@@ -1,4 +1,7 @@
-# Top-level Makefile
+# Top-level Makefile for Remind.
+
+# $Id: Makefile,v 1.24 1998-01-17 04:51:52 dfs Exp $
+
 all:
 	@if test ! -f src/Makefile ; then \
 		./configure ; \

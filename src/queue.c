@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.15 2000-02-18 03:46:06 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.16 2000-06-26 14:44:07 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -121,6 +121,7 @@ char *sched;
 	free(qelem);
 	return E_NO_MEM;
     }
+    NumQueued++;
     qelem->typ = trig->typ;
     qelem->tt = *tim;
     qelem->next = QueueHead;

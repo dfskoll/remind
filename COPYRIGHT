@@ -1,4 +1,4 @@
-$Id: COPYRIGHT,v 1.8 1998-02-14 04:04:31 dfs Exp $
+$Id: COPYRIGHT,v 1.9 1998-05-06 01:51:11 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
@@ -9,18 +9,14 @@ except where noted in individual files.
 
 3. DISTRIBUTION AND USE
 
-   a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95
-      or NT) or any future version of Windows.  REMIND may not be
-      used in POSIX-like systems built on Windows NT.  Such use constitutes
-      a violation of copyright.
+   a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95, CE,
+      or NT) or any future version of Windows or any other Microsoft
+      operating system.  REMIND may not be used in POSIX-like systems
+      built on Windows NT.  Such use constitutes a violation of copyright.
 
-   b) REMIND may not be used by Cadabra Design Libraries Inc. or its
-      directors, nor by any of Cadabra's subsidiaries or their directors.
-      Such use constitutes a violation of copyright.
-
-   c) Except for situations (a) and (b), REMIND may be used and
-      distributed according to the terms of the GNU General Public
-      License, Version 2, which follows:
+   b) Except for situation (a), REMIND may be used and distributed
+      according to the terms of the GNU General Public License,
+      Version 2, which follows:
 
 
 		    GNU GENERAL PUBLIC LICENSE

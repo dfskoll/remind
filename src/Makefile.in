@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.6 1998-01-20 03:14:20 dfs Exp $
+# $Id: Makefile.in,v 1.7 1998-02-07 05:35:55 dfs Exp $
 
 VERSION= 03.00.18
 SHELL= /bin/sh
@@ -23,8 +23,8 @@ MANS=		../man/kall.1 ../man/rem.1 ../man/rem2ps.1 ../man/remind.1 \
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-REMINDSRCS=	calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c \
-		hbcal.c init.c main.c moon.c omit.c queue.c sort.c \
+REMINDSRCS=	calendar.c dynbuf.c dorem.c dosubst.c expr.c files.c funcs.c \
+		globals.c hbcal.c init.c main.c moon.c omit.c queue.c sort.c \
 		token.c trigger.c userfns.c utils.c var.c
 
 REMINDOBJS= $(REMINDSRCS:.c=.o)
@@ -37,8 +37,8 @@ test: remind
 .c.o:
 	@CC@ -c @CFLAGS@ @DEFS@ $(LANGDEF) -DUNIX $*.c
 
-rem2ps: rem2ps.o
-	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o
+rem2ps: rem2ps.o dynbuf.o
+	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o dynbuf.o
 
 remind: $(REMINDOBJS)
 	@CC@ @LDFLAGS@ -o remind $(REMINDOBJS) @LIBS@

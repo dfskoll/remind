@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.3 1998-01-17 04:50:51 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.4 1998-02-07 05:35:58 dfs Exp $";
 
 #include <stdio.h>
 
@@ -146,36 +146,54 @@ int ReadLine()
 #ifdef HAVE_PROTOS
 PRIVATE int ReadLineFromFile(void)
 #else
-static ReadLineFromFile()
+static int ReadLineFromFile()
 #endif
 {
     int l;
     char *ptr;
     char *tmp;
 
-    CurLine = LineBuffer;
-    *LineBuffer = (char) 0;
-    l = 0;
-    ptr = LineBuffer;
+    DynamicBuffer buf;
+
+    DBufInit(&buf);
+    DBufFree(&LineBuffer);
+
     while(fp) {
-	tmp=fgets(ptr, LINELEN-l, fp);
+	if (DBufGets(&buf, fp) != OK) {
+	    DBufFree(&LineBuffer);
+	    return E_NO_MEM;
+	}
 	LineNo++;
-	if (ferror(fp)) return E_IO_ERR;
-	if (feof(fp) || !tmp) {
+	if (ferror(fp)) {
+	    DBufFree(&buf);
+	    DBufFree(&LineBuffer);
+	    return E_IO_ERR;
+	}
+	if (feof(fp) || !DBufLen(&buf)) {
+	    DBufFree(&buf);
 	    FCLOSE(fp);
 	}
-	l = strlen(LineBuffer);
-	if (l && (LineBuffer[l-1] == '\n')) LineBuffer[--l] = '\0';
-	if (l && (LineBuffer[l-1] == '\\')) {
-	    l--;
-	    ptr = LineBuffer+l;
-	    if (l >= LINELEN-1) return E_LINE_2_LONG;
+	l = DBufLen(&buf);
+	if (l && (DBufValue(&buf)[l-1] == '\\')) {
+	    DBufValue(&buf)[l-1] = 0;
+	    if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
+		DBufFree(&buf);
+		DBufFree(&LineBuffer);
+		return E_NO_MEM;
+	    }
 	    continue;
 	}
+	if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
+	    DBufFree(&buf);
+	    DBufFree(&LineBuffer);
+	    return E_NO_MEM;
+	}
 	FreshLine = 1;
+	CurLine = DBufValue(&LineBuffer);
 	if (DebugFlag & DB_ECHO_LINE) OutputLine(ErrFp);
 	return OK;
     }
+    CurLine = DBufValue(&LineBuffer);
     return OK;
 }
 
@@ -296,13 +314,14 @@ char *fname;
 	    return r;
 	}
 /* Skip blank chars */
-	s = LineBuffer;
+	s = DBufValue(&LineBuffer);
 	while (isspace(*s)) s++;
 	if (*s && *s!=';' && *s!='#') {
 /* Add the line to the cache */
 	    if (!cl) {
 		cf->cache = NEW(CachedLine);
 		if (!cf->cache) {
+		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
 		    FCLOSE(fp);
@@ -312,6 +331,7 @@ char *fname;
 	    } else {
 		cl->next = NEW(CachedLine);
 		if (!cl->next) {
+		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
 		    FCLOSE(fp);
@@ -322,6 +342,7 @@ char *fname;
 	    cl->next = NULL;
 	    cl->LineNo = LineNo;
 	    cl->text = StrDup(s);
+	    DBufFree(&LineBuffer);
 	    if (!cl->text) {
 		DestroyCache(cf);
 		ShouldCache = 0;
@@ -400,13 +421,18 @@ int DoInclude(p)
 ParsePtr p;
 #endif
 {     
-    char tok[TOKSIZE];
+    DynamicBuffer buf;
     int r, e;
 
-    if ( (r=ParseToken(p, tok)) ) return r;
+    DBufInit(&buf);
+    if ( (r=ParseToken(p, &buf)) ) return r;
     e = VerifyEoln(p); 
     if (e) Eprint("%s", ErrMsg[e]);
-    if ( (r=IncludeFile(tok)) ) return r;
+    if ( (r=IncludeFile(DBufValue(&buf))) ) {
+	DBufFree(&buf);
+	return r;
+    }
+    DBufFree(&buf);
     NumIfs = 0;
     IfFlags = 0;
     return OK;

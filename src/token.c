@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.2 1998-01-17 03:58:33 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.3 1998-02-07 05:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -156,26 +156,20 @@ char *s;
 {
     char *t;
     int len=0;
-   
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
+    tok->type = T_Illegal;
+
     while (isspace(*s)) s++;
 
-    t = TokBuffer;
-
     while (*s && !isspace(*s)) {
-	if (len < TOKSIZE) {
-	    *t++ = *s++;
-	    len++;
-	} else s++;
+	if (DBufPutc(&buf, *s++) != OK) return s;
     }
 
-    /* Ignore trailing commas */
-    if (t > TokBuffer && *(t-1) == ',') {
-	*(t-1) = 0;
-    } else {
-	*t = 0;
-    }
+    FindToken(DBufValue(&buf), tok);
+    DBufFree(&buf);
 
-    FindToken(TokBuffer, tok);
     return s;
 }
      

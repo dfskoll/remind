@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.3 1998-02-07 05:35:57 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -40,6 +40,8 @@ static char const RCSID[] = "$Id: dosubst.c,v 1.2 1998-01-17 03:58:28 dfs Exp $"
 static char TODAY[] = L_TODAY;
 static char TOMORROW[] = L_TOMORROW;
 
+#define SHIP_OUT(s) if(DBufPuts(dbuf, s) != OK) return E_NO_MEM
+
 /***************************************************************/
 /*                                                             */
 /*  DoSubst                                                    */
@@ -50,11 +52,11 @@ static char TOMORROW[] = L_TOMORROW;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int DoSubst(ParsePtr p, char *out, Trigger *t, TimeTrig *tt, int jul, int mode)
+PUBLIC int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode)
 #else
-int DoSubst(p, out, t, tt, jul, mode)
+int DoSubst(p, dbuf, t, tt, jul, mode)
 ParsePtr p;
-char *out;
+DynamicBuffer *dbuf;
 Trigger *t;
 TimeTrig *tt;
 int jul, mode;
@@ -71,10 +73,12 @@ int jul, mode;
     int tdiff, adiff, mdiff, hdiff;
     char *mplu, *hplu, *when, *plu;
     int has_quote = 0;
-    char *s = out;
-    char *os;
+    char *ss, *os;
+    char s[256];
 
     FromJulian(jul, &y, &m, &d);
+
+    DBufInit(dbuf);
 
     if (tim == NO_TIME) tim = curtime;
     tdiff = tim - curtime;
@@ -136,25 +140,29 @@ int jul, mode;
    
     while(1) {
 	c = ParseChar(p, &err, 0);
-	if (err) return err;
+	if (err) {
+	    DBufFree(dbuf);
+	    return err;
+	}
 	if (c == '\n') continue;
 	if (!c) {
-	    if (mode != CAL_MODE && t->typ != RUN_TYPE && !MsgCommand)
-		*s++ = '\n';
-	    *s++ = 0;
+	    if (mode != CAL_MODE && t->typ != RUN_TYPE && !MsgCommand) {
+		if (DBufPutc(dbuf, '\n') != OK) return E_NO_MEM;
+	    }
 	    break;
 	}
 	if (c != '%') {
-	    *s++ = c;
+	    if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
 	    continue;
 	}
 	c = ParseChar(p, &err, 0);
-	if (err) return err;
+	if (err) {
+	    DBufFree(dbuf);
+	    return err;
+	}
 	if (!c) {
-	    *s++ = 0;
 	    break;
 	}
-	os = s;
 	done = 0;
 	if (diff <= 1) {
 	    switch(UPPER(c)) {
@@ -198,7 +206,7 @@ int jul, mode;
 	    case 'V':
 #endif
 		sprintf(s, "%s", (diff ? TOMORROW : TODAY));
-		s += strlen(s);
+		SHIP_OUT(s);
 		done = 1;
 		break;
 		     
@@ -214,7 +222,7 @@ int jul, mode;
 	    sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
 		    MonthName[m], y);
 #endif
-            s += strlen(s);
+            SHIP_OUT(s);
 	    break;
 	       
 	case 'B':
@@ -223,7 +231,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, L_INXDAYS, diff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
             break;
 	       
 	case 'C':
@@ -232,7 +240,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%s %s", L_ON, DayName[jul%7]);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'D':
@@ -241,7 +249,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%d", d);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'E':
@@ -251,7 +259,7 @@ int jul, mode;
 	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DATESEP,
 		    m+1, DATESEP, y);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'F':
@@ -260,7 +268,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DATESEP, d, DATESEP, y);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'G':
@@ -269,7 +277,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'H':
@@ -278,7 +286,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%s %02d%c%02d", L_ON, d, DATESEP, m+1);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'I':
@@ -287,7 +295,7 @@ int jul, mode;
 #else	 
 	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DATESEP, d);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'J':
@@ -297,7 +305,7 @@ int jul, mode;
 	    sprintf(s, "%s %s, %s %d%s, %d", L_ON, DayName[jul%7],
 		    MonthName[m], d, plu, y);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'K':
@@ -307,7 +315,7 @@ int jul, mode;
 	    sprintf(s, "%s %s, %s %d%s", L_ON, DayName[jul%7],
 		    MonthName[m], d, plu);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'L':
@@ -316,7 +324,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DATESEP, m+1, DATESEP, d);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'M':
@@ -325,7 +333,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%s", MonthName[m]);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'N':
@@ -334,7 +342,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", m+1);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'O':
@@ -344,7 +352,7 @@ int jul, mode;
 	    if (RealToday == JulianToday) sprintf(s, " (%s)", L_TODAY);
 	    else *s = 0;
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'P':
@@ -353,7 +361,7 @@ int jul, mode;
 #else
 	    sprintf(s, (diff == 1 ? "" : L_PLURAL));
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'Q':
@@ -362,7 +370,7 @@ int jul, mode;
 #else
 	    sprintf(s, (diff == 1 ? "'s" : "s'"));
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'R':
@@ -371,7 +379,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%02d", d);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'S':
@@ -380,7 +388,7 @@ int jul, mode;
 #else
 	    sprintf(s, plu);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'T':
@@ -389,7 +397,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%02d", m+1);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'U':
@@ -399,7 +407,7 @@ int jul, mode;
 	    sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d,
 		    plu, MonthName[m], y);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'V':
@@ -409,7 +417,7 @@ int jul, mode;
 	    sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu,
 		    MonthName[m]);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'W':
@@ -418,7 +426,7 @@ int jul, mode;
 #else
 	    sprintf(s, DayName[jul%7]);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'X':
@@ -427,7 +435,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", diff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'Y':
@@ -436,7 +444,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", y);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case 'Z':
@@ -445,7 +453,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", y % 100);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '1':
@@ -462,7 +470,7 @@ int jul, mode;
 		sprintf(s, "%d %s%s %s %d %s%s %s", hdiff, L_HOUR, hplu,
 			L_AND, mdiff, L_MINUTE, mplu, when);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '2':
@@ -471,7 +479,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%s %d%c%02d%s", L_AT, hh, TIMESEP, min, pm);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '3':
@@ -481,7 +489,7 @@ int jul, mode;
 
 	    sprintf(s, "%s %02d%c%02d", L_AT, h, TIMESEP, min);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '4':
@@ -490,7 +498,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", tdiff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '5':
@@ -499,7 +507,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", adiff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '6':
@@ -508,7 +516,7 @@ int jul, mode;
 #else
 	    sprintf(s, when);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '7':
@@ -517,7 +525,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", hdiff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '8':
@@ -526,7 +534,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d", mdiff);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '9':
@@ -535,7 +543,7 @@ int jul, mode;
 #else
 	    sprintf(s, mplu);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '0':
@@ -544,7 +552,7 @@ int jul, mode;
 #else
 	    sprintf(s, hplu);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '!':
@@ -553,7 +561,7 @@ int jul, mode;
 #else
 	    sprintf(s, (tdiff >= 0 ? L_IS : L_WAS));
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '@':
@@ -562,7 +570,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%d%c%02d%s", chh, TIMESEP, cmin, cpm);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '#':
@@ -571,7 +579,7 @@ int jul, mode;
 #else
 	    sprintf(s, "%02d%c%02d", ch, TIMESEP, cmin);
 #endif
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case '_': 
@@ -579,7 +587,7 @@ int jul, mode;
 		sprintf(s, "%s", NL);
             else
 		sprintf(s, " ");
-	    s += strlen(s);
+	    SHIP_OUT(s);
 	    break;
 
 	case QUOTE_MARKER:
@@ -587,14 +595,17 @@ int jul, mode;
 	    break;
 
 	case '"':
-	    *s++ = QUOTE_MARKER;
+	    if (DBufPutc(dbuf, QUOTE_MARKER) != OK) return E_NO_MEM;
 	    has_quote = 1;
 	    break;
 
 	default:
-	    *s++ = c;
+	    if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
 	}
-	if (isupper(c)) *os = UPPER(*os);
+	if (isupper(c)) {
+	    os = DBufValue(dbuf) - strlen(s);
+	    *os = UPPER(*os);
+	}
     }
 
 /* We're outside the big while loop.  The only way to get here is for c to
@@ -605,32 +616,32 @@ int jul, mode;
 /* If there are NO quotes, then:  If CAL_MODE && RUN_TYPE, we don't want the
    reminder in the calendar.  Zero the output buffer and quit. */
     if (!has_quote) {
-	if (mode == CAL_MODE && t->typ == RUN_TYPE) *out = 0;
+	if (mode == CAL_MODE && t->typ == RUN_TYPE) DBufValue(dbuf) = 0;
 	return OK;
     }
 
 /* There ARE quotes.  If in CAL_MODE, delete everything before first quote
    and after second quote.  If in NORMAL_MODE, delete the %" sequences. */
 
-    s = out;
-    os = out;
+    ss = DBufValue(dbuf);
+    os = ss;
     if (mode == NORMAL_MODE) {
-	while (*s) {
-	    if (*s != QUOTE_MARKER) *os++ = *s;
-	    s++;
+	while (*ss) {
+	    if (*ss != QUOTE_MARKER) *os++ = *ss;
+	    ss++;
 	}
 	*os = 0;
     } else {
 
 /* Skip past the quote marker */
-	while (*s && (*s != QUOTE_MARKER)) s++;
+	while (*ss && (*ss != QUOTE_MARKER)) ss++;
 
 /* Security check... actually, *s must == QUOTE_MARKER at this point, but
    it doesn't hurt to make it a bit robust. */
-	if (*s) s++;
+	if (*ss) ss++;
 
 /* Copy the output until the next QUOTE_MARKER */
-	while (*s && (*s != QUOTE_MARKER)) *os++ = *s++;
+	while (*ss && (*ss != QUOTE_MARKER)) *os++ = *ss++;
 	*os = 0;
     }
 
@@ -648,11 +659,12 @@ int jul, mode;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int DoSubstFromString(char *source, char *dest, int jul, int tim)
+PUBLIC int DoSubstFromString(char *source, DynamicBuffer *dbuf,
+			     int jul, int tim)
 #else
-int DoSubstFromString(source, dest, jul, tim)
+int DoSubstFromString(source, dbuf, jul, tim)
 char *source;
-char *dest;
+DynamicBuffer *dbuf;
 int jul;
 int tim;
 #endif
@@ -669,7 +681,7 @@ int tim;
     tempTrig.typ = MSG_TYPE;
     tempTime.ttime = tim;
    
-    r = DoSubst(&tempP, dest, &tempTrig, &tempTime, jul, NORMAL_MODE);
+    r = DoSubst(&tempP, dbuf, &tempTrig, &tempTime, jul, NORMAL_MODE);
     DestroyParser(&tempP);
     return r;
 }

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.1 1998-01-15 02:50:29 dfs Exp $ */
+/* $Id: globals.h,v 1.2 1998-02-07 05:35:59 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -36,9 +36,6 @@ EXTERN	int	CurMon;
 EXTERN	int	CurYear;
 EXTERN  int	LineNo;
 EXTERN  int     FreshLine;
-EXTERN  char    LineBuffer[LINELEN];
-EXTERN  char    SubstBuffer[LINELEN];
-EXTERN  char    TokBuffer[TOKSIZE+1];
 EXTERN  INIT(   char    *MsgCommand, NULL);
 EXTERN  INIT(	int     ShowAllErrors, 0);
 EXTERN  INIT(	int     DebugFlag, 0);
@@ -113,9 +110,11 @@ EXTERN	INIT(	char	  *EndSentIg, "\"')]}>");
 /* We need the language stuff here... */
 
 #include "lang.h"
+#include "dynbuf.h"
 
-EXTERN  INIT(   char    Banner[LINELEN], L_BANNER);
-
+EXTERN DynamicBuffer Banner;
+EXTERN DynamicBuffer LineBuffer;
+EXTERN DynamicBuffer TPushBuffer;
 /* List of months */
 EXTERN  char    *EnglishMonthName[]
 #ifdef MK_GLOBALS

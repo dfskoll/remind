@@ -10,7 +10,8 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.3 1998-01-24 03:20:07 dfs Exp $";
+#include "dynbuf.h"
+static char const RCSID[] = "$Id: rem2ps.c,v 1.4 1998-02-07 05:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -97,8 +98,6 @@ char PortraitMode;
 char NoSmallCal;
 char UseISO;
 
-char LineBuffer[LINELEN];
-
 char *HeadFont="Helvetica";
 char *TitleFont="Helvetica";
 char *DayFont="Helvetica-BoldOblique";
@@ -152,6 +151,8 @@ char argv[];
 {
     /* If stdin is a tty - probably wrong. */
 
+    DynamicBuffer buf;
+    DBufInit(&buf);
     Init(argc, argv);
 
     if (isatty(0)) {
@@ -160,8 +161,8 @@ char argv[];
 
     /* Search for a valid input file */
     while (!feof(stdin)) {
-	gets(LineBuffer);
-	if (!strcmp(LineBuffer, PSBEGIN)) {
+	DBufGets(&buf, stdin);
+	if (!strcmp(DBufValue(&buf), PSBEGIN)) {
 	    if (!validfile) {
 		if (Verbose) {
 		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1997 by David F. Skoll\n\n", VERSION);
@@ -203,18 +204,19 @@ void DoPsCal()
     int firstcol;
     char *startOfBody;
     char passthru[PASSTHRU_LEN+1];
-
+    DynamicBuffer buf;
     CalEntry *c, *d;
 
 /* Read the month and year name, followed by # days in month and 1st day of
    month */
-    gets(LineBuffer);
-    sscanf(LineBuffer, "%s %s %d %d %d", month, year, &days, &wkday,
+    DBufInit(&buf);
+    DBufGets(&buf, stdin);
+    sscanf(DBufValue(&buf), "%s %s %d %d %d", month, year, &days, &wkday,
 	   &MondayFirst);
 
     /* Get day names */
-    gets(LineBuffer);
-    sscanf(LineBuffer, "%32s %32s %32s %32s %32s %32s %32s",
+    DBufGets(&buf, stdin);
+    sscanf(DBufValue(&buf), "%32s %32s %32s %32s %32s %32s %32s",
 	   DayName[0], DayName[1], DayName[2], DayName[3],
 	   DayName[4], DayName[5], DayName[6]);
 
@@ -224,10 +226,11 @@ void DoPsCal()
 	WriteProlog();
     }
 
-    gets(LineBuffer);
-    sscanf(LineBuffer, "%s %d", prevm, &prevdays);
-    gets(LineBuffer);
-    sscanf(LineBuffer, "%s %d", nextm, &nextdays);
+    DBufGets(&buf, stdin);
+    sscanf(DBufValue(&buf), "%s %d", prevm, &prevdays);
+    DBufGets(&buf, stdin);
+    sscanf(DBufValue(&buf), "%s %d", nextm, &nextdays);
+    DBufFree(&buf);
     MaxDay = days;
     FirstWkDay = wkday;
 
@@ -277,11 +280,14 @@ void DoPsCal()
 	    exit(1);
 	}
 	 
-	gets(LineBuffer);
-	if (!strcmp(LineBuffer, PSEND)) break;
+	DBufGets(&buf, stdin);
+	if (!strcmp(DBufValue(&buf), PSEND)) {
+	    DBufFree(&buf);
+	    break;
+	}
 
 /* Read the day number - a bit of a hack! */
-	DayNum = (LineBuffer[8] - '0') * 10 + LineBuffer[9] - '0';
+	DayNum = (DBufValue(&buf)[8] - '0') * 10 + DBufValue(&buf)[9] - '0';
 	if (DayNum != CurDay) {
 	    for(; CurDay<DayNum; CurDay++) {
 		WriteCalEntry();
@@ -297,7 +303,7 @@ void DoPsCal()
 	c->next = NULL;
 
 	/* Skip the tag, duration and time */
-	startOfBody = LineBuffer+10;
+	startOfBody = DBufValue(&buf)+10;
 
 	/* Eat the passthru */
 	startOfBody = EatToken(startOfBody, passthru, PASSTHRU_LEN);
@@ -391,7 +397,7 @@ void WriteProlog()
     char *isostuff;
     FILE *fp;
     int nread;
-    char buffer[LINELEN];
+    char buffer[512];
 
     if (!PortraitMode) {
 	i = x; x = y; y = i;
@@ -466,7 +472,7 @@ void WriteProlog()
 	    fprintf(stderr, "Could not open prologue file `%s'\n", UserProlog);
 	} else {
 	    while(1) {
-		nread = fread(buffer, sizeof(char), LINELEN, fp);
+		nread = fread(buffer, sizeof(char), 512, fp);
 		if (!nread) break;
 		fwrite(buffer, sizeof(char), nread, stdout);
 	    }
@@ -870,7 +876,7 @@ int DoQueuedPs()
     CalEntry *e, *n;
     FILE *fp;
     int fnoff;
-    char buffer[LINELEN];
+    char buffer[512];
 
     if (!MondayFirst) begin = CurDay - WkDayNum;
     else		     begin = CurDay - (WkDayNum ? WkDayNum-1 : 6);
@@ -905,7 +911,7 @@ int DoQueuedPs()
 		    fprintf(stderr, "Could not open PostScript file `%s'\n", e->entry+1);
 		} else {
 		    while(1) {
-			nread = fread(buffer, sizeof(char), LINELEN, fp);
+			nread = fread(buffer, sizeof(char), 512, fp);
 			if (!nread) break;
 			fwrite(buffer, sizeof(char), nread, stdout);
 		    }

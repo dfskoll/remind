@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: userfns.c,v 1.2 1998-01-17 03:58:34 dfs Exp $";
+static char const RCSID[] = "$Id: userfns.c,v 1.3 1998-02-07 05:36:04 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -38,7 +38,6 @@ typedef struct udf_struct {
     char name[VAR_NAME_LEN+1];
     char *text;
     Var *locals;
-    char IsCached;
     char IsActive;
     int nargs;
 } UserFunc;
@@ -79,27 +78,42 @@ ParsePtr p;
     UserFunc *func;
     Var *v;
 
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
     /* Get the function name */
-    if ( (r=ParseIdentifier(p, TokBuffer)) ) return r;
-    if (*TokBuffer == '$') return E_BAD_ID;
+    if ( (r=ParseIdentifier(p, &buf)) ) return r;
+    if (*DBufValue(&buf) == '$') {
+	DBufFree(&buf);
+	return E_BAD_ID;
+    }
 
     /* Should be followed by '(' */
     c = ParseNonSpaceChar(p, &r, 0);
-    if (r) return r;
-    if (c != '(') return E_PARSE_ERR;
+    if (r) {
+	DBufFree(&buf);
+	return r;
+    }
+    if (c != '(') {
+	DBufFree(&buf);
+	return E_PARSE_ERR;
+    }
 
     func = NEW(UserFunc);
-    if (!func) return E_NO_MEM;
-    StrnCpy(func->name, TokBuffer, VAR_NAME_LEN);
+    if (!func) {
+	DBufFree(&buf);
+	return E_NO_MEM;
+    }
+    StrnCpy(func->name, DBufValue(&buf), VAR_NAME_LEN);
+    DBufFree(&buf);
     if (!Hush) {
-	if (FindFunc(TokBuffer, Func, NumFuncs)) {
+	if (FindFunc(DBufValue(&buf), Func, NumFuncs)) {
 	    Eprint("%s: `%s'", ErrMsg[E_REDEF_FUNC],
-		   TokBuffer);
+		   DBufValue(&buf));
 	}
     }
     func->locals = NULL;
     func->text = NULL;
-    func->IsCached = 1;
     func->IsActive = 0;
     func->nargs = 0;
 
@@ -114,16 +128,21 @@ ParsePtr p;
     }
     else {
 	while(1) {
-	    if ( (r=ParseIdentifier(p, TokBuffer)) ) return r;
-	    if (*TokBuffer == '$') return E_BAD_ID;
+	    if ( (r=ParseIdentifier(p, &buf)) ) return r;
+	    if (*DBufValue(&buf) == '$') {
+		DBufFree(&buf);
+		return E_BAD_ID;
+	    }
 	    v = NEW(Var);
-	    func->nargs++;
-	    v->v.type = ERR_TYPE;
 	    if (!v) {
+		DBufFree(&buf);
 		DestroyUserFunc(func);
 		return E_NO_MEM;
 	    }
-	    StrnCpy(v->name, TokBuffer, VAR_NAME_LEN);
+	    func->nargs++;
+	    v->v.type = ERR_TYPE;
+	    StrnCpy(v->name, DBufValue(&buf), VAR_NAME_LEN);
+	    DBufFree(&buf);
 	    v->next = func->locals;
 	    func->locals = v;
 	    c = ParseNonSpaceChar(p, &r, 0);
@@ -142,18 +161,10 @@ ParsePtr p;
 	return E_PARSE_ERR;
     }
 
-    /* A bit of trickery here - if the definition is already cached,
-       no point in copying it. */
-    if (CurLine != LineBuffer) {
-	func->IsCached = 1;
-	func->text = p->pos;
-    } else {
-	func->IsCached = 0;
-	func->text = StrDup(p->pos);
-	if (!func->text) {
-	    DestroyUserFunc(func);
-	    return E_NO_MEM;
-	}
+    func->text = StrDup(p->pos);
+    if (!func->text) {
+	DestroyUserFunc(func);
+	return E_NO_MEM;
     }
 
     /* If an old definition of this function exists, destroy it */
@@ -190,7 +201,7 @@ UserFunc *f;
     }
 
     /* Free the function definition */
-    if (f->text && !f->IsCached) free(f->text);
+    if (f->text) free(f->text);
 
     /* Free the data structure itself */
     free(f);

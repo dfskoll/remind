@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.3 1998-01-17 04:50:51 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.4 1998-02-07 05:35:59 dfs Exp $";
 
 #include <stdio.h>
 
@@ -248,7 +248,7 @@ Operator Func[] = {
     {   "realnow",      0,      0,      FRealnow},
     {   "realtoday",    0,      0,      FRealtoday },
     {   "sgn",		1,	1,	FSgn	},
-    {   "shell",	1,	1,	FShell	},
+    {   "shell",	1,	2,	FShell	},
     {   "strlen",	1,	1,	FStrlen	},
     {   "substr",	2,	3,	FSubstr	},
     {   "sunrise",	0,	1,	FSunrise},
@@ -1301,35 +1301,50 @@ PRIVATE int FShell(void)
 static int FShell()
 #endif
 {
-    char buf[SHELLSIZE+1];
-    int ch, len;
+    DynamicBuffer buf;
+    int ch, r;
     FILE *fp;
-    char *s;
 
+    int maxlen = -1;
+
+    DBufInit(&buf);
     if (RunDisabled) return E_RUN_DISABLED;
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
-    s = buf;
-    len = 0;
+    if (Nargs >= 2) {
+	if (ARG(1).type != INT_TYPE) return E_BAD_TYPE;
+	maxlen = ARG(1).v.val;
+    }
     fp = POPEN(ARG(0).v.str, "r");
     if (!fp) return E_IO_ERR;
-    while (len < SHELLSIZE) {
+    while (1) {
 	ch = getc(fp);
 	if (ch == EOF) {
 	    break;
 	}
-	if (isspace(ch)) *s++ = ' ';
-	else            *s++ = ch;
-	len++;
+	if (isspace(ch)) ch = ' ';
+	if (DBufPutc(&buf, (char) ch) != OK) {
+	    PCLOSE(fp);
+	    DBufFree(&buf);
+	    return E_NO_MEM;
+	}
+	if (maxlen > 0 && DBufLen(&buf) >= maxlen) {
+	    break;
+	}
     }
-    *s = 0;
 
     /* Delete trailing newline (converted to space) */
-    if (s > buf && *(s-1) == ' ') *(s-1) = 0;
+    if (DBufLen(&buf) && DBufValue(&buf)[DBufLen(&buf)-1] == ' ') {
+	DBufValue(&buf)[DBufLen(&buf)-1] = 0;
+    }
 #if defined(__MSDOS__) || defined(__OS2__)
-    if (s-1 > buf && *(s-2) == ' ') *(s-2) = 0;
+    if (DBufLen(&buf) > 1 && DBufValue(&buf)[DBufLen(&buf)-2] == ' ') {
+	DBufValue(&buf)[DBufLen(&buf)-2] = 0;
+    }
 #endif
     PCLOSE(fp);
-    return RetStrVal(buf);
+    r = RetStrVal(DBufValue(&buf));
+    DBufFree(&buf);
+    return r;
 }
 
 /***************************************************************/
@@ -1497,24 +1512,33 @@ PRIVATE int FFiledir(void)
 static int FFiledir()
 #endif
 {
-    char TmpBuf[LINELEN];  /* Should be _POSIX_PATH_MAX ? */
     char *s;
+    DynamicBuffer buf;
+    int r;
 
-    strcpy(TmpBuf, FileName);
-    s = TmpBuf + strlen(TmpBuf) - 1;
-    if (s < TmpBuf) return RetStrVal(".");
+    DBufInit(&buf);
+
+    if (DBufPuts(&buf, FileName) != OK) return E_NO_MEM;
+    if (DBufLen(&buf) == 0) {
+	DBufFree(&buf);
+	return RetStrVal(".");
+    }
+
+    s = DBufValue(&buf) + DBufLen(&buf) - 1;
 #if defined(__OS2__) || defined(__MSDOS__)
     /* Both '\\' and '/' can be part of path; handle drive letters. */
-    while (s > TmpBuf && !strchr("\\/:", *s)) s--;
+    while (s > DBufValue(&buf) && !strchr("\\/:", *s)) s--;
     if (*s == ':') { s[1] = '.'; s += 2; }
-    if (s > TmpBuf) *s = '/';
+    if (s > DBufValue(&buf)) *s = '/';
 #else
-    while (s > TmpBuf && *s != '/') s--;
+    while (s > DBufValue(&buf) && *s != '/') s--;
 #endif
     if (*s == '/') {
 	*s = 0;
-	return RetStrVal(TmpBuf);
-    } else return RetStrVal(".");
+	r = RetStrVal(DBufValue(&buf));
+    } else r = RetStrVal(".");
+    DBufFree(&buf);
+    return r;
 }
 /***************************************************************/
 /*                                                             */
@@ -1689,7 +1713,9 @@ static int FDosubst()
 #endif
 {
     int jul, tim, r;
-    char TmpBuf[LINELEN];
+    DynamicBuffer buf;
+
+    DBufInit(&buf);
 
     jul = NO_DATE;
     tim = NO_TIME;
@@ -1703,8 +1729,10 @@ static int FDosubst()
 	}
     }
 
-    if ((r=DoSubstFromString(ARG(0).v.str, TmpBuf, jul, tim))) return r;
-    return RetStrVal(TmpBuf);
+    if ((r=DoSubstFromString(ARG(0).v.str, &buf, jul, tim))) return r;
+    r = RetStrVal(DBufValue(&buf));
+    DBufFree(&buf);
+    return r;
 }
 
 /***************************************************************/

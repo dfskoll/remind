@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.2 1998-02-02 02:57:47 dfs Exp $
+.\" $Id: remind.1,v 1.3 1998-02-07 05:35:50 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -806,6 +806,25 @@ over the advance triggering of all types of reminders.
 However, discussion must be deferred until after
 expressions and user-defined functions are explained.  See the subsection
 "Precise Scheduling" further on.
+.PP
+.B TAG AND DURATION
+.PP
+The \fBTAG\fR keyword lets you "tag" certain reminders.  Currently,
+this facility is not used, but it may be used by certain back-ends
+or systems built around \fBRemind\fR.  The \fBTAG\fR keyword should
+be followed by a tag consisting of up to 32 characters.
+.PP
+The \fBDURATION\fR keyword makes sense only for timed reminders;
+it specifies the duration of an event.  Currently, this is not
+used, but it may be used in future by back-ends or scheduling
+systems built around \fBRemind\fR.  For example, if you have
+a 90-minute meeting starting at 1:00pm, you could use:
+.PP
+.nf
+	REM 5 March 1999 AT 13:00 DURATION 1:30 MSG Meeting
+.fi
+.PP
+Note that \fIduration\fR is specified in hours and minutes.
 .PP
 .SH THE SUBSTITUTION FILTER
 .PP
@@ -3662,8 +3681,8 @@ The UTC functions may not be reliable under MS-DOS.
 The MS-DOS version of \fBRemind\fR does not support queuing or timed
 activation of reminders.
 .PP
-\fBRemind\fR has some built-in limits on total line length,
-substitution buffer length, number of global \fBOMIT\fRs, etc.
+\fBRemind\fR has some built-in limits (for example, 
+number of global \fBOMIT\fRs.)
 .PP
 .SH BIBLIOGRAPHY
 .PP

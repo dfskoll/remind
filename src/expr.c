@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.3 1998-02-07 05:35:58 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -38,8 +38,9 @@ static char const RCSID[] = "$Id: expr.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
 #define LE 4
 #define NE 5
 
-static char ExprBuf[TOKSIZE+1];
-static char CoerceBuf[TOKSIZE+1];
+DynamicBuffer ExprBuf;
+
+static char CoerceBuf[512];
 extern int NumFuncs;
 
 #ifdef HAVE_PROTOS
@@ -177,24 +178,27 @@ char **s;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PRIVATE int ParseExprToken(char *out, char **in)
+PRIVATE int ParseExprToken(DynamicBuffer *buf, char **in)
 #else
-static int ParseExprToken(out, in)
-char *out;
+static int ParseExprToken(buf, in)
+DynamicBuffer *buf;
 char **in;
 #endif
 {
 
     char c;
    
-    *out = 0;
+    DBufFree(buf);
 /* Skip white space */
     while (**in && isspace(**in)) (*in)++;
    
     if (!**in) return OK;
 
-    *out++ = c = *(*in)++;
-    *out = 0;
+    c = *(*in)++;
+    if (DBufPutc(buf, c) != OK) {
+	DBufFree(buf);
+	return E_NO_MEM;
+    }
 
     switch(c) {
     case COMMA:
@@ -210,8 +214,10 @@ char **in;
     case '&':
     case '|':
     case '=': if (**in == c) {
-	*out++ = c;
-	*out = 0;
+	if (DBufPutc(buf, c) != OK) {
+	    DBufFree(buf);
+	    return E_NO_MEM;
+	}
 	(*in)++;
     }
     return OK;
@@ -219,8 +225,10 @@ char **in;
     case '!':
     case '>':
     case '<': if (**in == '=') {
-	*out++ = '=';
-	*out = 0;
+	if (DBufPutc(buf, c) != OK) {
+	    DBufFree(buf);
+	    return E_NO_MEM;
+	}
 	(*in)++;
     }
     return OK;
@@ -229,17 +237,32 @@ char **in;
     /* Handle the parsing of quoted strings */
     if (c == '\"') {
 	if (!**in) return E_MISS_QUOTE;
-	while (**in) if ((c = *out++ = *(*in)++) == '\"') break;
-	*out = 0;
-	if (c == '\"') return OK ; else return E_MISS_QUOTE;
+	while (**in) {
+	    c = *(*in)++;
+	    if (DBufPutc(buf, c) != OK) {
+		DBufFree(buf);
+		return E_NO_MEM;
+	    }
+	    if (c == '\"') break;
+	}
+	if (c == '\"') return OK;
+	DBufFree(buf);
+	return E_MISS_QUOTE;
     }
 
     /* Dates can be specified with single-quotes */
     if (c == '\'') {
 	if (!**in) return E_MISS_QUOTE;
-	while (**in) if ((c = *out++ = *(*in)++) == '\'') break;
-	*out = 0;
-	if (c == '\'') return OK ; else return E_MISS_QUOTE;
+	while (**in) {
+	    c = *(*in)++;
+	    if (DBufPutc(buf, c) != OK) {
+		DBufFree(buf);
+		return E_NO_MEM;
+	    }
+	    if (c == '\'') break;
+	}
+	if (c == '\'') return OK;
+	DBufFree(buf);
     }
 
     if (!ISID(c) && c != '$') {
@@ -248,16 +271,24 @@ char **in;
     }
 
     /* Parse a constant, variable name or function */
-    while (ISID(**in) || **in == ':' || **in == '.' || **in == TIMESEP)
-	*out++ = *(*in)++;
-
+    while (ISID(**in) || **in == ':' || **in == '.' || **in == TIMESEP) {
+	if (DBufPutc(buf, **in) != OK) {
+	    DBufFree(buf);
+	    return E_NO_MEM;
+	}
+	(*in)++;
+    }
     /* Chew up any remaining white space */
     while (**in && isspace(**in)) (*in)++;
 
     /* Peek ahead - is it '('?  Then we have a function call */
-    if (**in == '(') *out++ = *(*in)++;
-
-    *out = 0;
+    if (**in == '(') {
+	if (DBufPutc(buf, **in++) != OK) {
+	    DBufFree(buf);
+	    return E_NO_MEM;
+	}
+	(*in)++;
+    }
     return OK;
 }
 
@@ -280,10 +311,12 @@ Value *v;
 
     OpStackPtr = 0;
     ValStackPtr = 0;
+
     r = Evaluate(e, NULL);
 
     /* Put last character parsed back onto input stream */
-    if (*ExprBuf) (*e)--;
+    if (DBufLen(&ExprBuf)) (*e)--;
+    DBufFree(&ExprBuf);
 
     if (r) {
 	CleanStack();
@@ -316,21 +349,35 @@ Var *locals;
    
     while(1) {
 /* Looking for a value.  Accept: value, unary op, func. call or left paren */
-	r = ParseExprToken(ExprBuf, s);
+	r = ParseExprToken(&ExprBuf, s);
 	if (r) return r;
-	if (!*ExprBuf) return E_EOLN;
+	if (!DBufLen(&ExprBuf)) {
+	    DBufFree(&ExprBuf);
+	    return E_EOLN;
+	}
 
-	if (*ExprBuf == '(') { /* Parenthesized expression */
+	if (*DBufValue(&ExprBuf) == '(') { /* Parenthesized expression */
+	    DBufFree(&ExprBuf);
 	    r = Evaluate(s, locals);  /* Leaves the last parsed token in ExprBuf */
 	    if (r) return r;
-	    if (*ExprBuf != ')') return E_MISS_RIGHT_PAREN;
-	} else if (*ExprBuf == '+') continue; /* Ignore unary + */
-	else if (*(ExprBuf + strlen(ExprBuf) -1) == '(') { /* Function Call */
-	    *(ExprBuf + strlen(ExprBuf) - 1) = 0;
-	    f = FindFunc(ExprBuf, Func, NumFuncs);
+	    r = OK;
+	    if (*DBufValue(&ExprBuf) != ')') {
+		DBufFree(&ExprBuf);
+		return E_MISS_RIGHT_PAREN;
+	    }
+	    return OK;
+	} else if (*DBufValue(&ExprBuf) == '+') {
+	    continue; /* Ignore unary + */
+	}
+	else if (*(DBufValue(&ExprBuf) + DBufLen(&ExprBuf) -1) == '(') { /* Function Call */
+	    *(DBufValue(&ExprBuf) + DBufLen(&ExprBuf) - 1) = 0;
+	    f = FindFunc(DBufValue(&ExprBuf), Func, NumFuncs);
 	    if (!f) {
-		ufname = StrDup(ExprBuf);
+		ufname = StrDup(DBufValue(&ExprBuf));
+		DBufFree(&ExprBuf);
 		if (!ufname) return E_NO_MEM;
+	    } else {
+		DBufFree(&ExprBuf);
 	    }
 	    args = 0;
 	    if (PeekChar(s) == ')') { /* Function has no arguments */
@@ -340,7 +387,8 @@ Var *locals;
 		    free(ufname);
 		}
 		if (r) return r;
-		(void) ParseExprToken(ExprBuf, s); /* Guaranteed to be right paren. */
+		(void) ParseExprToken(&ExprBuf, s); /* Guaranteed to be right paren. */
+		DBufFree(&ExprBuf);
 	    } else { /* Function has some arguments */
 		while(1) {
 		    args++;
@@ -349,10 +397,12 @@ Var *locals;
 			if (!f) free(ufname);
 			return r;
 		    }
-		    if (*ExprBuf == ')') break;
-		    else if (*ExprBuf != ',') {
+		    if (*DBufValue(&ExprBuf) == ')') break;
+		    else if (*DBufValue(&ExprBuf) != ',') {
 			if (!f) free(ufname);
-			Eprint("%s: `%c'", ErrMsg[E_EXPECT_COMMA], *ExprBuf);
+			Eprint("%s: `%c'", ErrMsg[E_EXPECT_COMMA],
+			       *DBufValue(&ExprBuf));
+			DBufFree(&ExprBuf);
 			return E_EXPECT_COMMA;
 		    }
 		}
@@ -362,27 +412,37 @@ Var *locals;
 		    free(ufname);
 		}
 		if (r) return r;
+		DBufFree(&ExprBuf);
 	    }
 	} else { /* Unary operator */
-	    f = FindFunc(ExprBuf, UnOp, NUM_UN_OPS);
+	    f = FindFunc(DBufValue(&ExprBuf), UnOp, NUM_UN_OPS);
 	    if (f) {
+		DBufFree(&ExprBuf);
 		PushOpStack(*f);
 		continue;  /* Still looking for an atomic vlue */
-	    } else if (!ISID(*ExprBuf) && *ExprBuf != '$' 
-		       && *ExprBuf != '"' && *ExprBuf != '\'') {
-		Eprint("%s `%c'", ErrMsg[E_ILLEGAL_CHAR], *ExprBuf);
+	    } else if (!ISID(*DBufValue(&ExprBuf)) &&
+		       *DBufValue(&ExprBuf) != '$' &&
+		       *DBufValue(&ExprBuf) != '"' &&
+		       *DBufValue(&ExprBuf) != '\'') {
+		Eprint("%s `%c'", ErrMsg[E_ILLEGAL_CHAR],
+		       *DBufValue(&ExprBuf));
+		DBufFree(&ExprBuf);
 		return E_ILLEGAL_CHAR;
 	    } else { /* Must be a literal value */
-		r = MakeValue(ExprBuf, &va, locals);
+		r = MakeValue(DBufValue(&ExprBuf), &va, locals);
+		DBufFree(&ExprBuf);
 		if (r) return r;
 		PushValStack(va);
 	    }
 	}
 /* OK, we've got a literal value; now, we're looking for the end of the
    expression, or a binary operator. */
-	r = ParseExprToken(ExprBuf, s);
+	r = ParseExprToken(&ExprBuf, s);
 	if (r) return r;
-	if (*ExprBuf == 0 || *ExprBuf == ',' || *ExprBuf == ']' || *ExprBuf == ')') {
+	if (*DBufValue(&ExprBuf) == 0 ||
+	    *DBufValue(&ExprBuf) == ',' ||
+	    *DBufValue(&ExprBuf) == ']' ||
+	    *DBufValue(&ExprBuf) == ')') {
 	    /* We've hit the end of the expression.  Pop off and evaluate until
 	       OpStackPtr = OpBase and ValStackPtr = ValBase+1 */
 	    while (OpStackPtr > OpBase) {
@@ -392,14 +452,20 @@ Var *locals;
 		else
 		    r=(op.func)();
 		if (r) {
+		    DBufFree(&ExprBuf);
 		    Eprint("`%s': %s", op.name, ErrMsg[r]);
 		    return r;
 		}
 	    }
-	    if (ValStackPtr != ValBase+1) return E_STACK_ERR; else return OK;
+	    if (ValStackPtr != ValBase+1) {
+		DBufFree(&ExprBuf);
+		return E_STACK_ERR;
+	    }
+	    return OK;
 	}
 	/* Must be a binary operator */
-	f = FindFunc(ExprBuf, BinOp, NUM_BIN_OPS);
+	f = FindFunc(DBufValue(&ExprBuf), BinOp, NUM_BIN_OPS);
+	DBufFree(&ExprBuf);
 	if (!f) return E_EXPECTING_BINOP;
 
 	/* While operators of higher or equal precedence are on the stack,

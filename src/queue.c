@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.2 1998-01-17 03:58:31 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.3 1998-02-07 05:36:02 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED
@@ -382,8 +382,9 @@ QueuedRem *q;
     RunDisabled = q->RunDisabled;  /* Don't want weird scheduling functions
 				     to be a security hole!                */
     while(1) {
-	sprintf(LineBuffer, "%s(%d)", q->sched, q->ntrig);
-	s = LineBuffer;
+	char exprBuf[VAR_NAME_LEN+32];
+	sprintf(exprBuf, "%s(%d)", q->sched, q->ntrig);
+	s = exprBuf;
 	r = EvalExpr(&s, &v);
 	if (r) {
 	    q->sched[0] = 0;

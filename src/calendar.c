@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.4 1998-02-02 02:58:08 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.5 1998-02-07 05:35:55 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -650,9 +650,10 @@ int col;
     CalEntry *CurPs = CalPs[col];
     CalEntry *e;
     char *s, *s2;
-    static char buf[TOKSIZE];
-    static char obuf[LINELEN];
+    DynamicBuffer buf, obuf;
     Token tok;
+
+    DBufInit(&buf);
 
     /* Parse the trigger date and time */
     if ( (r=ParseRem(p, &trig, &tim)) ) return r;
@@ -665,16 +666,21 @@ int col;
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
-	r=ParseToken(p, buf);
+	r=ParseToken(p, &buf);
 	if (r) return r;
-	FindToken(buf, &tok);
+	FindToken(DBufValue(&buf), &tok);
+	DBufFree(&buf);
 	if (tok.type == T_Empty || tok.type == T_Comment) return OK;
 	if (tok.type != T_RemType || tok.val == SAT_TYPE) return E_PARSE_ERR;
 	if (tok.val == PASSTHRU_TYPE) {
-	    r=ParseToken(p, buf);
+	    r=ParseToken(p, &buf);
 	    if (r) return r;
-	    if (!*buf) return E_EOLN;
-	    StrnCpy(trig.passthru, buf, PASSTHRU_LEN);
+	    if (!DBufLen(&buf)) {
+		DBufFree(&buf);
+		return E_EOLN;
+	    }
+	    StrnCpy(trig.passthru, DBufValue(&buf), PASSTHRU_LEN);
+	    DBufFree(&buf);
 	}
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
@@ -702,45 +708,66 @@ int col;
     }
 
     /* If trigger date == today, add it to the current entry */   
+    DBufInit(&obuf);
     if (jul == JulianToday) {
 	NumTriggered++;
-	s = obuf;
-	*s = 0;
-	if (DoSimpleCalendar || tim.ttime != NO_TIME)
-	    s += strlen(SimpleTime(tim.ttime, s));
+	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
+	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
+		DBufFree(&obuf);
+		return E_NO_MEM;
+	    }
+	}
 	if (trig.typ != PASSTHRU_TYPE &&
 	    UserFuncExists("calprefix")==1) {
-	    sprintf(buf, "calprefix(%d)", trig.priority);
-	    s2 = buf;
+	    char evalBuf[64];
+	    sprintf(evalBuf, "calprefix(%d)", trig.priority);
+	    s2 = evalBuf;
 	    r = EvalExpr(&s2, &v);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
-		    strcat(s, v.v.str);
-		    s += strlen(s);
+		    if (DBufPuts(&obuf, v.v.str) != OK) {
+			DestroyValue(v);
+			DBufFree(&obuf);
+			return E_NO_MEM;
+		    }
 		}
 		DestroyValue(v);
 	    }
 	}
-	if ( (r=DoSubst(p, s, &trig, &tim, jul, CAL_MODE)) ) return r;
-	if (!*s) return OK;
+	if ( (r=DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE)) ) {
+	    DBufFree(&obuf);
+	    return r;
+	}
+	if (!DBufLen(&obuf)) {
+	    DBufFree(&obuf);
+	    return OK;
+	}
 	if (trig.typ != PASSTHRU_TYPE &&
 	    UserFuncExists("calsuffix")==1) {
-	    sprintf(buf, "calsuffix(%d)", trig.priority);
-	    s2 = buf;
+	    char evalBuf[64];
+	    sprintf(evalBuf, "calsuffix(%d)", trig.priority);
+	    s2 = evalBuf;
 	    r = EvalExpr(&s2, &v);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
-		    strcat(s, v.v.str);
-		    s += strlen(s);
+		    if (DBufPuts(&obuf, v.v.str) != OK) {
+			DestroyValue(v);
+			DBufFree(&obuf);
+			return E_NO_MEM;
+		    }
 		}
 		DestroyValue(v);
 	    }
 	}
-	s = obuf;
+	s = DBufValue(&obuf);
 	if (!DoSimpleCalendar) while (isspace(*s)) s++;
 	e = NEW(CalEntry);
-	if (!e) return E_NO_MEM;
+	if (!e) {
+	    DBufFree(&obuf);
+	    return E_NO_MEM;
+	}
 	e->text = StrDup(s);
+	DBufFree(&obuf);
 	if (!e->text) {
 	    free(e);
 	    return E_NO_MEM;
@@ -890,24 +917,21 @@ static void WriteCalDays()
 /*  SimpleTime                                                 */
 /*                                                             */
 /*  Format the time according to simple time format.           */
-/*  If out is NULL, result placed in internal static buffer.   */
+/*  Answer is returned in a static buffer.                     */
 /*  A trailing space is always added.                          */
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC char *SimpleTime(int tim, char *out)
+PUBLIC char *SimpleTime(int tim)
 #else
-char *SimpleTime(tim, out)
+char *SimpleTime(tim)
 int tim;
-char *out;
 #endif
 {
-    static buf[9];
+    static char buf[32];
     int h, min, hh;
-   
-    if (!out) out = (char *) buf;
 
-    *out = 0;
+    buf[0] = 0;
    
     switch(ScFormat) {
 
@@ -918,7 +942,7 @@ char *out;
 	    if (h == 0) hh=12;
 	    else if (h > 12) hh=h-12;
 	    else hh=h;
-	    sprintf(out, "%2d%c%02d%s ", hh, TIMESEP, min, (h>=12) ? L_PM : L_AM);
+	    sprintf(buf, "%2d%c%02d%s ", hh, TIMESEP, min, (h>=12) ? L_PM : L_AM);
 	}
 	break;
 
@@ -926,11 +950,11 @@ char *out;
 	if (tim != NO_TIME) {
 	    h = tim / 60;
 	    min = tim % 60;
-	    sprintf(out, "%02d%c%02d ", h, TIMESEP, min);
+	    sprintf(buf, "%02d%c%02d ", h, TIMESEP, min);
 	}
 	break;
     }
-    return out;
+    return buf;
 }
 
 /***************************************************************/

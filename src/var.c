@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.2 1998-01-17 03:58:34 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.3 1998-02-07 05:36:04 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -218,14 +218,22 @@ Parser *p;
     Value v;
     int r;
 
-    r = ParseIdentifier(p, TokBuffer);
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
+    r = ParseIdentifier(p, &buf);
     if (r) return r;
 
     r = EvaluateExpr(p, &v);
-    if (r) return r;
+    if (r) {
+	DBufFree(&buf);
+	return r;
+    }
 
-    if (*TokBuffer == '$') return SetSysVar(TokBuffer+1, &v);
-    else return SetVar(TokBuffer, &v);
+    if (*DBufValue(&buf) == '$') r = SetSysVar(DBufValue(&buf)+1, &v);
+    else r = SetVar(DBufValue(&buf), &v);
+    DBufFree(&buf);
+    return r;
 }
 
 /***************************************************************/
@@ -242,18 +250,27 @@ Parser *p;
 {
     int r;
 
-    r = ParseToken(p, TokBuffer);
-    if (r) return r;
-    if (!*TokBuffer) return E_EOLN;
+    DynamicBuffer buf;
+    DBufInit(&buf);
 
-    (void) DeleteVar(TokBuffer);  /* Ignore error - nosuchvar */
+    r = ParseToken(p, &buf);
+    if (r) return r;
+    if (!DBufLen(&buf)) {
+	DBufFree(&buf);
+	return E_EOLN;
+    }
+
+    (void) DeleteVar(DBufValue(&buf));  /* Ignore error - nosuchvar */
 
 /* Keep going... */
     while(1) {
-	r = ParseToken(p, TokBuffer);
+	r = ParseToken(p, &buf);
 	if (r) return r;
-	if (!*TokBuffer) return OK;
-	(void) DeleteVar(TokBuffer);
+	if (!DBufLen(&buf)) {
+	    DBufFree(&buf);
+	    return OK;
+	}
+	(void) DeleteVar(DBufValue(&buf));
     }
 }
 
@@ -273,30 +290,41 @@ ParsePtr p;
 {
     int r;
     Var *v;
+    DynamicBuffer buf;
 
-    r = ParseToken(p, TokBuffer);
+    DBufInit(&buf);
+    r = ParseToken(p, &buf);
     if (r) return r;
-    if (!*TokBuffer || *TokBuffer == '#' || *TokBuffer == ';') {
+    if (!*DBufValue(&buf) ||
+	*DBufValue(&buf) == '#' ||
+	*DBufValue(&buf) == ';') {
+	DBufFree(&buf);
 	DumpVarTable();
 	return OK;
     }
     fprintf(ErrFp, "%*s  %s\n\n", VAR_NAME_LEN, VARIABLE, VALUE);
     while(1) {
-	if (*TokBuffer == '$') {
-	    DumpSysVarByName(TokBuffer+1);
+	if (*DBufValue(&buf) == '$') {
+	    DumpSysVarByName(DBufValue(&buf)+1);
 	} else {
-	    v = FindVar(TokBuffer, 0);
-	    TokBuffer[VAR_NAME_LEN] = 0;
-	    if (!v) fprintf(ErrFp, "%*s  %s\n", VAR_NAME_LEN, TokBuffer, UNDEF);
+	    v = FindVar(DBufValue(&buf), 0);
+	    DBufValue(&buf)[VAR_NAME_LEN] = 0;
+	    if (!v) fprintf(ErrFp, "%*s  %s\n", VAR_NAME_LEN,
+			    DBufValue(&buf), UNDEF);
 	    else {
 		fprintf(ErrFp, "%*s  ", VAR_NAME_LEN, v->name);
 		PrintValue(&(v->v), ErrFp);
 		fprintf(ErrFp, "\n");
 	    }
 	}
-	r = ParseToken(p, TokBuffer);
+	r = ParseToken(p, &buf);
 	if (r) return r;
-	if (!*TokBuffer || *TokBuffer == '#' || *TokBuffer == ';') return OK;
+	if (!*DBufValue(&buf) ||
+	    *DBufValue(&buf) == '#' ||
+	    *DBufValue(&buf) == ';') {
+	    DBufFree(&buf);
+	    return OK;
+	}
     }
 }
 
@@ -404,19 +432,30 @@ Parser *p;
 {
     int r;
 
-    r = ParseToken(p, TokBuffer);
-    if (r) return r;
-    if (!*TokBuffer) return E_EOLN;
+    DynamicBuffer buf;
+    DBufInit(&buf);
 
-    r = PreserveVar(TokBuffer);
+    r = ParseToken(p, &buf);
+    if (r) return r;
+    if (DBufLen(&buf)) {
+	DBufFree(&buf);
+	return E_EOLN;
+    }
+
+    r = PreserveVar(DBufValue(&buf));
+    DBufFree(&buf);
     if (r) return r;
 
 /* Keep going... */
     while(1) {
-	r = ParseToken(p, TokBuffer);
+	r = ParseToken(p, &buf);
 	if (r) return r;
-	if (!*TokBuffer) return OK;
-	r = PreserveVar(TokBuffer);
+	if (!DBufLen(&buf)) {
+	    DBufFree(&buf);
+	    return OK;
+	}
+	r = PreserveVar(DBufValue(&buf));
+	DBufFree(&buf);
 	if (r) return r;
     }
 }

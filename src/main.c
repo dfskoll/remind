@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.3 1998-01-17 04:50:52 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.4 1998-02-07 05:36:01 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -73,7 +73,6 @@ long timegm ARGS((struct tm *tm));
 long timelocal ARGS((struct tm *tm));
 #endif
 
-static char TPushBuffer[TOKSIZE+1]; /* Buffer for pushing back a token. */
 static char *TokenPushed = NULL;
 
 /* Whooo... the putchar/Putchar/PutChar macros are a mess...
@@ -393,9 +392,17 @@ int peek;
     int r;
 
     *err = 0;
-    if (TokenPushed && *TokenPushed)
+    if (TokenPushed && *TokenPushed) {
 	if (peek) return *TokenPushed;
-	else      return *TokenPushed++;
+	else {
+	    r = *TokenPushed++;
+	    if (!r) {
+		DBufFree(&TPushBuffer);
+		TokenPushed = NULL;
+	    }
+	    return r;
+	}
+    }
 
     while(1) {
 	if (p->isnested) {
@@ -482,17 +489,16 @@ int peek;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int ParseToken(ParsePtr p, char *out)
+PUBLIC int ParseToken(ParsePtr p, DynamicBuffer *dbuf)
 #else
-int ParseToken(p, out)
+int ParseToken(p, dbuf)
 ParsePtr p;
-char *out;
+DynamicBuffer *dbuf;
 #endif
 {
     int c, err;
-    int len = 0;
 
-    *out = 0;
+    DBufFree(dbuf);
 
     c = ParseChar(p, &err, 0);
     if (err) return err;
@@ -501,22 +507,17 @@ char *out;
 	if (err) return err;
     }
     if (!c) return OK;
-    *out++ = c;
-    len++;
-
     while (c && !isspace(c)) {
+	if (DBufPutc(dbuf, c) != OK) {
+	    DBufFree(dbuf);
+	    return E_NO_MEM;
+	}
 	c = ParseChar(p, &err, 0);
-	if (err) return err;
-	if (len < TOKSIZE && c && !isspace(c)) {
-	    *out++ = c;
-	    len++;
+	if (err) {
+	    DBufFree(dbuf);
+	    return err;
 	}
     }
-    /* Ignore trailing commas */
-    if (len > 0 && *(out-1) == ',') {
-	out--;
-    }
-    *out = 0;
     return OK;
 }
 
@@ -530,17 +531,16 @@ char *out;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int ParseIdentifier(ParsePtr p, char *out)
+PUBLIC int ParseIdentifier(ParsePtr p, DynamicBuffer *dbuf)
 #else
-int ParseIdentifier(p, out)
+int ParseIdentifier(p, dbuf)
 ParsePtr p;
-char *out;
+DynamicBuffer *dbuf;
 #endif
 {
     int c, err;
-    int len = 0;
 
-    *out = 0;
+    DBufFree(dbuf);
 
     c = ParseChar(p, &err, 0);
     if (err) return err;
@@ -550,23 +550,26 @@ char *out;
     }
     if (!c) return E_EOLN;
     if (c != '$' && c != '_' && !isalpha(c)) return E_BAD_ID;
-    *out++ = c;
-    *out = 0;
-    len++;
+    if (DBufPutc(dbuf, c) != OK) {
+	DBufFree(dbuf);
+	return E_NO_MEM;
+    }
 
     while (1) {
 	c = ParseChar(p, &err, 1);
-	if (err) return err;
+	if (err) {
+	    DBufFree(dbuf);
+	    return err;
+	}
 	if (c != '_' && !isalnum(c)) return OK;
-
-	if (len < TOKSIZE) {
-	    c = ParseChar(p, &err, 0);  /* Guaranteed to work */
-	    *out++ = c;
-	    *out = 0;
-	    len++;
+	c = ParseChar(p, &err, 0);  /* Guaranteed to work */
+	if (DBufPutc(dbuf, c) != OK) {
+	    DBufFree(dbuf);
+	    return E_NO_MEM;
 	}
     }
 }
+
 /***************************************************************/
 /*                                                             */
 /* EvaluateExpr                                                */
@@ -730,17 +733,20 @@ ParsePtr p;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC void PushToken(const char *tok)
+PUBLIC int PushToken(const char *tok)
 #else
-void PushToken(tok)
+int PushToken(tok)
 char *tok;
 #endif
 {
-    TokenPushed = TPushBuffer;
-    strcpy(TPushBuffer, tok);
-    strcat(TPushBuffer, " ");  /* Separate the pushed token from the next
-				  token */
-
+    DBufFree(&TPushBuffer);
+    if (DBufPuts(&TPushBuffer, (char *) tok) != OK ||
+	DBufPutc(&TPushBuffer, ' ') != OK) {
+	DBufFree(&TPushBuffer);
+	return E_NO_MEM;
+    }
+    TokenPushed = DBufValue(&TPushBuffer);
+    return OK;
 }
 
 /***************************************************************/
@@ -986,11 +992,18 @@ ParsePtr p;
 {
     int r;
 
-    if ( (r = ParseToken(p, TokBuffer)) ) return r;
-    if (*TokBuffer && (*TokBuffer != '#') && (*TokBuffer != ';')) {
-	Eprint("%s: `%s'", ErrMsg[E_EXPECTING_EOL], TokBuffer);
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
+    if ( (r = ParseToken(p, &buf)) ) return r;
+    if (*DBufValue(&buf) &&
+	(*DBufValue(&buf) != '#') &&
+	(*DBufValue(&buf) != ';')) {
+	Eprint("%s: `%s'", ErrMsg[E_EXPECTING_EOL], DBufValue(&buf));
+	DBufFree(&buf);
 	return E_EXTRANEOUS_TOKEN;
     }
+    DBufFree(&buf);
     return OK;
 }
 
@@ -1084,9 +1097,9 @@ ParsePtr p;
 {
     int err;
     int c;
-    char buf[LINELEN];   /* So we don't mess up the banner if an error occurs */
-    char *s;
+    DynamicBuffer buf;
 
+    DBufInit(&buf);
     c = ParseChar(p, &err, 0);
     if (err) return err;
     while (isspace(c)) {
@@ -1094,16 +1107,20 @@ ParsePtr p;
 	if (err) return err;
     }
     if (!c) return E_EOLN;
-    s = buf;
 
     while(c) {
-	*s++ = c;
+	if (DBufPutc(&buf, c) != OK) return E_NO_MEM;
 	c = ParseChar(p, &err, 0);
-	if (err) return err;
+	if (err) {
+	    DBufFree(&buf);
+	    return err;
+	}
     }
-    *s++ = 0;
-    strcpy(Banner, buf);
-    return OK;
+    DBufFree(&Banner);
+    
+    err = DBufPuts(&Banner, DBufValue(&buf));
+    DBufFree(&buf);
+    return err;
 }
 
 /***************************************************************/
@@ -1123,16 +1140,23 @@ ParsePtr p;
 {
     int r;
 
-    if ( (r=ParseToken(p, TokBuffer)) ) return r;
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
+    if ( (r=ParseToken(p, &buf)) ) return r;
 
 /* Only allow RUN ON in top-level script */
-    if (! StrCmpi(TokBuffer, "ON")) {
+    if (! StrCmpi(DBufValue(&buf), "ON")) {
 	if (TopLevel()) RunDisabled &= ~RUN_SCRIPT;
     }
 /* But allow RUN OFF anywhere */
-    else if (! StrCmpi(TokBuffer, "OFF"))
+    else if (! StrCmpi(DBufValue(&buf), "OFF"))
 	RunDisabled |= RUN_SCRIPT;
-    else return E_PARSE_ERR;
+    else {
+	DBufFree(&buf);
+	return E_PARSE_ERR;
+    }
+    DBufFree(&buf);
 
     return VerifyEoln(p);
 }
@@ -1197,13 +1221,18 @@ ParsePtr p;
     int r;
     char *s;
 
+    DynamicBuffer buf;
+
+    DBufInit(&buf);
     t.typ = MSG_TYPE;
     tt.ttime = SystemTime(0) / 60;
-    if ( (r=DoSubst(p, SubstBuffer, &t, &tt, JulianToday, NORMAL_MODE)) )
+    if ( (r=DoSubst(p, &buf, &t, &tt, JulianToday, NORMAL_MODE)) ) {
 	return r;
-    s = SubstBuffer;
+    }
+    s = DBufValue(&buf);
     while (isspace(*s)) s++;
     fprintf(ErrFp, "%s\n", s);
+    DBufFree(&buf);
     return OK;
 }
 

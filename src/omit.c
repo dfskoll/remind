@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: omit.c,v 1.2 1998-01-17 03:58:31 dfs Exp $";
+static char const RCSID[] = "$Id: omit.c,v 1.3 1998-02-07 05:36:02 dfs Exp $";
 
 #include <stdio.h>
 
@@ -303,28 +303,35 @@ ParsePtr p;
     Token tok;
     int parsing=1;
     int syndrome;
-   
+
+    DynamicBuffer buf;
+    DBufInit(&buf);
+
 /* Parse the OMIT.  We need a month and day; year is optional. */
     while(parsing) {
-	if ( (r=ParseToken(p, TokBuffer)) ) return r;
-	FindToken(TokBuffer, &tok);
+	if ( (r=ParseToken(p, &buf)) ) return r;
+	FindToken(DBufValue(&buf), &tok);
 	switch (tok.type) {
 	case T_Year:
+	    DBufFree(&buf);
 	    if (y != NO_YR) return E_YR_TWICE;
 	    y = tok.val;
 	    break;
 
 	case T_Month:
+	    DBufFree(&buf);
 	    if (m != NO_MON) return E_MON_TWICE;
 	    m = tok.val;
 	    break;
 
 	case T_Day:
+	    DBufFree(&buf);
 	    if (d != NO_DAY) return E_DAY_TWICE;
 	    d = tok.val;
 	    break;
 	 
 	case T_Delta:
+	    DBufFree(&buf);
 	    break;
 
 	case T_Empty:
@@ -333,11 +340,14 @@ ParsePtr p;
 	case T_Priority:
 	case T_Tag:
 	case T_Duration:
+	    DBufFree(&buf);
 	    parsing = 0;
 	    break;
 
 	default:
-	    Eprint("%s: `%s' (OMIT)", ErrMsg[E_UNKNOWN_TOKEN], TokBuffer);
+	    Eprint("%s: `%s' (OMIT)", ErrMsg[E_UNKNOWN_TOKEN],
+		   DBufValue(&buf));
+	    DBufFree(&buf);
 	    return E_UNKNOWN_TOKEN;
 	}
     }

@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: sort.c,v 1.2 1998-01-17 03:58:33 dfs Exp $";
+static char const RCSID[] = "$Id: sort.c,v 1.3 1998-02-07 05:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -205,10 +205,11 @@ static void IssueSortBanner(jul)
 int jul;
 #endif
 {
-    char BanExpr[25];
+    char BanExpr[64];
     int y, m, d;
     Value v;
     char *s = BanExpr;
+    DynamicBuffer buf;
 
     if (UserFuncExists("sortbanner") != 1) return;
 
@@ -217,8 +218,11 @@ int jul;
     y = EvalExpr(&s, &v);
     if (y) return;
     if (DoCoerce(STR_TYPE, &v)) return;
-    if (!DoSubstFromString(v.v.str, SubstBuffer, jul, NO_TIME))
-	if (*SubstBuffer) printf("%s\n", SubstBuffer);
+    DBufInit(&buf);
+    if (!DoSubstFromString(v.v.str, &buf, jul, NO_TIME)) {
+	if (*DBufValue(&buf)) printf("%s\n", DBufValue(&buf));
+	DBufFree(&buf);
+    }
     DestroyValue(v);
 }
 

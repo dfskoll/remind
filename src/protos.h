@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.2 1998-01-17 03:58:31 dfs Exp $ */
+/* $Id: protos.h,v 1.3 1998-02-07 05:36:02 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -23,6 +23,8 @@
 /* Define a general malloc routine for creating pointers to objects */
 #define NEW(type) ((type *) malloc(sizeof(type)))
 
+#include "dynbuf.h"
+
 #ifndef HAVE_STRSTR
 char *strstr ARGS ((char *s1, char *s2));
 #endif
@@ -30,7 +32,7 @@ char *strstr ARGS ((char *s1, char *s2));
 int CallUserFunc ARGS ((char *name, int nargs));
 int DoFset ARGS ((ParsePtr p));
 void ProduceCalendar ARGS ((void));
-char *SimpleTime ARGS ((int tim, char *out));
+char  *SimpleTime ARGS ((int tim));
 int DoRem ARGS ((ParsePtr p));
 int DoFlush ARGS ((ParsePtr p));
 void DoExit ARGS ((ParsePtr p));
@@ -42,8 +44,8 @@ int TriggerReminder ARGS ((ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
 int TriggerReminder ARGS ((ParsePtr p, Trigger *t, TimeTrig *tim, int jul));
 #endif
 int ShouldTriggerReminder ARGS ((Trigger *t, TimeTrig *tim, int jul));
-int DoSubst ARGS ((ParsePtr p, char *out, Trigger *t, TimeTrig *tt, int jul, int mode));
-int DoSubstFromString ARGS ((char *source, char *dest, int jul, int tim));
+int DoSubst ARGS ((ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode));
+int DoSubstFromString ARGS ((char *source, DynamicBuffer *dbuf, int jul, int tim));
 int EvalExpr ARGS ((char **e, Value *v));
 int DoCoerce ARGS ((char type, Value *v));
 void PrintValue  ARGS ((Value *v, FILE *fp));
@@ -63,8 +65,8 @@ int main ARGS ((int argc, char *argv[]));
 int Julian ARGS ((int year, int month, int day));
 void FromJulian ARGS ((int jul, int *y, int *m, int *d));
 int ParseChar ARGS ((ParsePtr p, int *err, int peek));
-int ParseToken ARGS ((ParsePtr p, char *out));
-int ParseIdentifier ARGS ((ParsePtr p, char *out));
+int ParseToken ARGS ((ParsePtr p, DynamicBuffer *dbuf));
+int ParseIdentifier ARGS ((ParsePtr p, DynamicBuffer *dbuf));
 int EvaluateExpr ARGS ((ParsePtr p, Value *v));
 int Evaluate ARGS ((char **s, Var *locals));
 int FnPopValStack ARGS ((Value *val));
@@ -72,7 +74,7 @@ void Eprint ARGS ((const char *fmt, ...));
 void OutputLine ARGS ((FILE *fp));
 void CreateParser ARGS ((char *s, ParsePtr p));
 void DestroyParser ARGS ((ParsePtr p));
-void PushToken ARGS ((const char *tok));
+int PushToken ARGS ((const char *tok));
 long SystemTime ARGS ((int realtime));
 int SystemDate ARGS ((int *y, int *m, int *d));
 int DoIf ARGS ((ParsePtr p));
@@ -115,7 +117,7 @@ void DestroyVars ARGS ((int all));
 int PreserveVar ARGS ((char *name));
 int DoPreserve  ARGS ((Parser *p));
 int DoSatRemind ARGS ((Trigger *trig, TimeTrig *tim, ParsePtr p));
-void DoMsgCommand ARGS ((char *cmd, char *msg));
+int DoMsgCommand ARGS ((char *cmd, char *msg));
 int ParseNonSpaceChar ARGS ((ParsePtr p, int *err, int peek));
 unsigned int HashVal ARGS ((const char *str));
 int DateOK ARGS ((int y, int m, int d));

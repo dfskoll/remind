@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.2 1998-01-17 03:58:29 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.3 1998-02-07 05:36:00 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -119,6 +119,13 @@ char *argv[];
     int i;
     int y, m, d, rep;
     Token tok;
+
+    /* Initialize global dynamic buffers */
+    DBufInit(&Banner);
+    DBufInit(&LineBuffer);
+    DBufInit(&TPushBuffer);
+
+    DBufPuts(&Banner, L_BANNER);
 
     /* Make sure remind is not installed set-uid or set-gid */
 #ifdef UNIX

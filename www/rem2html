@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.8 1998-05-10 01:29:23 dfs Exp $
+# $Id: rem2html,v 1.9 1999-10-18 19:55:14 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -41,6 +41,11 @@ if ($DefaultImageDir =~ m@/$@) {
 $rem2html_version = "1.0";
 
 &parse_options();
+
+# Backgound color -- unfortunately, most Web browsers (as of 14 October 1999)
+# do not correctly handle transparency in PNG images, so I had to make the
+# moon image background white.
+$Options{'bgcolor'} &&= "BGCOLOR\"#FFFFFF\"";
 
 if (-t STDIN) {
     print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";
@@ -103,7 +108,7 @@ sub escape_html {
 
 sub parse_options {
   %Options = ();
-
+  
   GetOptions (\%Options, "help|h",
                          "version",
                          "border|b=i",
@@ -167,16 +172,16 @@ sub parse_input {
 	  }
 	  next if ($phase > 3);
 	  if ($phase == 0) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/newmoon.gif\" ALT=\"New Moon\"" .
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/newmoon.png\" ALT=\"New Moon\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } elsif ($phase == 1) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/firstquarter.gif\" ALT=\"First Quarter\"" .
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/firstquarter.png\" ALT=\"First Quarter\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } elsif ($phase == 2) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/fullmoon.gif\" ALT=\"Full Moon\"" .
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/fullmoon.png\" ALT=\"Full Moon\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } else {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/lastquarter.gif\" ALT=\"Last Quarter\"" .
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/lastquarter.png\" ALT=\"Last Quarter\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  }
 	  $moons[$day] = $text . "</FONT> ";

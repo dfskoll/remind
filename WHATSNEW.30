@@ -4,7 +4,7 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
-- Made Remind accept date specs like "Jan 6, 1998" -- the comma is
+- Made REMIND accept date specs like "Jan 6, 1998" -- the comma is
   ignored.  This was suggested by John Conover <john@johncon.johncon.com>.
   You can even do "REM 27, Aug, 1998, msg bar".  (But I don't know why
   you'd want to.)
@@ -13,12 +13,20 @@ CHANGES TO REMIND
   `remind -p ...' to an HTML table.  The script was contributed by
   Don Schwarz <darkowl@mcs.net>
 
+- New security features: Because of the risk of statically-allocated
+  buffer, REMIND now refuses to run if it is installed set-uid or set-gid.
+  If REMIND is run as root, it refuses to read files not owned by root.
+  It also won't open group- or world-writable files, no matter who is
+  running it.  REMIND doesn't do security checks on stdin, though, so
+  be careful if you run it as root in a script.
+
+  NOTE:  REMIND doesn't do the world- and group-writable checks
+  on devices, FIFOs, etc.  Otherwise "remind /dev/null" fails...
+
 + BUG FIXES
 
 - Increased sizes of some statically-allocated buffers.  This doesn't
-  really fix the problem, but makes it more manageable.  Because of
-  the risk of statically-allocated buffers, REMIND now refuses to
-  run if it is installed set-uid or set-gid.
+  really fix the problem, but makes it more manageable.
 
 - Using the "-u" option now implies the "-r" option.  This is a
   security feature.

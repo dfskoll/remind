@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.5 1997-03-30 19:07:39 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.6 1997-07-31 01:49:38 dfs Exp $";
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -26,6 +26,10 @@ static char const RCSID[] = "$Id: files.c,v 1.5 1997-03-30 19:07:39 dfs Exp $";
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+
+#ifdef HAVE_UNISTD
+#include <unistd.h>
+#endif
 
 #if defined(__MSDOS__)
 #include <io.h>
@@ -78,6 +82,7 @@ static int IStackPtr = 0;
 PRIVATE int ReadLineFromFile ARGS ((void));
 PRIVATE int CacheFile ARGS ((const char *fname));
 PRIVATE void DestroyCache ARGS ((CachedFile *cf));
+PRIVATE int CheckSafety ARGS ((void));
 
 /***************************************************************/
 /*                                                             */
@@ -194,7 +199,7 @@ char *fname;
     } else {
 	fp = fopen(fname, "r");
     }
-    if (!fp) return E_CANT_OPEN;
+    if (!fp || !CheckSafety()) return E_CANT_OPEN;
     CLine = NULL;
     if (ShouldCache) {
 	LineNo = 0;
@@ -203,11 +208,12 @@ char *fname;
 	    fp = NULL;
 	    CLine = CachedFiles->cache;
 	} else {
-	    if (strcmp(fname, "-"))
+	    if (strcmp(fname, "-")) {
 		fp = fopen(fname, "r");
-	    else
+		if (!fp || !CheckSafety()) return E_CANT_OPEN;
+	    } else {
 		fp = stdin;
-	    if (!fp) return E_CANT_OPEN;
+	    }
 	}
     }
     STRSET(FileName, fname);
@@ -327,11 +333,12 @@ int PopFile()
     STRSET(FileName, i->filename);
     if (!CLine && (i->offset != -1L)) {
 	/* We must open the file, then seek to specified position */
-	if (strcmp(i->filename, "-"))
+	if (strcmp(i->filename, "-")) {
 	    fp = fopen(i->filename, "r");
-	else
+	    if (!fp || !CheckSafety()) return E_CANT_OPEN;
+	} else {
 	    fp = stdin;
-	if (!fp) return E_CANT_OPEN;
+	}
 	if (fp != stdin)
 	    (void) fseek(fp, i->offset, 0);  /* Trust that it works... */
     }
@@ -555,4 +562,55 @@ int TopLevel()
 #endif
 {
     return !IStackPtr;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  CheckSafety                                                */
+/*                                                             */
+/*  Returns 1 if current file is safe to read; 0 otherwise.    */
+/*  Currently only meaningful for UNIX.  If we are running as  */
+/*  root, we refuse to open files not owned by root.           */
+/*  We also reject group- or world-writable files, no matter   */
+/*  who we're running as.                                      */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PRIVATE int CheckSafety(void)
+#else
+static int CheckSafety()
+#endif
+{
+#ifdef UNIX
+    struct stat statbuf;
+
+    if (fstat(fileno(fp), &statbuf)) {
+	fclose(fp);
+	fp = NULL;
+	return 0;
+    }
+
+    /* Under UNIX, take extra precautions if running as root */
+    if (!geteuid()) {
+	/* Reject files not owned by root or group/world writable */
+	if (statbuf.st_uid != 0) {
+	    fprintf(ErrFp, "SECURITY: Won't read non-root-owned file when running as root!\n");
+	    fclose(fp);
+	    fp = NULL;
+	    return 0;
+	}
+    }
+    /* Sigh... /dev/null is usually world-writable, so ignore devices,
+       FIFOs, sockets, etc. */
+    if (!S_ISREG(statbuf.st_mode)) {
+	return 1;
+    }
+    if ((statbuf.st_mode & S_IWGRP) ||
+	(statbuf.st_mode & S_IWOTH)) {
+	fprintf(ErrFp, "SECURITY: Won't read group- or world-writable file!");
+	fclose(fp);
+	fp = NULL;
+	return 0;
+    }
+#endif
+    return 1;
 }

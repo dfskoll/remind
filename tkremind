@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.2 1996-04-14 16:07:06 dfs Exp $
+# $Id: tkremind,v 1.3 1996-04-22 03:37:35 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -19,6 +19,9 @@ exec wish "$0" "$@"
 #---------------------------------------------------------------------------
 # GLOBAL VARIABLES
 #---------------------------------------------------------------------------
+
+# Remind program to execute -- supply full path if you want
+set Remind "remind"
 
 # Month names in English
 set MonthNames {January February March April May June July August September October November December}
@@ -42,13 +45,44 @@ set TodayDay -1
 set OptionType 1
 set SkipType 1
 
+# Remind command line
+set CommandLine {}
+
+# Reminder file to source -- default
+catch {set ReminderFile "$env(HOME)/.reminders"}
+
+# Reminder file to append to -- default
+catch {set AppendFile $ReminderFile}
+
 #---------------------------------------------------------------------------
 # Initialize -- initialize things
 #---------------------------------------------------------------------------
 proc Initialize {} {
-    global DayNames
+    global DayNames argc argv CommandLine ReminderFile AppendFile Remind
+
+    set CommandLine "|$Remind -itkremind=1 -p"
+
+    set i 0
+    while {$i < $argc} {
+	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
+	    append CommandLine " [lindex $argv $i]"
+	} else {
+	    break
+	}
+	incr i
+    }
+    if {$i < $argc} {
+	set ReminderFile [lindex $argv $i]
+	set AppendFile $ReminderFile
+	incr i
+	if {$i < $argc} {
+	    set AppendFile [lindex $argv $i]
+	    incr i
+	}
+    }
+    append CommandLine " $ReminderFile"
     set DayNames [GetWeekdayNames]
-#    wm geometry . 700x400
+#   puts "CommandLine: $CommandLine"
 }
 
 #---------------------------------------------------------------------------
@@ -56,8 +90,8 @@ proc Initialize {} {
 # Also sets CurMonth and CurYear.
 #---------------------------------------------------------------------------
 proc GetWeekdayNames {} {
-    global CurMonth CurYear TodayYear TodayMonth TodayDay
-    set f [open "|remind - 2>/dev/null" r+]
+    global CurMonth CurYear TodayYear TodayMonth TodayDay Remind
+    set f [open "|$Remind - 2>/dev/null" r+]
     puts $f "banner %"
     set i 0
     while { $i < 7 } {
@@ -182,12 +216,12 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
 # FillCalWindow -- Fill in the calendar for global CurMonth and CurYear.
 #---------------------------------------------------------------------------
 proc FillCalWindow {} {
-    global DayNames CurYear CurMonth MonthNames
+    global DayNames CurYear CurMonth MonthNames CommandLine
 
     Status "Firing off Remind..."
     set month [lindex $MonthNames $CurMonth]
 
-    set file [open "|remind -itkremind=1 -p /home/dfs/.reminders $month $CurYear 2>/dev/null" r]
+    set file [open "$CommandLine $month $CurYear 2>/dev/null" r]
     # Look for # rem2ps begin line
     while { [gets $file line] >= 0 } {
 	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
@@ -454,7 +488,7 @@ proc CreateModifyDialog {w day firstDay} {
     CreateDayMenu $w.advdays 1 10 0
     label $w.advlab -text "day(s) in advance"
     checkbutton $w.advcount -text "not counting holidays/weekend"
-    $w.advcount deselect
+    $w.advcount select
     pack $w.advbut $w.advdays $w.advlab $w.advcount -side left -anchor w -in $w.adv
 
     # WEEKEND
@@ -484,7 +518,25 @@ proc CreateModifyDialog {w day firstDay} {
     menu $w.ampm.menu -tearoff 0
     $w.ampm.menu add command -label "AM" -command "$w.ampm configure -text {AM}"
     $w.ampm.menu add command -label "PM" -command "$w.ampm configure -text {PM}"
-    pack $w.timebut $w.timehour $w.timemin $w.ampm -side left -anchor w -in $w.time
+
+    checkbutton $w.timeadvbut -text "with"
+    $w.timeadvbut deselect
+    menubutton $w.timeadv -text "15" -menu $w.timeadv.menu -relief raised
+    menu $w.timeadv.menu -tearoff 0
+    foreach i {5 10 15 30 45 60} {
+	$w.timeadv.menu add command -label $i -command "$w.timeadv configure -text $i"
+    }
+    label $w.timelab1 -text "minutes advance notice"
+
+    checkbutton $w.timerepbut -text "repeated every"
+    $w.timerepbut deselect
+    menubutton $w.timerep -text "5" -menu $w.timerep.menu -relief raised
+    menu $w.timerep.menu -tearoff 0
+    foreach i {3 5 10 15 30} {
+	$w.timerep.menu add command -label $i -command "$w.timerep configure -text $i"
+    }
+    label $w.timelab2 -text "minutes"
+    pack $w.timebut $w.timehour $w.timemin $w.ampm $w.timeadvbut $w.timeadv $w.timelab1 $w.timerepbut $w.timerep $w.timelab2 -side left -anchor w -in $w.time
 
     # SKIP TYPE
     label $w.labhol -text "On holidays or weekends:"
@@ -500,10 +552,13 @@ proc CreateModifyDialog {w day firstDay} {
     pack $w.msglab -side left -anchor w -in $w.msg
     pack $w.entry -side left -anchor w -expand 1 -fill x -in $w.msg
 
+    bind $w.entry <Return> "$w.add flash; $w.add invoke"
+
     # BUTTONS
     button $w.add -text "Add to reminder file" -command "set ModifyDialogResult 1"
-    button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 2"
-    pack $w.add $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill both
+    button $w.preview -text "Preview reminder" -command "set ModifyDialogResult 2"
+    button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 3"
+    pack $w.add $w.preview $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill both
 
     set ModifyDialogResult 0
 
@@ -592,6 +647,8 @@ proc CreateYearMenu {w {every 1}} {
 #    firstDay -- first weekday in month (0-6)
 #---------------------------------------------------------------------------
 proc ModifyDay {d firstDay} {
+    global ModifyDialogResult AppendFile
+
     catch {destroy .mod}
     toplevel .mod
     CreateModifyDialog .mod $d $firstDay
@@ -599,11 +656,38 @@ proc ModifyDay {d firstDay} {
     wm iconname .mod "Add Reminder"
     tkwait visibility .mod
     set oldFocus [focus]
-    grab .mod
-    focus .mod.entry
-    tkwait variable ModifyDialogResult
-    catch {focus $oldFocus}
-    destroy .mod
+    while {1} {
+	grab .mod
+	focus .mod.entry
+	set ModifyDialogResult -1
+	tkwait variable ModifyDialogResult
+	if {$ModifyDialogResult == 3} {
+	    catch {focus $oldFocus}
+	    destroy .mod
+	    return 0
+	}
+	set problem [catch {set rem [CreateReminder .mod]} err]
+	if {$problem} {
+	    tk_dialog .error Error "$err" error -1 Ok
+	} else {
+	    if {$ModifyDialogResult == 2} {
+		set err [EditReminder $err]
+		if {$ModifyDialogResult == 3} {
+		    continue
+		}
+	    }
+	    catch {focus $oldFocus}
+	    destroy .mod
+	    Status "Writing reminder..."
+	    set f [open $AppendFile a]
+	    puts $f "# Next reminder was created with TkRemind"
+	    puts $f $err
+	    puts $f ""
+	    close $f
+	    FillCalWindow
+	    return 0
+	}
+    }
 }
 
 #---------------------------------------------------------------------------
@@ -622,6 +706,283 @@ proc CenterWindow {w} {
     wm deiconify $w
 }
 
+#---------------------------------------------------------------------------
+# CreateReminder -- create the reminder
+# Arguments:
+#    w -- the window containing the add reminder dialog box.
+# Returns:
+#    The reminder as a string.
+#---------------------------------------------------------------------------
+proc CreateReminder {w} {
+    global DidOmit
+
+    set body [string trim [$w.entry get]]
+
+    if {"$body" == ""} {
+	error "Blank body in reminder"
+    }
+
+    set DidOmit 0
+    set needOmit 0
+    # Delegate the first part to CreateReminder1, CreateReminder2, or
+    # CreateReminder3
+    global OptionType SkipType repbut expbut advbut advcount
+    global timebut timeadvbut timerepbut
+
+    set rem [CreateReminder$OptionType $w]
+
+    # Do the "until" part
+    if {$expbut} {
+	append rem " UNTIL [$w.expday cget -text] [$w.expmon cget -text] [$w.expyear cget -text]"
+    }
+
+    # Advance warning
+    if {$advbut} {
+	append rem " +"
+	if {!$advcount} {
+	    append rem "+"
+	} else {
+	    set needOmit 1
+	}
+	append rem [$w.advdays cget -text]
+    }
+
+    # Timed reminder
+    if {$timebut} {
+	set hour [$w.timehour cget -text]
+	set min [$w.timemin cget -text]
+	if {[$w.ampm cget -text] == "PM"} {
+	    if {$hour < 12} {
+		incr hour 12
+	    }
+	} else {
+	    if {$hour == 12} {
+		set hour 0
+	    }
+	}
+	append rem " AT $hour:$min"
+	if {$timeadvbut} {
+	    append rem " +[$w.timeadv cget -text]"
+	}
+	if {$timerepbut} {
+	    append rem " *[$w.timerep cget -text]"
+	}
+    }
+
+    global SkipType
+    if {$SkipType == 2} {
+	append rem " SKIP"
+	set needOmit 1
+    } elseif {$SkipType == 3} {
+	append rem " BEFORE"
+	set needOmit 1
+    } elseif {$SkipType == 4} {
+	append rem " AFTER"
+	set needOmit 1
+    }
+
+    if {$needOmit && !$DidOmit} {
+	append rem " OMIT [GetWeekend $w 1]"
+    }
+
+
+    # Check it out!
+    global Remind
+    set f [open "|$Remind -arq -e -" r+]
+    puts $f "BANNER %"
+    puts $f "$rem MSG %"
+    puts $f "MSG %_%_%_%_"
+    puts $f "FLUSH"
+    flush $f
+    set err {}
+    catch {set err [gets $f]}
+    catch {close $f}
+    if {"$err" != ""} {
+	error "Error from Remind: $err"
+    }
+    append rem " MSG $body"
+    return $rem
+}
+
+#---------------------------------------------------------------------------
+# CreateReminder1 -- Create the first part of a type-1 reminder
+# Arguments:
+#    w -- add reminder dialog window
+# Returns: first part of reminder
+#---------------------------------------------------------------------------
+proc CreateReminder1 {w} {
+
+    global repbut
+
+    set rem "REM"
+    set gotDay 0
+    set gotMon 0
+    set gotYear 0
+    set d [$w.day1 cget -text]
+    if {"$d" != "every day"} {
+	append rem " $d"
+	set gotDay 1
+    }
+    set m [$w.mon1 cget -text]
+    if {"$m" != "every month"} {
+	append rem " $m"
+	set gotMon 1
+    }
+    set y [$w.year1 cget -text]
+    if {"$y" != "every year"} {
+	append rem " $y"
+	set gotYear 1
+    }
+
+    # Check for repetition
+    if {$repbut} {
+	if {!$gotDay || !$gotMon || !$gotYear} {
+	    error "All components of a date must be specified if you wish to use the repeat feature."
+	}
+	append rem " *[$w.repdays cget -text]"
+    }
+
+    return $rem
+}
+
+#---------------------------------------------------------------------------
+# CreateReminder2 -- Create the first part of a type-2 reminder
+# Arguments:
+#    w -- add reminder dialog window
+# Returns: first part of reminder
+#---------------------------------------------------------------------------
+proc CreateReminder2 {w} {
+    set wkday [$w.wkday2 cget -text]
+    if {"$wkday" == "weekday"} {
+	set wkday [GetWeekend $w 0]
+    }
+    set day [$w.day2 cget -text]
+    set mon [$w.mon2 cget -text]
+    set year [$w.year2 cget -text]
+    set rem "REM $wkday $day"
+    if {$mon != "every month"} {
+	append rem " $mon"
+    }
+    if {$year != "every year"} {
+	append rem " $year"
+    }
+    return $rem
+}
+
+#---------------------------------------------------------------------------
+# CreateReminder3 -- Create the first part of a type-3 reminder
+# Arguments:
+#    w -- add reminder dialog window
+# Returns: first part of reminder
+#---------------------------------------------------------------------------
+proc CreateReminder3 {w} {
+    global MonthNames DidOmit
+    set which [$w.ordinal cget -text]
+    set day [$w.wkday3 cget -text]
+    set mon [$w.mon3 cget -text]
+    set year [$w.year3 cget -text]
+    set rem "REM"
+    if {$which != "Last"} {
+	if {$which == "First"} {
+	    append rem " 1"
+	} elseif {$which == "Second"} {
+	    append rem " 8"
+	} elseif {$which == "Third"} {
+	    append rem " 15"
+	} elseif {$which == "Fourth"} {
+	    append rem " 22"
+	}
+	if {$day != "weekday"} {
+	    append rem " $day"
+	} else {
+	    append rem " [GetWeekend $w 0]"
+	}
+	if {$mon != "every month"} {
+	    append rem " $mon"
+	}
+	if {$year != "every year"} {
+	    append rem " $year"
+	}
+    } else {
+	if {$day != "weekday"} {
+	    append rem " $day 1 --7"
+	} else {
+	    append rem " 1 -1 OMIT [GetWeekend $w 1]"
+	    set DidOmit 1
+	}
+	if {$mon != "every month"} {
+	    set i [lsearch -exact $MonthNames $mon]
+	    if {$i == 11} {
+		set i 0
+	    } else {
+		incr i
+	    }
+	    append rem " [lindex $MonthNames $i]"
+	}
+	if {$year != "every year"} {
+	    if {$mon == "December"} {
+		incr year
+	    }
+	    append rem " $year"
+	}
+    }
+    return $rem
+}
+
+#---------------------------------------------------------------------------
+# GetWeekend -- returns a list of weekdays or weekend days
+# Arguments:
+#    w -- add reminder dialog window
+#    wkend -- if 1, we want weekend.  If 0, we want weekdays.
+# Returns:
+#    list of weekdays or weekend-days
+#---------------------------------------------------------------------------
+proc GetWeekend {w wkend} {
+    global dSaturday dSunday dMonday dTuesday dWednesday dThursday dFriday
+    global EnglishDayNames
+    set ret {}
+    foreach d $EnglishDayNames {
+	set v [set d$d]
+	if {$v == $wkend} {
+	    lappend ret $d
+	}
+    }
+    return $ret
+}
+
+#---------------------------------------------------------------------------
+# EditReminder -- allow user to edit what gets put in reminder file
+# Arguments:
+#    rem -- current reminder
+# Returns:
+#    edited version of rem
+#---------------------------------------------------------------------------
+proc EditReminder {rem} {
+    catch {destroy .edit}
+    global ModifyDialogResult
+    toplevel .edit
+    wm title .edit "Preview reminder"
+    wm iconname .edit "Preview reminder"
+    text .edit.t -width 80 -height 5 -relief sunken
+    .edit.t insert end $rem
+    frame .edit.f
+    button .edit.ok -text {Add to reminder file} -command "set ModifyDialogResult 1"
+    button .edit.cancel -text {Cancel} -command "set ModifyDialogResult 3"
+    pack .edit.t -side top -fill both -expand 1
+    pack .edit.f -side top -fill x -expand 1
+    pack .edit.ok .edit.cancel -in .edit.f -side left -fill x -expand 1
+    set ModifyDialogResult 0
+    CenterWindow .edit
+    tkwait visibility .edit
+    set oldFocus [focus]
+    focus .edit.t
+    grab .edit
+    tkwait variable ModifyDialogResult
+    catch {focus $oldFocus}
+    set rem [.edit.t get 1.0 end]
+    catch {destroy .edit}
+    return $rem
+}
 
 proc main {} {	
     wm withdraw .

@@ -1,6 +1,6 @@
 <HTML>
 <!-- Sample HTML file with links to the calendar stuff -->
-<!-- $Id: calendar.html-DIST,v 1.2 1997-03-30 19:08:01 dfs Exp $ -->
+<!-- $Id: calendar.html-DIST,v 1.3 1997-07-06 14:34:41 dfs Exp $ -->
 <HEAD>
 <TITLE>David Skoll's Calendar Server</TITLE>
 </HEAD>
@@ -25,3 +25,4 @@ PostScript Calendar with Jewish Holidays</a> (Approximately 35 kB)<P>
 Get the Remind software</a> that provides this service.<P>
 
 </BODY>
+</HTML>

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.6 1997-03-31 22:13:09 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.7 1997-07-06 14:34:37 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -1260,11 +1260,18 @@ int jul, tim, *mins, *isdst;
     temp = localtime(&loc_t);
     /* Compute difference between local time and UTC in seconds.
        Be careful, since time_t might be unsigned. */
-    tdiff = (loc_t < utc_t) ? -1*((int)(utc_t-loc_t)) : (loc_t-utc_t);
 #ifdef HAVE_MKTIME
-    /* Should use difftime */
+    /* If we have mktime(), then we have difftime(), so use it! */
+    tdiff = (int) difftime(loc_t, utc_t);
     if (mins) *mins = (int)(((temp->tm_isdst) ? 60 : 0) + tdiff / 60 );
 #else
+    /* If we don't have mktime(), we probably don't have difftime(),
+       so use this rather non-portable code. */
+    if (loc_t < utc_t) {
+	tdiff = - (int) (utc_t - loc_t);
+    } else {
+	tdiff = (int) (loc_t - utc_t);
+    }
     if (mins) *mins = (int)(tdiff / 60);
 #endif
     if (isdst) *isdst = temp->tm_isdst;

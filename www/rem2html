@@ -1,0 +1,298 @@
+#!/bin/perl
+
+# rem2html
+#
+# $Id: rem2html,v 1.1 1997-07-06 14:34:41 dfs Exp $
+#
+# A script to convert from the output of "remind -p" to Hyper-Text Markup
+# Language (HTML), the text format used in WWW documents.  By default, it
+# outputs a stand-alone file which can be fed directly into a web browser.
+# The output uses nested <TABLE> blocks, so it will only work in a browser
+# which supports tables (Netscape, MSIE, etc, NOT Lynx).
+#
+# This script works well on my computer (Linux 2.0.27) under Perl 5.003 and
+# 5.004.  It should work fine on other unices but I have no idea whether
+# it will run under VMS, OS/2, Windows, etc.
+#
+# This file is Copyright (C) 1997 by Don Schwarz <darkowl@mcs.net>.
+
+use Getopt::Long;
+
+@months = (January,February,March,April,May,June,July,August,September,October,November,December);
+
+$rem2html_version = "1.0";
+
+&parse_options();
+
+if ($Options{'help'}) {
+  &show_usage();
+} elsif ($Options{'version'}) {
+  print "Rem2HTML Version $rem2html_version.\n";
+} else {
+  &parse_input();
+
+  &output_header();
+  &output_data();
+  &output_footer();
+}
+
+exit(0);
+
+sub show_usage {
+  print STDERR <<EndOfUsage;
+Rem2HTML: Produce a HTML calendar from the output of Remind.
+
+Usage: rem2html [options]
+
+Options:
+
+--help, -h          Print this information
+--version           Version information
+-p file             Prepend the specified HTML file to the beginning of the
+                    output
+-f[shted] font      Set font for small cal, hdr, title, cal entries,day numbers
+-s[hted] size       Set size for header, title, calendar entries and/or day
+                    numbers
+--backurl url       Make the title on the previous month's small calendar entry
+                    a hyperlink to <url>
+--forwurl url       Same as --backurl, but with the next month's small calendar
+--tableonly         Output the results as a <TABLE> block only, no <HTML>, etc.
+--border,-b size    Set the border thickness of the table
+--cellspace,-t size Set the line thickness of the table
+--bgcolor,-g color  Set the background color for the day entries
+
+EndOfUsage
+
+}
+
+sub parse_options {
+  %Options = ();
+
+  GetOptions (\%Options, "help|h",
+                         "version",
+                         "border|b=i",
+                         "cellspace|t=i",
+                         "backurl|bu:s", "forwurl|fu:s",
+                         "tableonly|to",
+                         "prologue|p=s",
+                         "bgcolor|g=s",
+                         "fs=s", "fh=s", "ft=s", "fe=s", "fd=s",
+                                 "sh=i", "st=i", "se=i", "sd=i",
+             );
+
+   $Options{'border'} = "BORDER=" . ($Options{'border'} || 1);
+   $Options{'cellspace'} &&= "CELLSPACING=$Options{'cellspace'}";
+   $Options{'bgcolor'} &&= "BGCOLOR=$Options{'bgcolor'}";
+}
+
+sub parse_input {
+  local $where = 0;
+  local $msg;
+  @days = ();
+
+  while (<>) {
+    chomp($_);
+    if (/rem2(html|ps) begin/) {
+    } elsif (!$where) {
+      next;
+    } elsif ($where == 1) {
+      local ($month, $year);
+      ($month, $year, $month_length, $firstday, $mfirst) = split(" ");
+      $caption = "$month, $year";
+      for $i ( 1 .. $month_length) { push(@days, ""); }
+    } elsif ($where == 2) {
+      @prevsc = split(" ");
+    } elsif ($where == 3) {
+      @nextsc = split(" ");
+    } else {
+      last if /rem2(html|ps) end/;
+      next unless m%^(\d*)/*(\d*)/*(\d*)  ([^ ]*)?\s*(.*)$%;
+      $msg = $5;
+      $msg = "$4 $msg" if $4;
+      $days[$3] .= "<P>$msg</P>";
+    }
+    $where++;
+  }
+
+  die "Rem2HTML: Could not find any calendar data.\n", unless $where;
+}
+
+sub output_header {
+  local ($title, $dayheader);
+
+  if (!$Options{'tableonly'}) {
+    print <<EndOfHTML;
+<HTML>
+ <HEAD><TITLE>Reminders for $caption</TITLE></HEAD>
+ <BODY>
+EndOfHTML
+  }
+
+  print <<EndOfHTML;
+<!-- This output was produced by Rem2HTML $rem2html_version (written by
+Don Schwarz <darkowl\@mcs.net>) and Remind (written by David F. Skoll).  -->
+EndOfHTML
+
+  if ($Options{'prologue'}) {
+    open(PROLOGUE, "< $Options{'prologue'}");
+    print while ( <PROLOGUE> );
+    close(PROLOGUE);
+  }
+
+  $caption = &format_font($caption, $Options{'ft'}, $Options{'st'} || "+1");
+
+  print <<EndOfHTML;
+<TABLE $Options{'border'} $Options{'cellspace'} $Options{'bgcolor'} WIDTH=100%>
+ <CAPTION><STRONG>$caption</STRONG></CAPTION>
+ <TR>
+EndOfHTML
+
+  $mfirst || &print_day_header("Sunday");
+  
+  foreach $dayheader (Monday,Tuesday,Wednesday,Thursday,Friday,Saturday) {
+    &print_day_header($dayheader);
+  }
+
+  $mfirst && &print_day_header("Sunday");
+  print " </TR>\n";
+}
+
+sub output_footer {
+  print "</TABLE>\n";
+
+  unless ($Options{'tableonly'}) {
+    print <<EndOfHTML;
+ </BODY>
+</HTML>
+EndOfHTML
+  }
+}
+
+sub output_data {
+  local ($endday, $prevday, $nextday, $week, $weekday);
+  local ($element, $day, $msg, $fday);
+  $firstday -= $mfirst;
+  if ($firstday < 0) { $firstday += 7; }
+  $endday = $firstday + $month_length;
+  $endweek = $endday + (6 - ($endday % 7));
+  $endday %= 7;
+
+  if ( $firstday > 1 ) {
+    $prevday = 0;
+    $nextday = 1;
+  } elsif ($endday ? ($endday < 5) : !$firstday) {
+    $prevday = $endweek - 1;
+    $nextday = $endweek;
+  } else {
+    $prevday = 0;
+    $nextday = $endweek;
+  }
+
+  for $week ( 0..5 ) {
+    print " <TR>\n";
+    for $weekday ( 0..6 ) {
+      $element = ($week * 7) + ($weekday * 1);
+      $day = $element - $firstday + 1;
+      $msg = $days[$day];
+      $msg = $msg ? &format_font($msg, $Options{'fe'}, $Options{'se'})
+                  : " <BR> <BR> <BR> <BR>";
+
+      $fday = &format_font($day, $Options{'fd'}, $Options{'sd'} || -1);
+      if ($day > 0 && $day <= $month_length) {
+
+        print <<EndOfHTML;
+  <TD VALIGN=TOP WIDTH=14%>
+   <P ALIGN=RIGHT>$fday</P>
+   $msg
+  </TD>
+EndOfHTML
+
+      } elsif ($element == $prevday) {
+        &small_calendar(@prevsc, 1, $Options{'backurl'});
+      } elsif ($element == $nextday) {
+        &small_calendar(@nextsc, 2, $Options{'forwurl'});
+      } else {
+        print "  <TD WIDTH=14%><BR></TD>";
+      }
+    }
+    print " </TR>\n";
+    last if $day >= $month_length && $element >= $nextday;
+  }
+}
+
+sub small_calendar {
+  local ($scname, $scn, $which, $url) = @_;
+  local ($scstart, $l, $week, $weekday, $tday);
+  
+  $scname = "<A HREF=\"$url\">$scname</A>", if $url;
+  $scname = &format_font($scname, $Options{'fs'}, -2);
+  
+  if ($which == 1) {
+    $scstart = $firstday - ($scn % 7);
+    if ($scstart < 0) { $scstart += 7; }
+  } else {
+    $scstart = $firstday + ($month_length % 7);
+    if ($scstart > 6) { $scstart -= 7; }
+  }
+
+  print <<EndOfHTML;
+  <TD WIDTH=14% VALIGN=TOP>
+<TABLE WIDTH=100%>
+ <CAPTION><STRONG>$scname</STRONG></CAPTION>
+ <TR>
+EndOfHTML
+
+  $mfirst || &print_day_header("S", 1);
+  
+  foreach $l (M,T,W,T,F,S) {
+    &print_day_header($l, 1);
+  }
+
+  $mfirst && &print_day_header("S", 1);
+  print "</TR>\n";
+
+  for $week ( 0..5 ) {
+    print " <TR>\n";
+    for $weekday ( 0..6 ) {
+      $tday = ($week * 7) + ($weekday * 1) - $scstart + 1;
+      $tday = "", if $tday <= 0 || $tday > $scn;
+      print "  <TD WIDTH=14%><FONT SIZE=-2>$tday</FONT></TD>\n";
+    }
+    print " </TR>\n";
+    last if $tday >= $scn;
+  }
+
+  print <<EndOfHTML;
+</TABLE>
+  </TD>
+EndOfHTML
+
+}
+
+sub format_font {
+  local ($text, $font, $size) = @_;
+
+  if (!$text) {
+    return "";
+  } elsif ($font && $size) {
+    return "<FONT FACE=$font SIZE=$size>$text</FONT>";
+  } elsif ($font) {
+    return "<FONT FACE=$font>$text</FONT>";
+  } elsif ($size) {
+    return "<FONT SIZE=$size>$text</FONT>";
+  } else {
+    return $text;
+  }
+}
+
+sub print_day_header {
+  local ($dheader, $small) = @_;
+
+  if ($small) {
+    $dheader = &format_font($dheader, $Options{'fs'}, -2);
+  } else {
+    $dheader = &format_font($dheader, $Options{'fh'}, $Options{'sh'});
+  }
+
+  print "  <TH WIDTH=14%>$dheader</TH>\n";
+}

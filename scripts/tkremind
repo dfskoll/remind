@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.19 1998-04-23 02:56:46 dfs Exp $
+# $Id: tkremind,v 1.20 1998-05-01 02:19:52 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -618,7 +618,7 @@ proc FillCalWindow {} {
 	if { [string length [string trim [.cal.t$n get 1.0]]] != 0} {
 	    .cal.t$n insert end " .....\n"
 	}
-	if {[regexp {TKTAG([0-9])+} $tag all tagno]} {
+	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
 	    .cal.t$n insert end [string trim $stuff] "TAGGED TKTAG$tagno"
 	} else {
 	    .cal.t$n insert end [string trim $stuff]

@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.6 1998-02-12 03:32:17 dfs Exp $
+# $Id: rem2html,v 1.7 1998-04-23 02:57:08 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -32,6 +32,11 @@
 use Getopt::Long;
 
 @months = (January,February,March,April,May,June,July,August,September,October,November,December);
+
+$DefaultImageDir = "%IMAGEBASE%";
+if ($DefaultImageDir =~ m@/$@) {
+    chop $DefaultImageDir;
+}
 
 $rem2html_version = "1.0";
 
@@ -123,7 +128,8 @@ sub parse_input {
   local $type;
   local $day;
   @days = ();
-
+  @shades = ();
+  @moons = ();
   while (<>) {
     chomp($_);
     if (/rem2(html|ps) begin/) {
@@ -146,10 +152,51 @@ sub parse_input {
       $type = $4;
       $msg = $8;
       $day = $3;
-      next unless ($type eq "HTML" || ($type eq "*"));
       if ($type eq "HTML") {
 	  $days[$day] .= "$msg ";
-      } else {
+      } elsif ($type eq "MOON") {
+	  my($phase, $text);
+	  if ($msg =~ /^\s*(\d+)\s+\S+\s+\S+\s+(.*)$/) {
+	      $phase = $1;
+	      $text = $2;
+	  } elsif ($msg =~ /^\s*(\d+)/) {
+	      $phase = $1;
+	      $text = "";
+	  } else {
+	      next;
+	  }
+	  next if ($phase > 3);
+	  if ($phase == 0) {
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/newmoon.gif\" ALT=\"New Moon\"" .
+		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
+	  } elsif ($phase == 1) {
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/firstquarter.gif\" ALT=\"First Quarter\"" .
+		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
+	  } elsif ($phase == 2) {
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/fullmoon.gif\" ALT=\"Full Moon\"" .
+		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
+	  } else {
+	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/lastquarter.gif\" ALT=\"Last Quarter\"" .
+		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
+	  }
+	  $moons[$day] = $text . "</FONT> ";
+      } elsif ($type eq "SHADE") {
+	  my($red, $green, $blue);
+	  if ($msg =~ /^\s*(\d+)\s+(\d+)\s+(\d+)\s*$/) {
+	      $red = $1;
+	      $green = $2;
+	      $blue = $3;
+	  } elsif ($msg =~ /^\s*(\d+)\s*$/) {
+	      $red = $1;
+	      $green = $1;
+	      $blue = $1;
+	  } else {
+	      next;
+	  }
+	  next if ($red > 255 || $green > 255 || $blue > 255);
+	  $shades[$day] = sprintf(" BGCOLOR=\"#%02X%02X%02X\"",
+				  $red, $green, $blue);
+      } elsif ($type eq "*") {
 	  $msg = &escape_html($msg);
 	  $days[$day] .= "<P>$msg</P>";
       }
@@ -252,8 +299,8 @@ sub output_data {
       if ($day > 0 && $day <= $month_length) {
 
         print <<EndOfHTML;
-  <TD VALIGN=TOP WIDTH=14%>
-   <P ALIGN=RIGHT>$fday</P>
+  <TD VALIGN=TOP WIDTH=14%$shades[$day]>
+   <P ALIGN=RIGHT>$moons[$day]$fday</P>
    $msg
   </TD>
 EndOfHTML

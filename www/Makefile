@@ -2,7 +2,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: Makefile,v 1.7 1997-08-31 17:17:51 dfs Exp $
+# $Id: Makefile,v 1.8 1998-04-23 02:57:06 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca
@@ -13,7 +13,7 @@ WWWHOST = shevy.skoll.ca
 SCRIPTDIR = /var/web/cgi-bin
 # SCRIPTDIR = /home/dfs/Remind/www/TEST
 
-# Where the scripts live as seen from the outside world.  If
+# Where the scripts live as seen by the web browser.  If
 # they live in WWWHOST/cgi-bin, supply /cgi-bin
 CGIDIR = /cgi-bin
 
@@ -21,6 +21,12 @@ CGIDIR = /cgi-bin
 # file containing links to all the scripts.  This path should be the
 # path as seen by the UNIX operating system
 HTMLDIR = /home/dfs/public_html
+
+# Where you stick images, as seen by UNIX
+IMAGEDIR = /home/dfs/public_html
+
+# Where images are, as seen by web browers
+IMAGEBASE = /~dfs
 
 # Location.  Typically, the name of your city or town.  Example: Ottawa
 LOCATION = Ottawa
@@ -38,6 +44,7 @@ SEDSCRIPT = -e 's/Ottawa/$(LOCATION)/g' \
 	    -e 's@http://your.machine/your.dir@http://$(WWWHOST)$(CGIDIR)@g' \
 	    -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
 	    -e 's@%REMIND%@$(REMIND)@g' \
+	    -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
 	    -e 's@%REM2PS%@$(REM2PS)@g'
 
 all:
@@ -53,12 +60,21 @@ install:
 	sed $(SEDSCRIPT) < sunrise.rem-DIST   > $(SCRIPTDIR)/sunrise.rem
 	sed $(SEDSCRIPT) < sunset.rem-DIST    > $(SCRIPTDIR)/sunset.rem
 	sed $(SEDSCRIPT) < calendar.html-DIST > $(HTMLDIR)/calendar.html
+	sed $(SEDSCRIPT) < rem2html           > $(SCRIPTDIR)/rem2html
 	chmod 644 $(SCRIPTDIR)/sunrise.rem
 	chmod 644 $(SCRIPTDIR)/moon.rem
 	chmod 644 $(SCRIPTDIR)/hebdate.rem
 	chmod 644 $(SCRIPTDIR)/sunset.rem
 	chmod 644 $(HTMLDIR)/calendar.html
 	chmod 755 $(SCRIPTDIR)/cal_dispatch
+	chmod 755 $(SCRIPTDIR)/rem2html
 	chmod 755 $(SCRIPTDIR)/calps $(SCRIPTDIR)/hebdate \
 	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \
 	$(SCRIPTDIR)/sunset $(SCRIPTDIR)/hebhtml $(SCRIPTDIR)/rem2html
+
+	cp firstquarter.gif fullmoon.gif lastquarter.gif newmoon.gif $(IMAGEDIR)
+	chmod 644 $(IMAGEDIR)/firstquarter.gif $(IMAGEDIR)/fullmoon.gif $(IMAGEDIR)/lastquarter.gif $(IMAGEDIR)/newmoon.gif
+
+
+
+

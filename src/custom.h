@@ -10,15 +10,17 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.2 1998-01-15 03:28:40 dfs Exp $ */
+/* $Id: custom.h,v 1.3 1998-01-17 22:09:44 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
 /* LON_DEG, LON_MIN and LON_SEC: Longitude of your location            */
 /* LOCATION: A string identifying your location.                       */
-/* All latitude and longitude numbers should be positive.              */
-/* If you live in the southern and/or eastern hemisphere, define       */
-/* NORTHERN_HEMISPHERE to 0 and/or WESTERN_HEMISPHERE to 0.            */
+/* All latitude and longitude numbers should be positive for the       */
+/* northern and western hemisphere.  If you live in the southern       */
+/* hemisphere, ALL latitude values should be negative.  If you live    */
+/* in the eastern hemisphere, ALL longitude values should be negative. */
+/*                                                                     */
 /* The default values are initially set to Ottawa, Ontario, Canada.    */
 /*---------------------------------------------------------------------*/
 #define LAT_DEG 45
@@ -27,8 +29,6 @@
 #define LON_DEG 75
 #define LON_MIN 39
 #define LON_SEC  0
-#define NORTHERN_HEMISPHERE 1
-#define WESTERN_HEMISPHERE 1
 #define LOCATION "Ottawa"
 
 /*---------------------------------------------------------------------*/
@@ -54,7 +54,7 @@
 /* #define TIMESEP '.' */
 
 /*---------------------------------------------------------------------*/
-/* ISOLATIN1: uncomment the following line if your system uses the     */
+/* ISOLATIN1: define it to 1 if you use the                            */
 /* ISO 8859-1 character set instead of ASCII.                          */
 /*---------------------------------------------------------------------*/
 #define ISOLATIN1 1

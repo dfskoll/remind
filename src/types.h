@@ -6,11 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.4 1999-04-05 17:34:58 dfs Exp $ */
+/* $Id: types.h,v 1.5 2000-02-18 03:46:12 dfs Exp $ */
 
 #include "dynbuf.h"
 

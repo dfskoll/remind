@@ -7,12 +7,12 @@
 #   A cheesy graphical front/back end for Remind using Tcl/Tk
 #
 #   This file is part of REMIND.
-#   Copyright (C) 1992-1998 by David F. Skoll
-#   Copyright (C) 1999 by Roaring Penguin Software Inc.
+#   Copyright (C) 1992-1998 David F. Skoll
+#   Copyright (C) 1999-2000 Roaring Penguin Software Inc.
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.26 1999-04-13 01:39:33 dfs Exp $
+# $Id: tkremind,v 1.27 2000-02-18 03:45:40 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"

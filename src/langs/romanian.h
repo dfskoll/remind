@@ -9,12 +9,12 @@
 /*  This file is part of REMIND.                               */
 /*                                                             */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
-/*            Copyright 1999 by Roaring Penguin Software Inc.  */
+/*       Copyright 1999-2000 by Roaring Penguin Software Inc.  */
 /*  This file is Copyright (C) 1996-1998 by Liviu Daia         */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: romanian.h,v 1.5 1999-04-05 17:35:10 dfs Exp $ */
+/* $Id: romanian.h,v 1.6 2000-02-18 03:46:27 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Romanian"

@@ -6,11 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright 1999 by Roaring Penguin Software Inc.            */
+/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: english.h,v 1.4 1999-04-05 17:35:06 dfs Exp $ */
+/* $Id: english.h,v 1.5 2000-02-18 03:46:19 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "English"

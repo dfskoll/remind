@@ -2,9 +2,9 @@
 #
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
-# Copyright (C) 1999 by Roaring Penguin Software Inc.
+# Copyright (C) 1999-2000 by Roaring Penguin Software Inc.
 
-# $Id: hebdate.rem-DIST,v 1.7 1999-10-18 20:08:55 dfs Exp $
+# $Id: hebdate.rem-DIST,v 1.8 2000-02-18 03:46:37 dfs Exp $
 
 BANNER %
 IF !$PSCAL

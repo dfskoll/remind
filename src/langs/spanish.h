@@ -8,11 +8,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright 1999 by Roaring Penguin Software Inc.            */
+/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: spanish.h,v 1.2 1999-04-05 17:35:11 dfs Exp $ */
+/* $Id: spanish.h,v 1.3 2000-02-18 03:46:28 dfs Exp $ */
 
 #define L_LANGNAME "Spanish"
 

@@ -9,13 +9,13 @@
 /*  This file is part of REMIND.                               */
 /*                                                             */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
-/*  Copyright 1999 by Roaring Penguin Software Inc.            */
+/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*  This file is Copyright (C) 1993 by Laurent Duperval and    */
 /*  David F. Skoll.                                            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.7 1999-04-12 19:45:42 dfs Exp $ */
+/* $Id: french.h,v 1.8 2000-02-18 03:46:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"

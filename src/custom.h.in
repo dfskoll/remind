@@ -7,11 +7,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h.in,v 1.6 1999-04-05 17:34:43 dfs Exp $ */
+/* $Id: custom.h.in,v 1.7 2000-02-18 03:45:46 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -228,11 +228,6 @@
 
 #define PUBLIC
 #define PRIVATE static
-
-#ifdef UNIX
-#define _POSIX_SOURCE
-#define _SVID_SOURCE
-#endif
 
 #define PSBEGIN "# rem2ps begin"
 #define PSEND   "# rem2ps end"

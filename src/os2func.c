@@ -8,12 +8,12 @@
 /*                                                             */
 /*  This file is Copyright (C) 1993 by Russ Herman.            */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: os2func.c,v 1.3 1999-04-05 17:34:54 dfs Exp $";
+static char const RCSID[] = "$Id: os2func.c,v 1.4 2000-02-18 03:46:04 dfs Exp $";
 
 #ifdef OS2_POPUP
 #define INCL_VIO

@@ -6,17 +6,16 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.14 2000-02-02 20:20:33 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.15 2000-02-18 03:46:06 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
 #define __EXTENSIONS__ 1
-#undef _POSIX_SOURCE
 #endif
 
 /* We only want object code generated if we have queued reminders */
@@ -29,6 +28,10 @@ static char const RCSID[] = "$Id: queue.c,v 1.14 2000-02-02 20:20:33 dfs Exp $";
 
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
+#endif
+
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
 #endif
 
 #ifdef HAVE_STDLIB_H
@@ -306,8 +309,13 @@ QueuedRem *q;
 	r = CalculateNextTimeUsingSched(q);
 	if (r != NO_TIME) return r;
     }
-    if (delta == NO_DELTA)
-	if (tim < curtime) return NO_TIME; else return tim;
+    if (delta == NO_DELTA) {
+	if (tim < curtime) {
+	    return NO_TIME; 
+	} else {
+	    return tim;
+	}
+    }
 
     tim -= delta;
     if (rep == NO_REP) rep = delta;

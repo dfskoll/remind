@@ -9,13 +9,13 @@
 /*  This file is part of REMIND.                               */
 /*                                                             */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
-/*  Copyright 1999 by Roaring Penguin Software Inc.            */
+/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*  This file is Copyright (C) 1996 by Marco Paganini and      */
 /*  David F. Skoll.                                            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.6 1999-04-12 19:45:43 dfs Exp $ */
+/* $Id: portbr.h,v 1.7 2000-02-18 03:46:26 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"

@@ -7,12 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 static char const RCSID[] =
-"$Id: dynbuf.c,v 1.4 1999-04-21 01:48:00 dfs Exp $";
+"$Id: dynbuf.c,v 1.5 2000-02-18 03:45:49 dfs Exp $";
 
 #include "config.h"
 #include "dynbuf.h"

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.in,v 1.5 1998-02-16 03:41:39 dfs Exp $
+dnl $Id: configure.in,v 1.6 2000-02-18 03:45:16 dfs Exp $
 
 AC_INIT(src/amiga.c)
 
@@ -28,7 +28,7 @@ AC_CHECK_LIB(m, sqrt)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(sys/file.h sys/time.h sys/types.h unistd.h malloc.h stdarg.h stdlib.h pwd.h)
+AC_CHECK_HEADERS(sys/file.h sys/select.h sys/time.h sys/types.h unistd.h malloc.h stdarg.h stdlib.h pwd.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

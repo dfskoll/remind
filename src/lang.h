@@ -6,11 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.4 1999-04-05 17:34:51 dfs Exp $ */
+/* $Id: lang.h,v 1.5 2000-02-18 03:46:00 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 
@@ -27,7 +27,7 @@
 #define ROMANIAN  10 /* translated by Liviu Daia                       */
 #define SPANISH   11 /* translated by Rafa Couto                       */
 
-/* Add more languages here - but please e-mail aa775@freenet.carleton.ca
+/* Add more languages here - but please e-mail dfs@roaringpenguin.com
    to have your favorite language assigned a number.  If you add a
    language, please send me the header file, and permission to include
    it in future releases of Remind.  Note that you'll get no remuneration

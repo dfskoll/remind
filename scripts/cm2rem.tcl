@@ -9,11 +9,11 @@
 #
 #   This file is part of REMIND.
 #   Copyright (C) 1992-1998 by David F. Skoll
-#   Copyright (C) 1999 by Roaring Penguin Software Inc.
+#   Copyright (C) 1999-2000 by Roaring Penguin Software Inc.
 #
 #--------------------------------------------------------------
 
-# $Id: cm2rem.tcl,v 1.2 1999-08-30 16:28:01 dfs Exp $
+# $Id: cm2rem.tcl,v 1.3 2000-02-18 03:45:38 dfs Exp $
 
 # the next line restarts using tclsh \
 exec tclsh "$0" "$@"

@@ -7,12 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.8 2000-02-18 03:08:18 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.9 2000-02-18 03:45:55 dfs Exp $";
 
 #include <stdio.h>
 
@@ -1015,7 +1015,10 @@ static int FUpper()
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     DCOPYVAL(RetVal, ARG(0));
     s = RetVal.v.str;
-    while (*s) { *s = UPPER(*s); s++; }
+    while (*s) {
+	*s = UPPER(*s);
+	s++;
+    }
     return OK;
 }
 
@@ -1030,7 +1033,10 @@ static int FLower()
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     DCOPYVAL(RetVal, ARG(0));
     s = RetVal.v.str;
-    while (*s) { *s = LOWER(*s); s++; }
+    while (*s) {
+	*s = LOWER(*s);
+	s++;
+    }
     return OK;
 }
 
@@ -2018,7 +2024,7 @@ int jul;
     int year, mon, day;
     int jan0;
     int mins, hours;
-	int dusk_or_dawn;
+    int dusk_or_dawn;
 
     double M, L, tanA, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
@@ -2042,9 +2048,9 @@ int jul;
     FromJulian(jul, &year, &mon, &day);
     jan0 = jul - Julian(year, 0, 1);
 
-	dusk_or_dawn = rise;
-	if (rise > 1)
-		rise -= 2;
+    dusk_or_dawn = rise;
+    if (rise > 1)
+	rise -= 2;
 /* Following formula on page B6 exactly... */
     t = (double) jan0;
     if (rise) t += (6.0 + longdeg/15.0) / 24.0;
@@ -2055,13 +2061,11 @@ int jul;
 
 /* Sun's true longitude */
     L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 282.565;
-	if (dusk_or_dawn == 2) // dusk
-	{
-		L += 6;
-	} else if (dusk_or_dawn == 3) // dawn
-	{
-		L -= 14;
-	}
+    if (dusk_or_dawn == 2) {/* dusk */
+	L += 6;
+    } else if (dusk_or_dawn == 3) {/* dawn */
+	L -= 14;
+    }
     if (L > 360.0) L -= 360.0;
 
 /* Tan of sun's right ascension */
@@ -2080,7 +2084,7 @@ int jul;
     }
 /*   if (fabs(a - L) > 90.0)
      a += 180.0; */
-
+    
     if (a > 360.0)
 	a -= 360.0;
     a_hr = a / 15.0;
@@ -2088,10 +2092,10 @@ int jul;
 /* Sine of sun's declination */
     sinDelta = 0.39782 * sin(DEGRAD*L);
     cosDelta = sqrt(1 - sinDelta*sinDelta);
-
+    
 /* Cosine of sun's local hour angle */
     cosH = (cosz - sinDelta * sin(latitude)) / (cosDelta * cos(latitude));
-
+    
     if (cosH < -1.0) { /* Summer -- permanent daylight */
 	if (rise) return NO_TIME;
 	else      return -NO_TIME;
@@ -2107,9 +2111,9 @@ int jul;
     T = H / 15.0 + a_hr - 0.065710*t - 6.620;
     if (T >= 24.0) T -= 24.0;
     else if (T < 0.0) T+= 24.0;
-
+    
     UT = T + longdeg / 15.0;
-
+    
 
     local = UT + (double) mins / 60.0;
     if (local < 0.0) local += 24.0;
@@ -2117,7 +2121,7 @@ int jul;
 
     hours = (int) local;
     mins = (int) ((local - hours) * 60.0);
-
+    
     /* Sometimes, we get roundoff error.  Check for "reasonableness" of
        answer. */
     if (rise) {

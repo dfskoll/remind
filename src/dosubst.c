@@ -7,12 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
+/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.9 1999-04-05 17:34:44 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.10 2000-02-18 03:45:48 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -32,7 +32,7 @@ static char const RCSID[] = "$Id: dosubst.c,v 1.9 1999-04-05 17:34:44 dfs Exp $"
 #include "types.h"
 #include "protos.h"
 
-#define UPPER(c) (islower(c) ? toupper(c) : c)
+#define UPPER(c) (islower(c) ? toupper(c) : (c))
 #define ABS(x) ( (x) < 0 ? -(x) : (x) )
 #ifndef NL
 #define NL "\n"

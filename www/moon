@@ -3,9 +3,9 @@
 #
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
-# Copyright (C) 1999 by Roaring Penguin Software Inc.
+# Copyright (C) 1999-2000 by Roaring Penguin Software Inc.
 
-# $Id: moon,v 1.2 1999-04-05 17:35:19 dfs Exp $
+# $Id: moon,v 1.3 2000-02-18 03:46:40 dfs Exp $
 
 echo Content-type: text/html
 echo

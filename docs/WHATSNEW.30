@@ -4,6 +4,8 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Updated copyright years and contact info.
+
 - Changed GIF images to PNG to avoid patent problems.
 
 - Added "cm2trem.tcl" to convert from CDE's "cm" calendar manager to Remind
@@ -16,10 +18,14 @@ CHANGES TO REMIND
 - Added "remind.vim" file for Vim syntax highlighting of Remind files,
   thanks to Davide Alberani.
 
+- Added "dusk" and "dawn" built-in functions, thanks to Ron Aaron.
+
 + BUG FIXES
 
 - Fixed typo which caused compilation failure on compilers without function
   prototypes.  Thanks to Ian Darwin for the patch.
+
+- Fixed compilation problem on FreeBSD.
 
 * Version 3.0 Patch 20
 

@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.13 1999-10-18 19:55:00 dfs Exp $
+# $Id: Makefile.in,v 1.14 2000-02-18 03:45:41 dfs Exp $
 
 VERSION= 03.00.21
 SHELL= /bin/sh
@@ -40,7 +40,7 @@ test: remind
 	sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CFLAGS@ @DEFS@ $(LANGDEF) -DUNIX -I. -I$(srcdir) $<
+	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -DUNIX -I. -I$(srcdir) $<
 
 rem2ps: rem2ps.o dynbuf.o
 	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o dynbuf.o
@@ -75,14 +75,13 @@ tgz:
 	ln -s .. remind-$(VERSION)
 	peekentry `find remind-$(VERSION) -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION).tar
 	gzip -v -9 remind-$(VERSION).tar
-	mv remind-$(VERSION).tar.gz remind-$(VERSION).tgz
+	mv remind-$(VERSION).tar.gz
 	rm -f remind-$(VERSION)
 
 beta-tgz:
 	ln -s .. remind-$(VERSION)-BETA
 	peekentry `find remind-$(VERSION)-BETA -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION)-BETA.tar
 	gzip -v -9 remind-$(VERSION)-BETA.tar
-	mv remind-$(VERSION)-BETA.tar.gz remind-$(VERSION)-BETA.tgz
 	rm -f remind-$(VERSION)-BETA
 #---------------- Stuff after this added by "make depend" -----------------
 

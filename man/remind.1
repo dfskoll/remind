@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.10 1999-04-13 01:46:19 dfs Exp $
-.TH REMIND 1 "1 February 1998"
+.\" $Id: remind.1,v 1.11 2000-02-18 03:45:37 dfs Exp $
+.TH REMIND 1 "17 February 2000"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -1068,7 +1068,7 @@ is similar to \fB%3\fR but displays the current time.
 .TP
 .B 
 %"
-(percent-doublequote) is removed.  This sequence is not 
+(percent-doublequote - ") is removed.  This sequence is not 
 used by the substitution filter,
 but is used to tell \fBRemind\fR which text to include in a calendar
 entry when the \fB\-c\fR, \fB\-s\fR or \fB\-p\fR option is chosen.
@@ -1885,6 +1885,10 @@ converted using the reverse of procedures described above.  A
 The \fBdate()\fR function returns a \fBDATE\fR object with the year,
 month and day components specified by \fIy\fR, \fIm\fR and \fId\fR.
 .TP
+.B dawn([d_date])
+Returns the time of "civil dawn" on the specified \fIdate\fR.  If \fIdate\fR
+is omitted, defaults to \fBtoday()\fR.
+.TP
 .B day(d_date)
 This function takes a \fBDATE\fR as an argument, and returns an \fBINT\fR
 which is the day-of-month component of \fIdate\fR.
@@ -1928,6 +1932,10 @@ will produce undefined results.
 \fBDosubst()\fR is only available starting from version 03.00.04 of
 \fBRemind\fR.
 .RE
+.TP
+.B dusk([d_date])
+Returns the time of "civil twilight" on the specified \fIdate\fR.  If
+\fIdate\fR is omitted, defaults to \fBtoday()\fR.
 .TP
 .B easterdate(di_arg)
 If \fIarg\fR is an \fBINT\fR, then returns the date of Easter Sunday

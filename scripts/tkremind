@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.3 1998-02-14 03:56:28 dfs Exp $
+# $Id: tkremind,v 1.4 1998-03-01 20:43:23 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -102,7 +102,7 @@ proc Initialize {} {
 
     # Check system sanity
     if {! [file readable $ReminderFile]} {
-	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error 0 Ok
+	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error 0 OK
 	exit 1
     }
 
@@ -257,7 +257,7 @@ proc FillCalWindow {} {
     Status "Firing off Remind..."
     set month [lindex $MonthNames $CurMonth]
 
-    set file [open "$CommandLine $month $CurYear 2>/dev/null" r]
+    set file [open "$CommandLine $month $CurYear" r]
     # Look for # rem2ps begin line
     while { [gets $file line] >= 0 } {
 	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
@@ -265,7 +265,7 @@ proc FillCalWindow {} {
 
     if { [string compare "$line" "# rem2ps begin"] != 0 } { 
 	Status "Problem reading results from Remind!"
-	close $file
+	catch { close $file }
 	return 0
     }
 
@@ -296,7 +296,10 @@ proc FillCalWindow {} {
 	.h.col$c.t$r configure -state disabled
 	
     }
-    close $file
+    set problem [catch { close $file } errmsg]
+    if {$problem} {
+	tk_dialog .error Error "There was a problem running Remind: $errmsg" error 0 OK
+    }
     Status "Ready."
 }
 

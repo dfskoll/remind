@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.5 1998-02-14 03:56:37 dfs Exp $ */
+/* $Id: finnish.h,v 1.6 1998-10-27 17:50:20 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -65,8 +65,8 @@
 #define L_BANNER "Viestit %wna %d. %mta %y%o:"
 
 /* "am" and "pm" */
-#define L_AM "ap"
-#define L_PM "ip"
+#define L_AM " ap."
+#define L_PM " ip."
 
 /*** The following are only used in dosubst.c ***/
 #ifdef L_IN_DOSUBST
@@ -182,25 +182,24 @@
 			 d, plu, MonthName[m], L_PARTIT, y);
 #define L_V_OVER sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, \
 			 plu, MonthName[m], L_PARTIT);
-#define L_1_OVER if (tdiff == 0) \
-sprintf(s, L_NOW); \
+#define L_1_OVER \
+if (tdiff == 0) \
+  sprintf(s, "%s", L_NOW); \
 else { \
+   s[0] = '\0'; \
    if (hdiff != 0) { \
       if (tdiff < 0) \
 	sprintf(s, "%d %s%s ", hdiff, L_HOUR, hplu); \
       else \
         sprintf(s, "%d %s ", hdiff, L_HGEN); \
-       s += strlen(s); \
    } \
    if (mdiff != 0) { \
       if (tdiff < 0) \
-         sprintf(s, "%d %s%s ", mdiff, L_MINUTE, \
-		 mplu); \
+         sprintf(s + strlen(s), "%d %s%s ", mdiff, L_MINUTE, mplu); \
       else \
-         sprintf(s, "%d %s ", mdiff, L_MGEN); \
-      s += strlen(s); \
+         sprintf(s + strlen(s), "%d %s ", mdiff, L_MGEN); \
    } \
-   sprintf(s, when); \
+   sprintf(s + strlen(s), when); \
 }
 #endif /* L_IN_DOSUBST */
 

@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.10 1999-10-18 20:08:56 dfs Exp $
+# $Id: rem2html,v 1.11 2000-06-26 14:44:17 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -33,7 +33,7 @@ use Getopt::Long;
 
 @months = (January,February,March,April,May,June,July,August,September,October,November,December);
 
-$DefaultImageDir = "%IMAGEBASE%";
+ $DefaultImageDir = "%IMAGEBASE%";
 if ($DefaultImageDir =~ m@/$@) {
     chop $DefaultImageDir;
 }
@@ -304,7 +304,7 @@ sub output_data {
       if ($day > 0 && $day <= $month_length) {
 
         print <<EndOfHTML;
-  <TD VALIGN=TOP WIDTH=14%$shades[$day]>
+  <TD HEIGHT="120" VALIGN=TOP WIDTH=14%$shades[$day]>
    <P ALIGN=RIGHT>$moons[$day]$fday</P>
    $msg
   </TD>

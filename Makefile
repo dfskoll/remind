@@ -1,11 +1,8 @@
 # Top-level Makefile for Remind.
 
-# $Id: Makefile,v 1.24 1998-01-17 04:51:52 dfs Exp $
+# $Id: Makefile,v 1.25 1998-01-17 05:00:38 dfs Exp $
 
-all:
-	@if test ! -f src/Makefile ; then \
-		./configure ; \
-	fi
+all: src/Makefile
 	@echo ""
 	@echo "*******************"
 	@echo "*                 *"
@@ -28,3 +25,7 @@ install: all
 clean:
 	find . -name '*~' -exec rm {} \;
 	cd src; $(MAKE) clean
+
+
+src/Makefile: src/Makefile.in
+	./configure

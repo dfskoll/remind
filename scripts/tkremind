@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.27 2000-02-18 03:45:40 dfs Exp $
+# $Id: tkremind,v 1.28 2000-02-18 03:55:47 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -2071,8 +2071,8 @@ proc main {} {
     rename drawLogo {}
 
     global AppendFile HighestTagSoFar DayNames
-    puts "\nTkRemind Copyright (C) 1996-1998 by David F. Skoll"
-    puts "Copyright (C) 1999 by Roaring Penguin Software Inc."
+    puts "\nTkRemind Copyright (C) 1996-1998 David F. Skoll"
+    puts "Copyright (C) 1999-2000 Roaring Penguin Software Inc."
     LoadOptions
     CreateMoonImages
     Initialize

@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.29 2000-03-25 23:59:30 dfs Exp $
+# $Id: tkremind,v 1.30 2000-06-26 14:43:55 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -46,6 +46,9 @@ set OptDescr(StartIconified) "(0/1) If 1, TkRemind starts up in the iconified st
 
 set Option(Deiconify) 0
 set OptDescr(Deiconify) "(0/1) If 1, TkRemind deiconifies the calendar window when a reminder pops up"
+
+set Option(ShowTodaysReminders) 1
+set OptDescr(ShowTodaysReminders) "(0/1) If 1, TkRemind shows all of today's non-timed reminders in a window at startup and when the date changes"
 
 set Option(RunCmd) ""
 set OptDescr(RunCmd) "(String) If non-blank, run specified command when a pop-up reminder appears"
@@ -425,6 +428,11 @@ proc EditOptions {} {
 	    -anchor w -justify left \
 	    -variable tmpOpt(StartIconified)
 
+    # Show today's reminders on startup
+    checkbutton $w.showTodays -text "Show Today's Reminders on Startup" \
+	    -anchor w -justify left \
+	    -variable tmpOpt(ShowTodaysReminders)
+
     # Confirm quit
     checkbutton $w.confirmQuit -text "Confirm Quit" -anchor w -justify left \
 	    -variable tmpOpt(ConfirmQuit)
@@ -458,6 +466,7 @@ proc EditOptions {} {
 	    -variable tmpOpt(FeedReminder) -anchor w -justify left
 
     pack $w.startIconified -in $w.f -side top -expand 0 -fill x
+    pack $w.showTodays -in $w.f -side top -expand 0 -fill x
     pack $w.confirmQuit -in $w.f -side top -expand 0 -fill x
     pack $w.bringDown -in $w.f -side top -expand 0 -fill x
     pack $w.ring -in $w.f -side top -expand 0 -fill x
@@ -522,6 +531,7 @@ proc SaveOptions { w } {
 	puts $f "# $OptDescr($name)"
 	puts $f [list $name $Option($name)]
     }
+    puts $f ""
     close $f
 }
 
@@ -1915,6 +1925,7 @@ proc DaemonReadable { file } {
 	    catch { unset Ignore}
 	    Initialize
 	    FillCalWindow
+	    ShowTodaysReminders
 	}
 	"NOTE reread" {
 	    puts $file "STATUS"
@@ -1984,15 +1995,17 @@ proc IssueBackgroundReminder { file time now tag } {
     frame $w.b
     button $w.ok -text "OK" -command "destroy $w"
     if {$tag != "*"} {
-	button $w.nomore -text "Don't remind me again" -command \
+	button $w.nomore -text "Don't remind me again today" -command \
 		"destroy $w; set Ignore($tag) 1"
+	button $w.kill -text "Delete this reminder completely" -command \
+		"destroy $w; InteractiveDeleteReminder $tag"
     }
     pack $w.l -side top
     pack $w.msg -side top -expand 1 -fill both
     pack $w.b -side top
     pack $w.ok -in $w.b -side left
     if {$tag != "*"} {
-	pack $w.nomore -in $w.b -side left
+	pack $w.nomore $w.kill -in $w.b -side left
     }
     
     CenterWindow $w
@@ -2076,6 +2089,7 @@ proc main {} {
     LoadOptions
     CreateMoonImages
     Initialize
+    ShowTodaysReminders
     ScanForTags $AppendFile
     CreateCalWindow $DayNames
     FillCalWindow
@@ -3581,6 +3595,62 @@ proc doLogo {} {
     update idletasks
     after 2500
     destroy .c
+}
+
+#***********************************************************************
+# %PROCEDURE: ShowTodaysReminders
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Shows all of today's non-timed reminders in a window
+#***********************************************************************
+proc ShowTodaysReminders {} {
+    global Option
+    global Remind
+    global ReminderFile
+    if {!$Option(ShowTodaysReminders)} {
+	return
+    }
+
+    set w .today
+    catch { destroy $w }
+    toplevel $w
+    wm title $w "Today's Reminders"
+    wm iconname $w "Reminders"
+    text $w.text -width 80 -height 20 -wrap word -yscrollcommand "$w.sb set"
+    scrollbar $w.sb -orient vertical -command "$w.text yview"
+    button $w.ok -text "OK" -command "destroy $w"
+
+    grid $w.text -row 0 -column 0 -sticky nsew
+    grid $w.sb -row 0 -column 1 -sticky ns
+    grid $w.ok -row 1 -column 0 -sticky w
+
+    CenterWindow $w
+
+    # Grab the reminders
+    set stuff [exec -keepnewline $Remind -q -a -r $ReminderFile 2>/dev/null]
+    $w.text insert end $stuff
+    $w.text configure -state disabled
+}
+
+#***********************************************************************
+# %PROCEDURE: InteractiveDeleteReminder
+# %ARGUMENTS:
+#  tag -- tag of reminder to delete
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Prompts for confirmation; then deletes reminder
+#***********************************************************************
+proc InteractiveDeleteReminder { tag } {
+    set ans [tk_dialog .error "Really Delete" "Really delete reminder?" warning 0 No Yes]
+    if {$ans == 1} {
+	DeleteTaggedReminder $tag
+	FillCalWindow
+	RestartBackgroundRemindDaemon
+    }
 }
 
 main

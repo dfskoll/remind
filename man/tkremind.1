@@ -1,4 +1,4 @@
-.\" $Id: tkremind.1,v 1.9 2000-03-15 15:51:39 dfs Exp $ "
+.\" $Id: tkremind.1,v 1.10 2000-06-26 14:43:51 dfs Exp $ "
 .TH TKREMIND 1 "15 February 1998"
 .UC 4
 .SH NAME
@@ -167,6 +167,12 @@ certain aspects of \fBTkRemind\fR.  The configuration options are:
 .B Start up Iconified
 If this is selected, \fBTkRemind\fR starts up iconified.  Otherwise,
 it starts up in a normal window.
+
+.TP
+.B Show Today's Reminders on Startup
+If this is selected, \fBTkRemind\fR shows a text window containing reminders
+which would be issued by "remind -q -a -r" on startup, and when the date
+changes at midnight.
 
 .TP
 .B Confirm Quit

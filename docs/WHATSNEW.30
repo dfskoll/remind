@@ -17,6 +17,10 @@ CHANGES TO REMIND
   "configure" script which should make life very pleasant for UNIX
    people.
 
+- Added the script "build.tk" which makes it trivial to compile
+  and install Remind under UNIX -- no need to edit Makefiles or
+  header files.  A nice GUI installation dialog!
+
 + BUG FIXES
 
 - Updated "finnish.h" to include proper URL and translation of all

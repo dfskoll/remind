@@ -11,28 +11,52 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.12 1998-03-25 04:24:59 dfs Exp $
+# $Id: tkremind,v 1.13 1998-03-30 05:08:34 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
 
+# Check that we have the right version of wish
+if {$tcl_version < 8.0} {
+    wm withdraw .
+    tk_dialog .error Error "You need wish version 8.0 or higher to run TkRemind; you have $tcl_version" error 0 OK
+    exit 1
+}
+
+if {$tcl_platform(platform) == "windows"} {
+    wm withdraw .
+    tk_dialog .error Error "You are not allowed to run Remind under Windows" error 0 OK
+    exit 1
+}
 #---------------------------------------------------------------------------
 # GLOBAL VARIABLES
 #---------------------------------------------------------------------------
 
-# Set to 1 if you want confirmation when quitting
-set ConfirmQuit 0
+set Option(ConfirmQuit) 0
+set OptDescr(ConfirmQuit) "(0/1) If 1, TkRemind prompts you to confirm 'Quit' operation"
+set Option(AutoClose) 1
+set OptDescr(AutoClose) "(0/1) If 1, TkRemind automatically closes pop-up reminders after a minute"
+set Option(RingBell) 0
+set OptDescr(RingBell) "(0/1) If 1, TkRemind beeps the terminal when a pop-up reminder appears"
+
+set Option(Deiconify) 0
+set OptDescr(Deiconify) "(0/1) If 1, TkRemind deiconifies the calendar window when a reminder pops up"
+
+set Option(RunCmd) ""
+set OptDescr(RunCmd) "(String) If non-blank, run specified command when a pop-up reminder appears"
+set Option(FeedReminder) 0
+set OptDescr(FeedReminder) "(0/1) If 1, feed the reminder to RunCmd on standard input (see RunCmd option)"
 
 # Remind program to execute -- supply full path if you want
-set Remind "remind"
-#set Remind "/home/dfs/Remind/src/remind"
+#set Remind "remind"
+set Remind "/home/dfs/Remind/src/remind"
 
 # Rem2PS program to execute -- supply full path if you want
 set Rem2PS "rem2ps"
 
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
-catch {set ReminderFile "$env(HOME)/.reminders"}
+set ReminderFile [file nativename "~/.reminders"]
 
 # Reminder file to append to -- default
 set AppendFile {NOSUCHFILE}
@@ -81,9 +105,16 @@ set PrintFill 1
 # Highest tag seen so far.  Array of tags is stored in ReminderTags()
 set HighestTagSoFar 0
 
-#---------------------------------------------------------------------------
-# Initialize -- initialize things
-#---------------------------------------------------------------------------
+#***********************************************************************
+# %PROCEDURE: Initialize
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Initializes TkRemind -- sets day names, Remind command line,
+#  MondayFirst flag, current date, etc.
+#***********************************************************************
 proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
@@ -249,6 +280,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
     set offset [CalEntryOffset $firstDay]
     set first [expr $offset+1]
     set last [expr $offset+$numDays]
+
     for {set i 0} {$i < $first} {incr i} {
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
@@ -271,13 +303,13 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
+	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
     }
     if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
 	set n [expr $TodayDay + $offset]
 	$w.l$n configure -background "#00c0c0"
-	$w.t$n configure -background "#00c0c0"
     }
 }
 
@@ -296,15 +328,16 @@ proc CreateCalWindow { dayNames } {
     pack .cal -side top -fill both -expand 1
 
     frame .b
-    button .b.prev -text {Previous Month} -command {MoveMonth -1}
+    button .b.prev -text {<-} -command {MoveMonth -1}
     button .b.this -text {Today} -command {ThisMonth}
-    button .b.next -text {Next Month} -command {MoveMonth 1}
+    button .b.next -text {->} -command {MoveMonth 1}
     button .b.goto -text {Go To Date...} -command {GotoDialog}
     button .b.print -text {Print...} -command {DoPrint}
     button .b.quit -text {Quit} -command {Quit}
+    button .b.options -text {Options...} -command EditOptions
     label .b.status -text "" -width 25 -relief sunken
     label .b.nqueued -text "" -width 20 -relief sunken
-    pack .b.prev .b.this .b.next .b.goto .b.print .b.quit -side left -fill x
+    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x
     pack .b -side top -fill x -expand 0
@@ -312,6 +345,162 @@ proc CreateCalWindow { dayNames } {
     wm iconname . ""
     wm protocol . WM_DELETE_WINDOW Quit
 }
+
+#***********************************************************************
+# %PROCEDURE: EditOptions
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Lets user edit options
+#***********************************************************************
+proc EditOptions {} {
+    global Option tmpOpt
+
+    # Make a working copy of current option set
+    foreach name [array names Option] {
+	set tmpOpt($name) $Option($name)
+    }
+    
+    set w .opt
+    catch { destroy $w }
+    toplevel $w
+    wm title $w "TkRemind Options"
+    wm iconname $w "Options"
+    frame $w.f
+    frame $w.b
+    pack $w.f -side top -expand 1 -fill both
+    pack $w.b -side top -expand 0 -fill x
+
+    # Confirm quit
+    checkbutton $w.confirmQuit -text "Confirm Quit" -anchor w -justify left \
+	    -variable tmpOpt(ConfirmQuit)
+
+    # Bring down reminder windows after one minute
+    checkbutton $w.bringDown \
+	    -text "Automatically close pop-up reminders after a minute" \
+	    -anchor w -justify left -variable tmpOpt(AutoClose)
+
+    # Ring bell when popping up reminder
+    checkbutton $w.ring -text "Beep terminal when popping up a reminder" \
+	    -anchor w -justify left -variable tmpOpt(RingBell)
+
+    checkbutton $w.deic -text "Deiconify calendar window when popping up a reminder" \
+	    -anchor w -justify left -variable tmpOpt(Deiconify)
+
+    # Run command when popping up reminder
+    frame $w.rf
+    label $w.rl -text "Run command when popping up reminder:" -anchor w \
+	    -justify left
+    entry $w.cmd -width 30
+    pack $w.rl -in $w.rf -side left -expand 0 -fill none
+    pack $w.cmd -in $w.rf -side left -expand 1 -fill x
+    $w.cmd insert 0 $tmpOpt(RunCmd)
+
+    frame $w.sep1 -border 1 -relief sunken
+    frame $w.sep2 -border 1 -relief sunken
+
+    checkbutton $w.feed \
+	    -text "Feed popped-up reminder to command's standard input" \
+	    -variable tmpOpt(FeedReminder) -anchor w -justify left
+
+    pack $w.confirmQuit -in $w.f -side top -expand 0 -fill x
+    pack $w.bringDown -in $w.f -side top -expand 0 -fill x
+    pack $w.ring -in $w.f -side top -expand 0 -fill x
+    pack $w.deic -in $w.f -side top -expand 0 -fill x
+    pack $w.sep1 -in $w.f -side top -expand 0 -fill x -ipady 1
+    pack $w.rf -in $w.f -side top -expand 0 -fill x
+    pack $w.feed -in $w.f -side top -expand 0 -fill x
+    pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
+
+    button $w.apply -text "Apply Options" -command "ApplyOptions $w; destroy $w"
+    button $w.save -text "Save Options" -command "SaveOptions $w; destroy $w"
+    button $w.cancel -text "Cancel" -command "destroy $w"
+
+    pack $w.apply $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
+    CenterWindow $w
+}
+
+#***********************************************************************
+# %PROCEDURE: ApplyOptions
+# %ARGUMENTS:
+#  w -- edit options window path
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Applies options set in the edit options box.
+#***********************************************************************
+proc ApplyOptions { w } {
+    global Option tmpOpt
+    set tmpOpt(RunCmd) [$w.cmd get]
+    # Copy working copy to real option set
+    foreach name [array names tmpOpt] {
+	set Option($name) $tmpOpt($name)
+    }
+}
+
+#***********************************************************************
+# %PROCEDURE: SaveOptions
+# %ARGUMENTS:
+#  w -- edit options window path
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Saves options in $HOME/.tkremindrc
+#***********************************************************************
+proc SaveOptions { w } {
+    global Option OptDescr
+    ApplyOptions $w
+
+    set problem [catch {set f [open ~/.tkremindrc "w"]} err]
+    if {$problem} {
+	tk_dialog .error Error "Can't write ~/.tkremindrc: $err" 0 OK
+	return
+    }
+
+    puts $f "# TkRemind option file -- created automatically"
+    puts $f "# [clock format [clock seconds]]"
+    puts $f "# Format of each line is 'key value' where 'key'"
+    puts $f "# specifies the option name, and 'value' is a"
+    puts $f "# *legal Tcl list element* specifying the option value."
+    foreach name [lsort [array names Option]] {
+	puts $f ""
+	puts $f "# $OptDescr($name)"
+	puts $f [list $name $Option($name)]
+    }
+    close $f
+}
+
+#***********************************************************************
+# %PROCEDURE: LoadOptions
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Loads options from ~/.tkremindrc
+#***********************************************************************
+proc LoadOptions {} {
+    global Option
+    set problem [catch {set f [open "~/.tkremindrc" "r"]}]
+    if {$problem} {
+	return
+    }
+    while {[gets $f line] >= 0} {
+	if {[string match "#*" $line]} { continue }
+	if {$line == ""} { continue }
+	foreach {key val} $line {}
+	if {![info exists Option($key)]} {
+	    puts "Unknown option in ~/.tkremindrc: $key"
+	    continue
+	}
+	set Option($key) $val
+    }
+    close $f
+}
+
+
 
 #***********************************************************************
 # %PROCEDURE: ConfigureCalWindow
@@ -355,6 +544,7 @@ proc FillCalWindow {} {
 
     if { [string compare "$line" "# rem2ps begin"] != 0 } { 
 	Status "Problem reading results from Remind!"
+	after 5000 DisplayTime
 	catch { close $file }
 	return 0
     }
@@ -395,7 +585,7 @@ proc FillCalWindow {} {
 	tk_dialog .error Error "There was a problem running Remind: $errmsg" error 0 OK
 	exit 1
     }
-    Status "Ready."
+    DisplayTime
 }
 
 #---------------------------------------------------------------------------
@@ -549,8 +739,8 @@ proc DoPrint {} {
     Status "Printing..."
     if {[catch {eval "exec $cmd"} err]} {
 	tk_dialog .error Error "Error during printing: $err" error 0 Ok
-    }	
-    Status "Ready."
+    }
+    DisplayTime
 }
 
 #---------------------------------------------------------------------------
@@ -633,8 +823,8 @@ proc DoGoto {} {
 # Quit -- handle the Quit button
 #---------------------------------------------------------------------------
 proc Quit {} {
-    global ConfirmQuit
-    if { !$ConfirmQuit } {
+    global Option
+    if { !$Option(ConfirmQuit) } {
 	destroy .
 	StopBackgroundRemindDaemon
 	exit
@@ -1618,8 +1808,8 @@ proc DaemonReadable { file } {
     }
     switch -glob -- $line {
 	"NOTE reminder*" {
-	    scan $line "NOTE reminder %s %s" time now
-	    IssueBackgroundReminder $file $time $now
+	    scan $line "NOTE reminder %s %s %s" time now tag
+	    IssueBackgroundReminder $file $time $now $tag
 	}
 	"NOTE newdate" {
 	    Initialize
@@ -1649,13 +1839,18 @@ proc DaemonReadable { file } {
 #    file -- file channel that is readable
 #    time -- time of reminder
 #    now -- current time according to Remind daemon
+#    tag -- tag for reminder, or "*" if no tag
 # Returns:
 #    nothing
 # Description:
 #    Reads a background reminder from daemon and pops up window.
 #---------------------------------------------------------------------------
-proc IssueBackgroundReminder { file time now } {
-    global BgCounter
+proc IssueBackgroundReminder { file time now tag } {
+    global BgCounter Option Ignore
+    if {$Option(Deiconify)} {
+	wm deiconify .
+    }
+
     set msg ""
     set line ""
     while (1) {
@@ -1672,6 +1867,12 @@ proc IssueBackgroundReminder { file time now } {
     if {$msg == ""} {
 	return
     }
+
+    # Do nothing if user told us to ignore this reminder
+    if {[info exists Ignore($tag)]} {
+	return
+    }
+
     incr BgCounter
     set w .bg$BgCounter
     toplevel $w
@@ -1679,29 +1880,91 @@ proc IssueBackgroundReminder { file time now } {
     wm title $w "Timed reminder ($time)"
     label $w.l -text "Reminder for $time issued at $now"
     message $w.msg -width 6i -text $msg
+    frame $w.b
     button $w.ok -text "OK" -command "destroy $w"
+    if {$tag != "*"} {
+	button $w.nomore -text "Don't remind me again" -command \
+		"destroy $w; set Ignore($tag) 1"
+    }
     pack $w.l -side top
     pack $w.msg -side top -expand 1 -fill both
-    pack $w.ok -side top
+    pack $w.b -side top
+    pack $w.ok -in $w.b -side left
+    if {$tag != "*"} {
+	pack $w.nomore -in $w.b -side left
+    }
+    
     CenterWindow $w
 
+    # Automatically shut down window after a minute if option says so
+    if {$Option(AutoClose)} {
+	after 60000 "catch { destroy $w }"
+    }
+
+    update
+    if {$Option(RingBell)} {
+	bell
+    }
+    if {$Option(RunCmd) != ""} {
+	if {$Option(FeedReminder)} {
+	    FeedReminderToCommand $Option(RunCmd) $msg
+	} else {
+	    exec "/bin/sh" "-c" $Option(RunCmd) "&"
+	}
+    }
+
     # reread status
-    puts $file "STATUS"
-    flush $file
+    if {$file != "stdin"} {
+	puts $file "STATUS"
+	flush $file
+    }
 }
+
+#***********************************************************************
+# %PROCEDURE: FeedReminderToCommand
+# %ARGUMENTS:
+#  cmd -- command to execute
+#  msg -- what to feed it
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Feeds "$msg" to a command.
+#***********************************************************************
+proc FeedReminderToCommand { cmd msg } {
+    catch {
+	set f [open "|$cmd" "w"]
+	fconfigure $f -blocking 0
+	fileevent $f writable [list CommandWritable $f $msg]
+    }
+}
+
+#***********************************************************************
+# %PROCEDURE: CommandWritable
+# %ARGUMENTS:
+#  f -- file which is writable
+#  msg -- message to write
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Writes $msg to $f; closes $f.
+#***********************************************************************
+proc CommandWritable { f msg } {
+    puts $f $msg
+    flush $f
+    close $f
+}
+
 
 proc main {} {	
     global AppendFile HighestTagSoFar DayNames
     puts "\nTkRemind Copyright (c) 1996-1998 by David F. Skoll\n"
-    puts "Initializing..."    
+    LoadOptions
     Initialize
-    puts "Scanning for tags..."
     ScanForTags $AppendFile
-    puts "Highest tag: $HighestTagSoFar"
-    puts "Creating calendar window..."
     CreateCalWindow $DayNames
     FillCalWindow
     StartBackgroundRemindDaemon
+    DisplayTimeContinuously
 }
 
 #***********************************************************************
@@ -2038,10 +2301,42 @@ proc WriteReminder { out tag rem opts } {
     puts $out "# TKEND"
 }
 
+#***********************************************************************
+# %PROCEDURE: DisplayTime
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Displays current date and time in status window
+#***********************************************************************
+proc DisplayTime {} {
+    set msg [clock format [clock seconds] -format "%e %b %Y %I:%M%p"]
+    Status $msg
+}
+
+#***********************************************************************
+# %PROCEDURE: DisplayTimeContinuously
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Continuously displays current date and time in status window,
+#  updating once a minute
+#***********************************************************************
+proc DisplayTimeContinuously {} {
+    DisplayTime
+    set secs [clock format [clock seconds] -format "%S"]
+    # Doh -- don't interpret as an octal number if leading zero
+    scan $secs "%d" decSecs
+    set decSecs [expr 60 - $decSecs]
+    after [expr $decSecs * 1000] DisplayTimeContinuously
+}
 main
 
 # For debugging only...
-# fileevent stdin readable "DaemonReadable stdin"
+fileevent stdin readable "DaemonReadable stdin"
 #Initialize
 #CreateCalWindow $DayNames
 #ConfigureCalWindow March 1998 0 31

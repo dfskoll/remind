@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.7 1998-04-29 02:50:24 dfs Exp $
+.\" $Id: remind.1,v 1.8 1998-05-06 01:47:41 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -827,10 +827,14 @@ expressions and user-defined functions are explained.  See the subsection
 .PP
 .B TAG AND DURATION
 .PP
-The \fBTAG\fR keyword lets you "tag" certain reminders.  Currently,
-this facility is not used, but it may be used by certain back-ends
-or systems built around \fBRemind\fR.  The \fBTAG\fR keyword should
-be followed by a tag consisting of up to 32 characters.
+The \fBTAG\fR keyword lets you "tag" certain reminders.  This facility
+is used by certain back-ends or systems built around \fBRemind\fR,
+such as \fBTkRemind\fR.  These back-ends have specific rules about
+tags; you should \fInot\fR use the \fBTAG\fR keyword yourself, or
+your script will interact badly with back-ends.
+.PP
+The \fBTAG\fR keyword is followed by a tag consisting of up to
+32 characters.
 .PP
 The \fBDURATION\fR keyword makes sense only for timed reminders;
 it specifies the duration of an event.  Currently, this is not

@@ -1,4 +1,4 @@
-.\" $Id: tkremind.1,v 1.4 1998-05-05 03:16:25 dfs Exp $ "
+.\" $Id: tkremind.1,v 1.5 1998-05-06 01:47:42 dfs Exp $ "
 .TH TKREMIND 1 "15 February 1998"
 .UC 4
 .SH NAME
@@ -209,12 +209,12 @@ preview a reminder.  However, if you edit a reminder in the previewer,
 \fBTkRemind\fR does \fInot\fR check the edited reminder.  You can
 produce illegal reminders which may cause problems.  (This is one good
 reason to isolate \fBTkRemind\fR's reminders in a separate file.)
-
+.PP
 \fBTkRemind\fR does \fInot\fR check the body of the reminder in any
 way.  You can use the normal \fBRemind\fR substitution sequences in
 the body.  Furthermore, if you use expression-pasting in the body,
 \fBTkRemind\fR does \fInot\fR validate the expressions.
-
+.PP
 When \fBTkRemind\fR invokes \fBRemind\fR, it supplies the option:
 .PP
 .nf
@@ -231,6 +231,25 @@ on the command line.  So, in your \fBRemind\fR file, you can include:
 .PP
 You can use this to activate certain reminders in different ways
 for \fBTkRemind\fR (for example).
+.PP
+\fBTkRemind\fR uses tags to keep track of reminders in the
+script file.  It also places special comments in the reminder
+file to store additional state.  You can certainly mix
+"hand-crafted" reminders with reminders created by \fBTkRemind\fR
+if you are awared of the following rules and limitations:
+.TP
+o
+Do not use the \fBTAG\fR keyword in hand-crafted reminders.
+.TP
+o
+Do not edit lines starting with "# TKTAGnnn", "# TKEND", or any
+lines in between.  You can move such lines, but be careful to move
+them as a single block.
+.TP
+o
+Hand-crafted reminders cannot be edited with \fBTkRemind\fR, and
+for hand-crafted timed reminders, you will not be presented with
+the "Don't remind me again" option when they pop up.
 
 .SH SERVER MODE
 

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.5 1998-03-02 19:38:33 dfs Exp $
+# $Id: tkremind,v 1.6 1998-03-02 19:55:41 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -256,6 +256,7 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
 	puts $DaemonFile "STATUS"
 	flush $DaemonFile
     }
+    wm protocol . WM_DELETE_WINDOW Quit
 }
 
 #---------------------------------------------------------------------------
@@ -551,10 +552,12 @@ proc Quit {} {
     global ConfirmQuit
     if { !$ConfirmQuit } {
 	destroy .
+	StopBackgroundRemindDaemon
 	exit
     }
     if { [tk_dialog .question "Confirm..." {Really quit?} question 0 No Yes] } {
 	destroy .
+	StopBackgroundRemindDaemon
 	exit
     }
 }

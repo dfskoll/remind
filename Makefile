@@ -1,6 +1,6 @@
 # Top-level Makefile for Remind.
 
-# $Id: Makefile,v 1.26 1998-01-19 03:07:09 dfs Exp $
+# $Id: Makefile,v 1.27 1998-01-19 03:27:36 dfs Exp $
 
 all: src/Makefile
 	@echo ""
@@ -12,7 +12,7 @@ all: src/Makefile
 	@echo ""
 	@cd src; $(MAKE) all LANGDEF=$(LANGDEF)
 
-install: all
+install:
 	@echo ""
 	@echo "*********************"
 	@echo "*                   *"

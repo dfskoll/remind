@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.6 1998-02-10 03:15:49 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.7 1998-02-14 03:32:00 dfs Exp $";
 
 #include <stdio.h>
 
@@ -150,8 +150,6 @@ static int ReadLineFromFile()
 #endif
 {
     int l;
-    char *ptr;
-    char *tmp;
 
     DynamicBuffer buf;
 

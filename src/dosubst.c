@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.5 1998-02-10 03:33:49 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.6 1998-02-14 03:31:59 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -616,6 +616,7 @@ int jul, mode;
     if (!has_quote) {
 	if (mode == CAL_MODE && t->typ == RUN_TYPE) {
 	    *DBufValue(dbuf) = 0;
+	    dbuf->len = 0;
 	}
 	return OK;
     }
@@ -644,6 +645,9 @@ int jul, mode;
 	while (*ss && (*ss != QUOTE_MARKER)) *os++ = *ss++;
 	*os = 0;
     }
+
+    /* Violating encapsulation here!!!! */
+    dbuf->len = strlen(dbuf->buffer);
 
     return OK;
 }

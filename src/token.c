@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.5 1998-02-12 03:32:16 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.6 1998-02-14 03:32:01 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -154,8 +154,6 @@ Token *tok;
 char *s;
 #endif
 {
-    char *t;
-    int len=0;
     DynamicBuffer buf;
     DBufInit(&buf);
 

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.5 1998-02-10 04:11:44 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.6 1998-02-14 03:31:59 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -607,7 +607,7 @@ PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
     int r, y, m, d;
     char PrioExpr[25];
     DynamicBuffer buf;
-    char *s, *s2;
+    char *s;
     Value v;
 
     DBufInit(&buf);
@@ -941,7 +941,7 @@ PUBLIC int DoMsgCommand(char *cmd, char *msg)
 
 #ifdef WANT_SHELL_ESCAPING
     DynamicBuffer buf;
-    char *s, *t;
+    char *s;
 
     DBufInit(&buf);
     DBufInit(&execBuffer);

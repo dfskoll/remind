@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: var.c,v 1.1 1996-03-27 03:26:16 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.2 1996-03-31 04:02:00 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -633,11 +633,11 @@ SysVar *v;
 	if (v->type == STR_TYPE) {
 	    char *s = *((char **)v->value);
 	    int y;
-	    putc('"', ErrFp);
-	    for (y=0; y<MAX_PRT_LEN && *s; y++) putc(*s++, ErrFp);
-	    putc('"', ErrFp);
+	    Putc('"', ErrFp);
+	    for (y=0; y<MAX_PRT_LEN && *s; y++) Putc(*s++, ErrFp);
+	    Putc('"', ErrFp);
 	    if (*s) fprintf(ErrFp, "...");
-	    putc('\n', ErrFp);
+	    Putc('\n', ErrFp);
 	} else {
 	    if (!v->modifiable) fprintf(ErrFp, "%d\n", *((int *)v->value));
 	    else {

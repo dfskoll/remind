@@ -1,5 +1,27 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 14
+
++ MINOR ENHANCEMENTS
+
+- Added support for QDOS/SMSQ on the Sinclair QL microcomputer,
+  courtesy of Robert H. Klein <kleir000@goofy.zdv.Uni-Mainz.de>
+  NOTE THAT I CANNOT TEST NOR SUPPORT THIS VERSION!
+
+- Added support for AmigaDOS / SAS/C, courtesy of Martin Hohl
+  <martinh@caverna.tynet.sub.org>.  As before, I CANNOT TEST NOR
+  SUPPORT THIS VERSION, but will rely on feedback from others.
+
++ BUG FIXES
+
+- Removed the "-n" option from Rem2PS.  Instead, if you want the
+  PostScript calendar to start on a Monday, supply the "-m" option
+  to Remind.  It was repugnant to have two options to two programs
+  to accomplish one thing.
+
+- The "hebdate" built-in function worked incorrectly with 5 arguments.
+  The bug was pointed out by Hershel Safer <h.safer@ieee.org>
+
 * Version 3.0 Patch 13
 
 + MINOR ENHANCEMENTS

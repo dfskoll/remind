@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: calendar.c,v 1.1 1996-03-27 03:25:50 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.2 1996-03-31 04:01:54 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -138,7 +138,7 @@ static void DoCalendarOneWeek()
     }
 
 /* Here come the first few lines... */
-    putchar('|');
+    PutChar('|');
     for (i=0; i<7; i++) {
 	FromJulian(OrigJul+i, &y, &m, &d);
 	sprintf(buf, "%d %c%c%c ", d, MonthName[m][0], MonthName[m][1], 
@@ -147,16 +147,16 @@ static void DoCalendarOneWeek()
 	    PrintLeft(buf, ColSpaces, '*');
 	else
 	    PrintLeft(buf, ColSpaces, ' ');
-	putchar('|');
+	PutChar('|');
     }
-    putchar('\n');
+    PutChar('\n');
     for (l=0; l<CalPad; l++) {
-	putchar('|');
+	PutChar('|');
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    putchar('|');
+	    PutChar('|');
 	}
-	putchar('\n');
+	PutChar('\n');
     }
 
 /* Write the body lines */
@@ -168,12 +168,12 @@ static void DoCalendarOneWeek()
 
 /* Write any blank lines required */
     while (LinesWritten++ < CalLines) {
-	putchar('|');
+	PutChar('|');
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    putchar('|');
+	    PutChar('|');
 	}
-	putchar('\n');
+	PutChar('\n');
     }
 
 /* Write the final line */   
@@ -200,8 +200,9 @@ static void DoCalendarOneMonth()
     if (PsCal) {
 	FromJulian(JulianToday, &y, &m, &d);
 	printf("%s\n", PSBEGIN);
-	printf("%s %d %d %d\n",
-	       MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7);
+	printf("%s %d %d %d %d\n",
+	       MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
+	       MondayFirst);
 	mm = m-1;
 	if (mm<0) {
 	    mm = 11; yy = y-1;
@@ -263,7 +264,7 @@ static int WriteCalendarRow()
  
 
 /* Here come the first few lines... */
-    putchar('|');
+    PutChar('|');
     for (i=0; i<7; i++) {
 	if (i < wd || d+i-wd>DaysInMonth(m, y))
 	    PrintLeft("", ColSpaces, ' ');
@@ -271,16 +272,16 @@ static int WriteCalendarRow()
 	    sprintf(buf, "%d", d+i-wd);
 	    PrintLeft(buf, ColSpaces, ' ');
 	}
-	putchar('|');
+	PutChar('|');
     }
-    putchar('\n');
+    PutChar('\n');
     for (l=0; l<CalPad; l++) {
-	putchar('|');
+	PutChar('|');
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    putchar('|');
+	    PutChar('|');
 	}
-	putchar('\n');
+	PutChar('\n');
     }
 
 /* Write the body lines */
@@ -292,12 +293,12 @@ static int WriteCalendarRow()
 
 /* Write any blank lines required */
     while (LinesWritten++ < CalLines) {
-	putchar('|');
+	PutChar('|');
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    putchar('|');
+	    PutChar('|');
 	}
-	putchar('\n');
+	PutChar('\n');
     }
 
     WriteIntermediateCalLine();
@@ -324,7 +325,7 @@ char pad;
 {
     int len = strlen(s);
     printf("%s", s);
-    while (len++ < width) putchar(pad);
+    while (len++ < width) PutChar(pad);
 }
 
 /***************************************************************/
@@ -347,11 +348,11 @@ char pad;
     int d = (width - len) / 2;
     int i;
 
-    for (i=0; i<d; i++) putchar(pad);
+    for (i=0; i<d; i++) PutChar(pad);
     for (i=0; i<width; i++) {
-	if (*s) putchar(*s++); else break;
+	if (*s) PutChar(*s++); else break;
     }
-    for (i=d+len; i<width; i++) putchar(pad);
+    for (i=d+len; i<width; i++) PutChar(pad);
 }
 
 /***************************************************************/
@@ -369,16 +370,16 @@ static int WriteOneCalLine()
 {
     int done = 1, i;
 
-    putchar('|');
+    PutChar('|');
     for (i=0; i<7; i++) {
 	if (CalColumn[i]) {
 	    if (WriteOneColLine(i)) done = 0;
 	} else {
 	    PrintCentered("", ColSpaces, ' ');
 	}
-	putchar('|');
+	PutChar('|');
     }
-    putchar('\n');
+    PutChar('\n');
 
     return done;
 }
@@ -430,7 +431,7 @@ int col;
 	for (s = e->pos; s - e->pos < ColSpaces; s++) {
 	    if (!*s) break;
 	    numwritten++;
-	    putchar(*s);
+	    PutChar(*s);
 	}
 	e->pos = s;
     } else {
@@ -439,12 +440,12 @@ int col;
 	for (s = e->pos; s<space; s++) {
 	    if (!*s) break;
 	    numwritten++;
-	    putchar(*s);
+	    PutChar(*s);
 	}
     }
 
 /* Flesh out the rest of the column */
-    while(numwritten++ < ColSpaces) putchar(' ');
+    while(numwritten++ < ColSpaces) PutChar(' ');
 
 /* Skip any spaces before next word */
     while (*s == ' ') s++;
@@ -591,10 +592,10 @@ static void WriteCalHeader()
 
     WriteSolidCalLine();
 
-    putchar('|');
+    PutChar('|');
     PrintCentered(buf, CalWidth-2, ' ');
-    putchar('|');
-    putchar('\n');
+    PutChar('|');
+    PutChar('\n');
 
     WriteIntermediateCalLine();
     WriteCalDays();
@@ -612,7 +613,7 @@ PRIVATE void WriteCalTrailer(void)
 static void WriteCalTrailer()
 #endif
 {
-    putchar('\f');
+    PutChar('\f');
 }
 
 /***************************************************************/
@@ -791,10 +792,10 @@ PRIVATE void WriteSolidCalLine(void)
 static void WriteSolidCalLine()
 #endif
 {
-    putchar('+');
+    PutChar('+');
     PrintCentered("", CalWidth-2, '-');
-    putchar('+');
-    putchar('\n');
+    PutChar('+');
+    PutChar('\n');
 }
 
 #ifdef HAVE_PROTOS
@@ -805,12 +806,12 @@ static void WriteIntermediateCalLine()
 {
     int i;
 
-    putchar('+');
+    PutChar('+');
     for (i=0; i<7; i++) {
 	PrintCentered("", ColSpaces, '-');
-	putchar('+');
+	PutChar('+');
     }
-    putchar('\n');
+    PutChar('\n');
 }
 
 #ifdef HAVE_PROTOS
@@ -820,15 +821,15 @@ static void WriteCalDays()
 #endif
 {
     int i;
-    putchar('|');
+    PutChar('|');
     for (i=0; i<7; i++) {
 	if (!MondayFirst)
 	    PrintCentered(DayName[(i+6)%7], ColSpaces, ' ');
 	else
 	    PrintCentered(DayName[i%7], ColSpaces, ' ');
-	putchar('|');
+	PutChar('|');
     }
-    putchar('\n');
+    PutChar('\n');
 }
 
 /***************************************************************/

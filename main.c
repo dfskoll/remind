@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: main.c,v 1.1 1996-03-27 03:26:01 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.2 1996-03-31 04:01:57 dfs Exp $";
 
 #include "config.h"
 #ifdef HAVE_STDLIB_H
@@ -33,15 +33,22 @@ static char const RCSID[] = "$Id: main.c,v 1.1 1996-03-27 03:26:01 dfs Exp $";
 #include <ctype.h>
 #include <time.h>
 
+#ifdef AMIGA
+#include <sys/types.h>
+#else
 #if defined(__MSDOS__) || defined(__OS2__)
 #include <dos.h>
 #else
 #include <sys/types.h>
 #ifndef SYSV
+#ifdef QDOS
+#include <sys/times.h>
+#else
 #include <sys/time.h>
-#endif
+#endif /* QDOS */
+#endif /* ndef SYSV */
 #endif /* if defined(__MSDOS__)... */
-
+#endif /* AMIGA */
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
@@ -59,10 +66,12 @@ long timelocal ARGS((struct tm *tm));
 static char TPushBuffer[TOKSIZE+1]; /* Buffer for pushing back a token. */
 static char *TokenPushed = NULL;
 
+/* Whooo... the putchar/Putchar/PutChar macros are a mess...
+   my apologies... */
 #ifdef OS2_POPUP
 #define Putchar(c) {if (AsPopUp) PutcPopUp(c); else putchar(c);}
 #else
-#define Putchar(c) putchar(c)
+#define Putchar(c) PutChar(c)
 #endif
 
 /***************************************************************/
@@ -648,11 +657,11 @@ FILE *fp;
     register char c = 0;
 
     while (*s) {
-	if (*s == '\n') putc('\\', fp);
-	putc(*s, fp);
+	if (*s == '\n') Putc('\\', fp);
+	Putc(*s, fp);
 	c = *s++;
     }
-    if (c != '\n') putc('\n', fp);
+    if (c != '\n') Putc('\n', fp);
 }
 
 /***************************************************************/

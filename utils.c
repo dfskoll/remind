@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: utils.c,v 1.1 1996-03-27 03:26:15 dfs Exp $";
+static char const RCSID[] = "$Id: utils.c,v 1.2 1996-03-31 04:02:00 dfs Exp $";
 
 #include "config.h"
 #include <string.h>
@@ -181,3 +181,31 @@ int y, m, d;
 	d > DaysInMonth(m, y) ) return 0;
     else return 1;
 }
+
+#ifdef BROKEN_PUTC
+/***************************************************************/
+/*                                                             */
+/*  Safe versions of putc and putchar                          */
+/*                                                             */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PUBLIC int SafePutChar(int c)
+#else
+int SafePutChar(c)
+int c;
+#endif
+{
+    return putchar(c);
+}
+
+#ifdef HAVE_PROTOS
+PUBLIC int SafePutc(int c, FILE *fp)
+#else
+int SafePutc(c, fp)
+int c;
+FILE *fp;
+#endif
+{
+    return putc(c, fp);
+}
+#endif

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: funcs.c,v 1.2 1996-03-30 04:00:29 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.3 1996-03-31 04:01:56 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -122,7 +122,7 @@ PRIVATE int	CheckArgs       ARGS ((Operator *f, int nargs));
 PRIVATE int	CleanUpAfterFunc ARGS ((void));
 PRIVATE int	SunStuff	ARGS ((int rise, double cosz, int jul));
 
-#if defined(__MSDOS__) || defined(__BORLANDC__)
+#if defined(__MSDOS__) || defined(__BORLANDC__) || defined(AMIGA)
 PRIVATE FILE *os_popen  ARGS((char *cmd, char *mode));
 PRIVATE int   os_pclose ARGS((FILE *fp));
 #define POPEN os_popen
@@ -964,7 +964,15 @@ static int FOstype()
 #ifdef __OS2__
     return RetStrVal(OS2MODE ? "OS/2" : "MSDOS");
 #else
+#ifdef QDOS
+    return RetStrVal("QDOS / SMSQ");
+#else
+#ifdef AMIGA
+    return RetStrVal("AmigaDOS");
+#else
     return RetStrVal("MSDOS");
+#endif
+#endif
 #endif
 #endif
 }
@@ -1531,7 +1539,7 @@ static int FAccess()
     return OK;
 }
 
-#if defined(__MSDOS__) || defined(__BORLANDC__)
+#if defined(__MSDOS__) || defined(__BORLANDC__) || defined(AMIGA)
 /***************************************************************/
 /*                                                             */
 /*  popen and pclose                                           */
@@ -1586,6 +1594,9 @@ FILE *fp;
 #endif
 
     unlink(TmpFile);
+#ifdef AMIGA
+    free(TmpFile);
+#endif
     return fclose(fp);
 }
 

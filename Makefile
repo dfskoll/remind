@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.1 1996-03-27 03:25:48 dfs Exp $
+# $Id: Makefile,v 1.2 1996-03-31 04:01:51 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -19,8 +19,8 @@ CC= gcc
 LD= gcc
 
 # Put any additional flags for the C compiler or linker here - if you
-# are not using gcc, you probably want to remove '-ansi'.
-CFLAGS= -O -ansi
+# are not using gcc, you probably want to remove '-ansi -pedantic -Wall'.
+CFLAGS= -O -ansi -pedantic -Wall
 CDEFS=
 LDFLAGS=
 
@@ -127,24 +127,6 @@ tarZ:
 
 shar:
 	shar -x -n"Remind $(VERSION)" -l45 -o./Shar $(MANIFEST)
-
-todos:
-	mcopy -tn $(MANIFEST) a:
-
-fromdos:
-	mcopy -tn 'a:*' .
-	-mv -f copyrigh COPYRIGHT
-	-mv -f makefile Makefile
-	-mv -f readme.os2 README.OS2
-	-mv -f readme.dos README.DOS
-	-mv -f readme.bcc README.BCC
-	-mv -f readme.uni README.UNIX
-	-mv -f remind-a.csh remind-all.csh
-	-mv -f remind-a.sh remind-all.sh
-	-mv -f manifest.dos MANIFEST.DOS
-	-mv -f manifest.unx MANIFEST.UNX
-	-mv -f whatsnew.30 WHATSNEW.30
-	-chmod u+x test-rem
 
 backup:
 	cp $(MANIFEST) ../backup

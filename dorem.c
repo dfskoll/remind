@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dorem.c,v 1.1 1996-03-27 03:25:52 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.2 1996-03-31 04:01:55 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -28,6 +28,14 @@ static char const RCSID[] = "$Id: dorem.c,v 1.1 1996-03-27 03:25:52 dfs Exp $";
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
+
+/* Define the shell characters to escape */
+static char const EscapeMe[] =
+#ifdef QDOS
+"\"'!$%^&*()|<>[]{}\x9F~;?\\";
+#else
+"\"'!$%^&*()|<>[]{}`~;?\\";
+#endif
 
 PRIVATE int ParseTimeTrig ARGS ((ParsePtr s, TimeTrig *tim));
 PRIVATE int ParseLocalOmit ARGS ((ParsePtr s, Trigger *t));
@@ -779,7 +787,7 @@ ParsePtr p;
    
 	/* Escape shell characters in msg INCLUDING WHITESPACE! */
 	for (t=buf, s=msg; *s; s++) {
-	    if (isspace(*s) || strchr("\"'!$%^&*()|<>[]{}`~;?\\", *s)) *t++ = '\\';
+	    if (isspace(*s) || strchr(EscapeMe, *s)) *t++ = '\\';
 	    *t++ = *s;
 	}
 	*t = 0;

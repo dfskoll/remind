@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.1 1996-03-27 03:26:05 dfs Exp $ */
+/* $Id: protos.h,v 1.2 1996-03-31 04:01:57 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -168,4 +168,9 @@ int PutcPopUp ARGS ((int c));
 int PutlPopUp ARGS ((char *s));
 int PutsPopUp ARGS ((char *s));
 #endif
+#endif
+
+#ifdef BROKEN_PUTC
+int SafePutChar ARGS ((int ch));
+int SafePutc ARGS ((int ch, FILE *fp));
 #endif

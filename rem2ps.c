@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.1 1996-03-27 03:26:07 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.2 1996-03-31 04:01:58 dfs Exp $";
 
 #include "config.h"
 #include "lang.h"
@@ -204,7 +204,8 @@ void DoPsCal()
 /* Read the month and year name, followed by # days in month and 1st day of
    month */
     gets(LineBuffer);
-    sscanf(LineBuffer, "%s %s %d %d", month, year, &days, &wkday);
+    sscanf(LineBuffer, "%s %s %d %d %d", month, year, &days, &wkday,
+	   &MondayFirst);
     gets(LineBuffer);
     sscanf(LineBuffer, "%s %d", prevm, &prevdays);
     gets(LineBuffer);
@@ -372,7 +373,7 @@ void WriteProlog()
 	strcmp(SmallFont, DayFont)  &&
 	strcmp(TitleFont, SmallFont) &&
 	strcmp(SmallFont, EntryFont)) printf(" %s", SmallFont);
-    putchar('\n');
+    PutChar('\n');
     printf("%%%%Creator: Rem2PS\n");
     printf("%%%%Pages: (atend)\n");
     printf("%%%%Orientation: %s\n", PortraitMode ? "Portrait" : "Landscape");
@@ -545,19 +546,19 @@ char *s;
 /* Chew up leading spaces */
     while(isspace(*s)) s++;
 
-    putchar('(');
+    PutChar('(');
     while(*s) {
 	c = *s++;
-	if (c == '\\' || c == '(' || c == ')') putchar('\\');
-	if (!isspace(c)) putchar(c);
+	if (c == '\\' || c == '(' || c == ')') PutChar('\\');
+	if (!isspace(c)) PutChar(c);
 	else {
-	    putchar(')');
+	    PutChar(')');
 	    while(isspace(*s)) s++;
 	    if (!*s) {
 		printf("]\n");
 		return;
 	    }
-	    putchar('(');
+	    PutChar('(');
 	}
     }
     printf(")]\n");
@@ -603,10 +604,6 @@ char *argv[];
 	if (*s++ != '-') Usage("Options must begin with '-'");
 
 	switch(*s++) {
-
-	case 'n':
-	    MondayFirst = 1;
-	    break;
 
 	case 'p':
 	    if (i == argc) Usage("Prologue filename must be supplied");
@@ -747,7 +744,6 @@ char *s;
     fprintf(stderr, "-t size       Set line thickness\n");
     fprintf(stderr, "-e            Make calendar fill entire page\n");
     fprintf(stderr, "-o[lrtb] marg Specify left, right, top and bottom margins\n");
-    fprintf(stderr, "-n            Start calendar with Monday rather than Sunday\n");
     exit(1);
 }
 

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.1 1996-03-27 03:25:50 dfs Exp $ */
+/* $Id: config.h,v 1.2 1996-03-31 04:01:54 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -103,6 +103,13 @@
 /* uncomment the following line.                                       */
 /*---------------------------------------------------------------------*/
 /* #define NO_STRSTR 1 */
+
+/*---------------------------------------------------------------------*/
+/* Some implementations have a broken 'putc' and 'putchar'.            */
+/*---------------------------------------------------------------------*/
+#ifdef __SASC_60
+#define BROKEN_PUTC
+#endif
 
 /*---------------------------------------------------------------------*/
 /* STDLIB:  If you don't have the <stdlib.h> header file, comment the  */
@@ -205,7 +212,7 @@
 /* the only bad side effect is a compiler warning, so don't worry too  */
 /* much about it.                                                      */
 /*---------------------------------------------------------------------*/
-/* #define SIGHANDLER_INT_ARG 1 */
+#define SIGHANDLER_INT_ARG 1
 
 /*---------------------------------------------------------------------*/
 /* Do we have the <unistd.h> header?  If not, use sys/files.h          */
@@ -259,5 +266,17 @@
 #define _POSIX_SOURCE
 #endif
 
+#ifdef SYSV
+#define __USE_SVID
+#endif
+
 #define PSBEGIN "# rem2ps begin"
 #define PSEND   "# rem2ps end"
+
+#ifdef BROKEN_PUTC
+#define Putc SafePutc
+#define PutChar SafePutChar
+#else
+#define Putc putc
+#define PutChar putchar
+#endif

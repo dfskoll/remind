@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: expr.c,v 1.1 1996-03-27 03:25:54 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.2 1996-03-31 04:01:55 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -123,7 +123,7 @@ Operator *op;
     fprintf(ErrFp, " => ");
     if (!r) {
 	PrintValue(&ValStack[ValStackPtr-1], ErrFp);
-	putc('\n', ErrFp);
+	Putc('\n', ErrFp);
     } else {
 	fprintf(ErrFp, "%s\n", ErrMsg[r]);
     }
@@ -488,7 +488,7 @@ Var *locals;
 	if (! (DebugFlag & DB_PRTEXPR)) return r;
 	if (r == OK) {
 	    PrintValue(v, ErrFp);
-	    putc('\n', ErrFp);
+	    Putc('\n', ErrFp);
 	}
 	return r;
     } else /* Must be a symbol */
@@ -498,7 +498,7 @@ Var *locals;
     if (! (DebugFlag & DB_PRTEXPR)) return r;
     if (r == OK) {
         PrintValue(v, ErrFp);
-	putc('\n', ErrFp);
+	Putc('\n', ErrFp);
     }
     return r;
 }
@@ -1097,9 +1097,9 @@ FILE *fp;
 
     if (v->type == STR_TYPE) {
 	s=v->v.str;
-	putc('"', fp);
-	for (y=0; y<MAX_PRT_LEN && *s; y++) putc(*s++, fp);
-	putc('"',fp);
+	Putc('"', fp);
+	for (y=0; y<MAX_PRT_LEN && *s; y++) Putc(*s++, fp);
+	Putc('"',fp);
 	if (*s) fprintf(fp, "...");
     }      
     else if (v->type == INT_TYPE) fprintf(fp, "%d", v->v.val);

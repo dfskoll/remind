@@ -12,7 +12,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.10 2000-02-18 03:46:07 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.11 2004-08-09 19:48:04 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -82,7 +82,8 @@ PageType Pages[] =
     {"B5", 519, 729},
     {"Folio", 612, 936},
     {"Quarto", 612, 780},
-    {"10x14", 720, 1008}
+    {"10x14", 720, 1008},
+    {"-custom-", 0, 0}
 };
 
 PageType DefaultPage[1] =
@@ -704,17 +705,32 @@ char *argv[];
 	    if (i == argc) Usage("Media must be supplied");
 	    t = argv[i++];
 	    CurPage = NULL;
-	    for (j=0; j<NUMPAGES; j++)
+	    for (j=0; j<NUMPAGES-1; j++)
 		if (!strcmp(t, Pages[j].name)) {
 		    CurPage = &Pages[j]; 
 		    break;
 		}
 
 	    if (!CurPage) {
+		double w, h;
+		if (sscanf(t, "%lfx%lfin", &w, &h) == 2) {
+		    CurPage = &Pages[NUMPAGES-1];
+		    CurPage->xsize = (int) (w * 72.0);
+		    CurPage->ysize = (int) (h * 72.0);
+		} else if (sscanf(t, "%lfx%lfcm", &w, &h) == 2) {
+		    CurPage = &Pages[NUMPAGES-1];
+		    CurPage->xsize = (int) ((double) w * 28.346457);
+		    CurPage->ysize = (int) ((double) w * 28.346457);
+		}
+	    }
+	    if (!CurPage) {
 		fprintf(stderr, "\nUnknown media specified.\n");
 		fprintf(stderr, "\nAvailable media types:\n");
-		for (j=0; j<NUMPAGES; j++)
+		for (j=0; j<NUMPAGES-1; j++) {
 		    fprintf(stderr, "   %s\n", Pages[j].name);
+		}
+		fprintf(stderr, "   WxHin  Specify size in inches (W and H are decimal numbers)\n");
+		fprintf(stderr, "   WxHcm  Specify size in centimetres (W and H are decimal numbers)\n");
 		fprintf(stderr, "Default media type is %s\n", DefaultPage[0].name);
 		exit(1);
             }

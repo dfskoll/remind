@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.5 2000-02-18 03:46:00 dfs Exp $ */
+/* $Id: lang.h,v 1.6 2000-12-18 14:05:32 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 
@@ -26,6 +26,7 @@
 #define ITALIAN    9 /* translated by Valerio Aimale                   */
 #define ROMANIAN  10 /* translated by Liviu Daia                       */
 #define SPANISH   11 /* translated by Rafa Couto                       */
+#define ICELANDIC 12 /* translated by Björn Davíðsson                  */
 
 /* Add more languages here - but please e-mail dfs@roaringpenguin.com
    to have your favorite language assigned a number.  If you add a
@@ -69,6 +70,8 @@
 #include "langs/romanian.h"
 #elif LANG == SPANISH
 #include "langs/spanish.h"
+#elif LANG == ICELANDIC
+#include "langs/icelandic.h"
 
 /* If no sensible language, choose English.  I intended to use
    the #error directive here, but some C compilers barf. */

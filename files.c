@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.7 1997-07-31 01:51:18 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.8 1997-07-31 01:52:46 dfs Exp $";
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -610,7 +610,7 @@ static int CheckSafety()
     }
     if ((statbuf.st_mode & S_IWGRP) ||
 	(statbuf.st_mode & S_IWOTH)) {
-	fprintf(ErrFp, "SECURITY: Won't read group- or world-writable file!");
+	fprintf(ErrFp, "SECURITY: Won't read group- or world-writable file!\n");
 	fclose(fp);
 	fp = NULL;
 	return 0;

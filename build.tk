@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.6 1998-03-01 21:03:36 dfs Exp $
+# $Id: build.tk,v 1.7 1998-05-24 15:43:34 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -261,6 +261,7 @@ proc CreateOptionsDialog { w } {
 	"Norwegian"
 	"Polish"
 	"Romanian"
+        "Spanish"
     } {
 	$w.lang.menu add command -label $lang -command [list $w.lang configure -text $lang]
     }
@@ -530,17 +531,18 @@ proc CallMake {} {
     global Options
     set lang [$Options.lang cget -text]
     switch -- $lang {
-	"German" { set lang GERMAN }
-	"Dutch" { set lang DUTCH }
-	"Finnish" { set lang FINNISH }
-	"French" { set lang FRENCH }
-	"Norwegian" { set lang NORWEGIAN }
-	"Danish" { set lang DANISH }
-	"Polish" { set lang POLISH }
-	"Brazilian Portuguese" {set lang BRAZPORT }
-	"Italian" { set lang ITALIAN }
-	"Romanian" { set lang ROMANIAN }
-	default { set lang ENGLISH }
+	"German"               { set lang GERMAN }
+	"Dutch"                { set lang DUTCH }
+	"Finnish"              { set lang FINNISH }
+	"French"               { set lang FRENCH }
+	"Norwegian"            { set lang NORWEGIAN }
+	"Danish"               { set lang DANISH }
+	"Polish"               { set lang POLISH }
+	"Brazilian Portuguese" { set lang BRAZPORT }
+	"Italian"              { set lang ITALIAN }
+	"Romanian"             { set lang ROMANIAN }
+        "Spanish"              { set lang SPANISH }
+	default                { set lang ENGLISH }
     }
     RunCommand "make \"LANGDEF=-DLANG=$lang\""
 }

@@ -1,4 +1,4 @@
-$Id: README.UNIX,v 1.2 1998-01-17 04:50:34 dfs Exp $
+$Id: README.UNIX,v 1.3 1998-01-19 03:07:14 dfs Exp $
 REMIND version 3.0 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
@@ -7,19 +7,24 @@ in the man page, "remind.1".
 INSTALLING REMIND:
 -----------------
 
-1 - Read the file COPYRIGHT.
+If you have Tcl/Tk (wish) installed and are running X Windows:
+--------------------------------------------------------------
 
-2 - In the main Remind directory, type: sh ./configure
+1) Type: wish ./build.tk from the top-level Remind directory.
+   Fill in the various options and hit "Build Remind"
 
-3 - Examine the file src/custom.h and modify it as needed.
+2) Type: "make install" -- you may need to be root to do this.
 
-4 - Examine lang.h and choose the language you want Remind to use.
-    (You can do this on the "make" command-line -- see "OTHER
-    LANGUAGE SUPPORT.)
+If you do NOT have Tcl/Tk or are NOT running X Windows:
+-------------------------------------------------------
 
-5 - Type 'make'
+1) Edit the file "src/custom.h" according to your preferences.
 
-6 - Type 'make install' (possibly as root)
+2) Edit the file "src/lang.h" to choose a language.
+
+3) Type: "make"
+
+4) Type: "make install" -- you may need to be root to do this.
 
 The subdirectory "www" contains scripts for making a nice calendar
 web server.  See the files README and Makefile in that directory.
@@ -63,7 +68,7 @@ To compile Remind for a non-english language, look at the constants
 defined in "src/lang.h".  Then, to compile Remind for Italian (as an
 example), type:
 
-	make "LANGDEFS=-DLANG=ITALIAN"
+	make "LANGDEF=-DLANG=ITALIAN"
 
 If you add support for a non-English language, Remind will accept both the
 English and non-English names of months and weekdays in an input script.

@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.4 1998-01-17 22:09:44 dfs Exp $
+# $Id: Makefile.in,v 1.5 1998-01-19 03:07:18 dfs Exp $
 
 VERSION= 03.00.18
 SHELL= /bin/sh
@@ -35,7 +35,7 @@ test: remind
 	sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CFLAGS@ @DEFS@ -DUNIX $*.c
+	@CC@ -c @CFLAGS@ @DEFS@ $(LANGDEF) -DUNIX $*.c
 
 rem2ps: rem2ps.o
 	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o

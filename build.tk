@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.2 1998-01-19 03:24:03 dfs Exp $
+# $Id: build.tk,v 1.3 1998-02-14 03:39:40 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -239,9 +239,19 @@ proc CreateOptionsDialog { w } {
     menubutton $w.lang -text $Config(LANGUAGE) -indicatoron 1 -relief raised \
 	    -menu $w.lang.menu
     menu $w.lang.menu -tearoff 0
-    foreach lang {"English" "German" "Dutch" "Finnish" "French" \
-	    "Norwegian" "Danish" "Polish" "Brazilian Portuguese" \
-	    "Italian" "Romanian"} {
+    foreach lang {
+	"Brazilian Portuguese"
+	"Danish"
+	"Dutch"
+	"English"
+	"Finnish"
+	"French"
+	"German"
+	"Italian"
+	"Norwegian"
+	"Polish"
+	"Romanian"
+    } {
 	$w.lang.menu add command -label $lang -command [list $w.lang configure -text $lang]
     }
 

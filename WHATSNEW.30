@@ -1,0 +1,613 @@
+CHANGES TO REMIND
+
+* Version 3.0 Patch 13
+
++ MINOR ENHANCEMENTS
+
+- Added extra parameters to the "psmoon" built-in function so you
+  can annotate the PostScript moon icons.
+
+- Added a command-line "time" argument to Remind for testing Remind
+  scripts with specific system times.  Also added the realnow() function
+  which has the same relationship to now() as realtoday() has to today().
+  (See the man page!)
+
+- Modified Rem2PS so it prints progress messages to stderr if
+  '-v' command-line argument is used.
+
+- In the top of the 'finnish.h' file, added a note about
+  Mikko Silvonen's file of Finnish holidays.
+
++ BUG FIXES
+
+- Fixed a bug in rem2ps which sometimes caused incorrect PostScript if
+  the -e and -m options were used.  Thanks to Michael Neuhauser for
+  reporting the bug and providing a fix.
+
+- Made the '-k' option escape shell characters in the message to make it
+  safer.
+
+- Fixed a segmentation violation which resulted if not all
+  PUSH-OMIT-CONTEXTs were balanced by POP-OMIT-CONTEXTs.
+
+- Removed the prototype for DestroyValue, which is now a macro.  I'm
+  amazed that very few compilers complained about this one!
+
+- Updated the copyright notices everywhere.
+
+* Version 3.0 Patch 12
+
++ MINOR ENHANCEMENTS
+
+- Added support for the Danish language, courtesy of Mogens Lynnerup.
+
+- Added support for the Polish language, courtesy of Jerzy Sobczyk.
+
+- Made the Makefile more portable, thanks to Jim Budler.
+
+- Removed some compiler warnings under Linux, thanks to Francois Pinard.
+
+- Tidied the man page a bit; added a small bibliography.
+
++ BUG FIXES
+
+- Fixed a problem with the '-k' option which resulted in a newline being
+  placed after the message text.  This was giving sh(1) heartburn...
+
+* Version 3.0 Patch 11
+
++ MINOR ENHANCEMENTS
+
+- Added release notes to README.UNIX and README.OS2 describing one
+  way to make pop-up alarms under X-Windows and Presentation Manager.
+
+- Added the $DefaultPrio system variable
+
+- Improved OS/2 support, thanks to Darrel Hankerson, Russ Herman
+  and Norman Walsh.
+
+- Made the pushing and popping of operators and operands during
+  expression evaluation in-line code instead of function calls.  Did the
+  same for DestroyValue.  I'm not sure if this was a good idea -- on the
+  Sparc using gcc, this slowed things down... go figure.
+
++ BUG FIXES
+
+- Fixed a potential memory leak in the char() function.
+
+- Made the TRIGGER() built-in function return its answer in English even
+  for the foreign-language versions -- this was required for compilers which
+  are not 8-bit clean, and for languages with accented letters.
+
+- Made expression evaluation slightly faster by eliminating some unnecessary
+  copying of string values.
+
+- Corrected some non-portable definitions of the macro UPPER(c)
+
+- Fixed typos in french.h
+
+* Version 3.0 Patch 10
+
++ MAJOR ENHANCEMENT
+
+- OS/2 support is now much better, thanks to Russ Herman.  The Borland
+  C compiler under OS/2 and MS-DOS is supported.
+
++ MINOR ENHANCEMENTS
+
+- Added the SCHED keyword for precise control of scheduling of timed
+  reminders -- it's really quite nifty!
+
+- Modified the trigger() function to take up to three arguments -- in
+  addition to a date, you can specify a time and a flag specifying that
+  the trigger should be converted from UTC to local time.
+
+- Added $SortByDate, $SortByTime and $SortByPrio system variables.
+
+- Added test suites for MS-DOS and OS/2, courtesy of Russ Herman.
+
+- In PostScript output, the month and year are output in the %%Page: comments.
+  Makes it nicer to view multi-month calendars with previewers (eg,
+  GhostView.)
+
+- Added the PRIORITY keyword for more control of sort order of reminders.
+  Based on a suggestion by George M. Sipe.
+
+- Added the msgprefix() and msgsuffix() evaluations around MSG-type
+  reminders for doing fancy things with reminders of different priorities.
+  Also added calprefix() and calsuffix() for doing the same thing in
+  calendar mode.
+
+- Enabled the -g option during calendar mode as well as regular mode.
+
++ BUG FIXES
+
+- Fixed minor bugs in the LocalToUTC and UTCToLocal functions.
+
+- "remind -c -de file" used to cause a segmentation violation.  Whoops...
+
+- Some files which should have included <string.h> didn't include it - these
+  are now fixed.
+
+- Fixed the moondate() and moontime() functions, which used to be incorrect
+  after November 1994.
+
+- Fixed the Finnish language support which was missing a few newlines.
+
+* Version 3.0 Patch 9
+
++ NOTES
+
+- Remind is now too big to compile under the "small" model in
+  MS-DOS.  You must recompile everything under the "medium" model.
+
++ MAJOR ENHANCEMENTS
+
+- Functions moonphase(), moondate() and moontime() were added for dealing
+  with phases of the moon.  The code was snarfed from "moontool" by
+  John Walker - see the file "moon.c" for detailed acknowledgement.  Also
+  added psmoon() for putting little moon symbols on the PostScript calendar.
+
++ MINOR ENHANCEMENTS
+
+- Added some more examples to defs.rem - notably, support for ANSI
+  terminal color-changing escape sequences, thanks to Gail Gurman.
+
+- Modified both Remind and Rem2PS so that calendars can start on Sunday or
+  Monday, depending on your preference.  Unfortunately, the command-line
+  options are different -- for Remind, it's '-m' and for Rem2PS it's '-n'
+  because '-m' was already in use.  Based on a suggestion by John Plate
+  and a patch sent by Mikko Silvonen.
+
+- The Finnish language support is better - now, all usage and error
+  messages are in Finnish.  In addition, the Finnish language module
+  supports the IBM extended character set as well as ISOLATIN1.
+  Thanks to Mikko Silvonen.
+
+- Modified Rem2PS to allow more control over the placement of the small
+  calendars, thanks to a suggestion by Frank Vance.  Also added option
+  to control the calendar title (e.g., "September 1993") independently
+  of day-of-week headings.
+
+- Added the psshade() function to make it easier to shade PostScript
+  calendars.
+
+- Allowed a repeat parameter '*num' to be supplied on command line so
+  a 'preview' of many days' worth of reminders can be obtained easily.
+
+- Added the $Location system variable.
+
+- Allowed an expression to be supplied to EXIT to return an exit
+  status.
+
+- Added the FLUSH command.
+
++ BUG FIXES
+
+- Fixed the MSF-type reminder to fill paragraphs more intelligently.
+  It puts double spaces after '!', '.' and '?', and can handle quotes,
+  brackets, etc. after periods, etc.  These characters can be specified
+  with the $EndSent and $EndSentIg system variables.  Also modified it
+  so that newlines in the body start new paragraphs, rather than being
+  swallowed as white-space.
+
+* Version 3.0 Patch 8
+
++ MAJOR ENHANCEMENTS
+
+- Changed the code to more fully support foreign languages - error
+  messages and usage instructions can now be changed.  All changes can
+  be localized in the appropriate language.h files.
+
+- Added support for the French language, courtesy of Laurent Duperval.
+  Note that the French support is more complete than for other languages -
+  French usage instructions and error messages are supported.
+
+- Added support for the Norwegian language, courtesy of Trygve Randen.
+
++ MINOR ENHANCEMENTS
+
+- Added code for the functions timelocal() and timegm(), courtesy of
+  Lucio de Re.  This is for those very few machines whose libraries
+  include neither those functions nor mktime().
+
+- Added the filedate() function.
+
+- Allowed the filename to be specified as "-" to cause Remind to take
+  its input from the standard input stream.
+
+- Added the "MSF" keyword to cause reminders to be formatted automatically.
+  This keyword paragraph-fills reminder text following user specifications.
+  Based on a suggestion by Ken McGlothlen.
+
+- Added the "-e" option to Rem2PS, allowing the PostScript calendar
+  to fill the entire page.  Thanks to Arthur G. Yaffe.
+
++ BUG FIXES
+
+- Corrected the Hebrew holidays Tzom Gedalia, Tzom Tevet, Ta'anit
+  Esther, Tzom Tamuz and Tisha B'Av so they won't occur on Saturday.
+  Corrections made following the algorithm in "Calendrical Calculations"
+  by Nachum Dershowitz and Edward M. Reingold.
+
+- Changed the dutch.h language file as suggested by Erik-Jan Vens.  Made
+  month and day names lower-case; corrected the spelling of oktober.
+
+- Changed HashVal in var.c to use unsigned arithmetic - it's conceivable
+  that a machine with signed chars could cause problems otherwise.
+
+- Changed the LONG_* macros in config.h to LON_* to avoid conflicts
+  with names defined by ANSI C.  Thanks to David W. Sanderson.
+
+- Allowed the built-in function char() to accept numbers in the
+  range [-128, 255] (but not 0) so that char(asc(s)) works even
+  on machines with signed char types.
+
+* Version 3.0 Patch 7
+
++ MAJOR ENHANCEMENTS
+
+- Added "system variables" to allow the user more control over
+  Remind operation, and to allow queries about the command-line
+  options from within a reminder script.  They allow for specification
+  of longitude and latitude for use by sunrise/sunset calculations.
+
+- Added sunrise(), sunset(), isdst() and minsfromutc() functions -
+  these are needed to support sunrise and sunset calculations.
+
++ MINOR ENHANCEMENTS
+
+- Allowed the MSG, RUN, CAL, PS and PSF keywords to be used in the
+  same reminder as the SATISFY keyword.  This makes many complex
+  reminders more compact.
+
+- Added the filedir() function to enable Remind's include to emulate
+  CPP's #include more closely.
+
+- Allowed non-root users to use the "-u" option.  It only affects
+  the "SHELL", "HOME", "USER" and "LOGNAME" environment variables -
+  it doesn't change the effective uid and gid when run by non-root.
+
+- Added built-in function "easterdate" to calculate date of Easter
+  Sunday - function courtesy of Michael Salmon.
+
+- Improved the Jewish holiday reminders in "defs.rem" to give advance
+  notice of holidays.
+
+- Allowed the "simple calendar" option (-s) to specify a number of
+  weeks as well as a number of months, in the same fashion as the
+  -c option.  Thanks to Dave Rickel.
+
++ BUG FIXES
+
+- Corrected the behaviour of "hebdate" for jahrzeits; added an additional
+  parameter to specify the behaviour of dates in Adar during leap years.
+
+- Changed kall so that "kall sh" doesn't commit suicide - patch courtesy
+  of Michael Salmon.
+
+* Version 3.0 Patch 6
+
++ MINOR ENHANCEMENTS
+
+- Added the PS- and PSFILE-type reminders - these allow you to include
+  arbitrary PostScript code in your PostScript calendars.  Useful for
+  shading, drawing graphics on calendars, etc.  Use with care, though!
+
+- Added the "-ivar=val" option to initialize variables from the command
+  line.  Changed the remind-all.* shell scripts to predefine the variable
+  "remind_all".
+
++ BUG FIXES
+
+- Fixed a bug in the hebmon(), hebday() and hebyear() functions - there
+  was an off-by-one error.  Sorry!
+
+- Fixed a bug in the hebdate() function which resulted in infinite loops
+  for dates after about 2075
+
+- Fixed a bug in the -u option which sometimes caused a core dump
+  (embarrassed grin!)  The fix is due to Tina Hoeltig.  Thanks, Tina!
+
+* Version 3.0 Patch 5
+
++ MAJOR ENHANCEMENTS:
+
+- Added support for the Hebrew calendar - can now specify Jewish holidays
+  easily.  Thanks to Amos Shapir for explaining the Hebrew calendar, and
+  to Danny Sadinoff, from whose HEBCAL program I got some inspiration.
+  Also thanks to David W. Tamkin and Frank Yellin for explaining the rules
+  for jahrzeits.
+
++ MINOR ENHANCEMENTS:
+
+- Allowed the default page size used by Rem2PS to be selected in config.h
+
+- Edited the defs.rem file to contain Jewish holidays.  Cleaned up some
+  of the examples and improved the layout - thanks to George M. Sipe.
+
+- Modified the IIF function to be more general
+
+- Updated finnish.h to support the ISO 8859-1 character set, courtesy
+  of Mikko Silvonen.
+
+- Changed the date conversion routines to greatly speed up conversion from
+  Julian to yyyy/mm/dd form.
+
++ BUG FIXES:
+
+- Fixed a bug in which Remind complained incorrectly about a missing quote
+  in the command SET foo ""
+
+- Fixed bugs in dosubst.c which caused the %o, %1 and %@ substitutions
+  to be incorrect
+
+- Fixed a bug in the man page - thanks to Ed Oskiewicz.
+
+* Version 3.0 Patch 4
+
+- Added the -g option - this sorts reminders by date/time before
+  issuing them.  (You can see I'm running out of letters to
+  name options!)  This feature was suggested by George M. Sipe,
+  Paul D. Smith, and Francois Pinard.
+
+- Added the "args()" and "dosubst()" built-in functions - see the
+  man page for details.
+
+- Added more support for the ISO 8859-1 character set, and
+  modified the german.h file to take advantage of this, thanks
+  to Robert Joop.
+
+- Allowed any character to be used as date and time separator
+  characters (not just "/-:.")
+
+- Added support for the Dutch and Finnish languages, thanks to
+  Willem Kasdorp and Mikko Silvonen.  (Anyone care to contribute
+  French?  Italian?  Spanish?)
+
+- Made Remind issue a warning if you try to redefine a built-in
+  function.  This warning is disabled in 'Hush' mode.
+
+- Added the SCANFROM clause to the REM command.  This allows reasonably
+  safe moveable OMITs such as the Labour Day example in the manual.
+
+- Added more examples to the defs.rem file, and cleaned up some old
+  examples.  Note that there are now safe moveable holidays for most
+  U.S. holidays provided in the defs.rem file.
+
+- Added the '-k' option, which allows MSG-type reminders to be passed
+  to any system command.  (Idea and patch courtesy of Philipp Slusallek.)
+
+- Allowed selection of ':' or '.' as time separator characters at
+  compile-time.
+
+- Edited the COPYRIGHT file to clarify the rules.  Please read them.
+
+- Removed hard-coding of "am" and "pm" and placed them in language-specific
+  header files as #defines L_AM and L_PM
+
+- Fixed a bug in the FindToken() routine which had, through sheer luck,
+  never been activated until the SCANFROM clause was added!
+
+- Fixed the UNTIL clause to check for a valid expiry date.
+
+- Removed identifiers in the C source beginning with "_" to conform
+  to ANSI practice.
+  
+- Fixed a bug in the -u option which resulted in environment variables
+  SHELL and USER not being set correctly.  Also made -u set the LOGNAME
+  environment variable.
+
+- Fixed a couple of typos in the man page; added LDFLAGS to the
+  Makefile.  (Thanks to Dave Wolfe.)
+
+- Put my new mailing address in the README files.
+
+* Version 3.0 Patch 3
+
+- Corrected bugs in Remind and Rem2PS.  No new features added.  You
+  should NOT use patch level 2 - either stick to 3.0.1 or upgrade to
+  3.0.3.
+
+* Version 3.0 Patch 2
+
+- Added the -u option to Remind so that root can run it as any user.
+  This simplifies the remind-all scripts, and makes them more efficient.
+  If you are worried that this option is a security hole, you can
+  disable it in config.h
+
+- Changed the RUN command so that RUN OFF can be used anywhere, even
+  though RUN ON only works in the top-level file.  This eases the
+  management of global files which may want to switch RUN OFF.
+
+- Added ISO encoding (ISO 8859-1) to the PostScript output, courtesy of
+  Michael Salmon.  This can be selected with the '-i' option in rem2ps.
+
+- Added support for the '-' date separator as well as the '/' separator.
+
+- Added support for languages other than English.  Note that this support
+  is not complete - error messages are still in English.  The idea and
+  German translation came from Wolfgang Thronicke.
+
+- Changed the -w option to include the "padding" and "spacing" options.
+  NOTE INCOMPATIBILITY:  In the previous patch level, creating a weekly
+  calendar using the -c+n option left no blank lines between the day
+  number and the first reminder entry.  This has been changed so that one
+  blank line is left.  To revert to the old behaviour, use the "-w,,0"
+  option.
+
+- Added the -o option to Rem2ps.  This allows you to specify the margins
+  when producing a PostScript calendar.
+
+- Updated the copyright notices in all the files. :-)
+
+- Added 'make clobber' and 'make test' targets to the Unix makefile.
+
+- Corrected typos in WHATSNEW.30 and remind.1 man page.  Thanks to
+  Dave Wolfe <dwolfe@pffft.sps.mot.com>
+
+- Changed Remind so that supplying the -a option causes timed reminders
+  not to be placed into the calendar in calendar mode.
+
+* Version 3.0 Patch 1
+
+- Wrote the Rem2ps program to produce PostScript calendars
+
+- Added an 'install' target to the Makefile
+
+- Fixed a bug which allowed the shell() function to execute in timed
+  reminders which were queued with RUN disabled.
+
+- Added support for OS/2, courtesy of DARREL HANKERSON
+  <HANK@DUCVAX.AUBURN.EDU>
+
+- In expressions, can now specify literal dates as 'yyyy/mm/dd' rather than
+  using the date() function.
+
+- Fixed all the source files to include "config.h" first.
+
+- Changed the way triggers are calculated so that trigger dates are 
+  always valid if year, month and day are specified, and there is no
+  UNTIL clause.  See MAN page section "DETAILS ABOUT TRIGVALID()."
+
+- Defined _POSIX_SOURCE so Remind will compile on SGI workstations (and
+  be more portable... I hope.)
+
+- Fixed some rather brain-dead definitions of UPPER and LOWER, as pointed
+  out by <rsalz@osf.org>
+
+- Added more details to the Man page concerning how triggers are computed,
+  and added warnings about computing OMIT dates.
+
+- Added the file defs.rem which contains examples of useful definitions and
+  triggers.
+
+- Changed the script test-rem to be a sh script instead of csh for improved
+  portability.
+
+- Fixed up the README.* files to reflect the changes.
+
+- Re-formatted the WHATSNEW.30 file.
+
+* Version 3.0
+
+- Total rewrite from previous versions
+
+- Added variables, expressions, flow-control statements, daemon mode
+
+- Added "expression pasting"
+
+- Added CAL-type reminders
+
+- Added the SATISFY clause
+
+- Improved debugging of reminder scripts
+
+- Took out the "purge" option - it is in general too dificult to tell when
+  a reminder has expired for good, so now it's up to you to do this
+  by hand.
+
+- Fixed a lurking bug in trigger date calculation which, amazingly, had not
+  been caught in the couple of years that Remind has been out!
+
+* Version 2.3 Patch 5 
+
+- Added the "c+n" option for printing a calendar by
+  weeks instead of months, courtesy Dennis Cottel (dennis@peanuts.nosc.mil).
+
+* Version 2.3 Patch 4
+
+- Made the init.c file nicer.  Made the Makefile
+  prettier.  Added "make test", "make tar" and "make shar" Makefile targets.
+
+* Version 2.3 Patch 3
+
+- Added a command-line option for Remind to process
+  queued reminders in the foreground.  This makes automatic termination
+  of Remind processes from within X-Windows and Sunview easier.
+
+* Version 2.3 Patch 2
+
+- Fixed up a problem with timed reminders which resulted
+  in cursor not starting from left side of screen on some systems.
+
+- Fixed the SIGINT handler for SYSV systems - this was interrupting the
+  sleep(2) system call.
+
+- Closed stdin and stdout if remind was part of a pipe - this prevents other
+  sections of the pipe from hanging as remind puts itself in the background.
+
+- Added the "-h" (Hush mode) option
+
+- Added the "%#" and "%@" modifiers for the current time.
+
+- Made the Makefile more portable
+
+* Version 2.3 Patch 1
+
+- Added the "-t" command-line option to get Remind
+  to trigger all non-expired reminders.
+
+- Added Turbo C support courtesy of Rhys Weatherly
+
+- Added the "RUN ON" and "RUN OFF" commands for a secure interface with
+  the Elm mail system.
+
+- Added the "rem" shell script for running Remind with a default script.
+
+- Added manual pages for "kall" and "rem".
+
+* Version 2.3
+
+- Added the UNTIL keyword for forcing reminders to expire.
+
+- Added the "++" form of 'back' and the "--" form of 'delta' for
+  ignoring OMIT information.
+
+- Added the CLEAR-OMIT-CONTEXT, PUSH-OMIT-CONTEXT and POP-OMIT-CONTEXT
+  keywords for isolating personal or peculiar reminders from the global
+  OMIT context.
+
+- Speeded up the parsing of tokens.
+
+- Changed the source to recognize and exploit ANSI-C compilers which
+  accept function prototypes.
+
+- Added the "-n" option to output the next occurrence of each reminder
+  in SimpleCalendar format
+
+- Modified the calendar and SimpleCalendar formats so that the % escape
+  substitutions ARE performed.
+
+* Version 2.2 - Patch 5
+
+- Added the BEFORE, AFTER and SKIP tokens to make the
+  handling of holidays more sensible.  Also corrected a few more bugs.
+
+* Version 2.2 - Patch 3
+
+- Added the MSG or RUN tokens in an OMIT command; also
+  allowed RUN-type reminders to be explicitly included in the calendar by
+  using the %" escape sequence.
+
+* Version 2.2
+
+- Added the AT keyword, the timed reminders daemon, and the
+  calendar facility.
+
+* Version 2.1
+
+- Added the "repeat" token for repeating reminders with a period
+  other than 7 days.  Also fixed some bugs from version 2.0
+
+* Version 2.0
+
+- first public release.  Included advanced date specifications,
+  character substitution, and the RUN keyword.
+
+* Version 1.0
+
+- never publicly released.
+
+
+

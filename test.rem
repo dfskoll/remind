@@ -1,0 +1,255 @@
+# Test file for REMIND
+#
+# $Id: test.rem,v 1.1 1996-03-27 03:26:12 dfs Exp $
+#
+# Use this file to test the date calculation routines
+# of the REMIND program by typing:
+#
+# 	./test-rem  # From WITHIN Remind source directory!
+
+REM MSG Today is [hebday(today())] [hebmon(today())] [hebyear(today())]
+fset _h(x, y) trigger(hebdate(x,y))
+
+[_h(1,  "Tishrey")] MSG Rosh Hashana 1
+[_h(2,  "Tishrey")] MSG Rosh Hashana 2
+[_h(3,  "Tishrey")] MSG Tzom Gedalia
+[_h(10, "Tishrey")] MSG Yom Kippur
+[_h(15, "Tishrey")] MSG Sukkot 1
+[_h(25, "Kislev")]  MSG Channuka
+[_h(10, "Tevet")]   MSG Asara B'Tevet
+[_h(15, "Shvat")]   MSG Tu B'Shvat
+[_h(15, "Adar A")]  MSG Purim Katan
+[_h(14, "Adar")]    MSG Purim
+[_h(15, "Nisan")]   MSG Pesach
+[_h(27, "Nisan")]   MSG Yom HaShoah
+[_h(4,  "Iyar")]    MSG Yom HaZikaron
+[_h(5,  "Iyar")]    MSG Yom Ha'atzmaut
+[_h(28, "Iyar")]    MSG Yom Yerushalayim
+[_h(6,  "Sivan")]   MSG Shavuot
+[_h(9,  "Av")]      MSG Tish'a B'Av
+
+# Test some jahrzeit cases
+fset _i(x,y,z,a) trigger(hebdate(x,y,z,a))
+[_i(30, "Heshvan", today(), 5759)] MSG Complete-Complete
+[_i(30, "Heshvan", today(), 5760)] MSG Complete-Defective
+[_i(30, "Heshvan", today(), 5761)] MSG Illegal
+
+[_i(30, "Kislev", today(), 5759)] MSG Complete-Complete
+[_i(30, "Kislev", today(), 5760)] MSG Complete-Defective
+[_i(30, "Kislev", today(), 5761)] MSG Illegal
+
+[_i(30, "Adar A", today(), 5755)] MSG Leap
+[_i(30, "Adar A", today(), 5756)] MSG Illegal
+[_i(29, "Adar A", today(), 5755)] MSG Leap
+[_i(29, "Adar A", today(), 5756)] MSG Illegal
+
+# Test each possible case of the basic reminders.
+
+REM MSG Every Day
+
+REM 18 MSG Every 18th 
+REM 15 MSG Every 15th
+
+REM Feb MSG February
+REM Jan MSG January
+REM March MSG March
+
+REM 13 Jan MSG 13 Jan
+REM 15 Feb MSG 15 Feb
+REM 28 Feb MSG 28 Feb
+REM 29 Feb MSG 29 Feb
+REM 5 Mar MSG 5 Mar
+
+REM 1990 MSG 1990
+REM 1991 MSG 1991
+REM 1992 MSG 1991
+
+REM 1 1990 MSG 1 1990
+REM 29 1991 MSG 29 1991
+REM 29 1992 MSG 29 1992
+REM 16 1991 MSG 16 1991
+
+REM Jan 1990 MSG Jan 1990
+REM Feb 1991 MSG Feb 1991
+REM Dec 1991 MSG Dec 1991
+REM May 1992 MSG May 1992
+
+REM 1 Jan 1991 MSG 1 Jan 1991
+REM 16 Feb 1991 MSG 16 Feb 1991
+REM 29 Dec 1992 MSG 29 Dec 1992
+
+REM Sun MSG Sun
+REM Fri Sat Tue MSG Fri Sat Tue
+
+REM Sun 16 MSG Sun 16
+REM Mon Tue Wed Thu Fri 1 MSG Mon Tue Wed Thu Fri 1
+
+REM Sun Feb MSG Sun Feb
+REM Mon Tue March MSG Mon Tue March
+
+REM Sun 16 Feb MSG Sun 16 Feb
+REM Mon Tue 10 March MSG Mon Tue 10 March
+
+REM Sat Sun 1991 MSG Sat Sun 1991
+REM Mon Tue 1992 MSG Mon Tue 1992
+
+REM Sun 16 1991 MSG Sun 16 1991
+REM Mon Tue Wed Thu Fri 1 1992 MSG Mon Tue Wed Thu Fri 1 1992
+
+REM Mon Feb 1991 MSG Mon Feb 1991
+REM Tue Jan 1992 MSG Tue Jan 1992
+
+REM Sun Mon 16 Feb 1991 MSG Sun Mon 16 Feb 1991
+REM Tue 28 Jan 1992 MSG Tue 28 Jan 1992
+
+# Try some Backs
+CLEAR-OMIT-CONTEXT
+REM 1 -1 OMIT sat sun MSG 1 -1 OMIT Sat Sun
+REM 1 --1 OMIT sat sun MSG 1 --1 OMIT Sat Sun
+
+OMIT 28 Feb
+REM 1 -1 OMIT sat sun MSG 1 -1 OMIT Sat Sun (28 Feb omitted)
+REM 1 --1 OMIT sat sun MSG 1 --1 OMIT Sat Sun (28 Feb omitted)
+
+CLEAR-OMIT-CONTEXT
+
+# Try out UNTIL
+REM Wed UNTIL 21 Feb 1991 MSG Wed UNTIL 21 Feb 1991
+
+# Try playing with the OMIT context
+
+OMIT 28 Feb 1991
+REM 1 Mar -1 MSG 1 mar -1 (28feb91 omitted)
+REM 1 Mar --1 MSG 1 mar --1 (28Feb91 omitted)
+REM 28 Feb BEFORE MSG 28 Feb BEFORE (28Feb91 omitted)
+REM 28 Feb SKIP MSG 28 Feb SKIP (28Feb91 omitted)
+REM 28 Feb AFTER MSG 28 Feb AFTER (28Feb91 omitted)
+
+PUSH-OMIT-CONTEXT
+CLEAR-OMIT-CONTEXT
+REM 1 Mar -1 MSG 1 mar -1
+REM 1 Mar --1 MSG 1 mar --1
+REM 28 Feb BEFORE MSG 28 Feb BEFORE
+REM 28 Feb SKIP MSG 28 Feb SKIP 
+REM 28 Feb AFTER MSG 28 Feb AFTER
+
+POP-OMIT-CONTEXT
+REM 1 Mar -1 MSG 1 mar -1 (28feb91 omitted)
+REM 1 Mar --1 MSG 1 mar --1 (28Feb91 omitted)
+REM 28 Feb BEFORE MSG 28 Feb BEFORE (28Feb91 omitted)
+REM 28 Feb SKIP MSG 28 Feb SKIP (28Feb91 omitted)
+REM 28 Feb AFTER MSG 28 Feb AFTER (28Feb91 omitted)
+
+
+REM 13 March 1991 *1 UNTIL 19 March 1991 MSG 13-19 Mar 91
+ 
+# Test BACK
+CLEAR-OMIT-CONTEXT
+REM 18 Feb 1991 +1 MSG 18 Feb 1991 +1
+
+OMIT 17 Feb 1991
+REM 18 Feb 1991 +1 MSG 18 Feb 1991 +1 (17Feb91 omitted)
+REM 18 Feb 1991 ++1 MSG 18 Feb 1991 ++1 (17Feb91 omitted)
+
+CLEAR-OMIT-CONTEXT
+# Test the scanfrom clause
+REM Fri SATISFY 1
+OMIT [trigger(trigdate())]
+REM Fri after MSG 23 Feb 1991
+CLEAR-OMIT-CONTEXT
+REM Fri SCANFROM [trigger(today()-7)] SATISFY 1
+OMIT [trigger(trigdate())]
+REM Fri after MSG 16 Feb 1991
+CLEAR-OMIT-CONTEXT
+set a000 abs(1)
+set a001 abs(-1)
+set a002 asc("foo")
+set a003 baseyr()
+set a004 char(66,55,66,77,66)
+set a005 choose(3, "foo", "bar", "baz", "blech")
+set a006 coerce("string", 1)
+set a007 coerce("string", today())
+set a008 coerce("string", 11:44)
+set a009 coerce("int", "badnews")
+set a010 coerce("int", "12")
+set a011 coerce("int", 11:44)
+set a012 coerce("int", today())
+set a013 date(1992, 2, 2)
+set a014 date(1993, 2, 29)
+set a015 day(today())
+set a016 daysinmon(2, 1991)
+set a017 daysinmon(2, 1992)
+set a018 defined("a017")
+set a019 defined("a019")
+set a020 filename()
+set a021 getenv("TEST_GETENV")
+set a022 hour(11:22)
+set a023 iif(1, 1, 0)
+set a024 iif(0, 1, 0)
+set a025 index("barfoobar", "foo")
+set a026 index("barfoobar", "bar", 2)
+set a027 isleap(today())
+set a028 isleap(1992)
+omit [trigger(today())]
+set a030 isomitted(today())
+clear
+set a029 isomitted(today())
+set a031 lower("FOOBARBAZ")
+set a032 max(1, 2, 34, 1, 3)
+set a033 max("foo", "bar", "baz")
+set a034 max(today(), today()+1, today()-1)
+set a035 min(1, 2, 34, 1, 3)
+set a036 min("foo", "bar", "baz")
+set a037 min(today(), today()+1, today()-1)
+set a038 minute(11:33)
+set a039 mon(today())
+set a040 monnum(today())
+set a041 ord(3)
+set a042 ord(4)
+set a043 ostype()
+set a044 plural(2)
+set a045 plural(2, "ies")
+set a046 plural(2, "y", "ies")
+set a047 sgn(-2)
+set a048 shell("echo foo")
+set a049 strlen("sadjflkhsldkfhsdlfjhk")
+set a050 substr(a049, 2)
+set a051 substr(a050, 2, 6)
+set a052 time(1+2, 3+4)
+rem 10 jan 1992 AT 11:22 CAL
+set a053 trigdate()
+set a054 trigtime()
+set a055 trigvalid()
+set a056 upper("sdfjhsdf ksjdfh kjsdfh ksjdfh")
+set a057 value("a05"+"6")
+set a058 version()
+set a059 wkday(today())
+set a060 wkdaynum(today())
+set a061 year(today())
+set a062 1+2*(3+4-(5*7/2))
+set a063 1>=2
+set a064 1<2 || 3 > 4
+set a065 1 && 1
+set a066 !a065
+set a067 typeof(2)
+set a068 typeof("foo")
+set a069 typeof(11:33)
+set a070 typeof(today())
+fset g(x,y) max(x,y)
+fset h(x,y) min(g(x+y, x*y), g(x-y, x/y))
+set a071 g(1, 2)
+set a072 h(2, 3)
+set a073 h("foo", 11:33)
+set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
+msg [a074]%
+set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
+msg [a075]%
+set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
+msg [a076]%
+set a077 dosubst("%y %z", '1992/5/5')
+msg [a077]%
+set a078 easterdate(today())
+set a079 easterdate(1992)
+set a080 easterdate(1995)
+set a081 ""
+dump

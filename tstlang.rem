@@ -1,0 +1,202 @@
+#!remind -rq
+# ---------------------------------------------------------------------------
+#
+# TSTLANG.REM
+#
+# $Id: tstlang.rem,v 1.1 1996-03-27 03:26:14 dfs Exp $
+#
+# Use this file to test new language headers you may want to create.
+# Usage: remind -rq tstlang.rem
+#
+# Don't run it within about 2 hours of midnight (ie, between 10pm and 2am)
+#
+# Use the output to verify your translations.
+#
+# This file is part of REMIND.
+# Copyright (C) 1992-1996 by David F. Skoll        
+#
+# ---------------------------------------------------------------------------
+
+if version()<"03.00.08"
+   errmsg %
+   errmsg This file only works with Remind version 03.00.08 and later - aborting
+   exit
+endif
+
+if !$RunOff || !$DontQueue || $DontTrigAts
+   errmsg %
+   errmsg Please run [filename()] with the -q and -r options, but%
+   errmsg not the -a option.
+   exit
+endif
+
+# Set up a few useful definitions
+fset show(x) "%%" + x + " yields: " + char(34) + "%" + x + char(34) + "%"
+set a trigger(today()+2) + " ++2"
+set l language()
+set tt now()+134
+set tu now()-134
+set d a + " at " + tt
+set e a + " at " + tu
+
+msg The above is the default banner for the [l] language.
+
+msg The following are the two-day-in-advance substitutions:%
+[a] msg [show("a")]
+[a] msg [show("b")]
+[a] msg [show("c")]
+[a] msg [show("d")]
+[a] msg [show("e")]
+[a] msg [show("f")]
+[a] msg [show("g")]
+[a] msg [show("h")]
+[a] msg [show("i")]
+[a] msg [show("j")]
+[a] msg [show("k")]
+[a] msg [show("l")]
+[a] msg [show("m")]
+[a] msg [show("n")]
+[a] msg [show("o")]
+[a] msg [show("p")]
+[a] msg [show("q")]
+[a] msg [show("r")]
+[a] msg [show("s")]
+[a] msg [show("t")]
+[a] msg [show("u")]
+[a] msg [show("v")]
+[a] msg [show("w")]
+[a] msg [show("x")]
+[a] msg [show("y")]
+[a] msg [show("z")]
+
+msg %_%_The following are the one-day-in-advance substitutions:%
+set a trigger(today()+1) + " ++1"
+set d a + " at " + tt
+set e a + " at " + tu
+[a] msg [show("a")]
+[a] msg [show("b")]
+[a] msg [show("c")]
+[a] msg [show("d")]
+[a] msg [show("e")]
+[a] msg [show("f")]
+[a] msg [show("g")]
+[a] msg [show("h")]
+[a] msg [show("i")]
+[a] msg [show("j")]
+[a] msg [show("k")]
+[a] msg [show("l")]
+[a] msg [show("m")]
+[a] msg [show("n")]
+[a] msg [show("o")]
+[a] msg [show("p")]
+[a] msg [show("q")]
+[a] msg [show("r")]
+[a] msg [show("s")]
+[a] msg [show("t")]
+[a] msg [show("u")]
+[a] msg [show("v")]
+[a] msg [show("w")]
+[a] msg [show("x")]
+[a] msg [show("y")]
+[a] msg [show("z")]
+
+msg %_%_The following are the current-day substitutions:%
+set a trigger(today())
+set d a + " at " + tt
+set e a + " at " + tu
+[a] msg [show("a")]
+[a] msg [show("b")]
+[a] msg [show("c")]
+[a] msg [show("d")]
+[a] msg [show("e")]
+[a] msg [show("f")]
+[a] msg [show("g")]
+[a] msg [show("h")]
+[a] msg [show("i")]
+[a] msg [show("j")]
+[a] msg [show("k")]
+[a] msg [show("l")]
+[a] msg [show("m")]
+[a] msg [show("n")]
+[a] msg [show("o")]
+[a] msg [show("p")]
+[a] msg [show("q")]
+[a] msg [show("r")]
+[a] msg [show("s")]
+[a] msg [show("t")]
+[a] msg [show("u")]
+[a] msg [show("v")]
+[a] msg [show("w")]
+[a] msg [show("x")]
+[a] msg [show("y")]
+[a] msg [show("z")]
+
+msg %_Time substititions for a time in the future:%
+[d] msg [show("1")]
+[d] msg [show("2")]
+[d] msg [show("3")]
+[d] msg [show("4")]
+[d] msg [show("5")]
+[d] msg [show("6")]
+[d] msg [show("7")]
+[d] msg [show("8")]
+[d] msg [show("9")]
+[d] msg [show("0")]
+[d] msg [show("!")]
+[d] msg [show("@")]
+[d] msg [show("#")]
+msg %_Time substititions for a time in the past:%
+[e] msg [show("1")]
+[e] msg [show("2")]
+[e] msg [show("3")]
+[e] msg [show("4")]
+[e] msg [show("5")]
+[e] msg [show("6")]
+[e] msg [show("7")]
+[e] msg [show("8")]
+[e] msg [show("9")]
+[e] msg [show("0")]
+[e] msg [show("!")]
+[e] msg [show("@")]
+[e] msg [show("#")]
+
+msg %_Time substititions for the current time:%
+set e a + " at " + now()
+[e] msg [show("1")]
+[e] msg [show("2")]
+[e] msg [show("3")]
+[e] msg [show("4")]
+[e] msg [show("5")]
+[e] msg [show("6")]
+[e] msg [show("7")]
+[e] msg [show("8")]
+[e] msg [show("9")]
+[e] msg [show("0")]
+[e] msg [show("!")]
+[e] msg [show("@")]
+[e] msg [show("#")]
+
+msg %_The following are the days of the week:
+fset showwd(x) "wkday("+x+") = " + wkday(x) + "%"
+msg [showwd(0)]
+msg [showwd(1)]
+msg [showwd(2)]
+msg [showwd(3)]
+msg [showwd(4)]
+msg [showwd(5)]
+msg [showwd(6)]
+
+msg %_The following are the months of the year:
+fset showmon(x) "mon("+x+") = "+mon(x)+"%"
+msg [showmon(1)]
+msg [showmon(2)]
+msg [showmon(3)]
+msg [showmon(4)]
+msg [showmon(5)]
+msg [showmon(6)]
+msg [showmon(7)]
+msg [showmon(8)]
+msg [showmon(9)]
+msg [showmon(10)]
+msg [showmon(11)]
+msg [showmon(12)]

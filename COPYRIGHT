@@ -1,0 +1,103 @@
+$Id: COPYRIGHT,v 1.1 1996-03-27 03:25:46 dfs Exp $
+THE REMIND COPYRIGHT
+
+1. REMIND refers to the entire set of files and documentation in the
+REMIND package.
+
+2. REMIND is Copyright 1992-1996 by David Skoll,
+except where noted in individual files.
+
+3. You may use REMIND for free, and may freely distribute it, providing
+you do not charge the recipients to whom you distribute REMIND.
+
+4. This means that if you distribute REMIND:
+
+- You may not charge more than cost for distribution media.
+- If you run a BBS or network service, you cannot charge more than
+  the regular access fee for REMIND.  That is, REMIND must be accessible
+  at the basic BBS access rate, with no surcharge.
+- You may not charge users support fees for REMIND.
+- No other fees may be levied for REMIND.
+- You cannot use REMIND to solicit donations.
+
+5. You may modify REMIND.  However, you must clearly indicate such
+modifications when you distribute REMIND, and must tell the recipients
+of the modified version that it is modified.  Place that notice in the
+WHATSNEW.xx file.
+
+6. You may incorporate parts of REMIND into your own programs,
+providing you do not sell these programs.  You must clearly indicate
+that the parts of REMIND you have incorporated are Copyright 1992-1996
+by David Skoll.  These programs can be distributed according to the terms
+of paragraphs 3 and 4.
+
+7. I will attempt to support REMIND as much as possible.  However,
+REMIND is supplied on an "as-is" basis with no warranty.  You use it
+at your own risk.  I am not responsible for any damages caused by the
+use or misuse of REMIND.
+
+8. If you wish to contribute ideas or money to help the production of
+software like REMIND, you can reply to the address shown at the end of
+this file.  Note that you are under no obligation to send me money.
+If you don't donate, you have full rights to use REMIND just as if you
+had donated.  If you do donate, you get a big thank-you, but no
+special rights.  However, you will have helped support the production
+of software like REMIND.  Should you wish to donate, the suggested
+amount is $18.00 (Canadian)
+
+If you wish to incorporate Remind into a commercial product, or to
+charge support fees for products incorporating Remind, contact
+me for licensing arrangements.
+
+ACKNOWLEDGEMENTS:
+
+I would like to thank the following people:
+
+Bill Aten <netagw!bill@uunet.UU.NET> for providing remind-all.sh
+
+Bradley D. Keister <keister@poincare.phys.cmu.edu>, Rhys Weatherly
+rhys@batserver.cs.uq.OZ.AU> and Anthony Cheng for initially providing
+the Turbo C compiler support.
+
+Dennis Cottel <dennis@peanuts.nosc.mil> for providing the patch to
+produce calendars by weeks as well as by months.
+
+Bill Silvert <bill%biomel@cs.dal.ca> and Dennis Cottel
+<dennis@peanuts.nosc.mil> for suggesting many of the new features in
+REMIND.
+
+Dave Wolfe <dwolfe@pffft.sps.mot.com> and Raphael Manfredi
+<ram@eiffel.com> for noticing bugs and sending me fixes.
+
+Dave Rickel and George M. Sipe for sample reminders and holidays.
+
+Michael Salmon for ISO encoding of PostScript output.
+
+Darrel Hankerson for helping me provide some OS/2 support.  Sorry
+it's not complete, Darrel!
+
+Phillipp Slusallek for suggesting the -k option.
+
+Amos Shapir, David W. Tamkin and Frank Yellin for help with the Hebrew
+calendar.
+
+All of the language translators whose names are listed in lang.h
+
+Timo Salmi, Keith Petersen, Bill Davidsen and Kent Landfield for
+maintaining the uwasa and SIMTEL archives, and comp.binaries.ibm.pc
+and comp.sources.misc in the face of a flurry of updates to REMIND.
+
+All others who have corresponded with me to report bugs, express
+appreciation or suggest features - too many people to list here.
+
+Finally, all those who donated money to support the production of
+REMIND.  Your donations were gratefully appreciated.
+
+--
+David F. Skoll <dfs@doe.carleton.ca>
+986 Eiffel Avenue
+Ottawa, Ontario K2C 0J2
+CANADA
+
+Tel. (613) 225-8687
+

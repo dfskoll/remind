@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.in,v 1.4 1998-01-17 04:50:17 dfs Exp $
+dnl $Id: configure.in,v 1.5 1998-02-16 03:41:39 dfs Exp $
 
 AC_INIT(src/amiga.c)
 
@@ -16,7 +16,6 @@ EOF
 AC_CONFIG_HEADER(src/config.h)
 
 dnl Checks for programs.
-AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -42,6 +41,6 @@ AC_TYPE_UID_T
 AC_FUNC_UTIME_NULL
 AC_HEADER_TIME
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(mktime putenv strstr timegm)
+AC_CHECK_FUNCS(mktime putenv strstr timegm difftime)
 
 AC_OUTPUT(src/Makefile)

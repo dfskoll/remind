@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.10 1999-04-05 17:34:51 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.11 1999-04-12 19:45:27 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -489,6 +489,7 @@ void Usage()
 #endif /* HAVE_PROTOS */
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "Copyright 1999 by Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.5 1999-04-05 17:35:10 dfs Exp $ */
+/* $Id: portbr.h,v 1.6 1999-04-12 19:45:43 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -260,6 +260,7 @@ void Usage()
 #endif /* HAVE_PROTOS */
 {
     fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-1998 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "(C) 1999 by Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> VERSAO BETA <<<<\n");
 #endif

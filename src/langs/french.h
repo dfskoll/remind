@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.6 1999-04-05 17:35:07 dfs Exp $ */
+/* $Id: french.h,v 1.7 1999-04-12 19:45:42 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -360,6 +360,7 @@ void Usage()
 #endif /* HAVE_PROTOS */
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "Copyright 1999 by Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

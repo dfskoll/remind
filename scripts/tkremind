@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.31 2001-05-07 14:13:15 dfs Exp $
+# $Id: tkremind,v 1.32 2004-08-11 01:55:20 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -632,6 +632,7 @@ proc FillCalWindow {} {
 	set day [string trimleft $day 0]
 	set n [expr $day+$offset]
 	set month [string trimleft $month 0]
+	set extratags ""
 	switch -exact -- $type {
 	    "SHADE" {
 		DoShadeSpecial $n $stuff
@@ -641,8 +642,33 @@ proc FillCalWindow {} {
 		DoMoonSpecial $n $stuff
 		continue
 	    }
+	    "COLOR" {
+		if {[regexp {^ *([0-9]+) +([0-9]+) +([0-9]+) +(.*)$} $stuff all r g b rest]} {
+		    if {$r > 255} {
+			set r 255
+		    } elseif {$r < 0} {
+			set r 0
+		    }
+		    if {$g > 255} {
+			set g 255
+		    } elseif {$g < 0} {
+			set g 0
+		    }
+		    if {$b > 255} {
+			set b 255
+		    } elseif {$b < 0} {
+			set b 0
+		    }
+		    set color [format "%02X%02X%02X" $r $g $b]
+		    set extratags "clr$color"
+		    .cal.t$n configure -state normal
+		    .cal.t$n tag configure $extratags -foreground "#$color"
+		    .cal.t$n configure -state disabled
+		    set stuff $rest
+		}
+	    }
 	}
-	if { $type != "*"} {
+	if { $type != "*" && $type != "COLOR"} {
 	    continue
 	}
 	.cal.t$n configure -state normal
@@ -651,7 +677,7 @@ proc FillCalWindow {} {
 	}
 	set didSomething($day) 1
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
-	    .cal.t$n insert end [string trim $stuff] "TAGGED TKTAG$tagno"
+	    .cal.t$n insert end [string trim $stuff] [list TAGGED "TKTAG$tagno" $extratags]
 	} else {
 	    .cal.t$n insert end [string trim $stuff]
 	}
@@ -2197,7 +2223,15 @@ proc TaggedEnter { w } {
 proc TaggedLeave { w } {
     set tag [GetCurrentReminder $w]
     if {$tag != ""} {
-	$w tag configure $tag -foreground #000000
+	set tags [$w tag names current]
+	set index [lsearch -glob $tags "clr*"]
+	if {$index < 0} {
+	    set fg "#000000"
+	} else {
+	    set fg [string range [lindex $tags $index] 3 end]
+	    set fg "#$fg"
+	}
+	$w tag configure $tag -foreground $fg
     }
 }
 

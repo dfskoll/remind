@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.8 1997-07-30 01:30:57 dfs Exp $
-.TH REMIND 1 "29 July 1997"
+.\" $Id: remind.1,v 1.9 1997-08-01 02:28:31 dfs Exp $
+.TH REMIND 1 "31 July 1997"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -1171,7 +1171,7 @@ will begin reading from standard input.
 .SH THE RUN COMMAND
 .PP
 If you include other files in your reminder script, you may not always
-entirely "trust" the contents of the other files.  For example, they
+entirely trust the contents of the other files.  For example, they
 may contain \fBRUN\fR-type reminders which could be used to access your
 files or perform undesired actions.  The \fBRUN\fR command can restrict
 this:  If you include the command \fBRUN OFF\fR in your top-level reminder
@@ -1205,6 +1205,11 @@ your main .reminders file, include the following lines:
 	INCLUDE .reminders.in
 	RUN ON    # Re-enable RUN
 .fi
+.PP
+In addition, \fBRemind\fR contains a few other security features.  It
+will not read a file which is group- or world-writable.  It will not
+run set-uid.  And if it is run as \fIroot\fR, it will only read files
+owned by \fIroot\fR.
 .PP
 .SH THE BANNER COMMAND
 .PP

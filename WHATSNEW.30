@@ -1,5 +1,17 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 15
+
++ MINOR ENHANCEMENTS
+
+- Added a Print dialog to tkremind.
+
+- Added support for Brazilian Portuguese.
+
++ BUG FIXES
+
+- Fixed confusing error in rem2ps help messages.
+
 * Version 3.0 Patch 14
 
 + CHANGE IN COPYING POLICY

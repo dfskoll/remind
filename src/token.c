@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.9 2000-02-18 03:46:10 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.10 2001-11-06 15:51:37 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -49,63 +49,63 @@ while (isdigit(*(string))) { \
 Token TokArray[] = {
     /* NAME          MINLEN      TYPE           VALUE */
 
-    { "after", 		3, 	T_Skip, 	AFTER_SKIP },
+    { "after",		3,	T_Skip,	AFTER_SKIP },
     { "april",		3,	T_Month,	3 },
     { "at",		2,	T_At,		0 },
     { "august",		3,	T_Month,	7 },
     { "banner",		3,	T_Banner,	0 },
-    { "before", 		3, 	T_Skip, 	BEFORE_SKIP },
-    { "cal", 		3, 	T_RemType, 	CAL_TYPE },
+    { "before",	3,	T_Skip,	BEFORE_SKIP },
+    { "cal",		3,	T_RemType,	CAL_TYPE },
     { "clear-omit-context", 5,   T_Clr,         0 },
     { "debug",          5,      T_Debug,       0 },
     { "december",	3,	T_Month,       11 },
     { "dumpvars",       4,      T_Dumpvars,    0 },
     { "duration",       3,      T_Duration,     0 },
-    { "else", 		4, 	T_Else, 	0 },
-    { "endif", 		5, 	T_EndIf, 	0 },
+    { "else",		4,	T_Else,	0 },
+    { "endif",		5,	T_EndIf,	0 },
     { "errmsg",         6,      T_ErrMsg,      0 },
     { "exit",		4,	T_Exit,		0 },
-    { "february",	3, 	T_Month,	1 },
+    { "february",	3,	T_Month,	1 },
     { "flush",		5,	T_Flush,	0 },
     { "friday",		3,	T_WkDay,	4 },
     { "fset",		4,	T_Fset,		0 },
     { "if",		2,	T_If,		0 },
     { "iftrig",		6,	T_IfTrig,	0 },
-    { "include", 	3, 	T_Include, 	0 },
-    { "january",	3, 	T_Month,	0 },
+    { "include",	3,	T_Include,	0 },
+    { "january",	3,	T_Month,	0 },
     { "july",		3,	T_Month,	6 },
     { "june",		3,	T_Month,	5 },
     { "march",		3,	T_Month,	2 },
-    { "may",		3, 	T_Month, 	4 },
+    { "may",		3,	T_Month,	4 },
     { "monday",		3,	T_WkDay,	0 },
     { "msf",		3,	T_RemType,	MSF_TYPE },
-    { "msg", 		3, 	T_RemType, 	MSG_TYPE },
-    { "november",	3, 	T_Month,	10 },
-    { "october",	3, 	T_Month,	9 },
+    { "msg",		3,	T_RemType,	MSG_TYPE },
+    { "november",	3,	T_Month,	10 },
+    { "october",	3,	T_Month,	9 },
     { "omit",		3,	T_Omit,		0 },
-    { "once", 		3, 	T_Once,		0 },
+    { "once",		3,	T_Once,		0 },
     { "pop-omit-context", 3,	T_Pop,		0 },
     { "preserve",       8,      T_Preserve,     0 },
     { "priority",	8,	T_Priority,	0 },
-    { "ps", 		2, 	T_RemType, 	PS_TYPE },
-    { "psfile", 	6, 	T_RemType, 	PSF_TYPE },
-    { "push-omit-context", 4, 	T_Push,		0 },
+    { "ps",		2,	T_RemType,	PS_TYPE },
+    { "psfile",	6,	T_RemType,	PSF_TYPE },
+    { "push-omit-context", 4,	T_Push,		0 },
     { "rem",		3,	T_Rem,		0 },
-    { "run", 		3, 	T_RemType, 	RUN_TYPE },
+    { "run",		3,	T_RemType,	RUN_TYPE },
     { "satisfy",	7,	T_RemType,      SAT_TYPE },
     { "saturday",	3,	T_WkDay,	5 },
     { "scanfrom",	4,	T_Scanfrom,	0 },
     { "sched",		5,	T_Sched,	0 },
-    { "september",	3, 	T_Month, 	8 },
+    { "september",	3,	T_Month,	8 },
     { "set",		3,	T_Set,		0 },
-    { "skip", 		3, 	T_Skip, 	SKIP_SKIP },
+    { "skip",		3,	T_Skip,	SKIP_SKIP },
     { "special",        7,      T_RemType,      PASSTHRU_TYPE },
     { "sunday",		3,	T_WkDay,	6 },
     { "tag",            3,      T_Tag,          0 },
     { "thursday",	3,	T_WkDay,	3 },
     { "tuesday",	3,	T_WkDay,	1 },
-    { "unset", 		5, 	T_UnSet, 	0 },
-    { "until", 		3, 	T_Until,	0 },
+    { "unset",		5,	T_UnSet,	0 },
+    { "until",		3,	T_Until,	0 },
     { "warn",           4,      T_Warn,         0 },
     { "wednesday",	3,	T_WkDay,	2 }
 };
@@ -171,7 +171,7 @@ char *s;
 
     return s;
 }
-     
+
 
 /***************************************************************/
 /*                                                             */
@@ -196,7 +196,7 @@ Token *tok;
 	tok->type = T_Empty;
 	return;
     }
-       
+
     if (*s == '#' || *s == ';') {
 	tok->type = T_Comment;
 	return;
@@ -244,7 +244,7 @@ Token *tok;
    array. */
 #if LANG != ENGLISH
     for (r=0; r<(sizeof(NonEnglishToks) / sizeof(Token)); r++) {
-	if (l >= NonEnglishToks[r].MinLen && 
+	if (l >= NonEnglishToks[r].MinLen &&
 	    !TokStrCmp(&NonEnglishToks[r], s)) {
 	    tok->type = NonEnglishToks[r].type;
 	    tok->val = NonEnglishToks[r].val;
@@ -252,7 +252,7 @@ Token *tok;
 	}
     }
 #endif
- 
+
     return;
 }
 

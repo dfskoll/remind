@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.5 1998-02-10 04:11:46 dfs Exp $ */
+/* $Id: protos.h,v 1.6 1998-03-30 05:08:52 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -94,7 +94,7 @@ int PushOmitContext ARGS ((ParsePtr p));
 int PopOmitContext ARGS ((ParsePtr p));
 int IsOmitted ARGS ((int jul, int localomit));
 int DoOmit ARGS ((ParsePtr p));
-int QueueReminder ARGS ((ParsePtr p, int typ, TimeTrig *tim, const char *sched));
+int QueueReminder ARGS ((ParsePtr p, Trigger *trig, TimeTrig *tim, const char *sched));
 void HandleQueuedReminders ARGS ((void));
 char *FindInitialToken ARGS ((Token *tok, char *s));
 void FindToken ARGS ((const char *s, Token *tok));

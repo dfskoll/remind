@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.6 1998-03-04 18:13:27 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.7 1998-03-30 05:08:52 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED
@@ -58,6 +58,7 @@ typedef struct queuedrem {
     int ntrig;
     char *text;
     char sched[VAR_NAME_LEN+1];
+    char tag[TAG_LEN+1];
     TimeTrig tt;
 } QueuedRem;
 
@@ -83,11 +84,12 @@ PRIVATE void reread ARGS((void));
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int QueueReminder(ParsePtr p, int typ, TimeTrig *tim, const char *sched)
+PUBLIC int QueueReminder(ParsePtr p, Trigger *trig,
+			 TimeTrig *tim, const char *sched)
 #else
-int QueueReminder(p, typ, tim, sched)
+int QueueReminder(p, trig, tim, sched)
 ParsePtr p;
-int typ;
+Trigger *trig,
 TimeTrig *tim;
 char *sched;
 #endif
@@ -96,9 +98,9 @@ char *sched;
 
     if (DontQueue ||
 	tim->ttime == NO_TIME ||
-	typ == CAL_TYPE ||
+	trig->typ == CAL_TYPE ||
 	tim->ttime < SystemTime(0) / 60 ||
-	((typ == RUN_TYPE) && RunDisabled)) return OK;
+	((trig->typ == RUN_TYPE) && RunDisabled)) return OK;
 
     qelem = NEW(QueuedRem);
     if (!qelem) {
@@ -109,12 +111,13 @@ char *sched;
 	free(qelem);
 	return E_NO_MEM;
     }
-    qelem->typ = typ;
+    qelem->typ = trig->typ;
     qelem->tt = *tim;
     qelem->next = QueueHead;
     qelem->RunDisabled = RunDisabled;
     qelem->ntrig = 0;
     strcpy(qelem->sched, sched);
+    strcpy(qelem->tag, trig->tag);
     QueueHead = qelem;
     NumQueued++;
     return OK;
@@ -233,7 +236,13 @@ void HandleQueuedReminders()
 	if (Daemon < 0) {
 	    printf("NOTE reminder %s ",
 		   SimpleTime(q->tt.ttime));
-	    printf("%s\n", SimpleTime(SystemTime(0)/60));
+	    printf("%s ", SimpleTime(SystemTime(0)/60));
+	    if (!*q->tag) {
+		printf("*");
+	    } else {
+		printf("%s", q->tag);
+	    }
+	    printf("\n");
 	}
 #ifdef OS2_POPUP
 	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday, 1);

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.6 1998-02-14 03:31:59 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.7 1998-03-30 05:08:51 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -115,7 +115,7 @@ ParsePtr p;
 	!(!IgnoreOnce &&
 	  trig.once != NO_ONCE &&
 	  FileAccessDate == JulianToday))
-	QueueReminder(p, trig.typ, &tim, trig.sched);
+	QueueReminder(p, &trig, &tim, trig.sched);
 /* If we're in daemon mode, do nothing over here */
     if (Daemon) return OK;
 #endif

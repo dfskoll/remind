@@ -9,13 +9,14 @@
 /*                                                             */
 /***************************************************************/
 
+#include "config.h"
+static char const RCSID[] = "$Id: queue.c,v 1.9 1998-05-10 02:46:43 dfs Exp $";
+
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
 #define __EXTENSIONS__ 1
+#undef _POSIX_SOURCE
 #endif
-
-#include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.8 1998-05-10 01:29:12 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED

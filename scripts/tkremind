@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.18 1998-04-19 03:52:46 dfs Exp $
+# $Id: tkremind,v 1.19 1998-04-23 02:56:46 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -322,7 +322,6 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	    grid rowconfigure $w $row -weight 0
 	    grid rowconfigure $w [expr $row+1] -weight 0
 	} else {
-	    grid rowconfigure $w $row -weight 1
 	    grid rowconfigure $w [expr $row+1] -weight 1
 	}
 	$w.l$i configure -text "" -command "" -state disabled -relief flat

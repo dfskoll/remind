@@ -1,16 +1,16 @@
-$Id: COPYRIGHT,v 1.9 1998-05-06 01:51:11 dfs Exp $
+$Id: COPYRIGHT,v 1.10 1999-02-06 21:43:13 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
 REMIND package.
 
-2. REMIND is Copyright 1992-1998 by David Skoll,
+2. REMIND is Copyright 1992-1999 by David Skoll,
 except where noted in individual files.
 
 3. DISTRIBUTION AND USE
 
-   a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95, CE,
-      or NT) or any future version of Windows or any other Microsoft
+   a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95, 98, CE,
+      NT or 2000) or any future version of Windows or any other Microsoft
       operating system.  REMIND may not be used in POSIX-like systems
       built on Windows NT.  Such use constitutes a violation of copyright.
 

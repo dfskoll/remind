@@ -1,4 +1,4 @@
-$Id: COPYRIGHT,v 1.3 1996-10-12 03:11:05 dfs Exp $
+$Id: COPYRIGHT,v 1.4 1996-10-12 03:13:04 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
@@ -17,7 +17,7 @@ except where noted in individual files.
       directors, nor by any of Cadabra's subsidiaries or their directors.
       Such use constitutes a violation of copyright.
 
-   c) If the (a) and (b) do not hold, then REMIND may be used and
+   c) Except for situations (a) and (b), REMIND may be used and
       distributed according to the terms of the GNU General Public
       License, Version 2, which follows:
 

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.2 1996-03-31 04:01:51 dfs Exp $
+# $Id: Makefile,v 1.3 1996-03-31 04:08:09 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -54,7 +54,7 @@ GROUP=bin
 # YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
 # in config.h; then, you should be able to type 'make'.
 #-----------------------------------------------------------------------------
-VERSION= 03.00.13
+VERSION= 03.00.14
 MATHLIB= -lm
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
@@ -70,13 +70,18 @@ SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c hbcal.c \
 init.c main.c moon.c omit.c sort.c queue.c token.c trigger.c userfns.c \
 utils.c var.c
 
-MANIFEST= README.UNIX README.DOS COPYRIGHT $(HDRS) $(SRCS) Makefile rem rem.1 \
-remind.1 remind-all.csh remind-all.sh test.rem test-rem test.cmp makefile.tc \
-makefile.msc lnk.msc lnk.tc MANIFEST.UNX MANIFEST.DOS WHATSNEW.30 kall kall.1 \
-defs.rem README.OS2 makefile.os2 rem2ps.c rem2ps.h remind.def rem2ps.1 \
-tstlang.rem README.BCC lnk.bcc makefile.bcc os2func.c \
-test-rem.bat test-rem.cmd test1.cmp test2.cmp
-
+MANIFEST=COPYRIGHT Makefile Makefile_QDOS README.AMIGA README.BCC \
+README.DOS README.OS2 README.UNIX README_QDOS WHATSNEW.30 \
+amiga-SCOPTIONS amiga.c calendar.c config.h danish.h defs.rem dorem.c \
+dosubst.c dutch.h english.h err.h expr.c expr.h files.c finnish.h \
+french.h funcs.c german.h globals.c globals.h hbcal.c init.c kall \
+kall.1 lang.h lnk.bcc lnk.msc lnk.tc main.c makefile.bcc makefile.msc \
+makefile.os2 makefile.tc moon.c norwgian.h omit.c os2func.c polish.h \
+protos.h queue.c rem rem.1 rem2ps.1 rem2ps.c rem2ps.h remind-all.csh \
+remind-all.sh remind.1 remind.def smakefile sort.c test-rem \
+test-rem.ami test-rem.bat test-rem.cmd test-rem.rexx test.cmp test.rem \
+test1.cmp test2.cmp token.c trigger.c tstlang.rem types.h userfns.c \
+utils.c var.c version.h
 
 OBJS= $(SRCS:.c=.o)
 
@@ -121,9 +126,9 @@ userfns.o: userfns.c $(STDHDRS) expr.h
 utils.o: utils.c $(STDHDRS)
 var.o: var.c $(STDHDRS) expr.h
 
-tarZ:
-	tar cvf remind-3.0.13.tar $(MANIFEST)
-	compress -v remind-3.0.13.tar
+tgz:
+	tar cvzf remind-3.0.14.tgz $(MANIFEST)
+	compress -v remind-3.0.14.tar
 
 shar:
 	shar -x -n"Remind $(VERSION)" -l45 -o./Shar $(MANIFEST)
@@ -177,9 +182,9 @@ install-man:
 release:
 	-mkdir RELEASE
 	-rm -f RELEASE/*
-	mkpatch ../prev . patch.13 Shar "Remind-3.0/Patch-13/part"
+	mkpatch ../prev . patch.14 Shar "Remind-3.0/Patch-14/part"
 	mv Shar* RELEASE
-	rm -f patch.13*
+	rm -f patch.14*
 	for i in *.1; do nroff -man $$i | sed -e 's/_//g' > `basename $$i .1`.man; done
 	mv *.man RELEASE
 	for i in *.1; do groff -man -Tps $$i > `basename $$i .1`.ps; done

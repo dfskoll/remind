@@ -1,8 +1,8 @@
 # Makefile for REMIND for Turbo C for MSDOS
-# $Id: makefile.tc,v 1.1 1996-03-27 03:26:03 dfs Exp $
+# $Id: makefile.tc,v 1.2 1996-03-31 04:08:11 dfs Exp $
 
 CC= tcc
-VERSION= 03.00.13
+VERSION= 03.00.14
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
 lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \
@@ -19,14 +19,6 @@ moon.c main.c omit.c sort.c token.c trigger.c userfns.c utils.c var.c hbcal.c
 OBJS=calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
 globals.obj init.obj main.obj omit.obj sort.obj token.obj trigger.obj \
 utils.obj userfns.obj var.obj hbcal.obj
-
-MANIFEST= readme.uni readme.dos copyrigh $(HDRS) $(SRCS) makefile rem rem.1 \
-remind.1 remind-a.csh remind-a.sh test.rem test-rem test.cmp makefile.tc \
-makefile.msc lnk.msc lnk.tc manifest.dos manifest.unx whatsnew.30 kall kall.1 \
-tstlang.rem defs.rem readme.os2 makefile.os2 rem2ps.c rem2ps.h remind.def \
-rem2ps.1 README.BCC lnk.bcc makefile.bcc os2func.c \
-test-rem.bat test-rem.cmd test1.cmp test2.cmp
-
 
 all: remind.exe rem2ps.exe
 
@@ -74,7 +66,3 @@ userfns.obj: userfns.c $(STDHDRS) expr.h
 utils.obj: utils.c $(STDHDRS)
 
 var.obj: var.c $(STDHDRS) expr.h
-
-remind.zoo: $(MANIFEST)
-	zoo aI remind.zoo < manifest.dos
-

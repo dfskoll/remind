@@ -1,7 +1,7 @@
 # Makefile for REMIND for Borland C++
-# $Id: makefile.bcc,v 1.1 1996-03-27 03:26:01 dfs Exp $
+# $Id: makefile.bcc,v 1.2 1996-03-31 04:08:11 dfs Exp $
 
-VERSION= 03.00.13
+VERSION= 03.00.14
 
 MODEL=l
 
@@ -31,12 +31,6 @@ queue.c moon.c os2func.c
 OBJS=calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
 globals.obj init.obj main.obj omit.obj sort.obj token.obj trigger.obj \
 utils.obj userfns.obj var.obj hbcal.obj queue.obj moon.obj os2func.obj
-
-MANIFEST= readme.uni readme.dos copyrigh $(HDRS) $(SRCS) makefile rem rem.1 \
-remind.1 remind-a.csh remind-a.sh test.rem test-rem test.cmp makefile.tc \
-makefile.msc lnk.msc lnk.tc manifest.dos manifest.unx whatsnew.30 kall kall.1 \
-tstlang.rem defs.rem readme.os2 makefile.os2 rem2ps.c rem2ps.h remind.def \
-rem2ps.1 makefile.bcc lnk.bcc test-rem.cmd test2.cmp
 
 all: exes test-rem.cmd test-rem.bat
 	test-rem
@@ -101,7 +95,3 @@ userfns.obj: userfns.c $(STDHDRS) expr.h
 utils.obj: utils.c $(STDHDRS)
 
 var.obj: var.c $(STDHDRS) expr.h
-
-remind.zoo: $(MANIFEST)
-	zoo aI remind.zoo < manifest.dos
-

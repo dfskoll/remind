@@ -8,6 +8,9 @@ CHANGES TO REMIND
 
 - Added support for Brazilian Portuguese.
 
+- The tar file now unpacks into a Remind subdirectory rather than into
+  the current working directory.
+
 + BUG FIXES
 
 - Fixed confusing error in rem2ps help messages.

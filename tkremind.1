@@ -1,4 +1,4 @@
-.\" $Id: tkremind.1,v 1.3 1996-07-07 16:35:43 dfs Exp $ "
+.\" $Id: tkremind.1,v 1.4 1996-09-28 18:46:57 dfs Exp $ "
 .TH TKREMIND 1 "7 July 1996"
 .UC 4
 .SH NAME
@@ -111,11 +111,16 @@ main calendar window.  This brings up the print dialog.  Printing
 either produces a PostScript file or sends PostScript to a UNIX command.
 
 Select the print destination by choosing either \fBTo file:\fR or
-\fBTo command:\fR in the print dialog.  Press \fBBrowse...\fR to
-bring up a file browser.  In the file browser, you can enter a filename
-in the text entry, double-click on a filename in the listbox, or double-click
-on a directory to navigate the file system.  The \fBMatch:\fR box contains
-a filename wildcard which filters files in the listbox.
+\fBTo command:\fR in the print dialog.  Press \fBBrowse...\fR to bring
+up a file browser.  In the file browser, you can enter a filename in
+the text entry, double-click on a filename in the listbox, or
+double-click on a directory to navigate the file system.  You can also
+type the first few characters of a file name in the text entry box and
+press space to complete the name to the first matching entry.
+
+The \fBMatch:\fR box contains a filename wildcard which filters files
+in the listbox.  You can change the filter and press enter to rescan
+the directory.
 
 Select the appropriate paper size and orientation.  Activate
 \fBFill page\fR if you want the calendar to fill the page.  This should

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.11 1996-09-28 18:17:06 dfs Exp $
+# $Id: Makefile,v 1.12 1996-09-28 18:46:56 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -130,9 +130,13 @@ var.o: var.c $(STDHDRS) expr.h
 # probably won't be too useful to you! -- dfs
 
 tgz:
-	tar cvf remind-3.0.15.tar $(MANIFEST)
+	-rm -rf remind-$(VERSION)
+	-mkdir remind-$(VERSION)
+	cd remind-$(VERSION); for i in $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
+	tar -c -h -v -f remind-3.0.15.tar remind-$(VERSION)
 	gzip -v -9 remind-3.0.15.tar
 	mv remind-3.0.15.tar.gz remind-3.0.15.tgz
+	rm -rf remind-$(VERSION)
 
 shar:
 	shar -o./Shar -sdfs@doe.carleton.ca -a -c -n"Remind $(VERSION)" -m -l58 -o./Shar $(MANIFEST)

@@ -1,6 +1,6 @@
 Begin3
 Title:		Remind          
-Version:	03.00.21
+Version:	03.00.22
 Entered-date:   12 Apr 1999
 Description:    Full-featured calendar/reminder program featuring
 		sophisticated date calculation, moon phases, sunrise/sunset,
@@ -12,8 +12,8 @@ Description:    Full-featured calendar/reminder program featuring
 Keywords:       calendar reminder alarm datebook PostScript www
 Author:         dskoll@iname.com (David F. Skoll)
 Maintained-by:  dskoll@iname.com (David F. Skoll)
-Primary-site:   ftp.doe.carleton.ca /pub/Remind-3.0
-		304kB remind-3.0.21.tgz
+Primary-site:   http://www.roaringpenguin.com/remind.html
+		304kB remind-3.0.22.tgz
 Alternate-site: 
 Original-site:  
 Platform:       Linux, Solaris, SunOS, HP-UX -- virtually any UN*X-like

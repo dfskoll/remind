@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: files.c,v 1.2 1996-05-25 18:14:52 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.3 1996-05-25 19:10:12 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -485,22 +485,21 @@ int jul;
     if (!f || setftime(fileno(f) , &ft)) {
 
 #else /* Must be MSC */
-	if (utime(fname, (struct utimbuf *) NULL)) {
+    if (utime(fname, (struct utimbuf *) NULL)) {
 #endif   	
-	    fprintf(ErrFp, ErrMsg[M_CANTSET_ACCESS], fname);
+	fprintf(ErrFp, ErrMsg[M_CANTSET_ACCESS], fname);
 
 #ifdef __TURBOC__
-	    if (f) FCLOSE(f);
+	if (f) FCLOSE(f);
 #endif
-	    return -1;
-	}
-
-#ifdef __TURBOC__
-	FCLOSE(f);
-#endif
-
-	return 0;
+	return -1;
     }
+
+#ifdef __TURBOC__
+    FCLOSE(f);
+#endif
+
+    return 0;
 }
 #endif /* __MSDOS__ */
 

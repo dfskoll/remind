@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: trigger.c,v 1.1 1996-03-27 03:26:14 dfs Exp $";
+static char const RCSID[] = "$Id: trigger.c,v 1.2 1996-05-25 19:10:13 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -214,6 +214,10 @@ int *err;
 	return j;
 
     case GOT_DAY+GOT_MON+GOT_WD:
+	if (trig->d > MonthDays[trig->m]) {
+	    *err = E_BAD_DATE;
+	    return -1;
+	}
 	/* Move up to the first valid year */
 	while (trig->d > DaysInMonth(trig->m, y)) y++;
 
@@ -243,6 +247,10 @@ int *err;
 	}
 
     case GOT_WD+GOT_DAY+GOT_MON+GOT_YR:
+	if (trig->d > DaysInMonth(trig->m, trig->y)) {
+	    *err = E_BAD_DATE;
+	    return -1;
+	}
 	j = Julian(trig->y, trig->m, trig->d);
 	while(! (trig->wd & (1 << (j%7)))) j++;
 	return j;

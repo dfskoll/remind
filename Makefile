@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.5 1996-04-29 19:34:36 dfs Exp $
+# $Id: Makefile,v 1.6 1996-05-25 19:10:11 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -126,6 +126,9 @@ userfns.o: userfns.c $(STDHDRS) expr.h
 utils.o: utils.c $(STDHDRS)
 var.o: var.c $(STDHDRS) expr.h
 
+# Some of these targets are just for my convenience and
+# probably won't be too useful to you! -- dfs
+
 tgz:
 	tar cvf remind-3.0.14.tar $(MANIFEST)
 	gzip -v -9 remind-3.0.14.tar
@@ -136,6 +139,14 @@ shar:
 
 backup:
 	tar cvzf ../rbackup.tgz $(MANIFEST)
+
+zip:
+	zip ../rbackup.zip $(MANIFEST)
+
+todos:
+	rm -rf DOS
+	mkdir DOS
+	for i in $(MANIFEST) ; do todos < $$i > DOS/$$i; done	
 
 transmit:
 	sz -a -e $(MANIFEST)

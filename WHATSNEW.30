@@ -42,6 +42,20 @@ CHANGES TO REMIND
 - The "hebdate" built-in function worked incorrectly with 5 arguments.
   The bug was pointed out by Hershel Safer <h.safer@ieee.org>
 
+- This would hang up REMIND:   REM Mon 31 Feb MSG Foo
+  and this would fail quietly: REM Mon 31 Feb 1996 MSG Foo
+  Both have been fixed and now report bad date specifications.
+
++ IMPORTANT NOTE
+
+- I had problems building the DOS version with Turbo C.  I have access
+  only to ancient versions of Turbo C and Microsoft C.  Remind built
+  fine with Microsoft C, but the TC version hung up.  I am not too
+  interested in maintaining the DOS version, so when the MSC compiler
+  no longer works, I will drop DOS support.  Please not that I will
+  _not_ support MS Windows, and in fact do not allow Remind to run
+  under Windows (see COPYRIGHT).
+
 * Version 3.0 Patch 13
 
 + MINOR ENHANCEMENTS

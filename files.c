@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.6 1997-07-31 01:49:38 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.7 1997-07-31 01:51:18 dfs Exp $";
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -582,6 +582,10 @@ static int CheckSafety()
 {
 #ifdef UNIX
     struct stat statbuf;
+
+    if (fp == stdin) {
+	return 1;
+    }
 
     if (fstat(fileno(fp), &statbuf)) {
 	fclose(fp);

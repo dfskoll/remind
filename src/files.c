@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.7 1998-02-14 03:32:00 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.8 1998-04-19 03:39:43 dfs Exp $";
 
 #include <stdio.h>
 
@@ -644,7 +644,7 @@ int TopLevel()
 /*  Returns 1 if current file is safe to read; 0 otherwise.    */
 /*  Currently only meaningful for UNIX.  If we are running as  */
 /*  root, we refuse to open files not owned by root.           */
-/*  We also reject group- or world-writable files, no matter   */
+/*  We also reject world-writable files, no matter             */
 /*  who we're running as.                                      */
 /*  As a side effect, if we don't own the file, we disable RUN */
 /***************************************************************/
@@ -682,9 +682,8 @@ static int CheckSafety()
     if (!S_ISREG(statbuf.st_mode)) {
 	return 1;
     }
-    if ((statbuf.st_mode & S_IWGRP) ||
-	(statbuf.st_mode & S_IWOTH)) {
-	fprintf(ErrFp, "SECURITY: Won't read group- or world-writable file!\n");
+    if ((statbuf.st_mode & S_IWOTH)) {
+	fprintf(ErrFp, "SECURITY: Won't read world-writable file!\n");
 	fclose(fp);
 	fp = NULL;
 	return 0;

@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # TEST-REM
 #
-# $Id: test-rem,v 1.1 1998-01-15 02:50:49 dfs Exp $
+# $Id: test-rem,v 1.2 1998-01-17 04:51:04 dfs Exp $
 #
 # This file runs an acceptance test for Remind.  To use it, type:
 #      sh test-rem  OR make test
@@ -13,8 +13,8 @@
 # ---------------------------------------------------------------------------
 
 TEST_GETENV="foo bar baz" ; export TEST_GETENV
-./remind -e -dxte ./test.rem 16 feb 1991 > ./test.out
-cmp -s ./test.out ./test.cmp
+../src/remind -e -dxte ../tests/test.rem 16 feb 1991 > ../tests/test.out
+cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"
    exit 0

@@ -1,7 +1,7 @@
 # Makefile for REMIND for Borland C++
-# $Id: makefile.bcc,v 1.1 1998-01-15 02:50:32 dfs Exp $
+# $Id: makefile.bcc,v 1.2 1998-03-01 20:43:56 dfs Exp $
 
-VERSION= 03.00.18
+VERSION= 03.00.19
 
 MODEL=l
 

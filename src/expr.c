@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.5 1998-02-10 03:15:49 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.6 1998-03-01 20:43:55 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -37,8 +37,6 @@ static char const RCSID[] = "$Id: expr.c,v 1.5 1998-02-10 03:15:49 dfs Exp $";
 #define GE 3
 #define LE 4
 #define NE 5
-
-DynamicBuffer ExprBuf;
 
 static char CoerceBuf[512];
 extern int NumFuncs;

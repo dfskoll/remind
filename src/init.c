@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.6 1998-02-14 03:56:33 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.7 1998-03-01 20:43:56 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -123,6 +123,7 @@ char *argv[];
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
     DBufInit(&LineBuffer);
+    DBufInit(&ExprBuf);
 
     DBufPuts(&Banner, L_BANNER);
 

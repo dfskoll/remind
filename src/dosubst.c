@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.6 1998-02-14 03:31:59 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.7 1998-03-01 20:43:54 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -153,6 +153,7 @@ int jul, mode;
 	    if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
 	    continue;
 	}
+	s[0] = 0;
 	c = ParseChar(p, &err, 0);
 	if (err) {
 	    DBufFree(dbuf);
@@ -357,7 +358,7 @@ int jul, mode;
 #ifdef L_P_OVER
 	    L_P_OVER
 #else
-	    sprintf(s, (diff == 1 ? "" : L_PLURAL));
+	    sprintf(s, "%s", (diff == 1 ? "" : L_PLURAL));
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -366,7 +367,7 @@ int jul, mode;
 #ifdef L_Q_OVER
 	    L_Q_OVER
 #else
-	    sprintf(s, (diff == 1 ? "'s" : "s'"));
+	    sprintf(s, "%s", (diff == 1 ? "'s" : "s'"));
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -384,7 +385,7 @@ int jul, mode;
 #ifdef L_S_OVER
 	    L_S_OVER
 #else
-	    sprintf(s, plu);
+	    sprintf(s, "%s", plu);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -422,7 +423,7 @@ int jul, mode;
 #ifdef L_W_OVER
 	    L_W_OVER
 #else
-	    sprintf(s, DayName[jul%7]);
+	    sprintf(s, "%s", DayName[jul%7]);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -459,7 +460,7 @@ int jul, mode;
 	    L_1_OVER
 #else
 	    if (tdiff == 0) 
-		sprintf(s, L_NOW);
+		sprintf(s, "%s", L_NOW);
 	    else if (hdiff == 0) 
 		sprintf(s, "%d %s%s %s", mdiff, L_MINUTE, mplu, when);
 	    else if (mdiff == 0)
@@ -512,7 +513,7 @@ int jul, mode;
 #ifdef L_6_OVER
 	    L_6_OVER
 #else
-	    sprintf(s, when);
+	    sprintf(s, "%s", when);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -539,7 +540,7 @@ int jul, mode;
 #ifdef L_9_OVER
 	    L_9_OVER
 #else
-	    sprintf(s, mplu);
+	    sprintf(s, "%s", mplu);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -548,7 +549,7 @@ int jul, mode;
 #ifdef L_0_OVER
 	    L_0_OVER
 #else
-	    sprintf(s, hplu);
+	    sprintf(s, "%s", hplu);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -557,7 +558,7 @@ int jul, mode;
 #ifdef L_BANG_OVER
 	    L_BANG_OVER
 #else
-	    sprintf(s, (tdiff >= 0 ? L_IS : L_WAS));
+	    sprintf(s, "%s", (tdiff >= 0 ? L_IS : L_WAS));
 #endif
 	    SHIP_OUT(s);
 	    break;

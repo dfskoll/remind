@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.6 1998-02-14 03:32:01 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.7 1998-03-01 20:43:57 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -115,9 +115,9 @@ Token NonEnglishToks[] = {
     /* NAME          MINLEN      TYPE           VALUE */
 
     { L_MONDAY,	       3,       T_WkDay,        0 },
-    { L_TUESDAY	       3,       T_WkDay,        1 },
-    { L_WEDNESDAY      3,       T_WkDay,        2 },
-    { L_THURSDAY       3,       T_WkDay,        3 },
+    { L_TUESDAY,       3,       T_WkDay,        1 },
+    { L_WEDNESDAY,     3,       T_WkDay,        2 },
+    { L_THURSDAY,      3,       T_WkDay,        3 },
     { L_FRIDAY,	       3,       T_WkDay,        4 },
     { L_SATURDAY,      3,       T_WkDay,        5 },
     { L_SUNDAY,	       3,       T_WkDay,        6 },

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.4 1998-02-10 04:11:45 dfs Exp $ */
+/* $Id: globals.h,v 1.5 1998-03-01 20:43:55 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -114,6 +114,7 @@ EXTERN	INIT(	char	  *EndSentIg, "\"')]}>");
 
 EXTERN DynamicBuffer Banner;
 EXTERN DynamicBuffer LineBuffer;
+EXTERN DynamicBuffer ExprBuf;
 /* List of months */
 EXTERN  char    *EnglishMonthName[]
 #ifdef MK_GLOBALS

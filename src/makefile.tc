@@ -1,8 +1,8 @@
 # Makefile for REMIND for Turbo C for MSDOS
-# $Id: makefile.tc,v 1.1 1998-01-15 02:50:33 dfs Exp $
+# $Id: makefile.tc,v 1.2 1998-03-01 20:43:57 dfs Exp $
 
 CC= tcc
-VERSION= 03.00.18
+VERSION= 03.00.19
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
 lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \

@@ -7,6 +7,11 @@ CHANGES TO REMIND
 - I have started a company, Roaring Penguin Software
   Inc. (http://www.roaringpenguin.com) and it now holds the Remind copyright.
 
++ LICENSE CHANGE
+
+- Remind is now distributed under the pure GPL.  See the file WINDOWS for my
+  feelings about a Windows port, however.
+
 + MINOR ENHANCEMENTS
 
 - Made TkRemind adjust for really low-resolution displays if necessary.

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.6 1996-05-25 19:10:11 dfs Exp $
+# $Id: Makefile,v 1.7 1996-05-25 19:36:49 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -178,6 +178,10 @@ install-man:
 	-chmod $(MANMODE) $(MANDIR)/man$(MANSECT)/remind.$(MANSECT)
 	-chown $(OWNER) $(MANDIR)/man$(MANSECT)/remind.$(MANSECT)
 	-chgrp $(GROUP) $(MANDIR)/man$(MANSECT)/remind.$(MANSECT)
+	cp tkremind.1 $(MANDIR)/man$(MANSECT)/tkremind.$(MANSECT)
+	-chmod $(MANMODE) $(MANDIR)/man$(MANSECT)/tkremind.$(MANSECT)
+	-chown $(OWNER) $(MANDIR)/man$(MANSECT)/tkremind.$(MANSECT)
+	-chgrp $(GROUP) $(MANDIR)/man$(MANSECT)/tkremind.$(MANSECT)
 	cp rem.1 $(MANDIR)/man$(MANSECT)/rem.$(MANSECT)
 	-chmod $(MANMODE) $(MANDIR)/man$(MANSECT)/rem.$(MANSECT)
 	-chown $(OWNER) $(MANDIR)/man$(MANSECT)/rem.$(MANSECT)

@@ -46,6 +46,9 @@ CHANGES TO REMIND
   and this would fail quietly: REM Mon 31 Feb 1996 MSG Foo
   Both have been fixed and now report bad date specifications.
 
+- Remind now compiles without complaint under gcc -ansi -Wall -pedantic
+  (on my Linux system, anyway!)
+
 + IMPORTANT NOTE
 
 - I had problems building the DOS version with Turbo C.  I have access

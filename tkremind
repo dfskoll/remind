@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.5 1996-05-25 19:29:26 dfs Exp $
+# $Id: tkremind,v 1.6 1996-05-25 19:36:50 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -433,7 +433,8 @@ proc CreateModifyDialog {w day firstDay} {
     frame $w.msg
     frame $w.buttons
     pack $w.o1 $w.o2 $w.o3  -side top -anchor w -in $w.o
-    pack $w.o $w.exp $w.adv $w.weekend $w.time $w.hol $w.msg $w.buttons -side top -anchor w -pady 4 -expand 1 -fill both
+    pack $w.o $w.exp $w.adv $w.weekend $w.time $w.hol $w.msg -side top -anchor w -pady 4 -expand 1 -fill both
+    pack $w.buttons -side top -anchor w -pady 4 -expand 1 -fill x
 
     # TYPE 1 REMINDER
     radiobutton $w.type1 -variable OptionType -value 1
@@ -583,7 +584,7 @@ proc CreateModifyDialog {w day firstDay} {
     button $w.add -text "Add to reminder file" -command "set ModifyDialogResult 1"
     button $w.preview -text "Preview reminder" -command "set ModifyDialogResult 2"
     button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 3"
-    pack $w.add $w.preview $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill both
+    pack $w.add $w.preview $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill x
 
     set ModifyDialogResult 0
 

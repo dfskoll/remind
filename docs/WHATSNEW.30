@@ -11,6 +11,23 @@ CHANGES TO REMIND
 - Completely reworked the PS/PSFILE mechanism to use the more
   general SPECIAL mechanism for customizing output in REMIND back-ends.
 
++ MINOR ENHANCEMENTS
+
+- Directory structure totally reorganized.  Remind now uses an autoconf
+  "configure" script which should make life very pleasant for UNIX
+   people.
+
++ BUG FIXES
+
+- Updated "finnish.h" to include proper URL and translation of all
+  error messages.
+
++ BUG INTRODUCTIONS
+
+- The reorganization and use of "configure" probably breaks Remind
+  installation on non-UNIX platforms.  Sorry.  I can't fix it until
+  I hear back from non-UNIX maintainers.
+
 * Version 3.0 Patch 17
 
 + MINOR ENHANCEMENTS

@@ -2,8 +2,9 @@
 #
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
+# Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: moon.rem-DIST,v 1.1 1997-01-16 04:00:28 dfs Exp $
+# $Id: moon.rem-DIST,v 1.2 1999-04-05 17:35:20 dfs Exp $
 
 set now now()
 

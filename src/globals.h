@@ -8,10 +8,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.5 1998-03-01 20:43:55 dfs Exp $ */
+/* $Id: globals.h,v 1.6 1999-04-05 17:34:50 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN

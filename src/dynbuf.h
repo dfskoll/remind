@@ -6,10 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: dynbuf.h,v 1.1 1998-02-07 05:35:57 dfs Exp $ */
+/* $Id: dynbuf.h,v 1.2 1999-04-05 17:34:45 dfs Exp $ */
 
 #ifndef DYNBUF_H
 #define DYNBUF_H

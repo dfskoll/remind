@@ -10,10 +10,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright 1999 by Roaring Penguin Software Inc.            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.5 1998-02-14 03:56:38 dfs Exp $ */
+/* $Id: polish.h,v 1.6 1999-04-05 17:35:09 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"

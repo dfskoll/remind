@@ -6,11 +6,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.9 1998-05-10 02:46:43 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.10 1999-04-05 17:34:55 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__

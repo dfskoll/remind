@@ -3,8 +3,9 @@
 #
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
+# Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: hebps,v 1.3 1997-07-31 02:19:06 dfs Exp $
+# $Id: hebps,v 1.4 1999-04-05 17:35:19 dfs Exp $
 
 # Figure out the month:  If day <= 20, use this month; otherwise, use
 # next month.

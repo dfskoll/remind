@@ -3,8 +3,9 @@
 #
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
+# Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: calps,v 1.1 1997-01-16 04:00:27 dfs Exp $
+# $Id: calps,v 1.2 1999-04-05 17:35:17 dfs Exp $
 
 echo "Content-type: application/postscript"
 echo

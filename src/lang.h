@@ -6,10 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.3 1998-05-24 15:40:13 dfs Exp $ */
+/* $Id: lang.h,v 1.4 1999-04-05 17:34:51 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 

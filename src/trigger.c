@@ -6,11 +6,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: trigger.c,v 1.3 1998-02-10 03:15:55 dfs Exp $";
+static char const RCSID[] = "$Id: trigger.c,v 1.4 1999-04-05 17:34:57 dfs Exp $";
 
 #include <stdio.h>
 

@@ -6,12 +6,13 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.8 1998-08-15 14:19:05 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.9 1999-04-05 17:34:55 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

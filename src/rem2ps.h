@@ -6,10 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: rem2ps.h,v 1.2 1998-02-10 03:15:54 dfs Exp $ */
+/* $Id: rem2ps.h,v 1.3 1999-04-05 17:34:56 dfs Exp $ */
 
 char *PSProlog1[] =
 {

@@ -8,11 +8,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.7 1998-03-30 05:08:51 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.8 1999-04-05 17:34:44 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>

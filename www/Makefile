@@ -1,8 +1,9 @@
 # Makefile for installing WWW server calendar scripts
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
+# Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: Makefile,v 1.8 1998-04-23 02:57:06 dfs Exp $
+# $Id: Makefile,v 1.9 1999-04-05 17:35:16 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca

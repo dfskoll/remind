@@ -9,11 +9,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: globals.c,v 1.2 1998-02-10 03:15:50 dfs Exp $";
+static char const RCSID[] = "$Id: globals.c,v 1.3 1999-04-05 17:34:50 dfs Exp $";
 
 #include <stdio.h>   /* For defintion of FILE - sigh! */
 #include "types.h"

@@ -12,6 +12,8 @@ CHANGES TO REMIND
 
 + BUG FIXES
 
+- Changed copyright notices to Roaring Penguin Software Inc.
+
 - Rem2PS was passing specials like HTML, etc. in PostScript output.
   YECH!  Fix courtesty of Derek J. Decker.
 

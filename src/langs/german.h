@@ -10,10 +10,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright 1999 by Roaring Penguin Software Inc.            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: german.h,v 1.4 1998-02-10 03:16:09 dfs Exp $ */
+/* $Id: german.h,v 1.5 1999-04-05 17:35:08 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "German"

@@ -8,10 +8,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Remind is Copyright (C) 1992-1998 by David F. Skoll        */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 #include "config.h"
-static char const RCSID[] = "$Id: amiga.c,v 1.2 1998-02-10 03:15:46 dfs Exp $";
+static char const RCSID[] = "$Id: amiga.c,v 1.3 1999-04-05 17:34:42 dfs Exp $";
 
 #include <stdlib.h>
 #include <string.h>

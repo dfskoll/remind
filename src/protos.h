@@ -6,10 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.6 1998-03-30 05:08:52 dfs Exp $ */
+/* $Id: protos.h,v 1.7 1999-04-05 17:34:54 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x

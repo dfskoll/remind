@@ -7,11 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.8 1998-03-04 18:13:26 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.9 1999-04-05 17:34:44 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>

@@ -7,11 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.9 1998-02-16 03:41:45 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.10 1999-04-05 17:34:52 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>

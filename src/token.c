@@ -7,11 +7,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.7 1998-03-01 20:43:57 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.8 1999-04-05 17:34:57 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

@@ -6,11 +6,12 @@
 /*  expressions.                                               */
 /*                                                             */
 /*  Copyright 1992-1998 by David F. Skoll                      */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.6 1998-03-01 20:43:55 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.7 1999-04-05 17:34:46 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>

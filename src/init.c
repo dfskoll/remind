@@ -8,11 +8,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1999 by Roaring Penguin Software Inc.        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.9 1998-07-18 03:16:37 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.10 1999-04-05 17:34:51 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>

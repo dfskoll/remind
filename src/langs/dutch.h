@@ -12,10 +12,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright 1999 by Roaring Penguin Software Inc.            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: dutch.h,v 1.3 1998-02-10 03:16:07 dfs Exp $ */
+/* $Id: dutch.h,v 1.4 1999-04-05 17:35:06 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Dutch"

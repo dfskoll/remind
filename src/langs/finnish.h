@@ -12,10 +12,11 @@
 /*  This file is part of REMIND.                               */
 /*  This file is Copyright (C) 1993-1998 by Mikko Silvonen.    */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
+/*  Copyright 1999 by Roaring Penguin Software Inc.            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.6 1998-10-27 17:50:20 dfs Exp $ */
+/* $Id: finnish.h,v 1.7 1999-04-05 17:35:07 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"

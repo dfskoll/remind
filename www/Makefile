@@ -2,13 +2,14 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: Makefile,v 1.1 1997-01-16 04:00:26 dfs Exp $
+# $Id: Makefile,v 1.2 1997-01-16 04:05:31 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = www.skoll.ca
 # WWWHOST = www.mycompany.com
  
-# The complete path to where the scripts actually live.
+# The complete path to where the scripts actually live, as seen by
+# the UNIX operating system.
 SCRIPTDIR = /var/lib/httpd/cgi-bin
 # SCRIPTDIR = /home/dfs/Remind/www/TEST
 
@@ -16,7 +17,7 @@ SCRIPTDIR = /var/lib/httpd/cgi-bin
 # they live in WWWHOST/cgi-bin, supply /cgi-bin
 CGIDIR = /cgi-bin
 
-# Location.  Typically, a city name.  Example: Ottawa
+# Location.  Typically, the name of your city or town.  Example: Ottawa
 LOCATION = Ottawa
 # LOCATION = New York
 

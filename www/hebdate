@@ -1,0 +1,26 @@
+#!/bin/sh
+# Hebrew date shell script
+#
+# This file is part of REMIND.
+# Copyright (C) 1992-1997 by David F. Skoll
+
+# $Id: hebdate,v 1.1 1997-01-16 04:00:27 dfs Exp $
+
+echo Content-type: text/html
+
+cat <<EOM
+<HTML>
+<HEAD>
+<TITLE>Hebrew date</TITLE>
+</HEAD>
+<BODY>
+
+<H1>Hebrew date</H1>
+
+EOM
+
+$REMIND -arqh $DIR/hebdate.rem
+
+echo "</BODY>"
+echo "</HTML>"
+exit 0

@@ -1,0 +1,15 @@
+#!/bin/sh
+# Moon shell script
+#
+# This file is part of REMIND.
+# Copyright (C) 1992-1997 by David F. Skoll
+
+# $Id: moon,v 1.1 1997-01-16 04:00:27 dfs Exp $
+
+echo Content-type: text/html
+echo
+echo "<HTML>"
+$REMIND $DIR/moon.rem
+echo "</HTML>"
+exit 0
+

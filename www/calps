@@ -1,0 +1,13 @@
+#!/bin/sh
+# PostScript calendar shell script
+#
+# This file is part of REMIND.
+# Copyright (C) 1992-1997 by David F. Skoll
+
+# $Id: calps,v 1.1 1997-01-16 04:00:27 dfs Exp $
+
+echo "Content-type: application/postscript"
+echo
+
+$REMIND -p /dev/null | $REM2PS -e -c3
+exit 0

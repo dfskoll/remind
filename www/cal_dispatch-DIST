@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# This file is part of REMIND.
+# Copyright (C) 1992-1997 by David F. Skoll
+
+# CAL_DISPATCH -- Shell script for CGI directory to dispatch calendar
+# commands.
+#
+# $Id: cal_dispatch-DIST,v 1.1 1997-01-16 04:00:26 dfs Exp $
+#
+# WARNING WARNING WARNING -- If your /bin/sh is really GNU's "bash",
+# make sure you don't have a buggy version which treats char 0xFF as
+# a command separator -- it is a security risk!
+
+#########################
+#
+# Parameters for you to change
+#
+#########################
+
+# Set DIR to the directory in which all the scripts live.  They must all
+# be in the same directory.  The scripts are:
+# cal_dispatch, cal_ps, hebdate, hebps, moon, sunrise and sunset.
+# In addition, the reminder files hebbg.ps, hebdate.rem, moon.rem,
+# sunrise.rem and sunset.rem must live in $DIR.
+DIR=%SCRIPTDIR%
+export DIR
+
+# Set REMIND to the full pathname of the Remind executable.
+REMIND=%REMIND%
+export REMIND
+
+# Set REM2PS to the full pathname of the rem2ps executable
+REM2PS=%REM2PS%
+export REM2PS
+
+#########################
+#
+# Don't change anything after this.
+#
+#########################
+
+if [ "$1" = "" ] ; then
+    exit 0
+fi
+
+
+case "$1" in
+    sunrise)
+    exec $DIR/sunrise
+    ;;
+
+    sunset)
+    exec $DIR/sunset
+    ;;
+
+    hebdate)
+    exec $DIR/hebdate
+    ;;
+
+    calps)
+    exec $DIR/calps
+    ;;
+
+    moon)
+    exec $DIR/moon
+    ;;
+
+    hebps)
+    exec $DIR/hebps
+    ;;
+esac
+
+exit 0

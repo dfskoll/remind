@@ -1,0 +1,41 @@
+README
+$Id: README,v 1.1 1997-01-16 04:00:26 dfs Exp $
+
+HTML Hebrew Calendar Server
+
+This is a very rudimentary Hebrew calendar server for the WWW.  It supplies
+local sunrise and sunset times, moon phases, upcoming Jewish holidays,
+and PostScript calendars.
+
+To install it, you need the Remind package, available via ftp from
+ftp://ftp.doe.carleton.ca/pub/remind-3.0.  You should install Remind,
+setting the lattitude, longitude, location and time zone as appropriate
+for your machine.
+
+Once you have Remind installed, follow these steps to set up your WWW server.
+
+1) Unpack all of the files into a convenient directory
+
+2) edit "cal_dispatch" as instructed in the comments at the beginning
+   of the file.
+
+3) Do "grep -i HREF *" to find all the hypertext links.  Edit them
+   to point to the proper place on your system.  The links should be
+   set as follows:
+
+	http://your.system.name/your_bin_name/cal_dispatch?what
+
+   Where "what" is one of:
+	sunrise, sunset, hebdate, calps, moon or hebps.
+
+   You must have the ability to execute cal_dispatch from within your
+   WWW server; consult your system administrator for details/permission.
+
+4) Do "grep -i ottawa *" to find all references to "Ottawa" in the
+   scripts.  Change them as appropriate for your location.
+
+5) TEST ALL YOUR LINKS THOROUGHLY
+
+6) Enjoy!
+
+	

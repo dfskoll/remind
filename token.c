@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.4 1997-03-30 19:07:50 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.5 1997-07-13 16:18:49 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -159,10 +159,15 @@ char *s;
 	if (len < TOKSIZE) {
 	    *t++ = *s++;
 	    len++;
-	}else s++;
+	} else s++;
     }
 
-    *t = 0;
+    /* Ignore trailing commas */
+    if (t > TokBuffer && *(t-1) == ',') {
+	*(t-1) = 0;
+    } else {
+	*t = 0;
+    }
 
     FindToken(TokBuffer, tok);
     return s;
@@ -274,6 +279,20 @@ Token *t;
     if (isdigit(*s)) {
 	PARSENUM(t->val, s);
 
+	/* If we hit a comma, swallow it.  This allows stuff
+	   like Jan 6, 1998 */
+	if (*s == ',') {
+	    s++;
+	    /* Special hack - convert years between 90 and
+	       99 to 1990 and 1999 */
+	    if (t->val >= 90 && t->val <= 99) t->val += 1900;
+
+	    /* Classify the number we've got */
+	    if (t->val >= BASE && t->val <= BASE+YR_RANGE) t->type = T_Year;
+	    else if (t->val >= 1 && t->val <= 31) t->type = T_Day;
+	    else t->type = T_Number;
+	    return;
+	}
 	/* If we hit a colon or a period, we've probably got a time hr:min */
 	if (*s == ':' || *s == '.' || *s == TIMESEP) {
 	    s++;

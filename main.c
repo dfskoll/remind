@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.7 1997-07-06 14:34:37 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.8 1997-07-13 16:18:49 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -501,6 +501,10 @@ char *out;
 	    *out++ = c;
 	    len++;
 	}
+    }
+    /* Ignore trailing commas */
+    if (len > 0 && *(out-1) == ',') {
+	out--;
     }
     *out = 0;
     return OK;

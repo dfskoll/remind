@@ -4,11 +4,19 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Made Remind accept date specs like "Jan 6, 1998" -- the comma is
+  ignored.  This was suggested by John Conover <john@johncon.johncon.com>.
+  You can even do "REM 27, Aug, 1998, msg bar".  (But I don't know why
+  you'd want to.)
+
 - Added www/rem2html, a Perl script which converts the output of
   `remind -p ...' to an HTML table.  The script was contributed by
   Don Schwarz <darkowl@mcs.net>
 
 + BUG FIXES
+
+- Increased sizes of some statically-allocated buffers.  This doesn't
+  really fix the problem, but makes it more manageable.
 
 - Added romanian.h to the manifest.  Sorry.
 

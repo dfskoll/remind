@@ -11,7 +11,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.7 1998-04-19 03:03:25 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.8 1998-08-15 14:19:05 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -348,7 +348,7 @@ void DoPsCal()
 		while(d->next) d = d->next;
 		d->next = c;
 	    }
-	} else {
+	} else if (!strcmp(passthru, "*")) {
 /* Put on linked list */
 	    if (!CurEntries) CurEntries = c;
 	    else {

@@ -10,17 +10,20 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.1 1998-01-15 02:50:27 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+
 #include "err.h"
 #include "types.h"
 #include "expr.h"
@@ -265,7 +268,7 @@ char **in;
 /*  Put the result into value pointed to by v.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HaveProtos
+#ifdef HAVE_PROTOS
 PUBLIC int EvalExpr(char **e, Value *v)
 #else
 int EvalExpr(e, v)

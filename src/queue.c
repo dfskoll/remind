@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.1 1998-01-15 02:50:34 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.2 1998-01-17 03:58:31 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED
@@ -19,13 +19,16 @@ static char const RCSID[] = "$Id: queue.c,v 1.1 1998-01-15 02:50:34 dfs Exp $";
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
-#ifdef HAVE_UNISTD
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 

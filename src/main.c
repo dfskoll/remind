@@ -11,44 +11,54 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.1 1998-01-15 02:50:31 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.2 1998-01-17 03:58:30 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
-#ifdef HAVE_UNISTD
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
-#ifdef HAVE_STDARG
+
+#ifdef HAVE_STDARG_H
 #include <stdarg.h>
 #else
 #include <varargs.h>
 #endif
+
 #include <ctype.h>
+#ifdef TIME_WITH_SYS_TIME
 #include <time.h>
+#include <sys/time.h>
+#else
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#else
+#include <time.h>
+#endif
+#endif
 
 #ifdef AMIGA
 #include <sys/types.h>
-#else
+#endif
+
 #if defined(__MSDOS__) || defined(__OS2__)
 #include <dos.h>
-#else
+#endif
+
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#ifndef SYSV
-#ifdef QDOS
-#include <sys/times.h>
-#else
-#include <sys/time.h>
-#endif /* QDOS */
-#endif /* ndef SYSV */
-#endif /* if defined(__MSDOS__)... */
-#endif /* AMIGA */
+#endif
+
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
@@ -57,7 +67,7 @@ static char const RCSID[] = "$Id: main.c,v 1.1 1998-01-15 02:50:31 dfs Exp $";
 
 PRIVATE void DoReminders ARGS ((void));
 
-#if defined(NEED_TIMEGM) && !defined(HAVE_MKTIME)
+#if !defined(HAVE_TIMEGM) && !defined(HAVE_MKTIME)
 PRIVATE long time_cheat ARGS ((int year, int month));
 long timegm ARGS((struct tm *tm));
 long timelocal ARGS((struct tm *tm));
@@ -598,7 +608,7 @@ Value *v;
 /*  Eprint - print an error message.                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_STDARG
+#ifdef HAVE_STDARG_H
 #ifdef HAVE_PROTOS
 PUBLIC void Eprint(const char *fmt, ...)
 #else
@@ -612,7 +622,7 @@ va_dcl
 #endif
 {
     va_list argptr;
-#ifndef HAVE_STDARG
+#ifndef HAVE_STDARG_H
     char *fmt;
 #endif
 
@@ -628,7 +638,7 @@ va_dcl
 	if (DebugFlag & DB_PRTLINE) OutputLine(ErrFp);
     } else fprintf(ErrFp, "       ");
 
-#ifdef HAVE_STDARG
+#ifdef HAVE_STDARG_H
     va_start(argptr, fmt);
 #else
     va_start(argptr);
@@ -636,7 +646,7 @@ va_dcl
 #endif
     (void) vfprintf(ErrFp, fmt, argptr);
     (void) fputc('\n', ErrFp);
-#ifndef HAVE_STDARG
+#ifndef HAVE_STDARG_H
     va_end(argptr);
 #endif
     return;
@@ -1380,7 +1390,7 @@ char *s;
     }
 }
 
-#if defined(NEED_TIMEGM) && !defined(HAVE_MKTIME)
+#if !defined(HAVE_TIMEGM) && !defined(HAVE_MKTIME)
 #define		TGM_SEC		(1)
 #define		TGM_MIN		(60 * TGM_SEC)
 #define		TGM_HR		(60 * TGM_MIN)
@@ -1537,25 +1547,18 @@ int utcdate, utctime, *locdate, *loctime;
 void __cdecl SigIntHandler(int d)
 #else
 #ifdef HAVE_PROTOS
-#ifdef SIGHANDLER_INT_ARG
-void SigIntHandler(int d)
+RETSIGTYPE SigIntHandler(int d)
 #else
-void SigIntHandler(void)
-#endif
-#else
-void SigIntHandler()
+RETSIGTYPE SigIntHandler()
 #endif
 #endif
 {
-#ifdef SYSV
     signal(SIGINT, SigIntHandler);
-#else
 #ifdef __BORLANDC__
     signal(SIGINT, SIG_DFL);
 #else
 #ifdef __OS2__
     signal(SIGINT, SIG_ACK);
-#endif
 #endif
 #endif
     GotSigInt();

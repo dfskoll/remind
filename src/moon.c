@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: moon.c,v 1.1 1998-01-15 02:50:33 dfs Exp $";
+static char const RCSID[] = "$Id: moon.c,v 1.2 1998-01-17 03:58:30 dfs Exp $";
 
 /* All of these routines were adapted from the program "moontool"
    by John Walker, February 1988.  Here's the blurb from moontool:
@@ -63,6 +63,7 @@ static char const RCSID[] = "$Id: moon.c,v 1.1 1998-01-15 02:50:33 dfs Exp $";
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #include <stdio.h>
 #include <math.h>
 #include <time.h>

@@ -11,17 +11,20 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.1 1998-01-15 02:50:36 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.2 1998-01-17 03:58:33 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+
 #include "types.h"
 #include "globals.h"
 #include "protos.h"

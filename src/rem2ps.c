@@ -10,20 +10,21 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.1 1998-01-15 02:50:35 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.2 1998-01-17 03:58:32 dfs Exp $";
 
 #include "lang.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#ifdef HAVE_UNISTD
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include "rem2ps.h"
-#include "version.h"
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
@@ -31,6 +32,9 @@ static char const RCSID[] = "$Id: rem2ps.c,v 1.1 1998-01-15 02:50:35 dfs Exp $";
 #ifdef __TURBOC__
 #include <io.h>
 #endif
+
+#include "rem2ps.h"
+#include "version.h"
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x

@@ -12,25 +12,33 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.1 1998-01-15 02:50:30 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.2 1998-01-17 03:58:29 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
-#ifdef UNIX
+
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
+#endif
+
+#ifdef HAVE_PWD_H
 #include <pwd.h>
-#ifdef HAVE_UNISTD
+#endif
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#endif
-#include <ctype.h>
+
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
@@ -517,12 +525,7 @@ static void ChgUser(user)
 char *user;
 #endif /* HAVE_PROTOS */
 {
-#ifdef SYSV
-    /* uid_t myuid; This seems to mess up on XENIX, so forget it... */ 
-    int myuid;
-#else
-    int myuid;
-#endif
+    uid_t myuid;
 
     struct passwd *pwent;
     static char *home, *shell, *username, *logname;

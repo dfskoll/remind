@@ -12,22 +12,28 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.1 1998-01-15 02:50:27 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
 
 #include <stdio.h>
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
+
 #include <string.h>
 #include <ctype.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
 
-#ifdef HAVE_UNISTD
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 

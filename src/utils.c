@@ -10,17 +10,20 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: utils.c,v 1.1 1998-01-15 02:50:37 dfs Exp $";
+static char const RCSID[] = "$Id: utils.c,v 1.2 1998-01-17 03:58:34 dfs Exp $";
 
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
-#include <ctype.h>
+
 #include "types.h"
 #include "globals.h"
 #include "protos.h"
@@ -139,7 +142,7 @@ char *s1, *s2;
     return UPPER(*s1) - UPPER(*s2);
 }
 
-#ifdef NO_STRSTR
+#ifndef HAVE_STRSTR
 #ifdef HAVE_PROTOS
 PUBLIC char *strstr(char *s1, char *s2)
 #else

@@ -10,7 +10,10 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: sort.c,v 1.1 1998-01-15 02:50:36 dfs Exp $";
+static char const RCSID[] = "$Id: sort.c,v 1.2 1998-01-17 03:58:33 dfs Exp $";
+
+#include <stdio.h>
+#include <string.h>
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -20,8 +23,6 @@ static char const RCSID[] = "$Id: sort.c,v 1.1 1998-01-15 02:50:36 dfs Exp $";
 #include <malloc.h>
 #endif
 
-#include <stdio.h>
-#include <string.h>
 #include "types.h"
 #include "protos.h"
 #include "expr.h"

@@ -11,39 +11,50 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.1 1998-01-15 02:50:28 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.2 1998-01-17 03:58:29 dfs Exp $";
 
 #include <stdio.h>
+
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#ifdef UNIX
-#ifdef HAVE_UNISTD
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#else
+#endif
+
+#ifdef HAVE_SYS_FILE_H
 #include <sys/file.h>
 #endif
-#endif
+
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
+#endif
+
 #include <sys/stat.h>
 #include <time.h>
+
 #if defined(__MSDOS__) || defined(__OS2__)
 #include <io.h>
 #define R_OK 4
 #define W_OK 2
 #define X_OK 1
 #endif
+
 #ifndef R_OK
 #define R_OK 4
 #define W_OK 2
 #define X_OK 1
 #endif
+
 #include "types.h"
 #include "globals.h"
 #include "protos.h"

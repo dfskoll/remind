@@ -1,9 +1,15 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.1 1998-01-15 03:28:39 dfs Exp $
+# $Id: Makefile.in,v 1.2 1998-01-17 03:58:26 dfs Exp $
 
 VERSION= 03.00.18
 SHELL= /bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+mandir=@mandir@
+bindir=@bindir@
+datadir=@datadir@
 
 .SUFFIXES:
 .SUFFIXES: .c .o
@@ -34,6 +40,16 @@ clobber:
 depend:
 	gccmakedep @DEFS@ -DUNIX $(REMINDSRCS) rem2ps.c
 
+# The next targets are not very useful to you.  I use them to build
+# distributions, etc.
+
+# Build a tar file based on all files checked into CVS.
+tgz:
+	ln -s .. remind-$(VERSION)
+	peekentry `find remind-$(VERSION) -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION).tar
+	gzip -v -9 remind-$(VERSION).tar
+	mv remind-$(VERSION).tar.gz remind-$(VERSION).tgz
+	rm -f remind-$(VERSION)
 
 #---------------- Stuff after this added by "make depend" -----------------
 

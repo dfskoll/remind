@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.1 1998-01-15 02:50:34 dfs Exp $ */
+/* $Id: protos.h,v 1.2 1998-01-17 03:58:31 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -23,7 +23,7 @@
 /* Define a general malloc routine for creating pointers to objects */
 #define NEW(type) ((type *) malloc(sizeof(type)))
 
-#ifdef NO_STRSTR
+#ifndef HAVE_STRSTR
 char *strstr ARGS ((char *s1, char *s2));
 #endif
 
@@ -151,11 +151,7 @@ int CompareRems ARGS ((int dat1, int tim1, int prio1, int dat2, int tim2, int pr
 #ifdef __BORLANDC__
 void __cdecl SigIntHandler ARGS ((int d));
 #else
-#ifdef SIGHANDLER_INT_ARG
-void SigIntHandler ARGS ((int d));
-#else
-void SigIntHandler ARGS ((void));
-#endif
+RETSIGTYPE SigIntHandler ARGS ((int d));
 #endif
 void GotSigInt ARGS ((void));
 

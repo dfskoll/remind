@@ -10,17 +10,15 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.1 1998-01-15 02:50:25 dfs Exp $ */
+/* $Id: custom.h,v 1.2 1998-01-15 03:28:40 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
 /* LON_DEG, LON_MIN and LON_SEC: Longitude of your location            */
 /* LOCATION: A string identifying your location.                       */
-/* For latitude, north is positive, south is negative.                 */
-/* For longitude, west is positive, east is negative.                  */
-/* NOTE:  For negative numbers, all three of DEG, MIN, SEC should be   */
-/*        negative.  To indicate -20deg22'33'' use                     */
-/*        DEG=-20, MIN=-22 and SEC=-33.                                */
+/* All latitude and longitude numbers should be positive.              */
+/* If you live in the southern and/or eastern hemisphere, define       */
+/* NORTHERN_HEMISPHERE to 0 and/or WESTERN_HEMISPHERE to 0.            */
 /* The default values are initially set to Ottawa, Ontario, Canada.    */
 /*---------------------------------------------------------------------*/
 #define LAT_DEG 45
@@ -29,6 +27,8 @@
 #define LON_DEG 75
 #define LON_MIN 39
 #define LON_SEC  0
+#define NORTHERN_HEMISPHERE 1
+#define WESTERN_HEMISPHERE 1
 #define LOCATION "Ottawa"
 
 /*---------------------------------------------------------------------*/
@@ -75,7 +75,16 @@
 #define WANT_U_OPTION 1
 
 /**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
 /* You most likely do NOT have to tweak anything after this!          */
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
+/**********************************************************************/
 /**********************************************************************/
 
 /*---------------------------------------------------------------------*/

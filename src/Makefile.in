@@ -1,0 +1,39 @@
+# Makefile.in for REMIND
+# 
+# $Id: Makefile.in,v 1.1 1998-01-15 03:28:39 dfs Exp $
+
+VERSION= 03.00.18
+SHELL= /bin/sh
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+REMINDSRCS=	calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c \
+		hbcal.c init.c main.c moon.c omit.c queue.c sort.c \
+		token.c trigger.c userfns.c utils.c var.c
+
+REMINDOBJS= $(REMINDSRCS:.c=.o)
+
+all: remind rem2ps
+
+.c.o:
+	@CC@ -c @CFLAGS@ @DEFS@ -DUNIX $*.c
+
+rem2ps: rem2ps.o
+	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o
+
+remind: $(REMINDOBJS)
+	@CC@ @LDFLAGS@ -o remind $(REMINDOBJS) @LIBS@
+
+clean:
+	rm -f *.o *~ core *.bak
+
+clobber:
+	rm -f *.o *~ remind rem2ps test.out core *.bak
+
+depend:
+	gccmakedep @DEFS@ -DUNIX $(REMINDSRCS) rem2ps.c
+
+
+#---------------- Stuff after this added by "make depend" -----------------
+

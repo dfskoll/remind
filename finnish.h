@@ -4,18 +4,18 @@
 /*                                                             */
 /*  Support for the Finnish language.                          */
 /*                                                             */
-/*  Author: Mikko Silvonen <Mikko.Silvonen@Helsinki.FI>        */
+/*  Author: Mikko Silvonen <silvonen@iki.fi>                   */
 /*                                                             */
-/*  Finnish holidays and name days for Remind are available    */
-/*  at ftp.funet.fi (pub/unix/misc/remind-fin*).               */
+/*  See http://www.iki.fi/silvonen/remind/ for a list of       */
+/*  Finnish holidays.                                          */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  This file is Copyright (C) 1993, 1994 by Mikko Silvonen.   */
+/*  This file is Copyright (C) 1993-1997 by Mikko Silvonen.    */
 /*  REMIND is Copyright (C) 1992-1997 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.4 1997-01-16 04:14:23 dfs Exp $ */
+/* $Id: finnish.h,v 1.5 1998-01-01 02:01:26 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"

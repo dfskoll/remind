@@ -5,11 +5,11 @@
 /*  Type definitions all dumped here.                          */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.2 1996-04-28 02:02:11 dfs Exp $ */
+/* $Id: types.h,v 1.3 1997-01-16 04:14:33 dfs Exp $ */
 
 /* Values */
 typedef struct {

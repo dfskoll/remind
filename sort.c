@@ -5,11 +5,11 @@
 /*  Routines for sorting reminders by trigger date             */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: sort.c,v 1.1 1996-03-27 03:26:10 dfs Exp $";
+static char const RCSID[] = "$Id: sort.c,v 1.2 1997-01-16 04:14:31 dfs Exp $";
 
 #include "config.h"
 

@@ -17,12 +17,12 @@
 #  "#COLORS" for examples of ANSI color escape sequences.                   #
 # 									    #
 # This file is part of REMIND.						    #
-# Copyright (C) 1992-1996 by David F. Skoll        			    #
+# Copyright (C) 1992-1997 by David F. Skoll        			    #
 # 									    #
 #############################################################################
 
 #
-# $Id: defs.rem,v 1.2 1996-12-18 00:20:44 dfs Exp $
+# $Id: defs.rem,v 1.3 1997-01-16 04:14:20 dfs Exp $
 #
 
 RUN OFF

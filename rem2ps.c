@@ -5,11 +5,11 @@
 /*  Print a PostScript calendar.                               */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.5 1996-12-18 00:20:46 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.6 1997-01-16 04:14:29 dfs Exp $";
 
 #include "config.h"
 #include "lang.h"
@@ -160,7 +160,7 @@ char argv[];
 	if (!strcmp(LineBuffer, PSBEGIN)) {
 	    if (!validfile) {
 		if (Verbose) {
-		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1996 by David F. Skoll\n\n", VERSION);
+		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1997 by David F. Skoll\n\n", VERSION);
 		    fprintf(stderr, "Generating PostScript calendar\n");
 		}
 	    }

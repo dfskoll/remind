@@ -7,11 +7,11 @@
 /*  care of certain system dependencies.                       */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.5 1996-10-12 02:49:32 dfs Exp $ */
+/* $Id: config.h,v 1.6 1997-01-16 04:14:20 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */

@@ -2,14 +2,14 @@
 # ---------------------------------------------------------------------------
 # TEST-REM
 #
-# $Id: test-rem,v 1.1 1996-03-27 03:26:10 dfs Exp $
+# $Id: test-rem,v 1.2 1997-01-16 04:14:31 dfs Exp $
 #
 # This file runs an acceptance test for Remind.  To use it, type:
 #      sh test-rem  OR make test
 # in the build directory.
 #
 # This file is part of REMIND.
-# Copyright (C) 1992-1996 by David F. Skoll        
+# Copyright (C) 1992-1997 by David F. Skoll        
 # ---------------------------------------------------------------------------
 
 TEST_GETENV="foo bar baz" ; export TEST_GETENV

@@ -3,9 +3,9 @@
 
 # This file is part of REMIND
 #
-# $Id: remind-all.sh,v 1.1 1996-03-27 03:26:08 dfs Exp $
+# $Id: remind-all.sh,v 1.2 1997-01-16 04:14:30 dfs Exp $
 #
-# REMIND is Copyright (C) 1992-1996 by David F. Skoll        
+# REMIND is Copyright (C) 1992-1997 by David F. Skoll        
 # This file is Copyright (C) 1990 by Bill Aten
 
 # Thanks to Bill Aten for this script.

@@ -7,11 +7,11 @@
 /*  commands.                                                  */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dorem.c,v 1.3 1996-04-28 02:01:54 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.4 1997-01-16 04:14:21 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>

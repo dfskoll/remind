@@ -7,10 +7,10 @@
 /*  This file is Copyright (C) 1995 by Martin Hohl             */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Remind is Copyright (C) 1992-1996 by David F. Skoll        */
+/*  Remind is Copyright (C) 1992-1997 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
-static char const RCSID[] = "$Id: amiga.c,v 1.1 1996-03-31 04:01:53 dfs Exp $";
+static char const RCSID[] = "$Id: amiga.c,v 1.2 1997-01-16 04:14:19 dfs Exp $";
 
 #include <stdlib.h>
 #include <string.h>

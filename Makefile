@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.16 1996-12-18 00:20:43 dfs Exp $
+# $Id: Makefile,v 1.17 1997-01-16 04:14:18 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -132,28 +132,23 @@ var.o: var.c $(STDHDRS) expr.h
 tgz:
 	-rm -rf remind-$(VERSION)
 	-mkdir remind-$(VERSION)
-	cd remind-$(VERSION); for i in $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
+	cd remind-$(VERSION); for i in www $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
 	tar -c -h -v -f remind-3.0.16.tar remind-$(VERSION)
 	gzip -v -9 remind-3.0.16.tar
 	mv remind-3.0.16.tar.gz remind-3.0.16.tgz
 	rm -rf remind-$(VERSION)
 
 shar:
-	shar -o./Shar -sdfs@doe.carleton.ca -a -c -n"Remind $(VERSION)" -m -l58 -o./Shar $(MANIFEST)
+	shar -o./Shar -sdfs@doe.carleton.ca -a -c -n"Remind $(VERSION)" -m -l58 -o./Shar www $(MANIFEST)
 
 backup:
-	tar cvzf ../rbackup.tgz $(MANIFEST)
+	tar cvzf ../rbackup.tgz www $(MANIFEST)
 
 zip:
-	zip ../rbackup.zip $(MANIFEST)
-
-todos:
-	rm -rf DOS
-	mkdir DOS
-	for i in $(MANIFEST) ; do todos < $$i > DOS/$$i; done	
+	zip ../rbackup.zip www $(MANIFEST)
 
 transmit:
-	sz -a -e $(MANIFEST)
+	sz -a -e $(MANIFEST) www/*
 
 install:  install-bin install-scripts install-man
 
@@ -202,14 +197,3 @@ install-man:
 	-chmod $(MANMODE) $(MANDIR)/man$(MANSECT)/rem2ps.$(MANSECT)
 	-chown $(OWNER) $(MANDIR)/man$(MANSECT)/rem2ps.$(MANSECT)
 	-chgrp $(GROUP) $(MANDIR)/man$(MANSECT)/rem2ps.$(MANSECT)
-
-release:
-	-mkdir RELEASE
-	-rm -f RELEASE/*
-	mkpatch ../prev . patch.16 Shar "Remind-3.0/Patch-15/part"
-	mv Shar* RELEASE
-	rm -f patch.16*
-	for i in *.1; do nroff -man $$i | sed -e 's/_//g' > `basename $$i .1`.man; done
-	mv *.man RELEASE
-	for i in *.1; do groff -man -Tps $$i > `basename $$i .1`.ps; done
-	mv *.ps RELEASE

@@ -3,7 +3,7 @@
 #
 # TSTLANG.REM
 #
-# $Id: tstlang.rem,v 1.1 1996-03-27 03:26:14 dfs Exp $
+# $Id: tstlang.rem,v 1.2 1997-01-16 04:14:33 dfs Exp $
 #
 # Use this file to test new language headers you may want to create.
 # Usage: remind -rq tstlang.rem
@@ -13,7 +13,7 @@
 # Use the output to verify your translations.
 #
 # This file is part of REMIND.
-# Copyright (C) 1992-1996 by David F. Skoll        
+# Copyright (C) 1992-1997 by David F. Skoll        
 #
 # ---------------------------------------------------------------------------
 

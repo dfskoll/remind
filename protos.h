@@ -5,11 +5,11 @@
 /*  Function Prototypes.                                       */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.2 1996-03-31 04:01:57 dfs Exp $ */
+/* $Id: protos.h,v 1.3 1997-01-16 04:14:29 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x

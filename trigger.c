@@ -5,11 +5,11 @@
 /*  Routines for figuring out the trigger date of a reminder   */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: trigger.c,v 1.2 1996-05-25 19:10:13 dfs Exp $";
+static char const RCSID[] = "$Id: trigger.c,v 1.3 1997-01-16 04:14:33 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>

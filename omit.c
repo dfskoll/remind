@@ -6,11 +6,11 @@
 /*  the data structures for OMITted dates.                     */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: omit.c,v 1.2 1996-04-28 02:02:00 dfs Exp $";
+static char const RCSID[] = "$Id: omit.c,v 1.3 1997-01-16 04:14:28 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>

@@ -8,13 +8,13 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-1996 by David F. Skoll        */
+/*  REMIND is Copyright (C) 1992-1997 by David F. Skoll        */
 /*  This file is Copyright (C) 1996 by Marco Paganini and      */
 /*  David F. Skoll.                                            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.1 1996-06-22 02:21:29 dfs Exp $ */
+/* $Id: portbr.h,v 1.2 1997-01-16 04:14:29 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -261,7 +261,7 @@ PUBLIC void Usage(void)
 void Usage()
 #endif /* HAVE_PROTOS */
 {
-    fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-1996 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-1997 by David F. Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> VERSAO BETA <<<<\n");
 #endif

@@ -2,14 +2,14 @@
 rem ---------------------------------------------------------------------------
 rem TEST-REM
 rem
-rem $Id: test-rem.cmd,v 1.1 1996-03-27 03:26:11 dfs Exp $
+rem $Id: test-rem.cmd,v 1.2 1997-01-16 04:14:32 dfs Exp $
 rem
 rem This file runs an OS/2 acceptance test for Remind.	To use it, type:
 rem	 test-rem
 rem in the build directory.
 rem
 rem This file is part of REMIND.
-rem Copyright (C) 1992-1996 by David F. Skoll        
+rem Copyright (C) 1992-1997 by David F. Skoll        
 rem ---------------------------------------------------------------------------
 
 del /f test.out > nul

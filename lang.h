@@ -5,11 +5,11 @@
 /*  Header file for language support for various languages.    */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.5 1996-12-10 02:36:33 dfs Exp $ */
+/* $Id: lang.h,v 1.6 1997-01-16 04:14:26 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 

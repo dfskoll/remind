@@ -2,14 +2,14 @@
 rem ---------------------------------------------------------------------------
 rem TEST-REM
 rem
-rem $Id: test-rem.bat,v 1.1 1996-03-27 03:26:10 dfs Exp $
+rem $Id: test-rem.bat,v 1.2 1997-01-16 04:14:31 dfs Exp $
 rem
 rem This file runs an MSDOS acceptance test for Remind.  To use it, type:
 rem	 test-rem
 rem in the build directory.
 rem
 rem This file is part of REMIND.
-rem Copyright (C) 1992-1996 by David F. Skoll        
+rem Copyright (C) 1992-1997 by David F. Skoll        
 rem ---------------------------------------------------------------------------
 
 del test.out > nul

@@ -4,6 +4,9 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Bundled scripts for making a nice WWW calendar server.  See the
+  "www" subdirectory in the release.
+
 - Added support for the Romanian language, courtesy of Liviu Daia
 
 - Changed sunrise() and sunset() as follows:  If the sun never rises,

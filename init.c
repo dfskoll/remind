@@ -7,11 +7,11 @@
 /*  in normal mode.                                            */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: init.c,v 1.3 1996-10-27 21:28:03 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.4 1997-01-16 04:14:26 dfs Exp $";
 
 #define L_IN_INIT 1
 #include "config.h"

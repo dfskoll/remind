@@ -6,11 +6,11 @@
 /*  reminders are triggered.                                   */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dosubst.c,v 1.3 1996-10-12 02:49:32 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.4 1997-01-16 04:14:21 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include "config.h"

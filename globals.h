@@ -7,11 +7,11 @@
 /*  MK_GLOBALS.  Also contains useful macro definitions.       */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1996 by David F. Skoll                  */
+/*  Copyright (C) 1992-1997 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.1 1996-03-27 03:25:57 dfs Exp $ */
+/* $Id: globals.h,v 1.2 1997-01-16 04:14:24 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN

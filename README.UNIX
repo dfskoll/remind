@@ -1,4 +1,4 @@
-$Id: README.UNIX,v 1.2 1996-10-12 02:59:06 dfs Exp $
+$Id: README.UNIX,v 1.3 1997-01-16 04:14:18 dfs Exp $
 REMIND version 3.0 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
@@ -29,6 +29,9 @@ in the man page, "remind.1".
 
 8 - Type 'make install' to install Remind, kall, rem and the man
     pages.
+
+The subdirectory "www" contains scripts for making a nice calendar
+web server.  See the files README and Makefile in that directory.
 
 Two shell scripts, "remind-all.csh" and "remind-all.sh" are provided.
 These allow automatic mailing of reminders to all users who create a

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.1 1996-04-08 00:39:12 dfs Exp $
+# $Id: tkremind,v 1.2 1996-04-14 16:07:06 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -26,6 +26,9 @@ set MonthNames {January February March April May June July August September Octo
 # Day names in Remind's pre-selected language
 set DayNames {}
 
+# Day name in English
+set EnglishDayNames {Sunday Monday Tuesday Wednesday Thursday Friday Saturday}
+
 # Current month and year -- will be set by Initialize procedure
 set CurMonth -1
 set CurYear -1
@@ -35,10 +38,14 @@ set TodayMonth -1
 set TodayYear -1
 set TodayDay -1
 
+# Reminder option types and skip types
+set OptionType 1
+set SkipType 1
+
 #---------------------------------------------------------------------------
 # Initialize -- initialize things
 #---------------------------------------------------------------------------
-proc Initialize { } {
+proc Initialize {} {
     global DayNames
     set DayNames [GetWeekdayNames]
 #    wm geometry . 700x400
@@ -48,7 +55,7 @@ proc Initialize { } {
 # GetWeekdayNames - Spawn a remind process and get the names of the weekdays
 # Also sets CurMonth and CurYear.
 #---------------------------------------------------------------------------
-proc GetWeekdayNames { } {
+proc GetWeekdayNames {} {
     global CurMonth CurYear TodayYear TodayMonth TodayDay
     set f [open "|remind - 2>/dev/null" r+]
     puts $f "banner %"
@@ -81,8 +88,12 @@ proc GetWeekdayNames { } {
 
 #---------------------------------------------------------------------------
 # RowNumber -- get the row number of a specified day.
+# Arguments:
+#   firstDay -- first day of month (0=Sunday, 6=Saturday)
+#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
+#   day -- day whose row number is needed
 #---------------------------------------------------------------------------
-proc RowNumber { firstDay mondayFirst day } {
+proc RowNumber {firstDay mondayFirst day} {
     set modDay [expr $day - $mondayFirst]
     if { $modDay < 0 } { set modDay 6 }
     return [expr ($modDay + $firstDay - 1) / 7 + 1]
@@ -90,6 +101,10 @@ proc RowNumber { firstDay mondayFirst day } {
 
 #---------------------------------------------------------------------------
 # ColumnNumber -- get the column number of a specified day.
+# Arguments:
+#   firstDay -- first day of month (0=Sunday, 6=Saturday)
+#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
+#   day -- day whose column number is needed
 #---------------------------------------------------------------------------
 proc ColumnNumber { firstDay mondayFirst day } {
     set modDay [expr $day - $mondayFirst]
@@ -99,13 +114,18 @@ proc ColumnNumber { firstDay mondayFirst day } {
 
 #---------------------------------------------------------------------------
 # CreateCalWindow -- create the calendar window.
+# Arguments:
+#   firstDay -- first day of month (0=Sunday, 6=Saturday)
+#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
+#   daysInMonth -- number of days in month
+#   month -- name of the month
+#   year -- year
+#   dayNames -- names of weekdays in current language {Sun .. Sat}
 #---------------------------------------------------------------------------
 proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     global CurMonth CurYear TodayMonth TodayYear TodayDay
     catch { destroy .h }
     catch { destroy .b }
-    wm title . "TkRemind - $month $year"
-    wm iconname . "$month $year"
 
     frame .h
     label .h.title -text "$month $year" -justify center -pady 2 -relief raised
@@ -124,7 +144,7 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
 	pack .h.col$col.day -side top -fill x -expand 0
 	while { $row <= $numRows } {
 	    button .h.col$col.num$row -text "" -justify center -command "" -state disabled -relief flat
-	    text .h.col$col.t$row -width 12 -height 4 -wrap word -relief sunken
+	    text .h.col$col.t$row -width 12 -height 1 -wrap word -relief sunken -state disabled
 	    pack .h.col$col.num$row -side top -fill x -expand 0
 	    pack .h.col$col.t$row -side top -fill both -expand 1
 	    incr row
@@ -136,11 +156,12 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     while { $d <= $daysInMonth } {
 	set r [RowNumber $firstDay $mondayFirst $d]
 	set c [ColumnNumber $firstDay $mondayFirst $d]
-	.h.col$c.num$r configure -text $d -command "ModifyDay $d" -state normal
-	incr d
+	.h.col$c.num$r configure -text $d -command "ModifyDay $d $firstDay" -state normal
 	if { $CurMonth == $TodayMonth && $CurYear == $TodayYear && $d == $TodayDay} {
 	    .h.col$c.num$r configure -background "#00c0c0"
+	    .h.col$c.t$r configure -background "#00c0c0"
 	}
+	incr d
     }
     frame .b
     button .b.prev -text {Previous Month} -command {MoveMonth -1}
@@ -153,18 +174,20 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     pack .b.status -side left -fill x -expand 1
     pack .h -side top -expand 1 -fill both
     pack .b -side top -fill x -expand 0
+    wm title . "TkRemind - $month $year"
+    wm iconname . "$month $year"
 }
 
 #---------------------------------------------------------------------------
-# FillCalWindow -- Make the calendar for global CurMonth and CurYear.
+# FillCalWindow -- Fill in the calendar for global CurMonth and CurYear.
 #---------------------------------------------------------------------------
-proc FillCalWindow { } {
+proc FillCalWindow {} {
     global DayNames CurYear CurMonth MonthNames
 
     Status "Firing off Remind..."
     set month [lindex $MonthNames $CurMonth]
 
-    set file [open "|remind -p /home/dfs/.reminders $month $CurYear 2>/dev/null" r]
+    set file [open "|remind -itkremind=1 -p /home/dfs/.reminders $month $CurYear 2>/dev/null" r]
     # Look for # rem2ps begin line
     while { [gets $file line] >= 0 } {
 	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
@@ -190,8 +213,13 @@ proc FillCalWindow { } {
 	set month [string trimleft $month 0]
 	set c [ColumnNumber $firstWkday $mondayFirst $day]
 	set r [RowNumber $firstWkday $mondayFirst $day]
+	.h.col$c.t$r configure -state normal
+	if { [string length [string trim [.h.col$c.t$r get 1.0]]] != 0} {
+	    .h.col$c.t$r insert end " .....\n"
+	}
 	.h.col$c.t$r insert end [string trim $stuff]
-	.h.col$c.t$r insert end "\n\n"
+	.h.col$c.t$r insert end "\n"
+	.h.col$c.t$r configure -state disabled
 	
     }
     close $file
@@ -200,6 +228,8 @@ proc FillCalWindow { } {
 
 #---------------------------------------------------------------------------
 # MoveMonth -- move by +1 or -1 months
+# Arguments:
+#    delta -- +1 or -1 -- months to move.
 #---------------------------------------------------------------------------
 proc MoveMonth {delta} {
     global CurMonth CurYear
@@ -234,19 +264,12 @@ proc ThisMonth {} {
 
 #---------------------------------------------------------------------------
 # Status -- set status string
+# Arguments:
+#   stuff -- what to set string to.
 #---------------------------------------------------------------------------
 proc Status { stuff } {
     catch { .b.status configure -text $stuff }
     update idletasks
-}
-
-#---------------------------------------------------------------------------
-# CreateModifyDialog -- create the dialog box for making new entries
-#---------------------------------------------------------------------------
-proc CreateModifyDialog { month day wkday } {
-    catch { destroy .cm }
-    toplevel .cm
-    wm withdraw .cm
 }
 
 #---------------------------------------------------------------------------
@@ -270,6 +293,7 @@ proc GotoDialog {} {
     label .g.y.lab -text "Year: "
     entry .g.y.e -width 4
     .g.y.e insert end $CurYear
+    bind .g.y.e <Return> ".g.b.go flash; .g.b.go invoke"
     frame .g.b
     button .g.b.go -text "Go" -command {DoGoto}
     button .g.b.cancel -text "Cancel" -command { destroy .g }
@@ -280,9 +304,12 @@ proc GotoDialog {} {
     pack .g.y.e -side left -fill x -expand 1
     pack .g.y -expand 1 -fill x
     pack .g.b -expand 1 -fill x
-    set x [expr [winfo x .] + ([winfo width .] / 2)]
-    set y [expr [winfo y .] + ([winfo height .] / 2)]
-    wm geometry .g +$x+$y
+    CenterWindow .g
+    set oldFocus [focus]
+    grab .g
+    focus .g.y.e
+    tkwait window .g
+    catch {focus $oldFocus}
 }
 
 #---------------------------------------------------------------------------
@@ -315,12 +342,310 @@ proc Quit {} {
     }
 }
 
-wm withdraw .
-puts "TkRemind Copyright (c) 1996 by David F. Skoll\n"
-puts "Initializing..."    
-Initialize
-puts "Creating calendar window..."
-FillCalWindow
-wm deiconify .
+#---------------------------------------------------------------------------
+# CreateModifyDialog -- create dialog for adding a reminder
+# Arguments:
+#    w -- path of parent window
+#    day -- day number of month
+#    firstDay -- day number of first day of month
+#---------------------------------------------------------------------------
+proc CreateModifyDialog {w day firstDay} {
 
-update
+    # Set up: Year, Month, Day, WeekdayName
+    global CurYear CurMonth EnglishDayNames MonthNames OptionType SkipType
+    global ModifyDialogResult
+
+    set OptionType 1
+    set SkipType 1
+
+    set year $CurYear
+    set month [lindex $MonthNames $CurMonth]
+    set wkday [lindex $EnglishDayNames [expr ($day+$firstDay-1) % 7]]
+
+    frame $w.o -border 4 -relief ridge
+    frame $w.o1 -border 4
+    frame $w.o2 -border 4
+    frame $w.o3 -border 4
+    frame $w.exp -border 4
+    frame $w.adv -border 4
+    frame $w.weekend -border 4
+    frame $w.time -border 4
+    frame $w.hol -border 4
+    frame $w.msg
+    frame $w.buttons
+    pack $w.o1 $w.o2 $w.o3  -side top -anchor w -in $w.o
+    pack $w.o $w.exp $w.adv $w.weekend $w.time $w.hol $w.msg $w.buttons -side top -anchor w -pady 4 -expand 1 -fill both
+
+    # TYPE 1 REMINDER
+    radiobutton $w.type1 -variable OptionType -value 1
+    menubutton $w.day1 -text $day -relief raised -menu $w.day1.menu
+    CreateDayMenu $w.day1
+    menubutton $w.mon1 -text $month -relief raised -menu $w.mon1.menu
+    CreateMonthMenu $w.mon1
+    menubutton $w.year1 -text $year -relief raised -menu $w.year1.menu
+    CreateYearMenu $w.year1
+    checkbutton $w.repbut -text "and repeating every"
+    $w.repbut deselect
+    menubutton $w.repdays -text 1 -relief raised -menu $w.repdays.menu
+    CreateDayMenu $w.repdays 1 28 0
+    label $w.label1a -text "day(s) thereafter"
+    pack $w.type1 $w.day1 $w.mon1 $w.year1 $w.repbut $w.repbut $w.repdays $w.label1a -side left -anchor w -in $w.o1
+
+    # TYPE 2 REMINDER
+    radiobutton $w.type2 -variable OptionType -value 2
+    label $w.label2a -text First
+    menubutton $w.wkday2 -text $wkday -relief raised -menu $w.wkday2.menu
+    CreateWeekdayMenu $w.wkday2
+    label $w.label2b -text "on or after"
+    menubutton $w.day2 -text $day -relief raised -menu $w.day2.menu
+    CreateDayMenu $w.day2 1 31 0
+    menubutton $w.mon2 -text $month -relief raised -menu $w.mon2.menu
+    CreateMonthMenu $w.mon2
+    menubutton $w.year2 -text $year -relief raised -menu $w.year2.menu
+    CreateYearMenu $w.year2
+    pack $w.type2 $w.label2a $w.wkday2 $w.label2b $w.day2 $w.mon2 $w.year2 -side left -anchor w -in $w.o2
+
+    # TYPE 3 REMINDER
+    if { $day <= 7 } {
+	set which "First"
+    } elseif {$day <= 14} {
+	set which "Second"
+    } elseif {$day <= 21} {
+	set which "Third"
+    } elseif {$day <= 28} {
+	set which "Fourth"
+    } else {
+	set which "Last"
+    }
+    radiobutton $w.type3 -variable OptionType -value 3
+    menubutton $w.ordinal -text $which -relief raised -menu $w.ordinal.menu
+    menu $w.ordinal.menu -tearoff 0
+    $w.ordinal.menu add command -label "First" -command "$w.ordinal configure -text First"
+    $w.ordinal.menu add command -label "Second" -command "$w.ordinal configure -text Second"
+    $w.ordinal.menu add command -label "Third" -command "$w.ordinal configure -text Third"
+    $w.ordinal.menu add command -label "Fourth" -command "$w.ordinal configure -text Fourth"
+    $w.ordinal.menu add command -label "Last" -command "$w.ordinal configure -text Last"
+    $w.ordinal.menu add command -label "Every" -command "$w.ordinal configure -text Every"
+    menubutton $w.wkday3 -text $wkday -relief raised -menu $w.wkday3.menu
+    CreateWeekdayMenu $w.wkday3
+    label $w.label3 -text "in"
+    menubutton $w.mon3 -text $month -relief raised -menu $w.mon3.menu
+    CreateMonthMenu $w.mon3
+    menubutton $w.year3 -text $year -relief raised -menu $w.year3.menu
+    CreateYearMenu $w.year3
+    pack $w.type3 $w.ordinal $w.wkday3 $w.label3 $w.mon3 $w.year3 -side left -anchor w -in $w.o3
+
+    # EXPIRY DATE
+    checkbutton $w.expbut -text "Expire after"
+    $w.expbut deselect
+    menubutton $w.expday -text $day -relief raised -menu $w.expday.menu
+    CreateDayMenu $w.expday 1 31 0
+    menubutton $w.expmon -text $month -relief raised -menu $w.expmon.menu
+    CreateMonthMenu $w.expmon 0
+    menubutton $w.expyear -text $year -relief raised -menu $w.expyear.menu
+    CreateYearMenu $w.expyear 0
+
+    pack $w.expbut $w.expday $w.expmon $w.expyear -side left -anchor w -in $w.exp
+
+    # ADVANCE NOTICE
+    checkbutton $w.advbut -text "Issue"
+    $w.advbut deselect
+    menubutton $w.advdays -text 3 -menu $w.advdays.menu -relief raised
+    CreateDayMenu $w.advdays 1 10 0
+    label $w.advlab -text "day(s) in advance"
+    checkbutton $w.advcount -text "not counting holidays/weekend"
+    $w.advcount deselect
+    pack $w.advbut $w.advdays $w.advlab $w.advcount -side left -anchor w -in $w.adv
+
+    # WEEKEND
+    label $w.weeklab -text "Weekend is: "
+    pack $w.weeklab -side left -anchor w -in $w.weekend
+    foreach d $EnglishDayNames {
+	checkbutton $w.d$d -text $d
+	$w.d$d deselect
+	pack $w.d$d -side left -anchor w -in $w.weekend
+    }
+    $w.dSaturday select
+    $w.dSunday select
+
+    # TIMED REMINDER
+    checkbutton $w.timebut -text "Timed reminder at"
+    $w.timebut deselect
+    menubutton $w.timehour -text "12" -menu $w.timehour.menu -relief raised
+    CreateDayMenu $w.timehour 1 12 0
+    menubutton $w.timemin -text "00" -menu $w.timemin.menu -relief raised
+    menu $w.timemin.menu -tearoff 0
+    $w.timemin.menu add command -label "00" -command "$w.timemin configure -text {00}"
+    $w.timemin.menu add command -label "15" -command "$w.timemin configure -text {15}"
+    $w.timemin.menu add command -label "30" -command "$w.timemin configure -text {30}"
+    $w.timemin.menu add command -label "45" -command "$w.timemin configure -text {45}"
+
+    menubutton $w.ampm -text "PM" -menu $w.ampm.menu -relief raised
+    menu $w.ampm.menu -tearoff 0
+    $w.ampm.menu add command -label "AM" -command "$w.ampm configure -text {AM}"
+    $w.ampm.menu add command -label "PM" -command "$w.ampm configure -text {PM}"
+    pack $w.timebut $w.timehour $w.timemin $w.ampm -side left -anchor w -in $w.time
+
+    # SKIP TYPE
+    label $w.labhol -text "On holidays or weekends:"
+    radiobutton $w.issue -variable SkipType -value 1 -text "Issue reminder as usual"
+    radiobutton $w.skip -variable SkipType -value 2 -text "Skip reminder"
+    radiobutton $w.before -variable SkipType -value 3 -text "Move reminder before holiday or weekend"
+    radiobutton $w.after -variable SkipType -value 4 -text "Move reminder after holiday or weekend"
+    pack $w.labhol $w.issue $w.skip $w.before $w.after -side top -anchor w -in $w.hol
+
+    # TEXT ENTRY
+    label $w.msglab -text "Body:"
+    entry $w.entry
+    pack $w.msglab -side left -anchor w -in $w.msg
+    pack $w.entry -side left -anchor w -expand 1 -fill x -in $w.msg
+
+    # BUTTONS
+    button $w.add -text "Add to reminder file" -command "set ModifyDialogResult 1"
+    button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 2"
+    pack $w.add $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill both
+
+    set ModifyDialogResult 0
+
+    # Center the window on the root
+    CenterWindow $w
+}
+
+#---------------------------------------------------------------------------
+# CreateMonthMenu -- create a menu with all the months of the year
+# Arguments:
+#    w -- menu button -- becomes parent of menu
+#    every -- if true, include an "every month" entry
+#---------------------------------------------------------------------------
+proc CreateMonthMenu {w {every 1}} {
+    global MonthNames
+    menu $w.menu -tearoff 0
+
+    if {$every} {
+	$w.menu add command -label "every month" -command "$w configure -text {every month}"
+    }
+
+    foreach month $MonthNames {
+	$w.menu add command -label $month -command "$w configure -text $month"
+    }
+}
+
+#---------------------------------------------------------------------------
+# CreateWeekdayMenu -- create a menu with all the weekdays
+# Arguments:
+#    w -- menu button -- becomes parent of menu
+#---------------------------------------------------------------------------
+proc CreateWeekdayMenu {w} {
+    global EnglishDayNames
+    menu $w.menu -tearoff 0
+
+    foreach d $EnglishDayNames {
+	$w.menu add command -label $d -command "$w configure -text $d"
+    }
+    $w.menu add command -label "weekday" -command "$w configure -text weekday"
+}
+
+#---------------------------------------------------------------------------
+# CreateDayMenu -- create a menu with entries 1-31 and possibly "every day"
+# Arguments:
+#    w -- menu button -- becomes parent of menu
+#    min -- minimum day to start from.
+#    max -- maximum day to go up to
+#    every -- if true, include an "every day" entry
+#---------------------------------------------------------------------------
+proc CreateDayMenu {w {min 1} {max 31} {every 1}} {
+    menu $w.menu -tearoff 0
+    if {$every} {
+	$w.menu add command -label "every day" -command "$w configure -text {every day}"
+    }
+    set d $min
+    while { $d <= $max } {
+	$w.menu add command -label $d -command "$w configure -text $d"
+	incr d
+    }
+}
+
+#---------------------------------------------------------------------------
+# CreateYearMenu -- create a menu with entries from this year to this year+10
+#                   and possibly "every year"
+# Arguments:
+#    w -- menu button -- becomes parent of menu
+#    every -- if true, include an "every year" entry
+#---------------------------------------------------------------------------
+proc CreateYearMenu {w {every 1}} {
+    menu $w.menu -tearoff 0
+    if {$every} {
+	$w.menu add command -label "every year" -command "$w configure -text {every year}"
+    }
+    global CurYear
+    set d $CurYear
+    while { $d < [expr $CurYear + 11] } {
+	$w.menu add command -label $d -command "$w configure -text $d"
+	incr d
+    }
+}
+
+#---------------------------------------------------------------------------
+# ModifyDay -- bring up dialog for adding reminder.
+# Arguments:
+#    d -- which day to modify
+#    firstDay -- first weekday in month (0-6)
+#---------------------------------------------------------------------------
+proc ModifyDay {d firstDay} {
+    catch {destroy .mod}
+    toplevel .mod
+    CreateModifyDialog .mod $d $firstDay
+    wm title .mod "Add Reminder..."
+    wm iconname .mod "Add Reminder"
+    tkwait visibility .mod
+    set oldFocus [focus]
+    grab .mod
+    focus .mod.entry
+    tkwait variable ModifyDialogResult
+    catch {focus $oldFocus}
+    destroy .mod
+}
+
+#---------------------------------------------------------------------------
+# CenterWindow -- center a window on the screen.  Stolen from tk_dialog code
+# Arguments:
+#    w -- window to center
+#---------------------------------------------------------------------------
+proc CenterWindow {w} {
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2 \
+	    - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2 \
+	    - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+}
+
+
+proc main {} {	
+    wm withdraw .
+    puts "TkRemind Copyright (c) 1996 by David F. Skoll\n"
+    puts "Initializing..."    
+    Initialize
+    puts "Creating calendar window..."
+    FillCalWindow
+    wm deiconify .
+
+    # Choose a reasonable initial height for the calendar window.
+
+    tkwait visibility .
+    set x [winfo width .]
+    wm geometry . ${x}x600
+
+    update
+}
+
+proc t {} {
+    catch { destroy .foo }
+    toplevel .foo
+    CreateModifyDialog .foo 20 1
+}
+
+main
+

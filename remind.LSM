@@ -7,12 +7,13 @@ Description:    Full-featured calendar/reminder program featuring
 		Hebrew calendar, alarms, PostScript output, X-Windows
 		front-end, multilingual messages, and proper handling of
 		holidays.  Available for UNIX, MS-DOS, OS/2, and other
-		platforms.
-Keywords:       calendar reminder alarm datebook PostScript
+		platforms.  Includes scripts for making a nice WWW
+		calendar server.
+Keywords:       calendar reminder alarm datebook PostScript www
 Author:         aa775@freenet.carleton.ca (David F. Skoll)
 Maintained-by:  aa775@freenet.carleton.ca (David F. Skoll)
 Primary-site:   ftp.doe.carleton.ca /pub/Remind-3.0
-		215kB remind-3.0.16.tgz
+		230kB remind-3.0.16.tgz
 Alternate-site: 
 Original-site:  
 Platform:       Linux, Solaris, SunOS, HP-UX -- virtually any UN*X-like

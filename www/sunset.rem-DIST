@@ -3,7 +3,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: sunset.rem-DIST,v 1.1 1997-01-16 04:00:28 dfs Exp $
+# $Id: sunset.rem-DIST,v 1.2 1997-01-16 04:31:11 dfs Exp $
 
 set now now()
 
@@ -38,6 +38,6 @@ set aw iif(tod==tom, " as well.", ".")
 msg Today is %w, %d %m, %y.<P>
 msg The local time in Ottawa is [now].<P>
 msg Sunset today [iw] at [tod]; in other words, [hstr][astr][mstr] [fn].<P>
-msg Sunset	 tomorrow is at [tom][aw]<P>
+msg Sunset tomorrow is at [tom][aw]<P>
 msg The daylight portion of tomorrow will be [slen] today.<P>
 msg </BODY>

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.17 1997-01-16 04:14:18 dfs Exp $
+# $Id: Makefile,v 1.18 1997-01-16 04:31:07 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -133,7 +133,7 @@ tgz:
 	-rm -rf remind-$(VERSION)
 	-mkdir remind-$(VERSION)
 	cd remind-$(VERSION); for i in www $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
-	tar -c -h -v -f remind-3.0.16.tar remind-$(VERSION)
+	tar --exclude CVS -c -h -v -f remind-3.0.16.tar remind-$(VERSION)
 	gzip -v -9 remind-3.0.16.tar
 	mv remind-3.0.16.tar.gz remind-3.0.16.tgz
 	rm -rf remind-$(VERSION)

@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.12 1999-04-21 01:47:59 dfs Exp $
+# $Id: Makefile.in,v 1.13 1999-10-18 19:55:00 dfs Exp $
 
 VERSION= 03.00.21
 SHELL= /bin/sh
@@ -19,10 +19,11 @@ INSTALL_DATA=@INSTALL_DATA@
 
 PROGS=		remind rem2ps
 SCRIPTS=	$(srcdir)/../scripts/kall $(srcdir)/../scripts/rem \
-		$(srcdir)/../scripts/tkremind
+		$(srcdir)/../scripts/tkremind $(srcdir)/../scripts/cm2rem.tcl
+
 MANS=		$(srcdir)/../man/kall.1 $(srcdir)/../man/rem.1 \
 		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
-		$(srcdir)/../man/tkremind.1
+		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1
 
 .SUFFIXES:
 .SUFFIXES: .c .o

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.1 1998-01-19 03:07:10 dfs Exp $
+# $Id: build.tk,v 1.2 1998-01-19 03:24:03 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -282,8 +282,23 @@ proc BuildRemind {} {
     CallConfigure
     .msgs insert end ">>> Calling `make'...\n\n" green
     CallMake
-    tk_dialog .built "Remind Built" "Remind has been built.  To install it, type `make install' from the top-level Remind directory.  After it's installed, create an empty file called \$HOME/.reminders and type `tkremind' for a quick look." info 0 "OK"
-    exit 0
+    .msgs insert end "\n----------------------------------------------\n\n"
+    .msgs insert end "Remind" red
+    .msgs insert end " has been built.  To install it, type:\n\n"
+    .msgs insert end "make install\n\n" green
+    .msgs insert end "from the top-level "
+    .msgs insert end "Remind" red
+    .msgs insert end " directory.  (You may need to be root.)\n\n"
+    .msgs insert end "After it's installed, create an empty file called:\n"
+    .msgs insert end "       \$HOME/.reminders\n" green
+    .msgs insert end "and type "
+    .msgs insert end "tkremind" green
+    .msgs insert end " for a nice easy introduction to "
+    .msgs insert end "Remind.\n\n" red
+    .msgs insert end "Press me to exit --> "
+    button .msgs.ok -text "OK" -command "exit"
+    .msgs window create end -window .msgs.ok
+    .msgs see end
 }
 
 #***********************************************************************

@@ -12,7 +12,7 @@ Manual pages are in "man".
 
 Quick UNIX installation instructions for the very impatient:
 
-If you have Tcl/Tk (wish) installed and are running X Windows:
+If you have Tcl/Tk (wish 4.1 or higher) installed and are running X Windows:
 --------------------------------------------------------------
 
 1) Type: wish ./build.tk from this directory.  Fill in the various
@@ -31,4 +31,4 @@ If you do NOT have Tcl/Tk or are NOT running X Windows:
 
 4) Type: "make install" -- you may need to be root to do this.
 
-$Id: README,v 1.3 1998-01-19 03:07:10 dfs Exp $
+$Id: README,v 1.4 1998-01-19 03:24:03 dfs Exp $

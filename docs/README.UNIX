@@ -1,4 +1,4 @@
-$Id: README.UNIX,v 1.3 1998-01-19 03:07:14 dfs Exp $
+$Id: README.UNIX,v 1.4 1998-01-19 03:24:09 dfs Exp $
 REMIND version 3.0 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
@@ -7,7 +7,7 @@ in the man page, "remind.1".
 INSTALLING REMIND:
 -----------------
 
-If you have Tcl/Tk (wish) installed and are running X Windows:
+If you have Tcl/Tk (wish 4.1 or higher) installed and are running X Windows:
 --------------------------------------------------------------
 
 1) Type: wish ./build.tk from the top-level Remind directory.
@@ -59,9 +59,9 @@ commands, as well as U.S. and Jewish holidays.
 OTHER LANGUAGE SUPPORT
 
 Remind has support for languages other than English.  See the file
-"lang.h" for details.  The language support may vary - you can change
+"src/lang.h" for details.  The language support may vary - you can change
 only the substitution filter, or you can translate all of the usage
-instructions and error messages as well.  See "french.h" for an
+instructions and error messages as well.  See "src/langs/french.h" for an
 example of the latter.
 
 To compile Remind for a non-english language, look at the constants
@@ -86,12 +86,13 @@ language.  If you do add another language to Remind, please let me
 know!  Here are the basic guidelines:
 
 - Your language file should be called "src/langs/lxxx.h", where lxxx
-  is the first 8
-  characters of the ENGLISH name of your language.
+  is the first 8 characters of the ENGLISH name of your language.
 
 - Your language file should define L_LANGNAME to be the full English
   name of your language, with the first letter capitalized and the rest
   lower-case.
+
+- You can test your language file with the script "tests/tstlang.rem"
 
 RELEASE NOTES -- miscellaneous info that couldn't go anywhere else!
 

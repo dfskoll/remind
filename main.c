@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.8 1997-07-13 16:18:49 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.9 1997-09-07 19:19:11 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -1264,20 +1264,14 @@ int jul, tim, *mins, *isdst;
     temp = localtime(&loc_t);
     /* Compute difference between local time and UTC in seconds.
        Be careful, since time_t might be unsigned. */
-#ifdef HAVE_MKTIME
-    /* If we have mktime(), then we have difftime(), so use it! */
-    tdiff = (int) difftime(loc_t, utc_t);
-    if (mins) *mins = (int)(((temp->tm_isdst) ? 60 : 0) + tdiff / 60 );
-#else
-    /* If we don't have mktime(), we probably don't have difftime(),
-       so use this rather non-portable code. */
+
+    /* I would love to use difftime(), but SunOS doesn't have it. */
     if (loc_t < utc_t) {
 	tdiff = - (int) (utc_t - loc_t);
     } else {
 	tdiff = (int) (loc_t - utc_t);
     }
     if (mins) *mins = (int)(tdiff / 60);
-#endif
     if (isdst) *isdst = temp->tm_isdst;
     return 0;
 }

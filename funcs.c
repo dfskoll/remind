@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: funcs.c,v 1.1 1996-03-27 03:25:56 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.2 1996-03-30 04:00:29 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -1719,7 +1719,7 @@ static int FHebdate()
 	if (adarbehave > 2) return E_2HIGH;
     } else adarbehave = 0;
 
-    if (Nargs == 4) {
+    if (Nargs >= 4) {
 	if (ARG(3).type != INT_TYPE) return E_BAD_TYPE;
 	jahr = ARG(3).v.val;
 	if (jahr < 0) return E_2LOW;

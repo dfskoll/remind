@@ -1,7 +1,5 @@
 # Test file for REMIND
 #
-# $Id: test.cmp,v 1.1 1996-03-27 03:26:11 dfs Exp $
-#
 # Use this file to test the date calculation routines
 # of the REMIND program by typing:
 #

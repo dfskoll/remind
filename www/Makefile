@@ -2,20 +2,25 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: Makefile,v 1.3 1997-01-16 04:31:11 dfs Exp $
+# $Id: Makefile,v 1.4 1997-01-19 03:59:55 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
-WWWHOST = www.skoll.ca
+WWWHOST = shevy.skoll.ca
 # WWWHOST = www.mycompany.com
  
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.
-SCRIPTDIR = /var/lib/httpd/cgi-bin
+SCRIPTDIR = /var/web/cgi-bin
 # SCRIPTDIR = /home/dfs/Remind/www/TEST
 
 # Where the scripts live as seen from the outside world.  If
 # they live in WWWHOST/cgi-bin, supply /cgi-bin
 CGIDIR = /cgi-bin
+
+# The complete path to the HTML file "calendar.html".  This is a sample
+# file containing links to all the scripts.  This path should be the
+# path as seen by the UNIX operating system
+HTMLDIR = /home/dfs/public_html
 
 # Location.  Typically, the name of your city or town.  Example: Ottawa
 LOCATION = Ottawa
@@ -42,15 +47,17 @@ all:
 # OK, it's abominable.  But it works...
 install:
 	cp calps hebdate hebps moon sunrise sunset $(SCRIPTDIR)
-	sed $(SEDSCRIPT) < cal_dispatch-DIST > $(SCRIPTDIR)/cal_dispatch
-	sed $(SEDSCRIPT) < hebdate.rem-DIST  > $(SCRIPTDIR)/hebdate.rem
-	sed $(SEDSCRIPT) < moon.rem-DIST     > $(SCRIPTDIR)/moon.rem
-	sed $(SEDSCRIPT) < sunrise.rem-DIST  > $(SCRIPTDIR)/sunrise.rem
-	sed $(SEDSCRIPT) < sunset.rem-DIST   > $(SCRIPTDIR)/sunset.rem
+	sed $(SEDSCRIPT) < cal_dispatch-DIST  > $(SCRIPTDIR)/cal_dispatch
+	sed $(SEDSCRIPT) < hebdate.rem-DIST   > $(SCRIPTDIR)/hebdate.rem
+	sed $(SEDSCRIPT) < moon.rem-DIST      > $(SCRIPTDIR)/moon.rem
+	sed $(SEDSCRIPT) < sunrise.rem-DIST   > $(SCRIPTDIR)/sunrise.rem
+	sed $(SEDSCRIPT) < sunset.rem-DIST    > $(SCRIPTDIR)/sunset.rem
+	sed $(SEDSCRIPT) < calendar.html-DIST > $(HTMLDIR)/calendar.html
 	chmod 644 $(SCRIPTDIR)/sunrise.rem
 	chmod 644 $(SCRIPTDIR)/moon.rem
 	chmod 644 $(SCRIPTDIR)/hebdate.rem
 	chmod 644 $(SCRIPTDIR)/sunset.rem
+	chmod 644 $(HTMLDIR)/calendar.html
 	chmod 755 $(SCRIPTDIR)/cal_dispatch
 	chmod 755 $(SCRIPTDIR)/calps $(SCRIPTDIR)/hebdate \
 	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \

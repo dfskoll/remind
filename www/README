@@ -1,5 +1,5 @@
 README
-$Id: README,v 1.2 1997-01-16 04:05:31 dfs Exp $
+$Id: README,v 1.3 1997-01-19 03:59:55 dfs Exp $
 
 HTML Hebrew Calendar Server
 
@@ -34,6 +34,10 @@ where "what" is one of:
 	hebps   -- get a PostScript calendar with Jewish holidays.
 
    (Visit http://www.doe.carleton.ca/~dfs/ for previews.)
+
+   All of these links will be set up in a sample HTML document
+   called "calendar.html" and installed in the HTMLDIR you specified
+   in the Makefile.
 
 4) Enjoy!
 

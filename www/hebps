@@ -4,11 +4,13 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: hebps,v 1.1 1997-01-16 04:00:27 dfs Exp $
+# $Id: hebps,v 1.2 1997-01-19 03:59:56 dfs Exp $
 
 # Figure out the month:  If day <= 20, use this month; otherwise, use
 # next month.
 echo "Content-type: application/postscript"
+echo ""
+
 $REMIND - <<EOR
 BANNER %
 REM 20 ++40 RUN $REMIND -p $DIR/hebdate.rem %m %y | $REM2PS -e -c3

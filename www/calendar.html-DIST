@@ -1,0 +1,27 @@
+<HTML>
+<! Sample HTML file with links to the calendar stuff >
+<! $Id: calendar.html-DIST,v 1.1 1997-01-19 03:59:56 dfs Exp $ >
+<HEAD>
+<TITLE>David Skoll's Calendar Server</TITLE>
+</HEAD>
+
+<BODY>
+<H1>David Skoll's Calendar Server</H1>
+
+<a HREF="http://your.machine/your.dir/cal_dispatch?sunrise">
+Sunrise Information</a><P>
+<a HREF="http://your.machine/your.dir/cal_dispatch?sunset">
+Sunset Information</a><P>
+<a HREF="http://your.machine/your.dir/cal_dispatch?moon">
+Moon Phase Information</a><P>
+<a HREF="http://your.machine/your.dir/cal_dispatch?calps">
+Blank PostScript Calendar</a> (Approximately 20kB)<P>
+<a HREF="http://your.machine/your.dir/cal_dispatch?hebdate">
+Today's Hebrew Date</a><P>
+<a HREF="http://your.machine/your.dir/cal_dispatch?hebps">
+PostScript Calendar with Jewish Holidays</a> (Approximately 35 kB)<P>
+<HR>
+<a HREF="ftp://ftp.doe.carleton.ca/pub/remind-3.0">
+Get the Remind software</a> that provides this service.<P>
+
+</BODY>

@@ -4,9 +4,10 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: hebdate,v 1.1 1997-01-16 04:00:27 dfs Exp $
+# $Id: hebdate,v 1.2 1997-01-19 03:59:56 dfs Exp $
 
 echo Content-type: text/html
+echo ""
 
 cat <<EOM
 <HTML>

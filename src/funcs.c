@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.7 1999-04-05 17:34:49 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.8 2000-02-18 03:08:18 dfs Exp $";
 
 #include <stdio.h>
 
@@ -115,8 +115,10 @@ PRIVATE int	FPsshade	ARGS ((void));
 PRIVATE	int	FShell		ARGS ((void));
 PRIVATE	int	FStrlen		ARGS ((void));
 PRIVATE	int	FSubstr		ARGS ((void));
-PRIVATE	int	FSunrise	ARGS ((void));
+PRIVATE	int	FDawn		ARGS ((void));
+PRIVATE	int	FDusk	 	ARGS ((void));
 PRIVATE	int	FSunset		ARGS ((void));
+PRIVATE	int	FSunrise	ARGS ((void));
 PRIVATE	int	FTime		ARGS ((void));
 PRIVATE	int	FTrigdate	ARGS ((void));
 PRIVATE	int	FTrigtime	ARGS ((void));
@@ -210,10 +212,12 @@ Operator Func[] = {
     {   "choose",	2,	NO_MAX, FChoose },
     {   "coerce",	2,	2,	FCoerce },
     {   "date",		3,	3,	FDate	},
+    {   "dawn",		0,	1,	FDawn},
     {   "day",		1,	1,	FDay	},
     {   "daysinmon",	2,	2,	FDaysinmon },
     {   "defined",	1,	1,	FDefined },
     {   "dosubst",	1,	3,	FDosubst },
+    {   "dusk",		0,	1,	FDusk },
     {   "easterdate",	1,	1,	FEasterdate },
     {	"filedate",	1,	1,	FFiledate },
     {	"filedir",	0,	0,	FFiledir },
@@ -2014,6 +2018,7 @@ int jul;
     int year, mon, day;
     int jan0;
     int mins, hours;
+	int dusk_or_dawn;
 
     double M, L, tanA, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
@@ -2037,6 +2042,9 @@ int jul;
     FromJulian(jul, &year, &mon, &day);
     jan0 = jul - Julian(year, 0, 1);
 
+	dusk_or_dawn = rise;
+	if (rise > 1)
+		rise -= 2;
 /* Following formula on page B6 exactly... */
     t = (double) jan0;
     if (rise) t += (6.0 + longdeg/15.0) / 24.0;
@@ -2047,6 +2055,13 @@ int jul;
 
 /* Sun's true longitude */
     L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 282.565;
+	if (dusk_or_dawn == 2) // dusk
+	{
+		L += 6;
+	} else if (dusk_or_dawn == 3) // dawn
+	{
+		L -= 14;
+	}
     if (L > 360.0) L -= 360.0;
 
 /* Tan of sun's right ascension */
@@ -2165,6 +2180,23 @@ static int FSunset()
 #endif
 {
     return FSun(0);
+}
+
+#ifdef HAVE_PROTOS
+PRIVATE int FDawn(void)
+#else
+static int FDawn()
+#endif
+{
+    return FSun(3);
+}
+#ifdef HAVE_PROTOS
+PRIVATE int FDusk(void)
+#else
+static int FDusk()
+#endif
+{
+    return FSun(2);
 }
 
 /***************************************************************/

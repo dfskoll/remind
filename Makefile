@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.7 1996-05-25 19:36:49 dfs Exp $
+# $Id: Makefile,v 1.8 1996-05-26 03:08:32 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -135,7 +135,7 @@ tgz:
 	mv remind-3.0.14.tar.gz remind-3.0.14.tgz
 
 shar:
-	shar -x -n"Remind $(VERSION)" -l45 -o./Shar $(MANIFEST)
+	shar -o./Shar -sdfs@doe.carleton.ca -a -c -n"Remind $(VERSION)" -m -L45 -o./Shar $(MANIFEST)
 
 backup:
 	tar cvzf ../rbackup.tgz $(MANIFEST)

@@ -1,5 +1,12 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 22
+
++ BUG FIXES
+
+- Fixed packing order in TkRemind so resizing window doesn't make control
+  buttons disappear.
+
 * Version 3.0 Patch 21
 
 + MINOR ENHANCEMENTS

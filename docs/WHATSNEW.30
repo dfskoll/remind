@@ -7,6 +7,8 @@ CHANGES TO REMIND
 - Fixed dates for Yom Hazikaron and Yom Ha'atzmaut if 5 Iyar falls on a
   Saturday.  (Hebrew calendar fix.)
 
+- Added support for the Icelandic language, courtesy of Björn Davíðsson.
+
 * Version 3.0 Patch 22
 
 + MINOR ENHANCEMENTS

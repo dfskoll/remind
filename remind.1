@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.6 1996-12-10 02:36:34 dfs Exp $
+.\" $Id: remind.1,v 1.7 1996-12-18 00:20:47 dfs Exp $
 .TH REMIND 1 "27 April 1996"
 .UC 4
 .SH NAME
@@ -2157,13 +2157,14 @@ of \fIstr\fR.
 Returns a \fBTIME\fR indicating the time of sunrise on the specified
 \fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
 may be no sunrise on a particular day, in which case \fBsunrise()\fR
-returns the \fBINT\fR 0.
+returns the \fBINT\fR 0 if the sun never sets, or 1440 if it never rises.
 .TP
 .B sunset([d_date])
 Returns a \fBTIME\fR indicating the time of sunset on the specified
 \fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
 may be no sunset on a particular day, in which case \fBsunset()\fR
-returns the \fBINT\fR 0.
+returns the \fBINT\fR 0 if the sun never rises, or 1440 if it never
+sets.
 .RS
 .PP
 The functions \fBsunrise()\fR and \fBsunset()\fR are based on

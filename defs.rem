@@ -22,7 +22,7 @@
 #############################################################################
 
 #
-# $Id: defs.rem,v 1.1 1996-03-27 03:25:51 dfs Exp $
+# $Id: defs.rem,v 1.2 1996-12-18 00:20:44 dfs Exp $
 #
 
 RUN OFF
@@ -159,6 +159,14 @@ FSET _am_pm(tm)	IIF(tm<01:00, tm+12*60+"am", \
 #################################################################
 
 FSET _no_lz(s) IIF(SUBSTR(s, 1, 1)=="0", SUBSTR(s, 2), s)
+
+#################################################################
+# Return the length of the daylight/night portion of a date,    #
+# in minutes.                                                   #
+#################################################################
+
+FSET _light_len(date) MAX(SUNSET(date)-SUNRISE(date), 0)
+FSET _dark_len(date) 1440-_light_len(date)
 
 ############################################################
 # Function to calculate number of years since a given year #

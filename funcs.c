@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: funcs.c,v 1.4 1996-10-06 21:03:49 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.5 1996-12-18 00:20:45 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -2030,7 +2030,14 @@ int jul;
 /* Cosine of sun's local hour angle */
     cosH = (cosz - sinDelta * sin(latitude)) / (cosDelta * cos(latitude));
 
-    if (cosH > 1.0 || cosH < -1.0) return NO_TIME;
+    if (cosH < -1.0) { /* Summer -- permanent daylight */
+	if (rise) return NO_TIME;
+	else      return -NO_TIME;
+    }
+    if (cosH > 1.0) { /* Winter -- permanent darkness */
+	if (rise) return -NO_TIME;
+	else      return NO_TIME;
+    }
 
     H = RADDEG * acos(cosH);
     if (rise) H = 360.0 - H;
@@ -2049,6 +2056,15 @@ int jul;
     hours = (int) local;
     mins = (int) ((local - hours) * 60.0);
 
+    /* Sometimes, we get roundoff error.  Check for "reasonableness" of
+       answer. */
+    if (rise) {
+	/* Sunrise so close to midnight it wrapped around -- permament light */
+	if (hours >= 23) return NO_TIME;
+    } else {
+	/* Sunset so close to midnight it wrapped around -- permament light */
+	if (hours <= 1) return -NO_TIME;
+    }
     return hours*60 + mins;
 }
 
@@ -2076,6 +2092,9 @@ int rise;
     r = SunStuff(rise, cosz, jul);
     if (r == NO_TIME) {
 	RetVal.v.val = 0;
+	RetVal.type = INT_TYPE;
+    } else if (r == -NO_TIME) {
+	RetVal.v.val = 1440;
 	RetVal.type = INT_TYPE;
     } else {
 	RetVal.v.val = r;

@@ -6,6 +6,21 @@ CHANGES TO REMIND
 
 - Added support for the Romanian language, courtesy of Liviu Daia
 
+- Changed sunrise() and sunset() as follows:  If the sun never rises,
+  sunrise() returns 1440 and sunset() returns 0.  In this case,
+  sunrise()-sunset() returns the length of the dark period of the
+  day, in minutes.  If the sun never sets, sunrise() returns 0 and
+  sunset() returns 1440, and sunset()-sunrise() returns the length
+  of the light period of the day, in minutes.  Thanks to Michael Salmon
+  for explaining the utility of this.  See the file "defs.rem" for the
+  functions _light_len and _dark_len which return the length in minutes
+  of the light and dark period of the day, respectively.
+
++ BUG FIXES
+
+- Fixed a problem under Solaris 2.5 whereby rem2ps was skipping some
+  latin1 characters which it interpreted as white space.
+
 * Version 3.0 Patch 15
 
 + IMPORTANT NOTES

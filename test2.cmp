@@ -1,6 +1,6 @@
 # Test file for REMIND
 #
-# $Id: test2.cmp,v 1.4 1996-09-28 18:17:10 dfs Exp $
+# $Id: test2.cmp,v 1.5 1996-12-18 00:20:50 dfs Exp $
 #
 # Use this file to test the date calculation routines
 # of the REMIND program by typing:
@@ -633,7 +633,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "03.00.15"
+version() => "03.00.16"
 set a059 wkday(today())
 today() => 1991/02/16
 wkday(1991/02/16) => "Saturday"
@@ -774,7 +774,7 @@ dump
         a048  "foo"
         a067  "INT"
         a039  "February"
-        a058  "03.00.15"
+        a058  "03.00.16"
         a077  "1992 92
 "
         a049  21

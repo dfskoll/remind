@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.4 1996-07-07 16:35:42 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.5 1996-12-18 00:20:46 dfs Exp $";
 
 #include "config.h"
 #include "lang.h"
@@ -550,16 +550,18 @@ char *s;
     printf("  [");
 
 /* Chew up leading spaces */
-    while(isspace(*s)) s++;
+    while(isspace((unsigned char) *s)) s++;
 
     PutChar('(');
     while(*s) {
-	c = *s++;
+	/* Use the "unsigned char" cast to fix problem on Solaris 2.5 */
+        /* which treated some latin1 characters as white space.       */
+	c = (unsigned char) *s++;
 	if (c == '\\' || c == '(' || c == ')') PutChar('\\');
 	if (!isspace(c)) PutChar(c);
 	else {
 	    PutChar(')');
-	    while(isspace(*s)) s++;
+	    while(isspace((unsigned char)*s)) s++;
 	    if (!*s) {
 		printf("]\n");
 		return;

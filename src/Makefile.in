@@ -1,8 +1,8 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.15 2000-02-18 03:48:53 dfs Exp $
+# $Id: Makefile.in,v 1.16 2000-03-15 16:03:39 dfs Exp $
 
-VERSION= 03.00.21
+VERSION=03.00.21
 SHELL= /bin/sh
 
 srcdir=@srcdir@
@@ -71,7 +71,7 @@ depend:
 # distributions, etc.
 
 # Build a tar file based on all files checked into CVS.
-tgz:
+distro:
 	ln -s .. remind-$(VERSION)
 	peekentry `find remind-$(VERSION) -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION).tar
 	gzip -v -9 remind-$(VERSION).tar

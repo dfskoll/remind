@@ -1,7 +1,17 @@
-# Makefile for REMIND for Turbo C for MSDOS
-# $Id: makefile.tc,v 1.3 1999-04-21 01:48:01 dfs Exp $
+# Makefile for REMIND for Borland C++
+# $Id: makefile.bcc,v 1.1 2000-03-15 16:03:57 dfs Exp $
 
-CC= tcc
+MODEL=l
+
+!if $d(__OS2__)
+CFLAGS= -DOS2_POPUP -w-pia -O2
+BINDIR= ..\OS2-EX
+DELFLAG= /f
+!else
+CFLAGS= -w-pia -O2 -m$(MODEL)
+BINDIR= ..\MSDOS-EX
+DELFLAG=
+!endif
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
 lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \
@@ -13,22 +23,36 @@ LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h danish.h \
 polish.h
 
 SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c init.c \
-moon.c main.c omit.c sort.c token.c trigger.c userfns.c utils.c var.c hbcal.c
+main.c omit.c sort.c token.c trigger.c userfns.c utils.c var.c hbcal.c \
+queue.c moon.c os2func.c
 
 OBJS=calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
 globals.obj init.obj main.obj omit.obj sort.obj token.obj trigger.obj \
-utils.obj userfns.obj var.obj hbcal.obj
+utils.obj userfns.obj var.obj hbcal.obj queue.obj moon.obj os2func.obj
 
-all: remind.exe rem2ps.exe
+all: exes test-rem.cmd test-rem.bat
+	test-rem
 
-remind.exe: $(OBJS)
-	$(CC) @lnk.tc
+clean:
+	-del $(DELFLAG) *.obj
+	-del $(DELFLAG) $(BINDIR)\*.exe
 
-rem2ps.exe: rem2ps.obj
-	$(CC) -erem2ps.exe rem2ps.obj
+exes: $(BINDIR)\remind.exe $(BINDIR)\rem2ps.exe
+
+..\os2-ex\remind.exe: $(OBJS)
+	bcc -e..\os2-ex\remind @lnk.bcc -lap;Toe
+
+..\msdos-ex\remind.exe: $(OBJS)
+	bcc -e..\msdos-ex\remind -m$(MODEL) @lnk.bcc
+
+..\os2-ex\rem2ps.exe: rem2ps.obj
+	bcc -e..\os2-ex\rem2ps rem2ps.obj -lap;Toe
+
+..\msdos-ex\rem2ps.exe: rem2ps.obj
+	bcc -e..\msdos-ex\rem2ps -m$(MODEL) rem2ps.obj
 
 .c.obj:
-	$(CC) -w-pia -c -O -mm {$< }
+	bcc $(CFLAGS) -c {$< }
 
 rem2ps.obj: rem2ps.c rem2ps.h config.h lang.h
 
@@ -53,6 +77,10 @@ main.obj: main.c $(STDHDRS) expr.h
 moon.obj: moon.c $(STDHDRS) expr.h
 
 omit.obj: omit.c $(STDHDRS)
+
+os2func.obj: os2func.c $(STDHDRS)
+
+queue.obj: queue.c $(STDHDRS)
 
 sort.obj: sort.c $(STDHDRS)
 

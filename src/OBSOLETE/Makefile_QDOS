@@ -1,4 +1,4 @@
-#$Id: Makefile_QDOS,v 1.3 1999-04-21 01:47:59 dfs Exp $
+#$Id: Makefile_QDOS,v 1.1 2000-03-15 16:03:57 dfs Exp $
 # Makefile for REMIND for QDOS / SMSQ
 
 #-----------------------------------------------------------------------------

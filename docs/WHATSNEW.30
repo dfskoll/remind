@@ -22,6 +22,10 @@ CHANGES TO REMIND
 
 + BUG FIXES
 
+- Files for no-longer-supported platforms (OS/2, amiga, MS-DOS) have been
+  moved to OBSOLETE subdirectory.  They will disappear unless someone
+  wants to maintain them.
+
 - Fixed typo which caused compilation failure on compilers without function
   prototypes.  Thanks to Ian Darwin for the patch.
 

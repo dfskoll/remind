@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.4 1998-02-16 02:35:00 dfs Exp $
+# $Id: build.tk,v 1.5 1998-03-01 20:42:54 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -35,8 +35,10 @@ proc SetConfigDefaults {} {
     set Config(DEFAULT_PAGE) "Letter"
     set Config(DATESEP) "/"
     set Config(TIMESEP) ":"
-    set Config(ISOLATIN1) 1
+    set Config(ISOLATIN1) 0
     set Config(IBMEXTENDED) 0
+    set Config(ISOLATIN2) 0
+    set Config(IBM852) 0
     set Config(NORTHERN_HEMISPHERE) 1
     set Config(WESTERN_HEMISPHERE) 1
     set Config(LANGUAGE) "English"
@@ -233,7 +235,9 @@ proc CreateOptionsDialog { w } {
 	    -menu $w.char.menu
     menu $w.char.menu -tearoff 0
     $w.char.menu add command -label "ISO 8859-1" -command "$w.char configure -text {ISO 8859-1}"
+    $w.char.menu add command -label "ISO 8859-2" -command "$w.char configure -text {ISO 8859-2}"
     $w.char.menu add command -label "IBM Extended" -command "$w.char configure -text {IBM Extended}"
+    $w.char.menu add command -label "IBM CPI-852" -command "$w.char configure -text {ISO 8859-2}"
     $w.char.menu add command -label "Plain ASCII" -command "$w.char configure -text {Plain ASCII}"
 
     grid configure $w.charlabel -row 3 -column 0 -sticky e
@@ -440,15 +444,15 @@ proc CreateCustomH {} {
     switch -- [$Options.char cget -text] {
 	"ISO 8859-1" {
 	    set Config(ISOLATIN1) 1
-	    set Config(IBMEXTENDED) 0
+	}
+	"ISO 8859-2" {
+	    set Config(ISOLATIN2) 1
+	}
+	"IBM CPI-852" {
+	    set Config(IBM852) 1
 	}
 	"IBM Extended" {
-	    set Config(ISOLATIN1) 0
 	    set Config(IBMEXTENDED) 1
-	}
-	default {
-	    set Config(ISOLATIN1) 0
-	    set Config(IBMEXTENDED) 0
 	}
     }
 
@@ -489,6 +493,14 @@ proc CreateCustomH {} {
 	    "#define ISOLATIN1 *" {
 		puts $out "#define ISOLATIN1 $Config(ISOLATIN1)"
 		.msgs insert end "#define ISOLATIN1 $Config(ISOLATIN1)\n"
+	    }
+	    "#define ISOLATIN2 *" {
+		puts $out "#define ISOLATIN2 $Config(ISOLATIN2)"
+		.msgs insert end "#define ISOLATIN2 $Config(ISOLATIN2)\n"
+	    }
+	    "#define IBM852 *" {
+		puts $out "#define IBM852 $Config(IBM852)"
+		.msgs insert end "#define IBM852 $Config(IBM852)\n"
 	    }
 	    "#define IBMEXTENDED *" {
 		puts $out "#define IBMEXTENDED $Config(IBMEXTENDED)"

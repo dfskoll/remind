@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.7 1996-12-18 00:20:47 dfs Exp $
-.TH REMIND 1 "27 April 1996"
+.\" $Id: remind.1,v 1.8 1997-07-30 01:30:57 dfs Exp $
+.TH REMIND 1 "29 July 1997"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -15,6 +15,8 @@ If \fIfilename\fR is specified as a single dash '-', then \fBRemind\fR
 takes its input from standard input.  This also implicitly enables
 the \fB\-o\fR option, described below.
 .SH OPTIONS
+\fBRemind\fR has a slew of options.  If you're new to the program,
+ignore them for now and skip to the section "Reminder Files".
 .TP
 .B \-n
 The \fB\-n\fR option causes \fBRemind\fR to print the \fBnext\fR occurrence
@@ -179,7 +181,9 @@ The option changes the uid and gid as described, and sets the
 environment variables HOME, SHELL and USER to the home directory, shell,
 and user name, respectively, of the specified user.  LOGNAME is also
 set to the specified user name.  This option is meant for
-use in shell scripts which mail reminders to all users.
+use in shell scripts which mail reminders to all users.  Note that
+as of Remind 3.0.17, using \fB\-u\fR implies \fB\-r\fR -- the RUN
+directive and shell() functions are disabled.
 .PP
 .RS
 Non-root users can also use the \fB\-u\fR option.  However, in this

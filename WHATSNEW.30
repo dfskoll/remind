@@ -16,7 +16,12 @@ CHANGES TO REMIND
 + BUG FIXES
 
 - Increased sizes of some statically-allocated buffers.  This doesn't
-  really fix the problem, but makes it more manageable.
+  really fix the problem, but makes it more manageable.  Because of
+  the risk of statically-allocated buffers, REMIND now refuses to
+  run if it is installed set-uid or set-gid.
+
+- Using the "-u" option now implies the "-r" option.  This is a
+  security feature.
 
 - Added romanian.h to the manifest.  Sorry.
 

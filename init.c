@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.5 1997-03-30 19:07:40 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.6 1997-07-30 01:30:56 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -111,6 +111,15 @@ char *argv[];
     int i;
     int y, m, d, rep;
     Token tok;
+
+    /* Make sure remind is not installed set-uid or set-gid */
+#ifdef UNIX
+    if (getgid() != getegid() ||
+	getuid() != geteuid()) {
+	fprintf(ErrFp, "\nRemind should not be installed set-uid or set-gid.\nCHECK YOUR SYSTEM SECURITY.\n");
+	exit(1);
+    }
+#endif
 
     y = NO_YR;
     m = NO_MON;
@@ -225,6 +234,7 @@ char *argv[];
 	    case 'u':
 	    case 'U':
 		ChgUser(arg);
+		RunDisabled = 1;
 		while (*arg) arg++;
 		break;
 #endif	       

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.8 2000-02-18 03:45:52 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.9 2004-09-04 03:17:09 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -186,11 +186,11 @@ char **in;
 {
 
     char c;
-   
+
     DBufFree(buf);
 /* Skip white space */
     while (**in && isspace(**in)) (*in)++;
-   
+
     if (!**in) return OK;
 
     c = *(*in)++;
@@ -221,7 +221,7 @@ char **in;
 	    (*in)++;
 	}
 	return OK;
-      	   
+
     case '!':
     case '>':
     case '<':
@@ -265,6 +265,7 @@ char **in;
 	}
 	if (c == '\'') return OK;
 	DBufFree(buf);
+	return E_MISS_QUOTE;
     }
 
     if (!ISID(c) && c != '$') {
@@ -345,10 +346,10 @@ Var *locals;
     Operator op, op2;
     Value va;
     char *ufname = NULL; /* Stop GCC from complaining about use of uninit var */
-   
+
     OpBase = OpStackPtr;
     ValBase = ValStackPtr;
-   
+
     while(1) {
 /* Looking for a value.  Accept: value, unary op, func. call or left paren */
 	r = ParseExprToken(&ExprBuf, s);
@@ -487,7 +488,7 @@ Var *locals;
 	PushOpStack(*f);
     }
 }
-   
+
 /***************************************************************/
 /*                                                             */
 /*  MakeValue                                                  */
@@ -555,7 +556,7 @@ Var *locals;
 	if (DebugFlag & DB_PRTEXPR)
 	    fprintf(ErrFp, "%s => ", s);
 	r = GetSysVar(s+1, v);
-   
+
 	if (! (DebugFlag & DB_PRTEXPR)) return r;
 	if (r == OK) {
 	    PrintValue(v, ErrFp);
@@ -568,7 +569,7 @@ Var *locals;
     r = GetVarValue(s, v, locals);
     if (! (DebugFlag & DB_PRTEXPR)) return r;
     if (r == OK) {
-        PrintValue(v, ErrFp);
+	PrintValue(v, ErrFp);
 	Putc('\n', ErrFp);
     }
     return r;
@@ -589,15 +590,15 @@ Value *v;
 {
     int h, d, m, y, i;
     char *s;
-   
+
     /* Do nothing if value is already the right type */
     if (type == v->type) return OK;
-   
+
     switch(type) {
     case STR_TYPE:
 	switch(v->type) {
 	case INT_TYPE: sprintf(CoerceBuf, "%d", v->v.val); break;
-	case TIM_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60, 
+	case TIM_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60,
 			       TIMESEP, v->v.val % 60);
 	break;
 	case DATE_TYPE: FromJulian(v->v.val, &y, &m, &d);
@@ -718,13 +719,13 @@ static int Add()
 {
     Value v1, v2, v3;
     int r;
-   
+
     PopValStack(v2);
     if ( (r = FnPopValStack(&v1)) ) {
 	DestroyValue(v2);
 	return r;
     }
-   
+
 /* If both are ints, just add 'em */
     if (v2.type == INT_TYPE && v1.type == INT_TYPE) {
 	v2.v.val += v1.v.val;
@@ -741,7 +742,7 @@ static int Add()
 	PushValStack(v1);
 	return OK;
     }
-   
+
 /* If it's a time plus an int, add 'em mod 1440 */
     if ((v1.type == TIM_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == TIM_TYPE)) {
@@ -750,7 +751,7 @@ static int Add()
 	v1.type = TIM_TYPE;
 	PushValStack(v1);
 	return OK;
-    }   	
+    }
 
 /* If either is a string, coerce them both to strings and concatenate */
     if (v1.type == STR_TYPE || v2.type == STR_TYPE) {
@@ -778,7 +779,7 @@ static int Add()
     /* Don't handle other types yet */
     return E_BAD_TYPE;
 }
-      
+
 /***************************************************************/
 /*                                                             */
 /*  Subtract                                                   */
@@ -794,7 +795,7 @@ static int Subtract()
 {
     Value v1, v2;
     int r;
-   
+
     PopValStack(v2);
     if ( (r = FnPopValStack(&v1)) ) {
 	DestroyValue(v2);
@@ -1147,7 +1148,7 @@ int num;
     }
     return NULL;
 }
-	
+
 /***************************************************************/
 /*                                                             */
 /*  PrintValue                                                 */
@@ -1172,9 +1173,9 @@ FILE *fp;
 	for (y=0; y<MAX_PRT_LEN && *s; y++) Putc(*s++, fp);
 	Putc('"',fp);
 	if (*s) fprintf(fp, "...");
-    }      
+    }
     else if (v->type == INT_TYPE) fprintf(fp, "%d", v->v.val);
-    else if (v->type == TIM_TYPE) fprintf(fp, "%02d%c%02d", v->v.val / 60, 
+    else if (v->type == TIM_TYPE) fprintf(fp, "%02d%c%02d", v->v.val / 60,
 					  TIMESEP, v->v.val % 60);
     else if (v->type == DATE_TYPE) {
 	FromJulian(v->v.val, &y, &m, &d);
@@ -1248,7 +1249,7 @@ int *jul;
 	d += *(*s)++ - '0';
     }
     if (!DateOK(y, m, d)) return E_BAD_DATE;
-   
+
     *jul = Julian(y, m, d);
 
     return OK;
@@ -1277,4 +1278,3 @@ Value *val;
 	return OK;
     }
 }
-

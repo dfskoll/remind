@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: dutch.h,v 1.1 1998-01-15 02:50:44 dfs Exp $ */
+/* $Id: dutch.h,v 1.2 1998-02-02 02:58:20 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Dutch"
@@ -28,9 +28,6 @@
 #define L_THURSDAY "donderdag"
 #define L_FRIDAY "vrijdag"
 #define L_SATURDAY "zaterdag"
-
-/* Day initials - first letter only */
-#define L_DAYINIT "zmdwdvz"
 
 /* Month names */
 #define L_JAN "januari"

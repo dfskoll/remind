@@ -13,7 +13,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.2 1998-01-17 22:10:01 dfs Exp $ */
+/* $Id: polish.h,v 1.3 1998-02-02 02:58:22 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
@@ -35,13 +35,6 @@
 #  define L_THURSDAY "Czwartek"
 #  define L_FRIDAY "Piatek"
 #  define L_SATURDAY "Sobota"
-#endif
-
-/* Day initials - first letter only */
-#if ISOLATIN1
-#define L_DAYINIT "NPW\246CPS"
-#else
-#define L_DAYINIT "NPWSCPS"
 #endif
 
 /* Month names */

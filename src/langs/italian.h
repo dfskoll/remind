@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: italian.h,v 1.2 1998-01-17 22:10:00 dfs Exp $ */
+/* $Id: italian.h,v 1.3 1998-02-02 02:58:22 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Italian"
@@ -34,10 +34,6 @@
 #define L_FRIDAY "Venerdi`"
 #define L_SATURDAY "Sabato"
 #endif /* ISOLATIN */
-
-
-/* Day initials - first letter only */
-#define L_DAYINIT "DLMMGVS"
 
 /* Month names */
 #define L_JAN "Gennaio"

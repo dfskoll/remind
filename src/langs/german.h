@@ -13,7 +13,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: german.h,v 1.2 1998-01-17 22:10:00 dfs Exp $ */
+/* $Id: german.h,v 1.3 1998-02-02 02:58:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "German"
@@ -26,9 +26,6 @@
 #define L_THURSDAY "Donnerstag"
 #define L_FRIDAY "Freitag"
 #define L_SATURDAY "Samstag"
-
-/* Day initials - first letter only */
-#define L_DAYINIT "SMDMDFS"
 
 /* Month names */
 #define L_JAN "Januar"

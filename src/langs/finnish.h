@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.2 1998-01-17 22:09:59 dfs Exp $ */
+/* $Id: finnish.h,v 1.3 1998-02-02 02:58:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -28,9 +28,6 @@
 #define L_THURSDAY "torstai"
 #define L_FRIDAY "perjantai"
 #define L_SATURDAY "lauantai"
-
-/* Day initials - first letter only */
-#define L_DAYINIT "SMTKTPL"
 
 /* Month names */
 #define L_JAN "tammikuu"

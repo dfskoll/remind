@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: english.h,v 1.1 1998-01-15 02:50:45 dfs Exp $ */
+/* $Id: english.h,v 1.2 1998-02-02 02:58:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "English"
@@ -22,9 +22,6 @@
 #define L_THURSDAY "Thursday"
 #define L_FRIDAY "Friday"
 #define L_SATURDAY "Saturday"
-
-/* Day initials - first letter only */
-#define L_DAYINIT "SMTWTFS"
 
 /* Month names */
 #define L_JAN "January"

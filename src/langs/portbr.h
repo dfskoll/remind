@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.1 1998-01-15 02:50:47 dfs Exp $ */
+/* $Id: portbr.h,v 1.2 1998-02-02 02:58:22 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -27,9 +27,6 @@
 #define L_THURSDAY "quinta"
 #define L_FRIDAY "sexta"
 #define L_SATURDAY "sabado"
-
-/* Day initials - first letter only */
-#define L_DAYINIT "dstqqss"
 
 /* Month names */
 #define L_JAN "janeiro"

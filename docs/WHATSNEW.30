@@ -25,7 +25,7 @@ CHANGES TO REMIND
 - Fixed typo which caused compilation failure on compilers without function
   prototypes.  Thanks to Ian Darwin for the patch.
 
-- Fixed compilation problem on FreeBSD.
+- Fixed compilation problem on FreeBSD, IRIX, Tru64 and other UNIXes.
 
 * Version 3.0 Patch 20
 

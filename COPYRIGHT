@@ -1,4 +1,4 @@
-$Id: COPYRIGHT,v 1.2 1996-05-25 18:14:49 dfs Exp $
+$Id: COPYRIGHT,v 1.3 1996-10-12 03:11:05 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
@@ -7,16 +7,19 @@ REMIND package.
 2. REMIND is Copyright 1992-1996 by David Skoll,
 except where noted in individual files.
 
-3. REMIND is distributed under the GNU General Public License,
-   Version 2, WITH THE FOLLOWING IMPORTANT MODIFICATIONS:
-
-   Notwithstanding any statements in the GNU General Public License:
+3. DISTRIBUTION AND USE
 
    a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95
       or NT) or any future version of Windows.  Such use constitutes
       a violation of copyright.
+
    b) REMIND may not be used by Cadabra Design Libraries Inc. or its
-      directors.  Such use constitutes a violation of copyright.
+      directors, nor by any of Cadabra's subsidiaries or their directors.
+      Such use constitutes a violation of copyright.
+
+   c) If the (a) and (b) do not hold, then REMIND may be used and
+      distributed according to the terms of the GNU General Public
+      License, Version 2, which follows:
 
 
 		    GNU GENERAL PUBLIC LICENSE

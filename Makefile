@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.19 1997-03-30 19:07:35 dfs Exp $
+# $Id: Makefile,v 1.20 1997-07-31 01:57:10 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -81,7 +81,7 @@ protos.h queue.c rem rem.1 rem2ps.1 rem2ps.c rem2ps.h remind-all.csh \
 remind-all.sh remind.1 remind.def smakefile sort.c test-rem \
 test-rem.ami test-rem.bat test-rem.cmd test-rem.rexx test.cmp test.rem \
 test1.cmp test2.cmp tkremind tkremind.1 token.c trigger.c tstlang.rem \
-types.h userfns.c utils.c var.c version.h remind.LSM portbr.h
+types.h userfns.c utils.c var.c version.h remind.LSM portbr.h romanian.h
 
 OBJS= $(SRCS:.c=.o)
 

@@ -8,4 +8,8 @@ the appropriate README file for installation on your system.
 
 Manual pages are in "man".
 
-$Id: README,v 1.1 1998-01-15 02:49:27 dfs Exp $
+One-step quick instructions for building and installing on a UNIX system:
+
+1) make install (possibly as root)
+
+$Id: README,v 1.2 1998-01-17 04:50:16 dfs Exp $

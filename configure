@@ -1804,15 +1804,3 @@ chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
-
-cat << 'EOF'
-
-*******************************************************************
-*                                                                 *
-* If all went well, you should be able to build Remind by typing: *
-*                                                                 *
-*	cd src; make                                              *
-*                                                                 *
-*******************************************************************
-
-EOF

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.in,v 1.3 1998-01-17 03:58:12 dfs Exp $
+dnl $Id: configure.in,v 1.4 1998-01-17 04:50:17 dfs Exp $
 
 AC_INIT(src/amiga.c)
 
@@ -45,15 +45,3 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(mktime putenv strstr timegm)
 
 AC_OUTPUT(src/Makefile)
-
-cat << 'EOF'
-
-*******************************************************************
-*                                                                 *
-* If all went well, you should be able to build Remind by typing: *
-*                                                                 *
-*	cd src; make                                              *
-*                                                                 *
-*******************************************************************
-
-EOF

@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.30 2000-06-26 14:43:55 dfs Exp $
+# $Id: tkremind,v 1.31 2001-05-07 14:13:15 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -1080,10 +1080,10 @@ proc CreateModifyDialog {w day firstDay args} {
     CreateDayMenu $w.timehour 1 12 0
     menubutton $w.timemin -text "00" -menu $w.timemin.menu -relief raised
     menu $w.timemin.menu -tearoff 0
-    $w.timemin.menu add command -label "00" -command "$w.timemin configure -text {00}"
-    $w.timemin.menu add command -label "15" -command "$w.timemin configure -text {15}"
-    $w.timemin.menu add command -label "30" -command "$w.timemin configure -text {30}"
-    $w.timemin.menu add command -label "45" -command "$w.timemin configure -text {45}"
+    foreach i {00 05 10 15 20 25 30 35 40 45 50 55} {
+	$w.timemin.menu add command -label $i \
+		-command "$w.timemin configure -text $i"
+    }
 
     menubutton $w.ampm -text "PM" -menu $w.ampm.menu -relief raised
     menu $w.ampm.menu -tearoff 0

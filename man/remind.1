@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.1 1998-01-15 02:50:18 dfs Exp $
-.TH REMIND 1 "31 July 1997"
+.\" $Id: remind.1,v 1.2 1998-02-02 02:57:47 dfs Exp $
+.TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -61,6 +61,8 @@ The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
 \fBrem2ps\fR program, which creates a PostScript calendar.  For this
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
+The format of the \fB\-p\fR output is described in the \fBrem2ps(1)\fR
+man page.
 .TP
 .B \-m
 The \fB\-m\fR option causes the \fB\-c\fR or \fB\-p\fR options to produce
@@ -268,8 +270,10 @@ Its syntax is:
 [\fBWARN\fR \fIwarn_function\fR]
 [\fBUNTIL\fR \fIexpiry_date\fR]
 [\fBSCANFROM\fR \fIscan_date\fR]
-\fBMSG\fR | \fBMSF\fR | \fBRUN\fR | \fBCAL\fR | \fBSATISFY\fR |
-\fBPS\fR | \fBPSFILE\fR
+[\fBDURATION\fR \fIduration\fR]
+[\fBTAG\fR \fItag\fR]
+<\fBMSG\fR | \fBMSF\fR | \fBRUN\fR | \fBCAL\fR | \fBSATISFY\fR |
+\fBSPECIAL\fR \fIspecial\fR | \fBPS\fR | \fBPSFILE\fR>
 .I body
 .RE
 .PP
@@ -283,7 +287,7 @@ such as \fBOMIT\fR or \fBRUN\fR.  The portion of the \fBREM\fR command
 before the \fBMSG\fR, \fBMSF\fR \fBRUN\fR, \fBCAL\fR or \fBSATISFY\fR clause
 is called a \fItrigger\fR.
 .PP
-.B "MSG, MSF, RUN, CAL, PS and PSFILE"
+.B "MSG, MSF, RUN, CAL, SPECIAL, PS and PSFILE"
 .PP
 These keywords denote the \fItype\fR
 of the reminder.  (\fBSATISFY\fR is more complicated and will be explained
@@ -323,6 +327,15 @@ should not use these types of reminders unless you are an expert PostScript
 programmer.  The \fBPS\fR and \fBPSFILE\fR reminders are ignored unless
 \fBRemind\fR is run with the \fB\-p\fR option.  See the section
 "More about PostScript" for more details.
+.PP
+A \fBSPECIAL\fR-type reminder is used to pass "out-of-band" information
+from \fBRemind\fR to a calendar-producing back-end.  It should be followed
+by a word indicating the type of special data being passed.  The type
+of a special reminder depends on the back-end.  For the \fBRem2PS\fR
+back-end, \fBSPECIAL PostScript\fR is equivalent to a \fBPS\fR-type
+reminder, and \fBSPECIAL PSFile\fR is equivalent to a \fBPSFILE\fR-type
+reminder.  The body of a \fBSPECIAL\fR reminder is obviously dependent
+upon the back-end.
 .PP
 .B DATE SPECIFICATIONS
 .PP

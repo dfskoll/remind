@@ -1,5 +1,18 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 20
+
++ MINOR ENHANCEMENTS
+
+- Made TkRemind adjust for really low-resolution displays if necessary.
+
+- Added Spanish language support, courtesy of Rafa Couto.
+
++ BUG FIXES
+
+- Rem2PS was passing specials like HTML, etc. in PostScript output.
+  YECH!  Fix courtesty of Derek J. Decker.
+
 * Version 3.0 Patch 19
 
 + MAJOR ENHANCEMENTS

@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.4 1997-03-30 19:07:37 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.5 1997-09-16 03:16:30 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -34,6 +34,9 @@ typedef struct cal_entry {
     char *pos;
     int time;
     int priority;
+    char tag[TAG_LEN+1];
+    char passthru[PASSTHRU_LEN+1];
+    int duration;
 } CalEntry;
 
 /* Global variables */
@@ -661,6 +664,12 @@ int col;
 	FindToken(buf, &tok);
 	if (tok.type == T_Empty || tok.type == T_Comment) return OK;
 	if (tok.type != T_RemType || tok.val == SAT_TYPE) return E_PARSE_ERR;
+	if (tok.val == PASSTHRU_TYPE) {
+	    r=ParseToken(p, buf);
+	    if (r) return r;
+	    if (!*buf) return E_EOLN;
+	    StrnCpy(trig.passthru, buf, PASSTHRU_LEN);
+	}
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
 	if (!LastTrigValid) return OK;
@@ -670,10 +679,21 @@ int col;
 	if (r) return r;
     }
 
-    if (!PsCal && (trig.typ == PS_TYPE || trig.typ == PSF_TYPE)) return OK;
+    /* Convert PS and PSF to PASSTHRU */
+    if (trig.typ == PS_TYPE) {
+	strcpy(trig.passthru, "PPPP");
+	trig.typ = PASSTHRU_TYPE;
+    } else if (trig.typ == PSF_TYPE) {
+	strcpy(trig.passthru, "FFFF");
+	trig.typ = PASSTHRU_TYPE;
+    }
+    if (!PsCal && trig.typ == PASSTHRU_TYPE) return OK;
 
     /* Remove any "at" times from PS or PSFILE reminders */
-    if (trig.typ == PS_TYPE || trig.typ == PSF_TYPE) tim.ttime = NO_TIME;
+    if (trig.typ == PASSTHRU_TYPE) {
+	tim.ttime = NO_TIME;
+	tim.duration = NO_TIME;
+    }
 
     /* If trigger date == today, add it to the current entry */   
     if (jul == JulianToday) {
@@ -682,7 +702,7 @@ int col;
 	*s = 0;
 	if (DoSimpleCalendar || tim.ttime != NO_TIME)
 	    s += strlen(SimpleTime(tim.ttime, s));
-	if (trig.typ != PS_TYPE && trig.typ != PSF_TYPE &&
+	if (trig.typ != PASSTHRU_TYPE &&
 	    UserFuncExists("calprefix")==1) {
 	    sprintf(buf, "calprefix(%d)", trig.priority);
 	    s2 = buf;
@@ -697,7 +717,7 @@ int col;
 	}
 	if ( (r=DoSubst(p, s, &trig, &tim, jul, CAL_MODE)) ) return r;
 	if (!*s) return OK;
-	if (trig.typ != PS_TYPE && trig.typ != PSF_TYPE &&
+	if (trig.typ != PASSTHRU_TYPE &&
 	    UserFuncExists("calsuffix")==1) {
 	    sprintf(buf, "calsuffix(%d)", trig.priority);
 	    s2 = buf;
@@ -719,9 +739,15 @@ int col;
 	    free(e);
 	    return E_NO_MEM;
 	}
+	StrnCpy(e->tag, trig.tag, TAG_LEN);
+	if (!e->tag[0]) {
+	    strcpy(e->tag, "*");
+	}
+	e->duration = tim.duration;
 	e->priority = trig.priority;
-	if (trig.typ == PS_TYPE || trig.typ == PSF_TYPE) {
-	    e->pos = (trig.typ == PS_TYPE) ? "P" : "F";
+	if (trig.typ == PASSTHRU_TYPE) {
+	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
+	    e->pos = e->passthru;
 	    e->time = NO_TIME;
 	    e->next = CurPs;
 	    CalPs[col] = e;
@@ -753,14 +779,34 @@ int col, jul;
 {
     CalEntry *e = CalPs[col];
     CalEntry *n;
-    int y, m, d;
+    int y, m, d, i, j;
 
-/* Do all the PostScript entries first, if any */
+/* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
     while(e) {
-	printf("%c%c%c%c%c%02d%c%02d ", *(e->pos), *(e->pos),
-	       *(e->pos), *(e->pos), DATESEP,
+	/* Print the PASSTHRU */
+	j = 0;
+	for(i=0; i<PASSTHRU_LEN; i++) {
+	    printf("%c", *(e->pos+j));
+	    if (*(e->pos+j+1)) {
+		j++;
+	    } else {
+		j=0;
+	    }
+	}
+	printf("%c%02d%c%02d ", DATESEP,
 	       m+1, DATESEP, d);
+	printf("%s ", e->tag);
+	if (e->duration != NO_TIME) {
+	    printf("%d ", e->duration);
+	} else {
+	    printf("* ");
+	}
+	if (e->time != NO_TIME) {
+	    printf("%d ", e->time);
+	} else {
+	    printf("* ");
+	}
 	printf("%s\n", e->text);
 	free(e->text);
 	n = e->next;
@@ -772,6 +818,17 @@ int col, jul;
     e = CalColumn[col];				     
     while(e) {
 	printf("%04d%c%02d%c%02d ", y, DATESEP, m+1, DATESEP, d);
+	printf("%s ", e->tag);
+	if (e->duration != NO_TIME) {
+	    printf("%d ", e->duration);
+	} else {
+	    printf("* ");
+	}
+	if (e->time != NO_TIME) {
+	    printf("%d ", e->time);
+	} else {
+	    printf("* ");
+	}
 	printf("%s\n", e->text);
 	free(e->text);
 	n = e->next;
@@ -859,8 +916,7 @@ char *out;
     switch(ScFormat) {
 
     case SC_AMPM:
-	if (tim == NO_TIME) sprintf(out, "        ");
-	else {
+	if (tim != NO_TIME) {
 	    h = tim / 60;
 	    min = tim % 60;
 	    if (h == 0) hh=12;
@@ -871,8 +927,7 @@ char *out;
 	break;
 
     case SC_MIL:
-	if (tim == NO_TIME) sprintf(out, "      ");
-	else {
+	if (tim != NO_TIME) {
 	    h = tim / 60;
 	    min = tim % 60;
 	    sprintf(out, "%02d%c%02d ", h, TIMESEP, min);

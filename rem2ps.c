@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.7 1997-03-30 19:07:45 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.8 1997-09-16 03:16:32 dfs Exp $";
 
 #include "lang.h"
 #include <stdio.h>
@@ -197,6 +197,7 @@ void DoPsCal()
     int i;
     int is_ps;
     int firstcol;
+    char *startOfBody;
 
     CalEntry *c, *d;
 
@@ -282,14 +283,37 @@ void DoPsCal()
 	    fprintf(stderr, "malloc failed - aborting.\n");
 	    exit(1);
 	}
-	is_ps = (*LineBuffer == 'F' || *LineBuffer == 'P');
 	c->next = NULL;
-	c->entry = malloc(strlen(LineBuffer+10) + 1 + is_ps);
+
+	is_ps = ((LineBuffer[0] == 'F' &&
+		  LineBuffer[1] == 'F' &&
+		  LineBuffer[2] == 'F' &&
+		  LineBuffer[3] == 'F') ||
+		 (LineBuffer[0] == 'P' &&
+		  LineBuffer[1] == 'P' &&
+		  LineBuffer[2] == 'P' &&
+		  LineBuffer[3] == 'P'));
+
+	/* Skip the tag, duration and time */
+	startOfBody = LineBuffer+10;
+	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
+	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
+
+	/* If no time, skip it */
+	if (*startOfBody == '*') {
+	    startOfBody++;
+	}
+	c->entry = malloc(strlen(startOfBody) + 1 + is_ps);
 	if (!c->entry) {
 	    fprintf(stderr, "malloc failed - aborting.\n");
 	    exit(1);
 	}
-	strcpy(c->entry+is_ps, LineBuffer+10);
+	strcpy(c->entry+is_ps, startOfBody);
 
 	if (is_ps) {
 /* Save the 'P' or 'F' flag */

@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.4 1997-08-31 17:03:27 dfs Exp $ */
+/* $Id: types.h,v 1.5 1997-09-16 03:16:35 dfs Exp $ */
 
 /* Values */
 typedef struct {
@@ -58,6 +58,8 @@ typedef struct {
     int priority;
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
+    char tag[TAG_LEN+1];
+    char passthru[PASSTHRU_LEN+1];
 } Trigger;
 
 /* A time trigger */
@@ -66,6 +68,7 @@ typedef struct {
     int nexttime;
     int delta;
     int rep;
+    int duration;
 } TimeTrig;
 
 /* The parse pointer */
@@ -109,6 +112,8 @@ typedef Parser *ParsePtr;  /* Pointer to parser structure */
 #define PS_TYPE  5
 #define PSF_TYPE 6
 #define MSF_TYPE 7
+#define PASSTHRU_TYPE 8
+
 
 /* DEFINES for debugging flags */
 #define DB_PRTLINE   1
@@ -138,7 +143,9 @@ enum TokTypes
   T_Flush,
   T_Priority,
   T_Sched,
-  T_Warn
+  T_Warn,
+  T_Tag,
+  T_Duration
 };
 
 /* The structure of a token */

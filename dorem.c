@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.5 1997-03-30 19:07:37 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.6 1997-09-16 03:16:31 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -77,7 +77,15 @@ ParsePtr p;
 	if (r) return r;
 	FindToken(buf, &tok);
 	if (tok.type == T_Empty || tok.type == T_Comment) return OK;
-	if (tok.type != T_RemType || tok.val == SAT_TYPE) return E_PARSE_ERR;
+	if (tok.type != T_RemType || tok.val == SAT_TYPE) {
+	    return E_PARSE_ERR;
+	}
+	if (tok.val == PASSTHRU_TYPE) {
+	    r=ParseToken(p, buf);
+	    if (r) return r;
+	    if (!*buf) return E_EOLN;
+	    StrnCpy(trig.passthru, buf, PASSTHRU_LEN);
+	}
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
 	if (!LastTrigValid) return OK;
@@ -148,9 +156,11 @@ ParsePtr p;
 	trig->priority = DefaultPrio;
 	trig->sched[0] = 0;
 	trig->warn[0] = 0;
+	trig->tag[0] = 0;
 	tim->ttime = NO_TIME;
 	tim->delta = NO_DELTA;
 	tim->rep   = NO_REP;
+	tim->duration = NO_TIME;
 
 	while(1) {
 	    /* Read space-delimited string */
@@ -194,6 +204,12 @@ ParsePtr p;
 		trig->typ = tok.val;
 		if (s->isnested) return E_CANT_NEST_RTYPE;
 		if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
+		if (trig->typ == PASSTHRU_TYPE) {
+		    r = ParseToken(s, TokBuffer);
+		    if (r) return r;
+		    if (!*TokBuffer) return E_EOLN;
+		    StrnCpy(trig->passthru, TokBuffer, PASSTHRU_LEN);
+		}
 		return OK;
 
 	    case T_Until:
@@ -244,6 +260,25 @@ ParsePtr p;
 		r=ParseToken(s, TokBuffer);
 		if(r) return r;
 		StrnCpy(trig->warn, TokBuffer, VAR_NAME_LEN);
+		break;
+
+	    case T_Tag:
+		r = ParseToken(s, TokBuffer);
+		if (r) return r;
+		StrnCpy(trig->tag, TokBuffer, TAG_LEN);
+		break;
+
+	    case T_Duration:
+		r = ParseToken(s, TokBuffer);
+		if (r) return r;
+		FindToken(TokBuffer, &tok);
+		switch(tok.type) {
+		case T_Time:
+		    tim->duration = tok.val;
+		    break;
+		default:
+		    return E_BAD_TIME;
+		}
 		break;
 
 	    case T_Sched:
@@ -500,7 +535,10 @@ ParsePtr p;
 	Value v;
 
 	if (t->typ == RUN_TYPE && RunDisabled) return E_RUN_DISABLED;
-	if (t->typ == CAL_TYPE || t->typ == PS_TYPE || t->typ == PSF_TYPE)
+	if (t->typ == PASSTHRU_TYPE ||
+	    t->typ == CAL_TYPE ||
+	    t->typ == PS_TYPE ||
+	    t->typ == PSF_TYPE)
 	    return OK;
 
 /* If it's a MSG-type reminder, and no -k option was used, issue the banner. */

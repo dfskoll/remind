@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: omit.c,v 1.4 1997-03-30 19:07:42 dfs Exp $";
+static char const RCSID[] = "$Id: omit.c,v 1.5 1997-09-16 03:16:32 dfs Exp $";
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -328,6 +328,8 @@ ParsePtr p;
 	case T_Comment:
 	case T_RemType:
 	case T_Priority:
+	case T_Tag:
+	case T_Duration:
 	    parsing = 0;
 	    break;
 

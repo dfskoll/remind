@@ -1,4 +1,4 @@
-#$Id: Makefile_QDOS,v 1.5 1997-03-30 19:07:36 dfs Exp $
+#$Id: Makefile_QDOS,v 1.6 1997-09-16 03:16:30 dfs Exp $
 # Makefile for REMIND for QDOS / SMSQ
 
 #-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ LDFLAGS= -bufp200K
 # YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
 # in config_h; then, you should be able to type 'make'.
 #-----------------------------------------------------------------------------
-VERSION= 03.00.17
+VERSION= 03.00.18
 MATHLIB= -lm
 
 HDRS= config_h err_h expr_h globals_h protos_h types_h version_h \

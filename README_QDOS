@@ -1,5 +1,5 @@
-$Id: README_QDOS,v 1.5 1997-03-30 19:07:36 dfs Exp $
-REMIND version 3.0.17 for QDOS / SMSQ
+$Id: README_QDOS,v 1.6 1997-09-16 03:16:30 dfs Exp $
+REMIND version 3.0.18 for QDOS / SMSQ
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
 in the documentation file, "remind_doc" (QUILL format).

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.20 1997-07-31 01:57:10 dfs Exp $
+# $Id: Makefile,v 1.21 1997-09-16 03:16:30 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -54,7 +54,7 @@ GROUP=bin
 # YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
 # in config.h; then, you should be able to type 'make'.
 #-----------------------------------------------------------------------------
-VERSION= 03.00.17
+VERSION= 03.00.18
 MATHLIB= -lm
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
@@ -133,9 +133,9 @@ tgz:
 	-rm -rf remind-$(VERSION)
 	-mkdir remind-$(VERSION)
 	cd remind-$(VERSION); for i in www $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
-	tar --exclude CVS -c -h -v -f remind-3.0.17.tar remind-$(VERSION)
-	gzip -v -9 remind-3.0.17.tar
-	mv remind-3.0.17.tar.gz remind-3.0.17.tgz
+	tar --exclude CVS -c -h -v -f remind-3.0.18.tar remind-$(VERSION)
+	gzip -v -9 remind-3.0.18.tar
+	mv remind-3.0.18.tar.gz remind-3.0.18.tgz
 	rm -rf remind-$(VERSION)
 
 shar:

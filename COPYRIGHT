@@ -1,22 +1,16 @@
-$Id: COPYRIGHT,v 1.10 1999-02-06 21:43:13 dfs Exp $
+$Id: COPYRIGHT,v 1.11 1999-04-05 17:34:27 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
 REMIND package.
 
-2. REMIND is Copyright 1992-1999 by David Skoll,
+2. REMIND is Copyright 1999 by Roaring Penguin Software Inc.,
 except where noted in individual files.
 
 3. DISTRIBUTION AND USE
 
-   a) REMIND may not be used under Microsoft Windows (3.0, 3.1, 95, 98, CE,
-      NT or 2000) or any future version of Windows or any other Microsoft
-      operating system.  REMIND may not be used in POSIX-like systems
-      built on Windows NT.  Such use constitutes a violation of copyright.
-
-   b) Except for situation (a), REMIND may be used and distributed
-      according to the terms of the GNU General Public License,
-      Version 2, which follows:
+      REMIND may be used and distributed according to the terms of the
+      GNU General Public License, Version 2, which follows:
 
 
 		    GNU GENERAL PUBLIC LICENSE
@@ -300,10 +294,11 @@ POSSIBILITY OF SUCH DAMAGES.
 
 		     END OF TERMS AND CONDITIONS
 --
-David F. Skoll <dfs@doe.carleton.ca> <aa775@freenet.carleton.ca>
+David F. Skoll <dskoll@iname.com>
 986 Eiffel Avenue
 Ottawa, Ontario K2C 0J2
 CANADA
 
 Tel. (613) 225-8687
+http://www.roaringpenguin.com
 

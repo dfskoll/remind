@@ -1,0 +1,17 @@
+$Id: WINDOWS,v 1.1 1999-04-05 17:34:28 dfs Exp $
+
+MICROSOFT WINDOWS
+
+I used to prohibit porting Remind to Microsoft Windows.  However, this
+may cause problems with the GPL, so I have removed that restriction.
+
+Although I cannot prevent you from porting Remind to Windows, I appeal
+to you not to do it.  I am trying to encourage the growth of free
+software, not proprietary software.
+
+If you port Remind to Windows, I will not provide support or answers to
+questions -- you're on your own.  On the other hand, I will feel no guilt
+in taking enhancements and merging them into the UNIX stream.
+
+--
+David F. Skoll.

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.12 1996-09-28 18:46:56 dfs Exp $
+# $Id: Makefile,v 1.13 1996-10-12 02:49:30 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -64,7 +64,7 @@ danish.h polish.h
 STDHDRS= config.h types.h protos.h globals.h err.h lang.h
 
 LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h danish.h \
-polish.h
+polish.h portbr.h italian.h
 
 SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c hbcal.c \
 init.c main.c moon.c omit.c sort.c queue.c token.c trigger.c userfns.c \
@@ -74,7 +74,7 @@ MANIFEST=COPYRIGHT Makefile Makefile_QDOS README.AMIGA README.BCC \
 README.DOS README.OS2 README.UNIX README_QDOS WHATSNEW.30 \
 amiga-SCOPTIONS amiga.c calendar.c config.h danish.h defs.rem dorem.c \
 dosubst.c dutch.h english.h err.h expr.c expr.h files.c finnish.h \
-french.h funcs.c german.h globals.c globals.h hbcal.c init.c kall \
+french.h funcs.c german.h globals.c globals.h hbcal.c init.c italian.h kall \
 kall.1 lang.h lnk.bcc lnk.msc lnk.tc main.c makefile.bcc makefile.msc \
 makefile.os2 makefile.tc moon.c norwgian.h omit.c os2func.c polish.h \
 protos.h queue.c rem rem.1 rem2ps.1 rem2ps.c rem2ps.h remind-all.csh \

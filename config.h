@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.4 1996-05-25 18:14:51 dfs Exp $ */
+/* $Id: config.h,v 1.5 1996-10-12 02:49:32 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -73,7 +73,7 @@
 /* ISOLATIN1: uncomment the following line if your system uses the     */
 /* ISO 8859-1 character set instead of ASCII.                          */
 /*---------------------------------------------------------------------*/
-/* #define ISOLATIN1 1 */
+#define ISOLATIN1 1
 
 /*---------------------------------------------------------------------*/
 /* IBMEXTENDED: uncomment the following line if you want to use the    */

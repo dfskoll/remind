@@ -2,6 +2,11 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 15
 
++ IMPORTANT NOTE
+
+- The tar file now unpacks into a Remind subdirectory rather than into
+  the current working directory.
+
 + MINOR ENHANCEMENTS
 
 - Changed psshade() to accept 1 or 3 arguments for colored shading in
@@ -9,10 +14,9 @@ CHANGES TO REMIND
 
 - Added a Print dialog to tkremind.
 
-- Added support for Brazilian Portuguese.
+- Added support for Brazilian Portuguese courtesy of Marco Paganini
 
-- The tar file now unpacks into a Remind subdirectory rather than into
-  the current working directory.
+- Added support for Italian courtesy of Valerio Aimale
 
 + BUG FIXES
 

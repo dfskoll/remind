@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.10 1996-09-28 19:18:26 dfs Exp $
+# $Id: tkremind,v 1.11 1996-10-12 02:49:36 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -396,8 +396,8 @@ proc DoPrint {} {
     set PrintStatus 2
     CenterWindow .p
     tkwait visibility .p
-    focus .p.filename
     set oldFocus [focus]
+    focus .p.filename
     grab .p
     tkwait variable PrintStatus
     catch {focus $oldFocus}

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dosubst.c,v 1.2 1996-04-29 19:34:36 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.3 1996-10-12 02:49:32 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include "config.h"
@@ -78,8 +78,19 @@ int jul, mode;
     adiff = ABS(tdiff);
     mdiff = adiff % 60;
     hdiff = adiff / 60;
+
+#ifdef	L_MPLU_OVER
+    L_MPLU_OVER
+#else /* L_MPLU_OVER */
     mplu = (mdiff == 1 ? "" : L_MPLU);
+#endif /* L_MPLU_OVER */
+
+#ifdef L_HPLU_OVER 
+    L_HPLU_OVER
+#else /* L_HPLU_OVER */
     hplu = (hdiff == 1 ? "" : L_HPLU);
+#endif /* L_HPLU_OVER */
+
     when = (tdiff < 0 ? L_AGO : L_FROMNOW);
    
     h = tim / 60;

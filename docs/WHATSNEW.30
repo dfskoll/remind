@@ -4,8 +4,7 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
-- Decreased the size of the GIF images in www/.  The largest moon image is
-  now 141 bytes instead of 957 bytes.
+- Changed GIF images to PNG to avoid patent problems.
 
 - Added "cm2trem.tcl" to convert from CDE's "cm" calendar manager to Remind
   format.  It handles only an older version of "cm" data; there is a utility

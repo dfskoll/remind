@@ -1,6 +1,6 @@
 /***************************************************************/
 /*                                                             */
-/*  CUSTOM.H                                                   */
+/*  CUSTOM.H.IN                                                */
 /*                                                             */
 /*  Contains various configuration parameters for Remind       */
 /*  which you can customize.                                   */
@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h.in,v 1.1 1998-01-19 03:07:18 dfs Exp $ */
+/* $Id: custom.h.in,v 1.2 1998-01-20 03:14:20 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */

@@ -12,7 +12,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.11 2004-08-09 19:48:04 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.12 2004-08-11 01:55:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -44,8 +44,16 @@ static char const RCSID[] = "$Id: rem2ps.c,v 1.11 2004-08-09 19:48:04 dfs Exp $"
 #endif
 #define NEW(type) ((type *) malloc(sizeof(type)))
 
+#define SPECIAL_NORMAL     0
+#define SPECIAL_POSTSCRIPT 1
+#define SPECIAL_PSFILE     2
+#define SPECIAL_MOON       3
+#define SPECIAL_SHADE      4
+#define SPECIAL_COLOR      5
+
 typedef struct calentry {
     struct calentry *next;
+    int special;
     char *entry;
 } CalEntry;
 
@@ -134,7 +142,7 @@ int DoQueuedPs ARGS ((void));
 void DoSmallCal ARGS((char *m, int days, int first, int col, int which));
 void WriteProlog ARGS ((void));
 void WriteCalEntry ARGS ((void));
-void WriteOneEntry ARGS ((char *s));
+void WriteOneEntry ARGS ((CalEntry *c));
 void GetSmallLocations ARGS ((void));
 char *EatToken(char *in, char *out, int maxlen);
 
@@ -281,7 +289,7 @@ void DoPsCal()
 	    fprintf(stderr, "Input from REMIND is corrupt!\n");
 	    exit(1);
 	}
-	 
+
 	DBufGets(&buf, stdin);
 	if (!strcmp(DBufValue(&buf), PSEND)) {
 	    DBufFree(&buf);
@@ -303,6 +311,7 @@ void DoPsCal()
 	    exit(1);
 	}
 	c->next = NULL;
+	c->special = SPECIAL_NORMAL;
 
 	/* Skip the tag, duration and time */
 	startOfBody = DBufValue(&buf)+10;
@@ -326,37 +335,44 @@ void DoPsCal()
 	    !strcmp(passthru, "SHADE")) {
 	    is_ps = 1;
 	}
-	c->entry = malloc(strlen(startOfBody) + 1 + is_ps);
+	c->entry = malloc(strlen(startOfBody) + 1);
 	if (!c->entry) {
 	    fprintf(stderr, "malloc failed - aborting.\n");
 	    exit(1);
 	}
-	strcpy(c->entry+is_ps, startOfBody);
+	strcpy(c->entry, startOfBody);
 
 	if (is_ps) {
-/* Save the 'P' or 'F' flag */
+	    /* Save the type of SPECIAL */
 	    if (!strcmp(passthru, "PostScript")) {
-		*(c->entry) = 'P';
+		c->special = SPECIAL_POSTSCRIPT;
 	    } else if (!strcmp(passthru, "SHADE")) {
-		*(c->entry) = 'S';
+		c->special = SPECIAL_SHADE;
 	    } else if (!strcmp(passthru, "MOON")) {
-		*(c->entry) = 'M';
+		c->special = SPECIAL_MOON;
 	    } else {
-		*(c->entry) = 'F';
+		c->special = SPECIAL_PSFILE;
 	    }
-	    if (!PsEntries[DayNum]) PsEntries[DayNum] = c;
-	    else {
+
+	    if (!PsEntries[DayNum]) {
+		PsEntries[DayNum] = c;
+	    } else {
 		d = PsEntries[DayNum];
 		while(d->next) d = d->next;
 		d->next = c;
 	    }
-	} else if (!strcmp(passthru, "*")) {
-/* Put on linked list */
-	    if (!CurEntries) CurEntries = c;
-	    else {
+	} else if (!strcmp(passthru, "*") ||
+	           !strcmp(passthru, "COLOR")) {
+	    /* Put on linked list */
+	    if (!CurEntries) {
+		CurEntries = c;
+	    } else {
 		d = CurEntries;
 		while(d->next) d = d->next;
 		d->next = c;
+	    }
+	    if (!strcmp(passthru, "COLOR")) {
+		c->special = SPECIAL_COLOR;
 	    }
 	}
     }
@@ -521,7 +537,7 @@ void WriteCalEntry()
     CurEntries = NULL;
 
     while(c) {
-	WriteOneEntry(c->entry);
+	WriteOneEntry(c);
 	free(c->entry);
 	d = c->next;
 	free(c);
@@ -541,7 +557,7 @@ void WriteCalEntry()
 /* If WkDayNum is a Sunday or Monday, depending on MondayFirst,
    move to next row.  Also handle the queued PS and PSFILE reminders */
     if ((!MondayFirst && WkDayNum == 6) ||
-        (MondayFirst && WkDayNum == 0) || CurDay == MaxDay) {
+	(MondayFirst && WkDayNum == 0) || CurDay == MaxDay) {
 	HadQPS = 0;
 	if (MondayFirst) begin =  CurDay - (WkDayNum ? WkDayNum-1 : 6);
 	else             begin = CurDay - WkDayNum;
@@ -590,36 +606,66 @@ void WriteCalEntry()
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-void WriteOneEntry(char *s)
+void WriteOneEntry(CalEntry *c)
 #else
-void WriteOneEntry(s)
-char *s;
+void WriteOneEntry(c)
+CalEntry *c;
 #endif
 {
-    int c;
+    int ch, i;
+    char *s = c->entry;
+
     printf("  [");
 
-/* Chew up leading spaces */
+    /* Chew up leading spaces */
     while(isspace((unsigned char) *s)) s++;
+
+    /* Skip three decimal numbers for COLOR special */
+    if (c->special == SPECIAL_COLOR) {
+	for (i=0; i<3; i++) {
+	    while(*s && !isspace(*s)) s++;
+	    while(*s && isspace(*s)) s++;
+	}
+    }
 
     PutChar('(');
     while(*s) {
 	/* Use the "unsigned char" cast to fix problem on Solaris 2.5 */
-        /* which treated some latin1 characters as white space.       */
-	c = (unsigned char) *s++;
-	if (c == '\\' || c == '(' || c == ')') PutChar('\\');
-	if (!isspace(c)) PutChar(c);
+	/* which treated some latin1 characters as white space.       */
+	ch = (unsigned char) *s++;
+	if (ch == '\\' || ch == '(' || ch == ')') PutChar('\\');
+	if (!isspace(ch)) PutChar(ch);
 	else {
 	    PutChar(')');
 	    while(isspace((unsigned char)*s)) s++;
 	    if (!*s) {
 		printf("]\n");
-		return;
+		goto finish;
 	    }
 	    PutChar('(');
 	}
     }
-    printf(")]\n");
+    printf(")\n");
+  finish:
+    if (c->special == SPECIAL_COLOR) {
+	int r, g, b;
+	if (sscanf(c->entry, "%d %d %d", &r, &g, &b) == 3) {
+	    if (r < 0) r = 0;
+	    else if (r > 255) r = 255;
+	    if (g < 0) g = 0;
+	    else if (g > 255) g = 255;
+	    if (b < 0) b = 0;
+	    else if (b > 255) b = 255;
+	    printf("(gsave %f %f %f setrgbcolor)(grestore)",
+		   r / 255.0, g / 255.0, b / 255.0);
+	} else {
+	    /* Punt... unrecognized color is black */
+	    printf("()()");
+	}
+    } else {
+	printf("()()");
+    }
+    printf("]\n");
 }
 
 /***************************************************************/
@@ -677,9 +723,9 @@ char *argv[];
 		case 'e': EntrySize = t; break;
 		case 'd': DaySize = t; break;
 		case 't': TitleSize = t; break;
-		default: Usage("Size must specify h, t, e, or d");	    
+		default: Usage("Size must specify h, t, e, or d");
 		}
-            }
+	    }
 	    break;
 
 	case 'f':
@@ -692,9 +738,9 @@ char *argv[];
 		case 'd': DayFont = t; break;
 		case 's': SmallFont = t; break;
 		case 't': TitleFont = t; break;
-		default: Usage("Font must specify s, h, t, e, or d");	    
+		default: Usage("Font must specify s, h, t, e, or d");
 		}
-            }
+	    }
 	    break;
 
 	case 'v':
@@ -707,7 +753,7 @@ char *argv[];
 	    CurPage = NULL;
 	    for (j=0; j<NUMPAGES-1; j++)
 		if (!strcmp(t, Pages[j].name)) {
-		    CurPage = &Pages[j]; 
+		    CurPage = &Pages[j];
 		    break;
 		}
 
@@ -733,7 +779,7 @@ char *argv[];
 		fprintf(stderr, "   WxHcm  Specify size in centimetres (W and H are decimal numbers)\n");
 		fprintf(stderr, "Default media type is %s\n", DefaultPage[0].name);
 		exit(1);
-            }
+	    }
 	    break;
 
 	case 'o':
@@ -859,7 +905,7 @@ int days, first, col;
     /* Move origin to upper-left hand corner of appropriate box */
     printf("%d xincr mul MinX add ysmall%d translate\n", col, which);
 
-    /* Print the month */   
+    /* Print the month */
     printf("SmallWidth 7 mul (%s) stringwidth pop sub 2 div Border add Border neg SmallFontSize sub moveto (%s) show\n", m, m);
 
     /* Print the days of the week */
@@ -926,14 +972,14 @@ int DoQueuedPs()
 
 	while (e) {
 
-/* Now do the user's PostScript code */
-	    fnoff = 1;
+	    /* Now do the PostScript SPECIAL */
+	    fnoff = 0;
 	    while (isspace(*(e->entry+fnoff))) fnoff++;
-	    switch(*e->entry) {
-	    case 'P':		/* Send PostScript through */
+	    switch(e->special) {
+	    case SPECIAL_POSTSCRIPT:		/* Send PostScript through */
 		printf("%s\n", e->entry+fnoff);
 		break;
-	    case 'F':		/* PostScript from a file */
+	    case SPECIAL_PSFILE:		/* PostScript from a file */
 		fp = fopen(e->entry+fnoff, "r");
 		if (!fp) {
 		    fprintf(stderr, "Could not open PostScript file `%s'\n", e->entry+1);
@@ -946,7 +992,7 @@ int DoQueuedPs()
 		    fclose(fp);
 		}
 		break;
-	    case 'S':		/* Shading */
+	    case SPECIAL_SHADE:		/* Shading */
 		num = sscanf(e->entry+fnoff, "%d %d %d", &r, &g, &b);
 		if (num == 1) {
 		    g = r;
@@ -968,7 +1014,7 @@ int DoQueuedPs()
 		       r/255.0, g/255.0, b/255.0);
 		break;
 
-	    case 'M':		/* Moon phase */
+	    case SPECIAL_MOON:		/* Moon phase */
 		num = sscanf(e->entry+fnoff, "%d %d %d", &phase, &moonsize,
 			     &fontsize);
 		if (num == 1) {
@@ -991,7 +1037,7 @@ int DoQueuedPs()
 		    sprintf(buffer, "%d", moonsize);
 		    size = buffer;
 		}
-		
+
 		printf("gsave 0 setgray newpath Border %s add BoxHeight Border sub %s sub\n", size, size);
 		printf(" %s 0 360 arc closepath\n", size);
 		switch(phase) {
@@ -1095,14 +1141,14 @@ void GetSmallLocations()
 	switch(c) {
 	case 'b':
 	    /* Adjust Feb. if we want it on the bottom */
-	    if (MaxDay == 28 && colfirst == 0) { 
+	    if (MaxDay == 28 && colfirst == 0) {
 		printf("/ysmallbot ymin def /ymin ysmallbot MinBoxSize sub def\n");
 		printf("MinX ymin MaxX ymin L\n");
 		printf("/ysmall1 ysmallbot def /ysmall2 ysmallbot def\n");
 		SmallCol1 = 5;
 		SmallCol2 = 6;
 		return;
-            }
+	    }
 	    if (collast <= 4) {
 		printf("/ysmall1 ysmallbot def /ysmall2 ysmallbot def\n");
 		SmallCol1 = 5;
@@ -1133,7 +1179,7 @@ void GetSmallLocations()
     NoSmallCal = 1;
     return;
 }
-	       
+
 /***************************************************************/
 /*                                                             */
 /* EatToken                                                    */

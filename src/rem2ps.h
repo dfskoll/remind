@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: rem2ps.h,v 1.4 2000-02-18 03:46:08 dfs Exp $ */
+/* $Id: rem2ps.h,v 1.5 2004-08-11 01:55:32 dfs Exp $ */
 
 char *PSProlog1[] =
 {
@@ -178,8 +178,22 @@ char *PSProlog2[] =
     "   /width exch def",
     "   /xleft exch def",
     "   /curline () def",
+    "   % The last two strings in the word array are actually the PostScript",
+    "   % code to execute before and after the entry is printed.",
+    "   dup dup",
+    "   length 1 sub",
+    "   get",
+    "   exch",
+    "   dup dup",
+    "   length 2 sub",
+    "   get",
+    "   dup length 0 gt",
+    "   {cvx exec} {pop} ifelse",
+    "   dup length 2 sub 0 exch getinterval",
     "   {EnterOneWord} forall",
     "   FinishFormatting",
+    "   dup length 0 gt",
+    "   {cvx exec} {pop} ifelse",
     "   y",
     "} bind def",
     "% Variables for calendar boxes:",

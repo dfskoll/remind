@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.4 1998-02-10 03:15:57 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.5 1998-02-12 03:48:34 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -589,6 +589,15 @@ Value *val;
 	val->v.val = *((int *) v->value);
     }
     val->type = v->type;
+
+    /* In "verbose" mode, print attempts to test $RunOff */
+    if (DebugFlag & DB_PRTLINE) {
+	if (v->value == (void *) &RunDisabled) {
+	    Eprint("(Security note: $RunOff variable tested.)\n");
+	    /* Allow further messages from this line */
+	    FreshLine = 1;
+	}
+    }
     return OK;
 }
 

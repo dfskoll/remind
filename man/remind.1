@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.5 1998-02-12 03:32:11 dfs Exp $
+.\" $Id: remind.1,v 1.6 1998-02-12 03:48:28 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -71,6 +71,9 @@ a calendar whose first column is Monday rather than Sunday.
 .TP
 .B \-v
 The \fB\-v\fR option makes the output of \fBRemind\fR slightly more verbose.
+Currently, this causes \fBRemind\fR to echo a bad line in case of an
+error, and to print a security message if a script tests the
+$RunOff system variable.
 .TP
 .B \-o
 The \fB\-o\fR option causes \fBRemind\fR to ignore all \fBONCE\fR directives.

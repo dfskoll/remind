@@ -22,7 +22,7 @@
 #############################################################################
 
 #
-# $Id: defs.rem,v 1.1 1998-01-15 02:50:16 dfs Exp $
+# $Id: defs.rem,v 1.2 1998-05-05 03:16:23 dfs Exp $
 #
 
 RUN OFF
@@ -30,8 +30,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.00.10"
-   ERRMSG This file requires at least version 03.00.10 of Remind.%
+IF version() < "03.00.19"
+   ERRMSG This file requires at least version 03.00.19 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF
@@ -317,15 +317,9 @@ ENDIF
 #								         #
 ##########################################################################
 
-# Convenient to stick all the PostScript code in a string var - makes
-# reminders easier to understand and faster.  The variable "shade" will
-# contain PostScript code to shade in a particular box on the calendar.
-
-SET shade psshade(95)
-
 # The following reminder will shade the Saturday and Sunday calendar
 # entries.
-REM Sat Sun PS [shade]
+REM Sat Sun SPECIAL SHADE 220
 
 #USHOLS
 #############################################################################
@@ -386,14 +380,13 @@ OMIT     Dec 25		MSG %"Christmas%" Day
 
 ##########################################################################
 #								         #
-# The next block uses the shade variable defined in PSSTUFF above.       #
 # If any US holidays were triggered above, shade in the calendar         #
 # entry in PostScript.  This is not quite correct, as it blots out any   #
 # other PostScript stuff above.  I was too lazy to do it properly :-)    #
 #								         #
 ##########################################################################
 if $NumTrig > SaveTrig
-	REM PS [shade]
+	REM SPECIAL SHADE 220
 endif
 
 # Seasons (valid from 1992 to 2000)...
@@ -406,10 +399,9 @@ REM Dec [IIF((YEAR(TODAY())+1)%4, 21, 22)] MSG %"Winter%" begins
 #PSSTUFF2
 ##########################################################################
 #									 #
-# Since the "psshade" command blots out any previous PostScript		 #
+# Since the SHADE special blots out any previous PostScript		 #
 # reminders for a date, these examples need to follow the US Holidays	 #
-# section, which uses psshade.  See PSSTUFF1, above, for examples using	 #
-# psshade.								 #
+# section, which uses SHADE.                                             #
 #									 #
 ##########################################################################
 
@@ -420,10 +412,10 @@ REM PS Border Border moveto \
    ([hebday(today())] [hebmon(today())]) show
 
 # Fill in the phases of the moon on the PostScript calendar
-[trigger(moondate(0))] PS [psmoon(0)]
-[trigger(moondate(1))] PS [psmoon(1)]
-[trigger(moondate(2))] PS [psmoon(2)]
-[trigger(moondate(3))] PS [psmoon(3)]
+[trigger(moondate(0))] SPECIAL MOON 0
+[trigger(moondate(1))] SPECIAL MOON 1
+[trigger(moondate(2))] SPECIAL MOON 2
+[trigger(moondate(3))] SPECIAL MOON 3
 
 # The following example puts sunrise and sunset times in PostScript in the
 # calendar - the sizes are hard-coded, however, and work best in landscape.

@@ -4,12 +4,16 @@ CHANGES TO REMIND
 
 + MAJOR ENHANCEMENTS
 
-- Added MOON and SHADE specials.  These now work with PostScript and
-  the Tcl/Tk front-end
+- Added MOON and SHADE specials.  These now work with PostScript,
+  HTML and Tcl/Tk front-ends.  You can have cute moons and shaded
+  boxes on your printer, on your screen and in your web browser. :-)
 
 - TkRemind overhauled -- you can now edit and delete reminders from
   the GUI.  You can actually reasonably use Remind without learning
   the scripting language.
+
+- TkRemind overhauled -- "server mode" added to Remind; TkRemind will
+  now pop up timed reminders.
 
 + MINOR ENHANCEMENTS
 
@@ -28,6 +32,9 @@ CHANGES TO REMIND
 - Made tkremind display a helpful error message if Remind's
   "security feature" of not reading a group-writable file kicks
   in.
+
+- Fixed bug which sometimes prevented reminder times from appearing
+  in a calendar display.
 
 * Version 3.0 Patch 18
 

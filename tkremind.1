@@ -1,5 +1,5 @@
-.\" $Id: tkremind.1,v 1.2 1996-05-25 19:29:27 dfs Exp $ "
-.TH TKREMIND 1 "23 April 1996"
+.\" $Id: tkremind.1,v 1.3 1996-07-07 16:35:43 dfs Exp $ "
+.TH TKREMIND 1 "7 July 1996"
 .UC 4
 .SH NAME
 tkremind \- graphical front-end to Remind calendar program
@@ -104,6 +104,28 @@ reminder you entered using the \fBAdd Reminder...\fR dialog.  You can
 edit the reminder, thereby gaining access to advanced features of
 \fBRemind\fR.  You can also use it simply to play around and discover
 \fBRemind\fR's idioms for expressing different types of reminders.
+
+.SH PRINTING
+To print the current month's calender, click \fBPrint...\fR on the
+main calendar window.  This brings up the print dialog.  Printing
+either produces a PostScript file or sends PostScript to a UNIX command.
+
+Select the print destination by choosing either \fBTo file:\fR or
+\fBTo command:\fR in the print dialog.  Press \fBBrowse...\fR to
+bring up a file browser.  In the file browser, you can enter a filename
+in the text entry, double-click on a filename in the listbox, or double-click
+on a directory to navigate the file system.  The \fBMatch:\fR box contains
+a filename wildcard which filters files in the listbox.
+
+Select the appropriate paper size and orientation.  Activate
+\fBFill page\fR if you want the calendar to fill the page.  This should
+be the normal case unless you have many reminders in a particular
+day.  (See the \fBRem2PS\fR documentation.)
+
+Finally, click \fBPrint\fR to print or \fBCancel\fR to cancel.
+Note that during printing, \fBRemind\fR is \fInot\fR called with
+the \fB-itkremind=1\fR option, because it is operated in normal
+PostScript-producing mode.
 
 .SH ODDS AND ENDS
 \fBTkRemind\fR performs some basic consistency checks when you add or

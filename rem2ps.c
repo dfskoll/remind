@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.3 1996-04-28 02:02:02 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.4 1996-07-07 16:35:42 dfs Exp $";
 
 #include "config.h"
 #include "lang.h"
@@ -740,7 +740,6 @@ char *s;
     fprintf(stderr, "-p file       Include user-supplied PostScript code in prologue\n");
     fprintf(stderr, "-l            Do calendar in landscape mode\n");
     fprintf(stderr, "-c[n]         Control small calendars: 0=none; 1=bt; 2=tb; 3=sbt\n");
-    fprintf(stderr, "              and next month\n");
     fprintf(stderr, "-i            Use ISO 8859-1 encoding in PostScript output\n");
     fprintf(stderr, "-m media      Set page size (eg, Letter, Legal, A4.)  Case sensitive!\n");
     fprintf(stderr, "              (Default page size is %s)\n", DefaultPage[0].name);

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.10 1998-03-21 03:49:47 dfs Exp $
+# $Id: tkremind,v 1.11 1998-03-21 03:57:08 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -1971,7 +1971,7 @@ proc WriteReminder { out tag rem opts } {
     } else {
 	puts $out $rem
     }
-    puts $out "# TKEND\n"
+    puts $out "# TKEND"
 }
 
 main

@@ -39,6 +39,9 @@ CHANGES TO REMIND
 - Fixed bug which sometimes prevented reminder times from appearing
   in a calendar display.
 
+- Lots more silly little bugs squashed -- too many to go into in
+  detail.
+
 * Version 3.0 Patch 18
 
 + MAJOR ENHANCEMENTS

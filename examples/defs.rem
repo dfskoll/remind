@@ -23,7 +23,7 @@
 #############################################################################
 
 #
-# $Id: defs.rem,v 1.4 2000-02-18 03:45:36 dfs Exp $
+# $Id: defs.rem,v 1.5 2001-05-07 14:06:17 dfs Exp $
 #
 
 RUN OFF
@@ -472,7 +472,8 @@ SET Reform 0
 FSET _h(x, y) TRIGGER(HEBDATE(x,y))
 FSET _h2(x, y) HEBDATE(x, y, TODAY()-7)
 FSET _PastSat(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)+1))
-
+FSET _BackTwoFri(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=5, _h2(x,y), _h2(x,y)-2))
+FSET _BackTwoSat(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)-2))
 # Default values in case InIsrael and Reform are not set
 SET InIsrael VALUE("InIsrael", 0)
 SET Reform   VALUE("Reform", 0)
@@ -542,8 +543,8 @@ IF !InIsrael && !Reform
 ENDIF
 
 [_h(27, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
-[_h(4,  "Iyar")] ++4 MSG %"Yom HaZikaron%" is %b.
-[_h(5,  "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
+[_BackTwoFri(4,  "Iyar")] ++4 MSG %"Yom HaZikaron%" is %b.
+[_BackTwoSat(5,  "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
 
 # Not sure about Reform's position on Lag B'Omer
 IF !Reform

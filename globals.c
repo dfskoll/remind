@@ -12,9 +12,9 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: globals.c,v 1.2 1997-01-16 04:14:24 dfs Exp $";
-
 #include "config.h"
+static char const RCSID[] = "$Id: globals.c,v 1.3 1997-03-30 19:07:39 dfs Exp $";
+
 #include <stdio.h>   /* For defintion of FILE - sigh! */
 #include "types.h"
 #define MK_GLOBALS

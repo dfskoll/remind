@@ -11,10 +11,10 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: init.c,v 1.4 1997-01-16 04:14:26 dfs Exp $";
+#include "config.h"
+static char const RCSID[] = "$Id: init.c,v 1.5 1997-03-30 19:07:40 dfs Exp $";
 
 #define L_IN_INIT 1
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STDLIB_H

@@ -9,9 +9,8 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: queue.c,v 1.3 1997-02-11 01:44:30 dfs Exp $";
-
 #include "config.h"
+static char const RCSID[] = "$Id: queue.c,v 1.4 1997-03-30 19:07:44 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED

@@ -9,9 +9,9 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: utils.c,v 1.3 1997-01-16 04:14:34 dfs Exp $";
-
 #include "config.h"
+static char const RCSID[] = "$Id: utils.c,v 1.4 1997-03-30 19:07:51 dfs Exp $";
+
 #include <string.h>
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H

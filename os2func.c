@@ -11,7 +11,8 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: os2func.c,v 1.2 1997-01-16 04:14:28 dfs Exp $";
+#include "config.h"
+static char const RCSID[] = "$Id: os2func.c,v 1.3 1997-03-30 19:07:42 dfs Exp $";
 
 #ifdef OS2_POPUP
 #define INCL_VIO
@@ -34,7 +35,6 @@ static char const RCSID[] = "$Id: os2func.c,v 1.2 1997-01-16 04:14:28 dfs Exp $"
 #include <dos.h>
 #include <stdlib.h>
 #endif
-#include "config.h"
 #include "globals.h"
 
 /* EMX defines PS_TYPE, so we undefine it here to avoid

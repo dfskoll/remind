@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.18 1997-01-16 04:31:07 dfs Exp $
+# $Id: Makefile,v 1.19 1997-03-30 19:07:35 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -54,17 +54,17 @@ GROUP=bin
 # YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
 # in config.h; then, you should be able to type 'make'.
 #-----------------------------------------------------------------------------
-VERSION= 03.00.16
+VERSION= 03.00.17
 MATHLIB= -lm
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
 lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \
-danish.h polish.h
+danish.h polish.h romanian.h
 
 STDHDRS= config.h types.h protos.h globals.h err.h lang.h
 
 LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h danish.h \
-polish.h portbr.h italian.h
+polish.h portbr.h italian.h romanian.h
 
 SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c hbcal.c \
 init.c main.c moon.c omit.c sort.c queue.c token.c trigger.c userfns.c \
@@ -133,9 +133,9 @@ tgz:
 	-rm -rf remind-$(VERSION)
 	-mkdir remind-$(VERSION)
 	cd remind-$(VERSION); for i in www $(MANIFEST) ;do ln -s ../$$i .; done; cd ..
-	tar --exclude CVS -c -h -v -f remind-3.0.16.tar remind-$(VERSION)
-	gzip -v -9 remind-3.0.16.tar
-	mv remind-3.0.16.tar.gz remind-3.0.16.tgz
+	tar --exclude CVS -c -h -v -f remind-3.0.17.tar remind-$(VERSION)
+	gzip -v -9 remind-3.0.17.tar
+	mv remind-3.0.17.tar.gz remind-3.0.17.tgz
 	rm -rf remind-$(VERSION)
 
 shar:

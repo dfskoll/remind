@@ -10,7 +10,8 @@
 /*  Remind is Copyright (C) 1992-1997 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
-static char const RCSID[] = "$Id: amiga.c,v 1.2 1997-01-16 04:14:19 dfs Exp $";
+#include "config.h"
+static char const RCSID[] = "$Id: amiga.c,v 1.3 1997-03-30 19:07:36 dfs Exp $";
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,6 +1,6 @@
 <HTML>
-<! Sample HTML file with links to the calendar stuff >
-<! $Id: calendar.html-DIST,v 1.1 1997-01-19 03:59:56 dfs Exp $ >
+<!-- Sample HTML file with links to the calendar stuff -->
+<!-- $Id: calendar.html-DIST,v 1.2 1997-03-30 19:08:01 dfs Exp $ -->
 <HEAD>
 <TITLE>David Skoll's Calendar Server</TITLE>
 </HEAD>

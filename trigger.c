@@ -9,9 +9,9 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: trigger.c,v 1.3 1997-01-16 04:14:33 dfs Exp $";
-
 #include "config.h"
+static char const RCSID[] = "$Id: trigger.c,v 1.4 1997-03-30 19:07:50 dfs Exp $";
+
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>

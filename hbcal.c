@@ -12,10 +12,10 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: hbcal.c,v 1.2 1997-01-16 04:14:26 dfs Exp $";
+#include "config.h"
+static char const RCSID[] = "$Id: hbcal.c,v 1.3 1997-03-30 19:07:40 dfs Exp $";
 
 #include <stdio.h>  /* For FILE used by protos.h - sigh. */
-#include "config.h"
 #include "types.h"
 #include "protos.h"
 #include "globals.h"

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.6 1997-01-16 04:14:20 dfs Exp $ */
+/* $Id: config.h,v 1.7 1997-03-30 19:07:37 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -196,6 +196,14 @@
 /*---------------------------------------------------------------------*/
 #if defined(__STDC__) || defined(__TURBOC__) || defined(__BORLANDC__)
 #define HAVE_PROTOS 1
+#endif
+
+/*---------------------------------------------------------------------*/
+/* Does our C compiler understand "const"?  If not, define it as empty */
+/* You may want to change the test -- it's very conservative.          */
+/*---------------------------------------------------------------------*/
+#if !defined(__STDC__) && !defined(__TURBOC__) && !defined(__BORLANDC__)
+#define const
 #endif
 
 /*---------------------------------------------------------------------*/

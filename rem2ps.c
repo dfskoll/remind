@@ -9,9 +9,9 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.6 1997-01-16 04:14:29 dfs Exp $";
-
 #include "config.h"
+static char const RCSID[] = "$Id: rem2ps.c,v 1.7 1997-03-30 19:07:45 dfs Exp $";
+
 #include "lang.h"
 #include <stdio.h>
 #include <string.h>
@@ -226,7 +226,7 @@ void DoPsCal()
 	   year[2], year[3], validfile);
 
 /* Emit PostScript to do the heading */
-    if (!PortraitMode) printf("XSIZE 0 translate 90 rotate\n");
+    if (!PortraitMode) printf("90 rotate 0 XSIZE neg translate\n");
     printf("/SAVESTATE save def (%s) (%s) PreCal SAVESTATE restore\n", month, year);
     printf("(%s %s) doheading\n", month, year);
 
@@ -367,7 +367,7 @@ void WriteProlog()
 	isostuff = "copyFont";
 
 /* Write the document structuring stuff */
-    printf("%%!PS-Adobe-\n");
+    printf("%%!PS-Adobe-2.0\n");
     printf("%%%%DocumentFonts: %s", HeadFont);
     if (strcmp(TitleFont, HeadFont)) printf(" %s", TitleFont);
     if (strcmp(TitleFont, DayFont) &&

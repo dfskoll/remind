@@ -10,10 +10,10 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dosubst.c,v 1.4 1997-01-16 04:14:21 dfs Exp $";
+#include "config.h"
+static char const RCSID[] = "$Id: dosubst.c,v 1.5 1997-03-30 19:07:38 dfs Exp $";
 
 #define L_IN_DOSUBST
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

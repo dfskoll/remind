@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.1 1998-01-15 02:50:21 dfs Exp $
+# $Id: tkremind,v 1.2 1998-01-24 03:20:01 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -273,8 +273,9 @@ proc FillCalWindow {} {
     gets $file line
     regexp {^([^ ]*) ([0-9][0-9][0-9][0-9]) ([0-9][0-9]?) ([0-9]) ([0-9])} $line dummy monthName year daysInMonth firstWkday mondayFirst
 
+    # Skip day names -- we already have them
+    gets $file line
     CreateCalWindow $firstWkday $mondayFirst $daysInMonth $monthName $year $DayNames
-    Status "Filling calendar entries..."
     while { [gets $file line] >= 0 } {
 	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +[^ ]+ +[^ ]+ +[^ ]+(.*)} $line all year month day type stuff] == 0 } {
 	    continue

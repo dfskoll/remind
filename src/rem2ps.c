@@ -10,9 +10,8 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.2 1998-01-17 03:58:32 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.3 1998-01-24 03:20:07 dfs Exp $";
 
-#include "lang.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -53,7 +52,7 @@ typedef struct {
     int xsize, ysize;
 } PageType;
 
-char Days[]=L_DAYINIT;
+char DayName[7][33];
 
 char *SmallCalLoc[] = {
     "",
@@ -212,6 +211,12 @@ void DoPsCal()
     gets(LineBuffer);
     sscanf(LineBuffer, "%s %s %d %d %d", month, year, &days, &wkday,
 	   &MondayFirst);
+
+    /* Get day names */
+    gets(LineBuffer);
+    sscanf(LineBuffer, "%32s %32s %32s %32s %32s %32s %32s",
+	   DayName[0], DayName[1], DayName[2], DayName[3],
+	   DayName[4], DayName[5], DayName[6]);
 
     /* We write the prolog here because it's only at this point that
        MondayFirst is set correctly. */
@@ -419,12 +424,12 @@ void WriteProlog()
     for (i=0; PSProlog1[i]; i++) puts(PSProlog1[i]);
     if (!MondayFirst)
 	printf("[(%s) (%s) (%s) (%s) (%s) (%s) (%s)]\n",
-	       L_SUNDAY, L_MONDAY, L_TUESDAY, L_WEDNESDAY,
-	       L_THURSDAY, L_FRIDAY, L_SATURDAY);
+	       DayName[0], DayName[1], DayName[2], DayName[3],
+	       DayName[4], DayName[5], DayName[6]);
     else
 	printf("[(%s) (%s) (%s) (%s) (%s) (%s) (%s)]\n",
-	       L_MONDAY, L_TUESDAY, L_WEDNESDAY,
-	       L_THURSDAY, L_FRIDAY, L_SATURDAY, L_SUNDAY);
+	       DayName[1], DayName[2], DayName[3],
+	       DayName[4], DayName[5], DayName[6], DayName[0]);
     for (i=0; PSProlog2[i]; i++) puts(PSProlog2[i]);
 
     printf("/HeadFont /%s %s\n", HeadFont, isostuff);
@@ -832,7 +837,7 @@ int days, first, col;
     for (i=0; i<7; i++) {
 	if (MondayFirst) j=(i+1)%7;
 	else             j=i;
-	printf("Border %d SmallWidth mul add Border neg SmallFontSize sub SmallFontSize sub 2 sub moveto (%c) show\n", i, Days[j]);
+	printf("Border %d SmallWidth mul add Border neg SmallFontSize sub SmallFontSize sub 2 sub moveto (%c) show\n", i, DayName[j][0]);
     }
 
     /* Now do the days of the month */

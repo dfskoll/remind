@@ -1,5 +1,5 @@
 REM2HTML
-$Id: README.rem2html,v 1.2 1997-08-31 17:03:45 dfs Exp $
+$Id: README.rem2html,v 1.3 1998-01-24 03:20:11 dfs Exp $
 
 Rem2HTML is a Perl script which transforms the output of
 `remind -p ...' to an HTML table.  Type `perl rem2html --help' for
@@ -9,6 +9,13 @@ Typical usage:  remind -p ~/.reminders | rem2html > file.html
 
 You may have to edit the "#!/bin/perl" line to reflect the location
 of your Perl interpreter.
+
+If you make Remind output data for more than one month (for example,
+remind -p3 ~/.reminders | rem2html > file.html), then rem2html
+creates a _SINGLE_ file of concatenated HTML documents.  It's up
+to you to split them.  In this case, you're probably better off
+using the --tableonly option to rem2html and adding the appropriate
+head and tail with another program.
 
 Rem2HTML was contributed by Don Schwarz <darkowl@mcs.net>.  It
 produces HTML compatible with most modern browsers, but *not* with

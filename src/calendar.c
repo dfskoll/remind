@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.2 1998-01-17 03:58:27 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.3 1998-01-24 03:20:07 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -209,6 +209,9 @@ static void DoCalendarOneMonth()
 	printf("%s %d %d %d %d\n",
 	       MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
 	       MondayFirst);
+	printf("%s %s %s %s %s %s %s\n",
+	       DayName[6], DayName[0], DayName[1], DayName[2],
+	       DayName[3], DayName[4], DayName[5]);
 	mm = m-1;
 	if (mm<0) {
 	    mm = 11; yy = y-1;

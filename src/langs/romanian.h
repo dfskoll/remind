@@ -9,23 +9,49 @@
 /*  This file is part of REMIND.                               */
 /*                                                             */
 /*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
-/*  This file is Copyright (C) 1996 by Liviu Daia              */
+/*  This file is Copyright (C) 1996-1998 by Liviu Daia         */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: romanian.h,v 1.3 1998-02-10 03:16:10 dfs Exp $ */
+/* $Id: romanian.h,v 1.4 1998-03-01 20:44:10 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Romanian"
 
 /* Day names */
-#define L_SUNDAY "Duminica"
-#define L_MONDAY "Luni"
-#define L_TUESDAY "Marti"
-#define L_WEDNESDAY "Miercuri"
-#define L_THURSDAY "Joi"
-#define L_FRIDAY "Vineri"
-#define L_SATURDAY "Sambata"
+#if ISOLATIN1
+#  define L_SUNDAY "Duminica"
+#  define L_MONDAY "Luni"
+#  define L_TUESDAY "Marti"
+#  define L_WEDNESDAY "Miercuri"
+#  define L_THURSDAY "Joi"
+#  define L_FRIDAY "Vineri"
+#  define L_SATURDAY "S\342mbata"
+#elif ISOLATIN2
+#  define L_SUNDAY "Duminic\343"
+#  define L_MONDAY "Luni"
+#  define L_TUESDAY "Mar\376i"
+#  define L_WEDNESDAY "Miercuri"
+#  define L_THURSDAY "Joi"
+#  define L_FRIDAY "Vineri"
+#  define L_SATURDAY "S\342mb\343t\343"
+#elif IBM852
+#  define L_SUNDAY "Duminic\307"
+#  define L_MONDAY "Luni"
+#  define L_TUESDAY "Mar\316i"
+#  define L_WEDNESDAY "Miercuri"
+#  define L_THURSDAY "Joi"
+#  define L_FRIDAY "Vineri"
+#  define L_SATURDAY "S\203mb\307t\307"
+#else
+#  define L_SUNDAY "Duminica"
+#  define L_MONDAY "Luni"
+#  define L_TUESDAY "Marti"
+#  define L_WEDNESDAY "Miercuri"
+#  define L_THURSDAY "Joi"
+#  define L_FRIDAY "Vineri"
+#  define L_SATURDAY "Sambata"
+#endif
 
 /* Month names */
 #define L_JAN "Ianuarie"
@@ -38,12 +64,23 @@
 #define L_AUG "August"
 #define L_SEP "Septembrie"
 #define L_OCT "Octombrie"
-#define L_NOV "Noiemberie"
+#define L_NOV "Noiembrie"
 #define L_DEC "Decembrie"
 
 /* Today and tomorrow */
-#define L_TODAY "astazi"
-#define L_TOMORROW "maine"
+#if ISOLATIN1
+#  define L_TODAY "astazi"
+#  define L_TOMORROW "m\342ine"
+#elif ISOLATIN2
+#  define L_TODAY "ast\343zi"
+#  define L_TOMORROW "m\342ine"
+#elif IBM852
+#  define L_TODAY "ast\307zi"
+#  define L_TOMORROW "m\203ine"
+#else
+#  define L_TODAY "astazi"
+#  define L_TOMORROW "maine"
+#endif
 
 /* The default banner */
 #define L_BANNER "Reamintiri pentru %w, %d %m %y%o:"
@@ -76,15 +113,33 @@
 #define L_HOUR "or"
 #define L_IS "este"
 #define L_WAS "a fost"
-#define L_AND "si"
-/* What to add to make "hour" plural */
-#define L_HPLU_OVER hplu = (hdiff == 1 ? "a" : "e");
 /* What to add to make "minute" plural */
 #define L_MPLU "e"
 
+#if ISOLATIN2
+   /* What to add to make "hour" plural */
+#  define L_HPLU_OVER hplu = (hdiff == 1 ? "\343" : "e");
+#  define L_AND "\272i"
+#elif IBM852
+   /* What to add to make "hour" plural */
+#  define L_HPLU_OVER hplu = (hdiff == 1 ? "\307" : "e");
+#  define L_AND "\255i"
+#else
+   /* What to add to make "hour" plural */
+#  define L_HPLU_OVER hplu = (hdiff == 1 ? "a" : "e");
+#  define L_AND "si"
+#endif
+
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
-#define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " dimineata" : (hour > 17) ? " seara" : " dupa-amiaza";
+#if ISOLATIN2
+#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " diminea\376a" : (hour > 17) ? " seara" : " dup\343-amiaza";
+#elif IBM852
+#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " diminea\316a" : (hour > 17) ? " seara" : " dup\307-amiaza";
+#else
+#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " dimineata" : (hour > 17) ? " seara" : " dupa-amiaza";
+#endif
+
 #define L_ORDINAL_OVERRIDE		plu = "";
 
 #define L_A_OVER sprintf(s, "%s, %d %s %d", DayName[jul%7], d, MonthName[m], y);

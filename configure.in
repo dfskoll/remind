@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.in,v 1.6 2000-02-18 03:45:16 dfs Exp $
+dnl $Id: configure.in,v 1.7 2000-03-15 15:42:38 dfs Exp $
 
 AC_INIT(src/amiga.c)
 
@@ -42,5 +42,9 @@ AC_FUNC_UTIME_NULL
 AC_HEADER_TIME
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(mktime putenv strstr timegm difftime)
+
+if test "$GCC" = yes; then
+	CFLAGS="$CFLAGS -Wall -Wstrict-prototypes"
+fi
 
 AC_OUTPUT(src/Makefile)

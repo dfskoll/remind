@@ -2,11 +2,24 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 19
 
++ MAJOR ENHANCEMENTS
+
+- Added MOON and SHADE specials.  These now work with PostScript and
+  the Tcl/Tk front-end
+
+- TkRemind overhauled -- you can now edit and delete reminders from
+  the GUI.  You can actually reasonably use Remind without learning
+  the scripting language.
+
 + MINOR ENHANCEMENTS
 
 - Updated romanian.h, courtesy Liviu Daia.
 
 + BUG FIXES
+
+- Removed restriction against reading group-writable files.  This
+  caused headaches on Red Hat Linux which uses an unusual user/group
+  scheme.
 
 - Remind would not compile if a non-English language was selected.
 

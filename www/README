@@ -1,5 +1,5 @@
 README
-$Id: README,v 1.6 1997-08-31 17:09:46 dfs Exp $
+$Id: README,v 1.7 1997-08-31 17:17:51 dfs Exp $
 
 HTML Hebrew Calendar Server
 
@@ -26,13 +26,7 @@ server:
 
 3) Type "make install"
 
-4) Because of the new REMIND security features, all of the www files
-   must be owned by the effective uid of REMIND.  That is, if your
-   web server runs CGI programs as root, REMIND's script files must
-   be owned by root.  If REMIND is run as nobody, its script files
-   must be owned by nobody.
-
-5) Test it out.  It will generate links of the form:
+4) Test it out.  It will generate links of the form:
 
 	http://www.your_server.com/your_cgi-bin/cal_dispatch?what
 

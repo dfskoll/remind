@@ -7,12 +7,12 @@
 /*  This file is part of REMIND.                               */
 /*                                                             */
 /*  This file is Copyright (C) 1993 by Russ Herman.            */
-/*  REMIND is Copyright (C) 1992-1997 by David F. Skoll        */
+/*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: os2func.c,v 1.1 1998-01-15 02:50:34 dfs Exp $";
+static char const RCSID[] = "$Id: os2func.c,v 1.2 1998-02-10 03:15:53 dfs Exp $";
 
 #ifdef OS2_POPUP
 #define INCL_VIO

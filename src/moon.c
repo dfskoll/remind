@@ -5,12 +5,12 @@
 /*  Calculations for figuring out moon phases.                 */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: moon.c,v 1.2 1998-01-17 03:58:30 dfs Exp $";
+static char const RCSID[] = "$Id: moon.c,v 1.3 1998-02-10 03:15:52 dfs Exp $";
 
 /* All of these routines were adapted from the program "moontool"
    by John Walker, February 1988.  Here's the blurb from moontool:

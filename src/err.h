@@ -5,11 +5,11 @@
 /*  Error definitions.                                         */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: err.h,v 1.1 1998-01-15 02:50:26 dfs Exp $ */
+/* $Id: err.h,v 1.2 1998-02-10 03:15:48 dfs Exp $ */
 
 /* Note that not all of the "errors" are really errors - some are just
    messages for information purposes.  Constants beginning with M_ should

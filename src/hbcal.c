@@ -5,7 +5,7 @@
 /*  Support for the Hebrew calendar                            */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /*  Derived from code written by Amos Shapir in 1978; revised  */
 /*  1985.                                                      */
@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: hbcal.c,v 1.1 1998-01-15 02:50:29 dfs Exp $";
+static char const RCSID[] = "$Id: hbcal.c,v 1.2 1998-02-10 03:15:51 dfs Exp $";
 
 #include <stdio.h>  /* For FILE used by protos.h - sigh. */
 #include "types.h"

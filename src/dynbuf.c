@@ -11,7 +11,7 @@
 /***************************************************************/
 
 static char const RCSID[] =
-"$Id: dynbuf.c,v 1.1 1998-02-07 05:35:57 dfs Exp $";
+"$Id: dynbuf.c,v 1.2 1998-02-10 03:15:48 dfs Exp $";
 
 #include "config.h"
 #include "dynbuf.h"
@@ -189,6 +189,20 @@ FILE *fp
     int l;
 
     DBufFree(dbuf);
+
+    /* Try reading the first few bytes right into the buffer --
+       we can usually save some unnecessary copying */
+
+    *(dbuf->buffer) = 0;
+    fgets(dbuf->buffer, dbuf->allocatedLen, fp);
+    if (!*(dbuf->buffer)) return OK;
+    dbuf->len = strlen(dbuf->buffer);
+    l = dbuf->len - 1;
+    if (dbuf->buffer[l] == '\n') {
+	dbuf->buffer[l] = 0;
+	dbuf->len = l;
+	return OK;
+    }
 
     while(busy) {
 	*tmp = 0;

@@ -7,12 +7,12 @@
 /*  commands.                                                  */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.3 1998-02-07 05:35:56 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.4 1998-02-10 03:15:47 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -931,32 +931,66 @@ PUBLIC int DoMsgCommand(char *cmd, char *msg)
     char *msg;
 #endif
 {
+    int r;
+    int i, l;
+    DynamicBuffer execBuffer;
 
 #ifdef WANT_SHELL_ESCAPING
     DynamicBuffer buf;
     char *s, *t;
-    char execBuffer[512];
+
+    DBufInit(&buf);
+    DBufInit(&execBuffer);
 
     /* Escape shell characters in msg INCLUDING WHITESPACE! */
     for (s=msg; *s; s++) {
 	if (isspace(*s) || strchr(EscapeMe, *s)) {
 	    if (DBufPutc(&buf, '\\') != OK) {
-		DBufFree(&buf);
-		return E_NO_MEM;
+		r = E_NO_MEM;
+		goto finished;
 	    }
 	}
 	if (DBufPutc(&buf, *s) != OK) {
-	    DBufFree(&buf);
-	    return E_NO_MEM;
+	    r = E_NO_MEM;
+	    goto finished;
 	}
     }
-    /* Use a static buffer */
-    snprintf(execBuffer, 512, cmd, DBufValue(&buf));
-    DBufFree(&buf);
+    msg = DBufValue(&buf);
 #else
-    snprintf(execBuffer, 512, cmd, msg);
-#endif /* WANT_SHELL_ESCAPING */
-    system(execBuffer);
+    DBufInit(&execBuffer);
+#endif
+
+    /* Do "%s" substitution */
+    l = strlen(cmd)-1;
+    for (i=0; i<l; i++) {
+	if (cmd[i] == '%' && cmd[i+1] == 's') {
+	    ++i;
+	    if (DBufPuts(&execBuffer, msg) != OK) {
+		r = E_NO_MEM;
+		goto finished;
+	    }
+	} else {
+	    if (DBufPutc(&execBuffer, cmd[i]) != OK) {
+		r = E_NO_MEM;
+		goto finished;
+	    }
+	}
+    }
+    if (l >= 0 && DBufPutc(&execBuffer, cmd[l]) != OK) {
+	r = E_NO_MEM;
+	goto finished;
+    }
+
+    r = OK;
+
+    system(DBufValue(&execBuffer));
+
+finished:
+#ifdef WANT_SHELL_ESCAPING
+    DBufFree(&buf);
+#endif
+    DBufFree(&execBuffer);
+    return r;
 }
 
 /***************************************************************/

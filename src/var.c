@@ -6,12 +6,12 @@
 /*  user- and system-defined variables.                        */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.3 1998-02-07 05:36:04 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.4 1998-02-10 03:15:57 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -437,7 +437,7 @@ Parser *p;
 
     r = ParseToken(p, &buf);
     if (r) return r;
-    if (DBufLen(&buf)) {
+    if (!DBufLen(&buf)) {
 	DBufFree(&buf);
 	return E_EOLN;
     }

@@ -7,11 +7,11 @@
 /*  This file is part of REMIND.                               */
 /*  It is Copyright (C) 1996 by Valerio Aimale                 */
 /*                                                             */
-/*  Remind is copyright (C) 1992-1997 by David F. Skoll        */
+/*  Remind is copyright (C) 1992-1998 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: italian.h,v 1.3 1998-02-02 02:58:22 dfs Exp $ */
+/* $Id: italian.h,v 1.4 1998-02-10 03:16:09 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Italian"

@@ -6,11 +6,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  This file is Copyright (C) 1993 by Trygve Randen.          */
-/*  Remind is Copyright (C) 1992-1997 by David F. Skoll        */
+/*  Remind is Copyright (C) 1992-1998 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: norwgian.h,v 1.3 1998-02-02 02:58:22 dfs Exp $ */
+/* $Id: norwgian.h,v 1.4 1998-02-10 03:16:09 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Norwegian"

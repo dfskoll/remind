@@ -5,12 +5,12 @@
 /*  This file contains routines to parse and evaluate          */
 /*  expressions.                                               */
 /*                                                             */
-/*  Copyright 1992-1997 by David F. Skoll                      */
+/*  Copyright 1992-1998 by David F. Skoll                      */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.4 1998-02-09 00:25:45 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.5 1998-02-10 03:15:49 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>

@@ -5,12 +5,12 @@
 /*  The code for generating a calendar.                        */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.5 1998-02-07 05:35:55 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.6 1998-02-10 03:15:47 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

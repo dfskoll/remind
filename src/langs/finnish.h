@@ -10,12 +10,12 @@
 /*  Finnish holidays.                                          */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  This file is Copyright (C) 1993-1997 by Mikko Silvonen.    */
-/*  REMIND is Copyright (C) 1992-1997 by David F. Skoll        */
+/*  This file is Copyright (C) 1993-1998 by Mikko Silvonen.    */
+/*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.3 1998-02-02 02:58:21 dfs Exp $ */
+/* $Id: finnish.h,v 1.4 1998-02-10 03:16:08 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"

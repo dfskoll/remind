@@ -8,13 +8,13 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-1997 by David F. Skoll        */
+/*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
 /*  This file is Copyright (C) 1993 by Laurent Duperval and    */
 /*  David F. Skoll.                                            */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.3 1998-02-02 02:58:21 dfs Exp $ */
+/* $Id: french.h,v 1.4 1998-02-10 03:16:08 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"

@@ -5,11 +5,11 @@
 /*  Support for the English language.                          */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
-/* $Id: english.h,v 1.2 1998-02-02 02:58:21 dfs Exp $ */
+/* $Id: english.h,v 1.3 1998-02-10 03:16:08 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "English"

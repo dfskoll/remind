@@ -8,12 +8,12 @@
 /*  globals.h and err.h                                        */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1997 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by David F. Skoll                  */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: globals.c,v 1.1 1998-01-15 02:50:29 dfs Exp $";
+static char const RCSID[] = "$Id: globals.c,v 1.2 1998-02-10 03:15:50 dfs Exp $";
 
 #include <stdio.h>   /* For defintion of FILE - sigh! */
 #include "types.h"

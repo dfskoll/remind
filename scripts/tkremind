@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.14 1998-03-30 05:10:34 dfs Exp $
+# $Id: tkremind,v 1.15 1998-03-31 02:39:20 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -38,6 +38,9 @@ set Option(AutoClose) 1
 set OptDescr(AutoClose) "(0/1) If 1, TkRemind automatically closes pop-up reminders after a minute"
 set Option(RingBell) 0
 set OptDescr(RingBell) "(0/1) If 1, TkRemind beeps the terminal when a pop-up reminder appears"
+
+set Option(StartIconified) 0
+set OptDescr(StartIconified) "(0/1) If 1, TkRemind starts up in the iconified state"
 
 set Option(Deiconify) 0
 set OptDescr(Deiconify) "(0/1) If 1, TkRemind deiconifies the calendar window when a reminder pops up"
@@ -282,6 +285,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
     set last [expr $offset+$numDays]
 
     for {set i 0} {$i < $first} {incr i} {
+	grid $w.l$i $w.t$i
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
@@ -290,6 +294,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
     }
     for {set i $first} {$i <= $last} {incr i} {
+	grid $w.l$i $w.t$i
 	set d [expr $i-$first+1]
 	$w.l$i configure -text $d -state normal -relief flat \
 		-command "ModifyDay $d $firstDay"
@@ -299,7 +304,20 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
     }
-    for {set i [expr $last+1]} {$i < 41} {incr i} {
+    set forgetIt 0
+    for {set i [expr $last+1]} {$i < 42} {incr i} {
+	if {$i%7 == 0} {
+	    set forgetIt 1
+	}
+	set row [expr ($i/7)*2+1]
+	if {$forgetIt} {
+	    grid remove $w.l$i $w.t$i
+	    grid rowconfigure $w $row -weight 0
+	    grid rowconfigure $w [expr $row+1] -weight 0
+	} else {
+	    grid rowconfigure $w $row -weight 1
+	    grid rowconfigure $w [expr $row+1] -weight 1
+	}
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
@@ -319,6 +337,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 #   dayNames -- names of weekdays in current language {Sun .. Sat}
 #---------------------------------------------------------------------------
 proc CreateCalWindow { dayNames } {
+    global Option
     frame .h
     label .h.title -text "" -justify center -pady 2 -relief raised
     pack .h.title -side top -fill x
@@ -344,6 +363,11 @@ proc CreateCalWindow { dayNames } {
     wm title . "TkRemind"
     wm iconname . ""
     wm protocol . WM_DELETE_WINDOW Quit
+    if {$Option(StartIconified)} {
+	wm iconify .
+    }
+    update
+    grid propagate .cal 0
 }
 
 #***********************************************************************
@@ -372,6 +396,11 @@ proc EditOptions {} {
     frame $w.b
     pack $w.f -side top -expand 1 -fill both
     pack $w.b -side top -expand 0 -fill x
+
+    # Start iconified
+    checkbutton $w.startIconified -text "Start up Iconified" \
+	    -anchor w -justify left \
+	    -variable tmpOpt(StartIconified)
 
     # Confirm quit
     checkbutton $w.confirmQuit -text "Confirm Quit" -anchor w -justify left \
@@ -405,6 +434,7 @@ proc EditOptions {} {
 	    -text "Feed popped-up reminder to command's standard input" \
 	    -variable tmpOpt(FeedReminder) -anchor w -justify left
 
+    pack $w.startIconified -in $w.f -side top -expand 0 -fill x
     pack $w.confirmQuit -in $w.f -side top -expand 0 -fill x
     pack $w.bringDown -in $w.f -side top -expand 0 -fill x
     pack $w.ring -in $w.f -side top -expand 0 -fill x
@@ -1800,6 +1830,7 @@ proc RestartBackgroundRemindDaemon {} {
 #    Reads data from the Remind daemon and handles it appropriately
 #---------------------------------------------------------------------------
 proc DaemonReadable { file } {
+    global Ignore
     set line ""
     catch { set num [gets $file line] }
     if {$num < 0} {
@@ -1812,6 +1843,8 @@ proc DaemonReadable { file } {
 	    IssueBackgroundReminder $file $time $now $tag
 	}
 	"NOTE newdate" {
+	    # Date has rolled over -- clear "ignore" list
+	    catch { unset Ignore}
 	    Initialize
 	    FillCalWindow
 	}

@@ -13,7 +13,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.4 1998-02-10 03:16:09 dfs Exp $ */
+/* $Id: polish.h,v 1.5 1998-02-14 03:56:38 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
@@ -393,7 +393,7 @@ PUBLIC void Usage(void)
 void Usage()
 #endif /* HAVE_PROTOS */
 {
-    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1997 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 by David F. Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

@@ -11,7 +11,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.5 1998-02-10 03:15:54 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.6 1998-02-14 03:56:34 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -165,7 +165,7 @@ char argv[];
 	if (!strcmp(DBufValue(&buf), PSBEGIN)) {
 	    if (!validfile) {
 		if (Verbose) {
-		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1997 by David F. Skoll\n\n", VERSION);
+		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1998 by David F. Skoll\n\n", VERSION);
 		    fprintf(stderr, "Generating PostScript calendar\n");
 		}
 	    }

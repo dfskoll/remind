@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.6 1998-02-10 04:11:46 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.7 1998-02-16 03:20:46 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -1270,6 +1270,7 @@ int jul, tim, *mins, *isdst;
     int tdiff;
     struct tm local, utc, *temp;
     time_t loc_t, utc_t;
+    int isdst_tmp;
 
     FromJulian(jul, &yr, &mon, &day);
 
@@ -1288,11 +1289,18 @@ int jul, tim, *mins, *isdst;
     local.tm_year = yr-1900;
     local.tm_isdst = -1;  /* We don't know whether or not dst is in effect */
 
+
 #if !defined(HAVE_MKTIME)
     loc_t = timelocal(&local);
     local.tm_isdst = 0;
     utc_t = timegm(&local);
 #else
+    /* Horrible contortions to get around buggy SunOS 4.x implementation
+       of the time functions */
+    loc_t = mktime(&local);
+    if (loc_t == -1) return 1;
+    isdst_tmp = local.tm_isdst;
+    local.tm_isdst = 0;
     loc_t = mktime(&local);
     if (loc_t == -1) return 1;
     temp = gmtime(&loc_t);
@@ -1301,7 +1309,6 @@ int jul, tim, *mins, *isdst;
     utc_t = mktime(&utc);
     if (utc_t == -1) return 1;
 #endif
-    temp = localtime(&loc_t);
     /* Compute difference between local time and UTC in seconds.
        Be careful, since time_t might be unsigned. */
 
@@ -1311,8 +1318,10 @@ int jul, tim, *mins, *isdst;
     } else {
 	tdiff = (int) (loc_t - utc_t);
     }
+
+    if (isdst_tmp) tdiff += 60*60;
     if (mins) *mins = (int)(tdiff / 60);
-    if (isdst) *isdst = temp->tm_isdst;
+    if (isdst) *isdst = isdst_tmp;
     return 0;
 }
 

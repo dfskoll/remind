@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.10 1996-06-01 20:05:34 dfs Exp $
+# $Id: Makefile,v 1.11 1996-09-28 18:17:06 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -54,7 +54,7 @@ GROUP=bin
 # YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
 # in config.h; then, you should be able to type 'make'.
 #-----------------------------------------------------------------------------
-VERSION= 03.00.14
+VERSION= 03.00.15
 MATHLIB= -lm
 
 HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
@@ -130,9 +130,9 @@ var.o: var.c $(STDHDRS) expr.h
 # probably won't be too useful to you! -- dfs
 
 tgz:
-	tar cvf remind-3.0.14.tar $(MANIFEST)
-	gzip -v -9 remind-3.0.14.tar
-	mv remind-3.0.14.tar.gz remind-3.0.14.tgz
+	tar cvf remind-3.0.15.tar $(MANIFEST)
+	gzip -v -9 remind-3.0.15.tar
+	mv remind-3.0.15.tar.gz remind-3.0.15.tgz
 
 shar:
 	shar -o./Shar -sdfs@doe.carleton.ca -a -c -n"Remind $(VERSION)" -m -l58 -o./Shar $(MANIFEST)
@@ -202,9 +202,9 @@ install-man:
 release:
 	-mkdir RELEASE
 	-rm -f RELEASE/*
-	mkpatch ../prev . patch.14 Shar "Remind-3.0/Patch-14/part"
+	mkpatch ../prev . patch.15 Shar "Remind-3.0/Patch-15/part"
 	mv Shar* RELEASE
-	rm -f patch.14*
+	rm -f patch.15*
 	for i in *.1; do nroff -man $$i | sed -e 's/_//g' > `basename $$i .1`.man; done
 	mv *.man RELEASE
 	for i in *.1; do groff -man -Tps $$i > `basename $$i .1`.ps; done

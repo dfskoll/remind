@@ -49,6 +49,9 @@ CHANGES TO REMIND
 
 + BUG FIXES
 
+- Fixed sunset(), sunrise() and minsfromutc() functions which were broken
+  by 3.0.17.  (In 3.0.17, they did not account for daylight savings time.)
+
 - Updated "finnish.h" to include proper URL and translation of all
   error messages.
 

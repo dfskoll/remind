@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.7 1998-02-16 03:20:46 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.8 1998-02-16 03:32:32 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -1295,8 +1295,7 @@ int jul, tim, *mins, *isdst;
     local.tm_isdst = 0;
     utc_t = timegm(&local);
 #else
-    /* Horrible contortions to get around buggy SunOS 4.x implementation
-       of the time functions */
+    /* Horrible contortions to get minutes from UTC portably */
     loc_t = mktime(&local);
     if (loc_t == -1) return 1;
     isdst_tmp = local.tm_isdst;

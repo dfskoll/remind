@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.1 1998-01-15 02:50:45 dfs Exp $ */
+/* $Id: finnish.h,v 1.2 1998-01-17 22:09:59 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -38,10 +38,10 @@
 #define L_MAR "maaliskuu"
 #define L_APR "huhtikuu"
 #define L_MAY "toukokuu"
-#if defined(ISOLATIN1)
+#if ISOLATIN1
 #define L_JUN "kes\xE4kuu"
 #define L_JUL "hein\xE4kuu"
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
 #define L_JUN "kes\x84kuu"
 #define L_JUL "hein\x84kuu"
 #else
@@ -55,9 +55,9 @@
 #define L_DEC "joulukuu"
 
 /* Today and tomorrow */
-#if defined(ISOLATIN1)
+#if ISOLATIN1
 #define L_TODAY "t\xE4n\xE4\xE4n"
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
 #define L_TODAY "t\x84n\x84\x84n"
 #else
 #define L_TODAY "t{n{{n"
@@ -79,9 +79,9 @@
 #define L_FROMNOW "kuluttua"
 
 /* "in %d days' time" */
-#if defined(ISOLATIN1)
+#if ISOLATIN1
 #define L_INXDAYS "%d p\xE4iv\xE4n kuluttua"
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
 #define L_INXDAYS "%d p\x84iv\x84n kuluttua"
 #else
 #define L_INXDAYS "%d p{iv{n kuluttua"
@@ -95,9 +95,9 @@
 /* Pluralizing - this is a problem for many languages and may require
    a more drastic fix */
 /* The partitive ending of "day" */
-#if defined(ISOLATIN1)
+#if ISOLATIN1
 #define L_PLURAL "\xE4"
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
 #define L_PLURAL "\x84"
 #else
 #define L_PLURAL "{"
@@ -125,7 +125,7 @@
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
 
-#if defined(ISOLATIN1)
+#if ISOLATIN1
 #define L_ORDINAL_OVERRIDE switch(d) { \
     case 1:  plu = ":sen\xE4"; break; \
     case 2:  plu = ":sena"; break; \
@@ -138,7 +138,7 @@
        default: plu = ":nten\xE4"; break; \
      } \
 }
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
 #define L_ORDINAL_OVERRIDE switch(d) { \
     case 1:  plu = ":sen\x84"; break; \
     case 2:  plu = ":sena"; break; \
@@ -212,7 +212,7 @@ else { \
 #define L_ERR_OVERRIDE 1
 EXTERN char *ErrMsg[] =
 {
-#if defined(ISOLATIN1)
+#if ISOLATIN1
     "Ok",
     "Puuttuva ']'",
     "Puuttuva lainausmerkki",
@@ -313,7 +313,7 @@ EXTERN char *ErrMsg[] =
     "Numero puuttuu",
     "Virheellinen funktio WARN-lausekkeessa"
 
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
     "Ok",
     "Puuttuva ']'",
     "Puuttuva lainausmerkki",
@@ -530,7 +530,7 @@ void Usage()
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETAVERSIO <<<<\n");
 #endif
-#if defined(ISOLATIN1)
+#if ISOLATIN1
     fprintf(ErrFp, "K\xE4ytt\xF6: remind [tarkenteet] tiedosto [p\xE4iv\xE4ys] [aika] [*toisto]\n");
     fprintf(ErrFp, "Tarkenteet:\n");
     fprintf(ErrFp, " -n     Tulosta viestien seuraavat esiintymiskerrat yksink. muodossa\n");
@@ -559,7 +559,7 @@ void Usage()
     fprintf(ErrFp, " -ivar=val Alusta muuttuja var arvolla val ja s\xE4ilyt\xE4 var\n");
     fprintf(ErrFp, " -m     Aloita kalenteri maanantaista eik\xE4 sunnuntaista\n");
     exit(1);
-#elif defined(IBMEXTENDED)
+#elif IBMEXTENDED
     fprintf(ErrFp, "K\x84ytt\x94: remind [tarkenteet] tiedosto [p\x84iv\x84ys] [aika] [*toisto]\n");
     fprintf(ErrFp, "Tarkenteet:\n");
     fprintf(ErrFp, " -n     Tulosta viestien seuraavat esiintymiskerrat yksink. muodossa\n");

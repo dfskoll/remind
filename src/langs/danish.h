@@ -11,13 +11,13 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: danish.h,v 1.1 1998-01-15 02:50:44 dfs Exp $ */
+/* $Id: danish.h,v 1.2 1998-01-17 22:09:59 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Danish"
 
 /* Day names */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_SUNDAY "S\370ndag"
 #else
 #  define L_SUNDAY "Soendag"
@@ -27,7 +27,7 @@
 #define L_WEDNESDAY "Onsdag"
 #define L_THURSDAY "Torsdag"
 #define L_FRIDAY "Fredag"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_SATURDAY "L\370rdag"
 #else
 #  define L_SATURDAY "Loerdag"
@@ -55,7 +55,7 @@
 #define L_TOMORROW "i morgen"
 
 /* The default banner */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_BANNER "P\345mindelse for %w, %d. %m, %y%o:"
 #else
 #  define L_BANNER "Paamindelse for %w, %d. %m, %y%o:"
@@ -76,7 +76,7 @@
 #define L_INXDAYS "om %d dage"
 
 /* "on" as in "on date..." */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_ON "p\345"
 #else
 #  define L_ON "paa"

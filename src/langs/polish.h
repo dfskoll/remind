@@ -13,13 +13,13 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.1 1998-01-15 02:50:46 dfs Exp $ */
+/* $Id: polish.h,v 1.2 1998-01-17 22:10:01 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
 
 /* Day names */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_SUNDAY "Niedziela"
 #  define L_MONDAY "Poniedzia\263ek"
 #  define L_TUESDAY "Wtorek"
@@ -38,14 +38,14 @@
 #endif
 
 /* Day initials - first letter only */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_DAYINIT "NPW\246CPS"
 #else
 #define L_DAYINIT "NPWSCPS"
 #endif
 
 /* Month names */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_JAN "Stycze\361"
 #  define L_FEB "Luty"
 #  define L_MAR "Marzec"
@@ -106,7 +106,7 @@
 #define L_AT "o"
 #define L_MINUTE "minut"
 #define L_HOUR "godzin"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_IS "b\352dzie"
 #  define L_WAS "by\263o"
 #else
@@ -115,7 +115,7 @@
 #endif
 #define L_AND "i"
 /* What to add to make "hour" or "minute" plural */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_NPLU( N ) ((N == 1) ? "\352" : ((N==12) || (N==13) || (N==14)) ? "" : \
      ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
 #else
@@ -129,7 +129,7 @@
 
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_AMPM_OVERRIDE(ampm, hour) \
 ampm = (hour<12) ? \
      (hour<5) ? " w nocy" \
@@ -187,7 +187,7 @@ else \
 #define L_ERR_OVERRIDE 1
 EXTERN char *ErrMsg[] =
 {
-#ifdef ISOLATIN1
+#if ISOLATIN1
     "OK",
     "Brakuj\261cy ']'",
     "Brakuj\261cy nawias",
@@ -404,7 +404,7 @@ void Usage()
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif
-#ifdef ISOLATIN1
+#if ISOLATIN1
     fprintf(ErrFp, "\nSpos\363b u\277ycia: remind [opcje] plik [data] [czas] [*powt\363rzenie]\n");
     fprintf(ErrFp, "Opcje:\n");
     fprintf(ErrFp, " -n     Wypisz nast\352pne przypomnienia w prostym formacie\n");

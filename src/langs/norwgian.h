@@ -10,13 +10,13 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: norwgian.h,v 1.1 1998-01-15 02:50:46 dfs Exp $ */
+/* $Id: norwgian.h,v 1.2 1998-01-17 22:10:01 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Norwegian"
 
 /* Day names */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_SUNDAY "S\370ndag"
 #else
 #  define L_SUNDAY "Soendag"
@@ -26,7 +26,7 @@
 #define L_WEDNESDAY "Onsdag"
 #define L_THURSDAY "Torsdag"
 #define L_FRIDAY "Fredag"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_SATURDAY "L\370rdag"
 #else
 #  define L_SATURDAY "Loerdag"
@@ -54,7 +54,7 @@
 #define L_TOMORROW "i morgen"
 
 /* The default banner */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_BANNER "P\345minnelse for %w, %d. %m, %y%o:"
 #else
 #  define L_BANNER "Paaminnelse for %w, %d. %m, %y%o:"
@@ -69,7 +69,7 @@
 
 /* Ago and from now */
 #define L_AGO "siden"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_FROMNOW "fra n\345"
 #else
 #  define L_FROMNOW "fra naa"
@@ -86,7 +86,7 @@
 #define L_PLURAL "er"
 
 /* Minutes, hours, at, etc */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_NOW "n\345"
 #else
 #  define L_NOW "naa"

@@ -13,7 +13,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: german.h,v 1.1 1998-01-15 02:50:46 dfs Exp $ */
+/* $Id: german.h,v 1.2 1998-01-17 22:10:00 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "German"
@@ -33,7 +33,7 @@
 /* Month names */
 #define L_JAN "Januar"
 #define L_FEB "Februar"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_MAR "M\344rz"
 #else
 #  define L_MAR "Maerz"
@@ -53,7 +53,7 @@
 #define L_TOMORROW "morgen"
 
 /* The default banner */
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #  define L_BANNER "Termine f\374r %w, den %d. %m %y%o:"
 #else
 #  define L_BANNER "Termine fuer %w, den %d. %m %y%o:"

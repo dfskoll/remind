@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.1 1998-01-15 02:50:45 dfs Exp $ */
+/* $Id: french.h,v 1.2 1998-01-17 22:10:00 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -33,7 +33,7 @@
 
 /* Month names */
 #define L_JAN "janvier"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_FEB "f\351vrier"
 #else
 #define L_FEB "fevrier"
@@ -43,7 +43,7 @@
 #define L_MAY "mai"
 #define L_JUN "juin"
 #define L_JUL "juillet"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_AUG "ao\373t"
 #else
 #define L_AUG "aout"
@@ -51,7 +51,7 @@
 #define L_SEP "septembre"
 #define L_OCT "octobre"
 #define L_NOV "novembre"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_DEC "d\351cembre"
 #else
 #define L_DEC "decembre"
@@ -86,7 +86,7 @@
 
 /* Minutes, hours, at, etc */
 #define L_NOW "maintenant"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_AT "\340"
 #else
 #define L_AT "a"
@@ -94,7 +94,7 @@
 #define L_MINUTE "minute"
 #define L_HOUR "heure"
 #define L_IS "est"
-#ifdef ISOLATIN1
+#if ISOLATIN1
 #define L_WAS "\351tait"
 #else
 #define L_WAS "etait"
@@ -148,7 +148,7 @@ sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], \
 #define L_ERR_OVERRIDE 1
 EXTERN char *ErrMsg[] =
 {
-#ifdef ISOLATIN1
+#if ISOLATIN1
     "Ok",
     "']' manquant",
     "Apostrophe manquant",
@@ -365,7 +365,7 @@ void Usage()
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif
-#ifdef ISOLATIN1
+#if ISOLATIN1
     fprintf(ErrFp, "\nUtilisation: remind [options] fichier [date] [heure] [*r\351p\351tition]\n");
     fprintf(ErrFp, "Options:\n");
     fprintf(ErrFp, " -n     Afficher la prochaine occurence des rappels en format simple\n");

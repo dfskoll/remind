@@ -1,5 +1,21 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 19
+
++ MINOR ENHANCEMENTS
+
+- Updated romanian.h, courtesy Liviu Daia.
+
++ BUG FIXES
+
+- Remind would not compile if a non-English language was selected.
+
+- Fixed free() of a NULL pointer.
+
+- Made tkremind display a helpful error message if Remind's
+  "security feature" of not reading a group-writable file kicks
+  in.
+
 * Version 3.0 Patch 18
 
 + MAJOR ENHANCEMENTS

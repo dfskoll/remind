@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.3 1998-01-24 03:20:07 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.4 1998-02-02 02:58:08 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -790,8 +790,7 @@ int col, jul;
 /* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
     while(e) {
-	printf("%04d%c%02d%c%02d ", y, DATESEP,
-	       m+1, DATESEP, d);
+	printf("%04d/%02d/%02d ", y, m+1, d);
 	printf("%s ", e->passthru);
 	printf("%s ", e->tag);
 	if (e->duration != NO_TIME) {
@@ -814,7 +813,7 @@ int col, jul;
 
     e = CalColumn[col];				     
     while(e) {
-	printf("%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
+	printf("%04d/%02d/%02d", y, m+1, d);
 	printf(" * %s ", e->tag);
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);

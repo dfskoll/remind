@@ -2,7 +2,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: Makefile,v 1.5 1997-07-31 02:19:04 dfs Exp $
+# $Id: Makefile,v 1.6 1997-08-31 17:09:45 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca
@@ -16,6 +16,10 @@ SCRIPTDIR = /var/web/cgi-bin
 # Where the scripts live as seen from the outside world.  If
 # they live in WWWHOST/cgi-bin, supply /cgi-bin
 CGIDIR = /cgi-bin
+
+# The effective user of the REMIND process when started by your
+# web server
+CGIUSER = nobody
 
 # The complete path to the HTML file "calendar.html".  This is a sample
 # file containing links to all the scripts.  This path should be the
@@ -60,5 +64,14 @@ install:
 	chmod 644 $(HTMLDIR)/calendar.html
 	chmod 755 $(SCRIPTDIR)/cal_dispatch
 	chmod 755 $(SCRIPTDIR)/calps $(SCRIPTDIR)/hebdate \
+	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \
+	$(SCRIPTDIR)/sunset $(SCRIPTDIR)/hebhtml $(SCRIPTDIR)/rem2html
+	chown $(CGIUSER) $(SCRIPTDIR)/sunrise.rem
+	chown $(CGIUSER) $(SCRIPTDIR)/moon.rem
+	chown $(CGIUSER) $(SCRIPTDIR)/hebdate.rem
+	chown $(CGIUSER) $(SCRIPTDIR)/sunset.rem
+	chown $(CGIUSER) $(HTMLDIR)/calendar.html
+	chown $(CGIUSER) $(SCRIPTDIR)/cal_dispatch
+	chown $(CGIUSER) $(SCRIPTDIR)/calps $(SCRIPTDIR)/hebdate \
 	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \
 	$(SCRIPTDIR)/sunset $(SCRIPTDIR)/hebhtml $(SCRIPTDIR)/rem2html

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.7 1998-03-01 20:43:54 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.8 1998-03-04 18:13:26 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -75,6 +75,7 @@ int jul, mode;
     int has_quote = 0;
     char *ss, *os;
     char s[256];
+    int origLen = DBufLen(dbuf);
 
     FromJulian(jul, &y, &m, &d);
 
@@ -625,7 +626,7 @@ int jul, mode;
 /* There ARE quotes.  If in CAL_MODE, delete everything before first quote
    and after second quote.  If in NORMAL_MODE, delete the %" sequences. */
 
-    ss = DBufValue(dbuf);
+    ss = DBufValue(dbuf) + origLen;
     os = ss;
     if (mode == NORMAL_MODE) {
 	while (*ss) {
@@ -634,7 +635,6 @@ int jul, mode;
 	}
 	*os = 0;
     } else {
-
 /* Skip past the quote marker */
 	while (*ss && (*ss != QUOTE_MARKER)) ss++;
 

@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.5 1998-03-02 19:38:40 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.6 1998-03-04 18:13:27 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED
@@ -475,7 +475,7 @@ unsigned int sleeptime
 
     /* If date has rolled around, restart */
     if (RealToday != SystemDate(&y, &m, &d)) {
-	printf("NOTE reread\n");
+	printf("NOTE newdate\nNOTE reread\n");
 	fflush(stdout);
 	reread();
     }

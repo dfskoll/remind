@@ -4,6 +4,9 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Changed psshade() to accept 1 or 3 arguments for colored shading in
+  PostScript calendar mode.
+
 - Added a Print dialog to tkremind.
 
 - Added support for Brazilian Portuguese.

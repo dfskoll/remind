@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.3 1996-06-22 02:44:45 dfs Exp $
+.\" $Id: remind.1,v 1.4 1996-10-06 21:03:50 dfs Exp $
 .TH REMIND 1 "27 April 1996"
 .UC 4
 .SH NAME
@@ -2106,10 +2106,12 @@ moon displayed, you could use this in your reminder script:
 Note how the time is coerced to a string by concatenating the null string.
 .RE
 .TP
-.B psshade(i_num)
+\fBpsshade(i_gray)\fR or \fBpsshade(i_red, i_green, i_blue)\fR
 Returns a \fBSTRING\fR which consists of PostScript commands to
 shade a calendar box.  \fINum\fR can range from 0 (completely black)
-to 100 (completely white.)  Here's an example of how to use this:
+to 100 (completely white.)  If three arguments are given, they specify
+red, green and blue intensity from 0 to 100.  
+Here's an example of how to use this:
 .RS
 .PP
 .nf

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: funcs.c,v 1.3 1996-03-31 04:01:56 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.4 1996-10-06 21:03:49 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -228,7 +228,7 @@ Operator Func[] = {
     {   "ostype",       0,      0,      FOstype },
     {   "plural",	1,	3,	FPlural },
     {	"psmoon",	1,	4,	FPsmoon},
-    {	"psshade",	1,	1,	FPsshade},
+    {	"psshade",	1,	3,	FPsshade},
     {   "realnow",      0,      0,      FRealnow},
     {   "realtoday",    0,      0,      FRealtoday },
     {   "sgn",		1,	1,	FSgn	},
@@ -2155,9 +2155,16 @@ static int FPsshade()
 {
     char psbuff[256];
     char *s = psbuff;
-    if (ARG(0).type != INT_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val < 0) return E_2LOW;
-    if (ARG(0).v.val > 100) return E_2HIGH;
+    int i;
+
+    /* 1 or 3 args */
+    if (Nargs != 1 && Nargs != 3) return E_2MANY_ARGS;
+
+    for (i=0; i<Nargs; i++) {
+	if (ARG(i).type != INT_TYPE) return E_BAD_TYPE;
+	if (ARG(i).v.val < 0) return E_2LOW;
+	if (ARG(i).v.val > 100) return E_2HIGH;
+    }
 
     sprintf(s, "/_A LineWidth 2 div def ");
     s += strlen(s);
@@ -2165,7 +2172,11 @@ static int FPsshade()
     s += strlen(s);
     sprintf(s, "BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto ");
     s += strlen(s);
-    sprintf(s, "_A BoxHeight _A sub lineto closepath %d 100 div setgray fill 0.0 setgray", ARG(0).v.val);
+    if (Nargs == 1) {
+	sprintf(s, "_A BoxHeight _A sub lineto closepath %d 100 div setgray fill 0.0 setgray", ARG(0).v.val);
+    } else {
+	sprintf(s, "_A BoxHeight _A sub lineto closepath %d 100 div %d 100 div %d 100 div setrgbcolor fill 0.0 setgray", ARG(0).v.val, ARG(1).v.val, ARG(2).v.val);
+    }
     return RetStrVal(psbuff);
 }
 

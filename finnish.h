@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.5 1998-01-01 02:01:26 dfs Exp $ */
+/* $Id: finnish.h,v 1.6 1998-01-12 02:19:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -65,7 +65,7 @@
 #define L_TOMORROW "huomenna"
 
 /* The default banner */
-#define L_BANNER "Viestit %wna, %d. %mta %y%o:"
+#define L_BANNER "Viestit %wna %d. %mta %y%o:"
 
 /* "am" and "pm" */
 #define L_AM "ap"
@@ -165,25 +165,25 @@
        } \
 }
 #endif
-#define L_A_OVER sprintf(s, "%s%s, %d. %s%s %d", DayName[jul%7], L_ON, d, \
+#define L_A_OVER sprintf(s, "%s%s %d. %s%s %d", DayName[jul%7], L_ON, d, \
 			 MonthName[m], L_PARTIT, y);
 #define L_C_OVER sprintf(s, "%s%s", DayName[jul%7], L_ON);
 #define L_E_OVER sprintf(s, "%02d%c%02d%c%04d", d, DATESEP, m+1, DATESEP, \
 			 y);
 #define L_F_OVER sprintf(s, "%02d%c%02d%c%04d", m+1, DATESEP, d, DATESEP, y);
-#define L_G_OVER sprintf(s, "%s%s, %d. %s%s", DayName[jul%7], L_ON, d, \
+#define L_G_OVER sprintf(s, "%s%s %d. %s%s", DayName[jul%7], L_ON, d, \
 			 MonthName[m], L_PARTIT);
 #define L_H_OVER sprintf(s, "%02d%c%02d", d, DATESEP, m+1);
 #define L_I_OVER sprintf(s, "%02d%c%02d", m+1, DATESEP, d);
-#define L_J_OVER sprintf(s, "%s%s, %sn %d%s %d", DayName[jul%7], L_ON, \
+#define L_J_OVER sprintf(s, "%s%s %sn %d%s %d", DayName[jul%7], L_ON, \
 			 MonthName[m], d, plu, y);
-#define L_K_OVER sprintf(s, "%s%s, %sn %d%s", DayName[jul%7], L_ON, \
+#define L_K_OVER sprintf(s, "%s%s %sn %d%s", DayName[jul%7], L_ON, \
 			 MonthName[m], d, plu);
 #define L_L_OVER sprintf(s, "%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
 #define L_Q_OVER sprintf(s, "n");
-#define L_U_OVER sprintf(s, "%s%s, %d%s %s%s %d", DayName[jul%7], L_ON, \
+#define L_U_OVER sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, \
 			 d, plu, MonthName[m], L_PARTIT, y);
-#define L_V_OVER sprintf(s, "%s%s, %d%s %s%s", DayName[jul%7], L_ON, d, \
+#define L_V_OVER sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, \
 			 plu, MonthName[m], L_PARTIT);
 #define L_1_OVER if (tdiff == 0) \
 sprintf(s, L_NOW); \
@@ -311,7 +311,7 @@ EXTERN char *ErrMsg[] =
     "Ei viestej\xE4.",
     "%d viesti(\xE4) t\xE4m\xE4n p\xE4iv\xE4n jonossa.\n",
     "Numero puuttuu",
-    "Illegal function in WARN clause (NEEDS TRANSLATION)"
+    "Virheellinen funktio WARN-lausekkeessa"
 
 #elif defined(IBMEXTENDED)
     "Ok",
@@ -412,7 +412,7 @@ EXTERN char *ErrMsg[] =
     "Ei viestej\x84.",
     "%d viesti(\x84) t\x84m\x84n p\x84iv\x84n jonossa.\n",
     "Numero puuttuu"
-    "Illegal function in WARN clause (NEEDS TRANSLATION)"
+    "Virheellinen funktio WARN-lausekkeessa"
 #else
     "Ok",
     "Puuttuva ']'",
@@ -512,7 +512,7 @@ EXTERN char *ErrMsg[] =
     "Ei viestej{.",
     "%d viesti({) t{m{n p{iv{n jonossa.\n",
     "Numero puuttuu",
-    "Illegal function in WARN clause (NEEDS TRANSLATION)"
+    "Virheellinen funktio WARN-lausekkeessa"
 #endif
 };
 #endif /* MK_GLOBALS */

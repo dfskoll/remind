@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.10 1997-09-21 23:23:36 dfs Exp $ */
+/* $Id: config.h,v 1.11 1998-01-12 02:19:21 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -165,12 +165,12 @@
 /*---------------------------------------------------------------------*/
 /* OP_STACK_SIZE: The size of the operator stack for expr. parsing     */
 /*---------------------------------------------------------------------*/
-#define OP_STACK_SIZE 30
+#define OP_STACK_SIZE 100
 
 /*---------------------------------------------------------------------*/
 /* VAL_STACK_SIZE: The size of the operand stack for expr. parsing     */
 /*---------------------------------------------------------------------*/
-#define VAL_STACK_SIZE 30
+#define VAL_STACK_SIZE 500
 
 /*---------------------------------------------------------------------*/
 /* INCLUDE_NEST: How many nested INCLUDES do we handle?                */

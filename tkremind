@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.8 1996-09-28 01:43:17 dfs Exp $
+# $Id: tkremind,v 1.9 1996-09-28 19:14:37 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -160,9 +160,12 @@ proc GetWeekdayNames {} {
 #   day -- day whose row number is needed
 #---------------------------------------------------------------------------
 proc RowNumber {firstDay mondayFirst day} {
+    # If month starts on Sunday, but Monday is in first column, handle it...
+    set adjust 0
+    if {$mondayFirst && !$firstDay} {incr adjust}
     set modDay [expr $day - $mondayFirst]
     if { $modDay < 0 } { set modDay 6 }
-    return [expr ($modDay + $firstDay - 1) / 7 + 1]
+    return [expr ($modDay + $firstDay - 1) / 7 + 1 + $adjust]
 }
 
 #---------------------------------------------------------------------------

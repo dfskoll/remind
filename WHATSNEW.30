@@ -15,6 +15,9 @@ CHANGES TO REMIND
 
 - Fixed confusing error in rem2ps help messages.
 
+- Fixed bug in TkRemind which caused a crash if the "-m" option was used
+  for a month beginning on Sunday.  Doh!!!
+
 * Version 3.0 Patch 14
 
 + CHANGE IN COPYING POLICY

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.4 1998-02-10 03:15:55 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.5 1998-02-12 03:32:16 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -115,24 +115,24 @@ Token NonEnglishToks[] = {
     /* NAME          MINLEN      TYPE           VALUE */
 
     { L_MONDAY,	       3,       T_WkDay,        0 },
-    { L_TUESDAY,	       3,       T_WkDay,        1 },
-    { L_WEDNESDAY,      3,       T_WkDay,        2 },
-    { L_THURSDAY,       3,       T_WkDay,        3 },
+    { L_TUESDAY	       3,       T_WkDay,        1 },
+    { L_WEDNESDAY      3,       T_WkDay,        2 },
+    { L_THURSDAY       3,       T_WkDay,        3 },
     { L_FRIDAY,	       3,       T_WkDay,        4 },
-    { L_SATURDAY,       3,       T_WkDay,        5 },
+    { L_SATURDAY,      3,       T_WkDay,        5 },
     { L_SUNDAY,	       3,       T_WkDay,        6 },
-    { L_JAN,            3,       T_Month,        0 },
-    { L_FEB,            3,       T_Month,        1 },
-    { L_MAR,            3,       T_Month,        2 },
-    { L_APR,            3,       T_Month,        3 },
-    { L_MAY,            3,       T_Month,        4 },
-    { L_JUN,            3,       T_Month,        5 },
-    { L_JUL,            3,       T_Month,        6 },
-    { L_AUG,            3,       T_Month,        7 },
-    { L_SEP,            3,       T_Month,        8 },
-    { L_OCT,            3,       T_Month,        9 },
-    { L_NOV,            3,       T_Month,        10 },
-    { L_DEC,            3,       T_Month,        11 }
+    { L_JAN,           3,       T_Month,        0 },
+    { L_FEB,           3,       T_Month,        1 },
+    { L_MAR,           3,       T_Month,        2 },
+    { L_APR,           3,       T_Month,        3 },
+    { L_MAY,           3,       T_Month,        4 },
+    { L_JUN,           3,       T_Month,        5 },
+    { L_JUL,           3,       T_Month,        6 },
+    { L_AUG,           3,       T_Month,        7 },
+    { L_SEP,           3,       T_Month,        8 },
+    { L_OCT,           3,       T_Month,        9 },
+    { L_NOV,           3,       T_Month,        10 },
+    { L_DEC,           3,       T_Month,        11 }
 };
 #endif
 
@@ -210,6 +210,11 @@ Token *tok;
     }
 
     l = strlen(s);
+
+    /* Ignore trailing commas */
+    if (l > 0 && s[l-1] == ',') {
+	l--;
+    }
     bot = 0;
     top = sizeof(TokArray) / sizeof(TokArray[0]) - 1;
 
@@ -359,12 +364,14 @@ char *s;
 {
     register int r;
     char *tk = t->name;
-    while(*tk && *s) {
+    while(*tk && *s && !(*s == ',' && *(s+1) == 0)) {
 	r = UPPER(*tk) - UPPER(*s);
 	tk++;
 	s++;
 	if (r) return r;
     }
-    if (!*s) return 0;
+    /* Ignore trailing commas on s */
+
+    if (!*s || (*s == ',' && !*(s+1))) return 0;
     return (*tk - *s);
 }

@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.5 1998-01-24 03:20:11 dfs Exp $
+# $Id: rem2html,v 1.6 1998-02-12 03:32:17 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -17,7 +17,17 @@
 # [Note from David:  The REMIND license prohibits you from using REMIND
 #  under Windows.]
 #
-# This file is Copyright (C) 1997 by Don Schwarz <darkowl@mcs.net>.
+# Rem2html puts "normal" CAL or MSG-type reminders in a <P></P> pair,
+# and escapes any special HTML characters.
+#
+# If you want to put actual HTML code in the calendar (hyper-links, for
+# example), use the "SPECIAL HTML" type.  For example:
+#
+# REM Wed SPECIAL HTML <P> Meeting at \
+# <A HREF="http://www.linuxhq.org">Linux HQ</A> </P>
+#
+# This file is Copyright (C) 1997-8 by Don Schwarz <darkowl@mcs.net>
+# and David F. Skoll
 
 use Getopt::Long;
 
@@ -26,6 +36,11 @@ use Getopt::Long;
 $rem2html_version = "1.0";
 
 &parse_options();
+
+if (-t STDIN) {
+    print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";
+    $Options{'help'} = 1;
+}
 
 if ($Options{'help'}) {
   &show_usage();
@@ -57,6 +72,7 @@ Options:
 --version           Version information
 -p file             Prepend the specified HTML file to the beginning of the
                     output
+-a file             Append the specified HTML file to the end of the output
 -f[shted] font      Set font for small cal, hdr, title, cal entries,day numbers
 -s[hted] size       Set size for header, title, calendar entries and/or day
                     numbers
@@ -72,6 +88,14 @@ EndOfUsage
 
 }
 
+sub escape_html {
+    my($in) = @_;
+    $in =~ s/\&/\&amp;/g;
+    $in =~ s/\</\&lt;/g;
+    $in =~ s/\>/\&gt;/g;
+    return $in;
+}
+
 sub parse_options {
   %Options = ();
 
@@ -82,6 +106,7 @@ sub parse_options {
                          "backurl|bu:s", "forwurl|fu:s",
                          "tableonly|to",
                          "prologue|p=s",
+	                 "append|a=s",
                          "bgcolor|g=s",
                          "fs=s", "fh=s", "ft=s", "fe=s", "fd=s",
                                  "sh=i", "st=i", "se=i", "sd=i",
@@ -125,6 +150,7 @@ sub parse_input {
       if ($type eq "HTML") {
 	  $days[$day] .= "$msg ";
       } else {
+	  $msg = &escape_html($msg);
 	  $days[$day] .= "<P>$msg</P>";
       }
     }
@@ -178,6 +204,12 @@ EndOfHTML
 
 sub output_footer {
   print "</TABLE>\n";
+
+  if ($Options{'append'}) {
+    open(EPILOGUE, "< $Options{'append'}");
+    print while ( <EPILOGUE> );
+    close(EPILOGUE);
+  }
 
   unless ($Options{'tableonly'}) {
     print <<EndOfHTML;

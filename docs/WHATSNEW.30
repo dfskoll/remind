@@ -36,10 +36,16 @@ CHANGES TO REMIND
 
 - Directory structure totally reorganized.  Remind now uses an autoconf
   "configure" script which should make life very pleasant for UNIX
-   people.
+  people.
 
-- Made rem2html work properly if more than one month's worth of calendar
-  data was produced.
+- Made Rem2HTML work properly if more than one month's worth of calendar
+  data was produced.  Rem2HTML also escapes any special HTML characters.
+  However, it recognizes a "SPECIAL HTML" type of reminder which lets
+  you put arbitrary HTML code in your calendar entries.  See www/rem2html
+  for details.
+
+- Added the "-a" option to Rem2HTML to complement the "-p" option.  Also
+  made Rem2HTML print a usage message if input is coming from a terminal.
 
 + BUG FIXES
 

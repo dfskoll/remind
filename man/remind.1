@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.4 1998-02-10 04:11:39 dfs Exp $
+.\" $Id: remind.1,v 1.5 1998-02-12 03:32:11 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -297,6 +297,15 @@ described in the section "The Substitution Filter."  However, if you have
 used the \fB\-k\fR command-line option, then \fBMSG\fR-type reminders are
 passed to the appropriate program.  Note that the options \fB\-c\fR,
 \fB\-s\fR, \fB\-p\fR and \fB\-n\fR disable the \fB\-k\fR option.
+.PP
+Note that you can omit the reminder type, in which case it
+defaults to \fBMSG\fR.  So you can write:
+.PP
+.nf
+	6 January David's Birthday
+.fi
+.PP
+although this is not recommended.
 .PP
 The \fBMSF\fR keyword is almost the same as the \fBMSG\fR keyword,
 except that the reminder is formatted to fit into a paragraph-like

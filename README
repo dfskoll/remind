@@ -1,0 +1,11 @@
+				REMIND
+
+Remind is a full-featured calendar/alarm program.  Copying policy is
+in the file "COPYRIGHT" in this directory.
+
+Installation notes for various operating systems are in "docs".  See
+the appropriate README file for installation on your system.
+
+Manual pages are in "man".
+
+$Id: README,v 1.1 1998-01-15 02:49:27 dfs Exp $

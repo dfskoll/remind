@@ -1,0 +1,94 @@
+# $Id: smakefile,v 1.1 1998-01-15 02:50:36 dfs Exp $
+# Makefile for REMIND, suitable for SAS/C 6.50 under AmigaDOS
+# English version
+# THIS IS OUT OF DATE!
+
+#-----------------------------------------------------------------------------
+# THINGS FOR YOU TO EDIT START BELOW
+#-----------------------------------------------------------------------------
+
+# Uncomment the next line if you are running on a SYSV system
+# SYSV= -DSYSV
+
+# Uncomment the next line if you are running under UNIX (including SYSV!)
+#UNIX= -DUNIX
+
+# Uncomment the next lines if you want to use gcc instead of default compiler
+# NOTE:  Tempting as it may be, if you use 'cc' for the C compiler, do not
+# use 'ld' for the linker.  It will probably work much better if you use
+# LD= cc rather than LD= ld.
+CC= SC
+LD= SC
+
+# Put any additional flags for the C compiler or linker here - if you
+# are not using gcc, you probably want to remove '-ansi'.
+CFLAGS= OPT NOSTKCHK NOSINT MATH=IEEE
+CDEFS=
+LDFLAGS= LINK
+
+HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
+lang.h english.h german.h dutch.h finnish.h french.h norwgian.h
+
+STDHDRS= config.h types.h protos.h globals.h err.h lang.h
+
+LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h
+
+SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c hbcal.c \
+init.c main.c moon.c omit.c sort.c queue.c token.c trigger.c userfns.c \
+utils.c var.c amiga.c
+
+OBJS= calendar.o dorem.o dosubst.o expr.o files.o funcs.o globals.o hbcal.o \
+init.o main.o moon.o omit.o sort.o queue.o token.o trigger.o userfns.o \
+utils.o var.o amiga.o
+
+MANIFEST= README.UNIX README.DOS COPYRIGHT $(HDRS) $(SRCS) Makefile rem rem.1 \
+remind.1 remind-all.csh remind-all.sh test.rem test-rem test.cmp makefile.tc \
+makefile.msc lnk.msc lnk.tc MANIFEST.UNX MANIFEST.DOS WHATSNEW.30 kall kall.1 \
+defs.rem README.OS2 makefile.os2 rem2ps.c rem2ps.h remind.def rem2ps.1 \
+tstlang.rem README.BCC lnk.bcc makefile.bcc os2func.c \
+test-rem.bat test-rem.cmd test1.cmp test2.cmp
+
+
+all: remind rem2ps
+
+.c.o:
+	$(CC) $(UNIX) $(SYSV) $(CFLAGS) $(CDEFS) $*.c
+
+rem2ps: rem2ps.o
+	$(LD) MATH=IEEE $(LDFLAGS) PNAME=rem2ps rem2ps.o
+
+remind: $(OBJS)
+	$(LD) MATH=IEEE $(LDFLAGS) PNAME=remind $(OBJS)
+
+clean:
+	rm -f *.o *~ core *.bak
+
+clobber:
+	rm -f *.o *~ remind rem2ps test.out core *.bak
+
+test: remind
+	sh test-rem
+
+rem2ps.o: rem2ps.c rem2ps.h lang.h config.h
+calendar.o: calendar.c $(STDHDRS) expr.h
+dorem.o: dorem.c $(STDHDRS) expr.h
+dosubst.o: dosubst.c $(STDHDRS) $(LANGHDRS)
+expr.o: expr.c $(STDHDRS) expr.h
+files.o: files.c $(STDHDRS)
+funcs.o: funcs.c $(STDHDRS) expr.h version.h
+globals.o: globals.c config.h types.h globals.h err.h lang.h $(LANGHDRS)
+hbcal.o: hbcal.c $(STDHDRS)
+init.o: init.c $(STDHDRS) expr.h version.h lang.h $(LANGHDRS)
+main.o: main.c $(STDHDRS) expr.h
+moon.o: moon.c $(STDHDRS)
+omit.o: omit.c $(STDHDRS)
+sort.o: sort.c $(STDHDRS)
+queue.o: queue.c $(STDHDRS)
+token.o: token.c $(STDHDRS)
+trigger.o: trigger.c $(STDHDRS) expr.h
+userfns.o: userfns.c $(STDHDRS) expr.h
+utils.o: utils.c $(STDHDRS)
+var.o: var.c $(STDHDRS) expr.h
+
+amiga.o: amiga.c
+	$(CC) OBJNAME=amiga.o $(CFLAGS) amiga.c

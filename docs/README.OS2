@@ -1,0 +1,137 @@
+$Id: README.OS2,v 1.1 1998-01-15 02:50:14 dfs Exp $
+REMIND version 3.0 for OS/2
+
+This file contains instructions for compiling Remind under OS/2 with
+Eberhard Mattes' emx/gcc compiler and with the Microsoft C compiler.
+There are a number of targets in Makefile.os2, including OS/2-only 
+versions and bound versions (programs which run under OS/2 and DOS).
+
+Note that there is also support for OS/2 using the Borland C 
+compiler--see the file README.BCC for details.
+
+REMIND is a sophisticated alarm/calendar program.  Details are given
+in the man page, "remind.1".
+
+1 - Read the file COPYRIGHT.  (This may be called COPYRIGH on your
+    MS-DOS system.)
+
+2 - To compile Remind for OS/2, you must use the Microsoft C compiler
+    or emx/gcc. You must also have a decent version of 'make', such 
+    as dmake or GNU make.
+
+3 - Examine the file config.h and adjust parameters as needed
+
+4 - Examine the file Makefile.os2 and adjust parameters as needed.
+
+5 - Type:
+
+	make -f Makefile.os2
+
+to see a list of targets. For example, 
+
+	make -f Makefile.os2 emx
+
+will build a 32-bit emx version which runs under OS/2 2.x and DOS.
+
+The file "defs.rem" has some sample Remind definitions and commands,
+as well as U.S. and Jewish holidays.
+
+NOTE that I do not have access to an OS/2 system, so support for this
+system may not be as good as I'd like.
+
+OS/2 support is courtesy of Russ Herman <rwh@gov.on.ca>, Norman Walsh 
+<norm@ora.com>, and Darrel Hankerson <hankedr@mail.auburn.edu>. 
+However, if you have problems, please contact me.
+
+OTHER LANGUAGE SUPPORT
+
+Remind has support for languages other than English.  See the file
+"lang.h" for details.  The language support may vary - you can change
+only the substitution filter, or you can translate all of the usage
+instructions and error messages as well.  See "french.h" for an
+example of the latter.
+
+If you add support for a non-English language, Remind will accept both the
+English and non-English names of months and weekdays in an input script.
+However, you should not rely on this feature if you want to write portable
+Remind scripts.
+
+At a minimum, you should support month and day names in the foreign
+language, and should modify the substitution filter appropriately.
+If you are truly diligent, you can translate usage and error messages
+too.
+
+Take a look at the files "english.h" and "german.h" if you want to add
+support for your favourite language.  If you do add another language
+to Remind, please let me know!  Here are the basic guidelines:
+
+- Your language file should be called "lxxx.h", where lxxx is the first 8
+characters of the ENGLISH name of your language.
+
+- You should define L_LANGNAME to be the full English name of your language,
+  with the first letter capitalized and the rest lower-case.
+
+RELEASE NOTES -- miscellaneous info that couldn't go anywhere else!
+
+1. POPUP REMINDERS
+
+If you define the symbol OS2_POPUP in the OS/2 Makefile, you get
+"full-screen popups" (as implemented by Russ Herman) for all MSG-
+and MSF-type reminders.  You may or may not like this feature.
+
+One way of implementing popup reminders is to get the program
+"pmpopup.exe" from ftp-os2.cdrom.com, and using Remind with the
+'-k' option as follows from C:\STARTUP.CMD:
+
+start /pm /inv /n remind "-kstart pmpopup %%s" remfile
+
+Alternatively, if you have the Vrexx package, you can use this
+procedure suggested by Norman Walsh:
+
+Start remind like this in C:\STARTUP.CMD:
+
+start /pm /inv /n \bin\remind -faz "-kstart popupmsg %%s" .reminders
+
+The popups are done by POPUPMSG.CMD which looks like this:
+
+-------------- Cut Here ---------- Cut Here ---------- Cut Here --------
+/* PopUpMsg */
+
+'@echo off'
+
+parse arg theargs
+if theargs = "" then
+  theargs = "Empty message"
+
+call RxFuncAdd 'VInit', 'VREXX', 'VINIT'
+initcode = VInit()
+if initcode = 'ERROR' then signal CLEANUP
+
+signal on failure name CLEANUP
+signal on halt name CLEANUP
+signal on syntax name CLEANUP
+
+/* example VMsgBox call */
+
+msg.0 = 1
+msg.1 = theargs
+
+call VDialogPos 50, 50
+call VMsgBox 'Popup Message', msg, 1
+
+/* end of CMD file */
+
+CLEANUP:
+   call VExit
+
+exit
+-------------- Cut Here ---------- Cut Here ---------- Cut Here --------
+
+--
+David F. Skoll <dfs@doe.carleton.ca>
+986 Eiffel Avenue
+Ottawa, Ontario K2C 0J2
+CANADA
+
+Tel. (613) 225-8687
+

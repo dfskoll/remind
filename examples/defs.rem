@@ -1,0 +1,648 @@
+#############################################################################
+# 									    #
+# DEFS.REM								    #
+# 									    #
+# This file is a reminder script, which contains a few handy definitions.   #
+# Cut and paste as desired!  Also, near the end, there are a bunch of	    #
+# holiday definitions for the U.S.					    #
+# 									    #
+# Some examples provided by George M. Sipe <gsipe@pyratl.ga.pyramid.com>    #
+# 									    #
+# U.S. holidays provided by Dave Rickel <drickel@sjc.mentorg.com>	    #
+# 									    #
+# Use your text editor to search for:					    #
+#  "#USHOLS" for U.S. holidays						    #
+#  "#JHOLS"  for Jewish holidays					    #
+#  "#PSSTUFF" for nifty PostScript examples				    #
+#  "#COLORS" for examples of ANSI color escape sequences.                   #
+# 									    #
+# This file is part of REMIND.						    #
+# Copyright (C) 1992-1997 by David F. Skoll        			    #
+# 									    #
+#############################################################################
+
+#
+# $Id: defs.rem,v 1.1 1998-01-15 02:50:16 dfs Exp $
+#
+
+RUN OFF
+
+################################################
+# Ensure required version of remind is used... #
+################################################
+IF version() < "03.00.10"
+   ERRMSG This file requires at least version 03.00.10 of Remind.%
+   ERRMSG This version is version [version()].
+   EXIT
+ENDIF
+
+######################################
+# Symbolic constants for weekdays... #
+######################################
+SET Sunday    0
+SET Monday    1
+SET Tuesday   2
+SET Wednesday 3
+SET Thursday  4
+SET Friday    5
+SET Saturday  6
+
+SET Sun 0
+SET Mon 1
+SET Tue 2
+SET Wed 3
+SET Thu 4
+SET Fri 5
+SET Sat 6
+
+#########################################
+# Symbolic constants for month names... #
+#########################################
+
+SET Jan 1
+SET Feb 2
+SET Mar 3
+SET Apr 4
+SET May 5
+SET Jun 6
+SET Jul 7
+SET Aug 8
+SET Sep 9
+SET Oct 10
+SET Nov 11
+SET Dec 12
+
+SET January   1
+SET February  2
+SET March     3
+SET April     4
+SET May       5
+SET June      6
+SET July      7
+SET August    8
+SET September 9
+SET October   10
+SET November  11
+SET December  12
+
+###########################################################
+# Other symbolic constants and functions for "pasting"... #
+###########################################################
+
+SET Quote CHAR(34)
+
+# Handy constants/function for specifing week of month...
+SET  Week_1		 1
+SET  Week_2		 8
+SET  Week_3		15
+SET  Week_4		22
+FSET _last(mo)		"1 " + MON((mo%12)+1)+" --7"
+
+# Shorthand for commonly used expression...
+FSET _trig()		TRIGGER(TRIGDATE())
+
+# Handy function to provide SCANFROM dates...
+FSET _back(days)	TRIGGER(TODAY()-days)
+
+###########################################################
+# On MS-DOS systems, the standard C library functions are #
+# not reliable for computing offsets from local time to   #
+# UTC.  The following provides a work-around for the      #
+# sunrise() and sunset() functions.  Note, however, that  #
+# if Daylight Savings Time is in effect for today(), the  #
+# sun functions return times in DST even for dates on     #
+# which DST is not in effect; the converse can also occur.#
+#                                                         #
+# Change the timezone to your timezone - the default is   #
+# for EST which is 5 hours (300 minutes) behind UTC.      #
+# The code is correct for places in which Daylight Savings#
+# Time begins on the last Sunday in April and ends on the #
+# last Sunday in October.                                 #
+###########################################################
+
+IF OSTYPE() == "MSDOS"
+    # Eastern Standard Time
+    SET TimeZone -300
+
+    # Use --8 rather than --7 because we want the last day BEFORE
+    # the time switch occurs.
+    REM Sun 1 May --8 SATISFY 1
+    SET BegDst TRIGDATE()
+
+    REM Sun 1 Nov --8 SATISFY 1
+    SET EndDst TRIGDATE()
+
+    SET $CalcUTC 0
+
+    # Check out the following IF statement and figure out why it works!
+    IF EndDst < BegDst
+        # Daylight Savings Time
+        SET $MinsFromUTC TimeZone+60
+    ELSE
+        # Standard Time
+        SET $MinsFromUTC TimeZone
+    ENDIF
+ENDIF
+
+###########################################################
+# Function which returns a string in "am/pm" format based #
+# on the time.  For example, set a am_pm(NOW())...        #
+###########################################################
+
+FSET _am_pm(tm)	IIF(tm<01:00, tm+12*60+"am", \
+                    tm<12:00, tm+"am", \
+                    tm<13:00, tm+"pm", \
+                              tm-12*60+"pm")
+
+#################################################################
+# Function which removes a single leading zero from a string... #
+#################################################################
+
+FSET _no_lz(s) IIF(SUBSTR(s, 1, 1)=="0", SUBSTR(s, 2), s)
+
+#################################################################
+# Return the length of the daylight/night portion of a date,    #
+# in minutes.                                                   #
+#################################################################
+
+FSET _light_len(date) MAX(SUNSET(date)-SUNRISE(date), 0)
+FSET _dark_len(date) 1440-_light_len(date)
+
+############################################################
+# Function to calculate number of years since a given year #
+# or number of months since a given month and year...      #
+############################################################
+
+FSET _yr_num(yr)		ORD(YEAR(TRIGDATE()) - yr)
+FSET _mo_num(mo, yr)		ORD(12 * (YEAR(TRIGDATE()) - yr) + \
+					MONNUM(TRIGDATE()) - mo)
+
+# Here's an example of how to use them:
+REM 1 Nov ++12 MSG %"Dean's [_yr_num(1984)] birthday%" is %b.
+REM 1 MSG Dean's [_mo_num(11, 1984)] 'monthly' anniversary
+
+###########################################################
+# Function to send mail via elm's "fastmail" (by GMS!)... #
+###########################################################
+
+#FSET _mail(from, subj)	"mailx -s " + \
+#				Quote + from + " : " + subj + Quote \
+#				GETENV("LOGNAME") + " < /dev/null 1>&0"
+FSET _mail(from, subj)	"fastmail -f " + \
+				Quote + from + Quote + \
+				" -s " + Quote + subj + Quote + \
+				" /dev/null " + GETENV("LOGNAME")
+
+#############################################################################
+# Here's a tricky problem:  The 4th of July is a holiday in the U.S.
+# However, if it falls on a Saturday, the previous Friday is a holiday.
+# If it falls on a Sunday, the next Monday is a holiday.  Here's how
+# to do it.  NOTE that the following procedure makes the OMIT context
+# dependent upon the current date.  SInce it only depends on the current
+# year, which is not likely to change while producing a calendar, we
+# are fairly safe.  However, reminders with huge DELTA or BACK components
+# may not operate as expected.  In general, any time you make OMIT
+# dependent upon the current date, it's tricky and results may not be
+# what you expect.  You should try to make sure that the OMIT context
+# "near" any current reminders will not change during a calendar run.
+# The SCANFROM clause should help make these OMITs very safe.
+############################################################################
+
+# Calculate the weekday of the holiday.
+REM 4 July SCANFROM [_back(7)] SATISFY 1
+
+IF WKDAYNUM(TRIGDATE()) == Sat
+	REM [TRIGGER(TRIGDATE())] MSG Independence day (actual)
+	OMIT [TRIGGER(TRIGDATE()-1)] MSG Independence day (observed)
+ELSE
+	IF WKDAYNUM(TRIGDATE()) == Sun
+		REM [TRIGGER(TRIGDATE())] MSG Independence day (actual)
+		OMIT [TRIGGER(TRIGDATE()+1)] MSG Independence day (observed)
+	ELSE
+		OMIT [TRIGGER(TRIGDATE())] MSG Independence day
+	ENDIF
+ENDIF
+
+############################################################################
+#									   #
+# A meeting on the first Monday of every month which is moved to the       #
+# second Monday in the event of a holiday.                                 #
+#									   #
+############################################################################
+
+# First, the normal meeting.  However, the SKIP keyword means this
+# one won't be triggered if the first Monday is a holiday
+REM Mon 1 SKIP MSG Meeting
+
+# Now, calculate the "potential" delayed meeting
+REM Mon 8 SATISFY 1
+
+# But only actually trigger the delayed meeting if the previous
+# Monday was a holiday
+IF ISOMITTED(TRIGDATE()-7)
+   REM [TRIGGER(TRIGDATE())] MSG Delayed meeting
+ENDIF
+
+############################################################################
+#									   #
+# A very complicated reminder sent in by a Remind user.			   #
+# This person gets paid every two weeks, starting from 8 January 1993.	   #
+# If a pay date occurs before the twelfth of a month, then that		   #
+# he pays his mortgage on that pay date.  Otherwise, he pays the mortgage  #
+# on the previous pay date.  Furthermore, he has to schedule his	   #
+# mortgage payment six days before it is due.  He wants to be reminded	   #
+# a further four days before the scheduling deadline.  He also		   #
+# wants to be mailed a notice two weeks before the scheduling deadline.	   #
+#									   #
+# Here's the solution - if you can follow this, consider yourself a	   #
+# Remind programmer extraordinaire!					   #
+#									   #
+############################################################################
+
+# A function to determine whether or not a pay-date is a mortgage-date.
+
+FSET _IsMortDate(x) DAY(x) < 12 || (DAY(x+14) >= 12 && DAY(x+14) <= 14)
+
+# Paydays - for reference
+
+REM 8 Jan 1993 *14 MSG Payday
+
+# Calculate the mortgage payment six days ahead of time.  Note that this
+# is done "implicitly" by subtracting 6 from the starting date - we start
+# on 2 Jan rather than 8 Jan.  We add 6 to TRIGDATE() in _IsMortDate to
+# compensate.
+
+REM 2 Jan 1993 *14 ++4 SATISFY [_IsMortDate(TRIGDATE()+6)] \
+	MSG %"Schedule mortgage payment%" for %a.
+
+# Now the mail reminder two weeks before the payment date - because two
+# weeks before a payment date is also a payment date, no pre-compensation
+# in the starting date of 8 Jan is necessary - convince yourself of this!
+# This uses the _mail() function defined earlier.
+
+REM ONCE 8 Jan 1993 *14 SATISFY [_IsMortDate(TRIGDATE()+14)] \
+	RUN [_mail("Decatur Federal", \
+		"Pay mortgage by the " + ORD(DAY(TRIGDATE()+14)))]
+
+# Make an entry on the calendar when the mortgage should be paid
+
+REM 8 Jan 1993 *14 SATISFY [_IsMortDate(TRIGDATE())] \
+	CAL Mortgage payment
+
+##########################################################################
+#								         #
+# On our UNIX system, I run a program which queries the university       #
+# library and creates a file called ".booksdue".  This file is           #
+# a REMIND script to tell me when my library books are due.  Here's      #
+# an example from my reminder file - it shows the use of filedate().     #
+# When the .booksdue file is at least 7 days old, I create a new version #
+# by querying the library computer.  Note the use of realtoday() rather  #
+# than today.   						         #
+#								         #
+##########################################################################
+
+IF !$RunOff && !$CalMode && !$SimpleCal
+   IF REALTODAY()-FILEDATE("/home/dfs/.booksdue") >= 7
+      REM RUN /home/dfs/bilge/library/getbooks
+   ENDIF
+ENDIF
+
+#PSSTUFF1
+##########################################################################
+#								         #
+# This portion of the file contains some cute examples of the new        #
+# PS-type reminders.  You need a PostScript printer or viewer to         #
+# appreciate these.  To use them, pipe the output of remind -p into the  #
+# rem2ps program.  More examples are in the PSSTUFF2 section, below.     #
+#								         #
+##########################################################################
+
+# Convenient to stick all the PostScript code in a string var - makes
+# reminders easier to understand and faster.  The variable "shade" will
+# contain PostScript code to shade in a particular box on the calendar.
+
+SET shade psshade(95)
+
+# The following reminder will shade the Saturday and Sunday calendar
+# entries.
+REM Sat Sun PS [shade]
+
+#USHOLS
+#############################################################################
+#       								    #
+# The following holidays were provided by Dave Rickel			    #
+# Modified by D. Skoll to give safe OMITs for moveable holidays		    #
+#									    #
+#############################################################################
+
+SET SaveTrig $NumTrig
+SET easter EASTERDATE(YEAR(TODAY()))
+REM  [TRIGGER(easter-46)] MSG %"Ash Wednesday%"
+REM  [TRIGGER(easter-7)]  MSG %"Palm Sunday%"
+OMIT [TRIGGER(easter-2)]  MSG %"Good Friday%"
+OMIT [TRIGGER(easter)]    MSG %"Easter%" Sunday
+REM  [TRIGGER(easter+39)] MSG %"Ascension Day%"
+REM  [TRIGGER(easter+49)] MSG %"Pentecost%"
+
+# Some holidays are omitted, some are not.  You may want to change
+# which ones are omitted - use the general forms shown below.
+# You'll need the _back() function and the Week_n variables defined
+# way up in the file.
+
+OMIT     Jan  1		MSG %"New Year's%" Day
+REM  Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
+REM      Feb  2		MSG %"Ground Hog Day%"
+REM      Feb 14		MSG %"Valentine's%" Day
+REM  Mon Feb [Week_3]	SCANFROM [_back(7)] SATISFY 1
+			OMIT [_trig()] MSG %"President's Day%"
+REM      Mar 17		MSG %"St. Patrick's%" Day
+REM  Sun Apr  1 ++2	MSG Daylight Savings Time - %"DST starts%" %b
+REM      Apr  1		MSG %"April Fool's%" Day
+REM  Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
+REM      May  5		MSG %"Cinco de Mayo%"
+REM  Sat May [Week_1]	MSG %"Kentucky Derby%"
+REM  Sun May [Week_2]	MSG %"Mother's Day%"
+REM  Sat May [Week_3]	MSG %"Armed Forces Day%"
+REM  Mon [_last(May)]	SCANFROM [_back(7)] SATISFY 1
+			OMIT [_trig()] MSG %"Memorial Day%"
+REM      Jun 14		MSG %"Flag Day%"
+REM  Sun Jun [Week_3]	MSG %"Father's Day%"
+REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
+			OMIT [_trig()] MSG %"Labor Day%"
+REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
+REM      Nov 11		MSG %"Veterans Day%"
+REM  Sun [_last(Oct)]	MSG Daylight Savings Time - %"DST over%"
+REM      Oct 30		MSG %"Mischief Night%"
+REM      Oct 31		MSG %"Halloween%"
+REM  Tue Nov  2		SCANFROM [_back(7)] \
+	SATISFY [(YEAR(TRIGDATE()) % 4) == 0] \
+	MSG %"Election%" Day
+REM  Thu Nov [Week_4]	SCANFROM [_back(7)] SATISFY 1
+			OMIT [_trig()] MSG %"Thanksgiving%" Day
+REM  Fri Nov [Week_4+1]	SCANFROM [_back(7)] SATISFY 1
+			OMIT [_trig()] MSG %"Thanksgiving%" (cont.)
+OMIT     Dec 24		MSG %"Christmas Eve%"
+OMIT     Dec 25		MSG %"Christmas%" Day
+
+##########################################################################
+#								         #
+# The next block uses the shade variable defined in PSSTUFF above.       #
+# If any US holidays were triggered above, shade in the calendar         #
+# entry in PostScript.  This is not quite correct, as it blots out any   #
+# other PostScript stuff above.  I was too lazy to do it properly :-)    #
+#								         #
+##########################################################################
+if $NumTrig > SaveTrig
+	REM PS [shade]
+endif
+
+# Seasons (valid from 1992 to 2000)...
+REM Mar 20 MSG %"Spring%" begins
+REM Jun [IIF(YEAR(TODAY())%4, 21, 20)] MSG %"Summer%" begins
+REM Sep [CHOOSE(YEAR(TODAY())-1991, 22,22,23,23,22,22,22,23,22)] \
+	MSG %"Fall%" begins
+REM Dec [IIF((YEAR(TODAY())+1)%4, 21, 22)] MSG %"Winter%" begins
+
+#PSSTUFF2
+##########################################################################
+#									 #
+# Since the "psshade" command blots out any previous PostScript		 #
+# reminders for a date, these examples need to follow the US Holidays	 #
+# section, which uses psshade.  See PSSTUFF1, above, for examples using	 #
+# psshade.								 #
+#									 #
+##########################################################################
+
+# The following will fill in the Hebrew dates on the calendar.  For this
+# example, I recommend that you use the -sd 10 option for Rem2PS.
+REM PS Border Border moveto \
+   /DayFont findfont DaySize scalefont setfont \
+   ([hebday(today())] [hebmon(today())]) show
+
+# Fill in the phases of the moon on the PostScript calendar
+[trigger(moondate(0))] PS [psmoon(0)]
+[trigger(moondate(1))] PS [psmoon(1)]
+[trigger(moondate(2))] PS [psmoon(2)]
+[trigger(moondate(3))] PS [psmoon(3)]
+
+# The following example puts sunrise and sunset times in PostScript in the
+# calendar - the sizes are hard-coded, however, and work best in landscape.
+REM PS Border Border 5 sub moveto \
+	/SmallFont findfont 4 scalefont setfont \
+	(Sunrise: [sunrise(trigdate())] Sunset: [sunset(trigdate())]) show
+
+# The next one puts the day number (1-366) and days left in the year at the
+# bottom of the post-script calendar.  Again, the hard-coded sizes work best
+# in landscape.
+FSET _DayOfYear(x) x-(date(year(x),1,1) - 1)
+REM PS BoxWidth 3 mul 4 div Border 5 sub moveto \
+	/SmallFont findfont 4 scalefont setfont \
+	([_DayOfYear(today())]([365+isleap(today())-_DayOfYear(today())])) show
+
+#JHOLS
+##########################################################################
+#								         #
+# This portion of the file contains reminders for Jewish holidays.  The	 #
+# dates were obtained from "The First Jewish Catalog" by Richard Siegel	 #
+# and Michael and Sharon Strassfeld, published by the Jewish Publication #
+# Society of America.  The Reform version of the calendar was guessed	 #
+# at by David Skoll based on experience.  There is probably no standard  #
+# Reform position on many of the holidays, so you may have to adjust     #
+# the file as required.                                                  #
+#									 #
+# Additional corrections were made from the paper "Calendrical		 #
+# Calculations" by Nachum Dershowitz and Edward M. Reingold.  Any	 #
+# further corrections are welcome.					 #
+#				        			         #
+##########################################################################
+
+# Here are some general functions that you might find nice to use
+
+# _hstr:  Returns a string which is the full Hebrew date of its argument.
+#         Example: hstr('1994/02/02') returns "21 Shvat 5754"
+FSET _hstr(x) HEBDAY(x) + " " + HEBMON(x) + " " + HEBYEAR(x)
+
+# _hyrlen:  Return the length of the specified Hebrew year
+#           Example: _hyrlen(5754) returns 355
+FSET _hyrlen(x) HEBDATE(1, "Tishrey", x+1) - HEBDATE(1, "Tishrey", x)
+
+# --- HERE ARE THE JEWISH HOLIDAYS ---
+# Set the variable InIsrael to 1 if you live in Israel.  Otherwise,
+# you get the Diaspora versions of Jewish holidays
+SET InIsrael 0
+
+# Set the variable Reform to 1 if you want the Reform version of the
+# Jewish calendar.  Otherwise, you get the traditional version
+SET Reform 0
+
+# Convenient function definition to save typing
+FSET _h(x, y) TRIGGER(HEBDATE(x,y))
+FSET _h2(x, y) HEBDATE(x, y, TODAY()-7)
+FSET _PastSat(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)+1))
+
+# Default values in case InIsrael and Reform are not set
+SET InIsrael VALUE("InIsrael", 0)
+SET Reform   VALUE("Reform", 0)
+
+[_h(1,  "Tishrey")] ++4 MSG %"Rosh Hashana 1%" is %b.
+
+# No RH-2 or Tzom Gedalia in Reform
+IF !Reform
+   [_h(2,  "Tishrey")] ++4 MSG %"Rosh Hashana 2%" is %b.
+   [_PastSat(3,  "Tishrey")] ++4 MSG %"Tzom Gedalia%" is %b.
+ENDIF
+
+[_h(10, "Tishrey")] ++4 MSG %"Yom Kippur%" is %b.
+[_h(15, "Tishrey")] ++4 MSG %"Sukkot 1%" is %b.
+
+IF !InIsrael
+   [_h(16, "Tishrey")] MSG %"Sukkot 2%"
+ENDIF
+
+[_h(21, "Tishrey")] ++4 MSG %"Hashana Rabba%" is %b.
+[_h(22, "Tishrey")] ++4 MSG %"Shemini Atzeret%" is %b.
+
+IF InIsrael
+   [_h(22, "Tishrey")] ++4 MSG %"Simchat Torah%" is %b.
+ELSE
+   [_h(23, "Tishrey")] ++4 MSG %"Simchat Torah%" is %b.
+ENDIF
+
+# Because Kislev can change length, we must be more careful about Chanukah
+FSET _chan(x) TRIGGER(HEBDATE(24, "Kislev", today()-9)+x)
+[_chan(1)] ++4 MSG %"Chanukah 1%" is %b.
+[_chan(2)] MSG %"Chanukah 2%"
+[_chan(3)] MSG %"Chanukah 3%"
+[_chan(4)] MSG %"Chanukah 4%"
+[_chan(5)] MSG %"Chanukah 5%"
+[_chan(6)] MSG %"Chanukah 6%"
+[_chan(7)] MSG %"Chanukah 7%"
+[_chan(8)] MSG %"Chanukah 8%"
+
+# Not sure about Reform's position on the next one.
+IF !Reform
+# 10 Tevet will never be a Saturday, so whether or not to
+# move it is moot.  (Thanks to Art Werschulz.)
+   [_h(10, "Tevet")] MSG %"Tzom Tevet%" is %b.
+ENDIF
+
+[_h(15, "Shvat")] ++4 MSG %"Tu B'Shvat%" is %b.
+[_h(15, "Adar A")] ++4 MSG %"Purim Katan%" is %b.
+
+# If Purim is on Sunday, then Fast of Esther is 11 Adar.
+IF WKDAYNUM(_h2(13, "Adar")) != 6
+   REM [TRIGGER(_h2(13, "Adar"))] ++4 MSG %"Fast of Esther%" is %b.
+ELSE
+   REM [TRIGGER(_h2(11, "Adar"))] ++4 MSG %"Fast of Esther%" is %b.
+ENDIF
+[_h(14, "Adar")] ++4 MSG %"Purim%" is %b.
+[_h(15, "Nisan")] ++4 MSG %"Pesach%" is %b.
+
+IF !InIsrael
+   [_h(16, "Nisan")] MSG %"Pesach 2%"
+ENDIF
+
+[_h(21, "Nisan")] MSG %"Pesach 7%"
+
+IF !InIsrael && !Reform
+   [_h(22, "Nisan")] MSG %"Pesach 8%"
+ENDIF
+
+[_h(27, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
+[_h(4,  "Iyar")] ++4 MSG %"Yom HaZikaron%" is %b.
+[_h(5,  "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
+
+# Not sure about Reform's position on Lag B'Omer
+IF !Reform
+   [_h(18, "Iyar")] ++4 MSG %"Lag B'Omer%" is %b.
+ENDIF
+
+[_h(28, "Iyar")] ++4 MSG %"Yom Yerushalayim%" is %b.
+[_h(6,  "Sivan")] ++4 MSG %"Shavuot%" is %b.
+
+IF !InIsrael && !Reform
+   [_h(7, "Sivan")] MSG %"Shavuot 2%"
+ENDIF
+
+# Fairly sure Reform Jews don't observe the next two
+IF !Reform
+# Tzom Tamuz and Tish'a B'Av are moved to Sunday if they normally
+# fall on a Saturday
+   [_PastSat(17, "Tamuz")] ++4 MSG %"Tzom Tammuz%" is %b.
+   [_PastSat(9,  "Av")] ++4 MSG %"Tish'a B'Av%" is %b.
+ENDIF
+
+# Counting the omer - do the whole spiel, i.e:
+# "This is the xth day of the omer, being y weeks and z days of the omer."
+# Nice Remind programming example here!
+SET ostart HEBDATE(16, "Nisan", TODAY()-50)
+IF ostart <= TODAY() && (TODAY() - ostart < 49)
+   SET odays TODAY()-ostart+1
+   IF odays < 7
+      MSG %"%"Today is the [ORD(odays)] day of the Omer.
+   ELSE
+      IF !(odays % 7)
+         MSG %"%"Today is the [ORD(odays)] day of the Omer, being [odays / 7] [PLURAL(odays/7, "week")] of the Omer.
+      ELSE
+	 MSG %"%"Today is the [ORD(odays)] day of the Omer, being [odays/7] [PLURAL(odays/7, "week")] and [odays%7] [PLURAL(odays%7, "day")] of the Omer.
+      ENDIF
+   ENDIF
+   CAL [ORD(odays)] of Omer
+ENDIF
+
+### Candle lighting and Havdalah.  You should probably add candle lighting
+### for other holidays besides Shabbat.  These just create calendar entries
+### for Friday and Saturday.  Note:  You must set your latitude, longitude
+### and possibly time zone for these to work properly!
+
+REM Friday   CAL Candle lighting at [sunset(trigdate())-18]
+REM Saturday CAL Havdalah at [sunset(trigdate())+42]
+
+#COLORS
+##########################################################################
+#								         #
+# This contains sample ANSI escape sequences for coloring messages.      #
+# It should work on an IBM PC with the ANSI.SYS driver, and on           #
+# other terminals which use the ANSI sequences.                          #
+#								         #
+# This information was provided by Gail Gurman.
+#								         #
+##########################################################################
+# Colors - use Nrm to reset to normal text.
+SET Esc   CHAR(27)
+
+SET Nrm   Esc + "[0m"
+SET Blk   Esc + "[0;30m"
+SET Red   Esc + "[0;31m"
+SET Grn   Esc + "[0;32m"
+SET Ylw   Esc + "[0;33m"
+SET Blu   Esc + "[0;34m"
+SET Mag   Esc + "[0;35m"
+SET Cyn   Esc + "[0;36m"
+SET Wht   Esc + "[0;37m"
+SET Gry   Esc + "[30;1m"
+SET BrRed Esc + "[31;1m"
+SET BrGrn Esc + "[32;1m"
+SET BrYlw Esc + "[33;1m"
+SET BrBlu Esc + "[34;1m"
+SET BrMag Esc + "[35;1m"
+SET BrCyn Esc + "[36;1m"
+SET BrWht Esc + "[37;1m"
+
+# Examples
+REM MSG A [Blu]blue[Nrm] reminder.
+REM MSG [Red]%"A red reminder%" safe to use in the calendar mode.[Nrm]
+
+# Here is an example of how to use msgprefix() and msgsuffix().  These
+# will highlight priority-0 reminders in bright red,
+# priority-2500 in red, and priority-7500 in blue.  All others
+# will be in the normal colors
+FSET msgprefix(x) iif(x==0, BrRed, x==2500, Red, x==7500, Blu, Nrm)
+
+# Don't forget to return to normal color set at the end of reminder!
+FSET msgsuffix(x) Nrm
+
+# The next examples are great for putting right at the end of the reminder
+# file.  They make queued reminders more eye-catching when they pop up.
+FSET msgprefix(x) char(13,10,13,10)+"******************"+char(13,10,13,10)
+FSET msgsuffix(x) char(13,10)+"******************"+char(13,10,13,10)

@@ -1,0 +1,33 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl $Id: configure.in,v 1.1 1998-01-15 02:49:30 dfs Exp $
+
+AC_INIT(src/amiga.c)
+AC_CONFIG_HEADER(src/config.h)
+
+dnl Checks for programs.
+AC_PROG_AWK
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lm:
+
+AC_CHECK_LIB(m, sqrt)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(sys/file.h sys/time.h unistd.h malloc.h stdarg.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_TYPE_SIGNAL
+AC_FUNC_UTIME_NULL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(mktime putenv strstr)
+
+AC_OUTPUT()

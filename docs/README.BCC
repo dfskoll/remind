@@ -1,0 +1,65 @@
+$Id: README.BCC,v 1.1 1998-01-15 02:50:13 dfs Exp $
+REMIND version 3.0 for Borland C++
+
+1 - Read the file COPYRIGHT.  (This may be called COPYRIGH on your
+    MS-DOS system.)
+
+2 - You must use the Borland C++ OS/2 or MSDOS/Windows compiler.
+
+3 - Examine the file config.h and adjust parameters as needed
+
+4 - Examine the file makefile.bcc and adjust parameters as needed.
+
+5 - Type:
+
+	make -f makefile.bcc
+
+This will make 'remind.exe' and 'rem2ps.exe' in the ..\os2-ex or ..\msdos-ex
+directories.
+
+The file "defs.rem" has some sample Remind definitions and commands,
+as well as U.S. and Jewish holidays.
+
+NOTE that I do not have access to an OS/2 system, so support for this
+system may not be as good as I'd like.
+
+OS/2 support is courtesy of Russ Herman <rwh@gov.on.ca>, Norman Walsh 
+<norm@ora.com>, and Darrel Hankerson <hankedr@mail.auburn.edu>. 
+However, if you have problems, please contact me.
+
+OTHER LANGUAGE SUPPORT
+
+Remind has support for languages other than English.  See the file
+"lang.h" for details.  The language support may vary - you can change
+only the substitution filter, or you can translate all of the usage
+instructions and error messages as well.  See "french.h" for an
+example of the latter.
+
+If you add support for a non-English language, Remind will accept both the
+English and non-English names of months and weekdays in an input script.
+However, you should not rely on this feature if you want to write portable
+Remind scripts.
+
+At a minimum, you should support month and day names in the foreign
+language, and should modify the substitution filter appropriately.
+If you are truly diligent, you can translate usage and error messages
+too.
+
+Take a look at the files "english.h" and "german.h" if you want to add
+support for your favourite language.  If you do add another language
+to Remind, please let me know!	Here are the basic guidelines:
+
+- Your language file should be called "lxxx.h", where lxxx is the first 8
+characters of the ENGLISH name of your language.
+
+- You should define L_LANGNAME to be the full English name of your language,
+  with the first letter capitalized and the rest lower-case.
+
+--
+David F. Skoll <dfs@doe.carleton.ca>
+986 Eiffel Avenue
+Ottawa, Ontario K2C 0J2
+CANADA
+
+Tel. (613) 225-8687
+

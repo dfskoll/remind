@@ -1,0 +1,68 @@
+# Makefile for REMIND for Turbo C for MSDOS
+# $Id: makefile.tc,v 1.1 1998-01-15 02:50:33 dfs Exp $
+
+CC= tcc
+VERSION= 03.00.18
+
+HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
+lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \
+danish.h polish.h
+
+STDHDRS= config.h types.h protos.h globals.h err.h lang.h
+
+LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h danish.h \
+polish.h
+
+SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c init.c \
+moon.c main.c omit.c sort.c token.c trigger.c userfns.c utils.c var.c hbcal.c
+
+OBJS=calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
+globals.obj init.obj main.obj omit.obj sort.obj token.obj trigger.obj \
+utils.obj userfns.obj var.obj hbcal.obj
+
+all: remind.exe rem2ps.exe
+
+remind.exe: $(OBJS)
+	$(CC) @lnk.tc
+
+rem2ps.exe: rem2ps.obj
+	$(CC) -erem2ps.exe rem2ps.obj
+
+.c.obj:
+	$(CC) -w-pia -c -O -mm {$< }
+
+rem2ps.obj: rem2ps.c rem2ps.h config.h lang.h
+
+calendar.obj: calendar.c $(STDHDRS) expr.h
+
+dorem.obj: dorem.c $(STDHDRS) expr.h
+
+dosubst.obj: dosubst.c $(STDHDRS) $(LANGHDRS)
+
+expr.obj: expr.c $(STDHDRS) expr.h
+
+files.obj: files.c $(STDHDRS)
+
+funcs.obj: funcs.c $(STDHDRS) expr.h version.h
+
+globals.obj: globals.c config.h types.h globals.h err.h lang.h
+
+init.obj: init.c $(STDHDRS) expr.h version.h
+
+main.obj: main.c $(STDHDRS) expr.h
+
+moon.obj: moon.c $(STDHDRS) expr.h
+
+omit.obj: omit.c $(STDHDRS)
+
+sort.obj: sort.c $(STDHDRS)
+
+token.obj: token.c $(STDHDRS)
+
+trigger.obj: trigger.c $(STDHDRS) expr.h
+
+userfns.obj: userfns.c $(STDHDRS) expr.h
+
+utils.obj: utils.c $(STDHDRS)
+
+var.obj: var.c $(STDHDRS) expr.h

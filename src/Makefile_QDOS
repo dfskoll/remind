@@ -1,0 +1,86 @@
+#$Id: Makefile_QDOS,v 1.1 1998-01-15 02:50:24 dfs Exp $
+# Makefile for REMIND for QDOS / SMSQ
+
+#-----------------------------------------------------------------------------
+# THINGS FOR YOU TO EDIT START BELOW
+#-----------------------------------------------------------------------------
+
+# Uncomment the next lines if you want to use gcc instead of default compiler
+# NOTE:  Tempting as it may be, if you use 'cc' for the C compiler, do not
+# use 'ld' for the linker.  It will probably work much better if you use
+# LD= cc rather than LD= ld.
+# QDOS remark: I made it work the following way, and I found it to be working.
+CC= cc
+LD= ld
+
+# Put any additional flags for the C compiler or linker here - if you
+# are not using gcc, you probably want to remove '-ansi'.
+# QDOS remark: no -ansi option and no gcc on QDOS / SMSQ
+CFLAGS= -V -O -DQDOS
+CDEFS=
+LDFLAGS= -bufp200K
+
+#-----------------------------------------------------------------------------
+# YOU SHOULDN'T EDIT ANYTHING BELOW HERE.  You may want to change some things
+# in config_h; then, you should be able to type 'make'.
+#-----------------------------------------------------------------------------
+VERSION= 03.00.18
+MATHLIB= -lm
+
+HDRS= config_h err_h expr_h globals_h protos_h types_h version_h \
+lang_h english_h german_h dutch_h finnish_h french_h norwgian_h \
+danish_h polish_h
+
+STDHDRS= config_h types_h protos_h globals_h err_h lang_h
+
+LANGHDRS= english_h german_h dutch_h finnish_h french_h norwgian_h danish_h \
+polish_h
+
+SRCS= calendar_c dorem_c dosubst_c expr_c files_c funcs_c globals_c hbcal_c \
+init_c main_c moon_c omit_c sort_c queue_c token_c trigger_c userfns_c \
+utils_c var_c
+
+OBJS= calendar_o dorem_o dosubst_o expr_o files_o funcs_o globals_o hbcal_o \
+init_o main_o moon_o omit_o sort_o queue_o token_o trigger_o userfns_o \
+utils_o var_o
+
+all: remind rem2ps
+
+# _c_o:
+# 	$(CC) $(UNIX) $(SYSV) -c $(CFLAGS) $(CDEFS) $*_c
+
+rem2ps: rem2ps_o
+#   $(CC) $(CFLAGS) rem2ps_c
+   $(LD) $(LDFLAGS) -orem2ps rem2ps_o
+
+remind: $(OBJS)
+#   $(CC) $(CFLAGS) $(SRCS)
+   $(LD) $(LDFLAGS) -oremind $(OBJS) $(MATHLIB)
+
+rem2ps_o: rem2ps_c rem2ps_h lang_h config_h
+calendar_o: calendar_c $(STDHDRS) expr_h
+dorem_o: dorem_c $(STDHDRS) expr_h
+dosubst_o: dosubst_c $(STDHDRS) $(LANGHDRS)
+expr_o: expr_c $(STDHDRS) expr_h
+files_o: files_c $(STDHDRS)
+funcs_o: funcs_c $(STDHDRS) expr_h version_h
+globals_o: globals_c config_h types_h globals_h err_h lang_h $(LANGHDRS)
+hbcal_o: hbcal_c $(STDHDRS)
+init_o: init_c $(STDHDRS) expr_h version_h lang_h $(LANGHDRS)
+main_o: main_c $(STDHDRS) expr_h
+moon_o: moon_c $(STDHDRS)
+omit_o: omit_c $(STDHDRS)
+sort_o: sort_c $(STDHDRS)
+queue_o: queue_c $(STDHDRS)
+token_o: token_c $(STDHDRS)
+trigger_o: trigger_c $(STDHDRS) expr_h
+userfns_o: userfns_c $(STDHDRS) expr_h
+utils_o: utils_c $(STDHDRS)
+var_o: var_c $(STDHDRS) expr_h
+
+
+clean:
+	rm -f *_o *_bak
+
+clobber:
+	rm -f *_o remind rem2ps test_out *_bak

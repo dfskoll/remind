@@ -1,0 +1,97 @@
+# Makefile for REMIND for Borland C++
+# $Id: makefile.bcc,v 1.1 1998-01-15 02:50:32 dfs Exp $
+
+VERSION= 03.00.18
+
+MODEL=l
+
+!if $d(__OS2__)
+CFLAGS= -DOS2_POPUP -w-pia -O2
+BINDIR= ..\OS2-EX
+DELFLAG= /f
+!else
+CFLAGS= -w-pia -O2 -m$(MODEL)
+BINDIR= ..\MSDOS-EX
+DELFLAG=
+!endif
+
+HDRS= config.h err.h expr.h globals.h protos.h types.h version.h \
+lang.h english.h german.h dutch.h finnish.h french.h norwgian.h \
+danish.h polish.h
+
+STDHDRS= config.h types.h protos.h globals.h err.h lang.h
+
+LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h danish.h \
+polish.h
+
+SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c init.c \
+main.c omit.c sort.c token.c trigger.c userfns.c utils.c var.c hbcal.c \
+queue.c moon.c os2func.c
+
+OBJS=calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
+globals.obj init.obj main.obj omit.obj sort.obj token.obj trigger.obj \
+utils.obj userfns.obj var.obj hbcal.obj queue.obj moon.obj os2func.obj
+
+all: exes test-rem.cmd test-rem.bat
+	test-rem
+
+clean:
+	-del $(DELFLAG) *.obj
+	-del $(DELFLAG) $(BINDIR)\*.exe
+
+exes: $(BINDIR)\remind.exe $(BINDIR)\rem2ps.exe
+
+..\os2-ex\remind.exe: $(OBJS)
+	bcc -e..\os2-ex\remind @lnk.bcc -lap;Toe
+
+..\msdos-ex\remind.exe: $(OBJS)
+	bcc -e..\msdos-ex\remind -m$(MODEL) @lnk.bcc
+
+..\os2-ex\rem2ps.exe: rem2ps.obj
+	bcc -e..\os2-ex\rem2ps rem2ps.obj -lap;Toe
+
+..\msdos-ex\rem2ps.exe: rem2ps.obj
+	bcc -e..\msdos-ex\rem2ps -m$(MODEL) rem2ps.obj
+
+.c.obj:
+	bcc $(CFLAGS) -c {$< }
+
+rem2ps.obj: rem2ps.c rem2ps.h config.h lang.h
+
+calendar.obj: calendar.c $(STDHDRS) expr.h
+
+dorem.obj: dorem.c $(STDHDRS) expr.h
+
+dosubst.obj: dosubst.c $(STDHDRS) $(LANGHDRS)
+
+expr.obj: expr.c $(STDHDRS) expr.h
+
+files.obj: files.c $(STDHDRS)
+
+funcs.obj: funcs.c $(STDHDRS) expr.h version.h
+
+globals.obj: globals.c config.h types.h globals.h err.h lang.h
+
+init.obj: init.c $(STDHDRS) expr.h version.h
+
+main.obj: main.c $(STDHDRS) expr.h
+
+moon.obj: moon.c $(STDHDRS) expr.h
+
+omit.obj: omit.c $(STDHDRS)
+
+os2func.obj: os2func.c $(STDHDRS)
+
+queue.obj: queue.c $(STDHDRS)
+
+sort.obj: sort.c $(STDHDRS)
+
+token.obj: token.c $(STDHDRS)
+
+trigger.obj: trigger.c $(STDHDRS) expr.h
+
+userfns.obj: userfns.c $(STDHDRS) expr.h
+
+utils.obj: utils.c $(STDHDRS)
+
+var.obj: var.c $(STDHDRS) expr.h

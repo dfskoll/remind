@@ -1,0 +1,832 @@
+# Test file for REMIND
+#
+# $Id: test2.cmp,v 1.1 1998-01-15 02:50:51 dfs Exp $
+#
+# Use this file to test the date calculation routines
+# of the REMIND program by typing:
+#
+# 	./test-rem  # From WITHIN Remind source directory!
+
+REM MSG Today is [hebday(today())] [hebmon(today())] [hebyear(today())]
+.\test.rem(8): Trig = Saturday, 16 February, 1991
+Reminders for Saturday, 16th February, 1991:
+
+today() => 1991/02/16
+hebday(1991/02/16) => 2
+today() => 1991/02/16
+hebmon(1991/02/16) => "Adar"
+today() => 1991/02/16
+hebyear(1991/02/16) => 5751
+Today is 2 Adar 5751
+
+fset _h(x, y) trigger(hebdate(x,y))
+
+[_h(1,  "Tishrey")] MSG Rosh Hashana 1
+Entering UserFN _h(1, "Tishrey")
+x => 1
+y => "Tishrey"
+hebdate(1, "Tishrey") => 1991/09/09
+trigger(1991/09/09) => "9 September 1991"
+Leaving UserFN _h() => "9 September 1991"
+.\test.rem(11): Trig = Monday, 9 September, 1991
+[_h(2,  "Tishrey")] MSG Rosh Hashana 2
+Entering UserFN _h(2, "Tishrey")
+x => 2
+y => "Tishrey"
+hebdate(2, "Tishrey") => 1991/09/10
+trigger(1991/09/10) => "10 September 1991"
+Leaving UserFN _h() => "10 September 1991"
+.\test.rem(12): Trig = Tuesday, 10 September, 1991
+[_h(3,  "Tishrey")] MSG Tzom Gedalia
+Entering UserFN _h(3, "Tishrey")
+x => 3
+y => "Tishrey"
+hebdate(3, "Tishrey") => 1991/09/11
+trigger(1991/09/11) => "11 September 1991"
+Leaving UserFN _h() => "11 September 1991"
+.\test.rem(13): Trig = Wednesday, 11 September, 1991
+[_h(10, "Tishrey")] MSG Yom Kippur
+Entering UserFN _h(10, "Tishrey")
+x => 10
+y => "Tishrey"
+hebdate(10, "Tishrey") => 1991/09/18
+trigger(1991/09/18) => "18 September 1991"
+Leaving UserFN _h() => "18 September 1991"
+.\test.rem(14): Trig = Wednesday, 18 September, 1991
+[_h(15, "Tishrey")] MSG Sukkot 1
+Entering UserFN _h(15, "Tishrey")
+x => 15
+y => "Tishrey"
+hebdate(15, "Tishrey") => 1991/09/23
+trigger(1991/09/23) => "23 September 1991"
+Leaving UserFN _h() => "23 September 1991"
+.\test.rem(15): Trig = Monday, 23 September, 1991
+[_h(25, "Kislev")]  MSG Channuka
+Entering UserFN _h(25, "Kislev")
+x => 25
+y => "Kislev"
+hebdate(25, "Kislev") => 1991/12/02
+trigger(1991/12/02) => "2 December 1991"
+Leaving UserFN _h() => "2 December 1991"
+.\test.rem(16): Trig = Monday, 2 December, 1991
+[_h(10, "Tevet")]   MSG Asara B'Tevet
+Entering UserFN _h(10, "Tevet")
+x => 10
+y => "Tevet"
+hebdate(10, "Tevet") => 1991/12/17
+trigger(1991/12/17) => "17 December 1991"
+Leaving UserFN _h() => "17 December 1991"
+.\test.rem(17): Trig = Tuesday, 17 December, 1991
+[_h(15, "Shvat")]   MSG Tu B'Shvat
+Entering UserFN _h(15, "Shvat")
+x => 15
+y => "Shvat"
+hebdate(15, "Shvat") => 1992/01/20
+trigger(1992/01/20) => "20 January 1992"
+Leaving UserFN _h() => "20 January 1992"
+.\test.rem(18): Trig = Monday, 20 January, 1992
+[_h(15, "Adar A")]  MSG Purim Katan
+Entering UserFN _h(15, "Adar A")
+x => 15
+y => "Adar A"
+hebdate(15, "Adar A") => 1992/02/19
+trigger(1992/02/19) => "19 February 1992"
+Leaving UserFN _h() => "19 February 1992"
+.\test.rem(19): Trig = Wednesday, 19 February, 1992
+[_h(14, "Adar")]    MSG Purim
+Entering UserFN _h(14, "Adar")
+x => 14
+y => "Adar"
+hebdate(14, "Adar") => 1991/02/28
+trigger(1991/02/28) => "28 February 1991"
+Leaving UserFN _h() => "28 February 1991"
+.\test.rem(20): Trig = Thursday, 28 February, 1991
+[_h(15, "Nisan")]   MSG Pesach
+Entering UserFN _h(15, "Nisan")
+x => 15
+y => "Nisan"
+hebdate(15, "Nisan") => 1991/03/30
+trigger(1991/03/30) => "30 March 1991"
+Leaving UserFN _h() => "30 March 1991"
+.\test.rem(21): Trig = Saturday, 30 March, 1991
+[_h(27, "Nisan")]   MSG Yom HaShoah
+Entering UserFN _h(27, "Nisan")
+x => 27
+y => "Nisan"
+hebdate(27, "Nisan") => 1991/04/11
+trigger(1991/04/11) => "11 April 1991"
+Leaving UserFN _h() => "11 April 1991"
+.\test.rem(22): Trig = Thursday, 11 April, 1991
+[_h(4,  "Iyar")]    MSG Yom HaZikaron
+Entering UserFN _h(4, "Iyar")
+x => 4
+y => "Iyar"
+hebdate(4, "Iyar") => 1991/04/18
+trigger(1991/04/18) => "18 April 1991"
+Leaving UserFN _h() => "18 April 1991"
+.\test.rem(23): Trig = Thursday, 18 April, 1991
+[_h(5,  "Iyar")]    MSG Yom Ha'atzmaut
+Entering UserFN _h(5, "Iyar")
+x => 5
+y => "Iyar"
+hebdate(5, "Iyar") => 1991/04/19
+trigger(1991/04/19) => "19 April 1991"
+Leaving UserFN _h() => "19 April 1991"
+.\test.rem(24): Trig = Friday, 19 April, 1991
+[_h(28, "Iyar")]    MSG Yom Yerushalayim
+Entering UserFN _h(28, "Iyar")
+x => 28
+y => "Iyar"
+hebdate(28, "Iyar") => 1991/05/12
+trigger(1991/05/12) => "12 May 1991"
+Leaving UserFN _h() => "12 May 1991"
+.\test.rem(25): Trig = Sunday, 12 May, 1991
+[_h(6,  "Sivan")]   MSG Shavuot
+Entering UserFN _h(6, "Sivan")
+x => 6
+y => "Sivan"
+hebdate(6, "Sivan") => 1991/05/19
+trigger(1991/05/19) => "19 May 1991"
+Leaving UserFN _h() => "19 May 1991"
+.\test.rem(26): Trig = Sunday, 19 May, 1991
+[_h(9,  "Av")]      MSG Tish'a B'Av
+Entering UserFN _h(9, "Av")
+x => 9
+y => "Av"
+hebdate(9, "Av") => 1991/07/20
+trigger(1991/07/20) => "20 July 1991"
+Leaving UserFN _h() => "20 July 1991"
+.\test.rem(27): Trig = Saturday, 20 July, 1991
+
+# Test some jahrzeit cases
+fset _i(x,y,z,a) trigger(hebdate(x,y,z,a))
+[_i(30, "Heshvan", today(), 5759)] MSG Complete-Complete
+today() => 1991/02/16
+Entering UserFN _i(30, "Heshvan", 1991/02/16, 5759)
+x => 30
+y => "Heshvan"
+z => 1991/02/16
+a => 5759
+hebdate(30, "Heshvan", 1991/02/16, 5759) => 1991/11/07
+trigger(1991/11/07) => "7 November 1991"
+Leaving UserFN _i() => "7 November 1991"
+.\test.rem(31): Trig = Thursday, 7 November, 1991
+[_i(30, "Heshvan", today(), 5760)] MSG Complete-Defective
+today() => 1991/02/16
+Entering UserFN _i(30, "Heshvan", 1991/02/16, 5760)
+x => 30
+y => "Heshvan"
+z => 1991/02/16
+a => 5760
+hebdate(30, "Heshvan", 1991/02/16, 5760) => 1991/11/07
+trigger(1991/11/07) => "7 November 1991"
+Leaving UserFN _i() => "7 November 1991"
+.\test.rem(32): Trig = Thursday, 7 November, 1991
+[_i(30, "Heshvan", today(), 5761)] MSG Illegal
+today() => 1991/02/16
+Entering UserFN _i(30, "Heshvan", 1991/02/16, 5761)
+x => 30
+y => "Heshvan"
+z => 1991/02/16
+a => 5761
+hebdate(30, "Heshvan", 1991/02/16, 5761) => .\test.rem(33): 30 Heshvan 5761: Invalid Hebrew date
+Invalid Hebrew date
+Leaving UserFN _i() => Invalid Hebrew date
+
+[_i(30, "Kislev", today(), 5759)] MSG Complete-Complete
+today() => 1991/02/16
+Entering UserFN _i(30, "Kislev", 1991/02/16, 5759)
+x => 30
+y => "Kislev"
+z => 1991/02/16
+a => 5759
+hebdate(30, "Kislev", 1991/02/16, 5759) => 1991/12/07
+trigger(1991/12/07) => "7 December 1991"
+Leaving UserFN _i() => "7 December 1991"
+.\test.rem(35): Trig = Saturday, 7 December, 1991
+[_i(30, "Kislev", today(), 5760)] MSG Complete-Defective
+today() => 1991/02/16
+Entering UserFN _i(30, "Kislev", 1991/02/16, 5760)
+x => 30
+y => "Kislev"
+z => 1991/02/16
+a => 5760
+hebdate(30, "Kislev", 1991/02/16, 5760) => 1991/12/07
+trigger(1991/12/07) => "7 December 1991"
+Leaving UserFN _i() => "7 December 1991"
+.\test.rem(36): Trig = Saturday, 7 December, 1991
+[_i(30, "Kislev", today(), 5761)] MSG Illegal
+today() => 1991/02/16
+Entering UserFN _i(30, "Kislev", 1991/02/16, 5761)
+x => 30
+y => "Kislev"
+z => 1991/02/16
+a => 5761
+hebdate(30, "Kislev", 1991/02/16, 5761) => .\test.rem(37): 30 Kislev 5761: Invalid Hebrew date
+Invalid Hebrew date
+Leaving UserFN _i() => Invalid Hebrew date
+
+[_i(30, "Adar A", today(), 5755)] MSG Leap
+today() => 1991/02/16
+Entering UserFN _i(30, "Adar A", 1991/02/16, 5755)
+x => 30
+y => "Adar A"
+z => 1991/02/16
+a => 5755
+hebdate(30, "Adar A", 1991/02/16, 5755) => 1992/03/05
+trigger(1992/03/05) => "5 March 1992"
+Leaving UserFN _i() => "5 March 1992"
+.\test.rem(39): Trig = Thursday, 5 March, 1992
+[_i(30, "Adar A", today(), 5756)] MSG Illegal
+today() => 1991/02/16
+Entering UserFN _i(30, "Adar A", 1991/02/16, 5756)
+x => 30
+y => "Adar A"
+z => 1991/02/16
+a => 5756
+hebdate(30, "Adar A", 1991/02/16, 5756) => .\test.rem(40): No Adar A in 5756
+Invalid Hebrew date
+Leaving UserFN _i() => Invalid Hebrew date
+[_i(29, "Adar A", today(), 5755)] MSG Leap
+today() => 1991/02/16
+Entering UserFN _i(29, "Adar A", 1991/02/16, 5755)
+x => 29
+y => "Adar A"
+z => 1991/02/16
+a => 5755
+hebdate(29, "Adar A", 1991/02/16, 5755) => 1991/03/15
+trigger(1991/03/15) => "15 March 1991"
+Leaving UserFN _i() => "15 March 1991"
+.\test.rem(41): Trig = Friday, 15 March, 1991
+[_i(29, "Adar A", today(), 5756)] MSG Illegal
+today() => 1991/02/16
+Entering UserFN _i(29, "Adar A", 1991/02/16, 5756)
+x => 29
+y => "Adar A"
+z => 1991/02/16
+a => 5756
+hebdate(29, "Adar A", 1991/02/16, 5756) => .\test.rem(42): No Adar A in 5756
+Invalid Hebrew date
+Leaving UserFN _i() => Invalid Hebrew date
+
+# Test each possible case of the basic reminders.
+
+REM MSG Every Day
+.\test.rem(46): Trig = Saturday, 16 February, 1991
+Every Day
+
+
+REM 18 MSG Every 18th 
+.\test.rem(48): Trig = Monday, 18 February, 1991
+REM 15 MSG Every 15th
+.\test.rem(49): Trig = Friday, 15 March, 1991
+
+REM Feb MSG February
+.\test.rem(51): Trig = Saturday, 16 February, 1991
+February
+
+REM Jan MSG January
+.\test.rem(52): Trig = Wednesday, 1 January, 1992
+REM March MSG March
+.\test.rem(53): Trig = Friday, 1 March, 1991
+
+REM 13 Jan MSG 13 Jan
+.\test.rem(55): Trig = Monday, 13 January, 1992
+REM 15 Feb MSG 15 Feb
+.\test.rem(56): Trig = Saturday, 15 February, 1992
+REM 28 Feb MSG 28 Feb
+.\test.rem(57): Trig = Thursday, 28 February, 1991
+REM 29 Feb MSG 29 Feb
+.\test.rem(58): Trig = Saturday, 29 February, 1992
+REM 5 Mar MSG 5 Mar
+.\test.rem(59): Trig = Tuesday, 5 March, 1991
+
+REM 1990 MSG 1990
+.\test.rem(61): Expired
+REM 1991 MSG 1991
+.\test.rem(62): Trig = Saturday, 16 February, 1991
+1991
+
+REM 1992 MSG 1991
+.\test.rem(63): Trig = Wednesday, 1 January, 1992
+
+REM 1 1990 MSG 1 1990
+.\test.rem(65): Expired
+REM 29 1991 MSG 29 1991
+.\test.rem(66): Trig = Friday, 29 March, 1991
+REM 29 1992 MSG 29 1992
+.\test.rem(67): Trig = Wednesday, 29 January, 1992
+REM 16 1991 MSG 16 1991
+.\test.rem(68): Trig = Saturday, 16 February, 1991
+16 1991
+
+
+REM Jan 1990 MSG Jan 1990
+.\test.rem(70): Expired
+REM Feb 1991 MSG Feb 1991
+.\test.rem(71): Trig = Saturday, 16 February, 1991
+Feb 1991
+
+REM Dec 1991 MSG Dec 1991
+.\test.rem(72): Trig = Sunday, 1 December, 1991
+REM May 1992 MSG May 1992
+.\test.rem(73): Trig = Friday, 1 May, 1992
+
+REM 1 Jan 1991 MSG 1 Jan 1991
+.\test.rem(75): Expired
+REM 16 Feb 1991 MSG 16 Feb 1991
+.\test.rem(76): Trig = Saturday, 16 February, 1991
+16 Feb 1991
+
+REM 29 Dec 1992 MSG 29 Dec 1992
+.\test.rem(77): Trig = Tuesday, 29 December, 1992
+
+REM Sun MSG Sun
+.\test.rem(79): Trig = Sunday, 17 February, 1991
+REM Fri Sat Tue MSG Fri Sat Tue
+.\test.rem(80): Trig = Saturday, 16 February, 1991
+Fri Sat Tue
+
+
+REM Sun 16 MSG Sun 16
+.\test.rem(82): Trig = Sunday, 17 February, 1991
+REM Mon Tue Wed Thu Fri 1 MSG Mon Tue Wed Thu Fri 1
+.\test.rem(83): Trig = Friday, 1 March, 1991
+
+REM Sun Feb MSG Sun Feb
+.\test.rem(85): Trig = Sunday, 17 February, 1991
+REM Mon Tue March MSG Mon Tue March
+.\test.rem(86): Trig = Monday, 4 March, 1991
+
+REM Sun 16 Feb MSG Sun 16 Feb
+.\test.rem(88): Trig = Sunday, 17 February, 1991
+REM Mon Tue 10 March MSG Mon Tue 10 March
+.\test.rem(89): Trig = Monday, 11 March, 1991
+
+REM Sat Sun 1991 MSG Sat Sun 1991
+.\test.rem(91): Trig = Saturday, 16 February, 1991
+Sat Sun 1991
+
+REM Mon Tue 1992 MSG Mon Tue 1992
+.\test.rem(92): Trig = Monday, 6 January, 1992
+
+REM Sun 16 1991 MSG Sun 16 1991
+.\test.rem(94): Trig = Sunday, 17 February, 1991
+REM Mon Tue Wed Thu Fri 1 1992 MSG Mon Tue Wed Thu Fri 1 1992
+.\test.rem(95): Trig = Wednesday, 1 January, 1992
+
+REM Mon Feb 1991 MSG Mon Feb 1991
+.\test.rem(97): Trig = Monday, 18 February, 1991
+REM Tue Jan 1992 MSG Tue Jan 1992
+.\test.rem(98): Trig = Tuesday, 7 January, 1992
+
+REM Sun Mon 16 Feb 1991 MSG Sun Mon 16 Feb 1991
+.\test.rem(100): Trig = Sunday, 17 February, 1991
+REM Tue 28 Jan 1992 MSG Tue 28 Jan 1992
+.\test.rem(101): Trig = Tuesday, 28 January, 1992
+
+# Try some Backs
+CLEAR-OMIT-CONTEXT
+REM 1 -1 OMIT sat sun MSG 1 -1 OMIT Sat Sun
+.\test.rem(105): Trig = Thursday, 28 February, 1991
+REM 1 --1 OMIT sat sun MSG 1 --1 OMIT Sat Sun
+.\test.rem(106): Trig = Thursday, 28 February, 1991
+
+OMIT 28 Feb
+REM 1 -1 OMIT sat sun MSG 1 -1 OMIT Sat Sun (28 Feb omitted)
+.\test.rem(109): Trig = Wednesday, 27 February, 1991
+REM 1 --1 OMIT sat sun MSG 1 --1 OMIT Sat Sun (28 Feb omitted)
+.\test.rem(110): Trig = Thursday, 28 February, 1991
+
+CLEAR-OMIT-CONTEXT
+
+# Try out UNTIL
+REM Wed UNTIL 21 Feb 1991 MSG Wed UNTIL 21 Feb 1991
+.\test.rem(115): Trig = Wednesday, 20 February, 1991
+
+# Try playing with the OMIT context
+
+OMIT 28 Feb 1991
+REM 1 Mar -1 MSG 1 mar -1 (28feb91 omitted)
+.\test.rem(120): Trig = Wednesday, 27 February, 1991
+REM 1 Mar --1 MSG 1 mar --1 (28Feb91 omitted)
+.\test.rem(121): Trig = Thursday, 28 February, 1991
+REM 28 Feb BEFORE MSG 28 Feb BEFORE (28Feb91 omitted)
+.\test.rem(122): Trig = Wednesday, 27 February, 1991
+REM 28 Feb SKIP MSG 28 Feb SKIP (28Feb91 omitted)
+.\test.rem(123): Trig = Friday, 28 February, 1992
+REM 28 Feb AFTER MSG 28 Feb AFTER (28Feb91 omitted)
+.\test.rem(124): Trig = Friday, 1 March, 1991
+
+PUSH-OMIT-CONTEXT
+CLEAR-OMIT-CONTEXT
+REM 1 Mar -1 MSG 1 mar -1
+.\test.rem(128): Trig = Thursday, 28 February, 1991
+REM 1 Mar --1 MSG 1 mar --1
+.\test.rem(129): Trig = Thursday, 28 February, 1991
+REM 28 Feb BEFORE MSG 28 Feb BEFORE
+.\test.rem(130): Trig = Thursday, 28 February, 1991
+REM 28 Feb SKIP MSG 28 Feb SKIP 
+.\test.rem(131): Trig = Thursday, 28 February, 1991
+REM 28 Feb AFTER MSG 28 Feb AFTER
+.\test.rem(132): Trig = Thursday, 28 February, 1991
+
+POP-OMIT-CONTEXT
+REM 1 Mar -1 MSG 1 mar -1 (28feb91 omitted)
+.\test.rem(135): Trig = Wednesday, 27 February, 1991
+REM 1 Mar --1 MSG 1 mar --1 (28Feb91 omitted)
+.\test.rem(136): Trig = Thursday, 28 February, 1991
+REM 28 Feb BEFORE MSG 28 Feb BEFORE (28Feb91 omitted)
+.\test.rem(137): Trig = Wednesday, 27 February, 1991
+REM 28 Feb SKIP MSG 28 Feb SKIP (28Feb91 omitted)
+.\test.rem(138): Trig = Friday, 28 February, 1992
+REM 28 Feb AFTER MSG 28 Feb AFTER (28Feb91 omitted)
+.\test.rem(139): Trig = Friday, 1 March, 1991
+
+
+REM 13 March 1991 *1 UNTIL 19 March 1991 MSG 13-19 Mar 91
+.\test.rem(142): Trig = Wednesday, 13 March, 1991
+ 
+# Test BACK
+CLEAR-OMIT-CONTEXT
+REM 18 Feb 1991 +1 MSG 18 Feb 1991 +1
+.\test.rem(146): Trig = Monday, 18 February, 1991
+
+OMIT 17 Feb 1991
+REM 18 Feb 1991 +1 MSG 18 Feb 1991 +1 (17Feb91 omitted)
+.\test.rem(149): Trig = Monday, 18 February, 1991
+18 Feb 1991 +1 (17Feb91 omitted)
+
+REM 18 Feb 1991 ++1 MSG 18 Feb 1991 ++1 (17Feb91 omitted)
+.\test.rem(150): Trig = Monday, 18 February, 1991
+
+CLEAR-OMIT-CONTEXT
+# Test the scanfrom clause
+REM Fri SATISFY 1
+.\test.rem(154): Trig = Friday, 22 February, 1991
+OMIT [trigger(trigdate())]
+trigdate() => 1991/02/22
+trigger(1991/02/22) => "22 February 1991"
+REM Fri after MSG 23 Feb 1991
+.\test.rem(156): Trig = Saturday, 23 February, 1991
+CLEAR-OMIT-CONTEXT
+REM Fri SCANFROM [trigger(today()-7)] SATISFY 1
+today() => 1991/02/16
+1991/02/16 - 7 => 1991/02/09
+trigger(1991/02/09) => "9 February 1991"
+.\test.rem(158): Trig = Friday, 15 February, 1991
+OMIT [trigger(trigdate())]
+trigdate() => 1991/02/15
+trigger(1991/02/15) => "15 February 1991"
+REM Fri after MSG 16 Feb 1991
+.\test.rem(160): Trig = Saturday, 16 February, 1991
+16 Feb 1991
+
+CLEAR-OMIT-CONTEXT
+set a000 abs(1)
+abs(1) => 1
+set a001 abs(-1)
+- 1 => -1
+abs(-1) => 1
+set a002 asc("foo")
+asc("foo") => 102
+set a003 baseyr()
+baseyr() => 1990
+set a004 char(66,55,66,77,66)
+char(66, 55, 66, 77, 66) => "B7BMB"
+set a005 choose(3, "foo", "bar", "baz", "blech")
+choose(3, "foo", "bar", "baz", "blech") => "baz"
+set a006 coerce("string", 1)
+coerce("string", 1) => "1"
+set a007 coerce("string", today())
+today() => 1991/02/16
+coerce("string", 1991/02/16) => "1991/02/16"
+set a008 coerce("string", 11:44)
+coerce("string", 11:44) => "11:44"
+set a009 coerce("int", "badnews")
+coerce("int", "badnews") => Can't coerce
+.\test.rem(171): Can't coerce
+set a010 coerce("int", "12")
+coerce("int", "12") => 12
+set a011 coerce("int", 11:44)
+coerce("int", 11:44) => 704
+set a012 coerce("int", today())
+today() => 1991/02/16
+coerce("int", 1991/02/16) => 411
+set a013 date(1992, 2, 2)
+date(1992, 2, 2) => 1992/02/02
+set a014 date(1993, 2, 29)
+date(1993, 2, 29) => Bad date specification
+.\test.rem(176): Bad date specification
+set a015 day(today())
+today() => 1991/02/16
+day(1991/02/16) => 16
+set a016 daysinmon(2, 1991)
+daysinmon(2, 1991) => 28
+set a017 daysinmon(2, 1992)
+daysinmon(2, 1992) => 29
+set a018 defined("a017")
+defined("a017") => 1
+set a019 defined("a019")
+defined("a019") => 0
+set a020 filename()
+filename() => ".\test.rem"
+set a021 getenv("TEST_GETENV")
+getenv("TEST_GETENV") => "foo bar baz"
+set a022 hour(11:22)
+hour(11:22) => 11
+set a023 iif(1, 1, 0)
+iif(1, 1, 0) => 1
+set a024 iif(0, 1, 0)
+iif(0, 1, 0) => 0
+set a025 index("barfoobar", "foo")
+index("barfoobar", "foo") => 4
+set a026 index("barfoobar", "bar", 2)
+index("barfoobar", "bar", 2) => 7
+set a027 isleap(today())
+today() => 1991/02/16
+isleap(1991/02/16) => 0
+set a028 isleap(1992)
+isleap(1992) => 1
+omit [trigger(today())]
+today() => 1991/02/16
+trigger(1991/02/16) => "16 February 1991"
+set a030 isomitted(today())
+today() => 1991/02/16
+isomitted(1991/02/16) => 1
+clear
+set a029 isomitted(today())
+today() => 1991/02/16
+isomitted(1991/02/16) => 0
+set a031 lower("FOOBARBAZ")
+lower("FOOBARBAZ") => "foobarbaz"
+set a032 max(1, 2, 34, 1, 3)
+max(1, 2, 34, 1, 3) => 34
+set a033 max("foo", "bar", "baz")
+max("foo", "bar", "baz") => "foo"
+set a034 max(today(), today()+1, today()-1)
+today() => 1991/02/16
+today() => 1991/02/16
+1991/02/16 + 1 => 1991/02/17
+today() => 1991/02/16
+1991/02/16 - 1 => 1991/02/15
+max(1991/02/16, 1991/02/17, 1991/02/15) => 1991/02/17
+set a035 min(1, 2, 34, 1, 3)
+min(1, 2, 34, 1, 3) => 1
+set a036 min("foo", "bar", "baz")
+min("foo", "bar", "baz") => "bar"
+set a037 min(today(), today()+1, today()-1)
+today() => 1991/02/16
+today() => 1991/02/16
+1991/02/16 + 1 => 1991/02/17
+today() => 1991/02/16
+1991/02/16 - 1 => 1991/02/15
+min(1991/02/16, 1991/02/17, 1991/02/15) => 1991/02/15
+set a038 minute(11:33)
+minute(11:33) => 33
+set a039 mon(today())
+today() => 1991/02/16
+mon(1991/02/16) => "February"
+set a040 monnum(today())
+today() => 1991/02/16
+monnum(1991/02/16) => 2
+set a041 ord(3)
+ord(3) => "3rd"
+set a042 ord(4)
+ord(4) => "4th"
+set a043 ostype()
+ostype() => "OS/2"
+set a044 plural(2)
+plural(2) => "s"
+set a045 plural(2, "ies")
+plural(2, "ies") => "iess"
+set a046 plural(2, "y", "ies")
+plural(2, "y", "ies") => "ies"
+set a047 sgn(-2)
+- 2 => -2
+sgn(-2) => -1
+set a048 shell("echo foo")
+shell("echo foo") => "foo"
+set a049 strlen("sadjflkhsldkfhsdlfjhk")
+strlen("sadjflkhsldkfhsdlfjhk") => 21
+set a050 substr(a049, 2)
+a049 => 21
+substr(21, 2) => Type mismatch
+.\test.rem(214): Type mismatch
+set a051 substr(a050, 2, 6)
+a050 => .\test.rem(215): Undefined variable: a050
+set a052 time(1+2, 3+4)
+1 + 2 => 3
+3 + 4 => 7
+time(3, 7) => 03:07
+rem 10 jan 1992 AT 11:22 CAL
+.\test.rem(217): Trig = Friday, 10 January, 1992
+set a053 trigdate()
+trigdate() => 1992/01/10
+set a054 trigtime()
+trigtime() => 11:22
+set a055 trigvalid()
+trigvalid() => 1
+set a056 upper("sdfjhsdf ksjdfh kjsdfh ksjdfh")
+upper("sdfjhsdf ksjdfh kjsdfh ksjdfh") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+set a057 value("a05"+"6")
+"a05" + "6" => "a056"
+value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+set a058 version()
+version() => "03.00.18"
+set a059 wkday(today())
+today() => 1991/02/16
+wkday(1991/02/16) => "Saturday"
+set a060 wkdaynum(today())
+today() => 1991/02/16
+wkdaynum(1991/02/16) => 6
+set a061 year(today())
+today() => 1991/02/16
+year(1991/02/16) => 1991
+set a062 1+2*(3+4-(5*7/2))
+3 + 4 => 7
+5 * 7 => 35
+35 / 2 => 17
+7 - 17 => -10
+2 * -10 => -20
+1 + -20 => -19
+set a063 1>=2
+1 >= 2 => 0
+set a064 1<2 || 3 > 4
+1 < 2 => 1
+3 > 4 => 0
+1 || 0 => 1
+set a065 1 && 1
+1 && 1 => 1
+set a066 !a065
+a065 => 1
+! 1 => 0
+set a067 typeof(2)
+typeof(2) => "INT"
+set a068 typeof("foo")
+typeof("foo") => "STRING"
+set a069 typeof(11:33)
+typeof(11:33) => "TIME"
+set a070 typeof(today())
+today() => 1991/02/16
+typeof(1991/02/16) => "DATE"
+fset g(x,y) max(x,y)
+fset h(x,y) min(g(x+y, x*y), g(x-y, x/y))
+set a071 g(1, 2)
+Entering UserFN g(1, 2)
+x => 1
+y => 2
+max(1, 2) => 2
+Leaving UserFN g() => 2
+set a072 h(2, 3)
+Entering UserFN h(2, 3)
+x => 2
+y => 3
+2 + 3 => 5
+x => 2
+y => 3
+2 * 3 => 6
+Entering UserFN g(5, 6)
+x => 5
+y => 6
+max(5, 6) => 6
+Leaving UserFN g() => 6
+x => 2
+y => 3
+2 - 3 => -1
+x => 2
+y => 3
+2 / 3 => 0
+Entering UserFN g(-1, 0)
+x => -1
+y => 0
+max(-1, 0) => 0
+Leaving UserFN g() => 0
+min(6, 0) => 0
+Leaving UserFN h() => 0
+set a073 h("foo", 11:33)
+Entering UserFN h("foo", 11:33)
+x => "foo"
+y => 11:33
+"foo" + 11:33 => "foo11:33"
+x => "foo"
+y => 11:33
+"foo" * 11:33 => Type mismatch
+.\test.rem(240): `*': Type mismatch
+Leaving UserFN h() => Type mismatch
+set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
+dosubst("%a %b %c %d %e %f %g %h", 1992/05/05) => "on Tuesday, 5 May, 1992 in 444 days' tim"...
+msg [a074]%
+.\test.rem(242): Trig = Saturday, 16 February, 1991
+a074 => "on Tuesday, 5 May, 1992 in 444 days' tim"...
+on Tuesday, 5 May, 1992 in 444 days' time on Tuesday 5 on 05/05/1992 on 05/05/1992 on Tuesday, 5 May on 05/05
+set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
+dosubst("%i %j %k %l %m %n %o %p", 1992/05/05) => "on 05/05 on Tuesday, May 5th, 1992 on Tu"...
+msg [a075]%
+.\test.rem(244): Trig = Saturday, 16 February, 1991
+a075 => "on 05/05 on Tuesday, May 5th, 1992 on Tu"...
+on 05/05 on Tuesday, May 5th, 1992 on Tuesday, May 5th on 1992/05/05 May 5  s
+set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
+dosubst("%q %r %s %t %u %v %w %x", 1992/05/05) => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
+msg [a076]%
+.\test.rem(246): Trig = Saturday, 16 February, 1991
+a076 => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
+s' 05 th 05 on Tuesday, 5th May, 1992 on Tuesday, 5th May Tuesday 444
+set a077 dosubst("%y %z", '1992/5/5')
+dosubst("%y %z", 1992/05/05) => "1992 92
+"
+msg [a077]%
+.\test.rem(248): Trig = Saturday, 16 February, 1991
+a077 => "1992 92
+"
+1992 92
+set a078 easterdate(today())
+today() => 1991/02/16
+easterdate(1991/02/16) => 1991/03/31
+set a079 easterdate(1992)
+easterdate(1992) => 1992/04/19
+set a080 easterdate(1995)
+easterdate(1995) => 1995/04/16
+set a081 ""
+dump
+    Variable  Value
+
+        a017  29
+        a036  "bar"
+        a055  1
+        a074  "on Tuesday, 5 May, 1992 in 444 days' tim"...
+        a008  "11:44"
+        a027  0
+        a046  "ies"
+        a065  1
+        a018  1
+        a037  1991/02/15
+        a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+        a075  "on 05/05 on Tuesday, May 5th, 1992 on Tu"...
+        a028  1
+        a047  -1
+        a066  0
+        a019  0
+        a038  33
+        a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+        a076  "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
+        a029  0
+        a048  "foo"
+        a067  "INT"
+        a039  "February"
+        a058  "03.00.18"
+        a077  "1992 92
+"
+        a049  21
+        a068  "STRING"
+        a059  "Saturday"
+        a078  1991/03/31
+        a069  "TIME"
+        a079  1992/04/19
+        a000  1
+        a010  12
+        a001  1
+        a020  ".\test.rem"
+        a011  704
+        a030  1
+        a002  102
+        a021  "foo bar baz"
+        a040  2
+        a012  411
+        a031  "foobarbaz"
+        a003  1990
+        a022  11
+        a041  "3rd"
+        a060  6
+        a013  1992/02/02
+        a032  34
+        a070  "DATE"
+        a004  "B7BMB"
+        a023  1
+        a042  "4th"
+        a061  1991
+        a080  1995/04/16
+        a033  "foo"
+        a052  03:07
+        a071  2
+        a005  "baz"
+        a024  0
+        a043  "OS/2"
+        a062  -19
+        a081  ""
+        a015  16
+        a034  1991/02/17
+        a053  1992/01/10
+        a072  0
+        a006  "1"
+        a025  4
+        a044  "s"
+        a063  0
+        a016  28
+        a035  1
+        a054  11:22
+        a007  "1991/02/16"
+        a026  7
+        a045  "iess"
+        a064  1
+

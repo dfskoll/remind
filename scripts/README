@@ -1,0 +1,10 @@
+Files in this directory:
+
+kall		-- Kills a program by command name, as in "kall remind"
+rem		-- Starts Remind with a default file of $HOME/.reminders
+remind-all.csh	-- Mails reminders to all users (C-Shell version)
+remind-all.sh	-- Mails reminders to all users (Bourne Shell version)
+tkremind*	-- Tcl/Tk graphical calendar using Remind as engine
+
+$Id: README,v 1.1 1998-01-15 02:50:20 dfs Exp $
+

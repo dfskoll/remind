@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.5 1998-02-10 03:15:52 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.6 1998-02-10 04:11:46 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -72,8 +72,6 @@ PRIVATE long time_cheat ARGS ((int year, int month));
 long timegm ARGS((struct tm *tm));
 long timelocal ARGS((struct tm *tm));
 #endif
-
-static char *TokenPushed = NULL;
 
 /* Whooo... the putchar/Putchar/PutChar macros are a mess...
    my apologies... */
@@ -392,13 +390,13 @@ int peek;
     int r;
 
     *err = 0;
-    if (TokenPushed && *TokenPushed) {
-	if (peek) return *TokenPushed;
+    if (p->tokenPushed && *p->tokenPushed) {
+	if (peek) return *p->tokenPushed;
 	else {
-	    r = *TokenPushed++;
+	    r = *p->tokenPushed++;
 	    if (!r) {
-		DBufFree(&TPushBuffer);
-		TokenPushed = NULL;
+		DBufFree(&p->pushedToken);
+		p->tokenPushed = NULL;
 	    }
 	    return r;
 	}
@@ -702,7 +700,8 @@ ParsePtr p;
     p->epos = NULL;
     p->etext = NULL;
     p->allownested = 1;
-    TokenPushed = NULL;
+    p->tokenPushed = NULL;
+    DBufInit(&p->pushedToken);
 }
 
 /***************************************************************/
@@ -724,28 +723,30 @@ ParsePtr p;
 	p->etext = NULL;
 	p->isnested = 0;
     }
+    DBufFree(&p->pushedToken);
 }
 
 /***************************************************************/
 /*                                                             */
 /*  PushToken - one level of token pushback.  This is          */
-/*  GLOBAL, not on a per-parser basis.                         */
+/*  on a per-parser basis.                                     */
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-PUBLIC int PushToken(const char *tok)
+PUBLIC int PushToken(const char *tok, ParsePtr p)
 #else
-int PushToken(tok)
+int PushToken(tok, p)
 char *tok;
+ParsePtr p;
 #endif
 {
-    DBufFree(&TPushBuffer);
-    if (DBufPuts(&TPushBuffer, (char *) tok) != OK ||
-	DBufPutc(&TPushBuffer, ' ') != OK) {
-	DBufFree(&TPushBuffer);
+    DBufFree(&p->pushedToken);
+    if (DBufPuts(&p->pushedToken, (char *) tok) != OK ||
+	DBufPutc(&p->pushedToken, ' ') != OK) {
+	DBufFree(&p->pushedToken);
 	return E_NO_MEM;
     }
-    TokenPushed = DBufValue(&TPushBuffer);
+    p->tokenPushed = DBufValue(&p->pushedToken);
     return OK;
 }
 

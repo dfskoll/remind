@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.3 1998-02-07 05:35:50 dfs Exp $
+.\" $Id: remind.1,v 1.4 1998-02-10 04:11:39 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -2178,13 +2178,18 @@ in calendar mode, or if a date has been supplied on the command line.
 Returns -1 if \fInum\fR is negative, 1 if \fInum\fR is positive,
 and 0 if \fInum\fR is zero.
 .TP
-.B shell(s_cmd)
+.B shell(s_cmd [,i_maxlen])
 Executes \fIcmd\fR as a system command, and returns the first 511
 characters of output resulting from \fIcmd\fR.  Any whitespace
 character in the output is converted to a space.  Note that if \fBRUN
 OFF\fR has been executed, or the \fB\-r\fR command-line option has
 been used, \fBshell()\fR will result in an error, and \fIcmd\fR will
 not be executed.
+.PP
+If \fImaxlen\fR is specified, then \fBshell()\fR returns the first
+\fImaxlen\fR characters of output (rather than the first 511).  If
+\fImaxlen\fR is specified as a negative number, then \fIall\fR the
+output from \fIcmd\fR is returned.
 .TP
 .B strlen(s_str)
 Returns the length of \fIstr\fR.

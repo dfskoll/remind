@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.4 1998-02-10 03:15:47 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.5 1998-02-10 04:11:44 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -328,9 +328,12 @@ PUBLIC int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 	    break;
 
 	default:
-	    Eprint("%s: %s", ErrMsg[E_UNKNOWN_TOKEN], DBufValue(&buf));
+	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
-	    return E_UNKNOWN_TOKEN;
+	    trig->typ = MSG_TYPE;
+	    if (s->isnested) return E_CANT_NEST_RTYPE;
+	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
+	    return OK;
 	}
     }
 }
@@ -379,7 +382,7 @@ PRIVATE int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
 
 	    /* Save trigger time in global variable */
 	    LastTriggerTime = tim->ttime;
-	    PushToken(DBufValue(&buf));
+	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;
 	}
@@ -416,7 +419,7 @@ PRIVATE int ParseLocalOmit(ParsePtr s, Trigger *t)
 	    break;
 
 	default:
-	    PushToken(DBufValue(&buf));
+	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;
 	}
@@ -490,7 +493,7 @@ PRIVATE int ParseUntil(ParsePtr s, Trigger *t)
 		return E_BAD_DATE;
 	    }
 	    t->until = Julian(y, m, d);
-	    PushToken(DBufValue(&buf));
+	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;
 	}
@@ -564,7 +567,7 @@ PRIVATE int ParseScanFrom(ParsePtr s, Trigger *t)
 		return E_BAD_DATE;
 	    }
 	    t->scanfrom = Julian(y, m, d);
-	    PushToken(DBufValue(&buf));
+	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;
 	}
@@ -629,6 +632,7 @@ PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
 	printf("%s\n", DBufValue(&buf));
 #endif
 	}
+	DBufFree(&buf);
     }
 
 /* If it's NextMode, process as a CAL-type entry, and issue simple-calendar

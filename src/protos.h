@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.4 1998-02-10 03:15:53 dfs Exp $ */
+/* $Id: protos.h,v 1.5 1998-02-10 04:11:46 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -74,7 +74,7 @@ void Eprint ARGS ((const char *fmt, ...));
 void OutputLine ARGS ((FILE *fp));
 void CreateParser ARGS ((char *s, ParsePtr p));
 void DestroyParser ARGS ((ParsePtr p));
-int PushToken ARGS ((const char *tok));
+int PushToken ARGS ((const char *tok, ParsePtr p));
 long SystemTime ARGS ((int realtime));
 int SystemDate ARGS ((int *y, int *m, int *d));
 int DoIf ARGS ((ParsePtr p));

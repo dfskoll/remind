@@ -4,6 +4,14 @@ CHANGES TO REMIND
 
 + MAJOR ENHANCEMENTS
 
+- Added the script "build.tk" which makes it trivial to compile
+  and install Remind under UNIX -- no need to edit Makefiles or
+  header files.  A nice GUI installation dialog!
+
+- Got rid of all fixed-size buffers.  Hurray!  Everything is dynamic --
+  no built-in limits on line length, token size, etc.  This should
+  cure lots of SEGV's for weird files.
+
 - Added TAG and DURATION clauses for communicating more information to
   back-ends and eventually converting REMIND into a full-fledged
   scheduler.
@@ -13,6 +21,14 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Made parser _very_ forgiving -- the type of reminder now defaults
+  to MSG.  This lets you have lines in the reminder file like this:
+
+	Feb 9, 1998 Meeting with Joe.
+
+  But I don't recommend abusing it.  It's mostly to ease migration from
+  UNIX calendar(1) files.
+
 - Documented the "remind -p" format.
 
 - Made Remind communicate day and month names to back-ends so they
@@ -21,10 +37,6 @@ CHANGES TO REMIND
 - Directory structure totally reorganized.  Remind now uses an autoconf
   "configure" script which should make life very pleasant for UNIX
    people.
-
-- Added the script "build.tk" which makes it trivial to compile
-  and install Remind under UNIX -- no need to edit Makefiles or
-  header files.  A nice GUI installation dialog!
 
 - Made rem2html work properly if more than one month's worth of calendar
   data was produced.
@@ -39,6 +51,9 @@ CHANGES TO REMIND
 - The reorganization and use of "configure" probably breaks Remind
   installation on non-UNIX platforms.  Sorry.  I can't fix it until
   I hear back from non-UNIX maintainers.
+
+- Getting rid of fixed-sized buffers meant lots of changes to code.
+  No doubt, I missed a few regression tests.
 
 * Version 3.0 Patch 17
 

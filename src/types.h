@@ -9,7 +9,9 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.2 1998-02-10 03:15:57 dfs Exp $ */
+/* $Id: types.h,v 1.3 1998-02-10 04:11:47 dfs Exp $ */
+
+#include "dynbuf.h"
 
 /* Values */
 typedef struct {
@@ -79,6 +81,8 @@ typedef struct {
     char *pos;            /* Current position */
     char *etext;          /* Substituted text */
     char *epos;           /* Position in substituted text */
+    DynamicBuffer pushedToken;	/* Pushed-back token */
+    char *tokenPushed;	  /* NULL if no pushed-back token */
 } Parser;
 
 typedef Parser *ParsePtr;  /* Pointer to parser structure */

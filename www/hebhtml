@@ -4,13 +4,40 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: hebhtml,v 1.1 1997-07-31 02:19:06 dfs Exp $
+# $Id: hebhtml,v 1.2 1997-07-31 03:10:18 dfs Exp $
 
 echo "Content-Type: text/html"
 echo ""
-$REMIND - <<EOR
+
+if [ "$1 $2" = " " ] ; then
+$REMIND - <<'EOR'
+set thismon monnum(today())
+set thisyear year(today())
+set nextmon iif(thismon+1 > 12, 1, thismon+1)
+set nextyear iif(nextmon==1, thisyear+1, thisyear)
+set lastmon iif(thismon-1 < 1, 12, thismon-1)
+set lastyear iif(lastmon==12, thisyear-1, thisyear)
+set nextmon mon(nextmon)
+set lastmon mon(lastmon)
 BANNER %
-REM 20 ++40 RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | $DIR/rem2html
+REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | $DIR/rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]"
 EOR
+
+else
+
+$REMIND - "$1" "$2" <<'EOR'
+set thismon monnum(today())
+set thisyear year(today())
+set nextmon iif(thismon+1 > 12, 1, thismon+1)
+set nextyear iif(nextmon==1, thisyear+1, thisyear)
+set lastmon iif(thismon-1 < 1, 12, thismon-1)
+set lastyear iif(lastmon==12, thisyear-1, thisyear)
+set nextmon mon(nextmon)
+set lastmon mon(lastmon)
+BANNER %
+REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | $DIR/rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]"
+EOR
+
+fi
 
 exit 0

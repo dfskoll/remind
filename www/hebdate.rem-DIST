@@ -3,7 +3,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: hebdate.rem-DIST,v 1.2 1997-07-31 02:19:05 dfs Exp $
+# $Id: hebdate.rem-DIST,v 1.3 1997-07-31 03:10:18 dfs Exp $
 
 BANNER %
 IF !$PSCAL
@@ -170,7 +170,10 @@ IF !HTML
 	[trigger(moondate(3))] PS [psmoon(3)]
 	REM PS Border Border moveto /DayFont findfont 10 scalefont setfont ([hebday(today())] [hebmon(today())]) show
 ELSE
-	REM MSG [hebday(today())] [hebmon(today())]
+	[trigger(moondate(0))] MSG <FONT SIZE=-2>New Moon</FONT>
+	[trigger(moondate(2))] MSG <FONT SIZE=-2>Full Moon</FONT>
+	REM MSG <FONT SIZE=-1>[hebday(today())] [hebmon(today())]</FONT>
 ENDIF
 
 ENDIF
+

@@ -21,6 +21,9 @@ CHANGES TO REMIND
 
 + BUG FIXES
 
+- Allowed object files to be built in different directory from
+  source files (thanks to Jonathan Kamens <jik@American.COM>
+
 - Removed restriction against reading group-writable files.  This
   caused headaches on Red Hat Linux which uses an unusual user/group
   scheme.

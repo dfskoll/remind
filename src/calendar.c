@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.6 1998-02-10 03:15:47 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.7 1998-03-25 02:47:19 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -640,7 +640,7 @@ ParsePtr p;
 int col;
 #endif
 {
-
+    int oldLen;
     Trigger trig;
     TimeTrig tim;
     Value v;
@@ -734,11 +734,12 @@ int col;
 		DestroyValue(v);
 	    }
 	}
+	oldLen = DBufLen(&obuf);
 	if ( (r=DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE)) ) {
 	    DBufFree(&obuf);
 	    return r;
 	}
-	if (!DBufLen(&obuf)) {
+	if (DBufLen(&obuf) <= oldLen) {
 	    DBufFree(&obuf);
 	    return OK;
 	}

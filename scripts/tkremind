@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.32 2004-08-11 01:55:20 dfs Exp $
+# $Id: tkremind,v 1.33 2004-08-11 02:01:46 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -265,7 +265,7 @@ proc CreateCalFrame { w dayNames } {
 	} else {
 	    set index $i
 	}
-	    
+
 	label $w.day$i -text [lindex $dayNames $index] -justify center
 	grid configure $w.day$i -row 0 -column $i -sticky ew
     }
@@ -412,7 +412,7 @@ proc EditOptions {} {
     foreach name [array names Option] {
 	set tmpOpt($name) $Option($name)
     }
-    
+
     set w .opt
     catch { destroy $w }
     toplevel $w
@@ -605,7 +605,7 @@ proc FillCalWindow {} {
 	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
     }
 
-    if { [string compare "$line" "# rem2ps begin"] != 0 } { 
+    if { [string compare "$line" "# rem2ps begin"] != 0 } {
 	Status "Problem reading results from Remind!"
 	after 5000 DisplayTime
 	catch { close $file }
@@ -683,7 +683,7 @@ proc FillCalWindow {} {
 	}
 	.cal.t$n insert end "\n"
 	.cal.t$n configure -state disabled
-	
+
     }
     set problem [catch { close $file } errmsg]
     if {$problem} {
@@ -844,11 +844,11 @@ proc DoPrint {} {
     }
 
     if {$PrintMargins == "24pt"} {
-        append cmd " -or 24 -ol 24 -ot 24 -ob 24"
+	append cmd " -or 24 -ol 24 -ot 24 -ob 24"
     } elseif {$PrintMargins == "36pt"} {
-        append cmd " -or 36 -ol 36 -ot 36 -ob 36"
+	append cmd " -or 36 -ol 36 -ot 36 -ob 36"
     } else {
-        append cmd " -or 48 -ol 48 -ot 48 -ob 48"
+	append cmd " -or 48 -ol 48 -ot 48 -ob 48"
     }
 
     if {$PrintOrient == "landscape"} {
@@ -860,13 +860,13 @@ proc DoPrint {} {
     }
 
     if {$PrintEncoding} {
-        append cmd " -i"
+	append cmd " -i"
     }
 
     if {$PrintSmallCalendars} {
-        append cmd " -c3"
+	append cmd " -c3"
     } else {
-        append cmd " -c0"
+	append cmd " -c0"
     }
 
     append cmd " $fname"
@@ -2033,7 +2033,7 @@ proc IssueBackgroundReminder { file time now tag } {
     if {$tag != "*"} {
 	pack $w.nomore $w.kill -in $w.b -side left
     }
-    
+
     CenterWindow $w
 
     # Automatically shut down window after a minute if option says so
@@ -2095,7 +2095,7 @@ proc CommandWritable { f msg } {
 }
 
 
-proc main {} {	
+proc main {} {
     # If no ~/.tkremindrc file, do the penguin logo!
     if {![file exists ~/.tkremindrc]} {
 	doLogo
@@ -3688,8 +3688,3 @@ proc InteractiveDeleteReminder { tag } {
 }
 
 main
-
-
-
-
-

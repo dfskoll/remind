@@ -2,10 +2,15 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 15
 
-+ IMPORTANT NOTE
++ IMPORTANT NOTES
 
 - The tar file now unpacks into a Remind subdirectory rather than into
   the current working directory.
+
+- I no longer support Remind under DOS.  I don't think I've done anything
+  to stop it from working under DOS, but will no longer compile and test
+  it under DOS, and can't help you if you get stuck.  Sorry -- I no longer
+  have a DOS machine.
 
 + MINOR ENHANCEMENTS
 

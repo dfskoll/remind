@@ -1,5 +1,8 @@
-$Id: README.DOS,v 1.1 1996-03-27 03:25:49 dfs Exp $
+$Id: README.DOS,v 1.2 1996-10-12 02:59:06 dfs Exp $
 REMIND version 3.0 for MS-DOS
+
+IMPORTANT NOTE:  I'm no longer officially supporting Remind under
+DOS.  It may very well work, but if it doesn't... you're on your own.
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
 in the man page, "remind.1".

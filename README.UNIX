@@ -1,4 +1,4 @@
-$Id: README.UNIX,v 1.1 1996-03-27 03:25:49 dfs Exp $
+$Id: README.UNIX,v 1.2 1996-10-12 02:59:06 dfs Exp $
 REMIND version 3.0 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
@@ -14,11 +14,13 @@ in the man page, "remind.1".
 
 3 - Examine the Makefile and change any parameters which need to be
     changed for your system.  As it stands, the Makefile is set up for a
-    BSD system.
+    Linux system.
 
 4 - Examine the file config.h and adjust parameters as needed
 
 5 - Examine lang.h and choose the language you want Remind to use.
+    (You can do this on the "make" command-line -- see "OTHER
+    LANGUAE SUPPORT.)
 
 6 - Type 'make'
 
@@ -67,6 +69,12 @@ Remind has support for languages other than English.  See the file
 only the substitution filter, or you can translate all of the usage
 instructions and error messages as well.  See "french.h" for an
 example of the latter.
+
+To compile Remind for a non-english language, look at the constants
+defined in "lang.h".  Then, to compile Remind for Italian (as an
+example), type:
+
+	make "CDEFS=-DLANG=ITALIAN"
 
 If you add support for a non-English language, Remind will accept both the
 English and non-English names of months and weekdays in an input script.

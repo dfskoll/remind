@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.6 1998-03-02 19:55:41 dfs Exp $
+# $Id: tkremind,v 1.7 1998-03-02 20:01:29 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -310,6 +310,7 @@ proc FillCalWindow {} {
     set problem [catch { close $file } errmsg]
     if {$problem} {
 	tk_dialog .error Error "There was a problem running Remind: $errmsg" error 0 OK
+	exit 1
     }
     Status "Ready."
 }
@@ -1454,7 +1455,11 @@ proc RestartBackgroundRemindDaemon {} {
 #---------------------------------------------------------------------------
 proc DaemonReadable { file } {
     set line ""
-    catch { set line [gets $file] }
+    catch { set num [gets $file line] }
+    if {$num < 0} {
+	catch { close $file }
+	return
+    }
     switch -glob $line {
 	"NOTE reminder*" {
 	    scan $line "NOTE reminder %s %s" time now

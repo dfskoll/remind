@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.3 1998-02-07 05:35:58 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.4 1998-02-09 00:25:45 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -213,26 +213,29 @@ char **in;
 
     case '&':
     case '|':
-    case '=': if (**in == c) {
-	if (DBufPutc(buf, c) != OK) {
-	    DBufFree(buf);
-	    return E_NO_MEM;
+    case '=':
+	if (**in == c) {
+	    if (DBufPutc(buf, c) != OK) {
+		DBufFree(buf);
+		return E_NO_MEM;
+	    }
+	    (*in)++;
 	}
-	(*in)++;
-    }
-    return OK;
+	return OK;
       	   
     case '!':
     case '>':
-    case '<': if (**in == '=') {
-	if (DBufPutc(buf, c) != OK) {
-	    DBufFree(buf);
-	    return E_NO_MEM;
+    case '<':
+	if (**in == '=') {
+	    if (DBufPutc(buf, '=') != OK) {
+		DBufFree(buf);
+		return E_NO_MEM;
+	    }
+	    (*in)++;
 	}
-	(*in)++;
+	return OK;
     }
-    return OK;
-    }           
+
 
     /* Handle the parsing of quoted strings */
     if (c == '\"') {
@@ -283,7 +286,7 @@ char **in;
 
     /* Peek ahead - is it '('?  Then we have a function call */
     if (**in == '(') {
-	if (DBufPutc(buf, **in++) != OK) {
+	if (DBufPutc(buf, '(') != OK) {
 	    DBufFree(buf);
 	    return E_NO_MEM;
 	}
@@ -365,7 +368,7 @@ Var *locals;
 		DBufFree(&ExprBuf);
 		return E_MISS_RIGHT_PAREN;
 	    }
-	    return OK;
+	    if (r) return r;
 	} else if (*DBufValue(&ExprBuf) == '+') {
 	    continue; /* Ignore unary + */
 	}
@@ -387,8 +390,8 @@ Var *locals;
 		    free(ufname);
 		}
 		if (r) return r;
-		(void) ParseExprToken(&ExprBuf, s); /* Guaranteed to be right paren. */
-		DBufFree(&ExprBuf);
+		r = ParseExprToken(&ExprBuf, s); /* Guaranteed to be right paren. */
+		if (r) return r;
 	    } else { /* Function has some arguments */
 		while(1) {
 		    args++;

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.4 1998-02-07 05:35:58 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.5 1998-02-09 00:25:46 dfs Exp $";
 
 #include <stdio.h>
 
@@ -169,7 +169,7 @@ static int ReadLineFromFile()
 	    DBufFree(&LineBuffer);
 	    return E_IO_ERR;
 	}
-	if (feof(fp) || !DBufLen(&buf)) {
+	if (feof(fp)) {
 	    DBufFree(&buf);
 	    FCLOSE(fp);
 	}

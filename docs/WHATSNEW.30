@@ -11,6 +11,8 @@ CHANGES TO REMIND
   available (under Solaris anyway) to convert newer files to the older "cm"
   format.
 
+- Fixed the scripts in the "www" directory to install and work properly.
+
 * Version 3.0 Patch 20
 
 + NEWS

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.9 1998-03-13 02:52:20 dfs Exp $
+# $Id: tkremind,v 1.10 1998-03-21 03:49:47 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -579,8 +579,10 @@ proc Quit {} {
 #    w -- path of parent window
 #    day -- day number of month
 #    firstDay -- day number of first day of month
+#    args -- buttons to add to bottom frame.  First sets result to 1, next
+#            to 2, and so on.  FIRST BUTTON MUST BE "Cancel"
 #---------------------------------------------------------------------------
-proc CreateModifyDialog {w day firstDay} {
+proc CreateModifyDialog {w day firstDay args} {
 
     # Set up: Year, Month, Day, WeekdayName
     global CurYear CurMonth EnglishDayNames MonthNames OptionType SkipType
@@ -750,15 +752,15 @@ proc CreateModifyDialog {w day firstDay} {
     pack $w.msglab -side left -anchor w -in $w.msg
     pack $w.entry -side left -anchor w -expand 1 -fill x -in $w.msg
 
-    bind $w.entry <Return> "$w.add flash; $w.add invoke"
-
     # BUTTONS
-    button $w.add -text "Add to reminder file" -command "set ModifyDialogResult 1"
-    button $w.preview -text "Preview reminder" -command "set ModifyDialogResult 2"
-    button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 3"
-    pack $w.add $w.preview $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill x
+    set nbut 0
+    foreach but $args {
+	incr nbut
+	button $w.but$nbut -text $but -command "set ModifyDialogResult $nbut"
+	pack $w.but$nbut -side left -anchor w -in $w.buttons -expand 1 -fill x
+    }
 
-    bind $w <KeyPress-Escape> "$w.cancel flash; $w.cancel invoke"
+    bind $w <KeyPress-Escape> "$w.but1 invoke"
     set ModifyDialogResult 0
 
     # Center the window on the root
@@ -914,7 +916,7 @@ proc ModifyDay {d firstDay} {
     global ModifyDialogResult AppendFile HighestTagSoFar ReminderTags
     catch {destroy .mod}
     toplevel .mod
-    CreateModifyDialog .mod $d $firstDay
+    CreateModifyDialog .mod $d $firstDay "Cancel" "Add to reminder file" "Preview reminder"
     wm title .mod "Add Reminder..."
     wm iconname .mod "Add Reminder"
     tkwait visibility .mod
@@ -924,7 +926,7 @@ proc ModifyDay {d firstDay} {
 	focus .mod.entry
 	set ModifyDialogResult -1
 	tkwait variable ModifyDialogResult
-	if {$ModifyDialogResult == 3} {
+	if {$ModifyDialogResult == 1} {
 	    catch {focus $oldFocus}
 	    destroy .mod
 	    return 0
@@ -933,9 +935,9 @@ proc ModifyDay {d firstDay} {
 	if {$problem} {
 	    tk_dialog .error Error "$err" error 0 Ok
 	} else {
-	    if {$ModifyDialogResult == 2} {
-		set err [EditReminder $err]
-		if {$ModifyDialogResult == 3} {
+	    if {$ModifyDialogResult == 3} {
+		set rem [EditReminder $rem Cancel "Add reminder"]
+		if {$ModifyDialogResult == 1} {
 		    continue
 		}
 	    }
@@ -946,15 +948,10 @@ proc ModifyDay {d firstDay} {
 	    set f [open $AppendFile a]
 	    incr HighestTagSoFar
 	    set ReminderTags($HighestTagSoFar) 1
-	    puts $f "# TKTAG$HighestTagSoFar Next reminder was created with TkRemind.  DO NOT EDIT"
-	    puts $f "# $opts"
-	    if {[string range $err 0 3] == "REM "} {
-		puts $f "REM TAG TKTAG$HighestTagSoFar [string range $err 4 end]"
-	    } else {
-		puts $f $err
-	    }
-	    puts $f "# TKEND"
+
+	    WriteReminder $f TKTAG$HighestTagSoFar $rem $opts
 	    close $f
+
 	    FillCalWindow
 	    RestartBackgroundRemindDaemon
 	    return 0
@@ -1228,10 +1225,11 @@ proc GetWeekend {w wkend} {
 # EditReminder -- allow user to edit what gets put in reminder file
 # Arguments:
 #    rem -- current reminder
+#    args -- buttons to add to bottom
 # Returns:
 #    edited version of rem
 #---------------------------------------------------------------------------
-proc EditReminder {rem} {
+proc EditReminder {rem args} {
     catch {destroy .edit}
     global ModifyDialogResult
     toplevel .edit
@@ -1240,12 +1238,15 @@ proc EditReminder {rem} {
     text .edit.t -width 80 -height 5 -relief sunken
     .edit.t insert end $rem
     frame .edit.f
-    button .edit.ok -text {Add to reminder file} -command "set ModifyDialogResult 1"
-    button .edit.cancel -text {Cancel} -command "set ModifyDialogResult 3"
+    set n 0
+    foreach but $args {
+	incr n
+	button .edit.but$n -text $but -command "set ModifyDialogResult $n"
+	pack .edit.but$n -in .edit.f -side left -fill x -expand 1
+    }
     pack .edit.t -side top -fill both -expand 1
     pack .edit.f -side top -fill x -expand 1
-    pack .edit.ok .edit.cancel -in .edit.f -side left -fill x -expand 1
-    bind .edit <KeyPress-Escape> ".edit.cancel flash; .edit.cancel invoke"
+    bind .edit <KeyPress-Escape> ".edit.but1 invoke"
     set ModifyDialogResult 0
     CenterWindow .edit
     tkwait visibility .edit
@@ -1620,11 +1621,11 @@ proc main {} {
     global AppendFile HighestTagSoFar
     wm withdraw .
     puts "\nTkRemind Copyright (c) 1996-1998 by David F. Skoll\n"
+    puts "Initializing..."    
+    Initialize
     puts "Scanning for tags..."
     ScanForTags $AppendFile
     puts "Highest tag: $HighestTagSoFar"
-    puts "Initializing..."    
-    Initialize
     puts "Creating calendar window..."
     FillCalWindow
     wm deiconify .
@@ -1753,6 +1754,7 @@ proc TaggedLeave { w } {
 #  Opens a dialog box to edit the current editable reminder
 #***********************************************************************
 proc EditTaggedReminder { w } {
+    global ModifyDialogResult
     set tag [GetCurrentReminder $w]
     if {$tag == ""} {
 	return
@@ -1765,7 +1767,7 @@ proc EditTaggedReminder { w } {
     }
 
     toplevel .mod
-    CreateModifyDialog .mod 1 0
+    CreateModifyDialog .mod 1 0 "Cancel" "Replace reminder" "Delete reminder" "Preview reminder"
     wm title .mod "Edit Reminder..."
     wm iconname .mod "Edit Reminder"
     OptionsToRemindDialog .mod $opts
@@ -1777,10 +1779,199 @@ proc EditTaggedReminder { w } {
 	focus .mod.entry
 	set ModifyDialogResult -1
 	tkwait variable ModifyDialogResult
+	if {$ModifyDialogResult == 1} {
+	    catch {focus $oldFocus}
+	    destroy .mod
+	    return 0
+	}
+	set problem [catch {set rem [CreateReminder .mod]} err]
+	if {$problem} {
+	    tk_dialog .error Error "$err" error 0 Ok
+	    continue
+	}
+	if {$ModifyDialogResult == 4} {
+	    set rem [EditReminder $rem "Cancel" "Replace reminder"]
+	    if {$ModifyDialogResult == 1} {
+		continue
+	    }
+	}
+	set opts [RemindDialogToOptions .mod]
 	catch {focus $oldFocus}
 	destroy .mod
+	set problem [catch {
+	    if {$ModifyDialogResult == 2} {
+		ReplaceTaggedReminder $tag $rem $opts
+	    } else {
+		DeleteTaggedReminder $tag
+	    }
+	} err]
+	if {$problem} {
+	    tk_dialog .error Error "Error: $err" error 0 Ok
+	    return 1
+	}
+
+	FillCalWindow
+	RestartBackgroundRemindDaemon
 	return 0
     }
+}
+
+#***********************************************************************
+# %PROCEDURE: UniqueFileName
+# %ARGUMENTS:
+#  stem -- base name of file
+# %RETURNS:
+#  A filename of the form "stem.xxx" which does not exist
+#***********************************************************************
+proc UniqueFileName { stem } {
+    set n 1
+    while {[file exists $stem.$n]} {
+	incr n
+    }
+    return $stem.$n
+}
+
+
+#***********************************************************************
+# %PROCEDURE: DeleteTaggedReminder
+# %ARGUMENTS:
+#  tag -- tag of reminder to delete
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Deletes tagged reminder from reminder file
+#***********************************************************************
+proc DeleteTaggedReminder { tag } {
+    global AppendFile
+
+    set tmpfile [UniqueFileName $AppendFile]
+    set out [open $tmpfile "w"]
+    set in [open $AppendFile "r"]
+
+    set foundStart 0
+    set foundEnd 0
+
+    while {[gets $in line] >= 0} {
+	if {[string match "# $tag *" $line]} {
+	    set foundStart 1
+	    break
+	}
+	puts $out $line
+    }
+
+    if {! $foundStart} {
+	close $in
+	close $out
+	file delete $tmpfile
+	error "Did not find start of reminder with tag $tag"
+    }
+
+    while {[gets $in line] >= 0} {
+	if { $line == "# TKEND"} {
+	    set foundEnd 1
+	    break
+	}
+    }
+
+    if {! $foundEnd} {
+	close $in
+	close $out
+	file delete $tmpfile
+	error "Did not find end of reminder with tag $tag"
+    }
+
+    while {[gets $in line] >= 0} {
+	puts $out $line
+    }
+    close $in
+    close $out
+    file rename -force -- $tmpfile $AppendFile
+}
+
+#***********************************************************************
+# %PROCEDURE: ReplaceTaggedReminder
+# %ARGUMENTS:
+#  tag -- tag of reminder to replace
+#  rem -- text to replace it with
+#  opts -- edit options
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Replaces a tagged reminder in the reminder file
+#***********************************************************************
+proc ReplaceTaggedReminder { tag rem opts } {
+    global AppendFile
+
+    set tmpfile [UniqueFileName $AppendFile]
+    set out [open $tmpfile "w"]
+    set in [open $AppendFile "r"]
+
+    set foundStart 0
+    set foundEnd 0
+
+    while {[gets $in line] >= 0} {
+	if {[string match "# $tag *" $line]} {
+	    set foundStart 1
+	    break
+	}
+	puts $out $line
+    }
+
+    if {! $foundStart} {
+	close $in
+	close $out
+	file delete $tmpfile
+	error "Did not find start of reminder with tag $tag"
+    }
+
+    # Consume the old reminder
+    while {[gets $in line] >= 0} {
+	if { $line == "# TKEND"} {
+	    set foundEnd 1
+	    break
+	}
+    }
+
+    if {! $foundEnd} {
+	close $in
+	close $out
+	file delete $tmpfile
+	error "Did not find end of reminder with tag $tag"
+    }
+
+    # Write the new reminder
+    WriteReminder $out $tag $rem $opts
+
+    # Copy rest of file over
+    while {[gets $in line] >= 0} {
+	puts $out $line
+    }
+    close $in
+    close $out
+    file rename -force -- $tmpfile $AppendFile
+}
+
+#***********************************************************************
+# %PROCEDURE: WriteReminder
+# %ARGUMENTS:
+#  out -- file to write to
+#  tag -- reminder tag
+#  rem -- reminder body
+#  opts -- edit options
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Writes a reminder to a file
+#***********************************************************************
+proc WriteReminder { out tag rem opts } {
+    puts $out "# $tag Next reminder was created with TkRemind.  DO NOT EDIT"
+    puts $out "# $opts"
+    if {[string range $rem 0 3] == "REM "} {
+	puts $out "REM TAG $tag [string range $rem 4 end]"
+    } else {
+	puts $out $rem
+    }
+    puts $out "# TKEND\n"
 }
 
 main

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.2 1998-01-17 03:58:30 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.3 1998-01-17 04:50:52 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -40,7 +40,7 @@ static char const RCSID[] = "$Id: main.c,v 1.2 1998-01-17 03:58:30 dfs Exp $";
 #include <time.h>
 #include <sys/time.h>
 #else
-#ifdef HAVE_SYS_TIME_H
+#if defined(HAVE_SYS_TIME_H) || defined (TIME_WITH_SYS_TIME)
 #include <sys/time.h>
 #else
 #include <time.h>

@@ -12,14 +12,19 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.2 1998-01-17 03:58:28 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.3 1998-01-17 04:50:51 dfs Exp $";
 
 #include <stdio.h>
 
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
+
+#ifdef TM_IN_SYS_TIME
+#include <sys/time.h>
+#else
 #include <time.h>
+#endif
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>

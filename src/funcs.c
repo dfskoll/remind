@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.2 1998-01-17 03:58:29 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.3 1998-01-17 04:50:51 dfs Exp $";
 
 #include <stdio.h>
 
@@ -40,7 +40,12 @@ static char const RCSID[] = "$Id: funcs.c,v 1.2 1998-01-17 03:58:29 dfs Exp $";
 #endif
 
 #include <sys/stat.h>
+
+#ifdef TM_IN_SYS_TIME
+#include <sys/time.h>
+#else
 #include <time.h>
+#endif
 
 #if defined(__MSDOS__) || defined(__OS2__)
 #include <io.h>

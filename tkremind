@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.6 1996-05-25 19:36:50 dfs Exp $
+# $Id: tkremind,v 1.7 1996-07-07 16:24:29 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -25,6 +25,9 @@ set ConfirmQuit 0
 
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
+
+# Rem2PS program to execute -- supply full path if you want
+set Rem2PS "rem2ps"
 
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
@@ -60,20 +63,28 @@ set SkipType 1
 
 # Remind command line
 set CommandLine {}
+set PSCmd {}
+
+# Print options -- destination file; letter-size; landscape; fill page
+set PrintDest file
+set PrintSize letter
+set PrintOrient landscape
+set PrintFill 1
 
 #---------------------------------------------------------------------------
 # Initialize -- initialize things
 #---------------------------------------------------------------------------
 proc Initialize {} {
 
-    global DayNames argc argv CommandLine ReminderFile AppendFile Remind
+    global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
 
     set CommandLine "|$Remind -itkremind=1 -p"
-
+    set PSCmd "$Remind -p"
     set i 0
     while {$i < $argc} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
 	    append CommandLine " [lindex $argv $i]"
+	    append PSCmd " [lindex $argv $i]"
 	} else {
 	    break
 	}
@@ -91,16 +102,17 @@ proc Initialize {} {
 
     # Check system sanity
     if {! [file readable $ReminderFile]} {
-	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error -1 Ok
+	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error 0 Ok
 	exit 1
     }
 
     if {! [file writable $AppendFile]} {
-	tk_dialog .error Error "Can't write reminder file `$AppendFile'" error -1 Ok
+	tk_dialog .error Error "Can't write reminder file `$AppendFile'" error 0 Ok
 	exit 1
     }
 
     append CommandLine " $ReminderFile"
+    append PSCmd " $ReminderFile"
     set DayNames [GetWeekdayNames]
 #   puts "CommandLine: $CommandLine"
 }
@@ -222,9 +234,10 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     button .b.this -text {Today} -command {ThisMonth}
     button .b.next -text {Next Month} -command {MoveMonth 1}
     button .b.goto -text {Go To Date...} -command {GotoDialog}
+    button .b.print -text {Print...} -command {DoPrint}
     button .b.quit -text {Quit} -command {Quit}
     label .b.status -text "" -width 10 -relief sunken
-    pack .b.prev .b.this .b.next .b.goto .b.quit -side left -fill x
+    pack .b.prev .b.this .b.next .b.goto .b.print .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
     pack .h -side top -expand 1 -fill both
     pack .b -side top -fill x -expand 0
@@ -327,6 +340,129 @@ proc Status { stuff } {
 }
 
 #---------------------------------------------------------------------------
+# DoPrint -- print a calendar
+# Arguments:
+#   None
+#---------------------------------------------------------------------------
+proc DoPrint {} {
+    global PrintDest PrintSize PrintOrient PrintFill PrintStatus Rem2PS PSCmd
+    global CurMonth CurYear MonthNames
+    catch {destroy .p}
+    toplevel .p
+    wm title .p "Print..."
+    wm iconname .p "Print..."
+    frame .p.f1 -relief sunken -border 2
+    frame .p.f11
+    frame .p.f12
+    frame .p.f2 -relief sunken -border 2
+    frame .p.f3 -relief sunken -border 2
+    frame .p.f4
+
+    radiobutton .p.tofile -text "To file: " -variable PrintDest -value file
+    entry .p.filename
+    button .p.browse -text "Browse..." -command PrintFileBrowse
+    radiobutton .p.tocmd -text "To command: " -variable PrintDest -value command
+    entry .p.command
+    .p.command insert end "lpr"
+
+    label .p.size -text "Paper Size:"
+    radiobutton .p.letter -text "Letter" -variable PrintSize -value letter
+    radiobutton .p.a4 -text "A4" -variable PrintSize -value a4
+
+    label .p.orient -text "Orientation:"
+    radiobutton .p.landscape -text "Landscape" -variable PrintOrient -value landscape
+    radiobutton .p.portrait -text "Portrait" -variable PrintOrient -value portrait
+
+    checkbutton .p.fill -text "Fill page" -variable PrintFill
+
+    button .p.print -text "Print" -command {set PrintStatus print}
+    button .p.cancel -text "Cancel" -command {set PrintStatus cancel}
+
+    pack .p.f1 .p.f2 .p.f3  -side top -fill both -expand 1 -anchor w
+    pack .p.fill -side top -anchor w -fill none -expand 0
+    pack .p.f4 -side top -fill both -expand 1 -anchor w
+    pack .p.f11 .p.f12 -in .p.f1 -side top -fill none -expand 0 -anchor w
+    pack .p.tofile .p.filename .p.browse -in .p.f11 -side left -fill none -expand 0 -anchor w
+    pack .p.tocmd .p.command -in .p.f12 -side left -fill none -expand 0 -anchor w
+    pack .p.size .p.letter .p.a4 -in .p.f2 -side top -fill none -expand 0 -anchor w
+    pack .p.orient .p.landscape .p.portrait -in .p.f3 -side top -fill none -expand 0 -anchor w
+    pack .p.print .p.cancel -in .p.f4 -side left -fill none -expand 0
+
+    bind .p <KeyPress-Escape> ".p.cancel flash; .p.cancel invoke"
+    bind .p <KeyPress-Return> ".p.print flash; .p.print invoke"
+    set PrintStatus 2
+    CenterWindow .p
+    tkwait visibility .p
+    focus .p.filename
+    set oldFocus [focus]
+    grab .p
+    tkwait variable PrintStatus
+    catch {focus $oldFocus}
+    set fname [.p.filename get]
+    set cmd [.p.command get]
+    destroy .p
+    if {$PrintStatus == "cancel"} {
+	return
+    }
+    if {$PrintDest == "file"} {
+	if {$fname == ""} {
+	    tk_dialog .error Error "No filename specified" error 0 Ok
+	    return
+	}
+	if {[file isdirectory $fname]} {
+	    tk_dialog .error Error "$fname is a directory" error 0 Ok
+	    return
+	}
+	if {[file readable $fname]} {
+	    set ans [tk_dialog .error Overwrite? "Overwrite $fname?" question 0 No Yes]
+	    if {$ans == 0} {
+		return
+	    }
+	}
+	set fname "> $fname"
+    } else {
+	set fname "| $cmd"
+    }
+
+    # Build the command line
+    set cmd "$PSCmd 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS -c3"
+    if {$PrintSize == "letter"} {
+	append cmd " -m Letter"
+    } else {
+	append cmd " -m A4"
+    }
+
+    if {$PrintOrient == "landscape"} {
+	append cmd " -l"
+    }
+
+    if {$PrintFill} {
+	append cmd " -e"
+    }
+
+    append cmd " $fname"
+    Status "Printing..."
+    if {[catch {eval "exec $cmd"} err]} {
+	tk_dialog .error Error "Error during printing: $err" error 0 Ok
+    }	
+    Status "Ready."
+}
+
+#---------------------------------------------------------------------------
+# PrintFileBrowse -- browse for a filename for Print dialog
+# Arguments: none
+#---------------------------------------------------------------------------
+proc PrintFileBrowse {} {
+    set ans [BrowseForFile .filebrowse "Print to file..." "Ok" 0 "*.ps"]
+    if {$ans != ""} {
+	.p.filename delete 0 end
+	.p.filename insert end $ans
+	.p.filename icursor end
+	.p.filename xview end
+    }
+}
+
+#---------------------------------------------------------------------------
 # GotoDialog -- Do the "Goto..." dialog
 #---------------------------------------------------------------------------
 proc GotoDialog {} {
@@ -358,6 +494,7 @@ proc GotoDialog {} {
     pack .g.y.e -side left -fill x -expand 1
     pack .g.y -expand 1 -fill x
     pack .g.b -expand 1 -fill x
+    bind .g <KeyPress-Escape> ".g.b.cancel flash; .g.b.cancel invoke"
     CenterWindow .g
     set oldFocus [focus]
     grab .g
@@ -373,11 +510,11 @@ proc DoGoto {} {
     global CurYear CurMonth MonthNames
     set year [.g.y.e get]
     if { ! [regexp {^[0-9]+$} $year] } {
-	tk_dialog .error Error {Illegal year specified (1990-2078)} error -1 Ok
+	tk_dialog .error Error {Illegal year specified (1990-2078)} error 0 Ok
 	return
     }
     if { $year < 1990 || $year > 2078 } {
-	tk_dialog .error Error {Illegal year specified (1990-2078)} error -1 Ok
+	tk_dialog .error Error {Illegal year specified (1990-2078)} error 0 Ok
 	return
     }
     set month [lsearch -exact $MonthNames [.g.mon cget -text]]
@@ -586,6 +723,7 @@ proc CreateModifyDialog {w day firstDay} {
     button $w.cancel -text "Cancel" -background "#e0c9c9" -command "set ModifyDialogResult 3"
     pack $w.add $w.preview $w.cancel -side left -anchor w -in $w.buttons -expand 1 -fill x
 
+    bind $w <KeyPress-Escape> "$w.cancel flash; $w.cancel invoke"
     set ModifyDialogResult 0
 
     # Center the window on the root
@@ -694,7 +832,7 @@ proc ModifyDay {d firstDay} {
 	}
 	set problem [catch {set rem [CreateReminder .mod]} err]
 	if {$problem} {
-	    tk_dialog .error Error "$err" error -1 Ok
+	    tk_dialog .error Error "$err" error 0 Ok
 	} else {
 	    if {$ModifyDialogResult == 2} {
 		set err [EditReminder $err]
@@ -999,6 +1137,7 @@ proc EditReminder {rem} {
     pack .edit.t -side top -fill both -expand 1
     pack .edit.f -side top -fill x -expand 1
     pack .edit.ok .edit.cancel -in .edit.f -side left -fill x -expand 1
+    bind .edit <KeyPress-Escape> ".edit.cancel flash; .edit.cancel invoke"
     set ModifyDialogResult 0
     CenterWindow .edit
     tkwait visibility .edit
@@ -1010,6 +1149,187 @@ proc EditReminder {rem} {
     set rem [.edit.t get 1.0 end]
     catch {destroy .edit}
     return $rem
+}
+
+#---------------------------------------------------------------------------
+# SetWinAttr -- sets an attribute for a window
+# Arguments:
+#    w -- window name
+#    attr -- attribute name
+#    val -- value to set it to
+# Returns:
+#    $val
+#---------------------------------------------------------------------------
+proc SetWinAttr {w attr val} {
+    global attrPriv
+    set attrPriv($w-$attr) $val
+}
+
+#---------------------------------------------------------------------------
+# GetWinAttr -- gets an attribute for a window
+# Arguments:
+#    w -- window name
+#    attr -- attribute name
+# Returns:
+#    Value of attribute
+#---------------------------------------------------------------------------
+proc GetWinAttr {w attr} {
+    global attrPriv
+    return $attrPriv($w-$attr)
+}
+
+#---------------------------------------------------------------------------
+# WaitWinAttr -- wait for a window attribute to change
+# Arguments:
+#    w -- window name
+#    attr -- attribute name
+# Returns:
+#    Value of attribute
+#---------------------------------------------------------------------------
+proc WaitWinAttr {w attr} {
+    global attrPriv
+    tkwait variable attrPriv($w-$attr)
+    return $attrPriv($w-$attr)
+}
+
+#---------------------------------------------------------------------------
+# BrowseForFile -- creates and operates a file browser dialog.
+# Arguments:
+#    w -- dialog window.
+#    title -- dialog title
+#    oktext -- text for "OK" button
+#    showdots -- if non-zero, shows "dot" files as well.
+# Returns:
+#    complete path of filename chosen, or "" if Cancel pressed.
+#---------------------------------------------------------------------------
+proc BrowseForFile {w title {oktext "OK"} {showdots 0} {filter "*"}} {
+    catch {destroy $w}
+    toplevel $w
+    wm title $w $title
+
+    # Global array to hold window attributes
+    global a${w}
+
+    SetWinAttr $w status busy
+    SetWinAttr $w showdots $showdots
+
+    frame $w.fileframe
+    frame $w.butframe
+    label $w.cwd -text [pwd]
+    entry $w.entry
+    label $w.masklab -text "Match: "
+    listbox $w.list -yscrollcommand "$w.scroll set"
+    scrollbar $w.scroll -command "$w.list yview"
+    button $w.ok -text $oktext -command "BrowseForFileOK $w"
+    button $w.cancel -text "Cancel" -command "BrowseForFileCancel $w"
+    entry $w.filter -width 7
+    $w.filter insert end $filter
+
+    pack $w.cwd $w.entry -side top -expand 0 -fill x
+    pack $w.fileframe -side top -expand 1 -fill both
+    pack $w.butframe -side top -expand 0 -fill x
+    pack $w.list -in $w.fileframe -side left -expand 1 -fill both
+    pack $w.scroll -in $w.fileframe -side left -expand 0 -fill y
+    pack $w.ok -in $w.butframe -side left -expand 1 -fill x
+    pack $w.cancel -in $w.butframe -side left -expand 1 -fill x
+    pack $w.masklab -in $w.butframe -side left -expand 0
+    pack $w.filter -in $w.butframe -side left -expand 1 -fill x
+
+    # Fill in the box and wait for status to change
+    BrowseForFileRead $w [pwd]
+
+    bind $w <KeyPress-Escape> "$w.cancel flash; $w.cancel invoke"
+    bind $w.list <Button-1> "$w.entry delete 0 end; $w.entry insert 0 \[selection get\]"
+    bind $w.list <Double-Button-1> "$w.ok flash; $w.ok invoke"
+    bind $w.list <Return> "$w.entry delete 0 end; $w.entry insert 0 \[selection get\]; $w.ok flash; $w.ok invoke"
+    bind $w.entry <Return> "$w.ok flash; $w.ok invoke"
+    bind $w.filter <Return> "BrowseForFileRead $w"
+
+    bindtags $w.list "Listbox $w.list $w all"
+    CenterWindow $w
+    set oldFocus [focus]
+    tkwait visibility $w
+    focus $w.entry
+    set oldGrab [grab current $w]
+    grab set $w
+    WaitWinAttr $w status
+    catch {focus $oldFocus}
+    catch {grab set $oldGrab}
+    set ans [GetWinAttr $w status]
+    destroy $w
+    return $ans
+}
+
+proc BrowseForFileCancel {w} {
+    SetWinAttr $w status {}
+}
+
+proc BrowseForFileOK {w} {
+    set fname [$w.entry get]
+    if {$fname != ""} {
+	if {[string match */ $fname]} {
+	    set fname [string trimright $fname /]
+	}
+	if {[$w.cwd cget -text] == "/"} {
+	    set fname "/$fname"
+	} else {
+	    set fname "[$w.cwd cget -text]/$fname"
+	}
+	# If it's a directory, change directories
+	if {[file isdirectory $fname]} {
+	    BrowseForFileRead $w $fname
+	} else {
+	    SetWinAttr $w status $fname
+	}
+    }
+}
+
+#---------------------------------------------------------------------------
+# BrowseForFileRead -- read the current directory into the file browser
+# Arguments:
+#    w -- window name
+#    dir -- directory
+# Returns:
+#    nothing
+#---------------------------------------------------------------------------
+proc BrowseForFileRead {w {dir ""}} {
+    # Save working dir
+    set cwd [pwd]
+    if {$dir == ""} {
+	set dir [$w.cwd cget -text]
+    }
+    if {[catch "cd $dir" err]} {
+	tk_dialog .error Error "$err" error 0 Ok
+	return
+    }
+    $w.cwd configure -text [pwd]
+    if {[GetWinAttr $w showdots]} {
+	set flist [glob -nocomplain .* *]
+    } else {
+	set flist [glob -nocomplain *]
+    }
+    set flist [lsort $flist]
+    set filter [$w.filter get]
+    if {$filter == ""} {
+	set filter "*"
+    }
+    $w.list delete 0 end
+    foreach item $flist {
+	if {$item != "." && $item != ".."} {
+	    if {[file isdirectory $item]} {
+		$w.list insert end "$item/"
+	    } else {
+		if {[string match $filter $item]} {
+		    $w.list insert end $item
+		}
+	    }
+	}
+    }
+    if {[pwd] != "/"} {
+	$w.list insert 0 "../"
+    }
+    cd $cwd
+    $w.entry delete 0 end
 }
 
 proc main {} {	

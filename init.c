@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: init.c,v 1.2 1996-04-28 02:01:58 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.3 1996-10-27 21:28:03 dfs Exp $";
 
 #define L_IN_INIT 1
 #include "config.h"
@@ -77,12 +77,12 @@ static char const RCSID[] = "$Id: init.c,v 1.2 1996-04-28 02:01:58 dfs Exp $";
 
 /* For parsing an integer */
 #define PARSENUM(var, s)   \
-var = 0;                \
-while (isdigit(*(s))) { \
-			    var *= 10;           \
-						     var += *(s) - '0';   \
-									      s++;                 \
-												       }
+var = 0;                   \
+while (isdigit(*(s))) {    \
+    var *= 10;             \
+    var += *(s) - '0';     \
+    s++;                   \
+}
 
 #ifdef UNIX
 PRIVATE void ChgUser ARGS((char *uname));

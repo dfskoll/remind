@@ -3,7 +3,7 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: Makefile,v 1.9 1999-04-05 17:35:16 dfs Exp $
+# $Id: Makefile,v 1.10 1999-10-18 19:57:38 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca
@@ -11,23 +11,23 @@ WWWHOST = shevy.skoll.ca
  
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.
-SCRIPTDIR = /var/web/cgi-bin
+SCRIPTDIR = /home/httpd/cgi-bin
 # SCRIPTDIR = /home/dfs/Remind/www/TEST
 
 # Where the scripts live as seen by the web browser.  If
 # they live in WWWHOST/cgi-bin, supply /cgi-bin
 CGIDIR = /cgi-bin
 
-# The complete path to the HTML file "calendar.html".  This is a sample
-# file containing links to all the scripts.  This path should be the
-# path as seen by the UNIX operating system
-HTMLDIR = /home/dfs/public_html
+# The complete path to the directory containing the HTML file "calendar.html".
+#  This is a sample file containing links to all the scripts.  This path
+# should be the path as seen by the UNIX operating system
+HTMLDIR = /home/httpd/html/remind
 
 # Where you stick images, as seen by UNIX
-IMAGEDIR = /home/dfs/public_html
+IMAGEDIR = /home/httpd/html/remind
 
 # Where images are, as seen by web browers
-IMAGEBASE = /~dfs
+IMAGEBASE = /remind
 
 # Location.  Typically, the name of your city or town.  Example: Ottawa
 LOCATION = Ottawa

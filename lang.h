@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.2 1996-04-29 19:34:38 dfs Exp $ */
+/* $Id: lang.h,v 1.3 1996-06-22 02:42:22 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 
@@ -21,6 +21,7 @@
 #define NORWEGIAN  5 /* translated by Trygve Randen                    */
 #define DANISH     6 /* translated by Mogens Lynnerup                  */
 #define POLISH     7 /* translated by Jerzy Sobczyk                    */
+#define BRAZPORT   8 /* Brazilian Portuguese by Marco Paganini         */
 
 /* Add more languages here - but please e-mail aa775@freenet.carleton.ca
    to have your favorite language assigned a number.  If you add a
@@ -56,6 +57,8 @@
 #include "danish.h"
 #elif LANG == POLISH
 #include "polish.h"
+#elif LANG == BRAZPORT
+#include "portbr.h"
 
 /* If no sensible language, choose English.  I intended to use
    the #error directive here, but some C compilers barf. */

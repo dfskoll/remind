@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: danish.h,v 1.4 1998-02-10 03:16:07 dfs Exp $ */
+/* $Id: danish.h,v 1.5 1998-11-24 18:19:36 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Danish"
@@ -36,7 +36,7 @@
 /* Month names */
 #define L_JAN "Januar"
 #define L_FEB "Februar"
-#define L_MAR "Mars"
+#define L_MAR "Marts"
 #define L_APR "April"
 #define L_MAY "Maj"
 #define L_JUN "Juni"

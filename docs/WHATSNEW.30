@@ -6,12 +6,16 @@ CHANGES TO REMIND
 
 - Made TkRemind adjust for really low-resolution displays if necessary.
 
+- Added more print options to TkRemind, courtesy of Niels Kristian Bech Jensen.
+
 - Added Spanish language support, courtesy of Rafa Couto.
 
 + BUG FIXES
 
 - Rem2PS was passing specials like HTML, etc. in PostScript output.
   YECH!  Fix courtesty of Derek J. Decker.
+
+- Fixed a typo in danish.h, courtesy of  Niels Kristian Bech Jensen.
 
 * Version 3.0 Patch 19
 

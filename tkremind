@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.4 1996-04-28 02:02:08 dfs Exp $
+# $Id: tkremind,v 1.5 1996-05-25 19:29:26 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -20,8 +20,21 @@ exec wish "$0" "$@"
 # GLOBAL VARIABLES
 #---------------------------------------------------------------------------
 
+# Set to 1 if you want confirmation when quitting
+set ConfirmQuit 0
+
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
+
+# Reminder file to source -- default
+set ReminderFile {NOSUCHFILE}
+catch {set ReminderFile "$env(HOME)/.reminders"}
+
+# Reminder file to append to -- default
+set AppendFile {NOSUCHFILE}
+catch {set AppendFile $ReminderFile}
+
+#---------------- DON'T CHANGE STUFF BELOW HERE ------------------
 
 # Month names in English
 set MonthNames {January February March April May June July August September October November December}
@@ -47,14 +60,6 @@ set SkipType 1
 
 # Remind command line
 set CommandLine {}
-
-# Reminder file to source -- default
-set ReminderFile {NOSUCHFILE}
-catch {set ReminderFile "$env(HOME)/.reminders"}
-
-# Reminder file to append to -- default
-set AppendFile {NOSUCHFILE}
-catch {set AppendFile $ReminderFile}
 
 #---------------------------------------------------------------------------
 # Initialize -- initialize things
@@ -386,6 +391,11 @@ proc DoGoto {} {
 # Quit -- handle the Quit button
 #---------------------------------------------------------------------------
 proc Quit {} {
+    global ConfirmQuit
+    if { !$ConfirmQuit } {
+	destroy .
+	return
+    }
     if { [tk_dialog .question "Confirm..." {Really quit?} question 0 No Yes] } {
 	destroy .
     }
@@ -813,6 +823,8 @@ proc CreateReminder {w} {
     catch {set err [gets $f]}
     catch {close $f}
     if {"$err" != ""} {
+	# Clean up the message a bit
+	regsub -- {^-stdin-\([0-9]*\): } $err {} err
 	error "Error from Remind: $err"
     }
     append rem " MSG $body"
@@ -1001,7 +1013,7 @@ proc EditReminder {rem} {
 
 proc main {} {	
     wm withdraw .
-    puts "TkRemind Copyright (c) 1996 by David F. Skoll\n"
+    puts "\nTkRemind Copyright (c) 1996 by David F. Skoll\n"
     puts "Initializing..."    
     Initialize
     puts "Creating calendar window..."

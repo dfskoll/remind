@@ -2,6 +2,11 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 20
 
++ NEWS
+
+- I have started a company, Roaring Penguin Software
+  Inc. (http://www.roaringpenguin.com) and it now holds the Remind copyright.
+
 + MINOR ENHANCEMENTS
 
 - Made TkRemind adjust for really low-resolution displays if necessary.

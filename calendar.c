@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.5 1997-09-16 03:16:30 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.6 1997-09-21 23:23:35 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -681,10 +681,10 @@ int col;
 
     /* Convert PS and PSF to PASSTHRU */
     if (trig.typ == PS_TYPE) {
-	strcpy(trig.passthru, "PPPP");
+	strcpy(trig.passthru, "PostScript");
 	trig.typ = PASSTHRU_TYPE;
     } else if (trig.typ == PSF_TYPE) {
-	strcpy(trig.passthru, "FFFF");
+	strcpy(trig.passthru, "PSFile");
 	trig.typ = PASSTHRU_TYPE;
     }
     if (!PsCal && trig.typ == PASSTHRU_TYPE) return OK;
@@ -779,23 +779,14 @@ int col, jul;
 {
     CalEntry *e = CalPs[col];
     CalEntry *n;
-    int y, m, d, i, j;
+    int y, m, d;
 
 /* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
     while(e) {
-	/* Print the PASSTHRU */
-	j = 0;
-	for(i=0; i<PASSTHRU_LEN; i++) {
-	    printf("%c", *(e->pos+j));
-	    if (*(e->pos+j+1)) {
-		j++;
-	    } else {
-		j=0;
-	    }
-	}
-	printf("%c%02d%c%02d ", DATESEP,
+	printf("%04d%c%02d%c%02d ", y, DATESEP,
 	       m+1, DATESEP, d);
+	printf("%s ", e->passthru);
 	printf("%s ", e->tag);
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);
@@ -817,8 +808,8 @@ int col, jul;
 
     e = CalColumn[col];				     
     while(e) {
-	printf("%04d%c%02d%c%02d ", y, DATESEP, m+1, DATESEP, d);
-	printf("%s ", e->tag);
+	printf("%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
+	printf(" * %s ", e->tag);
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);
 	} else {

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.9 1997-09-16 03:16:31 dfs Exp $ */
+/* $Id: config.h,v 1.10 1997-09-21 23:23:36 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -273,7 +273,7 @@
 /*---------------------------------------------------------------------*/
 #define TAG_LEN 32
 
-#define PASSTHRU_LEN 4
+#define PASSTHRU_LEN 24
 
 #define PUBLIC
 #define PRIVATE static

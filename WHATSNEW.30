@@ -1,5 +1,16 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 18
+
++ MAJOR ENHANCEMENTS
+
+- Added TAG and DURATION clauses for communicating more information to
+  back-ends and eventually converting REMIND into a full-fledged
+  scheduler.
+
+- Completely reworked the PS/PSFILE mechanism to use the more
+  general SPECIAL mechanism for customizing output in REMIND back-ends.
+
 * Version 3.0 Patch 17
 
 + MINOR ENHANCEMENTS

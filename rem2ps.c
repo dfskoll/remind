@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.8 1997-09-16 03:16:32 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.9 1997-09-21 23:23:36 dfs Exp $";
 
 #include "lang.h"
 #include <stdio.h>
@@ -132,6 +132,7 @@ void WriteProlog ARGS ((void));
 void WriteCalEntry ARGS ((void));
 void WriteOneEntry ARGS ((char *s));
 void GetSmallLocations ARGS ((void));
+char *EatToken(char *in, char *out, int maxlen);
 
 /***************************************************************/
 /*                                                             */
@@ -198,6 +199,7 @@ void DoPsCal()
     int is_ps;
     int firstcol;
     char *startOfBody;
+    char passthru[PASSTHRU_LEN+1];
 
     CalEntry *c, *d;
 
@@ -285,28 +287,25 @@ void DoPsCal()
 	}
 	c->next = NULL;
 
-	is_ps = ((LineBuffer[0] == 'F' &&
-		  LineBuffer[1] == 'F' &&
-		  LineBuffer[2] == 'F' &&
-		  LineBuffer[3] == 'F') ||
-		 (LineBuffer[0] == 'P' &&
-		  LineBuffer[1] == 'P' &&
-		  LineBuffer[2] == 'P' &&
-		  LineBuffer[3] == 'P'));
-
 	/* Skip the tag, duration and time */
 	startOfBody = LineBuffer+10;
-	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && !isspace(*startOfBody)) startOfBody++;
-	while(*startOfBody && isspace(*startOfBody)) startOfBody++;
 
-	/* If no time, skip it */
-	if (*startOfBody == '*') {
-	    startOfBody++;
+	/* Eat the passthru */
+	startOfBody = EatToken(startOfBody, passthru, PASSTHRU_LEN);
+
+	/* Eat the tag */
+	startOfBody = EatToken(startOfBody, NULL, 0);
+
+	/* Eat the duration */
+	startOfBody = EatToken(startOfBody, NULL, 0);
+
+	/* Eat the time */
+	startOfBody = EatToken(startOfBody, NULL, 0);
+
+	is_ps = 0;
+	if (!strcmp(passthru, "PostScript") ||
+	    !strcmp(passthru, "PSFile")) {
+	    is_ps = 1;
 	}
 	c->entry = malloc(strlen(startOfBody) + 1 + is_ps);
 	if (!c->entry) {
@@ -317,7 +316,11 @@ void DoPsCal()
 
 	if (is_ps) {
 /* Save the 'P' or 'F' flag */
-	    *(c->entry) = *LineBuffer;
+	    if (!strcmp(passthru, "PostScript")) {
+		*(c->entry) = 'P';
+	    } else {
+		*(c->entry) = 'F';
+	    }
 	    if (!PsEntries[DayNum]) PsEntries[DayNum] = c;
 	    else {
 		d = PsEntries[DayNum];
@@ -982,3 +985,34 @@ void GetSmallLocations()
     return;
 }
 	       
+/***************************************************************/
+/*                                                             */
+/* EatToken                                                    */
+/*                                                             */
+/* Read a space-delimited token into an output buffer.         */
+/*                                                             */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PUBLIC char  *EatToken(char *in, char *out, int maxlen)
+#else
+char *EatToken(in, out, maxlen)
+char *in, *out;
+int maxlen;
+#endif
+{
+    int i = 0;
+
+    /* Skip space before token */
+    while(*in && isspace(*in)) in++;
+
+    /* Eat the token */
+    while(*in && !isspace(*in)) {
+	if (i < maxlen) {
+	    if (out) *out++ = *in;
+	    i++;
+	}
+	in++;
+    }
+    if (out) *out = 0;
+    return in;
+}

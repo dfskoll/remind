@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.11 1999-04-21 01:48:01 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.12 1999-10-18 20:38:18 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -67,6 +67,7 @@ typedef struct queuedrem {
     char sched[VAR_NAME_LEN+1];
     char tag[TAG_LEN+1];
     TimeTrig tt;
+    int id;
 } QueuedRem;
 
 /* Global variables */
@@ -125,8 +126,8 @@ char *sched;
     qelem->ntrig = 0;
     strcpy(qelem->sched, sched);
     strcpy(qelem->tag, trig->tag);
+    qelem->id = NumQueued++;
     QueueHead = qelem;
-    NumQueued++;
     return OK;
 }
 

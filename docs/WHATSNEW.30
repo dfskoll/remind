@@ -1,5 +1,12 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 21
+
++ MINOR ENHANCEMENTS
+
+- Decreased the size of the GIF images in www/.  The largest moon image is
+  now 141 bytes instead of 957 bytes.
+
 * Version 3.0 Patch 20
 
 + NEWS

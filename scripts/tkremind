@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.13 1998-03-30 05:08:34 dfs Exp $
+# $Id: tkremind,v 1.14 1998-03-30 05:10:34 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -48,8 +48,8 @@ set Option(FeedReminder) 0
 set OptDescr(FeedReminder) "(0/1) If 1, feed the reminder to RunCmd on standard input (see RunCmd option)"
 
 # Remind program to execute -- supply full path if you want
-#set Remind "remind"
-set Remind "/home/dfs/Remind/src/remind"
+set Remind "remind"
+#set Remind "/home/dfs/Remind/src/remind"
 
 # Rem2PS program to execute -- supply full path if you want
 set Rem2PS "rem2ps"
@@ -2336,7 +2336,7 @@ proc DisplayTimeContinuously {} {
 main
 
 # For debugging only...
-fileevent stdin readable "DaemonReadable stdin"
+#fileevent stdin readable "DaemonReadable stdin"
 #Initialize
 #CreateCalWindow $DayNames
 #ConfigureCalWindow March 1998 0 31

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: token.c,v 1.1 1996-03-27 03:26:13 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.2 1996-04-28 02:02:10 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -33,10 +33,10 @@ static char const RCSID[] = "$Id: token.c,v 1.1 1996-03-27 03:26:13 dfs Exp $";
 if (!isdigit(*(string))) return; \
 var = 0; \
 while (isdigit(*(string))) { \
-				 var *= 10; \
-						var += *(string) - '0'; \
-									    string++; \
-											  }
+    var *= 10; \
+    var += *(string) - '0'; \
+    string++; \
+}
 
 #define UPPER(c) (islower(c) ? toupper(c) : c)
 
@@ -99,6 +99,7 @@ Token TokArray[] = {
     { "tuesday",		3,	T_WkDay,	1 },
     { "unset", 		5, 	T_UnSet, 	0 },
     { "until", 		3, 	T_Until,	0 },
+    { "warn",           4,      T_Warn,         0 },
     { "wednesday",	3,	T_WkDay,	2 }
 };
 

@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: rem2ps.c,v 1.2 1996-03-31 04:01:58 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.3 1996-04-28 02:02:02 dfs Exp $";
 
 #include "config.h"
 #include "lang.h"
@@ -163,7 +163,6 @@ char argv[];
 		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1996 by David F. Skoll\n\n", VERSION);
 		    fprintf(stderr, "Generating PostScript calendar\n");
 		}
-		WriteProlog();
 	    }
 	    validfile++;
 	    DoPsCal();
@@ -206,6 +205,13 @@ void DoPsCal()
     gets(LineBuffer);
     sscanf(LineBuffer, "%s %s %d %d %d", month, year, &days, &wkday,
 	   &MondayFirst);
+
+    /* We write the prolog here because it's only at this point that
+       MondayFirst is set correctly. */
+    if (validfile == 1) {
+	WriteProlog();
+    }
+
     gets(LineBuffer);
     sscanf(LineBuffer, "%s %d", prevm, &prevdays);
     gets(LineBuffer);
@@ -421,7 +427,7 @@ void WriteProlog()
     if (UserProlog) {
 	fp = fopen(UserProlog, "r");
 	if (!fp) {
-	    fprintf(stderr, "Could not open prologue file '%s'\n", UserProlog);
+	    fprintf(stderr, "Could not open prologue file `%s'\n", UserProlog);
 	} else {
 	    while(1) {
 		nread = fread(buffer, sizeof(char), LINELEN, fp);
@@ -601,7 +607,7 @@ char *argv[];
 	s = argv[i];
 	i++;
 
-	if (*s++ != '-') Usage("Options must begin with '-'");
+	if (*s++ != '-') Usage("Options must begin with `-'");
 
 	switch(*s++) {
 
@@ -859,7 +865,7 @@ int DoQueuedPs()
 	    } else {
 		fp = fopen(e->entry+fnoff, "r");
 		if (!fp) {
-		    fprintf(stderr, "Could not open PostScript file '%s'\n", e->entry+1);
+		    fprintf(stderr, "Could not open PostScript file `%s'\n", e->entry+1);
 		} else {
 		    while(1) {
 			nread = fread(buffer, sizeof(char), LINELEN, fp);

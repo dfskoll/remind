@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dorem.c,v 1.2 1996-03-31 04:01:55 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.3 1996-04-28 02:01:54 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -42,6 +42,7 @@ PRIVATE int ParseLocalOmit ARGS ((ParsePtr s, Trigger *t));
 PRIVATE int ParseScanFrom ARGS ((ParsePtr s, Trigger *t));
 PRIVATE int ParsePriority ARGS ((ParsePtr s, Trigger *t));
 PRIVATE int ParseUntil ARGS ((ParsePtr s, Trigger *t));
+PRIVATE int ShouldTriggerBasedOnWarn ARGS ((Trigger *t, int jul));
 
 /***************************************************************/
 /*                                                             */
@@ -146,6 +147,7 @@ ParsePtr p;
 	trig->scanfrom = NO_DATE;
 	trig->priority = DefaultPrio;
 	trig->sched[0] = 0;
+	trig->warn[0] = 0;
 	tim->ttime = NO_TIME;
 	tim->delta = NO_DELTA;
 	tim->rep   = NO_REP;
@@ -237,6 +239,12 @@ ParsePtr p;
 	    case T_Empty:
 		if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
 		return OK;
+
+	    case T_Warn:
+		r=ParseToken(s, TokBuffer);
+		if(r) return r;
+		StrnCpy(trig->warn, TokBuffer, VAR_NAME_LEN);
+		break;
 
 	    case T_Sched:
 		r=ParseToken(s, TokBuffer);
@@ -634,12 +642,12 @@ ParsePtr p;
 #pragma argsused
 #endif
 #ifdef HAVE_PROTOS
-    PUBLIC int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
+PUBLIC int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 #else
-	int ShouldTriggerReminder(t, tim, jul)
-	Trigger *t;
-    TimeTrig *tim;
-    int jul;
+int ShouldTriggerReminder(t, tim, jul)
+Trigger *t;
+TimeTrig *tim;
+int jul;
 #endif
     {
 	int r;
@@ -666,6 +674,11 @@ ParsePtr p;
 
 	/* If "infinite delta" option is chosen, always trigger future reminders */
 	if (InfiniteDelta || NextMode) return 1;
+
+	/* If there's a "warn" function, it overrides any deltas */
+	if (t->warn[0] != 0) {
+	    return ShouldTriggerBasedOnWarn(t, jul);
+	}
 
 	/* Move back by delta days, if any */
 	if (t->delta != NO_DELTA) {
@@ -800,6 +813,68 @@ ParsePtr p;
 	system(SubstBuffer);
     }
 
-	  
+/***************************************************************/
+/*                                                             */
+/*  ShouldTriggerBasedOnWarn                                   */
+/*                                                             */
+/*  Determine whether to trigger a reminder based on its WARN  */
+/*  function.                                                  */
+/*                                                             */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PRIVATE int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
+#else
+static int ShouldTriggerBasedOnWarn(t, jul)
+Trigger *t;
+int jul;
+#endif
+{
+    char buffer[VAR_NAME_LEN+15];
+    int i;
+    char *s;
+    int r;
+    Value v;
+    int lastReturnVal = 0; /* Silence compiler warning */
 
-    
+    /* If no proper function exists, barf... */
+    if (UserFuncExists(t->warn) != 1) {
+	Eprint("%s: `%s'", ErrMsg[M_BAD_WARN_FUNC], t->warn);
+	return (jul == JulianToday);
+    }
+    for (i=1; ; i++) {
+	sprintf(buffer, "%s(%d)", t->warn, i);
+	s = buffer;
+	r = EvalExpr(&s, &v);
+	if (r) {
+	    Eprint("%s: `%s': %s", ErrMsg[M_BAD_WARN_FUNC],
+		   t->warn, ErrMsg[r]);
+	    return (jul == JulianToday);
+	}
+	if (v.type != INT_TYPE) {
+	    DestroyValue(v);
+	    Eprint("%s: `%s': %s", ErrMsg[M_BAD_WARN_FUNC],
+		   t->warn, ErrMsg[E_BAD_TYPE]);
+	    return (jul == JulianToday);
+	}
+
+	/* If absolute value of return is not monotonically
+           decreasing, exit */
+	if (i > 1 && abs(v.v.val) >= lastReturnVal) {
+	    return (jul == JulianToday);
+	}
+
+	lastReturnVal = abs(v.v.val);
+	/* Positive values: Just subtract.  Negative values:
+           skip omitted days. */
+	if (v.v.val >= 0) {
+	    if (JulianToday + v.v.val == jul) return 1;
+	} else {
+	    int j = jul;
+	    while (v.v.val) {
+		j--;
+		if (!IsOmitted(j, t->localomit)) v.v.val++;
+	    }
+	    if (j == JulianToday) return 1;
+	}
+    }
+}

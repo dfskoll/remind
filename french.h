@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.1 1996-03-27 03:25:55 dfs Exp $ */
+/* $Id: french.h,v 1.2 1996-04-28 02:01:57 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -346,7 +346,8 @@ EXTERN char *ErrMsg[] =
     "Remind: '-i' option: %s\n",
     "Pas de rappels.",
     "%d rappel(s) en file pour aujourd'hui.\n",
-    "Nombre attendu"
+    "Nombre attendu",
+    "Fonction illegale apres WARN"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

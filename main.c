@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: main.c,v 1.2 1996-03-31 04:01:57 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.3 1996-04-28 02:01:59 dfs Exp $";
 
 #include "config.h"
 #ifdef HAVE_STDLIB_H
@@ -200,7 +200,7 @@ static void DoReminders()
     }
 
     if (FileAccessDate < 0) {
-	fprintf(ErrFp, "%s: '%s'.\n", ErrMsg[E_CANTACCESS], InitialFile);
+	fprintf(ErrFp, "%s: `%s'.\n", ErrMsg[E_CANTACCESS], InitialFile);
 	exit(1);
     }
 
@@ -974,7 +974,7 @@ ParsePtr p;
 
     if ( (r = ParseToken(p, TokBuffer)) ) return r;
     if (*TokBuffer && (*TokBuffer != '#') && (*TokBuffer != ';')) {
-	Eprint("%s: '%s'", ErrMsg[E_EXPECTING_EOL], TokBuffer);
+	Eprint("%s: `%s'", ErrMsg[E_EXPECTING_EOL], TokBuffer);
 	return E_EXTRANEOUS_TOKEN;
     }
     return OK;

@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: init.c,v 1.1 1996-03-27 03:25:58 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.2 1996-04-28 02:01:58 dfs Exp $";
 
 #define L_IN_INIT 1
 #include "config.h"
@@ -466,12 +466,12 @@ void Usage()
     fprintf(ErrFp, " -c[n]  Produce a calendar for n (default 1) months\n");
     fprintf(ErrFp, " -c+[n] Produce a calendar for n (default 1) weeks\n");
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");
-    fprintf(ErrFp, " -s[+][n] Produce 'simple calendar' for n (1) months (weeks)\n");
+    fprintf(ErrFp, " -s[+][n] Produce `simple calendar' for n (1) months (weeks)\n");
     fprintf(ErrFp, " -p[n]  Same as -s, but input compatible with rem2ps\n");
     fprintf(ErrFp, " -v     Verbose mode\n");
     fprintf(ErrFp, " -o     Ignore ONCE directives\n");
     fprintf(ErrFp, " -t     Trigger all future reminders regardless of delta\n");
-    fprintf(ErrFp, " -h     'Hush' mode - be very quiet\n");
+    fprintf(ErrFp, " -h     `Hush' mode - be very quiet\n");
 #ifdef HAVE_QUEUED
     fprintf(ErrFp, " -a     Don't trigger timed reminders immediately - just queue them\n");
     fprintf(ErrFp, " -q     Don't queue timed reminders\n");
@@ -482,7 +482,7 @@ void Usage()
     fprintf(ErrFp, " -e     Divert messages normally sent to stderr to stdout\n");
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");
     fprintf(ErrFp, " -x[n]  Iteration limit for SATISFY clause (def=150)\n");
-    fprintf(ErrFp, " -kcmd  Run 'cmd' for MSG-type reminders\n");
+    fprintf(ErrFp, " -kcmd  Run `cmd' for MSG-type reminders\n");
     fprintf(ErrFp, " -g[ddd] Sort reminders by date, time and priority before issuing\n");
     fprintf(ErrFp, " -ivar=val Initialize var to val and preserve var\n");
     fprintf(ErrFp, " -m     Start calendar with Monday rather than Sunday\n");

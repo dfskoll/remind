@@ -1,6 +1,6 @@
 # Test file for REMIND
 #
-# $Id: test1.cmp,v 1.2 1996-03-31 04:08:13 dfs Exp $
+# $Id: test1.cmp,v 1.3 1996-04-28 02:02:07 dfs Exp $
 #
 # Use this file to test the date calculation routines
 # of the REMIND program by typing:
@@ -712,7 +712,7 @@ y => 11:33
 x => "foo"
 y => 11:33
 "foo" * 11:33 => Type mismatch
-.\test.rem(240): '*': Type mismatch
+.\test.rem(240): `*': Type mismatch
 Leaving UserFN h() => Type mismatch
 set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
 dosubst("%a %b %c %d %e %f %g %h", 1992/05/05) => "on Tuesday, 5 May, 1992 in 444 days' tim"...

@@ -1,4 +1,5 @@
-.TH REMIND 1 "6 April 1994"
+.\" $Id: remind.1,v 1.2 1996-04-28 02:02:04 dfs Exp $
+.TH REMIND 1 "27 April 1996"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -60,10 +61,9 @@ that the output contains additional information for use by the
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
 .TP
 .B \-m
-The \fB\-m\fR option causes the \fB\-c\fR option to produce a calendar whose
-first column is Monday rather than Sunday.  (This conforms to the international
-standard.)  It does \fInot\fR, however, affect the \fB\-p\fR or \fB\-s\fR
-options.
+The \fB\-m\fR option causes the \fB\-c\fR or \fB\-p\fR options to produce
+a calendar whose first column is Monday rather than Sunday.
+(This conforms to the international standard.)
 .TP
 .B \-v
 The \fB\-v\fR option makes the output of \fBRemind\fR slightly more verbose.
@@ -261,6 +261,7 @@ Its syntax is:
 [\fBOMIT\fR \fIomit_list\fR]
 [\fBAT\fR \fItime\fR [\fItdelta\fR] [\fItrepeat\fR]]
 [\fBSCHED\fR \fIsched_function\fR]
+[\fBWARN\fR \fIwarn_function\fR]
 [\fBUNTIL\fR \fIexpiry_date\fR]
 [\fBSCANFROM\fR \fIscan_date\fR]
 \fBMSG\fR | \fBMSF\fR | \fBRUN\fR | \fBCAL\fR | \fBSATISFY\fR |
@@ -780,10 +781,12 @@ in effect at the end of the reminder script.  These definitions may
 \fInot\fR necessarily be those which were in effect at the time the reminder
 was queued.
 .PP
-.B THE SCHED KEYWORD
+.B THE SCHED AND WARN KEYWORDS
 .PP
 The \fBSCHED\fR keyword allows more precise control over the triggering
-of timed reminders.  However, discussion must be deferred until after
+of timed reminders, and the \fBWARN\fR keyword allows precise control
+over the advance triggering of all types of reminders.
+However, discussion must be deferred until after
 expressions and user-defined functions are explained.  See the subsection
 "Precise Scheduling" further on.
 .PP
@@ -2496,7 +2499,52 @@ with an underscore.
 .PP
 .SH PRECISE SCHEDULING
 .PP
-The \fBSCHED\fR keyword allows precise control over the scheduling of timed
+The \fBWARN\fR keyword allows precise control over advance warning in
+a more flexible manner than the \fIdelta\fR mechanism.  It should be
+followed by the name of a user-defined function, \fIwarn_function\fR.
+.PP
+If a \fIwarn_function\fR is supplied, then it must take one argument of
+type \fBINT\fR.  \fBRemind\fR ignores any delta, and instead calls
+\fIwarn_function\fR successively with the arguments 1, 2, 3, ...
+.PP
+\fIWarn_function\fR's return value \fIn\fR is interpreted as follows:
+.TP
+o
+If \fIn\fR is positive, then the reminder is triggered exactly \fIn\fR
+days before its trigger date.
+.TP
+o
+If \fIn\fR is negative, then it is triggered \fIn\fR days before its
+trigger date, \fInot counting\fR \fBOMIT\fRted days.
+.PP
+As an example, suppose you wish to be warned of American Independence Day
+5, 3, and 1 days in advance.  You could use this:
+.PP
+.nf
+	FSET _wfun(x) choose(x, 5, 3, 1, 0)
+	REM 4 July WARN _wfun MSG American Independence Day is %b.
+.fi
+.PP
+.B NOTES
+.TP
+1
+If an error occurs during the evaluation of \fIwarn_function\fR, then
+\fBRemind\fR stops calling it and simply issues the reminder on its
+trigger date.
+.TP
+2
+If the absolute-values of the return values of \fIwarn_function\fR are
+not monotonically decreasing, \fBRemind\fR stops calling it and issues
+the reminder on its trigger date.
+.TP
+3
+\fIWarn_function\fR should (as a matter of good style) return 0 as the
+final value in its sequence of return values.  However, a reminder will
+\fIalways\fR be triggered on its trigger date, regardless of what
+\fIwarn_function\fR does.
+.PP
+Similarly to \fBWARN\fR, the \fBSCHED\fR keyword allows precise
+control over the scheduling of timed
 reminders.  It should be followed by the name of a user-defined function,
 \fIsched_function\fR.
 .PP
@@ -3593,4 +3641,4 @@ Catalog\fR, Jewish Publication Society of America.
 .PP
 .SH SEE ALSO
 .PP
-rem, elm, kall, rem2ps
+rem, elm, kall, rem2ps, tkremind

@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.1 1996-03-27 03:26:14 dfs Exp $ */
+/* $Id: types.h,v 1.2 1996-04-28 02:02:11 dfs Exp $ */
 
 /* Values */
 typedef struct {
@@ -57,6 +57,7 @@ typedef struct {
     int scanfrom;
     int priority;
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
+    char warn[VAR_NAME_LEN+1];   /* Warning function    */
 } Trigger;
 
 /* A time trigger */
@@ -136,7 +137,8 @@ enum TokTypes
   T_Scanfrom,
   T_Flush,
   T_Priority,
-  T_Sched
+  T_Sched,
+  T_Warn
 };
 
 /* The structure of a token */

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: var.c,v 1.2 1996-03-31 04:02:00 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.3 1996-04-28 02:02:12 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -503,7 +503,7 @@ Value *value;
     if (!v) return E_NOSUCH_VAR;
     if (v->type != value->type) return E_BAD_TYPE;
     if (!v->modifiable) {
-	Eprint("%s: '$%s'", ErrMsg[E_CANT_MODIFY], name);
+	Eprint("%s: `$%s'", ErrMsg[E_CANT_MODIFY], name);
 	return E_CANT_MODIFY;
     }
 

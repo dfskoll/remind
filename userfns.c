@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: userfns.c,v 1.1 1996-03-27 03:26:15 dfs Exp $";
+static char const RCSID[] = "$Id: userfns.c,v 1.2 1996-04-28 02:02:11 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -90,7 +90,7 @@ ParsePtr p;
     StrnCpy(func->name, TokBuffer, VAR_NAME_LEN);
     if (!Hush) {
 	if (FindFunc(TokBuffer, Func, NumFuncs)) {
-	    Eprint("%s: '%s'", ErrMsg[E_REDEF_FUNC],
+	    Eprint("%s: `%s'", ErrMsg[E_REDEF_FUNC],
 		   TokBuffer);
 	}
     }
@@ -268,7 +268,7 @@ int nargs;
     f = FuncHash[h];
     while (f && StrinCmp(name, f->name, VAR_NAME_LEN)) f = f->next;
     if (!f) {
-	Eprint("%s: '%s'", ErrMsg[E_UNDEF_FUNC], name);
+	Eprint("%s: `%s'", ErrMsg[E_UNDEF_FUNC], name);
 	return E_UNDEF_FUNC;
     }
     /* Debugging stuff */

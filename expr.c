@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: expr.c,v 1.2 1996-03-31 04:01:55 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.3 1996-04-28 02:01:55 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -240,7 +240,7 @@ char **in;
     }
 
     if (!ISID(c) && c != '$') {
-	Eprint("%s '%c'", ErrMsg[E_ILLEGAL_CHAR], c);
+	Eprint("%s `%c'", ErrMsg[E_ILLEGAL_CHAR], c);
 	return E_ILLEGAL_CHAR;
     }
 
@@ -349,7 +349,7 @@ Var *locals;
 		    if (*ExprBuf == ')') break;
 		    else if (*ExprBuf != ',') {
 			if (!f) free(ufname);
-			Eprint("%s: '%c'", ErrMsg[E_EXPECT_COMMA], *ExprBuf);
+			Eprint("%s: `%c'", ErrMsg[E_EXPECT_COMMA], *ExprBuf);
 			return E_EXPECT_COMMA;
 		    }
 		}
@@ -367,7 +367,7 @@ Var *locals;
 		continue;  /* Still looking for an atomic vlue */
 	    } else if (!ISID(*ExprBuf) && *ExprBuf != '$' 
 		       && *ExprBuf != '"' && *ExprBuf != '\'') {
-		Eprint("%s '%c'", ErrMsg[E_ILLEGAL_CHAR], *ExprBuf);
+		Eprint("%s `%c'", ErrMsg[E_ILLEGAL_CHAR], *ExprBuf);
 		return E_ILLEGAL_CHAR;
 	    } else { /* Must be a literal value */
 		r = MakeValue(ExprBuf, &va, locals);
@@ -389,7 +389,7 @@ Var *locals;
 		else
 		    r=(op.func)();
 		if (r) {
-		    Eprint("'%s': %s", op.name, ErrMsg[r]);
+		    Eprint("`%s': %s", op.name, ErrMsg[r]);
 		    return r;
 		}
 	    }
@@ -409,7 +409,7 @@ Var *locals;
 	    else
 		r=(op2.func)();
 	    if (r) {
-		Eprint("'%s': %s", op2.name, ErrMsg[r]);
+		Eprint("`%s': %s", op2.name, ErrMsg[r]);
 		return r;
 	    }
 	}

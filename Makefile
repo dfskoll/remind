@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.3 1996-03-31 04:08:09 dfs Exp $
+# $Id: Makefile,v 1.4 1996-04-28 02:01:51 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -127,8 +127,9 @@ utils.o: utils.c $(STDHDRS)
 var.o: var.c $(STDHDRS) expr.h
 
 tgz:
-	tar cvzf remind-3.0.14.tgz $(MANIFEST)
-	compress -v remind-3.0.14.tar
+	tar cvf remind-3.0.14.tar $(MANIFEST)
+	gzip -v -9 remind-3.0.14.tar
+	mv remind-3.0.14.tar.gz remind-3.0.14.tgz
 
 shar:
 	shar -x -n"Remind $(VERSION)" -l45 -o./Shar $(MANIFEST)
@@ -189,9 +190,3 @@ release:
 	mv *.man RELEASE
 	for i in *.1; do groff -man -Tps $$i > `basename $$i .1`.ps; done
 	mv *.ps RELEASE
-
-# Meant for debugging - don't invoke this target unless you know what
-# you're doing!
-majortest:
-	for comp in "cc" "gcc -Wall -pedantic -ansi" ; do for lang in 1 2 3 4 5 0 ; do for def in ISOLATIN1 IBMEXTENDED FOOBARBAZ ; do echo $$def $$lang ; $(MAKE) clobber ; $(MAKE) "CDEFS=-DLANG=$$lang -D$$def=1" CFLAGS=-O "CC=$$comp" "LD=$$comp" ; done ; done ; done
-

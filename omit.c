@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: omit.c,v 1.1 1996-03-27 03:26:04 dfs Exp $";
+static char const RCSID[] = "$Id: omit.c,v 1.2 1996-04-28 02:02:00 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -332,7 +332,7 @@ ParsePtr p;
 	    break;
 
 	default:
-	    Eprint("%s: '%s' (OMIT)", ErrMsg[E_UNKNOWN_TOKEN], TokBuffer);
+	    Eprint("%s: `%s' (OMIT)", ErrMsg[E_UNKNOWN_TOKEN], TokBuffer);
 	    return E_UNKNOWN_TOKEN;
 	}
     }

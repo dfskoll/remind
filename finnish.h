@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.1 1996-03-27 03:25:55 dfs Exp $ */
+/* $Id: finnish.h,v 1.2 1996-04-28 02:01:56 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -310,6 +310,9 @@ EXTERN char *ErrMsg[] =
     "Remind: tarkenne '-i': %s\n",
     "Ei viestej\xE4.",
     "%d viesti(\xE4) t\xE4m\xE4n p\xE4iv\xE4n jonossa.\n",
+    "Numero puuttuu",
+    "Illegal function in WARN clause (NEEDS TRANSLATION)"
+
 #elif defined(IBMEXTENDED)
     "Ok",
     "Puuttuva ']'",
@@ -409,6 +412,7 @@ EXTERN char *ErrMsg[] =
     "Ei viestej\x84.",
     "%d viesti(\x84) t\x84m\x84n p\x84iv\x84n jonossa.\n",
     "Numero puuttuu"
+    "Illegal function in WARN clause (NEEDS TRANSLATION)"
 #else
     "Ok",
     "Puuttuva ']'",
@@ -507,7 +511,8 @@ EXTERN char *ErrMsg[] =
     "Remind: tarkenne '-i': %s\n",
     "Ei viestej{.",
     "%d viesti({) t{m{n p{iv{n jonossa.\n",
-    "Numero puuttuu"
+    "Numero puuttuu",
+    "Illegal function in WARN clause (NEEDS TRANSLATION)"
 #endif
 };
 #endif /* MK_GLOBALS */

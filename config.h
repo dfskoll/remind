@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.2 1996-03-31 04:01:54 dfs Exp $ */
+/* $Id: config.h,v 1.3 1996-04-28 02:01:53 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -267,7 +267,7 @@
 #endif
 
 #ifdef SYSV
-#define __USE_SVID
+#define _SVID_SOURCE
 #endif
 
 #define PSBEGIN "# rem2ps begin"

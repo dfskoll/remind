@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.3 1996-04-22 03:37:35 dfs Exp $
+# $Id: tkremind,v 1.4 1996-04-28 02:02:08 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -49,15 +49,18 @@ set SkipType 1
 set CommandLine {}
 
 # Reminder file to source -- default
+set ReminderFile {NOSUCHFILE}
 catch {set ReminderFile "$env(HOME)/.reminders"}
 
 # Reminder file to append to -- default
+set AppendFile {NOSUCHFILE}
 catch {set AppendFile $ReminderFile}
 
 #---------------------------------------------------------------------------
 # Initialize -- initialize things
 #---------------------------------------------------------------------------
 proc Initialize {} {
+
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind
 
     set CommandLine "|$Remind -itkremind=1 -p"
@@ -80,6 +83,18 @@ proc Initialize {} {
 	    incr i
 	}
     }
+
+    # Check system sanity
+    if {! [file readable $ReminderFile]} {
+	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error -1 Ok
+	exit 1
+    }
+
+    if {! [file writable $AppendFile]} {
+	tk_dialog .error Error "Can't write reminder file `$AppendFile'" error -1 Ok
+	exit 1
+    }
+
     append CommandLine " $ReminderFile"
     set DayNames [GetWeekdayNames]
 #   puts "CommandLine: $CommandLine"

@@ -4,6 +4,11 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Added the WARN keyword for precise advance notice.  You can now
+  have advance warning 5, 3, 1 and 0 days in advance (for example.)
+  The WARN keyword operates similarly to the SCHED keyword in that it
+  calls a user-defined function to obtain the advance warning sequence.
+
 - Added support for QDOS/SMSQ on the Sinclair QL microcomputer,
   courtesy of Robert H. Klein <kleir000@goofy.zdv.Uni-Mainz.de>
   NOTE THAT I CANNOT TEST NOR SUPPORT THIS VERSION!

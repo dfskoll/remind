@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.1 1997-07-06 14:34:41 dfs Exp $
+# $Id: rem2html,v 1.2 1997-07-06 14:36:01 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -13,6 +13,9 @@
 # This script works well on my computer (Linux 2.0.27) under Perl 5.003 and
 # 5.004.  It should work fine on other unices but I have no idea whether
 # it will run under VMS, OS/2, Windows, etc.
+#
+# [Note from David:  The REMIND license prohibits you from using REMIND
+#  under Windows.]
 #
 # This file is Copyright (C) 1997 by Don Schwarz <darkowl@mcs.net>.
 

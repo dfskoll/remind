@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.5 1998-03-01 20:42:54 dfs Exp $
+# $Id: build.tk,v 1.6 1998-03-01 21:03:36 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -133,9 +133,11 @@ proc CreateInstallDirDialog { w } {
     entry $w.man -width 30
     $w.man insert end "/usr/local/man"
 
-    text $w.blurb -width 1 -height 5 -wrap word -relief flat
+    text $w.blurb -width 1 -height 5 -wrap word -relief flat -takefocus 0
     $w.blurb insert end "\n(Tabbed-notebook Tcl code taken from \"Effective Tcl/Tk Programming\" by Mark Harrison and Michael McLennan, Addison-Wesley Professional Computing Series.)"
     $w.blurb configure -state disabled
+    # Disable all text-window behaviour
+    bindtags $w.blurb {NoSuchTag}
     grid $w.binlabel -row 0 -column 0 -sticky e
     grid $w.bin -row 0 -column 1 -sticky nsew
     grid $w.manlabel -row 1 -column 0 -sticky e

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.5 1998-02-10 03:15:50 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.6 1998-02-10 03:33:49 dfs Exp $";
 
 #include <stdio.h>
 
@@ -1305,7 +1305,9 @@ static int FShell()
     int ch, r;
     FILE *fp;
 
-    int maxlen = -1;
+    /* For compatibility with previous versions of Remind, which
+       used a static buffer for reading results from shell() command */
+    int maxlen = 511;
 
     DBufInit(&buf);
     if (RunDisabled) return E_RUN_DISABLED;

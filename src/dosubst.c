@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.4 1998-02-10 03:15:48 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.5 1998-02-10 03:33:49 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -77,8 +77,6 @@ int jul, mode;
     char s[256];
 
     FromJulian(jul, &y, &m, &d);
-
-    DBufInit(dbuf);
 
     if (tim == NO_TIME) tim = curtime;
     tdiff = tim - curtime;
@@ -616,7 +614,9 @@ int jul, mode;
 /* If there are NO quotes, then:  If CAL_MODE && RUN_TYPE, we don't want the
    reminder in the calendar.  Zero the output buffer and quit. */
     if (!has_quote) {
-	if (mode == CAL_MODE && t->typ == RUN_TYPE) DBufValue(dbuf) = 0;
+	if (mode == CAL_MODE && t->typ == RUN_TYPE) {
+	    *DBufValue(dbuf) = 0;
+	}
 	return OK;
     }
 

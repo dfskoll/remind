@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h.in,v 1.3 1998-02-10 03:33:48 dfs Exp $ */
+/* $Id: custom.h.in,v 1.4 1998-02-14 03:41:40 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -211,9 +211,6 @@
 
 #ifdef UNIX
 #define _POSIX_SOURCE
-#endif
-
-#ifdef SYSV
 #define _SVID_SOURCE
 #endif
 

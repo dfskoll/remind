@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.11 1998-03-21 03:57:08 dfs Exp $
+# $Id: tkremind,v 1.12 1998-03-25 04:24:59 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -39,6 +39,9 @@ set AppendFile {NOSUCHFILE}
 catch {set AppendFile $ReminderFile}
 
 #---------------- DON'T CHANGE STUFF BELOW HERE ------------------
+
+# Is Monday in first column?
+set MondayFirst 0
 
 # Month names in English
 set MonthNames {January February March April May June July August September October November December}
@@ -84,6 +87,7 @@ set HighestTagSoFar 0
 proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
+    global MondayFirst
 
     set CommandLine "|$Remind -itkremind=1 -p"
     set PSCmd "$Remind -p"
@@ -92,6 +96,9 @@ proc Initialize {} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
 	    append CommandLine " [lindex $argv $i]"
 	    append PSCmd " [lindex $argv $i]"
+	    if {[regexp -- {m} [lindex $argv $i]]} {
+		set MondayFirst 1
+	    }
 	} else {
 	    break
 	}
@@ -159,89 +166,135 @@ proc GetWeekdayNames {} {
     return $ans
 }
 
-#---------------------------------------------------------------------------
-# RowNumber -- get the row number of a specified day.
-# Arguments:
-#   firstDay -- first day of month (0=Sunday, 6=Saturday)
-#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
-#   day -- day whose row number is needed
-#---------------------------------------------------------------------------
-proc RowNumber {firstDay mondayFirst day} {
-    # If month starts on Sunday, but Monday is in first column, handle it...
-    set adjust 0
-    if {$mondayFirst && !$firstDay} {incr adjust}
-    set modDay [expr $day - $mondayFirst]
-    if { $modDay < 0 } { set modDay 6 }
-    return [expr ($modDay + $firstDay - 1) / 7 + 1 + $adjust]
+#***********************************************************************
+# %PROCEDURE: CalEntryOffset
+# %ARGUMENTS:
+#  firstDay -- first day of month (0=Sunday, 6=Saturday)
+# %RETURNS:
+#  Offset mapping day numbers (1-31) to window numbers (0-41)
+# %DESCRIPTION:
+#  Computes offset from day number to window number
+#***********************************************************************
+proc CalEntryOffset { firstDay } {
+    global MondayFirst
+    if {$MondayFirst} {
+	incr firstDay -1
+	if {$firstDay < 0} {
+	    set firstDay 6
+	}
+    }
+    return [expr $firstDay-1]
 }
 
-#---------------------------------------------------------------------------
-# ColumnNumber -- get the column number of a specified day.
-# Arguments:
-#   firstDay -- first day of month (0=Sunday, 6=Saturday)
-#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
-#   day -- day whose column number is needed
-#---------------------------------------------------------------------------
-proc ColumnNumber { firstDay mondayFirst day } {
-    set modDay [expr $day - $mondayFirst]
-    if { $modDay < 0 } { set modDay 6 }
-    return [expr ($modDay + $firstDay - 1) % 7]
+#***********************************************************************
+# %PROCEDURE: CreateCalFrame
+# %ARGUMENTS:
+#  w -- name of frame window
+#  dayNames -- names of weekdays
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Creates a frame holding a grid of labels and a grid of text entries
+#***********************************************************************
+proc CreateCalFrame { w dayNames } {
+    global MondayFirst
+    frame $w
+    for {set i 0} {$i < 7} {incr i} {
+	if {$MondayFirst} {
+	    set index [expr ($i+1)%7]
+	} else {
+	    set index $i
+	}
+	    
+	label $w.day$i -text [lindex $dayNames $index] -justify center
+	grid configure $w.day$i -row 0 -column $i -sticky ew
+    }
+    for {set i 0} {$i < 6} {incr i} {
+	set n [expr $i*7]
+	for {set j 0} {$j < 7} {incr j} {
+	    set f [expr $n+$j]
+	    button $w.l$f -text "" -justify center -command "" \
+		    -state disabled -relief flat
+	    text $w.t$f -width 12 -height 5 -wrap word -relief flat \
+		    -state disabled -takefocus 0 -cursor {}
+	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
+	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
+	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
+	    grid configure $w.l$f -row [expr $i*2+1] -column $j -sticky ew
+	    grid configure $w.t$f -row [expr $i*2+2] -column $j -sticky nsew
+	}
+    }
+
+    for {set i 0} {$i < 7} {incr i} {
+	grid columnconfigure $w $i -weight 1
+    }
+    for {set i 2} {$i < 14} {incr i 2} {
+	grid rowconfigure $w $i -weight 1
+    }
+}
+
+#***********************************************************************
+# %PROCEDURE: ConfigureCalFrame
+# %ARGUMENTS:
+#  w -- window name of calendar frame
+#  firstDay -- first weekday of month
+#  numDays -- number of days in month
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Sets up button labels; configures text justification
+#***********************************************************************
+proc ConfigureCalFrame { w firstDay numDays } {
+    global CurMonth CurYear TodayMonth TodayYear TodayDay
+    set offset [CalEntryOffset $firstDay]
+    set first [expr $offset+1]
+    set last [expr $offset+$numDays]
+    for {set i 0} {$i < $first} {incr i} {
+	$w.l$i configure -text "" -command "" -state disabled -relief flat
+	$w.t$i configure -relief flat -takefocus 0 -state normal
+	$w.t$i delete 1.0 end
+	$w.t$i configure -state disabled
+	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
+	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+    }
+    for {set i $first} {$i <= $last} {incr i} {
+	set d [expr $i-$first+1]
+	$w.l$i configure -text $d -state normal -relief flat \
+		-command "ModifyDay $d $firstDay"
+	$w.t$i configure -relief sunken -takefocus 1 -state normal
+	$w.t$i delete 1.0 end
+	$w.t$i configure -state disabled
+	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
+	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+    }
+    for {set i [expr $last+1]} {$i < 41} {incr i} {
+	$w.l$i configure -text "" -command "" -state disabled -relief flat
+	$w.t$i configure -relief flat -takefocus 0 -state normal
+	$w.t$i delete 1.0 end
+	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
+	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+    }
+    if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
+	set n [expr $TodayDay + $offset]
+	$w.l$n configure -background "#00c0c0"
+	$w.t$n configure -background "#00c0c0"
+    }
 }
 
 #---------------------------------------------------------------------------
 # CreateCalWindow -- create the calendar window.
 # Arguments:
-#   firstDay -- first day of month (0=Sunday, 6=Saturday)
-#   mondayFirst -- 1 if Monday is in first column; 0 if Sunday is
-#   daysInMonth -- number of days in month
-#   month -- name of the month
-#   year -- year
 #   dayNames -- names of weekdays in current language {Sun .. Sat}
 #---------------------------------------------------------------------------
-proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
-    global CurMonth CurYear TodayMonth TodayYear TodayDay DaemonFile
-    catch { destroy .h }
-    catch { destroy .b }
-
+proc CreateCalWindow { dayNames } {
     frame .h
-    label .h.title -text "$month $year" -justify center -pady 2 -relief raised
+    label .h.title -text "" -justify center -pady 2 -relief raised
     pack .h.title -side top -fill x
+    pack .h -side top -expand 0 -fill x
 
-    set numRows [RowNumber $firstDay $mondayFirst $daysInMonth]
-    set col 0
-    while { $col < 7 } {
-	set row 1
-	frame .h.col$col
+    CreateCalFrame .cal $dayNames
+    pack .cal -side top -fill both -expand 1
 
-	set dayIndex [expr ($col + $mondayFirst) % 7]
-	# A bogus width is supplied for the day-name label to persuade TCL
-	# to make all the columns the same width.
-	label .h.col$col.day -text [lindex $dayNames $dayIndex] -justify center -width 10
-	pack .h.col$col.day -side top -fill x -expand 0
-	while { $row <= $numRows } {
-	    button .h.col$col.num$row -text "" -justify center -command "" -state disabled -relief flat
-	    text .h.col$col.t$row -width 12 -height 1 -wrap word -relief sunken -state disabled
-	    .h.col$col.t$row tag bind TAGGED <Enter> "TaggedEnter .h.col$col.t$row"
-	    .h.col$col.t$row tag bind TAGGED <Leave> "TaggedLeave .h.col$col.t$row"
-	    .h.col$col.t$row tag bind TAGGED <ButtonPress-1> "EditTaggedReminder .h.col$col.t$row"
-	    pack .h.col$col.num$row -side top -fill x -expand 0
-	    pack .h.col$col.t$row -side top -fill both -expand 1
-	    incr row
-	}
-	pack .h.col$col -side left -fill both -expand 1
-	incr col
-    }
-    set d 1
-    while { $d <= $daysInMonth } {
-	set r [RowNumber $firstDay $mondayFirst $d]
-	set c [ColumnNumber $firstDay $mondayFirst $d]
-	.h.col$c.num$r configure -text $d -command "ModifyDay $d $firstDay" -state normal
-	if { $CurMonth == $TodayMonth && $CurYear == $TodayYear && $d == $TodayDay} {
-	    .h.col$c.num$r configure -background "#00c0c0"
-	    .h.col$c.t$r configure -background "#00c0c0"
-	}
-	incr d
-    }
     frame .b
     button .b.prev -text {Previous Month} -command {MoveMonth -1}
     button .b.this -text {Today} -command {ThisMonth}
@@ -254,15 +307,35 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     pack .b.prev .b.this .b.next .b.goto .b.print .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x
-    pack .h -side top -expand 1 -fill both
     pack .b -side top -fill x -expand 0
+    wm title . "TkRemind"
+    wm iconname . ""
+    wm protocol . WM_DELETE_WINDOW Quit
+}
+
+#***********************************************************************
+# %PROCEDURE: ConfigureCalWindow
+# %ARGUMENTS:
+#  month -- month name
+#  year -- the year
+#  firstDay -- first day in month
+#  numDays -- number of days in month
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Configures the calendar window for a month and year
+# %PRECONDITIONS:
+#  Any preconditions
+# %POSTCONDITIONS:
+#  Any postconditions
+# %SIDE EFFECTS:
+#  Any side effects
+#***********************************************************************
+proc ConfigureCalWindow { month year firstDay numDays } {
+    .h.title configure -text "$month $year"
     wm title . "TkRemind - $month $year"
     wm iconname . "$month $year"
-    catch {
-	puts $DaemonFile "STATUS"
-	flush $DaemonFile
-    }
-    wm protocol . WM_DELETE_WINDOW Quit
+    ConfigureCalFrame .cal $firstDay $numDays
 }
 
 #---------------------------------------------------------------------------
@@ -292,7 +365,8 @@ proc FillCalWindow {} {
 
     # Skip day names -- we already have them
     gets $file line
-    CreateCalWindow $firstWkday $mondayFirst $daysInMonth $monthName $year $DayNames
+    ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
+    set offset [CalEntryOffset $firstWkday]
     while { [gets $file line] >= 0 } {
 	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +([^ ]+) +[^ ]+ +[^ ]+(.*)} $line all year month day type tag stuff] == 0 } {
 	    continue
@@ -301,20 +375,19 @@ proc FillCalWindow {} {
 	    continue
 	}
 	set day [string trimleft $day 0]
+	set n [expr $day+$offset]
 	set month [string trimleft $month 0]
-	set c [ColumnNumber $firstWkday $mondayFirst $day]
-	set r [RowNumber $firstWkday $mondayFirst $day]
-	.h.col$c.t$r configure -state normal
-	if { [string length [string trim [.h.col$c.t$r get 1.0]]] != 0} {
-	    .h.col$c.t$r insert end " .....\n"
+	.cal.t$n configure -state normal
+	if { [string length [string trim [.cal.t$n get 1.0]]] != 0} {
+	    .cal.t$n insert end " .....\n"
 	}
 	if {[regexp {TKTAG([0-9])+} $tag all tagno]} {
-	    .h.col$c.t$r insert end [string trim $stuff] "TAGGED TKTAG$tagno"
+	    .cal.t$n insert end [string trim $stuff] "TAGGED TKTAG$tagno"
 	} else {
-	    .h.col$c.t$r insert end [string trim $stuff]
+	    .cal.t$n insert end [string trim $stuff]
 	}
-	.h.col$c.t$r insert end "\n"
-	.h.col$c.t$r configure -state disabled
+	.cal.t$n insert end "\n"
+	.cal.t$n configure -state disabled
 	
     }
     set problem [catch { close $file } errmsg]
@@ -1618,8 +1691,7 @@ proc IssueBackgroundReminder { file time now } {
 }
 
 proc main {} {	
-    global AppendFile HighestTagSoFar
-    wm withdraw .
+    global AppendFile HighestTagSoFar DayNames
     puts "\nTkRemind Copyright (c) 1996-1998 by David F. Skoll\n"
     puts "Initializing..."    
     Initialize
@@ -1627,16 +1699,8 @@ proc main {} {
     ScanForTags $AppendFile
     puts "Highest tag: $HighestTagSoFar"
     puts "Creating calendar window..."
+    CreateCalWindow $DayNames
     FillCalWindow
-    wm deiconify .
-
-    # Choose a reasonable initial height for the calendar window.
-
-    tkwait visibility .
-    set x [winfo width .]
-    wm geometry . ${x}x600
-
-    update
     StartBackgroundRemindDaemon
 }
 
@@ -1978,3 +2042,6 @@ main
 
 # For debugging only...
 # fileevent stdin readable "DaemonReadable stdin"
+#Initialize
+#CreateCalWindow $DayNames
+#ConfigureCalWindow March 1998 0 31

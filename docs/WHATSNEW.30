@@ -13,6 +13,11 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Documented the "remind -p" format.
+
+- Made Remind communicate day and month names to back-ends so they
+  can automatically take on the language Remind was compiled with.
+
 - Directory structure totally reorganized.  Remind now uses an autoconf
   "configure" script which should make life very pleasant for UNIX
    people.
@@ -20,6 +25,9 @@ CHANGES TO REMIND
 - Added the script "build.tk" which makes it trivial to compile
   and install Remind under UNIX -- no need to edit Makefiles or
   header files.  A nice GUI installation dialog!
+
+- Made rem2html work properly if more than one month's worth of calendar
+  data was produced.
 
 + BUG FIXES
 

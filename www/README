@@ -1,5 +1,5 @@
 README
-$Id: README,v 1.4 1997-02-11 01:44:33 dfs Exp $
+$Id: README,v 1.5 1997-07-31 02:19:04 dfs Exp $
 
 HTML Hebrew Calendar Server
 
@@ -20,9 +20,13 @@ server:
 1) Edit the Makefile in this directory.  See the comments in the Makefile
    for details.
 
-2) Type "make install"
+2) Edit the first line of "rem2html" to reflect the location of
+   Perl on your system. (Oh yeah, you need Perl for the
+   HTML Hebrew calendar...)
 
-3) Test it out.  It will generate links of the form:
+3) Type "make install"
+
+4) Test it out.  It will generate links of the form:
 
 	http://www.your_server.com/your_cgi-bin/cal_dispatch?what
 
@@ -33,6 +37,7 @@ where "what" is one of:
 	calps   -- get a blank PostScript calendar.
 	moon    -- show info about moon phases.
 	hebps   -- get a PostScript calendar with Jewish holidays.
+	hebhtml -- get an HTML version of the above (requires Perl.)
 
    (Visit http://www.doe.carleton.ca/~dfs/ for previews.)
 

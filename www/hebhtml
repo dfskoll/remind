@@ -1,0 +1,16 @@
+#!/bin/sh
+# HTML calendar shell script
+#
+# This file is part of REMIND.
+# Copyright (C) 1992-1997 by David F. Skoll
+
+# $Id: hebhtml,v 1.1 1997-07-31 02:19:06 dfs Exp $
+
+echo "Content-Type: text/html"
+echo ""
+$REMIND - <<EOR
+BANNER %
+REM 20 ++40 RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | $DIR/rem2html
+EOR
+
+exit 0

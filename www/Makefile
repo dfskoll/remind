@@ -2,7 +2,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: Makefile,v 1.4 1997-01-19 03:59:55 dfs Exp $
+# $Id: Makefile,v 1.5 1997-07-31 02:19:04 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca
@@ -46,7 +46,7 @@ all:
 
 # OK, it's abominable.  But it works...
 install:
-	cp calps hebdate hebps moon sunrise sunset $(SCRIPTDIR)
+	cp rem2html calps hebdate hebps hebhtml moon sunrise sunset $(SCRIPTDIR)
 	sed $(SEDSCRIPT) < cal_dispatch-DIST  > $(SCRIPTDIR)/cal_dispatch
 	sed $(SEDSCRIPT) < hebdate.rem-DIST   > $(SCRIPTDIR)/hebdate.rem
 	sed $(SEDSCRIPT) < moon.rem-DIST      > $(SCRIPTDIR)/moon.rem
@@ -61,4 +61,4 @@ install:
 	chmod 755 $(SCRIPTDIR)/cal_dispatch
 	chmod 755 $(SCRIPTDIR)/calps $(SCRIPTDIR)/hebdate \
 	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \
-	$(SCRIPTDIR)/sunset
+	$(SCRIPTDIR)/sunset $(SCRIPTDIR)/hebhtml $(SCRIPTDIR)/rem2html

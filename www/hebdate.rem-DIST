@@ -3,7 +3,7 @@
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
 
-# $Id: hebdate.rem-DIST,v 1.1 1997-01-16 04:00:27 dfs Exp $
+# $Id: hebdate.rem-DIST,v 1.2 1997-07-31 02:19:05 dfs Exp $
 
 BANNER %
 IF !$PSCAL
@@ -159,15 +159,18 @@ IF ostart <= TODAY() && (TODAY() - ostart < 49)
 ENDIF
 
 IF !$PSCAL
-
-	REM 20 ++40 msg Click <a HREF="http://your.machine/your.dir/cal_dispatch?hebps">here</a> to get a PostScript calendar (about 35KB) for %m %y, complete with Hebrew dates, Jewish holidays, and moon phases for Ottawa.  (This takes a few seconds to generate.)
-
+	REM 20 ++40 msg Also available: <a HREF="http://your.machine/your.dir/cal_dispatch?hebps">a PostScript calendar</a> (about 35KB) for %m %y, complete with Hebrew dates, Jewish holidays, and moon phases for Ottawa.  (This takes a few seconds to generate.)
+	REM 20 ++40 msg And: <a HREF="http://your.machine/your.dir/cal_dispatch?hebhtml">an HTML version</a> of the above.  (No moons, and your browser must handle tables.)
 ELSE
+IF !HTML
 	REM Sat PS [psshade(95)]
 	[trigger(moondate(0))] PS [psmoon(0)]
 	[trigger(moondate(1))] PS [psmoon(1)]
 	[trigger(moondate(2))] PS [psmoon(2)]
 	[trigger(moondate(3))] PS [psmoon(3)]
 	REM PS Border Border moveto /DayFont findfont 10 scalefont setfont ([hebday(today())] [hebmon(today())]) show
+ELSE
+	REM MSG [hebday(today())] [hebmon(today())]
+ENDIF
 
 ENDIF

@@ -6,7 +6,7 @@
 # CAL_DISPATCH -- Shell script for CGI directory to dispatch calendar
 # commands.
 #
-# $Id: cal_dispatch-DIST,v 1.1 1997-01-16 04:00:26 dfs Exp $
+# $Id: cal_dispatch-DIST,v 1.2 1997-07-31 02:19:05 dfs Exp $
 #
 # WARNING WARNING WARNING -- If your /bin/sh is really GNU's "bash",
 # make sure you don't have a buggy version which treats char 0xFF as
@@ -69,6 +69,11 @@ case "$1" in
     hebps)
     exec $DIR/hebps
     ;;
+
+    hebhtml)
+    exec $DIR/hebhtml
+    ;;
+
 esac
 
 exit 0

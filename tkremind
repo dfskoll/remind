@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.7 1996-07-07 16:24:29 dfs Exp $
+# $Id: tkremind,v 1.8 1996-09-28 01:43:17 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -1244,6 +1244,9 @@ proc BrowseForFile {w title {oktext "OK"} {showdots 0} {filter "*"}} {
     bind $w.list <Return> "$w.entry delete 0 end; $w.entry insert 0 \[selection get\]; $w.ok flash; $w.ok invoke"
     bind $w.entry <Return> "$w.ok flash; $w.ok invoke"
     bind $w.filter <Return> "BrowseForFileRead $w"
+    bind $w.entry <KeyPress> "CompleteFile $w"
+    bind $w.entry <KeyPress-space> "ExpandFile $w"
+    bindtags $w.entry "Entry $w.entry $w all"
 
     bindtags $w.list "Listbox $w.list $w all"
     CenterWindow $w
@@ -1260,13 +1263,40 @@ proc BrowseForFile {w title {oktext "OK"} {showdots 0} {filter "*"}} {
     return $ans
 }
 
+proc CompleteFile {w} {
+    set index [lsearch [$w.list get 0 end] [$w.entry get]* ]
+    if {$index > -1} {
+	$w.list see $index
+	$w.list selection clear 0 end
+	$w.list selection set $index
+    }
+}
+
+proc ExpandFile {w} {
+    set stuff [$w.list curselection]
+    if {[string compare $stuff ""]} {
+	$w.entry delete 0 end
+	$w.entry insert end [$w.list get $stuff]
+    }
+}
+
 proc BrowseForFileCancel {w} {
     SetWinAttr $w status {}
 }
 
 proc BrowseForFileOK {w} {
     set fname [$w.entry get]
-    if {$fname != ""} {
+    if {[string compare $fname ""]} {
+	# If it starts with a slash, handle it specially.
+	if {[string match "/*" $fname]} {
+	    if {[file isdirectory $fname]} {
+		BrowseForFileRead $w $fname
+		return
+	    } else {
+		SetWinAttr $w status $fname
+		return
+	    }
+	}
 	if {[string match */ $fname]} {
 	    set fname [string trimright $fname /]
 	}

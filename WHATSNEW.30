@@ -1,5 +1,18 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 17
+
++ BUG FIXES
+
+- Added romanian.h to the manifest.  Sorry.
+
+- CalcMinsFromUTC was failing if time_t was unsigned.  I really _should_
+  use difftime(), but not all systems have it.  Also, defs.rem was rearranged
+  so PostScript stuff works better, and new target "emxomf" was added to
+  makefile.ost which uses OMF linking and a dynamically-linked C library.
+  All three of these fixes are courtesy of Christopher J. Madsen
+  <madsen@iglobal.net>.  Thanks, Christopher.
+
 * Version 3.0 Patch 16
 
 + MINOR ENHANCEMENTS

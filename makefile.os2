@@ -1,6 +1,6 @@
 # Makefile for REMIND
 #
-# $Id: makefile.os2,v 1.2 1996-10-12 02:49:34 dfs Exp $
+# $Id: makefile.os2,v 1.3 1997-03-31 22:13:09 dfs Exp $
 #
 # THIS IS OUT OF DATE!
 #
@@ -18,6 +18,7 @@ default:
 	@echo "   msc      OS/2 exe [Microsoft C 6.00a]                "
 	@echo "   mscbnd   OS/2 and DOS exe [Microsoft C 6.00a]        "
 	@echo "   emx      OS/2 and DOS 32-bit exe [EMX/gcc]           "
+	@echo "   emxomf   OS/2 32-bit exe w/DLL C library [EMX/gcc]   "
 
 
 msc: 
@@ -40,6 +41,13 @@ emx:
 	CC="gcc -O -s" O=".o" \
 	CFLAGS="-D__OS2__ -D__MSDOS__" \
 	LFLAGS=""
+
+emxomf:
+	$(MAKE) -f Makefile.os2 all \
+	CC="gcc -Zomf -O -s" O=".obj" \
+	CFLAGS="-D__OS2__" \
+	LFLAGS="-Zcrtdll -Zstack 32" \
+	LFLAGS2="remind.def"
 
 
 # OS2_POPUP enables Russ Herman's popup reminders
@@ -70,6 +78,8 @@ test-rem.bat test-rem.cmd test1.cmp test2.cmp
 OBJS= $(SRCS:.c=$O)
 
 all: remind.exe rem2ps.exe
+
+.SUFFIXES: $O
 
 .c$O:
 	$(CC) -c $(CFLAGS) $(OS2_POPUP) $*.c

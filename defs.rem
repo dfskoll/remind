@@ -22,7 +22,7 @@
 #############################################################################
 
 #
-# $Id: defs.rem,v 1.3 1997-01-16 04:14:20 dfs Exp $
+# $Id: defs.rem,v 1.4 1997-03-31 22:13:08 dfs Exp $
 #
 
 RUN OFF
@@ -307,50 +307,25 @@ IF !$RunOff && !$CalMode && !$SimpleCal
    ENDIF
 ENDIF
 
-#PSSTUFF
+#PSSTUFF1
 ##########################################################################
 #								         #
 # This portion of the file contains some cute examples of the new        #
 # PS-type reminders.  You need a PostScript printer or viewer to         #
 # appreciate these.  To use them, pipe the output of remind -p into the  #
-# rem2ps program.                                                        #
+# rem2ps program.  More examples are in the PSSTUFF2 section, below.     #
 #								         #
 ##########################################################################
 
 # Convenient to stick all the PostScript code in a string var - makes
 # reminders easier to understand and faster.  The variable "shade" will
 # contain PostScript code to shade in a particular box on the calendar.
+
 SET shade psshade(95)
 
 # The following reminder will shade the Saturday and Sunday calendar
 # entries.
 REM Sat Sun PS [shade]
-
-# The following will fill in the Hebrew dates on the calendar.  For this
-# example, I recommend that you use the -sd 10 option for Rem2PS.
-REM PS Border Border moveto \
-   /DayFont findfont DaySize scalefont setfont \
-   ([hebday(today())] [hebmon(today())]) show
-
-# Fill in the phases of the moon on the PostScript calendar
-[trigger(moondate(0))] PS [psmoon(0)]
-[trigger(moondate(1))] PS [psmoon(1)]
-[trigger(moondate(2))] PS [psmoon(2)]
-[trigger(moondate(3))] PS [psmoon(3)]
-
-# The following example puts sunrise and sunset times in PostScript in the
-# calendar - the sizes are hard-coded, however, and work best in landscape.
-REM PS Border Border 5 sub moveto \
-	/SmallFont findfont 4 scalefont setfont \
-	(Sunrise: [sunrise(trigdate())] Sunset: [sunset(trigdate())]) show
-
-# The next one puts the day number (1-366) and days left in the year at the
-# bottom of the post-script calendar.  Again, the hard-coded sizes work best
-# in landscape.
-FSET _DayOfYear(x) x-(date(year(x),1,1) - 1)
-REM PS BoxWidth 3 mul 4 div Border 5 sub moveto \
-	/SmallFont findfont 4 scalefont setfont \
-	([_DayOfYear(today())]([365+isleap(today())-_DayOfYear(today())])) show
 
 #USHOLS
 #############################################################################
@@ -413,7 +388,7 @@ OMIT     Dec 25		MSG %"Christmas%" Day
 #								         #
 # The next block uses the shade variable defined in PSSTUFF above.       #
 # If any US holidays were triggered above, shade in the calendar         #
-# entry in PostScript.  This is not quite correct, as it blots out the   #
+# entry in PostScript.  This is not quite correct, as it blots out any   #
 # other PostScript stuff above.  I was too lazy to do it properly :-)    #
 #								         #
 ##########################################################################
@@ -427,6 +402,42 @@ REM Jun [IIF(YEAR(TODAY())%4, 21, 20)] MSG %"Summer%" begins
 REM Sep [CHOOSE(YEAR(TODAY())-1991, 22,22,23,23,22,22,22,23,22)] \
 	MSG %"Fall%" begins
 REM Dec [IIF((YEAR(TODAY())+1)%4, 21, 22)] MSG %"Winter%" begins
+
+#PSSTUFF2
+##########################################################################
+#									 #
+# Since the "psshade" command blots out any previous PostScript		 #
+# reminders for a date, these examples need to follow the US Holidays	 #
+# section, which uses psshade.  See PSSTUFF1, above, for examples using	 #
+# psshade.								 #
+#									 #
+##########################################################################
+
+# The following will fill in the Hebrew dates on the calendar.  For this
+# example, I recommend that you use the -sd 10 option for Rem2PS.
+REM PS Border Border moveto \
+   /DayFont findfont DaySize scalefont setfont \
+   ([hebday(today())] [hebmon(today())]) show
+
+# Fill in the phases of the moon on the PostScript calendar
+[trigger(moondate(0))] PS [psmoon(0)]
+[trigger(moondate(1))] PS [psmoon(1)]
+[trigger(moondate(2))] PS [psmoon(2)]
+[trigger(moondate(3))] PS [psmoon(3)]
+
+# The following example puts sunrise and sunset times in PostScript in the
+# calendar - the sizes are hard-coded, however, and work best in landscape.
+REM PS Border Border 5 sub moveto \
+	/SmallFont findfont 4 scalefont setfont \
+	(Sunrise: [sunrise(trigdate())] Sunset: [sunset(trigdate())]) show
+
+# The next one puts the day number (1-366) and days left in the year at the
+# bottom of the post-script calendar.  Again, the hard-coded sizes work best
+# in landscape.
+FSET _DayOfYear(x) x-(date(year(x),1,1) - 1)
+REM PS BoxWidth 3 mul 4 div Border 5 sub moveto \
+	/SmallFont findfont 4 scalefont setfont \
+	([_DayOfYear(today())]([365+isleap(today())-_DayOfYear(today())])) show
 
 #JHOLS
 ##########################################################################

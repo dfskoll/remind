@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.5 1997-03-30 19:07:41 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.6 1997-03-31 22:13:09 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -1223,6 +1223,7 @@ int jul, tim, *mins, *isdst;
 
 /* Convert jul and tim to an Unix tm struct */
     int yr, mon, day;
+    int tdiff;
     struct tm local, utc, *temp;
     time_t loc_t, utc_t;
 
@@ -1257,11 +1258,14 @@ int jul, tim, *mins, *isdst;
     if (utc_t == -1) return 1;
 #endif
     temp = localtime(&loc_t);
+    /* Compute difference between local time and UTC in seconds.
+       Be careful, since time_t might be unsigned. */
+    tdiff = (loc_t < utc_t) ? -1*((int)(utc_t-loc_t)) : (loc_t-utc_t);
 #ifdef HAVE_MKTIME
-    if (mins) *mins = (int)  ( ((temp->tm_isdst) ? 60 : 0) +
-			       (loc_t - utc_t) / 60 );  /* Should use difftime */
+    /* Should use difftime */
+    if (mins) *mins = (int)(((temp->tm_isdst) ? 60 : 0) + tdiff / 60 );
 #else
-    if (mins) *mins = (int) ((utc_t - loc_t) / 60);
+    if (mins) *mins = (int)(tdiff / 60);
 #endif
     if (isdst) *isdst = temp->tm_isdst;
     return 0;

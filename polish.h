@@ -13,7 +13,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.2 1996-04-28 02:02:00 dfs Exp $ */
+/* $Id: polish.h,v 1.3 1996-04-29 19:34:38 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
@@ -117,10 +117,10 @@
 /* What to add to make "hour" or "minute" plural */
 #ifdef ISOLATIN1
 #define L_NPLU( N ) ((N == 1) ? "\352" : ((N==12) || (N==13) || (N==14)) ? "" : \
-		     ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
+     ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
 #else
 #define L_NPLU( N ) ((N == 1) ? "e" : ((N==12) || (N==13) || (N==14)) ? "" : \
-		     ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
+     ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
 #endif
 /* What to add to make "hour" plural */
 #define L_HPLU L_NPLU( hdiff )
@@ -132,12 +132,12 @@
 #ifdef ISOLATIN1
 #define L_AMPM_OVERRIDE(ampm, hour) \
 ampm = (hour<12) ? \
-		     (hour<5) ? " w nocy" \
-		     : (hour<10) ? " rano" \
-		     : " przed po\263udniem" \
-		     : (hour<18) ? " po po\263udniu" \
-		     : (hour<22) ? " wieczorem" \
-		     : " w nocy";
+     (hour<5) ? " w nocy" \
+     : (hour<10) ? " rano" \
+     : " przed po\263udniem" \
+     : (hour<18) ? " po po\263udniu" \
+     : (hour<22) ? " wieczorem" \
+     : " w nocy";
 #else
 #define L_AMPM_OVERRIDE(ampm, hour) \
 ampm = (hour<12) ? \
@@ -164,23 +164,23 @@ sprintf(s, L_NOW); \
 else if (tdiff > 0) \
 { \
       if (hdiff == 0)  \
-			   sprintf(s, "za %d %s%s", mdiff, L_MINUTE, L_MPLU); \
-										  else if (mdiff == 0) \
-													   sprintf(s, "za %d %s%s", hdiff, L_HOUR, L_HPLU); \
-																				else \
-																					 sprintf(s, "za %d %s%s %s %d %s%s", hdiff, L_HOUR, L_HPLU, \
-																						 L_AND, mdiff, L_MINUTE, L_MPLU); \
-																										      } \
+	   sprintf(s, "za %d %s%s", mdiff, L_MINUTE, L_MPLU); \
+      else if (mdiff == 0) \
+           sprintf(s, "za %d %s%s", hdiff, L_HOUR, L_HPLU); \
+      else \
+	   sprintf(s, "za %d %s%s %s %d %s%s", hdiff, L_HOUR, L_HPLU, \
+		   L_AND, mdiff, L_MINUTE, L_MPLU); \
+} \
 else \
 { \
-      if (hdiff == 0)  \
-			   sprintf(s, "%d %s%s temu", mdiff, L_MINUTE, L_MPLU); \
-										    else if (mdiff == 0) \
-													     sprintf(s, "%d %s%s temu", hdiff, L_HOUR, L_HPLU); \
-																				    else \
-																					     sprintf(s, "%d %s%s %s %d %s%s temu", hdiff, L_HOUR, L_HPLU, \
-																						     L_AND, mdiff, L_MINUTE, L_MPLU); \
-																											  } 
+   if (hdiff == 0)  \
+      sprintf(s, "%d %s%s temu", mdiff, L_MINUTE, L_MPLU); \
+   else if (mdiff == 0) \
+      sprintf(s, "%d %s%s temu", hdiff, L_HOUR, L_HPLU); \
+   else \
+      sprintf(s, "%d %s%s %s %d %s%s temu", hdiff, L_HOUR, L_HPLU, \
+	      L_AND, mdiff, L_MINUTE, L_MPLU); \
+} 
 
 /* The next ones are used only when MK_GLOBALS is set */
 #ifdef MK_GLOBALS

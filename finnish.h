@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.2 1996-04-28 02:01:56 dfs Exp $ */
+/* $Id: finnish.h,v 1.3 1996-04-29 19:34:37 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -128,42 +128,42 @@
 #if defined(ISOLATIN1)
 #define L_ORDINAL_OVERRIDE switch(d) { \
     case 1:  plu = ":sen\xE4"; break; \
-					  case 2:  plu = ":sena"; break; \
-									     default: \
-											  switch(d%10) { \
-													     case 2: \
-													     case 3: \
-													     case 6: \
-													     case 8:  plu = ":ntena"; break; \
-																		 default: plu = ":nten\xE4"; break; \
-																							} \
-																							      }
+    case 2:  plu = ":sena"; break; \
+    default: \
+     switch(d%10) { \
+       case 2: \
+       case 3: \
+       case 6: \
+       case 8:  plu = ":ntena"; break; \
+       default: plu = ":nten\xE4"; break; \
+     } \
+}
 #elif defined(IBMEXTENDED)
 #define L_ORDINAL_OVERRIDE switch(d) { \
     case 1:  plu = ":sen\x84"; break; \
-					  case 2:  plu = ":sena"; break; \
-									     default: \
-											  switch(d%10) { \
-													     case 2: \
-													     case 3: \
-													     case 6: \
-													     case 8:  plu = ":ntena"; break; \
-																		 default: plu = ":nten\x84"; break; \
-																							} \
-																							      }
+    case 2:  plu = ":sena"; break; \
+    default: \
+     switch(d%10) { \
+       case 2: \
+       case 3: \
+       case 6: \
+       case 8:  plu = ":ntena"; break; \
+       default: plu = ":nten\x84"; break; \
+     } \
+}
 #else
 #define L_ORDINAL_OVERRIDE switch(d) { \
     case 1:  plu = ":sen{"; break; \
-				       case 2:  plu = ":sena"; break; \
-									  default: \
-										       switch(d%10) { \
-													  case 2: \
-													  case 3: \
-													  case 6: \
-													  case 8:  plu = ":ntena"; break; \
-																	      default: plu = ":nten{"; break; \
-																						  } \
-																							}
+    case 2:  plu = ":sena"; break; \
+    default: \
+       switch(d%10) { \
+	  case 2: \
+	  case 3: \
+	  case 6: \
+	  case 8:  plu = ":ntena"; break; \
+	  default: plu = ":nten{"; break; \
+       } \
+}
 #endif
 #define L_A_OVER sprintf(s, "%s%s, %d. %s%s %d", DayName[jul%7], L_ON, d, \
 			 MonthName[m], L_PARTIT, y);
@@ -188,23 +188,23 @@
 #define L_1_OVER if (tdiff == 0) \
 sprintf(s, L_NOW); \
 else { \
-	   if (hdiff != 0) { \
-				 if (tdiff < 0) \
-						    sprintf(s, "%d %s%s ", hdiff, L_HOUR, hplu); \
-												     else \
-													      sprintf(s, "%d %s ", hdiff, L_HGEN); \
-																		       s += strlen(s); \
-																					   } \
-																						 if (mdiff != 0) { \
-																								       if (tdiff < 0) \
-																											  sprintf(s, "%d %s%s ", mdiff, L_MINUTE, \
-																												  mplu); \
-																													     else \
-																														      sprintf(s, "%d %s ", mdiff, L_MGEN); \
-																																			       s += strlen(s); \
-																																						   } \
-																																							 sprintf(s, when); \
-																																									       }
+   if (hdiff != 0) { \
+      if (tdiff < 0) \
+	sprintf(s, "%d %s%s ", hdiff, L_HOUR, hplu); \
+      else \
+        sprintf(s, "%d %s ", hdiff, L_HGEN); \
+       s += strlen(s); \
+   } \
+   if (mdiff != 0) { \
+      if (tdiff < 0) \
+         sprintf(s, "%d %s%s ", mdiff, L_MINUTE, \
+		 mplu); \
+      else \
+         sprintf(s, "%d %s ", mdiff, L_MGEN); \
+      s += strlen(s); \
+   } \
+   sprintf(s, when); \
+}
 #endif /* L_IN_DOSUBST */
 
 /* The next ones are used only when MK_GLOBALS is set */

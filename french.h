@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.2 1996-04-28 02:01:57 dfs Exp $ */
+/* $Id: french.h,v 1.3 1996-04-29 19:34:37 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -110,29 +110,28 @@
 
 #define L_ORDINAL_OVERRIDE \
 switch(d) { \
-		case 1: plu = "er"; break; \
-					       \
-					       default: plu = ""; break; \
-									     }
+   case 1: plu = "er"; break; \
+   default: plu = ""; break; \
+}
 
 #define L_1_OVER \
 if (tdiff == 0) \
 sprintf(s, L_NOW); \
 else if (tdiff < 0) { \
-			  if (mdiff == 0) \
-					      sprintf(s, "il y a %d heure%s", hdiff, hplu); \
-												else if (hdiff == 0) \
-															 sprintf(s, "il y a %d minute%s", mdiff, mplu); \
-																					    else \
-																						     sprintf(s, "il y a %d heure%s et %d minute%s", hdiff, hplu, mdiff, mplu); \
-																																   } else { \
-																																		if (mdiff == 0) \
-																																				    sprintf(s, "dans %d heure%s", hdiff, hplu); \
-																																										    else if (hdiff == 0) \
-																																													     sprintf(s, "dans %d minute%s", mdiff, mplu); \
-																																																			      else \
-																																																				       sprintf(s, "dans %d heure%s et %d minute%s", hdiff, hplu, mdiff, mplu); \
-																																																														   }
+  if (mdiff == 0) \
+      sprintf(s, "il y a %d heure%s", hdiff, hplu); \
+  else if (hdiff == 0) \
+      sprintf(s, "il y a %d minute%s", mdiff, mplu); \
+  else \
+      sprintf(s, "il y a %d heure%s et %d minute%s", hdiff, hplu, mdiff, mplu); \
+} else { \
+   if (mdiff == 0) \
+      sprintf(s, "dans %d heure%s", hdiff, hplu); \
+   else if (hdiff == 0) \
+      sprintf(s, "dans %d minute%s", mdiff, mplu); \
+   else \
+      sprintf(s, "dans %d heure%s et %d minute%s", hdiff, hplu, mdiff, mplu); \
+}
 
 #define L_J_OVER \
 sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], \
@@ -247,7 +246,8 @@ EXTERN char *ErrMsg[] =
     "Remind: '-i' option: %s\n",
     "Pas de rappels.",
     "%d rappel(s) en file pour aujourd'hui.\n",
-    "Nombre attendu"
+    "Nombre attendu",
+    "Fonction ill\351gale apr\350s WARN"
 #else /* ISOLATIN1 */
     "Ok",
     "']' manquant",

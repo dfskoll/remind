@@ -1,4 +1,4 @@
-# $Id: smakefile,v 1.1 1996-03-31 04:01:58 dfs Exp $
+# $Id: smakefile,v 1.2 1996-04-29 19:34:39 dfs Exp $
 # Makefile for REMIND, suitable for SAS/C 6.50 under AmigaDOS
 # English version
 
@@ -34,7 +34,7 @@ LANGHDRS= english.h german.h dutch.h finnish.h french.h norwgian.h
 
 SRCS= calendar.c dorem.c dosubst.c expr.c files.c funcs.c globals.c hbcal.c \
 init.c main.c moon.c omit.c sort.c queue.c token.c trigger.c userfns.c \
-utils.c var.c amiga/amiga.c
+utils.c var.c amiga.c
 
 OBJS= calendar.o dorem.o dosubst.o expr.o files.o funcs.o globals.o hbcal.o \
 init.o main.o moon.o omit.o sort.o queue.o token.o trigger.o userfns.o \
@@ -89,5 +89,5 @@ userfns.o: userfns.c $(STDHDRS) expr.h
 utils.o: utils.c $(STDHDRS)
 var.o: var.c $(STDHDRS) expr.h
 
-amiga.o: amiga/amiga.c
-	$(CC) OBJNAME=amiga.o $(CFLAGS) amiga/amiga.c
+amiga.o: amiga.c
+	$(CC) OBJNAME=amiga.o $(CFLAGS) amiga.c

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.4 1996-04-28 02:01:51 dfs Exp $
+# $Id: Makefile,v 1.5 1996-04-29 19:34:36 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -80,8 +80,8 @@ makefile.os2 makefile.tc moon.c norwgian.h omit.c os2func.c polish.h \
 protos.h queue.c rem rem.1 rem2ps.1 rem2ps.c rem2ps.h remind-all.csh \
 remind-all.sh remind.1 remind.def smakefile sort.c test-rem \
 test-rem.ami test-rem.bat test-rem.cmd test-rem.rexx test.cmp test.rem \
-test1.cmp test2.cmp token.c trigger.c tstlang.rem types.h userfns.c \
-utils.c var.c version.h
+test1.cmp test2.cmp tkremind tkremind.1 token.c trigger.c tstlang.rem \
+types.h userfns.c utils.c var.c version.h
 
 OBJS= $(SRCS:.c=.o)
 
@@ -135,7 +135,7 @@ shar:
 	shar -x -n"Remind $(VERSION)" -l45 -o./Shar $(MANIFEST)
 
 backup:
-	cp $(MANIFEST) ../backup
+	tar cvzf ../rbackup.tgz $(MANIFEST)
 
 transmit:
 	sz -a -e $(MANIFEST)

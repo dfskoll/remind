@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: dosubst.c,v 1.1 1996-03-27 03:25:52 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.2 1996-04-29 19:34:36 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include "config.h"
@@ -88,7 +88,7 @@ int jul, mode;
 #ifdef L_AMPM_OVERRIDE
     L_AMPM_OVERRIDE (pm, h)
 #else
-	pm = (h < 12) ? L_AM : L_PM;
+    pm = (h < 12) ? L_AM : L_PM;
 #endif
     hh = (h == 12) ? 12 : h % 12;
    
@@ -98,26 +98,26 @@ int jul, mode;
 #ifdef L_AMPM_OVERRIDE
     L_AMPM_OVERRIDE (cpm, ch)
 #else
-	cpm = (ch < 12) ? L_AM : L_PM;
+    cpm = (ch < 12) ? L_AM : L_PM;
 #endif
     chh = (ch == 12) ? 12 : ch % 12;
 
 #ifdef L_ORDINAL_OVERRIDE
     L_ORDINAL_OVERRIDE
 #else
-	switch(d) {
-	case 1:
-	case 21:
-	case 31: plu = "st"; break;
+    switch(d) {
+    case 1:
+    case 21:
+    case 31: plu = "st"; break;
+	
+    case 2:
+    case 22: plu = "nd"; break;
       
-	case 2:
-	case 22: plu = "nd"; break;
+    case 3:
+    case 23: plu = "rd"; break;
       
-	case 3:
-	case 23: plu = "rd"; break;
-      
-	default: plu = "th"; break;
-	}
+    default: plu = "th"; break;
+    }
 #endif      
    
     while(1) {
@@ -197,8 +197,8 @@ int jul, mode;
 #ifdef L_A_OVER
 	    L_A_OVER
 #else	 
-		sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
-			MonthName[m], y);
+	    sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
+		    MonthName[m], y);
 #endif
             s += strlen(s);
 	    break;
@@ -207,7 +207,7 @@ int jul, mode;
 #ifdef L_B_OVER
 	    L_B_OVER
 #else	 
-		sprintf(s, L_INXDAYS, diff);
+	    sprintf(s, L_INXDAYS, diff);
 #endif
 	    s += strlen(s);
             break;
@@ -216,7 +216,7 @@ int jul, mode;
 #ifdef L_C_OVER
 	    L_C_OVER
 #else	 
-		sprintf(s, "%s %s", L_ON, DayName[jul%7]);
+	    sprintf(s, "%s %s", L_ON, DayName[jul%7]);
 #endif
 	    s += strlen(s);
 	    break;
@@ -225,7 +225,7 @@ int jul, mode;
 #ifdef L_D_OVER
 	    L_D_OVER
 #else	 
-		sprintf(s, "%d", d);
+	    sprintf(s, "%d", d);
 #endif
 	    s += strlen(s);
 	    break;
@@ -234,8 +234,8 @@ int jul, mode;
 #ifdef L_E_OVER
 	    L_E_OVER
 #else	 
-		sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DATESEP,
-			m+1, DATESEP, y);
+	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DATESEP,
+		    m+1, DATESEP, y);
 #endif
 	    s += strlen(s);
 	    break;
@@ -244,7 +244,7 @@ int jul, mode;
 #ifdef L_F_OVER
 	    L_F_OVER
 #else	 
-		sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DATESEP, d, DATESEP, y);
+	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DATESEP, d, DATESEP, y);
 #endif
 	    s += strlen(s);
 	    break;
@@ -253,7 +253,7 @@ int jul, mode;
 #ifdef L_G_OVER
 	    L_G_OVER
 #else	 
-		sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
+	    sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
 #endif
 	    s += strlen(s);
 	    break;
@@ -262,7 +262,7 @@ int jul, mode;
 #ifdef L_H_OVER
 	    L_H_OVER
 #else	 
-		sprintf(s, "%s %02d%c%02d", L_ON, d, DATESEP, m+1);
+	    sprintf(s, "%s %02d%c%02d", L_ON, d, DATESEP, m+1);
 #endif
 	    s += strlen(s);
 	    break;
@@ -271,7 +271,7 @@ int jul, mode;
 #ifdef L_I_OVER
 	    L_I_OVER
 #else	 
-		sprintf(s, "%s %02d%c%02d", L_ON, m+1, DATESEP, d);
+	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DATESEP, d);
 #endif
 	    s += strlen(s);
 	    break;
@@ -280,8 +280,8 @@ int jul, mode;
 #ifdef L_J_OVER
 	    L_J_OVER
 #else
-		sprintf(s, "%s %s, %s %d%s, %d", L_ON, DayName[jul%7],
-			MonthName[m], d, plu, y);
+	    sprintf(s, "%s %s, %s %d%s, %d", L_ON, DayName[jul%7],
+		    MonthName[m], d, plu, y);
 #endif
 	    s += strlen(s);
 	    break;
@@ -290,8 +290,8 @@ int jul, mode;
 #ifdef L_K_OVER
 	    L_K_OVER
 #else
-		sprintf(s, "%s %s, %s %d%s", L_ON, DayName[jul%7],
-			MonthName[m], d, plu);
+	    sprintf(s, "%s %s, %s %d%s", L_ON, DayName[jul%7],
+		    MonthName[m], d, plu);
 #endif
 	    s += strlen(s);
 	    break;
@@ -300,7 +300,7 @@ int jul, mode;
 #ifdef L_L_OVER
 	    L_L_OVER
 #else
-		sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DATESEP, m+1, DATESEP, d);
+	    sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DATESEP, m+1, DATESEP, d);
 #endif
 	    s += strlen(s);
 	    break;
@@ -309,7 +309,7 @@ int jul, mode;
 #ifdef L_M_OVER
 	    L_M_OVER
 #else
-		sprintf(s, "%s", MonthName[m]);
+	    sprintf(s, "%s", MonthName[m]);
 #endif
 	    s += strlen(s);
 	    break;
@@ -318,7 +318,7 @@ int jul, mode;
 #ifdef L_N_OVER
 	    L_N_OVER
 #else
-		sprintf(s, "%d", m+1);
+	    sprintf(s, "%d", m+1);
 #endif
 	    s += strlen(s);
 	    break;
@@ -327,8 +327,8 @@ int jul, mode;
 #ifdef L_O_OVER
 	    L_O_OVER
 #else
-		if (RealToday == JulianToday) sprintf(s, " (%s)", L_TODAY);
-		else *s = 0;
+	    if (RealToday == JulianToday) sprintf(s, " (%s)", L_TODAY);
+	    else *s = 0;
 #endif
 	    s += strlen(s);
 	    break;
@@ -337,7 +337,7 @@ int jul, mode;
 #ifdef L_P_OVER
 	    L_P_OVER
 #else
-		sprintf(s, (diff == 1 ? "" : L_PLURAL));
+	    sprintf(s, (diff == 1 ? "" : L_PLURAL));
 #endif
 	    s += strlen(s);
 	    break;
@@ -346,7 +346,7 @@ int jul, mode;
 #ifdef L_Q_OVER
 	    L_Q_OVER
 #else
-		sprintf(s, (diff == 1 ? "'s" : "s'"));
+	    sprintf(s, (diff == 1 ? "'s" : "s'"));
 #endif
 	    s += strlen(s);
 	    break;
@@ -355,7 +355,7 @@ int jul, mode;
 #ifdef L_R_OVER
 	    L_R_OVER
 #else
-		sprintf(s, "%02d", d);
+	    sprintf(s, "%02d", d);
 #endif
 	    s += strlen(s);
 	    break;
@@ -364,7 +364,7 @@ int jul, mode;
 #ifdef L_S_OVER
 	    L_S_OVER
 #else
-		sprintf(s, plu);
+	    sprintf(s, plu);
 #endif
 	    s += strlen(s);
 	    break;
@@ -373,7 +373,7 @@ int jul, mode;
 #ifdef L_T_OVER
 	    L_T_OVER
 #else
-		sprintf(s, "%02d", m+1);
+	    sprintf(s, "%02d", m+1);
 #endif
 	    s += strlen(s);
 	    break;
@@ -382,8 +382,8 @@ int jul, mode;
 #ifdef L_U_OVER
 	    L_U_OVER
 #else
-		sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d,
-			plu, MonthName[m], y);
+	    sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d,
+		    plu, MonthName[m], y);
 #endif
 	    s += strlen(s);
 	    break;
@@ -392,8 +392,8 @@ int jul, mode;
 #ifdef L_V_OVER
 	    L_V_OVER
 #else
-		sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu,
-			MonthName[m]);
+	    sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu,
+		    MonthName[m]);
 #endif
 	    s += strlen(s);
 	    break;
@@ -402,7 +402,7 @@ int jul, mode;
 #ifdef L_W_OVER
 	    L_W_OVER
 #else
-		sprintf(s, DayName[jul%7]);
+	    sprintf(s, DayName[jul%7]);
 #endif
 	    s += strlen(s);
 	    break;
@@ -411,7 +411,7 @@ int jul, mode;
 #ifdef L_X_OVER
 	    L_X_OVER
 #else
-		sprintf(s, "%d", diff);
+	    sprintf(s, "%d", diff);
 #endif
 	    s += strlen(s);
 	    break;
@@ -420,7 +420,7 @@ int jul, mode;
 #ifdef L_Y_OVER
 	    L_Y_OVER
 #else
-		sprintf(s, "%d", y);
+	    sprintf(s, "%d", y);
 #endif
 	    s += strlen(s);
 	    break;
@@ -429,7 +429,7 @@ int jul, mode;
 #ifdef L_Z_OVER
 	    L_Z_OVER
 #else
-		sprintf(s, "%d", y % 100);
+	    sprintf(s, "%d", y % 100);
 #endif
 	    s += strlen(s);
 	    break;
@@ -438,15 +438,15 @@ int jul, mode;
 #ifdef L_1_OVER
 	    L_1_OVER
 #else
-		if (tdiff == 0) 
-		    sprintf(s, L_NOW);
-		else if (hdiff == 0) 
-		    sprintf(s, "%d %s%s %s", mdiff, L_MINUTE, mplu, when);
-		else if (mdiff == 0)
-		    sprintf(s, "%d %s%s %s", hdiff, L_HOUR, hplu, when);
-		else
-		    sprintf(s, "%d %s%s %s %d %s%s %s", hdiff, L_HOUR, hplu,
-			    L_AND, mdiff, L_MINUTE, mplu, when);
+	    if (tdiff == 0) 
+		sprintf(s, L_NOW);
+	    else if (hdiff == 0) 
+		sprintf(s, "%d %s%s %s", mdiff, L_MINUTE, mplu, when);
+	    else if (mdiff == 0)
+		sprintf(s, "%d %s%s %s", hdiff, L_HOUR, hplu, when);
+	    else
+		sprintf(s, "%d %s%s %s %d %s%s %s", hdiff, L_HOUR, hplu,
+			L_AND, mdiff, L_MINUTE, mplu, when);
 #endif
 	    s += strlen(s);
 	    break;
@@ -455,7 +455,7 @@ int jul, mode;
 #ifdef L_2_OVER
 	    L_2_OVER
 #else
-		sprintf(s, "%s %d%c%02d%s", L_AT, hh, TIMESEP, min, pm);
+	    sprintf(s, "%s %d%c%02d%s", L_AT, hh, TIMESEP, min, pm);
 #endif
 	    s += strlen(s);
 	    break;
@@ -465,7 +465,7 @@ int jul, mode;
 	    L_3_OVER
 #else
 
-		sprintf(s, "%s %02d%c%02d", L_AT, h, TIMESEP, min);
+	    sprintf(s, "%s %02d%c%02d", L_AT, h, TIMESEP, min);
 #endif
 	    s += strlen(s);
 	    break;
@@ -474,7 +474,7 @@ int jul, mode;
 #ifdef L_4_OVER
 	    L_4_OVER
 #else
-		sprintf(s, "%d", tdiff);
+	    sprintf(s, "%d", tdiff);
 #endif
 	    s += strlen(s);
 	    break;
@@ -483,7 +483,7 @@ int jul, mode;
 #ifdef L_5_OVER
 	    L_5_OVER
 #else
-		sprintf(s, "%d", adiff);
+	    sprintf(s, "%d", adiff);
 #endif
 	    s += strlen(s);
 	    break;
@@ -492,7 +492,7 @@ int jul, mode;
 #ifdef L_6_OVER
 	    L_6_OVER
 #else
-		sprintf(s, when);
+	    sprintf(s, when);
 #endif
 	    s += strlen(s);
 	    break;
@@ -501,7 +501,7 @@ int jul, mode;
 #ifdef L_7_OVER
 	    L_7_OVER
 #else
-		sprintf(s, "%d", hdiff);
+	    sprintf(s, "%d", hdiff);
 #endif
 	    s += strlen(s);
 	    break;
@@ -510,7 +510,7 @@ int jul, mode;
 #ifdef L_8_OVER
 	    L_8_OVER
 #else
-		sprintf(s, "%d", mdiff);
+	    sprintf(s, "%d", mdiff);
 #endif
 	    s += strlen(s);
 	    break;
@@ -519,7 +519,7 @@ int jul, mode;
 #ifdef L_9_OVER
 	    L_9_OVER
 #else
-		sprintf(s, mplu);
+	    sprintf(s, mplu);
 #endif
 	    s += strlen(s);
 	    break;
@@ -528,7 +528,7 @@ int jul, mode;
 #ifdef L_0_OVER
 	    L_0_OVER
 #else
-		sprintf(s, hplu);
+	    sprintf(s, hplu);
 #endif
 	    s += strlen(s);
 	    break;
@@ -537,7 +537,7 @@ int jul, mode;
 #ifdef L_BANG_OVER
 	    L_BANG_OVER
 #else
-		sprintf(s, (tdiff >= 0 ? L_IS : L_WAS));
+	    sprintf(s, (tdiff >= 0 ? L_IS : L_WAS));
 #endif
 	    s += strlen(s);
 	    break;
@@ -546,7 +546,7 @@ int jul, mode;
 #ifdef L_AT_OVER
 	    L_AT_OVER
 #else
-		sprintf(s, "%d%c%02d%s", chh, TIMESEP, cmin, cpm);
+	    sprintf(s, "%d%c%02d%s", chh, TIMESEP, cmin, cpm);
 #endif
 	    s += strlen(s);
 	    break;
@@ -555,7 +555,7 @@ int jul, mode;
 #ifdef L_HASH_OVER
 	    L_HASH_OVER
 #else
-		sprintf(s, "%02d%c%02d", ch, TIMESEP, cmin);
+	    sprintf(s, "%02d%c%02d", ch, TIMESEP, cmin);
 #endif
 	    s += strlen(s);
 	    break;

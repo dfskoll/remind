@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.1 1996-03-27 03:25:59 dfs Exp $ */
+/* $Id: lang.h,v 1.2 1996-04-29 19:34:38 dfs Exp $ */
 
 /* I'm chauvinistic and name each language with its English name... */
 
@@ -22,7 +22,7 @@
 #define DANISH     6 /* translated by Mogens Lynnerup                  */
 #define POLISH     7 /* translated by Jerzy Sobczyk                    */
 
-/* Add more languages here - but please e-mail dfs@doe.carleton.ca
+/* Add more languages here - but please e-mail aa775@freenet.carleton.ca
    to have your favorite language assigned a number.  If you add a
    language, please send me the header file, and permission to include
    it in future releases of Remind.  Note that you'll get no remuneration

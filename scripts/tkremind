@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.7 1998-03-02 20:01:29 dfs Exp $
+# $Id: tkremind,v 1.8 1998-03-04 18:13:13 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -1465,6 +1465,10 @@ proc DaemonReadable { file } {
 	    scan $line "NOTE reminder %s %s" time now
 	    IssueBackgroundReminder $file $time $now
 	}
+	"NOTE newdate"{
+	    Initialize
+	    FillCalWindow
+	}
 	"NOTE reread" {
 	    puts $file "STATUS"
 	    flush $file
@@ -1507,6 +1511,10 @@ proc IssueBackgroundReminder { file time now } {
 	    append msg "\n";
 	}
 	append msg $line
+    }
+    # Do nothing if it's blank -- was probably a RUN-type reminder.
+    if {$msg == ""} {
+	return
     }
     incr BgCounter
     set w .bg$BgCounter

@@ -1,5 +1,5 @@
 # Makefile for REMIND
-# $Id: Makefile,v 1.9 1996-05-26 03:17:35 dfs Exp $
+# $Id: Makefile,v 1.10 1996-06-01 20:05:34 dfs Exp $
 
 #-----------------------------------------------------------------------------
 # THINGS FOR YOU TO EDIT START BELOW
@@ -172,6 +172,10 @@ install-scripts:
 	-chmod $(EXEMODE) $(SCRIPTDIR)/rem
 	-chown $(OWNER) $(SCRIPTDIR)/rem
 	-chgrp $(GROUP) $(SCRIPTDIR)/rem
+	cp tkremind $(SCRIPTDIR)/tkremind
+	-chmod $(EXEMODE) $(SCRIPTDIR)/tkremind
+	-chown $(OWNER) $(SCRIPTDIR)/tkremind
+	-chgrp $(GROUP) $(SCRIPTDIR)/tkremind
 
 install-man:
 	cp remind.1 $(MANDIR)/man$(MANSECT)/remind.$(MANSECT)

@@ -13,6 +13,14 @@ CHANGES TO REMIND
 
 - Fixed the scripts in the "www" directory to install and work properly.
 
+- Added "remind.vim" file for Vim syntax highlighting of Remind files,
+  thanks to Davide Alberani.
+
++ BUG FIXES
+
+- Fixed typo which caused compilation failure on compilers without function
+  prototypes.  Thanks to Ian Darwin for the patch.
+
 * Version 3.0 Patch 20
 
 + NEWS

@@ -2,10 +2,25 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 22
 
++ MINOR ENHANCEMENTS
+
+- Added option to have TkRemind display all of today's reminders in a text
+  box on startup.  This option is on by default.
+
+- Makefile in "www" directory allows you to add ".cgi" suffix to CGI scripts.
+
+- Added option to completely delete a reminder from the reminder file in
+  the timed reminder popup dialog.
+
+- Clarified build instructions.
+
 + BUG FIXES
 
 - Fixed packing order in TkRemind so resizing window doesn't make control
   buttons disappear.
+
+- Fixed serious bug in which background queued reminders were ignored and
+  Remind simply exited.  Doh!  Sorry about that.
 
 * Version 3.0 Patch 21
 

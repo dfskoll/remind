@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.7 1998-04-23 02:57:08 dfs Exp $
+# $Id: rem2html,v 1.8 1998-05-10 01:29:23 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -24,7 +24,7 @@
 # example), use the "SPECIAL HTML" type.  For example:
 #
 # REM Wed SPECIAL HTML <P> Meeting at \
-# <A HREF="http://www.linuxhq.org">Linux HQ</A> </P>
+# <A HREF="http://www.linuxhq.com">Linux HQ</A> </P>
 #
 # This file is Copyright (C) 1997-8 by Don Schwarz <darkowl@mcs.net>
 # and David F. Skoll

@@ -11,7 +11,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.6 1998-02-14 03:56:34 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.7 1998-04-19 03:03:25 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -319,7 +319,9 @@ void DoPsCal()
 
 	is_ps = 0;
 	if (!strcmp(passthru, "PostScript") ||
-	    !strcmp(passthru, "PSFile")) {
+	    !strcmp(passthru, "PSFile") ||
+	    !strcmp(passthru, "MOON") ||
+	    !strcmp(passthru, "SHADE")) {
 	    is_ps = 1;
 	}
 	c->entry = malloc(strlen(startOfBody) + 1 + is_ps);
@@ -333,6 +335,10 @@ void DoPsCal()
 /* Save the 'P' or 'F' flag */
 	    if (!strcmp(passthru, "PostScript")) {
 		*(c->entry) = 'P';
+	    } else if (!strcmp(passthru, "SHADE")) {
+		*(c->entry) = 'S';
+	    } else if (!strcmp(passthru, "MOON")) {
+		*(c->entry) = 'M';
 	    } else {
 		*(c->entry) = 'F';
 	    }
@@ -877,6 +883,9 @@ int DoQueuedPs()
     FILE *fp;
     int fnoff;
     char buffer[512];
+    char *size, *extra;
+    int num, r, g, b, phase, fontsize, moonsize;
+    unsigned char c;
 
     if (!MondayFirst) begin = CurDay - WkDayNum;
     else		     begin = CurDay - (WkDayNum ? WkDayNum-1 : 6);
@@ -903,9 +912,11 @@ int DoQueuedPs()
 /* Now do the user's PostScript code */
 	    fnoff = 1;
 	    while (isspace(*(e->entry+fnoff))) fnoff++;
-	    if (*(e->entry) == 'P') {
+	    switch(*e->entry) {
+	    case 'P':		/* Send PostScript through */
 		printf("%s\n", e->entry+fnoff);
-	    } else {
+		break;
+	    case 'F':		/* PostScript from a file */
 		fp = fopen(e->entry+fnoff, "r");
 		if (!fp) {
 		    fprintf(stderr, "Could not open PostScript file `%s'\n", e->entry+1);
@@ -917,6 +928,112 @@ int DoQueuedPs()
 		    }
 		    fclose(fp);
 		}
+		break;
+	    case 'S':		/* Shading */
+		num = sscanf(e->entry+fnoff, "%d %d %d", &r, &g, &b);
+		if (num == 1) {
+		    g = r;
+		    b = r;
+		} else if (num != 3) {
+		    fprintf(stderr, "Rem2PS: Malformed SHADE special\n");
+		    break;
+		}
+		if (r < 0 || r > 255 ||
+		    g < 0 || g > 255 ||
+		    b < 0 || b > 255) {
+		    fprintf(stderr, "Rem2PS: Illegal values for SHADE\n");
+		    break;
+		}
+		printf("/_A LineWidth 2 div def _A _A moveto\n");
+		printf("BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto\n");
+		printf("_A BoxHeight _A sub lineto closepath\n");
+		printf("%g %g %g setrgbcolor fill 0.0 setgray\n",
+		       r/255.0, g/255.0, b/255.0);
+		break;
+
+	    case 'M':		/* Moon phase */
+		num = sscanf(e->entry+fnoff, "%d %d %d", &phase, &moonsize,
+			     &fontsize);
+		if (num == 1) {
+		    moonsize = -1;
+		    fontsize = -1;
+		} else if (num == 2) {
+		    fontsize = -1;
+		} else if (num != 3) {
+		    fprintf(stderr, "Rem2PS: Badly formed MOON special\n");
+		    break;
+		}
+		if (phase < 0 || phase > 3) {
+		    fprintf(stderr, "Rem2PS: Illegal MOON phase %d\n",
+			    phase);
+		    break;
+		}
+		if (moonsize < 0) {
+		    size = "DaySize 2 div";
+		} else {
+		    sprintf(buffer, "%d", moonsize);
+		    size = buffer;
+		}
+		
+		printf("gsave 0 setgray newpath Border %s add BoxHeight Border sub %s sub\n", size, size);
+		printf(" %s 0 360 arc closepath\n", size);
+		switch(phase) {
+		case 0:
+		    printf("fill\n");
+		    break;
+		case 2:
+		    printf("stroke\n");
+		    break;
+
+		case 1:
+		    printf("stroke\n");
+		    printf("newpath Border %s add BoxHeight Border sub %s sub\n",
+			   size, size);
+		    printf("%s 90 270 arc closepath fill\n", size);
+		    break;
+		default:
+		    printf("stroke\n");
+		    printf("newpath Border %s add BoxHeight Border sub %s sub\n",
+		size, size);
+		    printf("%s 270 90 arc closepath fill\n", size);
+		    break;
+		}
+		/* See if we have extra stuff */
+		extra = e->entry+fnoff;
+
+		/* Skip phase */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
+		/* Skip moon size */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
+		/* Skip font size */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
+		/* Anything left? */
+		if (*extra) {
+		    printf("Border %s add %s add Border add BoxHeight border sub %s sub %s sub moveto\n", size, size, size, size);
+		    if (fontsize < 0) {
+			size = "EntrySize";
+		    } else {
+			sprintf(buffer, "%d", fontsize);
+			size = buffer;
+		    }
+		    printf("/EntryFont findfont %s scalefont setfont (",
+			   size);
+		    while(*extra) {
+			c = (unsigned char) *extra++;
+			if (c == '\\' || c == '(' || c == ')') PutChar('\\');
+			PutChar(c);
+		    }
+		    printf(") show\n");
+
+		}
+		printf("grestore\n");
+		break;
 	    }
 
 /* Free the entry */

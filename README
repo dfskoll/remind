@@ -27,13 +27,14 @@ If you do NOT have Tcl/Tk or are NOT running X Windows:
 
 2) Edit the file "src/lang.h" to choose a language.
 
-3) Type: "./configure"
+3) Type: "./configure"  (You can supply options; type "./configure --help"
+   for details.)
 
 4) Type: "make"
 
 5) Type: "make install" -- you may need to be root to do this.
 
-$Id: README,v 1.6 2000-03-13 17:40:38 dfs Exp $
+$Id: README,v 1.7 2000-06-26 14:43:25 dfs Exp $
 
 Contact info: mailto:dfs@roaringpenguin.com
 Home page:    http://www.roaringpenguin.com/remind.html

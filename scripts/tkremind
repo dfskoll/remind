@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.20 1998-05-01 02:19:52 dfs Exp $
+# $Id: tkremind,v 1.21 1998-06-07 20:31:08 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -238,6 +238,16 @@ proc CalEntryOffset { firstDay } {
 #  Creates a frame holding a grid of labels and a grid of text entries
 #***********************************************************************
 proc CreateCalFrame { w dayNames } {
+    # Figure out reasonable height for text frames
+    set h [winfo screenheight .]
+    if {$h <= 480} {
+	set h 2
+    } elseif {$h <= 600} {
+	set h 4
+    } else {
+	set h 5
+    }
+
     global MondayFirst
     frame $w
     for {set i 0} {$i < 7} {incr i} {
@@ -256,7 +266,7 @@ proc CreateCalFrame { w dayNames } {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
 		    -state disabled -relief flat
-	    text $w.t$f -width 12 -height 5 -wrap word -relief flat \
+	    text $w.t$f -width 12 -height $h -wrap word -relief flat \
 		    -state disabled -takefocus 0 -cursor {}
 	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
 	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
@@ -615,7 +625,7 @@ proc FillCalWindow {} {
 	    continue
 	}
 	.cal.t$n configure -state normal
-	if { [string length [string trim [.cal.t$n get 1.0]]] != 0} {
+	if { [string length [string trim [.cal.t$n get 1.0 end]]] != 0} {
 	    .cal.t$n insert end " .....\n"
 	}
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {

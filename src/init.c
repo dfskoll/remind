@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.7 1998-03-01 20:43:56 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.8 1998-03-02 19:38:40 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -258,9 +258,16 @@ char *argv[];
 	    case 'z':
 	    case 'Z':
 		DontFork = 1;
-		PARSENUM(Daemon, arg);
-		if (Daemon<5) Daemon=5;
-		else if (Daemon>60) Daemon=60;
+		if (*arg == '0') {
+		    PARSENUM(Daemon, arg);
+		    if (Daemon == 0) Daemon = -1;
+		    else if (Daemon < 5) Daemon = 5;
+		    else if (Daemon > 60) Daemon = 60;
+		} else {
+		    PARSENUM(Daemon, arg);
+		    if (Daemon<5) Daemon=5;
+		    else if (Daemon>60) Daemon=60;
+		}
 		break;
 
 	    case 'a':

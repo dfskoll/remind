@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.4 1998-03-01 20:43:23 dfs Exp $
+# $Id: tkremind,v 1.5 1998-03-02 19:38:33 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -25,6 +25,7 @@ set ConfirmQuit 0
 
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
+#set Remind "/home/dfs/Remind/src/remind"
 
 # Rem2PS program to execute -- supply full path if you want
 set Rem2PS "rem2ps"
@@ -51,6 +52,9 @@ set EnglishDayNames {Sunday Monday Tuesday Wednesday Thursday Friday Saturday}
 # Current month and year -- will be set by Initialize procedure
 set CurMonth -1
 set CurYear -1
+
+# Background reminder counter
+set BgCounter 0
 
 # Absolutely today -- unlike the CurMonth and CurYear, these won't change
 set TodayMonth -1
@@ -192,7 +196,7 @@ proc ColumnNumber { firstDay mondayFirst day } {
 #   dayNames -- names of weekdays in current language {Sun .. Sat}
 #---------------------------------------------------------------------------
 proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
-    global CurMonth CurYear TodayMonth TodayYear TodayDay
+    global CurMonth CurYear TodayMonth TodayYear TodayDay DaemonFile
     catch { destroy .h }
     catch { destroy .b }
 
@@ -239,13 +243,19 @@ proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
     button .b.goto -text {Go To Date...} -command {GotoDialog}
     button .b.print -text {Print...} -command {DoPrint}
     button .b.quit -text {Quit} -command {Quit}
-    label .b.status -text "" -width 10 -relief sunken
+    label .b.status -text "" -width 25 -relief sunken
+    label .b.nqueued -text "" -width 20 -relief sunken
     pack .b.prev .b.this .b.next .b.goto .b.print .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
+    pack .b.nqueued -side left -fill x
     pack .h -side top -expand 1 -fill both
     pack .b -side top -fill x -expand 0
     wm title . "TkRemind - $month $year"
     wm iconname . "$month $year"
+    catch {
+	puts $DaemonFile "STATUS"
+	flush $DaemonFile
+    }
 }
 
 #---------------------------------------------------------------------------
@@ -860,6 +870,7 @@ proc ModifyDay {d firstDay} {
 	    puts $f ""
 	    close $f
 	    FillCalWindow
+	    RestartBackgroundRemindDaemon
 	    return 0
 	}
     }
@@ -1373,6 +1384,140 @@ proc BrowseForFileRead {w {dir ""}} {
     $w.entry delete 0 end
 }
 
+#---------------------------------------------------------------------------
+# StartBackgroundRemindDaemon
+# Arguments:
+#    none
+# Returns:
+#    nothing
+# Description:
+#    Starts a background Remind daemon to handle timed reminders
+#---------------------------------------------------------------------------
+proc StartBackgroundRemindDaemon {} {
+    global Remind DaemonFile ReminderFile
+    set problem [catch { set DaemonFile [open "|$Remind -z0 $ReminderFile" "r+"] } err]
+    if {$problem} {
+	tk_dialog .error Error "Can't start Remind daemon in background: $err" error 0 OK
+    } else {
+	fileevent $DaemonFile readable "DaemonReadable $DaemonFile"
+	puts $DaemonFile "STATUS"
+	flush $DaemonFile
+    }
+}
+
+#---------------------------------------------------------------------------
+# StopBackgroundRemindDaemon
+# Arguments:
+#    none
+# Returns:
+#    nothing
+# Description:
+#    Stops the background Remind daemon
+#---------------------------------------------------------------------------
+proc StopBackgroundRemindDaemon {} {
+    global DaemonFile
+    catch {
+	puts $DaemonFile "EXIT"
+	flush $DaemonFile
+	close $DaemonFile
+    }
+}
+
+#---------------------------------------------------------------------------
+# RestartBackgroundRemindDaemon
+# Arguments:
+#    none
+# Returns:
+#    nothing
+# Description:
+#    Restarts the background Remind daemon
+#---------------------------------------------------------------------------
+proc RestartBackgroundRemindDaemon {} {
+    global DaemonFile
+    catch {
+	puts $DaemonFile "REREAD"
+	flush $DaemonFile
+    }
+}
+
+#---------------------------------------------------------------------------
+# DaemonReadable
+# Arguments:
+#    file -- file channel that is readable
+# Returns:
+#    nothing
+# Description:
+#    Reads data from the Remind daemon and handles it appropriately
+#---------------------------------------------------------------------------
+proc DaemonReadable { file } {
+    set line ""
+    catch { set line [gets $file] }
+    switch -glob $line {
+	"NOTE reminder*" {
+	    scan $line "NOTE reminder %s %s" time now
+	    IssueBackgroundReminder $file $time $now
+	}
+	"NOTE reread" {
+	    puts $file "STATUS"
+	    flush $file
+	}
+	"NOTE queued*" {
+	    scan $line "NOTE queued %d" n
+	    if {$n == 1} {
+		.b.nqueued configure -text "1 reminder queued"
+	    } else {
+		.b.nqueued configure -text "$n reminders queued"
+	    }
+	}
+	default {
+	    puts "Unknown message from daemon: $line\n"
+	}
+    }
+}
+
+#---------------------------------------------------------------------------
+# IssueBackgroundReminder
+# Arguments:
+#    file -- file channel that is readable
+#    time -- time of reminder
+#    now -- current time according to Remind daemon
+# Returns:
+#    nothing
+# Description:
+#    Reads a background reminder from daemon and pops up window.
+#---------------------------------------------------------------------------
+proc IssueBackgroundReminder { file time now } {
+    global BgCounter
+    set msg ""
+    set line ""
+    while (1) {
+	gets $file line
+	if {$line == "NOTE endreminder"} {
+	    break
+	}
+	if {$msg != ""} {
+	    append msg "\n";
+	}
+	append msg $line
+    }
+    incr BgCounter
+    set w .bg$BgCounter
+    toplevel $w
+    wm iconname $w "Reminder"
+    wm title $w "Timed reminder ($time)"
+    label $w.l -text "Reminder for $time issued at $now"
+    message $w.msg -width 6i -text $msg
+    button $w.ok -text "OK" -command "destroy $w"
+    pack $w.l -side top
+    pack $w.msg -side top -expand 1 -fill both
+    pack $w.ok -side top
+    CenterWindow $w
+
+    # reread status
+    puts $file "STATUS"
+    flush $file
+}
+
 proc main {} {	
     wm withdraw .
     puts "\nTkRemind Copyright (c) 1996-1998 by David F. Skoll\n"
@@ -1389,12 +1534,7 @@ proc main {} {
     wm geometry . ${x}x600
 
     update
-}
-
-proc t {} {
-    catch { destroy .foo }
-    toplevel .foo
-    CreateModifyDialog .foo 20 1
+    StartBackgroundRemindDaemon
 }
 
 main

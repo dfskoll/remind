@@ -10,7 +10,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.4 1998-02-10 03:15:54 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.5 1998-03-02 19:38:40 dfs Exp $";
 
 /* We only want object code generated if we have queued reminders */
 #ifdef HAVE_QUEUED
@@ -19,6 +19,10 @@ static char const RCSID[] = "$Id: queue.c,v 1.4 1998-02-10 03:15:54 dfs Exp $";
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -67,6 +71,8 @@ PRIVATE void CheckInitialFile ARGS ((void));
 PRIVATE int CalculateNextTime ARGS ((QueuedRem *q));
 PRIVATE QueuedRem *FindNextReminder ARGS ((void));
 PRIVATE int CalculateNextTimeUsingSched ARGS ((QueuedRem *q));
+PRIVATE void DaemonWait ARGS ((unsigned int sleeptime));
+PRIVATE void reread ARGS((void));
 
 /***************************************************************/
 /*                                                             */
@@ -154,7 +160,7 @@ void HandleQueuedReminders()
     }
 
     /* If we're a daemon, get the mod time of initial file */
-    if (Daemon) {
+    if (Daemon > 0) {
 	if (stat(InitialFile, &StatBuf)) {
 	    fprintf(ErrFp, "Cannot stat %s - not running as daemon!\n",
 		    InitialFile);
@@ -183,35 +189,60 @@ void HandleQueuedReminders()
 	/* If no more reminders to issue, we're done unless we're a daemon. */
 	if (!q && !Daemon) break;
 
-	if (Daemon && !q)
-	    TimeToSleep = (long) 60*Daemon;
-	else
+	if (Daemon && !q) {
+	    if (Daemon < 0) {
+		/* Sleep until midnight */
+		TimeToSleep = (long) 1440*60L - SystemTime(0);
+	    } else {
+		TimeToSleep = (long) 60*Daemon;
+	    }
+	} else {
 	    TimeToSleep = (long) q->tt.nexttime * 60L - SystemTime(0);
+	}
 
 	while (TimeToSleep > 0L) {
 	    SleepTime = (unsigned) ((TimeToSleep > 30000L) ? 30000 : TimeToSleep);
 
-	    if (Daemon && SleepTime > 60*Daemon) SleepTime = 60*Daemon;
+	    if (Daemon > 0 && SleepTime > 60*Daemon) SleepTime = 60*Daemon;
 
-	    sleep(SleepTime);
+	    if (Daemon >= 0) {
+		sleep(SleepTime);
+	    } else {
+		DaemonWait(SleepTime);
+	    }
 
-	    if (Daemon && SleepTime) CheckInitialFile();
+	    if (Daemon> 0 && SleepTime) CheckInitialFile();
 
-	    if (Daemon && !q)
-		TimeToSleep = (long) 60*Daemon;
-	    else
+	    if (Daemon && !q) {
+		if (Daemon < 0) {
+		    /* Sleep until midnight */
+		    TimeToSleep = (long) 1440*60L - SystemTime(0);
+		} else {
+		    TimeToSleep = (long) 60*Daemon;
+		}
+	    } else {
 		TimeToSleep = (long) q->tt.nexttime * 60L - SystemTime(0);
+	    }
+
 	}
 
 	/* Trigger the reminder */
 	CreateParser(q->text, &p);
 	trig.typ = q->typ;
 	RunDisabled = q->RunDisabled;
+	if (Daemon < 0) {
+	    printf("NOTE reminder %s ",
+		   SimpleTime(q->tt.ttime));
+	    printf("%s\n", SimpleTime(SystemTime(0)/60));
+	}
 #ifdef OS2_POPUP
 	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday, 1);
 #else
 	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
 #endif
+	if (Daemon < 0) {
+	    printf("NOTE endreminder\n");
+	}
 	fflush(stdout);
       
 	/* Calculate the next trigger time */
@@ -349,8 +380,9 @@ static void CheckInitialFile()
 
     if (stat(InitialFile, &StatBuf) == 0) tim = StatBuf.st_mtime;
     if (tim != FileModTime ||
-	RealToday != SystemDate(&y, &m, &d))
-	execvp(ArgV[0], ArgV);
+	RealToday != SystemDate(&y, &m, &d)) {
+	reread();
+    }
 }
 
 /***************************************************************/
@@ -413,6 +445,94 @@ QueuedRem *q;
 	LastTime = ThisTime;
 	q->ntrig++;
     }
+}
+
+/***************************************************************/
+/*                                                             */
+/*  DaemonWait                                                 */
+/*                                                             */
+/*  Sleep or read command from stdin in "daemon -1" mode       */
+/*                                                             */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PRIVATE void DaemonWait(unsigned int sleeptime)
+#else
+static DaemonWait(sleeptime)
+unsigned int sleeptime
+#endif
+{
+    fd_set readSet;
+    struct timeval timeout;
+    int retval;
+    int y, m, d;
+    char cmdLine[256];
+
+    FD_ZERO(&readSet);
+    FD_SET(0, &readSet);
+    timeout.tv_sec = sleeptime;
+    timeout.tv_usec = 0;
+    retval = select(1, &readSet, NULL, NULL, &timeout);
+
+    /* If date has rolled around, restart */
+    if (RealToday != SystemDate(&y, &m, &d)) {
+	printf("NOTE reread\n");
+	fflush(stdout);
+	reread();
+    }
+
+    /* If nothing readable or interrupted system call, return */
+    if (retval <= 0) return;
+
+    /* If stdin not readable, return */
+    if (!FD_ISSET(0, &readSet)) return;
+
+    /* If EOF on stdin, exit */
+    if (feof(stdin)) {
+	exit(0);
+    }
+
+    /* Read a line from stdin and interpret it */
+    if (!fgets(cmdLine, sizeof(cmdLine), stdin)) {
+	exit(0);
+    }
+
+    if (!strcmp(cmdLine, "EXIT\n")) {
+	exit(0);
+    } else if (!strcmp(cmdLine, "STATUS\n")) {
+	int nqueued = 0;
+	QueuedRem *q = QueueHead;
+	while(q) {
+	    if (q->tt.nexttime != NO_TIME) {
+		nqueued++;
+	    }
+	    q = q->next;
+	}
+	printf("NOTE queued %d\n", nqueued);
+	fflush(stdout);
+    } else if (!strcmp(cmdLine, "REREAD\n")) {
+	printf("NOTE reread\n");
+	fflush(stdout);
+	reread();
+    } else {
+	printf("ERR Invalid daemon command: %s", cmdLine);
+	fflush(stdout);
+    }
+}
+
+/***************************************************************/
+/*                                                             */
+/*  reread                                                     */
+/*                                                             */
+/*  Restarts Remind if date rolls over or REREAD cmd received  */
+/*                                                             */
+/***************************************************************/
+#ifdef HAVE_PROTOS
+PRIVATE void reread(void)
+#else
+static reread()
+#endif
+{
+    execvp(ArgV[0], ArgV);
 }
 
 #endif /* HAVE_QUEUED from way at the top */

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.8 1998-03-02 19:38:40 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.9 1998-07-18 03:16:37 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -323,7 +323,7 @@ char *argv[];
 	    case 'W':
 		if (*arg != ',') {
 		    PARSENUM(CalWidth, arg);
-		    if (CalWidth < 80) CalWidth = 80;
+		    if (CalWidth < 71) CalWidth = 71;
 		}
 		if (*arg == ',') {
 		    arg++;

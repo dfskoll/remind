@@ -1,24 +1,28 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.10 1998-05-10 01:29:12 dfs Exp $
+# $Id: Makefile.in,v 1.11 1998-05-10 02:19:20 dfs Exp $
 
 VERSION= 03.00.19
 SHELL= /bin/sh
 
+srcdir=@srcdir@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 mandir=@mandir@
 bindir=@bindir@
 datadir=@datadir@
+VPATH=$(srcdir)
 
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 
 PROGS=		remind rem2ps
-SCRIPTS=	../scripts/kall ../scripts/rem ../scripts/tkremind
-MANS=		../man/kall.1 ../man/rem.1 ../man/rem2ps.1 ../man/remind.1 \
-		../man/tkremind.1
+SCRIPTS=	$(srcdir)/../scripts/kall $(srcdir)/../scripts/rem \
+		$(srcdir)/../scripts/tkremind
+MANS=		$(srcdir)/../man/kall.1 $(srcdir)/../man/rem.1 \
+		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
+		$(srcdir)/../man/tkremind.1
 
 .SUFFIXES:
 .SUFFIXES: .c .o
@@ -35,7 +39,7 @@ test: remind
 	sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CFLAGS@ @DEFS@ $(LANGDEF) -DUNIX $*.c
+	@CC@ -c @CFLAGS@ @DEFS@ $(LANGDEF) -DUNIX -I. -I$(srcdir) $<
 
 rem2ps: rem2ps.o dynbuf.o
 	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o dynbuf.o

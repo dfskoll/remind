@@ -1,7 +1,7 @@
 Begin3
 Title:		Remind          
-Version:	03.00.19
-Entered-date:   9 May 1998
+Version:	03.00.21
+Entered-date:   12 Apr 1999
 Description:    Full-featured calendar/reminder program featuring
 		sophisticated date calculation, moon phases, sunrise/sunset,
 		Hebrew calendar, alarms, PostScript output, X-Windows
@@ -10,14 +10,14 @@ Description:    Full-featured calendar/reminder program featuring
 		platforms.  Includes scripts for making a nice WWW
 		calendar server.
 Keywords:       calendar reminder alarm datebook PostScript www
-Author:         aa775@freenet.carleton.ca (David F. Skoll)
-Maintained-by:  aa775@freenet.carleton.ca (David F. Skoll)
+Author:         dskoll@iname.com (David F. Skoll)
+Maintained-by:  dskoll@iname.com (David F. Skoll)
 Primary-site:   ftp.doe.carleton.ca /pub/Remind-3.0
-		266kB remind-3.0.19.tgz
+		304kB remind-3.0.21.tgz
 Alternate-site: 
 Original-site:  
 Platform:       Linux, Solaris, SunOS, HP-UX -- virtually any UN*X-like
 		system.  Wish 8.x required for TCL/Tk front-end, but
 		this is not essential to use the software.
-Copying-policy: GPL (No ports to MS Windows allowed)
+Copying-policy: GPL
 End

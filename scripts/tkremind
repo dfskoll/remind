@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.17 1998-04-19 03:39:31 dfs Exp $
+# $Id: tkremind,v 1.18 1998-04-19 03:52:46 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -631,7 +631,6 @@ proc FillCalWindow {} {
     set problem [catch { close $file } errmsg]
     if {$problem} {
 	tk_dialog .error Error "There was a problem running Remind: $errmsg" error 0 OK
-	exit 1
     }
     DisplayTime
 }

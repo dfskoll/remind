@@ -3,7 +3,7 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: Makefile,v 1.10 1999-10-18 19:57:38 dfs Exp $
+# $Id: Makefile,v 1.11 1999-10-18 19:58:46 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = shevy.skoll.ca
@@ -54,6 +54,7 @@ all:
 
 # OK, it's abominable.  But it works...
 install:
+	-mkdir $(SCRIPTDIR)
 	cp rem2html calps hebdate hebps hebhtml moon sunrise sunset $(SCRIPTDIR)
 	sed $(SEDSCRIPT) < cal_dispatch-DIST  > $(SCRIPTDIR)/cal_dispatch
 	sed $(SEDSCRIPT) < hebdate.rem-DIST   > $(SCRIPTDIR)/hebdate.rem
@@ -73,8 +74,9 @@ install:
 	$(SCRIPTDIR)/hebps $(SCRIPTDIR)/moon $(SCRIPTDIR)/sunrise \
 	$(SCRIPTDIR)/sunset $(SCRIPTDIR)/hebhtml $(SCRIPTDIR)/rem2html
 
-	cp firstquarter.gif fullmoon.gif lastquarter.gif newmoon.gif $(IMAGEDIR)
-	chmod 644 $(IMAGEDIR)/firstquarter.gif $(IMAGEDIR)/fullmoon.gif $(IMAGEDIR)/lastquarter.gif $(IMAGEDIR)/newmoon.gif
+	-mkdir $(IMAGEDIR)
+	cp firstquarter.png fullmoon.png lastquarter.png newmoon.png $(IMAGEDIR)
+	chmod 644 $(IMAGEDIR)/firstquarter.png $(IMAGEDIR)/fullmoon.png $(IMAGEDIR)/lastquarter.png $(IMAGEDIR)/newmoon.png
 
 
 

@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.6 1998-02-12 03:48:28 dfs Exp $
+.\" $Id: remind.1,v 1.7 1998-04-29 02:50:24 dfs Exp $
 .TH REMIND 1 "1 February 1998"
 .UC 4
 .SH NAME
@@ -59,7 +59,7 @@ of weeks.
 .B \-p\fR\fIn\fR
 The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
-\fBrem2ps\fR program, which creates a PostScript calendar.  For this
+\fBRem2PS\fR program, which creates a PostScript calendar.  For this
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
 The format of the \fB\-p\fR output is described in the \fBrem2ps(1)\fR
 man page.
@@ -179,6 +179,12 @@ specifies how often (in minutes) \fBRemind\fR should wake up to
 check if the reminder script has been changed.  \fIN\fR defaults
 to 5, and can range from 5 to 60.  Note that the use of the
 \fB\-z\fR option also enables the \fB\-f\fR option.
+.PP
+.RS
+If you supply the option \fB\-z0\fR, \fBRemind\fR runs in a
+special mode called \fBserver mode\fR.  This is documented
+in the tkremind man page; see tkremind(1).
+.RE
 .TP
 \fB\-u\fR\fIname\fR  (UNIX version only)
 Runs \fBRemind\fR with the uid and gid of the user specified by \fIname\fR.
@@ -2174,6 +2180,10 @@ Here's an example of how to use this:
 .PP
 The above command emits PostScript code to lightly shade the boxes
 for Saturday and Sunday in a PostScript calendar.
+.PP
+Note that \fBpsmoon\fR and \fBpsshade\fR are deprecated; instead
+you should use the SPECIAL SHADE and SPECIAL MOON reminders
+as described in "Out-of-Band Reminders."
 .RE
 .TP
 .B realnow()
@@ -2874,7 +2884,7 @@ and then inserted into the calendar in the appropriate places.
 If you also supply the \fB\-a\fR option, then \fBRemind\fR will not
 include timed reminders in the calendar.
 .PP
-The \fB\-p\fR option is used in conjunction with the \fBrem2ps\fR
+The \fB\-p\fR option is used in conjunction with the \fBRem2PS\fR
 program to produce a calendar in PostScript format.  For example, the
 following command will send PostScript code to standard output:
 .PP
@@ -3023,7 +3033,7 @@ The \fBPS\fR and \fBPSFILE\fR reminders pass PostScript code directly
 to the printer.  They differ in that the \fBPS\fR-type reminder passes
 its body directly to the PostScript output (after processing by the
 substitution filter) while the \fBPSFILE\fR-type's body should
-simply consist of a filename.  The \fBRem2ps\fR program will open the
+simply consist of a filename.  The \fBRem2PS\fR program will open the
 file named in the \fBPSFILE\fR-type reminder, and include its contents in
 the PostScript output.
 .PP
@@ -3469,6 +3479,59 @@ also have to specify \fIaflag\fR, depending on your tradition.
 The jahrzeit information was supplied by Frank Yellin, who quoted
 "The Comprehensive Hebrew Calendar" by Arthur Spier, and "Calendrical
 Calculations" by E. M. Reingold and Nachum Dershowitz.
+.PP
+.SH OUT-OF-BAND REMINDERS
+.PP
+The \fBSPECIAL\fR keyword is used to transmit "out-of-band" information
+to \fBRemind\fR backends, such as \fBtkremind\fR or \fBRem2PS\fR.
+They are used only when piping data from a \fBremind -p\fR line.
+.PP
+The various \fBSPECIAL\fRs recognized are particular for each
+backend; however, there are two \fBSPECIAL\fRs which all backends
+should attempt to support.  They are currently supported by
+\fBRem2PS\fR, \fBtkremind\fR and \fBrem2html\fR.
+.PP
+The \fBSHADE\fR special replaces the \fBpsshade()\fR function.
+Use it like this:
+.nf
+	REM Sat Sun SPECIAL SHADE 128
+	REM Mon SPECIAL SHADE 255 0 0
+.fi
+The \fBSHADE\fR keyword is followed by either one or three numbers,
+from 0 to 255.  If one number is supplied, it is interpreted as
+a grey-scale value from black (0) to white (255).  If three numbers
+are supplied, they are interpreted as RGB components from minimum (0)
+to maximum (255).  The example above shades weekends a fairly dark
+grey and makes Mondays a fully-saturated red.  (These shadings appear
+in calendars produced by \fBRem2PS\fR, \fBtkremind\fR and \fBrem2html\fR.)
+.PP
+The \fBMOON\fR special replaces the \fBpsmoon()\fR function.  Use it
+like this:
+.nf
+	REM [trigger(moondate(0))] SPECIAL MOON 0
+	REM [trigger(moondate(1))] SPECIAL MOON 1
+	REM [trigger(moondate(2))] SPECIAL MOON 2
+	REM [trigger(moondate(3))] SPECIAL MOON 3
+.fi
+These draw little moons on the various calendars.  The complete syntax
+of the \fBMOON\fR special is as follows:
+.nf
+	... SPECIAL MOON phase moonsize fontsize msg
+.fi
+.PP
+\fIPhase\fR is a number from 0 to 3, with 0 representing a new moon,
+1 the first quarter, 2 a full moon and 3 the last quarter.
+.PP
+\fImoonsize\fR is the diameter in PostScript units of the moon to
+draw.  If omitted or supplied as -1, the backend chooses an appropriate
+size.
+.PP
+\fIfontsize\fR is the font size in PostScript units of the \fImsg\fR
+.PP
+\fIMsg\fR is additional text which is placed near the moon glyph.
+.PP
+Note that only the \fBRem2PS\fR backend supports \fImoonsize\fR
+and \fIfontsize\fR; the other backends use fixed sizes.
 .PP
 .SH MISCELLANEOUS
 .PP

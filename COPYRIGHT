@@ -1,4 +1,4 @@
-$Id: COPYRIGHT,v 1.12 2000-02-18 03:45:12 dfs Exp $
+$Id: COPYRIGHT,v 1.13 2000-03-15 15:51:33 dfs Exp $
 THE REMIND COPYRIGHT
 
 1. REMIND refers to the entire set of files and documentation in the
@@ -294,7 +294,7 @@ POSSIBILITY OF SUCH DAMAGES.
 
 		     END OF TERMS AND CONDITIONS
 --
-David F. Skoll <dskoll@iname.com>
+David F. Skoll <dfs@roaringpenguin.com>
 986 Eiffel Avenue
 Ottawa, Ontario K2C 0J2
 CANADA

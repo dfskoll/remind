@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.33 2004-08-11 02:01:46 dfs Exp $
+# $Id: tkremind,v 1.34 2004-08-11 02:14:36 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -315,6 +315,9 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
+	foreach t [$w.t$i tag names] {
+	    $w.t$i tag delete $t
+	}
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -326,6 +329,9 @@ proc ConfigureCalFrame { w firstDay numDays } {
 		-command "ModifyDay $d $firstDay"
 	$w.t$i configure -relief sunken -takefocus 1 -state normal
 	$w.t$i delete 1.0 end
+	foreach t [$w.t$i tag names] {
+	    $w.t$i tag delete $t
+	}
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -346,6 +352,9 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
+	foreach t [$w.t$i tag names] {
+	    $w.t$i tag delete $t
+	}
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -679,7 +688,7 @@ proc FillCalWindow {} {
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
 	    .cal.t$n insert end [string trim $stuff] [list TAGGED "TKTAG$tagno" $extratags]
 	} else {
-	    .cal.t$n insert end [string trim $stuff]
+	    .cal.t$n insert end [string trim $stuff] $extratags
 	}
 	.cal.t$n insert end "\n"
 	.cal.t$n configure -state disabled

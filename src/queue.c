@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.10 1999-04-05 17:34:55 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.11 1999-04-21 01:48:01 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -251,6 +251,12 @@ void HandleQueuedReminders()
 	    }
 	    printf("\n");
 	}
+
+	/* Set up global variables so some functions like trigdate()
+           and trigtime() work correctly                             */
+	LastTriggerDate = JulianToday;
+	LastTriggerTime = q->tt.ttime;
+	LastTrigValid = 1;
 #ifdef OS2_POPUP
 	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday, 1);
 #else

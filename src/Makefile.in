@@ -1,8 +1,8 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.11 1998-05-10 02:19:20 dfs Exp $
+# $Id: Makefile.in,v 1.12 1999-04-21 01:47:59 dfs Exp $
 
-VERSION= 03.00.19
+VERSION= 03.00.21
 SHELL= /bin/sh
 
 srcdir=@srcdir@

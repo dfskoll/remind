@@ -12,7 +12,7 @@
 /***************************************************************/
 
 static char const RCSID[] =
-"$Id: dynbuf.c,v 1.3 1999-04-05 17:34:45 dfs Exp $";
+"$Id: dynbuf.c,v 1.4 1999-04-21 01:48:00 dfs Exp $";
 
 #include "config.h"
 #include "dynbuf.h"
@@ -182,7 +182,7 @@ PUBLIC int DBufGets(DynamicBuffer *dbuf, FILE *fp)
 #else
 int DBufGets(dbuf, fp)
 DynamicBuffer *dbuf;
-FILE *fp
+FILE *fp;
 #endif
 {
     char tmp[256]; /* Safe to hard-code */

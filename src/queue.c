@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.13 1999-10-18 20:38:48 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.14 2000-02-02 20:20:33 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -479,7 +479,7 @@ QueuedRem *q;
 PRIVATE void DaemonWait(unsigned int sleeptime)
 #else
 static DaemonWait(sleeptime)
-unsigned int sleeptime
+unsigned int sleeptime;
 #endif
 {
     fd_set readSet;

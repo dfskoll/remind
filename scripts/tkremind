@@ -11,20 +11,20 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.15 1998-03-31 02:39:20 dfs Exp $
+# $Id: tkremind,v 1.16 1998-04-19 03:27:03 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
 
+wm withdraw .
+
 # Check that we have the right version of wish
 if {$tcl_version < 8.0} {
-    wm withdraw .
     tk_dialog .error Error "You need wish version 8.0 or higher to run TkRemind; you have $tcl_version" error 0 OK
     exit 1
 }
 
 if {$tcl_platform(platform) == "windows"} {
-    wm withdraw .
     tk_dialog .error Error "You are not allowed to run Remind under Windows" error 0 OK
     exit 1
 }
@@ -150,7 +150,14 @@ proc Initialize {} {
 
     # Check system sanity
     if {! [file readable $ReminderFile]} {
-	tk_dialog .error Error "Can't read reminder file `$ReminderFile'" error 0 OK
+	set ans [tk_dialog .error "TkRemind: Warning" "Can't read reminder file `$ReminderFile'" warning 0 "Create it and continue" "Exit"]
+	if {$ans != 0} {
+	    exit 1
+	}
+	catch {close [open "$ReminderFile" w]}
+    }
+    if {! [file readable $ReminderFile]} {
+	tk_dialog .error "TkRemind: Error" "Could not create reminder file `$ReminderFile'" error 0 "Exit"
 	exit 1
     }
 
@@ -363,6 +370,7 @@ proc CreateCalWindow { dayNames } {
     wm title . "TkRemind"
     wm iconname . ""
     wm protocol . WM_DELETE_WINDOW Quit
+    wm deiconify .
     if {$Option(StartIconified)} {
 	wm iconify .
     }
@@ -591,12 +599,22 @@ proc FillCalWindow {} {
 	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +([^ ]+) +[^ ]+ +[^ ]+(.*)} $line all year month day type tag stuff] == 0 } {
 	    continue
 	}
-	if { $type != "*"} {
-	    continue
-	}
 	set day [string trimleft $day 0]
 	set n [expr $day+$offset]
 	set month [string trimleft $month 0]
+	switch -exact -- $type {
+	    "SHADE" {
+		DoShadeSpecial $n $stuff
+		continue
+	    }
+	    "MOON" {
+		DoMoonSpecial $n $stuff
+		continue
+	    }
+	}
+	if { $type != "*"} {
+	    continue
+	}
 	.cal.t$n configure -state normal
 	if { [string length [string trim [.cal.t$n get 1.0]]] != 0} {
 	    .cal.t$n insert end " .....\n"
@@ -674,7 +692,7 @@ proc DoPrint {} {
     global CurMonth CurYear MonthNames
     catch {destroy .p}
     toplevel .p
-    wm title .p "Print..."
+    wm title .p "TkRemind Print..."
     wm iconname .p "Print..."
     frame .p.f1 -relief sunken -border 2
     frame .p.f11
@@ -1210,7 +1228,7 @@ proc ModifyDay {d firstDay} {
     catch {destroy .mod}
     toplevel .mod
     CreateModifyDialog .mod $d $firstDay "Cancel" "Add to reminder file" "Preview reminder"
-    wm title .mod "Add Reminder..."
+    wm title .mod "TkRemind Add Reminder..."
     wm iconname .mod "Add Reminder"
     tkwait visibility .mod
     set oldFocus [focus]
@@ -1526,7 +1544,7 @@ proc EditReminder {rem args} {
     catch {destroy .edit}
     global ModifyDialogResult
     toplevel .edit
-    wm title .edit "Preview reminder"
+    wm title .edit "TkRemind Preview reminder"
     wm iconname .edit "Preview reminder"
     text .edit.t -width 80 -height 5 -relief sunken
     .edit.t insert end $rem
@@ -1992,6 +2010,7 @@ proc main {} {
     global AppendFile HighestTagSoFar DayNames
     puts "\nTkRemind Copyright (c) 1996-1998 by David F. Skoll\n"
     LoadOptions
+    CreateMoonImages
     Initialize
     ScanForTags $AppendFile
     CreateCalWindow $DayNames
@@ -2128,7 +2147,7 @@ proc EditTaggedReminder { w } {
 
     toplevel .mod
     CreateModifyDialog .mod 1 0 "Cancel" "Replace reminder" "Delete reminder" "Preview reminder"
-    wm title .mod "Edit Reminder..."
+    wm title .mod "TkRemind Edit Reminder..."
     wm iconname .mod "Edit Reminder"
     OptionsToRemindDialog .mod $opts
 
@@ -2335,6 +2354,65 @@ proc WriteReminder { out tag rem opts } {
 }
 
 #***********************************************************************
+# %PROCEDURE: DoShadeSpecial
+# %ARGUMENTS:
+#  n -- calendar box to shade
+#  stuff -- Remind command line
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Handles the "SHADE" special -- shades a box.
+#***********************************************************************
+proc DoShadeSpecial { n stuff } {
+    set num [scan $stuff "%d %d %d" r g b]
+    if {$num == 1} {
+	set g $r
+	set b $r
+    } elseif {$num != 3} {
+	return
+    }
+    if {$r < 0 || $r > 255 || $g < 0 || $g > 255 || $b < 0 || $b > 255} {
+	return
+    }
+    set bg [format "#%02x%02x%02x" $r $g $b]
+    .cal.t$n configure -background $bg
+}
+
+#***********************************************************************
+# %PROCEDURE: DoMoonSpecial
+# %ARGUMENTS:
+#  n -- calendar box for moon
+#  stuff -- Remind command line
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Handles the "MOON" special -- draws a moon symbol
+#***********************************************************************
+proc DoMoonSpecial { n stuff } {
+    set msg ""
+    set num [scan $stuff "%d %d %d %s" phase junk1 junk2 msg]
+    if {$num < 1} {
+	return
+    }
+    if {$phase < 0 || $phase > 3} {
+	return
+    }
+    switch -exact -- $phase {
+	0 { set image new }
+	1 { set image first }
+	2 { set image full }
+	3 { set image last }
+    }
+    .cal.t$n configure -state normal
+    .cal.t$n image create end -image $image
+
+    if {$msg != ""} {
+	.cal.t$n insert end " $msg"
+    }
+    .cal.t$n insert end "\n"
+    .cal.t$n configure -state disabled
+}
+#***********************************************************************
 # %PROCEDURE: DisplayTime
 # %ARGUMENTS:
 #  None
@@ -2346,6 +2424,26 @@ proc WriteReminder { out tag rem opts } {
 proc DisplayTime {} {
     set msg [clock format [clock seconds] -format "%e %b %Y %I:%M%p"]
     Status $msg
+}
+
+#***********************************************************************
+# %PROCEDURE: CreateMoonImages
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+# %DESCRIPTION:
+#  Creates the moon images "new", "first", "full" and "last"
+#***********************************************************************
+proc CreateMoonImages {} {
+    image create bitmap new -foreground black \
+	    -data "#define newmoon_width 16\n#define newmoon_height 16\nstatic unsigned char newmoon_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0x30, 0x06, 0x0c, 0x18, 0x04, 0x10, 0x02, 0x20,\n0x02, 0x20, 0x01, 0x40, 0x01, 0x40, 0x01, 0x40, 0x02, 0x20, 0x02, 0x20,\n0x04, 0x10, 0x0c, 0x18, 0x30, 0x06, 0xc0, 0x01};"
+    image create bitmap first -foreground black \
+	    -data "#define firstquarter_width 16\n#define firstquarter_height 16\nstatic unsigned char firstquarter_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xf0, 0x06, 0xfc, 0x18, 0xfc, 0x10, 0xfe, 0x20,\n0xfe, 0x20, 0xff, 0x40, 0xff, 0x40, 0xff, 0x40, 0xfe, 0x20, 0xfe, 0x20,\n0xfc, 0x10, 0xfc, 0x18, 0xf0, 0x06, 0xc0, 0x01};"
+    image create bitmap full -foreground black \
+	    -data "#define fullmoon_width 16\n#define fullmoon_height 16\nstatic unsigned char fullmoon_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xf0, 0x07, 0xfc, 0x1f, 0xfc, 0x1f, 0xfe, 0x3f,\n0xfe, 0x3f, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xfe, 0x3f, 0xfe, 0x3f,\n0xfc, 0x1f, 0xfc, 0x1f, 0xf0, 0x07, 0xc0, 0x01};"
+    image create bitmap last -foreground black \
+	    -data "#define lastquarter_width 16\n#define lastquarter_height 16\nstatic unsigned char lastquarter_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xb0, 0x07, 0x8c, 0x1f, 0x84, 0x1f, 0x82, 0x3f,\n0x82, 0x3f, 0x81, 0x7f, 0x81, 0x7f, 0x81, 0x7f, 0x82, 0x3f, 0x82, 0x3f,\n0x84, 0x1f, 0x8c, 0x1f, 0xb0, 0x07, 0xc0, 0x01};"
 }
 
 #***********************************************************************

@@ -11,7 +11,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.21 1998-06-07 20:31:08 dfs Exp $
+# $Id: tkremind,v 1.22 1998-07-07 02:55:58 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -604,6 +604,11 @@ proc FillCalWindow {} {
     gets $file line
     ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
     set offset [CalEntryOffset $firstWkday]
+
+    for {set i 1} {$i <= 31} {incr i} {
+	set didSomething($i) 0
+    }
+
     while { [gets $file line] >= 0 } {
 	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +([^ ]+) +[^ ]+ +[^ ]+(.*)} $line all year month day type tag stuff] == 0 } {
 	    continue
@@ -625,9 +630,10 @@ proc FillCalWindow {} {
 	    continue
 	}
 	.cal.t$n configure -state normal
-	if { [string length [string trim [.cal.t$n get 1.0 end]]] != 0} {
+	if { $didSomething($day) } {
 	    .cal.t$n insert end " .....\n"
 	}
+	set didSomething($day) 1
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
 	    .cal.t$n insert end [string trim $stuff] "TAGGED TKTAG$tagno"
 	} else {

@@ -1,0 +1,326 @@
+#!/bin/sh
+# -*-Mode: TCL;-*-
+
+#--------------------------------------------------------------
+#   TKREMIND
+#
+#   A cheesy graphical front/back end for Remind using Tcl/Tk
+#
+#   This file is part of REMIND.
+#   Copyright (C) 1992-1996 by David F. Skoll
+#
+#--------------------------------------------------------------
+
+# $Id: tkremind,v 1.1 1996-04-08 00:39:12 dfs Exp $
+
+# the next line restarts using wish \
+exec wish "$0" "$@"
+
+#---------------------------------------------------------------------------
+# GLOBAL VARIABLES
+#---------------------------------------------------------------------------
+
+# Month names in English
+set MonthNames {January February March April May June July August September October November December}
+
+# Day names in Remind's pre-selected language
+set DayNames {}
+
+# Current month and year -- will be set by Initialize procedure
+set CurMonth -1
+set CurYear -1
+
+# Absolutely today -- unlike the CurMonth and CurYear, these won't change
+set TodayMonth -1
+set TodayYear -1
+set TodayDay -1
+
+#---------------------------------------------------------------------------
+# Initialize -- initialize things
+#---------------------------------------------------------------------------
+proc Initialize { } {
+    global DayNames
+    set DayNames [GetWeekdayNames]
+#    wm geometry . 700x400
+}
+
+#---------------------------------------------------------------------------
+# GetWeekdayNames - Spawn a remind process and get the names of the weekdays
+# Also sets CurMonth and CurYear.
+#---------------------------------------------------------------------------
+proc GetWeekdayNames { } {
+    global CurMonth CurYear TodayYear TodayMonth TodayDay
+    set f [open "|remind - 2>/dev/null" r+]
+    puts $f "banner %"
+    set i 0
+    while { $i < 7 } {
+	puts $f "msg \[wkday($i)\]%"
+	incr i
+    }
+
+    # Get current month and year as long as we're running Remind
+    puts $f "msg %n%"
+    puts $f "msg %y%"
+    puts $f "msg %d%"
+    puts $f "FLUSH"
+    flush $f
+    set ans {}
+    set i 0
+    while { $i < 7 } {
+	lappend ans [gets $f]
+	incr i
+    }
+    set CurMonth [expr [gets $f] - 1]
+    set CurYear [gets $f]
+    set TodayDay [gets $f]
+    set TodayMonth $CurMonth
+    set TodayYear $CurYear
+    close $f
+    return $ans
+}
+
+#---------------------------------------------------------------------------
+# RowNumber -- get the row number of a specified day.
+#---------------------------------------------------------------------------
+proc RowNumber { firstDay mondayFirst day } {
+    set modDay [expr $day - $mondayFirst]
+    if { $modDay < 0 } { set modDay 6 }
+    return [expr ($modDay + $firstDay - 1) / 7 + 1]
+}
+
+#---------------------------------------------------------------------------
+# ColumnNumber -- get the column number of a specified day.
+#---------------------------------------------------------------------------
+proc ColumnNumber { firstDay mondayFirst day } {
+    set modDay [expr $day - $mondayFirst]
+    if { $modDay < 0 } { set modDay 6 }
+    return [expr ($modDay + $firstDay - 1) % 7]
+}
+
+#---------------------------------------------------------------------------
+# CreateCalWindow -- create the calendar window.
+#---------------------------------------------------------------------------
+proc CreateCalWindow { firstDay mondayFirst daysInMonth month year dayNames } {
+    global CurMonth CurYear TodayMonth TodayYear TodayDay
+    catch { destroy .h }
+    catch { destroy .b }
+    wm title . "TkRemind - $month $year"
+    wm iconname . "$month $year"
+
+    frame .h
+    label .h.title -text "$month $year" -justify center -pady 2 -relief raised
+    pack .h.title -side top -fill x
+
+    set numRows [RowNumber $firstDay $mondayFirst $daysInMonth]
+    set col 0
+    while { $col < 7 } {
+	set row 1
+	frame .h.col$col
+
+	set dayIndex [expr ($col + $mondayFirst) % 7]
+	# A bogus width is supplied for the day-name label to persuade TCL
+	# to make all the columns the same width.
+	label .h.col$col.day -text [lindex $dayNames $dayIndex] -justify center -width 10
+	pack .h.col$col.day -side top -fill x -expand 0
+	while { $row <= $numRows } {
+	    button .h.col$col.num$row -text "" -justify center -command "" -state disabled -relief flat
+	    text .h.col$col.t$row -width 12 -height 4 -wrap word -relief sunken
+	    pack .h.col$col.num$row -side top -fill x -expand 0
+	    pack .h.col$col.t$row -side top -fill both -expand 1
+	    incr row
+	}
+	pack .h.col$col -side left -fill both -expand 1
+	incr col
+    }
+    set d 1
+    while { $d <= $daysInMonth } {
+	set r [RowNumber $firstDay $mondayFirst $d]
+	set c [ColumnNumber $firstDay $mondayFirst $d]
+	.h.col$c.num$r configure -text $d -command "ModifyDay $d" -state normal
+	incr d
+	if { $CurMonth == $TodayMonth && $CurYear == $TodayYear && $d == $TodayDay} {
+	    .h.col$c.num$r configure -background "#00c0c0"
+	}
+    }
+    frame .b
+    button .b.prev -text {Previous Month} -command {MoveMonth -1}
+    button .b.this -text {Today} -command {ThisMonth}
+    button .b.next -text {Next Month} -command {MoveMonth 1}
+    button .b.goto -text {Go To Date...} -command {GotoDialog}
+    button .b.quit -text {Quit} -command {Quit}
+    label .b.status -text "" -width 10 -relief sunken
+    pack .b.prev .b.this .b.next .b.goto .b.quit -side left -fill x
+    pack .b.status -side left -fill x -expand 1
+    pack .h -side top -expand 1 -fill both
+    pack .b -side top -fill x -expand 0
+}
+
+#---------------------------------------------------------------------------
+# FillCalWindow -- Make the calendar for global CurMonth and CurYear.
+#---------------------------------------------------------------------------
+proc FillCalWindow { } {
+    global DayNames CurYear CurMonth MonthNames
+
+    Status "Firing off Remind..."
+    set month [lindex $MonthNames $CurMonth]
+
+    set file [open "|remind -p /home/dfs/.reminders $month $CurYear 2>/dev/null" r]
+    # Look for # rem2ps begin line
+    while { [gets $file line] >= 0 } {
+	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
+    }
+
+    if { [string compare "$line" "# rem2ps begin"] != 0 } { 
+	Status "Problem reading results from Remind!"
+	close $file
+	return 0
+    }
+
+    # Read month name, year, number of days in month, first weekday, Mon flag
+    gets $file line
+    regexp {^([^ ]*) ([0-9][0-9][0-9][0-9]) ([0-9][0-9]?) ([0-9]) ([0-9])} $line dummy monthName year daysInMonth firstWkday mondayFirst
+
+    CreateCalWindow $firstWkday $mondayFirst $daysInMonth $monthName $year $DayNames
+    Status "Filling calendar entries..."
+    while { [gets $file line] >= 0 } {
+	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9])(.*)} $line all year month day stuff] == 0 } {
+	    continue
+	}
+	set day [string trimleft $day 0]
+	set month [string trimleft $month 0]
+	set c [ColumnNumber $firstWkday $mondayFirst $day]
+	set r [RowNumber $firstWkday $mondayFirst $day]
+	.h.col$c.t$r insert end [string trim $stuff]
+	.h.col$c.t$r insert end "\n\n"
+	
+    }
+    close $file
+    Status "Ready."
+}
+
+#---------------------------------------------------------------------------
+# MoveMonth -- move by +1 or -1 months
+#---------------------------------------------------------------------------
+proc MoveMonth {delta} {
+    global CurMonth CurYear
+    set CurMonth [expr $CurMonth + $delta]
+    if {$CurMonth < 0} {
+	set CurMonth 11
+	set CurYear [expr $CurYear-1]
+    }
+
+    if {$CurMonth > 11} {
+	set CurMonth 0
+	incr CurYear
+    }
+
+    FillCalWindow
+}
+
+#---------------------------------------------------------------------------
+# ThisMonth -- move to current month
+#---------------------------------------------------------------------------
+proc ThisMonth {} {
+    global CurMonth CurYear TodayMonth TodayYear
+
+    # Do nothing if already there
+    if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
+	return 0;
+    }
+    set CurMonth $TodayMonth
+    set CurYear $TodayYear
+    FillCalWindow
+}
+
+#---------------------------------------------------------------------------
+# Status -- set status string
+#---------------------------------------------------------------------------
+proc Status { stuff } {
+    catch { .b.status configure -text $stuff }
+    update idletasks
+}
+
+#---------------------------------------------------------------------------
+# CreateModifyDialog -- create the dialog box for making new entries
+#---------------------------------------------------------------------------
+proc CreateModifyDialog { month day wkday } {
+    catch { destroy .cm }
+    toplevel .cm
+    wm withdraw .cm
+}
+
+#---------------------------------------------------------------------------
+# GotoDialog -- Do the "Goto..." dialog
+#---------------------------------------------------------------------------
+proc GotoDialog {} {
+    global CurMonth MonthNames CurYear
+    catch { destroy .g }
+
+    set month [lindex $MonthNames $CurMonth]
+    toplevel .g
+    wm title .g "Go To Date"
+    menubutton .g.mon -text "$month" -menu .g.mon.menu -relief raised
+    menu .g.mon.menu -tearoff 0
+
+    foreach m $MonthNames {
+	.g.mon.menu add command -label $m -command ".g.mon configure -text $m"
+    }
+
+    frame .g.y
+    label .g.y.lab -text "Year: "
+    entry .g.y.e -width 4
+    .g.y.e insert end $CurYear
+    frame .g.b
+    button .g.b.go -text "Go" -command {DoGoto}
+    button .g.b.cancel -text "Cancel" -command { destroy .g }
+    pack .g.b.go .g.b.cancel -expand 1 -fill x -side left
+    pack .g.mon -fill x -expand 1
+
+    pack .g.y.lab -side left
+    pack .g.y.e -side left -fill x -expand 1
+    pack .g.y -expand 1 -fill x
+    pack .g.b -expand 1 -fill x
+    set x [expr [winfo x .] + ([winfo width .] / 2)]
+    set y [expr [winfo y .] + ([winfo height .] / 2)]
+    wm geometry .g +$x+$y
+}
+
+#---------------------------------------------------------------------------
+# DoGoto -- go to specified date
+#---------------------------------------------------------------------------
+proc DoGoto {} {
+    global CurYear CurMonth MonthNames
+    set year [.g.y.e get]
+    if { ! [regexp {^[0-9]+$} $year] } {
+	tk_dialog .error Error {Illegal year specified (1990-2078)} error -1 Ok
+	return
+    }
+    if { $year < 1990 || $year > 2078 } {
+	tk_dialog .error Error {Illegal year specified (1990-2078)} error -1 Ok
+	return
+    }
+    set month [lsearch -exact $MonthNames [.g.mon cget -text]]
+    set CurMonth $month
+    set CurYear $year
+    destroy .g
+    FillCalWindow
+}
+
+#---------------------------------------------------------------------------
+# Quit -- handle the Quit button
+#---------------------------------------------------------------------------
+proc Quit {} {
+    if { [tk_dialog .question "Confirm..." {Really quit?} question 0 No Yes] } {
+	destroy .
+    }
+}
+
+wm withdraw .
+puts "TkRemind Copyright (c) 1996 by David F. Skoll\n"
+puts "Initializing..."    
+Initialize
+puts "Creating calendar window..."
+FillCalWindow
+wm deiconify .
+
+update

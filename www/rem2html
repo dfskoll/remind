@@ -1,8 +1,8 @@
-#!/bin/perl
+#!/usr/bin/perl
 
 # rem2html
 #
-# $Id: rem2html,v 1.9 1999-10-18 19:55:14 dfs Exp $
+# $Id: rem2html,v 1.10 1999-10-18 20:08:56 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -45,7 +45,7 @@ $rem2html_version = "1.0";
 # Backgound color -- unfortunately, most Web browsers (as of 14 October 1999)
 # do not correctly handle transparency in PNG images, so I had to make the
 # moon image background white.
-$Options{'bgcolor'} &&= "BGCOLOR\"#FFFFFF\"";
+$Options{'bgcolor'} ||= "BGCOLOR=\"#FFFFFF\"";
 
 if (-t STDIN) {
     print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";

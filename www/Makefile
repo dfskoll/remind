@@ -3,10 +3,10 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: Makefile,v 1.11 1999-10-18 19:58:46 dfs Exp $
+# $Id: Makefile,v 1.12 1999-10-18 20:08:54 dfs Exp $
 
 # The complete name of your www host.  Example: www.mycompany.com
-WWWHOST = shevy.skoll.ca
+WWWHOST = localhost
 # WWWHOST = www.mycompany.com
  
 # The complete path to where the scripts actually live, as seen by

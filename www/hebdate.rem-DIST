@@ -4,7 +4,7 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: hebdate.rem-DIST,v 1.6 1999-04-05 17:35:17 dfs Exp $
+# $Id: hebdate.rem-DIST,v 1.7 1999-10-18 20:08:55 dfs Exp $
 
 BANNER %
 IF !$PSCAL
@@ -161,7 +161,7 @@ ENDIF
 
 IF !$PSCAL
 	REM 20 ++40 msg Also available: <a HREF="http://your.machine/your.dir/cal_dispatch?hebps">a PostScript calendar</a> (about 35KB) for %m %y, complete with Hebrew dates, Jewish holidays, and moon phases for Ottawa.  (This takes a few seconds to generate.)
-	REM 20 ++40 msg And: <a HREF="http://your.machine/your.dir/cal_dispatch?hebhtml">an HTML version</a> of the above.  (No moons, and your browser must handle tables.)
+	REM 20 ++40 msg And: <a HREF="http://your.machine/your.dir/cal_dispatch?hebhtml">an HTML version</a> of the above.  (Your browser must handle tables.)
 ELSE
 	[trigger(moondate(0))] SPECIAL MOON 0
 	[trigger(moondate(1))] SPECIAL MOON 1

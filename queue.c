@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: queue.c,v 1.2 1997-01-16 04:14:29 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.3 1997-02-11 01:44:30 dfs Exp $";
 
 #include "config.h"
 
@@ -133,7 +133,10 @@ void HandleQueuedReminders()
 
     /* Suppress the BANNER from being issued */
     NumTriggered = 1;
-   
+
+    /* Turn off sorting -- otherwise, TriggerReminder has no effect! */
+    SortByDate = 0;
+
     /* If we are not connected to a tty, then we must close the
      * standard file descriptors. This is to prevent someone
      * doing:

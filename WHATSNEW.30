@@ -7,7 +7,7 @@ CHANGES TO REMIND
 - Bundled scripts for making a nice WWW calendar server.  See the
   "www" subdirectory in the release.
 
-- Added support for the Romanian language, courtesy of Liviu Daia
+- Added support for the Romanian language, courtesy of Liviu Daia.
 
 - Changed sunrise() and sunset() as follows:  If the sun never rises,
   sunrise() returns 1440 and sunset() returns 0.  In this case,
@@ -20,6 +20,10 @@ CHANGES TO REMIND
   of the light and dark period of the day, respectively.
 
 + BUG FIXES
+
+- If you used the "-g" option, then no background reminders were
+  ever issued.  DOH!  Thanks to Greg Badros <gjb@cs.washington.edu>
+  for pointing this out.
 
 - Fixed a problem under Solaris 2.5 whereby rem2ps was skipping some
   latin1 characters which it interpreted as white space.

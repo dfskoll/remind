@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: files.c,v 1.1 1996-03-27 03:25:55 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.2 1996-05-25 18:14:52 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -501,6 +501,7 @@ int jul;
 
 	return 0;
     }
+}
 #endif /* __MSDOS__ */
 
 /***************************************************************/
@@ -511,35 +512,35 @@ int jul;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-    PRIVATE void DestroyCache(CachedFile *cf)
+PRIVATE void DestroyCache(CachedFile *cf)
 #else
-	static void DestroyCache(cf)
-	CachedFile *cf;
+static void DestroyCache(cf)
+CachedFile *cf;
 #endif
-    {
-	CachedLine *cl, *cnext;
-	CachedFile *temp;
-	if (cf->filename) free(cf->filename);
-	cl = cf->cache;
-	while (cl) {
-	    if (cl->text) free (cl->text);
-	    cnext = cl->next;
-	    free(cl);
-	    cl = cnext;
-	}
-	if (CachedFiles == cf) CachedFiles = cf->next;
-	else {
-	    temp = CachedFiles;
-	    while(temp) {
-		if (temp->next == cf) {
-		    temp->next = cf->next;
-		    break;
-		}
-		temp = temp->next;
-	    }
-	}
-	free(cf);
+{
+    CachedLine *cl, *cnext;
+    CachedFile *temp;
+    if (cf->filename) free(cf->filename);
+    cl = cf->cache;
+    while (cl) {
+	if (cl->text) free (cl->text);
+	cnext = cl->next;
+	free(cl);
+	cl = cnext;
     }
+    if (CachedFiles == cf) CachedFiles = cf->next;
+    else {
+	temp = CachedFiles;
+	while(temp) {
+	    if (temp->next == cf) {
+		temp->next = cf->next;
+		break;
+	    }
+	    temp = temp->next;
+	}
+    }
+    free(cf);
+}
 
 /***************************************************************/
 /*                                                             */
@@ -549,10 +550,10 @@ int jul;
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-    PUBLIC int TopLevel(void)
+PUBLIC int TopLevel(void)
 #else
-	int TopLevel()
+int TopLevel()
 #endif
-	{
-	    return !IStackPtr;
-	}
+{
+    return !IStackPtr;
+}

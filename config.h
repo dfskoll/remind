@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: config.h,v 1.3 1996-04-28 02:01:53 dfs Exp $ */
+/* $Id: config.h,v 1.4 1996-05-25 18:14:51 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -20,7 +20,7 @@
 /* For latitude, north is positive, south is negative.                 */
 /* For longitude, west is positive, east is negative.                  */
 /* NOTE:  For negative numbers, all three of DEG, MIN, SEC should be   */
-/*        negative.  To indicate -20deg22'33" use                      */
+/*        negative.  To indicate -20deg22'33'' use                     */
 /*        DEG=-20, MIN=-22 and SEC=-33.                                */
 /* The default values are initially set to Ottawa, Ontario, Canada.    */
 /*---------------------------------------------------------------------*/

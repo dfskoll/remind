@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] = "$Id: expr.c,v 1.3 1996-04-28 02:01:55 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.4 1996-05-25 18:14:51 dfs Exp $";
 
 #include "config.h"
 #include <stdio.h>
@@ -436,7 +436,7 @@ Var *locals;
     int len;
     int h, m, r;
 
-    if (*s == '\"') { /* It's a literal string */
+    if (*s == '\"') { /* It's a literal string "*/
 	len = strlen(s)-1;
 	v->type = STR_TYPE;
 	v->v.str = (char *) malloc(len);

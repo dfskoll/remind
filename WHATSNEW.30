@@ -2,6 +2,21 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 14
 
++ CHANGE IN COPYING POLICY
+
+- Remind is now distributed under an _AMENDED_ version of the Gnu
+  General Public License.  These amendments are listed in the
+  file COPYRIGHT.  The amendments were made for personal reasons;
+  please don't ask me to explain them.  They probably don't affect
+  you, anyway.
+
++ MAJOR ENHANCEMENTS
+
+- Added an X-Windows front-end to Remind.  To use it, you must be
+  running under X-Windows on UNIX, and have the "wish" tcl/tk
+  interpreter, version 7.4 of tcl and 4.0 of tk.  The front-end is
+  called "tkremind".
+
 + MINOR ENHANCEMENTS
 
 - Added the WARN keyword for precise advance notice.  You can now

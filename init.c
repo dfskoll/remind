@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.6 1997-07-30 01:30:56 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.7 1997-08-31 17:03:26 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -180,7 +180,7 @@ char *argv[];
 
 	    case 'r':
 	    case 'R':
-		RunDisabled = 1;
+		RunDisabled = RUN_CMDLINE;
 		break;
 
 	    case 'm':
@@ -234,7 +234,7 @@ char *argv[];
 	    case 'u':
 	    case 'U':
 		ChgUser(arg);
-		RunDisabled = 1;
+		RunDisabled = RUN_CMDLINE;
 		while (*arg) arg++;
 		break;
 #endif	       
@@ -465,7 +465,7 @@ PUBLIC void Usage(void)
 void Usage()
 #endif /* HAVE_PROTOS */
 {
-    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1996 by David F. Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1997 by David F. Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.9 1997-08-01 02:28:31 dfs Exp $
+.\" $Id: remind.1,v 1.10 1997-08-31 17:03:26 dfs Exp $
 .TH REMIND 1 "31 July 1997"
 .UC 4
 .SH NAME
@@ -1206,10 +1206,11 @@ your main .reminders file, include the following lines:
 	RUN ON    # Re-enable RUN
 .fi
 .PP
-In addition, \fBRemind\fR contains a few other security features.  It
-will not read a file which is group- or world-writable.  It will not
-run set-uid.  And if it is run as \fIroot\fR, it will only read files
-owned by \fIroot\fR.
+In addition, \fBRemind\fR on UNIX contains a few other security
+features.  It will not read a file which is group- or world-writable.
+It will not run set-uid.  If it reads a file you don't own, it will
+disable RUN and the shell() function.  And if it is run as \fIroot\fR,
+it will only read files owned by \fIroot\fR.
 .PP
 .SH THE BANNER COMMAND
 .PP

@@ -9,7 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.3 1997-01-16 04:14:33 dfs Exp $ */
+/* $Id: types.h,v 1.4 1997-08-31 17:03:27 dfs Exp $ */
 
 /* Values */
 typedef struct {
@@ -164,8 +164,9 @@ typedef struct {
 #define QUOTE_MARKER 1 /* Unlikely character to appear in reminder */
 
 /* Flags for disabling run */
-#define RUN_CMDLINE 1
-#define RUN_SCRIPT  2
+#define RUN_CMDLINE  1
+#define RUN_SCRIPT   2
+#define RUN_NOTOWNER 4
 
 /* Flags for the SimpleCalendar format */
 #define SC_AMPM   0   /* Time shown as 3:00am, etc. */

@@ -13,12 +13,13 @@ CHANGES TO REMIND
   `remind -p ...' to an HTML table.  The script was contributed by
   Don Schwarz <darkowl@mcs.net>
 
-- New security features: Because of the risk of statically-allocated
-  buffer, REMIND now refuses to run if it is installed set-uid or set-gid.
+- New security features: Because of the risks of statically-allocated
+  buffers, REMIND now refuses to run if it is installed set-uid or set-gid.
   If REMIND is run as root, it refuses to read files not owned by root.
   It also won't open group- or world-writable files, no matter who is
-  running it.  REMIND doesn't do security checks on stdin, though, so
-  be careful if you run it as root in a script.
+  running it.  Finally, if you read a file you don't own, REMIND disables
+  RUN and shell().  REMIND doesn't do these security checks on stdin,
+  though, so be careful if you run it as root in a script.
 
   NOTE:  REMIND doesn't do the world- and group-writable checks
   on devices, FIFOs, etc.  Otherwise "remind /dev/null" fails...

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.8 1997-07-31 01:52:46 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.9 1997-08-31 17:03:25 dfs Exp $";
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -59,6 +59,9 @@ typedef struct cheader {
     struct cheader *next;
     char *filename;
     CachedLine *cache;
+#ifdef UNIX
+    int ownedByMe;
+#endif
 } CachedFile;
 
 /* Define the structures needed by the INCLUDE file system */
@@ -69,6 +72,9 @@ typedef struct {
     int NumIfs;
     long offset;
     CachedLine *CLine;
+#ifdef UNIX
+    int ownedByMe;
+#endif
 } IncludeStruct;
 
 static CachedFile *CachedFiles = (CachedFile *) NULL;
@@ -181,6 +187,9 @@ char *fname;
     CachedFile *h = CachedFiles;
     int r;
 
+/* Assume we own the file for now */
+    RunDisabled &= ~RUN_NOTOWNER;
+
 /* If it's in the cache, get it from there. */
 
     while (h) {
@@ -188,6 +197,11 @@ char *fname;
 	    CLine = h->cache;
 	    STRSET(FileName, fname);
 	    LineNo = 0;
+#ifdef UNIX
+	    if (!h->ownedByMe) {
+		RunDisabled |= RUN_NOTOWNER;
+	    }
+#endif
 	    if (FileName) return OK; else return E_NO_MEM;
 	}
 	h = h->next;
@@ -254,6 +268,13 @@ char *fname;
 	return E_NO_MEM;
     }
 
+#ifdef UNIX
+    if (RunDisabled & RUN_NOTOWNER) {
+	cf->ownedByMe = 0;
+    } else {
+	cf->ownedByMe = 1;
+    }
+#endif    
 /* Read the file */
     while(fp) {
 	r = ReadLineFromFile();
@@ -320,6 +341,9 @@ int PopFile()
 {
     IncludeStruct *i;
 
+    /* Assume we own the file for now */
+    RunDisabled &= ~RUN_NOTOWNER;
+
     if (!Hush && NumIfs) Eprint("%s", ErrMsg[E_MISS_ENDIF]);
     if (!IStackPtr) return E_EOF;
     IStackPtr--;
@@ -331,6 +355,11 @@ int PopFile()
     CLine = i->CLine;
     fp = NULL;
     STRSET(FileName, i->filename);
+#ifdef UNIX
+    if (!i->ownedByMe) {
+	RunDisabled |= RUN_NOTOWNER;
+    }
+#endif
     if (!CLine && (i->offset != -1L)) {
 	/* We must open the file, then seek to specified position */
 	if (strcmp(i->filename, "-")) {
@@ -389,6 +418,7 @@ char *fname;
 {
     IncludeStruct *i;
     int r;
+    int oldRunDisabled;
 
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
@@ -400,6 +430,13 @@ char *fname;
     i->IfFlags = IfFlags;
     i->CLine = CLine;
     i->offset = -1L;
+#ifdef UNIX
+    if (RunDisabled & RUN_NOTOWNER) {
+	i->ownedByMe = 0;
+    } else {
+	i->ownedByMe = 1;
+    }
+#endif
     if (fp) {
 	i->offset = ftell(fp);
 	FCLOSE(fp);
@@ -407,10 +444,12 @@ char *fname;
 
     IStackPtr++;
 
+    oldRunDisabled = RunDisabled;
     /* Try to open the new file */
     if (!OpenFile(fname)) {
 	return OK;
     }
+    RunDisabled = oldRunDisabled;
     /* Ugh!  We failed!  */
     if ( (r=PopFile()) ) return r;
     Eprint("%s: %s", ErrMsg[E_CANT_OPEN], fname);
@@ -573,6 +612,7 @@ int TopLevel()
 /*  root, we refuse to open files not owned by root.           */
 /*  We also reject group- or world-writable files, no matter   */
 /*  who we're running as.                                      */
+/*  As a side effect, if we don't own the file, we disable RUN */
 /***************************************************************/
 #ifdef HAVE_PROTOS
 PRIVATE int CheckSafety(void)
@@ -615,6 +655,12 @@ static int CheckSafety()
 	fp = NULL;
 	return 0;
     }
+
+/* If file is not owned by me, disable RUN command */
+    if (statbuf.st_uid != geteuid()) {
+	RunDisabled |= RUN_NOTOWNER;
+    }
+
 #endif
     return 1;
 }

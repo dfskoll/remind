@@ -1,5 +1,5 @@
-.\" $Id: rem2ps.1,v 1.5 2004-08-11 14:59:49 dfs Exp $
-.TH REM2PS 1 "1 February 1998"
+.\" $Id: rem2ps.1,v 1.6 2005-04-12 00:57:48 dfs Exp $
+.TH REM2PS 1 "11 April 2005"
 .UC4
 .SH NAME
 rem2ps \- draw a PostScript calendar from Remind output
@@ -378,6 +378,16 @@ emits the line:
 .PP
 However, back-ends should keep reading until EOF in case more data for
 subsequent months is forthcoming.
+.PP
+If you supply the \fB\-l\fR option to \fBremind\fR, then reminders
+may be preceded by a line that looks like this:
+.PP
+\fB# fileinfo \fIlineno filename\fR
+.PP
+The word \fBfileinfo\fR is literal; \fIlineno\fR and \fIfilename\fR specify
+the line number and file name of the file containing the reminder.  Back-ends
+that don't care about this information should ignore lines starting with
+"#" (except, of course, for the # rem2ps lines.)
 .PP
 .SH AUTHOR
 Rem2PS is now supported by Roaring Penguin Software

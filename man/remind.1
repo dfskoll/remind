@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.14 2004-08-11 14:59:49 dfs Exp $
-.TH REMIND 1 "17 February 2000"
+.\" $Id: remind.1,v 1.15 2005-04-12 00:57:48 dfs Exp $
+.TH REMIND 1 "11 April 2005"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -63,6 +63,13 @@ that the output contains additional information for use by the
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
 The format of the \fB\-p\fR output is described in the \fBrem2ps(1)\fR
 man page.
+.TP
+.B \-l
+If you use the \-l option in conjunction with the \-p option, then
+\fBRemind\fR outputs additional information for back-end programs such
+as \fBrem2ps\fR.  This additional information lets the back-end programs
+correlate a reminder with the source file and line number that produced
+it.
 .TP
 .B \-m
 The \fB\-m\fR option causes the \fB\-c\fR or \fB\-p\fR options to produce

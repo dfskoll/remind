@@ -2,7 +2,7 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.12 2004-08-11 01:55:39 dfs Exp $
+# $Id: rem2html,v 1.13 2005-04-12 00:51:36 dfs Exp $
 #
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
@@ -153,6 +153,7 @@ sub parse_input {
       @nextsc = split(" ");
     } else {
       return 1 if /rem2(html|ps) end/;
+      next if /^\#/;
       next unless m/^(\d*).(\d*).(\d*)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$/;
       $type = $4;
       $msg = $8;

@@ -4,10 +4,25 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- Added the COLOR special for putting colored reminders in the calendar.
+  Supported by the HTML, Tcl/Tk and PostScript back-ends.
+
+- Many minor tweaks to tkremind.
+
+- Added ability to specify paper size in inches or centimetres to rem2ps.
+
+- Added the "-l" option to Remind.  This outputs additional information
+  for back-end programs that use the "-p" output format.  Currently
+  ignored by the back-ends that ship with Remind.
+
 - Fixed dates for Yom Hazikaron and Yom Ha'atzmaut if 5 Iyar falls on a
   Saturday.  (Hebrew calendar fix.)
 
 - Added support for the Icelandic language, courtesy of Björn Davíðsson.
+
++ BUG FIXES
+
+- Fixed parser error for unterminated date constant: '2005/01/01
 
 * Version 3.0 Patch 22
 

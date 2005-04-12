@@ -8,11 +8,11 @@
 #
 #   This file is part of REMIND.
 #   Copyright (C) 1992-1998 David F. Skoll
-#   Copyright (C) 1999-2000 Roaring Penguin Software Inc.
+#   Copyright (C) 1999-2005 Roaring Penguin Software Inc.
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.36 2005-04-12 01:14:48 dfs Exp $
+# $Id: tkremind,v 1.37 2005-04-12 01:27:54 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"

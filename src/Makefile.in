@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.18 2004-08-11 14:54:11 dfs Exp $
+# $Id: Makefile.in,v 1.19 2005-04-12 00:57:56 dfs Exp $
 
 VERSION=03.00.23
 SHELL= /bin/sh
@@ -49,11 +49,13 @@ remind: $(REMINDOBJS)
 	@CC@ @LDFLAGS@ -o remind $(REMINDOBJS) @LIBS@
 
 install: all
+	-mkdir -p $(bindir)
 	for prog in $(PROGS) $(SCRIPTS) ; do \
 		$(INSTALL_PROGRAM) $$prog $(bindir) ; \
 	done
 	-strip $(bindir)/remind
 	-strip $(bindir)/rem2ps
+	-mkdir -p $(mandir)/man1
 	for man in $(MANS) ; do  \
 		$(INSTALL_DATA) $$man $(mandir)/man1 ; \
 	done

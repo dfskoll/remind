@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.38 2005-04-12 02:30:21 dfs Exp $
+# $Id: tkremind,v 1.39 2005-04-12 13:50:29 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -2248,6 +2248,8 @@ proc FireEditor { w } {
     # Don't fire up a second editor if first is running
     if {$EditorPid >= 0} {
 	if {![catch {exec kill -0 $EditorPid}]} {
+	    Status "Editor already active!"
+	    after 2500 DisplayTime
 	    bell
 	    return
 	}

@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.35 2004-08-11 02:22:35 dfs Exp $
+# $Id: tkremind,v 1.36 2005-04-12 01:14:48 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -644,6 +644,10 @@ proc FillCalWindow {} {
     }
 
     while { [gets $file line] >= 0 } {
+	# Skip comments
+	if { [string match "#*" $line] } {
+	    continue
+	}
 	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +([^ ]+) +[^ ]+ +[^ ]+(.*)} $line all year month day type tag stuff] == 0 } {
 	    continue
 	}

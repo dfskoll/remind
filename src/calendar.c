@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.10 2005-04-12 00:44:07 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.11 2005-04-12 00:49:07 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -90,7 +90,7 @@ void ProduceCalendar()
 
     if (CalMonths) {
 	FromJulian(JulianToday, &y, &m, &d);
-	JulianToday = Julian(y, m, 1);   
+	JulianToday = Julian(y, m, 1);
 	while (CalMonths--)
 	    DoCalendarOneMonth();
 	return;
@@ -150,9 +150,9 @@ static void DoCalendarOneWeek()
     PutChar('|');
     for (i=0; i<7; i++) {
 	FromJulian(OrigJul+i, &y, &m, &d);
-	sprintf(buf, "%d %c%c%c ", d, MonthName[m][0], MonthName[m][1], 
+	sprintf(buf, "%d %c%c%c ", d, MonthName[m][0], MonthName[m][1],
 		MonthName[m][2]);
-	if (OrigJul+i == RealToday)				  
+	if (OrigJul+i == RealToday)
 	    PrintLeft(buf, ColSpaces, '*');
 	else
 	    PrintLeft(buf, ColSpaces, ' ');
@@ -185,7 +185,7 @@ static void DoCalendarOneWeek()
 	PutChar('\n');
     }
 
-/* Write the final line */   
+/* Write the final line */
     WriteIntermediateCalLine();
 }
 
@@ -231,7 +231,7 @@ static void DoCalendarOneMonth()
 
     if (PsCal) printf("%s\n", PSEND);
     if (!DoSimpleCalendar) WriteCalTrailer();
-}   
+}
 
 /***************************************************************/
 /*                                                             */
@@ -273,7 +273,7 @@ static int WriteCalendarRow()
 	}
 	return (d+7-wd <= DaysInMonth(m, y));
     }
- 
+
 
 /* Here come the first few lines... */
     PutChar('|');
@@ -396,7 +396,7 @@ static int WriteOneCalLine()
     return done;
 }
 
-     
+
 /***************************************************************/
 /*                                                             */
 /*  WriteOneColLine                                            */
@@ -531,7 +531,7 @@ int col;
 
 	    switch(tok.type) {
 
-            case T_Empty:
+	    case T_Empty:
 	    case T_Comment:
 		break;
 
@@ -548,7 +548,7 @@ int col;
 	    case T_UnSet:   r=DoUnset(&p);   break;
 	    case T_Clr:     r=DoClear(&p);   break;
 	    case T_Flush:   r=DoFlush(&p);   break;
-            case T_Debug:   break;  /* IGNORE DEBUG CMD */
+	    case T_Debug:   break;  /* IGNORE DEBUG CMD */
 	    case T_Dumpvars: break; /* IGNORE DUMPVARS CMD */
 	    case T_Banner:  break;  /* IGNORE BANNER CMD */
 	    case T_Omit:    r=DoOmit(&p);
@@ -560,7 +560,7 @@ int col;
 		break;
 	    case T_Pop:     r=PopOmitContext(&p);     break;
 	    case T_Push:    r=PushOmitContext(&p);    break;
-            case T_Preserve: r=DoPreserve(&p);        break;
+	    case T_Preserve: r=DoPreserve(&p);        break;
 	    case T_RemType: if (tok.val == RUN_TYPE) {
 		r=DoRun(&p);
 		break;
@@ -712,7 +712,7 @@ int col;
 	tim.duration = NO_TIME;
     }
 
-    /* If trigger date == today, add it to the current entry */   
+    /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
     if (jul == JulianToday) {
 	NumTriggered++;
@@ -852,7 +852,7 @@ int col, jul;
     }
     CalPs[col] = NULL;
 
-    e = CalColumn[col];				     
+    e = CalColumn[col];
     while(e) {
 	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d", y, m+1, d);
@@ -948,7 +948,7 @@ int tim;
     int h, min, hh;
 
     buf[0] = 0;
-   
+
     switch(ScFormat) {
 
     case SC_AMPM:

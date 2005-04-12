@@ -12,7 +12,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.12 2004-08-11 01:55:32 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.13 2005-04-12 00:49:07 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -296,7 +296,11 @@ void DoPsCal()
 	    break;
 	}
 
-/* Read the day number - a bit of a hack! */
+	/* Ignore lines beginning with '#' */
+	if (DBufValue(&buf)[0] == '#') {
+	    continue;
+	}
+	/* Read the day number - a bit of a hack! */
 	DayNum = (DBufValue(&buf)[8] - '0') * 10 + DBufValue(&buf)[9] - '0';
 	if (DayNum != CurDay) {
 	    for(; CurDay<DayNum; CurDay++) {
@@ -304,7 +308,7 @@ void DoPsCal()
 		WkDayNum = (WkDayNum + 1) % 7;
 	    }
 	}
-/* Add the text */
+	/* Add the text */
 	c = NEW(CalEntry);
 	if (!c) {
 	    fprintf(stderr, "malloc failed - aborting.\n");

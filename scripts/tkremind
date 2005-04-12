@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.37 2005-04-12 01:27:54 dfs Exp $
+# $Id: tkremind,v 1.38 2005-04-12 02:30:21 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -55,6 +55,9 @@ set OptDescr(RunCmd) "(String) If non-blank, run specified command when a pop-up
 set Option(FeedReminder) 0
 set OptDescr(FeedReminder) "(0/1) If 1, feed the reminder to RunCmd on standard input (see RunCmd option)"
 
+set Option(Editor) "emacs +%d %s"
+set OptDescr(Editor) "(String) Specify command to edit a file.  %d is replaced with line number and %s with filename"
+
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
 #set Remind "/home/dfs/Remind/src/remind"
@@ -65,6 +68,8 @@ set Rem2PS "rem2ps"
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
 set ReminderFile [file nativename "~/.reminders"]
+
+set EditorPid -1
 
 # Reminder file to append to -- default
 set AppendFile {NOSUCHFILE}
@@ -132,8 +137,8 @@ proc Initialize {} {
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst
 
-    set CommandLine "|$Remind -itkremind=1 -p"
-    set PSCmd "$Remind -p"
+    set CommandLine "|$Remind -itkremind=1 -p -l"
+    set PSCmd "$Remind -p -l"
     set i 0
     while {$i < $argc} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
@@ -280,6 +285,8 @@ proc CreateCalFrame { w dayNames } {
 	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
 	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
+	    $w.t$f tag bind REM <ButtonPress-3> "FireEditor $w.t$f"
+
 	    grid configure $w.l$f -row [expr $i*2+1] -column $j -sticky ew
 	    grid configure $w.t$f -row [expr $i*2+2] -column $j -sticky nsew
 	}
@@ -321,6 +328,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
 	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
+	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -338,6 +346,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
 	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
+	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -364,6 +373,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
 	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
+	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
 	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
 	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
@@ -476,6 +486,14 @@ proc EditOptions {} {
     pack $w.cmd -in $w.rf -side left -expand 1 -fill x
     $w.cmd insert 0 $tmpOpt(RunCmd)
 
+    # Editor
+    frame $w.ef
+    label $w.el -text "Text Editor:" -anchor w -justify left
+    entry $w.editor -width 30
+    pack $w.el -in $w.ef -side left -expand 0 -fill none
+    pack $w.editor -in $w.ef -side left -expand 1 -fill x
+    $w.editor insert 0 $tmpOpt(Editor)
+
     frame $w.sep1 -border 1 -relief sunken
     frame $w.sep2 -border 1 -relief sunken
 
@@ -492,6 +510,7 @@ proc EditOptions {} {
     pack $w.sep1 -in $w.f -side top -expand 0 -fill x -ipady 1
     pack $w.rf -in $w.f -side top -expand 0 -fill x
     pack $w.feed -in $w.f -side top -expand 0 -fill x
+    pack $w.ef -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
     button $w.apply -text "Apply Options" -command "ApplyOptions $w; destroy $w"
@@ -514,6 +533,7 @@ proc EditOptions {} {
 proc ApplyOptions { w } {
     global Option tmpOpt
     set tmpOpt(RunCmd) [$w.cmd get]
+    set tmpOpt(Editor) [$w.editor get]
     # Copy working copy to real option set
     foreach name [array names tmpOpt] {
 	set Option($name) $tmpOpt($name)
@@ -612,6 +632,8 @@ proc ConfigureCalWindow { month year firstDay numDays } {
 # FillCalWindow -- Fill in the calendar for global CurMonth and CurYear.
 #---------------------------------------------------------------------------
 proc FillCalWindow {} {
+    set FileName ""
+    set LineNo 0
     global DayNames CurYear CurMonth MonthNames CommandLine
 
     Status "Firing off Remind..."
@@ -643,7 +665,14 @@ proc FillCalWindow {} {
 	set didSomething($i) 0
     }
 
+    set fntag "x"
     while { [gets $file line] >= 0 } {
+	# File info
+	if { [ string match "# fileinfo *" $line ] } {
+	    regexp {fileinfo ([0-9]+) (.*)} $line all LineNo Filename
+	    set fntag "FILE_${LineNo}_${Filename}"
+	}
+
 	# Skip comments
 	if { [string match "#*" $line] } {
 	    continue
@@ -699,9 +728,9 @@ proc FillCalWindow {} {
 	}
 	set didSomething($day) 1
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
-	    .cal.t$n insert end [string trim $stuff] [list TAGGED "TKTAG$tagno" $extratags]
+	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" $extratags $fntag]
 	} else {
-	    .cal.t$n insert end [string trim $stuff] $extratags
+	    .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
 	}
 	.cal.t$n insert end "\n"
 	.cal.t$n configure -state disabled
@@ -2198,6 +2227,32 @@ proc ReadTaggedOptions { tag } {
     }
     close $f
     return ""
+}
+
+proc FireEditor { w } {
+    global Option
+    global EditorPid
+    set tags [$w tag names current]
+    set index [lsearch -glob $tags "FILE_*"]
+    if {$index < 0} {
+	return
+    }
+    set tag [lindex $tags $index]
+    if {![regexp {^FILE_([0-9]+)_(.*)} $tag all line file]} {
+	return
+    }
+    set editor $Option(Editor)
+    regsub -all "%s" $editor $file editor
+    regsub -all "%d" $editor $line editor
+
+    # Don't fire up a second editor if first is running
+    if {$EditorPid >= 0} {
+	if {![catch {exec kill -0 $EditorPid}]} {
+	    bell
+	    return
+	}
+    }
+    set EditorPid [exec sh -c $editor &]
 }
 
 #***********************************************************************

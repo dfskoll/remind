@@ -1,4 +1,4 @@
-.\" $Id: tkremind.1,v 1.10 2000-06-26 14:43:51 dfs Exp $ "
+.\" $Id: tkremind.1,v 1.11 2005-04-12 13:41:27 dfs Exp $ "
 .TH TKREMIND 1 "15 February 1998"
 .UC 4
 .SH NAME
@@ -149,6 +149,13 @@ in the \fBPreview reminder\fR dialog.
 If the reminder was not created with \fBTkRemind\fR, you can't edit
 it with \fBTkRemind\fR.
 
+.SH USING A TEXT EDITOR
+
+If you have set the "text editor" option correctly, right-clicking
+on a reminder will bring up a text editor on the file containing
+the reminder.  The cursor will be positioned on the line that
+generated the reminder.
+
 .SH BACKGROUND REMINDERS
 
 If you create "timed" reminders, \fBTkRemind\fR will queue them in
@@ -203,6 +210,14 @@ background reminder pops up.
 .B Feed popped-up reminder to command's standard input
 If selected, feeds the text of the reminder to the command described
 above.
+
+.TP
+.B Text Editor
+This specifies a text editor to invoke when a reminder is right-clicked.
+The characters "%d" are replaced with the lined number of the file
+containing the reminder, and "%s" are replaced with the file name.
+Useful strings might be "emacs +%d %s" or "gvim +%d %s"
+
 .PP
 Once you've configured the options the way you like them,
 press \fBApply Options\fR to put them into effect, \fBSave Options\fR

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.7 2000-02-18 03:46:15 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.8 2005-04-12 00:44:08 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -515,6 +515,7 @@ static SysVar SysVarArr[] = {
     {   "NextMode",	  0,	INT_TYPE,	&NextMode,	0,	0   },
     {   "NumQueued",	  0,	INT_TYPE,	&NumQueued,	0,	0   },
     {   "NumTrig",	  0,	INT_TYPE,	&NumTriggered,	0,	0   },
+    {   "PrefixLineNo",	  0,	INT_TYPE,	&DoPrefixLineNo,0,	0   },
     {   "PSCal",		  0,	INT_TYPE,	&PsCal,		0,	0   },
     {   "RunOff",	  0,	INT_TYPE,	&RunDisabled,	0,	0   },
     {   "SimpleCal",	  0,	INT_TYPE,	&DoSimpleCalendar,	0,  0 },

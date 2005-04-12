@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.9 2000-02-18 03:45:43 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.10 2005-04-12 00:44:07 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -41,6 +41,8 @@ typedef struct cal_entry {
     char tag[TAG_LEN+1];
     char passthru[PASSTHRU_LEN+1];
     int duration;
+    char *filename;
+    int lineno;
 } CalEntry;
 
 /* Global variables */
@@ -425,6 +427,7 @@ int col;
 	PrintLeft("", ColSpaces, ' ');
 	CalColumn[col] = e->next;
 	free(e->text);
+	free(e->filename);
 	free(e);
 	return 1;
     }
@@ -464,6 +467,7 @@ int col;
     if (!*s && !e->next) {
 	CalColumn[col] = e->next;
 	free(e->text);
+	free(e->filename);
 	free(e);
     } else {
 	e->pos = s;
@@ -780,6 +784,12 @@ int col;
 	}
 	e->duration = tim.duration;
 	e->priority = trig.priority;
+	e->filename = StrDup(FileName);
+	if(!e->filename) {
+	    free(e);
+	    return E_NO_MEM;
+	}
+	e->lineno = LineNo;
 	if (trig.typ == PASSTHRU_TYPE) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
 	    e->pos = e->passthru;
@@ -819,6 +829,7 @@ int col, jul;
 /* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
     while(e) {
+	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d ", y, m+1, d);
 	printf("%s ", e->passthru);
 	printf("%s ", e->tag);
@@ -834,6 +845,7 @@ int col, jul;
 	}
 	printf("%s\n", e->text);
 	free(e->text);
+	free(e->filename);
 	n = e->next;
 	free(e);
 	e = n;
@@ -842,6 +854,7 @@ int col, jul;
 
     e = CalColumn[col];				     
     while(e) {
+	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d", y, m+1, d);
 	printf(" * %s ", e->tag);
 	if (e->duration != NO_TIME) {
@@ -856,6 +869,7 @@ int col, jul;
 	}
 	printf("%s\n", e->text);
 	free(e->text);
+	free(e->filename);
 	n = e->next;
 	free(e);
 	e = n;

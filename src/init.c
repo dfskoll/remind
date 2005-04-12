@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.13 2000-02-18 03:53:45 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.14 2005-04-12 00:44:08 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -58,6 +58,8 @@ static char const RCSID[] = "$Id: init.c,v 1.13 2000-02-18 03:53:45 dfs Exp $";
  *  -w[n,n,n] = Specify output device width, padding and spacing
  *  -s[n]    = Produce calendar in "simple calendar" format
  *  -p[n]    = Produce calendar in format compatible with rem2ps
+ *  -l       = Prefix simple calendar lines with a comment containing
+ *             their trigger line numbers and filenames
  *  -v       = Verbose mode
  *  -o       = Ignore ONCE directives
  *  -a       = Don't issue timed reminders which will be queued
@@ -320,6 +322,11 @@ char *argv[];
 		if (!CalMonths) CalMonths = 1;
 		break;
 
+	    case 'l':
+	    case 'L':
+		DoPrefixLineNo = 1;
+		break;
+
 	    case 'w':
 	    case 'W':
 		if (*arg != ',') {
@@ -502,6 +509,7 @@ void Usage()
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");
     fprintf(ErrFp, " -s[+][n] Produce `simple calendar' for n (1) months (weeks)\n");
     fprintf(ErrFp, " -p[n]  Same as -s, but input compatible with rem2ps\n");
+    fprintf(ErrFp, " -l     Prefix each simple calendar line with line number and filename comment\n");
     fprintf(ErrFp, " -v     Verbose mode\n");
     fprintf(ErrFp, " -o     Ignore ONCE directives\n");
     fprintf(ErrFp, " -t     Trigger all future reminders regardless of delta\n");

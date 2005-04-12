@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.11 2005-04-12 00:49:07 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.12 2005-04-12 01:49:45 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -707,7 +707,7 @@ int col;
     if (!PsCal && trig.typ == PASSTHRU_TYPE) return OK;
 
     /* Remove any "at" times from PS or PSFILE reminders */
-    if (trig.typ == PASSTHRU_TYPE) {
+    if (trig.typ == PASSTHRU_TYPE && strcmp(trig.passthru, "COLOR")) {
 	tim.ttime = NO_TIME;
 	tim.duration = NO_TIME;
     }
@@ -790,7 +790,11 @@ int col;
 	    return E_NO_MEM;
 	}
 	e->lineno = LineNo;
-	if (trig.typ == PASSTHRU_TYPE) {
+
+	/* Ugly hack... a SPECIAL COLOR is not treated as "passthru"
+	   to preserve ordering and make it behave like a MSG-type reminder */
+
+	if (trig.typ == PASSTHRU_TYPE && strcmp(trig.passthru, "COLOR")) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
 	    e->pos = e->passthru;
 	    e->time = NO_TIME;
@@ -798,6 +802,11 @@ int col;
 	    CalPs[col] = e;
 	    SortCol(&CalPs[col]);
 	} else {
+	    if (trig.typ == PASSTHRU_TYPE) {
+		StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
+	    } else {
+		e->passthru[0] = 0;
+	    }
 	    e->pos = e->text;
 	    e->time = tim.ttime;
 	    e->next = CurCol;
@@ -856,7 +865,12 @@ int col, jul;
     while(e) {
 	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d", y, m+1, d);
-	printf(" * %s ", e->tag);
+	if (e->passthru[0]) {
+	    printf(" %s", e->passthru);
+	} else {
+	    printf(" *");
+	}
+	printf(" %s ", e->tag);
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);
 	} else {

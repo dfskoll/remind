@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.9 2000-02-18 03:45:47 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.10 2005-04-12 01:49:45 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -109,7 +109,7 @@ ParsePtr p;
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r);
 	if (r) return r;
     }
-   
+
 /* Queue the reminder, if necessary */
 #ifdef HAVE_QUEUED
     if (jul == JulianToday &&

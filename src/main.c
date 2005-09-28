@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.11 2000-02-18 03:46:01 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.12 2005-09-28 02:39:14 dfs Exp $";
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -76,11 +76,7 @@ long timelocal ARGS((struct tm *tm));
 
 /* Whooo... the putchar/Putchar/PutChar macros are a mess...
    my apologies... */
-#ifdef OS2_POPUP
-#define Putchar(c) {if (AsPopUp) PutcPopUp(c); else putchar(c);}
-#else
 #define Putchar(c) PutChar(c)
-#endif
 
 /***************************************************************/
 /***************************************************************/
@@ -1345,20 +1341,10 @@ int jul, tim, *mins, *isdst;
 #define ISBLANK(c) (isspace(c) && (c) != '\n')
 
 #ifdef HAVE_PROTOS
-#ifdef OS2_POPUP
-PUBLIC void FillParagraph(char *s, int AsPopUp)
-#else
 PUBLIC void FillParagraph(char *s)
-#endif
-#else
-#ifdef OS2_POPUP
-void FillParagraph(s, AsPopUp)
-char *s;
-int AsPopUp;
 #else
 void FillParagraph(s)
 char *s;
-#endif
 #endif
 {
 

@@ -1,4 +1,4 @@
-$Id: README.OS2,v 1.4 2005-04-12 01:18:22 dfs Exp $
+$Id: README.OS2,v 1.5 2005-09-28 02:39:11 dfs Exp $
 REMIND version 3.0 for OS/2
 
 I DO NOT SUPPORT REMIND ON OS/2.  THE OS/2 PORT HAS NOT BEEN MAINTAINED
@@ -46,7 +46,7 @@ However, if you have problems, please contact me.
 
 RELEASE NOTES -- miscellaneous info that couldn't go anywhere else!
 
-1. POPUP REMINDERS
+1. POPUP REMINDERS -- NO LONGER WORK; CODE FOR THIS WAS REMOVED.
 
 If you define the symbol OS2_POPUP in the OS/2 Makefile, you get
 "full-screen popups" (as implemented by Russ Herman) for all MSG-

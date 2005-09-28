@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.8 2000-02-18 03:46:05 dfs Exp $ */
+/* $Id: protos.h,v 1.9 2005-09-28 02:39:14 dfs Exp $ */
 
 #ifdef HAVE_PROTOS
 #define ARGS(x) x
@@ -38,12 +38,7 @@ int DoRem ARGS ((ParsePtr p));
 int DoFlush ARGS ((ParsePtr p));
 void DoExit ARGS ((ParsePtr p));
 int ParseRem ARGS ((ParsePtr s, Trigger *trig, TimeTrig *tim));
-#ifdef OS2_POPUP
-int TriggerReminder ARGS ((ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
-			   int AsPopUp));
-#else
 int TriggerReminder ARGS ((ParsePtr p, Trigger *t, TimeTrig *tim, int jul));
-#endif
 int ShouldTriggerReminder ARGS ((Trigger *t, TimeTrig *tim, int jul));
 int DoSubst ARGS ((ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode));
 int DoSubstFromString ARGS ((char *source, DynamicBuffer *dbuf, int jul, int tim));
@@ -141,11 +136,7 @@ int GetSysVar ARGS ((const char *name, Value *val));
 int SetSysVar ARGS ((const char *name, Value *val));
 void DumpSysVarByName ARGS ((const char *name));
 int CalcMinsFromUTC ARGS ((int jul, int tim, int *mins, int *isdst));
-#ifdef OS2_POPUP
-void FillParagraph ARGS ((char *s, int AsPopUp));
-#else
 void FillParagraph ARGS ((char *s));
-#endif
 void LocalToUTC ARGS ((int locdate, int loctime, int *utcdate, int *utctime));
 void UTCToLocal ARGS ((int utcdate, int utctime, int *locdate, int *loctime));
 int MoonPhase ARGS ((int date, int time));
@@ -160,13 +151,6 @@ void GotSigInt ARGS ((void));
 
 #if defined(__OS2__)
 int fork ARGS ((void));
-#if defined(OS2_POPUP)
-void StartPopUp ARGS ((void));
-void EndPopUp ARGS ((void));
-int PutcPopUp ARGS ((int c));
-int PutlPopUp ARGS ((char *s));
-int PutsPopUp ARGS ((char *s));
-#endif
 #endif
 
 #ifdef BROKEN_PUTC

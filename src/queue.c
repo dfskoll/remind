@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.16 2000-06-26 14:44:07 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.17 2005-09-28 02:39:14 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -180,9 +180,9 @@ void HandleQueuedReminders()
 	    Daemon = 0;
 	} else FileModTime = StatBuf.st_mtime;
     }
-   
+
     /* Initialize the queue - initialize all the entries time of issue */
-   
+
     while (q) {
 	q->tt.nexttime = (int) (SystemTime(0)/60 - 1);
 	q->tt.nexttime = CalculateNextTime(q);
@@ -256,20 +256,16 @@ void HandleQueuedReminders()
 	}
 
 	/* Set up global variables so some functions like trigdate()
-           and trigtime() work correctly                             */
+	   and trigtime() work correctly                             */
 	LastTriggerDate = JulianToday;
 	LastTriggerTime = q->tt.ttime;
 	LastTrigValid = 1;
-#ifdef OS2_POPUP
-	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday, 1);
-#else
 	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
-#endif
 	if (Daemon < 0) {
 	    printf("NOTE endreminder\n");
 	}
 	fflush(stdout);
-      
+
 	/* Calculate the next trigger time */
 	q->tt.nexttime = CalculateNextTime(q);
     }
@@ -278,7 +274,7 @@ void HandleQueuedReminders()
 #endif
     exit(0);
 }
-   
+
 
 /***************************************************************/
 /*                                                             */
@@ -312,7 +308,7 @@ QueuedRem *q;
     }
     if (delta == NO_DELTA) {
 	if (tim < curtime) {
-	    return NO_TIME; 
+	    return NO_TIME;
 	} else {
 	    return tim;
 	}
@@ -347,12 +343,12 @@ static QueuedRem *FindNextReminder()
 	    if (!ans) ans = q;
 	    else if (q->tt.nexttime < ans->tt.nexttime) ans = q;
 	}
-      
+
 	q = q->next;
     }
     return ans;
 }
-   
+
 
 /***************************************************************/
 /*                                                             */
@@ -455,7 +451,7 @@ QueuedRem *q;
 	if (v.type == TIM_TYPE) {
 	    ThisTime = v.v.val;
 	} else if (v.type == INT_TYPE) {
-	    if (v.v.val > 0) 
+	    if (v.v.val > 0)
 		ThisTime = q->tt.nexttime + v.v.val;
 	    else
 		ThisTime = q->tt.ttime + v.v.val;

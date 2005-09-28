@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.10 2005-04-12 01:49:45 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.11 2005-09-28 02:39:14 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -123,11 +123,7 @@ ParsePtr p;
 
 
     if (ShouldTriggerReminder(&trig, &tim, jul)) {
-#ifdef OS2_POPUP
-	if ( (r=TriggerReminder(p, &trig, &tim, jul, 0)) )
-#else
-	    if ( (r=TriggerReminder(p, &trig, &tim, jul)) )
-#endif
+	if ( (r=TriggerReminder(p, &trig, &tim, jul)) )
 	    {
 		return r;
 	    }
@@ -582,27 +578,13 @@ PRIVATE int ParseScanFrom(ParsePtr s, Trigger *t)
 /*                                                             */
 /***************************************************************/
 #ifdef HAVE_PROTOS
-#ifdef OS2_POPUP
-PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
-			   int AsPopUp)
-#else /* ! OS2_POPUP */
     PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
-#endif /* OS2_POPUP */
 #else /* ! HAVE_PROTOS */
-#ifdef OS2_POPUP
-    int TriggerReminder(p, t, tim, jul, AsPopUp)
-    ParsePtr p;
-    Trigger *t;
-    TimeTrig *tim;
-    int jul;
-    int AsPopUp;
-#else /* ! OS2_POPUP */
     int TriggerReminder(p, t, tim, jul)
     ParsePtr p;
     Trigger *t;
     TimeTrig *tim;
     int jul;
-#endif /* OS2_POPUP */
 #endif /* HAVE_PROTOS */
 {
     int r, y, m, d;
@@ -624,14 +606,7 @@ PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
 	if (!DoSubstFromString(DBufValue(&Banner), &buf,
 			       JulianToday, NO_TIME) &&
 	    DBufLen(&buf)) {
-#ifdef OS2_POPUP
-	    if (AsPopUp)
-		PutlPopUp(DBufValue(&buf));
-	    else
-		printf("%s\n", DBufValue(&buf));
-#else
 	printf("%s\n", DBufValue(&buf));
-#endif
 	}
 	DBufFree(&buf);
     }
@@ -645,24 +620,9 @@ PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
 	    return OK;
 	}
 	FromJulian(jul, &y, &m, &d);
-#ifdef OS2_POPUP
-	if (AsPopUp) {
-	    char tmpBuf[64];
-	    sprintf(tmpBuf, "%04d%c%02d%c%02d %s", y, DATESEP, m+1, DATESEP, d,
-		    SimpleTime(tim->ttime));
-	    StartPopUp();
-	    PutsPopUp(tmpBuf);
-	    PutlPopUp(DBufValue(&buf));
-	}
-	else
-	    printf("%04d%c%02d%c%02d %s%s\n", y, DATESEP, m+1, DATESEP, d,
-		   SimpleTime(tim->ttime),
-		   DBufValue(&buf));
-#else
 	printf("%04d%c%02d%c%02d %s%s\n", y, DATESEP, m+1, DATESEP, d,
 	       SimpleTime(tim->ttime),
 	       DBufValue(&buf));
-#endif
 	DBufFree(&buf);
 	return OK;
     }
@@ -723,29 +683,12 @@ PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul,
 	if (MsgCommand) {
 	    DoMsgCommand(MsgCommand, DBufValue(&buf));
 	} else {
-#ifdef OS2_POPUP
-	    if (AsPopUp)
-		PutlPopUp(DBufValue(&buf));
-	    else
-		printf("%s", DBufValue(&buf));
-#else
 	    printf("%s", DBufValue(&buf));
-#endif
 	}
 	break;
 
     case MSF_TYPE:
-#ifdef OS2_POPUP
-	if (AsPopUp) {
-	    StartPopUp();
-	    FillParagraph(DBufValue(&buf), 1);
-	    EndPopUp();
-	} else {
-	    FillParagraph(DBufValue(&buf), 0);
-	}
-#else
 	FillParagraph(DBufValue(&buf));
-#endif
 	break;
 
     case RUN_TYPE:

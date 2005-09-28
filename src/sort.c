@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: sort.c,v 1.6 2000-02-18 03:46:09 dfs Exp $";
+static char const RCSID[] = "$Id: sort.c,v 1.7 2005-09-28 02:39:14 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -173,11 +173,7 @@ void IssueSortedReminders()
 	    break;
 
 	case MSF_TYPE:
-#ifdef OS2_POPUP
-	    FillParagraph(cur->text, 0);
-#else
 	    FillParagraph(cur->text);
-#endif
 	    break;
 
 	case RUN_TYPE:

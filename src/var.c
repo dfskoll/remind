@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.8 2005-04-12 00:44:08 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.9 2005-09-28 02:43:09 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -48,12 +48,7 @@ static Var *VHashTbl[VAR_HASH_SIZE];
 /*  Given a string, compute the hash value.                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC unsigned int HashVal(const char *str)
-#else
-unsigned int HashVal(str)
-char *str;
-#endif
+unsigned int HashVal(const char *str)
 {
     register unsigned int i=0;
     register unsigned int j=1;
@@ -75,13 +70,7 @@ char *str;
 /*  string.  If create is 1, create the variable.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC Var *FindVar(const char *str, int create)
-#else
-Var *FindVar(str, create)
-char *str;
-int create;
-#endif
+Var *FindVar(const char *str, int create)
 {
     register int h;
     register Var *v;
@@ -118,12 +107,7 @@ int create;
 /*  string and delete it.                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DeleteVar(const char *str)
-#else
-int DeleteVar(str)
-char *str;
-#endif
+int DeleteVar(const char *str)
 {
     register int h;
     register Var *v;
@@ -152,13 +136,7 @@ char *str;
 /*  Set the indicate variable to the specified value.          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int SetVar(const char *str, Value *val)
-#else
-int SetVar(str, val)
-char *str;
-Value *val;
-#endif
+int SetVar(const char *str, Value *val)
 {
     Var *v = FindVar(str, 1);
 
@@ -176,14 +154,7 @@ Value *val;
 /*  Get a copy of the value of the variable.                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int GetVarValue(const char *str, Value *val, Var *locals)
-#else
-int GetVarValue(str, val, locals)
-char *str;
-Value *val;
-Var *locals;
-#endif
+int GetVarValue(const char *str, Value *val, Var *locals)
 {
     Var *v;
 
@@ -209,12 +180,7 @@ Var *locals;
 /*  DoSet - set a variable.                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoSet (Parser *p)
-#else
-int DoSet (p)
-Parser *p;
-#endif
+int DoSet (Parser *p)
 {
     Value v;
     int r;
@@ -242,12 +208,7 @@ Parser *p;
 /*  DoUnset - delete a bunch of variables.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoUnset (Parser *p)
-#else
-int DoUnset (p)
-Parser *p;
-#endif
+int DoUnset (Parser *p)
 {
     int r;
 
@@ -282,12 +243,7 @@ Parser *p;
 /*  Command file command to dump variable table.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoDump(ParsePtr p)
-#else
-int DoDump(p)
-ParsePtr p;
-#endif
+int DoDump(ParsePtr p)
 {
     int r;
     Var *v;
@@ -336,11 +292,7 @@ ParsePtr p;
 /*  Dump the variable table to stderr.                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DumpVarTable(void)
-#else
-void DumpVarTable()
-#endif
+void DumpVarTable(void)
 {
     register Var *v;
     register int i;
@@ -366,12 +318,7 @@ void DumpVarTable()
 /*  preserved variables unless ALL is non-zero.                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DestroyVars(int all)
-#else
-void DestroyVars(all)
-int all;
-#endif
+void DestroyVars(int all)
 {
     int i;
     Var *v, *next, *prev;
@@ -404,12 +351,7 @@ int all;
 /*  Given the name of a variable, "preserve" it.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int PreserveVar(char *name)
-#else
-int PreserveVar(name)
-char *name;
-#endif
+int PreserveVar(char *name)
 {
     Var *v;
 
@@ -424,12 +366,7 @@ char *name;
 /*  DoPreserve - preserve a bunch of variables.                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoPreserve (Parser *p)
-#else
-int DoPreserve (p)
-Parser *p;
-#endif
+int DoPreserve (Parser *p)
 {
     int r;
 
@@ -526,8 +463,8 @@ static SysVar SysVarArr[] = {
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
-PRIVATE SysVar *FindSysVar ARGS((const char *name));
-PRIVATE void DumpSysVar ARGS((const char *name, const SysVar *v));
+static SysVar *FindSysVar ARGS((const char *name));
+static void DumpSysVar ARGS((const char *name, const SysVar *v));
 /***************************************************************/
 /*                                                             */
 /*  SetSysVar                                                  */
@@ -535,13 +472,7 @@ PRIVATE void DumpSysVar ARGS((const char *name, const SysVar *v));
 /*  Set a system variable to the indicated value.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int SetSysVar(const char *name, Value *value)
-#else
-int SetSysVar(name, value)
-char *name;
-Value *value;
-#endif
+int SetSysVar(const char *name, Value *value)
 {
     SysVar *v = FindSysVar(name);
     if (!v) return E_NOSUCH_VAR;
@@ -572,13 +503,7 @@ Value *value;
 /*  Get the value of a system variable                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int GetSysVar(const char *name, Value *val)
-#else
-int GetSysVar(name, val)
-char *name;
-Value *val;
-#endif
+int GetSysVar(const char *name, Value *val)
 {
     SysVar *v = FindSysVar(name);
 
@@ -610,12 +535,7 @@ Value *val;
 /* Find a system var with specified name.                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE SysVar *FindSysVar(const char *name)
-#else
-static SysVar *FindSysVar(name)
-char *name;
-#endif
+static SysVar *FindSysVar(const char *name)
 {
     int top=NUMSYSVARS-1, bottom=0;
     int mid=(top + bottom) / 2;
@@ -630,7 +550,7 @@ char *name;
     }
     return NULL;
 }
-   
+
 /***************************************************************/
 /*                                                             */
 /*  DumpSysVarByName                                           */
@@ -639,12 +559,7 @@ char *name;
 /*  If name is "", dump all system variables.                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DumpSysVarByName(const char *name)
-#else
-void DumpSysVarByName(name)
-char *name;
-#endif
+void DumpSysVarByName(const char *name)
 {
     int i;
     SysVar *v;
@@ -653,7 +568,7 @@ char *name;
 	for (i=0; i<NUMSYSVARS; i++) DumpSysVar(name, SysVarArr + i);
 	return;
     }
-   
+
     v = FindSysVar(name);
     DumpSysVar(name, v);
     return;
@@ -666,19 +581,13 @@ char *name;
 /*  Dump the system variable.                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DumpSysVar(const char *name, const SysVar *v)
-#else
-static void DumpSysVar(name, v)
-char *name;
-SysVar *v;
-#endif
+static void DumpSysVar(const char *name, const SysVar *v)
 {
     char buffer[VAR_NAME_LEN+10];
 
     if (name && !*name) name=NULL;
     if (!v && !name) return;  /* Shouldn't happen... */
-   
+
     buffer[0]='$'; buffer[1] = 0;
     if (name) strcat(buffer, name); else strcat(buffer, v->name);
     fprintf(ErrFp, "%*s  ", VAR_NAME_LEN, buffer);
@@ -705,4 +614,3 @@ SysVar *v;
 
     return;
 }
-

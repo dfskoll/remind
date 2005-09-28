@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: utils.c,v 1.5 2000-02-18 03:46:14 dfs Exp $";
+static char const RCSID[] = "$Id: utils.c,v 1.6 2005-09-28 02:43:09 dfs Exp $";
 
 #include <string.h>
 #include <stdio.h>
@@ -38,13 +38,7 @@ static char const RCSID[] = "$Id: utils.c,v 1.5 2000-02-18 03:46:14 dfs Exp $";
 /*  Just like strncpy EXCEPT we ALWAYS copy the trailing 0.    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *StrnCpy(char *dest, const char *source, int n)
-#else
-char *StrnCpy(dest, source, n)
-char *dest, *source;
-int n;
-#endif
+char *StrnCpy(char *dest, const char *source, int n)
 {
     register char *odest = dest;
 
@@ -62,13 +56,7 @@ int n;
 /*  of the first string, whichever is greater.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int StrMatch(const char *s1, const char *s2, int n)
-#else
-int StrMatch(s1, s2, n)
-char *s1, *s2;
-int n;
-#endif
+int StrMatch(const char *s1, const char *s2, int n)
 {
     int l;
     if ((l = strlen(s1)) < n) return 0;
@@ -80,13 +68,7 @@ int n;
 /*  StrinCmp - compare strings, case-insensitive               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int StrinCmp(const char *s1, const char *s2, int n)
-#else
-int StrinCmp(s1, s2, n)
-char *s1, *s2;
-int n;
-#endif
+int StrinCmp(const char *s1, const char *s2, int n)
 {
     register int r;
     while (n && *s1 && *s2) {
@@ -106,12 +88,7 @@ int n;
 /*  Like ANSI strdup                                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *StrDup(const char *s)
-#else
-char *StrDup(s)
-char *s;
-#endif
+char *StrDup(const char *s)
 {
     char *ret = (char *) malloc(strlen(s)+1);
     if (!ret) return (char *) NULL;
@@ -126,12 +103,7 @@ char *s;
 /*  Compare strings, case insensitive.                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int StrCmpi(const char *s1, const char *s2)
-#else
-int StrCmpi(s1, s2)
-char *s1, *s2;
-#endif
+int StrCmpi(const char *s1, const char *s2)
 {
     int r;
     while (*s1 && *s2) {
@@ -144,12 +116,7 @@ char *s1, *s2;
 }
 
 #ifndef HAVE_STRSTR
-#ifdef HAVE_PROTOS
-PUBLIC char *strstr(char *s1, char *s2)
-#else
-char *strstr(s1, s2)
-char *s1, *s2;
-#endif
+char *strstr(char *s1, char *s2)
 {
     char *s = s1;
     int len2 = strlen(s2);
@@ -170,12 +137,7 @@ char *s1, *s2;
 /*  Return 1 if the date is OK, 0 otherwise.                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DateOK(int y, int m, int d)
-#else
-int DateOK(y, m, d)
-int y, m, d;
-#endif
+int DateOK(int y, int m, int d)
 {
     if (d < 1                 ||
 	m < 0                 ||
@@ -192,23 +154,12 @@ int y, m, d;
 /*  Safe versions of putc and putchar                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int SafePutChar(int c)
-#else
-int SafePutChar(c)
-int c;
-#endif
+int SafePutChar(int c)
 {
     return putchar(c);
 }
 
-#ifdef HAVE_PROTOS
-PUBLIC int SafePutc(int c, FILE *fp)
-#else
-int SafePutc(c, fp)
-int c;
-FILE *fp;
-#endif
+int SafePutc(int c, FILE *fp)
 {
     return putc(c, fp);
 }

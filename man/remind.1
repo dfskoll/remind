@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.15 2005-04-12 00:57:48 dfs Exp $
+.\" $Id: remind.1,v 1.16 2005-09-30 03:33:53 dfs Exp $
 .TH REMIND 1 "11 April 2005"
 .UC 4
 .SH NAME
@@ -758,7 +758,7 @@ versions.)
 If the trigger date is \fInot\fR the same as the system date, the reminder
 is not queued.
 .PP
-For example, the following reminder, triggered every working day, 
+For example, the following reminder, triggered every working day,
 will emit a message telling you to
 leave at 5:00pm:
 .PP
@@ -1073,9 +1073,9 @@ is similar to \fB%2\fR but displays the current time.
 .B %#
 is similar to \fB%3\fR but displays the current time.
 .TP
-.B 
+.B
 %"
-(percent-doublequote - ") is removed.  This sequence is not 
+(percent-doublequote - ") is removed.  This sequence is not
 used by the substitution filter,
 but is used to tell \fBRemind\fR which text to include in a calendar
 entry when the \fB\-c\fR, \fB\-s\fR or \fB\-p\fR option is chosen.
@@ -1106,12 +1106,12 @@ example, even though it may only be in 2 days time, because a \fIdelta\fR has
 triggered the reminder.  It is recommended that you use the time substitutions
 only in timed reminders with no \fIdelta\fR which are designed to be
 queued for timed activation.
-.TP 
+.TP
 o
 Capital letters can be used in the substitution sequence, in which case
 the first character of the substituted string is capitalized (if it is
 normally a lower-case letter.)
-.TP 
+.TP
 o
 All other characters following a "%" sign are simply copied.  In particular,
 to get a "%" sign out, use "%%" in the body.  To start the body of a reminder
@@ -1416,7 +1416,7 @@ C operators.
 .PP
 .nf
 	!  -     (unary logical negation and arithmetic negation)
-	*  /  %		
+	*  /  %
 	+  -
 	<  <=  >  >=
 	==  !=
@@ -1595,7 +1595,7 @@ The following system variables are defined.  Those marked
 All system variables hold values of type \fBINT\fR, unless otherwise
 specified.
 .TP
-.B $CalcUTC 
+.B $CalcUTC
 If 1 (the default), then \fBRemind\fR uses C library functions
 to calculate the number of minutes between local and Universal Time
 Coordinated.
@@ -1745,8 +1745,11 @@ calendar box.  (See the section "Calendar Mode".)
 .RS
 Note that \fB$NumTrig\fR is affected \fIonly\fR
 by \fBREM\fR commands; triggers in \fBIFTRIG\fR commands do
-not affect it.  
+not affect it.
 .RE
+.TP
+.B $PrefixLineNo (read-only)
+If non-zero, then the \fB\-l\fR option was supplied on the command line.
 .TP
 .B $PSCal (read-only)
 If non-zero, then the \fB\-p\fR option was supplied on the command line.
@@ -2057,7 +2060,7 @@ can be of any type, but must all be of the same type.  They are compared
 as with the < operator.
 .TP
 .B minsfromutc([d_date [,t_time]])
-Returns the number of minutes from Universal Time Coordinated 
+Returns the number of minutes from Universal Time Coordinated
 (formerly GMT) to
 local time on the specified date and time.  \fIDate\fR defaults to
 \fBtoday()\fR and \fItime\fR defaults to midnight.  If local time
@@ -2189,7 +2192,7 @@ Note how the time is coerced to a string by concatenating the null string.
 Returns a \fBSTRING\fR which consists of PostScript commands to
 shade a calendar box.  \fINum\fR can range from 0 (completely black)
 to 100 (completely white.)  If three arguments are given, they specify
-red, green and blue intensity from 0 to 100.  
+red, green and blue intensity from 0 to 100.
 Here's an example of how to use this:
 .RS
 .PP
@@ -2338,7 +2341,7 @@ defined, and the value of XY if it is defined.
 .RE
 .TP
 .B version()
-Returns a string specifying the version of \fBRemind\fR.  For version 
+Returns a string specifying the version of \fBRemind\fR.  For version
 03.00.04, returns "03.00.04".  It is guaranteed that as new versions of
 \fBRemind\fR are released, the value returned by \fBversion()\fR will
 strictly increase, according to the rules for string ordering.
@@ -3802,7 +3805,7 @@ The UTC functions may not be reliable under MS-DOS.
 The MS-DOS version of \fBRemind\fR does not support queuing or timed
 activation of reminders.
 .PP
-\fBRemind\fR has some built-in limits (for example, 
+\fBRemind\fR has some built-in limits (for example,
 number of global \fBOMIT\fRs.)
 .PP
 .SH BIBLIOGRAPHY

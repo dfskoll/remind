@@ -1,33 +1,3 @@
-$Id: README.BCC,v 1.4 2005-04-12 01:18:22 dfs Exp $
-REMIND version 3.0 for Borland C++
+$Id: README.BCC,v 1.5 2005-09-30 03:36:19 dfs Exp $
 
-IMPORTANT NOTE: BCC SUPPORT MAY BE BROKEN.  I DON'T CARE.  I'M NOT
-MAINTAINING IT ANY LONGER.  IT MOST LIKELY NO LONGER WORKS.
-
-1 - Read the file COPYRIGHT.  (This may be called COPYRIGH on your
-    MS-DOS system.)
-
-2 - You must use the Borland C++ OS/2 or MSDOS/Windows compiler.
-
-3 - cd src; examine the files custom.h and config.h and adjust
-    parameters as needed
-
-4 - Examine the file makefile.bcc and adjust parameters as needed.
-
-5 - Type:
-
-	make -f makefile.bcc
-
-This will make 'remind.exe' and 'rem2ps.exe' in the ..\os2-ex or ..\msdos-ex
-directories.
-
-See README.UNIX for more info.
-
---
-David F. Skoll <dfs@roaringpenguin.com>
-986 Eiffel Avenue
-Ottawa, Ontario K2C 0J2
-CANADA
-
-Tel. (613) 225-8687
-http://www.roaringpenguin.com/remind.html
+Remind no longer works with Borland C Compiler.

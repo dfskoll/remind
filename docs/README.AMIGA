@@ -1,34 +1,3 @@
-$Id: README.AMIGA,v 1.4 2005-04-12 01:18:22 dfs Exp $
-REMIND version 3.0 for AmigaDOS
+$Id: README.AMIGA,v 1.5 2005-09-30 03:36:19 dfs Exp $
 
-I DO NOT SUPPORT REMIND ON AmigaDOS.  THE AmigaDOS PORT HAS NOT BEEN MAINTAINED
-FOR QUITE A WHILE.  IT MOST LIKELY NO LONGER WORKS.
-
-REMIND is a sophisticated alarm/calendar program.  Details are given
-in the man page, "remind.1".
-
-1 - Read the file COPYRIGHT.
-
-2 - cd src; examine the files config.h and custom.h and adjust parameters
-    as needed
-
-3 - If you are using SAS/C to compile Remind, type:
-
-	copy amiga-SCOPTIONS SCOPTIONS
-	smake -f smakefile
-
-This will create remind, which is ready to be executed.
-
-[Please note:  I CANNOT SUPPORT THE AMIGA VERSION!]
-
-See README.UNIX for more info.
-
---
-David F. Skoll <dfs@roaringpenguin.com>
-986 Eiffel Avenue
-Ottawa, Ontario K2C 0J2
-CANADA
-
-Tel. (613) 225-8687
-http://www.roaringpenguin.com/remind.html
-
+Remind no longer works on AmigaDOS.

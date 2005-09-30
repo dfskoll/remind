@@ -12,20 +12,13 @@
 /***************************************************************/
 
 static char const RCSID[] =
-"$Id: dynbuf.c,v 1.5 2000-02-18 03:45:49 dfs Exp $";
+"$Id: dynbuf.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
 
 #include "config.h"
 #include "dynbuf.h"
 #include "err.h"
 #include <string.h>
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 
 /**********************************************************************
 %FUNCTION: DBufMakeRoom
@@ -38,13 +31,7 @@ static char const RCSID[] =
  Doubles the size of dynamic buffer until it has room for at least
  'n' characters, not including trailing '\0'
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int DBufMakeRoom(DynamicBuffer *dbuf, int n)
-#else
-static int DBufMakeRoom(dbuf, n)
-DynamicBuffer *dbuf;
-int n;
-#endif
+static int DBufMakeRoom(DynamicBuffer *dbuf, int n)
 {
     /* Double size until it's greater than n (strictly > to leave room
        for trailing '\0' */
@@ -80,12 +67,7 @@ int n;
 %DESCRIPTION:
  Initializes a dynamic buffer
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DBufInit(DynamicBuffer *dbuf)
-#else
-void DBufInit(dbuf)
-DynamicBuffer *dbuf;
-#endif
+void DBufInit(DynamicBuffer *dbuf)
 {
     dbuf->buffer = dbuf->staticBuf;
     dbuf->len = 0;
@@ -103,13 +85,7 @@ DynamicBuffer *dbuf;
 %DESCRIPTION:
  Appends a character to the buffer.
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DBufPutc(DynamicBuffer *dbuf, char c)
-#else
-int DBufPutc(dbuf, c)
-DynamicBuffer *dbuf;
-char c;
-#endif
+int DBufPutc(DynamicBuffer *dbuf, char c)
 {
     if (dbuf->allocatedLen == dbuf->len+1) {
 	if (DBufMakeRoom(dbuf, dbuf->len+1) != OK) return E_NO_MEM;
@@ -129,13 +105,7 @@ char c;
 %DESCRIPTION:
  Appends a string to the buffer.
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DBufPuts(DynamicBuffer *dbuf, char *str)
-#else
-int DBufPuts(dbuf, str)
-DynamicBuffer *dbuf;
-char *str;
-#endif
+int DBufPuts(DynamicBuffer *dbuf, char *str)
 {
     int l = strlen(str);
     if (!l) return OK;
@@ -155,12 +125,7 @@ char *str;
 %DESCRIPTION:
  Frees and reinitializes a dynamic buffer
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DBufFree(DynamicBuffer *dbuf)
-#else
-void DBufFree(dbuf)
-DynamicBuffer *dbuf;
-#endif
+void DBufFree(DynamicBuffer *dbuf)
 {
     if (dbuf->buffer != dbuf->staticBuf) free(dbuf->buffer);
     DBufInit(dbuf);
@@ -177,13 +142,7 @@ DynamicBuffer *dbuf;
  Reads an entire line from a file and appends to dbuf.  Does not include
  trailing newline.
 **********************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DBufGets(DynamicBuffer *dbuf, FILE *fp)
-#else
-int DBufGets(dbuf, fp)
-DynamicBuffer *dbuf;
-FILE *fp;
-#endif
+int DBufGets(DynamicBuffer *dbuf, FILE *fp)
 {
     char tmp[256]; /* Safe to hard-code */
     int busy = 1;

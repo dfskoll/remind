@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.5 2000-02-18 03:46:12 dfs Exp $ */
+/* $Id: types.h,v 1.6 2005-09-30 03:29:32 dfs Exp $ */
 
 #include "dynbuf.h"
 
@@ -28,11 +28,7 @@ typedef struct {
     char *name;
     char prec;
     char type;
-#ifdef HAVE_PROTOS
     int (*func)(void);
-#else
-    int (*func) ();
-#endif
 } Operator;
 
 /* Define the structure of a variable */

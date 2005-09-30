@@ -11,19 +11,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.12 2005-04-12 01:49:45 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.13 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 
 #include "types.h"
 #include "protos.h"
@@ -51,22 +45,22 @@ static CalEntry *CalPs[7];
 
 static int ColSpaces;
 
-PRIVATE void SortCol ARGS((CalEntry **col));
-PRIVATE void DoCalendarOneWeek ARGS ((void));
-PRIVATE void DoCalendarOneMonth ARGS ((void));
-PRIVATE int WriteCalendarRow ARGS ((void));
-PRIVATE void PrintLeft ARGS ((char *s, int width, char pad));
-PRIVATE void PrintCentered ARGS ((char *s, int width, char pad));
-PRIVATE int WriteOneCalLine ARGS ((void));
-PRIVATE int WriteOneColLine ARGS ((int col));
-PRIVATE void GenerateCalEntries ARGS ((int col));
-PRIVATE void WriteCalHeader ARGS ((void));
-PRIVATE void WriteCalTrailer ARGS ((void));
-PRIVATE int DoCalRem ARGS ((ParsePtr p, int col));
-PRIVATE void WriteSimpleEntries ARGS ((int col, int jul));
-PRIVATE void WriteSolidCalLine ARGS ((void));
-PRIVATE void WriteIntermediateCalLine ARGS ((void));
-PRIVATE void WriteCalDays ARGS ((void));
+static void SortCol (CalEntry **col);
+static void DoCalendarOneWeek (void);
+static void DoCalendarOneMonth (void);
+static int WriteCalendarRow (void);
+static void PrintLeft (char *s, int width, char pad);
+static void PrintCentered (char *s, int width, char pad);
+static int WriteOneCalLine (void);
+static int WriteOneColLine (int col);
+static void GenerateCalEntries (int col);
+static void WriteCalHeader (void);
+static void WriteCalTrailer (void);
+static int DoCalRem (ParsePtr p, int col);
+static void WriteSimpleEntries (int col, int jul);
+static void WriteSolidCalLine (void);
+static void WriteIntermediateCalLine (void);
+static void WriteCalDays (void);
 
 /***************************************************************/
 /*                                                             */
@@ -75,11 +69,7 @@ PRIVATE void WriteCalDays ARGS ((void));
 /*  Main loop for generating a calendar.                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void ProduceCalendar(void)
-#else
-void ProduceCalendar()
-#endif
+void ProduceCalendar(void)
 {
     int y, m, d;
 
@@ -117,11 +107,7 @@ void ProduceCalendar()
 /*  Write a calendar for a single week                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DoCalendarOneWeek(void)
-#else
-static void DoCalendarOneWeek()
-#endif
+static void DoCalendarOneWeek(void)
 {
     int y, m, d, done, i, l, wd;
     char buf[81];
@@ -196,11 +182,7 @@ static void DoCalendarOneWeek()
 /*  Produce a calendar for the current month.                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DoCalendarOneMonth(void)
-#else
-static void DoCalendarOneMonth()
-#endif
+static void DoCalendarOneMonth(void)
 {
     int y, m, d, mm, yy;
 
@@ -240,11 +222,7 @@ static void DoCalendarOneMonth()
 /*  Write one row of the calendar                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int WriteCalendarRow(void)
-#else
-static int WriteCalendarRow()
-#endif
+static int WriteCalendarRow(void)
 {
     int y, m, d, wd, i, l;
     int done;
@@ -326,14 +304,7 @@ static int WriteCalendarRow()
 /*  Left-justify a piece of text.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void PrintLeft(char *s, int width, char pad)
-#else
-static void PrintLeft(s, width, pad)
-char *s;
-int width;
-char pad;
-#endif
+static void PrintLeft(char *s, int width, char pad)
 {
     int len = strlen(s);
     printf("%s", s);
@@ -347,14 +318,7 @@ char pad;
 /*  Center a piec of text                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void PrintCentered(char *s, int width, char pad)
-#else
-static void PrintCentered(s, width, pad)
-char *s;
-int width;
-char pad;
-#endif
+static void PrintCentered(char *s, int width, char pad)
 {
     int len = strlen(s);
     int d = (width - len) / 2;
@@ -374,11 +338,7 @@ char pad;
 /*  Write a single line.                                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int WriteOneCalLine(void)
-#else
-static int WriteOneCalLine()
-#endif
+static int WriteOneCalLine(void)
 {
     int done = 1, i;
 
@@ -405,12 +365,7 @@ static int WriteOneCalLine()
 /*  the column still has entries; 0 otherwise.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int WriteOneColLine(int col)
-#else
-static int WriteOneColLine(col)
-int col;
-#endif
+static int WriteOneColLine(int col)
 {
     CalEntry *e = CalColumn[col];
     char *s;
@@ -482,12 +437,7 @@ int col;
 /*  Generate the calendar entries for the ith column           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void GenerateCalEntries(int col)
-#else
-static void GenerateCalEntries(col)
-int col;
-#endif
+static void GenerateCalEntries(int col)
 {
     int r;
     Token tok;
@@ -592,11 +542,7 @@ int col;
 /*  WriteCalHeader                                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void WriteCalHeader(void)
-#else
-static void WriteCalHeader()
-#endif
+static void WriteCalHeader(void)
 {
     char buf[80];
     int y, m, d;
@@ -621,11 +567,7 @@ static void WriteCalHeader()
 /*  WriteCalTrailer                                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void WriteCalTrailer(void)
-#else
-static void WriteCalTrailer()
-#endif
+static void WriteCalTrailer(void)
 {
     PutChar('\f');
 }
@@ -637,13 +579,7 @@ static void WriteCalTrailer()
 /*  Do the REM command in the context of a calendar.           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int DoCalRem(ParsePtr p, int col)
-#else
-static int DoCalRem(p, col)
-ParsePtr p;
-int col;
-#endif
+static int DoCalRem(ParsePtr p, int col)
 {
     int oldLen;
     Trigger trig;
@@ -664,9 +600,7 @@ int col;
     if ( (r=ParseRem(p, &trig, &tim)) ) return r;
 
 /* Don't include timed reminders in calendar if -a option supplied. */
-#ifdef HAVE_QUEUED
     if (DontIssueAts && tim.ttime != NO_TIME) return OK;
-#endif
     if (trig.typ == NO_TYPE) return E_EOLN;
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
@@ -824,12 +758,7 @@ int col;
 /*  Write entries in 'simple calendar' format.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void WriteSimpleEntries(int col, int jul)
-#else
-static void WriteSimpleEntries(col, jul)
-int col, jul;
-#endif
+static void WriteSimpleEntries(int col, int jul)
 {
     CalEntry *e = CalPs[col];
     CalEntry *n;
@@ -896,11 +825,7 @@ int col, jul;
 /*  Various functions for writing different types of lines.    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void WriteSolidCalLine(void)
-#else
-static void WriteSolidCalLine()
-#endif
+static void WriteSolidCalLine(void)
 {
     PutChar('+');
     PrintCentered("", CalWidth-2, '-');
@@ -908,11 +833,7 @@ static void WriteSolidCalLine()
     PutChar('\n');
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE void WriteIntermediateCalLine(void)
-#else
-static void WriteIntermediateCalLine()
-#endif
+static void WriteIntermediateCalLine(void)
 {
     int i;
 
@@ -924,11 +845,7 @@ static void WriteIntermediateCalLine()
     PutChar('\n');
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE void WriteCalDays(void)
-#else
-static void WriteCalDays()
-#endif
+static void WriteCalDays(void)
 {
     int i;
     PutChar('|');
@@ -951,12 +868,7 @@ static void WriteCalDays()
 /*  A trailing space is always added.                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *SimpleTime(int tim)
-#else
-char *SimpleTime(tim)
-int tim;
-#endif
+char *SimpleTime(int tim)
 {
     static char buf[32];
     int h, min, hh;
@@ -994,12 +906,7 @@ int tim;
 /*  Sort the calendar entries in a column by time and priority */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void SortCol(CalEntry **col)
-#else
-static void SortCol(col)
-CalEntry **col;
-#endif
+static void SortCol(CalEntry **col)
 {
     CalEntry *cur, *prev, *next;
 

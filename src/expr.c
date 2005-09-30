@@ -11,19 +11,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.9 2004-09-04 03:17:09 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.10 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 
 #include "err.h"
 #include "types.h"
@@ -42,23 +36,15 @@ static char const RCSID[] = "$Id: expr.c,v 1.9 2004-09-04 03:17:09 dfs Exp $";
 static char CoerceBuf[512];
 extern int NumFuncs;
 
-#ifdef HAVE_PROTOS
-PRIVATE int Multiply(void), Divide(void), Mod(void), Add(void),
+static int Multiply(void), Divide(void), Mod(void), Add(void),
     Subtract(void), GreaterThan(void), LessThan(void),
     EqualTo(void), NotEqual(void), LessOrEqual(void),
     GreaterOrEqual(void), LogAND(void), LogOR(void),
     UnMinus(void), LogNot(void),
     Compare(int);
-#else
-PRIVATE int Multiply(), Divide(), Mod(), Add(),
-    Subtract(), GreaterThan(), LessThan(),
-    EqualTo(), NotEqual(), LessOrEqual(),
-    GreaterOrEqual(), LogAND(), LogOR(),
-    UnMinus(), LogNot(), Compare();
-#endif
 
-PRIVATE int MakeValue ARGS ((char *s, Value *v, Var *locals));
-PRIVATE int ParseLiteralDate ARGS ((char **s, int *jul));
+static int MakeValue (char *s, Value *v, Var *locals);
+static int ParseLiteralDate (char **s, int *jul);
 
 /* Binary operators - all left-associative */
 
@@ -104,12 +90,7 @@ int OpStackPtr, ValStackPtr;
 /*  Execute an operator or function with debugging.            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int DebugPerform(Operator *op)
-#else
-static int DebugPerform(op)
-Operator *op;
-#endif
+static int DebugPerform(Operator *op)
 {
     int r;
 
@@ -140,11 +121,7 @@ Operator *op;
 /*  Clean the stack after an error occurs.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void CleanStack(void)
-#else
-static void CleanStack()
-#endif
+static void CleanStack(void)
 {
     int i;
 
@@ -157,12 +134,7 @@ static void CleanStack()
 /*  PeekChar - peek ahead to next char.                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE char PeekChar(char **s)
-#else
-static char PeekChar(s)
-char **s;
-#endif
+static char PeekChar(char **s)
 {
     char *t = *s;
     while (*t && isspace(*t)) t++;
@@ -176,13 +148,7 @@ char **s;
 /*  Read a token.                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseExprToken(DynamicBuffer *buf, char **in)
-#else
-static int ParseExprToken(buf, in)
-DynamicBuffer *buf;
-char **in;
-#endif
+static int ParseExprToken(DynamicBuffer *buf, char **in)
 {
 
     char c;
@@ -302,13 +268,7 @@ char **in;
 /*  Put the result into value pointed to by v.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int EvalExpr(char **e, Value *v)
-#else
-int EvalExpr(e, v)
-char **e;
-Value *v;
-#endif
+int EvalExpr(char **e, Value *v)
 {
     int r;
 
@@ -331,13 +291,7 @@ Value *v;
 }
 
 /* Evaluate - do the actual work of evaluation. */
-#ifdef HAVE_PROTOS
-PUBLIC int Evaluate(char **s, Var *locals)
-#else
-int Evaluate(s, locals)
-char **s;
-Var *locals;
-#endif
+int Evaluate(char **s, Var *locals)
 {
     int OpBase, ValBase;
     int r;
@@ -496,14 +450,7 @@ Var *locals;
 /*  a date or the value of a symbol.                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int MakeValue(char *s, Value *v, Var *locals)
-#else
-static int MakeValue(s, v, locals)
-char *s;
-Value *v;
-Var *locals;
-#endif
+static int MakeValue(char *s, Value *v, Var *locals)
 {
     int len;
     int h, m, r;
@@ -580,13 +527,7 @@ Var *locals;
 /*  DoCoerce - actually coerce a value to the specified type.  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoCoerce(char type, Value *v)
-#else
-int DoCoerce(type, v)
-char type;
-Value *v;
-#endif
+int DoCoerce(char type, Value *v)
 {
     int h, d, m, y, i;
     char *s;
@@ -711,11 +652,7 @@ Value *v;
 /*  Perform addition.                                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Add(void)
-#else
-static int Add()
-#endif
+static int Add(void)
 {
     Value v1, v2, v3;
     int r;
@@ -787,11 +724,7 @@ static int Add()
 /*  Perform subtraction.                                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Subtract(void)
-#else
-static int Subtract()
-#endif
+static int Subtract(void)
 {
     Value v1, v2;
     int r;
@@ -846,11 +779,7 @@ static int Subtract()
 /*  Perform multiplication.                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Multiply(void)
-#else
-static int Multiply()
-#endif
+static int Multiply(void)
 {
     Value v1, v2;
     int r;
@@ -877,11 +806,7 @@ static int Multiply()
 /*  Perform division.                                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Divide(void)
-#else
-static int Divide()
-#endif
+static int Divide(void)
 {
     Value v1, v2;
     int r;
@@ -909,11 +834,7 @@ static int Divide()
 /*  Perform modulus function.                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Mod(void)
-#else
-static int Mod()
-#endif
+static int Mod(void)
 {
     Value v1, v2;
     int r;
@@ -943,21 +864,12 @@ static int Mod()
 /*  All the comparison functions.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int GreaterThan(void) {return Compare(GT);}
-PRIVATE int LessThan(void) {return Compare(LT);}
-PRIVATE int EqualTo(void) {return Compare(EQ);}
-PRIVATE int NotEqual(void) {return Compare(NE);}
-PRIVATE int LessOrEqual(void) {return Compare(LE);}
-PRIVATE int GreaterOrEqual(void) {return Compare(GE);}
-#else
-static int GreaterThan() {return Compare(GT);}
-static int LessThan() {return Compare(LT);}
-static int EqualTo() {return Compare(EQ);}
-static int NotEqual() {return Compare(NE);}
-static int LessOrEqual() {return Compare(LE);}
-static int GreaterOrEqual() {return Compare(GE);}
-#endif
+static int GreaterThan(void) {return Compare(GT);}
+static int LessThan(void) {return Compare(LT);}
+static int EqualTo(void) {return Compare(EQ);}
+static int NotEqual(void) {return Compare(NE);}
+static int LessOrEqual(void) {return Compare(LE);}
+static int GreaterOrEqual(void) {return Compare(GE);}
 
 /***************************************************************/
 /*                                                             */
@@ -965,12 +877,7 @@ static int GreaterOrEqual() {return Compare(GE);}
 /*  Do the actual work of comparison.                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int Compare(int how)
-#else
-static int Compare(how)
-int how;
-#endif
+static int Compare(int how)
 {
     Value v1, v2, v3;
     int r;
@@ -1028,11 +935,7 @@ int how;
 /*  Do logical OR                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int LogOR(void)
-#else
-static int LogOR()
-#endif
+static int LogOR(void)
 {
     Value v1, v2;
     int r;
@@ -1059,11 +962,7 @@ static int LogOR()
 /*  Do logical AND                                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int LogAND(void)
-#else
-static int LogAND()
-#endif
+static int LogAND(void)
 {
     Value v1, v2;
     int r;
@@ -1090,11 +989,7 @@ static int LogAND()
 /*  Unary Minus                                                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int UnMinus(void)
-#else
-static int UnMinus()
-#endif
+static int UnMinus(void)
 {
     Value *v = &ValStack[ValStackPtr-1];
     if (v->type != INT_TYPE) return E_BAD_TYPE;
@@ -1109,11 +1004,7 @@ static int UnMinus()
 /*  Logical NOT                                                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int LogNot(void)
-#else
-static int LogNot()
-#endif
+static int LogNot(void)
 {
     Value *v = &ValStack[ValStackPtr-1];
     if (v->type != INT_TYPE) return E_BAD_TYPE;
@@ -1128,14 +1019,7 @@ static int LogNot()
 /*  Find a function.                                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 Operator *FindFunc(char *name, Operator where[], int num)
-#else
-Operator *FindFunc(name, where, num)
-char *name;
-Operator where[];
-int num;
-#endif
 {
     int top=num-1, bot=0;
     int mid, r;
@@ -1156,13 +1040,7 @@ int num;
 /*  Print a value to stdout for debugging purposes.            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void PrintValue (Value *v, FILE *fp)
-#else
-void PrintValue(v, fp)
-Value *v;
-FILE *fp;
-#endif
+void PrintValue (Value *v, FILE *fp)
 {
     int y, m, d;
     char *s;
@@ -1191,12 +1069,7 @@ FILE *fp;
 /*  Copy a value.                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int CopyValue(Value *dest, const Value *src)
-#else
-int CopyValue(dest, src)
-Value *dest, *src;
-#endif
+int CopyValue(Value *dest, const Value *src)
 {
     dest->type = ERR_TYPE;
     if (src->type == STR_TYPE) {
@@ -1216,13 +1089,7 @@ Value *dest, *src;
 /*  Parse a literal date.  Return result in jul, update s.     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseLiteralDate(char **s, int *jul)
-#else
-static int ParseLiteralDate(s, jul)
-char **s;
-int *jul;
-#endif
+static int ParseLiteralDate(char **s, int *jul)
 {
     int y, m, d;
 
@@ -1264,12 +1131,7 @@ int *jul;
 /*  return upon failure.                                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int FnPopValStack(Value *val)
-#else
-int FnPopValStack(val)
-Value *val;
-#endif
+int FnPopValStack(Value *val)
 {
     if (ValStackPtr <= 0)
 	return E_VA_STK_UNDER;

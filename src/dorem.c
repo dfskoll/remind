@@ -13,19 +13,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.11 2005-09-28 02:39:14 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.12 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 
 #include "globals.h"
 #include "err.h"
@@ -33,20 +27,16 @@ static char const RCSID[] = "$Id: dorem.c,v 1.11 2005-09-28 02:39:14 dfs Exp $";
 #include "protos.h"
 #include "expr.h"
 
-/* Define the shell characters to escape */
-static char const EscapeMe[] =
-#ifdef QDOS
-"\"'!$%^&*()|<>[]{}\x9F~;?\\";
-#else
-"\"'!$%^&*()|<>[]{}`~;?\\";
-#endif
+/* Define the shell characters not to escape */
+static char const DontEscapeMe[] =
+"1234567890_-=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.,";
 
-PRIVATE int ParseTimeTrig ARGS ((ParsePtr s, TimeTrig *tim));
-PRIVATE int ParseLocalOmit ARGS ((ParsePtr s, Trigger *t));
-PRIVATE int ParseScanFrom ARGS ((ParsePtr s, Trigger *t));
-PRIVATE int ParsePriority ARGS ((ParsePtr s, Trigger *t));
-PRIVATE int ParseUntil ARGS ((ParsePtr s, Trigger *t));
-PRIVATE int ShouldTriggerBasedOnWarn ARGS ((Trigger *t, int jul));
+static int ParseTimeTrig (ParsePtr s, TimeTrig *tim);
+static int ParseLocalOmit (ParsePtr s, Trigger *t);
+static int ParseScanFrom (ParsePtr s, Trigger *t);
+static int ParsePriority (ParsePtr s, Trigger *t);
+static int ParseUntil (ParsePtr s, Trigger *t);
+static int ShouldTriggerBasedOnWarn (Trigger *t, int jul);
 
 /***************************************************************/
 /*                                                             */
@@ -55,12 +45,7 @@ PRIVATE int ShouldTriggerBasedOnWarn ARGS ((Trigger *t, int jul));
 /*  Do the REM command.                                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoRem(ParsePtr p)
-#else
-int DoRem(p)
-ParsePtr p;
-#endif
+int DoRem(ParsePtr p)
 {
 
     Trigger trig;
@@ -111,7 +96,6 @@ ParsePtr p;
     }
 
 /* Queue the reminder, if necessary */
-#ifdef HAVE_QUEUED
     if (jul == JulianToday &&
 	!(!IgnoreOnce &&
 	  trig.once != NO_ONCE &&
@@ -119,8 +103,6 @@ ParsePtr p;
 	QueueReminder(p, &trig, &tim, trig.sched);
 /* If we're in daemon mode, do nothing over here */
     if (Daemon) return OK;
-#endif
-
 
     if (ShouldTriggerReminder(&trig, &tim, jul)) {
 	if ( (r=TriggerReminder(p, &trig, &tim, jul)) )
@@ -140,14 +122,7 @@ ParsePtr p;
 /*  trigger structure.                                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
-#else
-    int ParseRem(s, trig, tim)
-    ParsePtr s;
-    Trigger *trig;
-    TimeTrig *tim;
-#endif
+int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 {
     register int r;
     DynamicBuffer buf;
@@ -340,13 +315,7 @@ PUBLIC int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 /*  ParseTimeTrig - parse the AT part of a timed reminder      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
-#else
-    static int ParseTimeTrig(s, tim)
-    ParsePtr s;
-    TimeTrig *tim;
-#endif
+static int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
 {
     Token tok;
     int r;
@@ -392,13 +361,7 @@ PRIVATE int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
 /*  reminder.                                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseLocalOmit(ParsePtr s, Trigger *t)
-#else
-    static int ParseLocalOmit(s, t)
-    ParsePtr s;
-    Trigger *t;
-#endif
+static int ParseLocalOmit(ParsePtr s, Trigger *t)
 {
     Token tok;
     int r;
@@ -428,13 +391,7 @@ PRIVATE int ParseLocalOmit(ParsePtr s, Trigger *t)
 /*  ParseUntil - parse the UNTIL portion of a reminder         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseUntil(ParsePtr s, Trigger *t)
-#else
-    static int ParseUntil(s, t)
-    ParsePtr s;
-    Trigger *t;
-#endif
+static int ParseUntil(ParsePtr s, Trigger *t)
 {
     int y = NO_YR,
 	m = NO_MON,
@@ -502,13 +459,7 @@ PRIVATE int ParseUntil(ParsePtr s, Trigger *t)
 /*  ParseScanFrom - parse the SCANFROM portion of a reminder   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParseScanFrom(ParsePtr s, Trigger *t)
-#else
-    static int ParseScanFrom(s, t)
-    ParsePtr s;
-    Trigger *t;
-#endif
+static int ParseScanFrom(ParsePtr s, Trigger *t)
 {
     int y = NO_YR,
 	m = NO_MON,
@@ -577,15 +528,7 @@ PRIVATE int ParseScanFrom(ParsePtr s, Trigger *t)
 /*  Trigger the reminder if it's a RUN or MSG type.            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-    PUBLIC int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
-#else /* ! HAVE_PROTOS */
-    int TriggerReminder(p, t, tim, jul)
-    ParsePtr p;
-    Trigger *t;
-    TimeTrig *tim;
-    int jul;
-#endif /* HAVE_PROTOS */
+    int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 {
     int r, y, m, d;
     char PrioExpr[25];
@@ -714,32 +657,19 @@ PRIVATE int ParseScanFrom(ParsePtr s, Trigger *t)
 /*  triggered.                                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef __TURBOC__
-#pragma argsused
-#endif
-#ifdef HAVE_PROTOS
-PUBLIC int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
-#else
-    int ShouldTriggerReminder(t, tim, jul)
-    Trigger *t;
-    TimeTrig *tim;
-    int jul;
-#endif
+int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 {
     int r;
 
     /* Handle the ONCE modifier in the reminder. */
     if (!IgnoreOnce && t->once !=NO_ONCE && FileAccessDate == JulianToday)
 	return 0;
-   
+
     if (jul < JulianToday) return 0;
 
     /* Don't trigger timed reminders if DontIssueAts is true, and if the
        reminder is for today */
-
-#ifdef HAVE_QUEUED
     if (jul == JulianToday && DontIssueAts && tim->ttime != NO_TIME) return 0;
-#endif
 
     /* Don't trigger "old" timed reminders */
 /*** REMOVED...
@@ -780,17 +710,7 @@ PUBLIC int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 /*  Do the "satisfying..." remind calculation.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef __TURBOC__
-#pragma argsused
-#endif
-#ifdef HAVE_PROTOS
-PUBLIC int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
-#else
-    int DoSatRemind(trig, tim, p)
-    Trigger *trig;
-    TimeTrig *tim;
-    ParsePtr p;
-#endif
+int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 {
     int iter, jul, r;
     Value v;
@@ -824,13 +744,7 @@ PUBLIC int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 /*  ParsePriority - parse the PRIORITY portion of a reminder   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ParsePriority(ParsePtr s, Trigger *t)
-#else
-    static int ParsePriority(s, t)
-    ParsePtr s;
-    Trigger *t;
-#endif
+static int ParsePriority(ParsePtr s, Trigger *t)
 {
     int p, r;
     char *u;
@@ -871,19 +785,12 @@ PRIVATE int ParsePriority(ParsePtr s, Trigger *t)
 /*  Execute the '-k' command, escaping shell chars in message. */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoMsgCommand(char *cmd, char *msg)
-#else
-    int DoMsgCommand(cmd, msg)
-    char *cmd;
-    char *msg;
-#endif
+int DoMsgCommand(char *cmd, char *msg)
 {
     int r;
     int i, l;
     DynamicBuffer execBuffer;
 
-#ifdef WANT_SHELL_ESCAPING
     DynamicBuffer buf;
     char *s;
 
@@ -892,7 +799,7 @@ PUBLIC int DoMsgCommand(char *cmd, char *msg)
 
     /* Escape shell characters in msg INCLUDING WHITESPACE! */
     for (s=msg; *s; s++) {
-	if (isspace(*s) || strchr(EscapeMe, *s)) {
+	if (isspace(*s) || !strchr(DontEscapeMe, *s)) {
 	    if (DBufPutc(&buf, '\\') != OK) {
 		r = E_NO_MEM;
 		goto finished;
@@ -904,9 +811,6 @@ PUBLIC int DoMsgCommand(char *cmd, char *msg)
 	}
     }
     msg = DBufValue(&buf);
-#else
-    DBufInit(&execBuffer);
-#endif
 
     /* Do "%s" substitution */
     l = strlen(cmd)-1;
@@ -934,9 +838,7 @@ PUBLIC int DoMsgCommand(char *cmd, char *msg)
     system(DBufValue(&execBuffer));
 
 finished:
-#ifdef WANT_SHELL_ESCAPING
     DBufFree(&buf);
-#endif
     DBufFree(&execBuffer);
     return r;
 }
@@ -949,13 +851,7 @@ finished:
 /*  function.                                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
-#else
-    static int ShouldTriggerBasedOnWarn(t, jul)
-    Trigger *t;
-    int jul;
-#endif
+static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
 {
     char buffer[VAR_NAME_LEN+32];
     int i;

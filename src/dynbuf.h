@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: dynbuf.h,v 1.3 2000-02-18 03:45:50 dfs Exp $ */
+/* $Id: dynbuf.h,v 1.4 2005-09-30 03:29:32 dfs Exp $ */
 
 #ifndef DYNBUF_H
 #define DYNBUF_H
@@ -24,14 +24,6 @@ typedef struct {
     int allocatedLen;
     char staticBuf[DBUF_STATIC_SIZE];
 } DynamicBuffer;
-
-#ifndef ARGS
-#ifdef HAVE_PROTOS
-#define ARGS(x) x
-#else
-#define ARGS(x) ()
-#endif
-#endif
 
 void DBufInit(DynamicBuffer *dbuf);
 int DBufPutc(DynamicBuffer *dbuf, char c);

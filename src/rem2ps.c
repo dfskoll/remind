@@ -12,36 +12,17 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.13 2005-04-12 00:49:07 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.14 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef __TURBOC__
-#include <io.h>
-#endif
-
 #include "rem2ps.h"
 #include "version.h"
 
-#ifdef HAVE_PROTOS
-#define ARGS(x) x
-#else
-#define ARGS(x) ()
-#endif
 #define NEW(type) ((type *) malloc(sizeof(type)))
 
 #define SPECIAL_NORMAL     0
@@ -135,15 +116,15 @@ int LeftMarg, RightMarg, TopMarg, BotMarg;
 int FillPage;
 int Verbose = 0;
 
-void Init ARGS ((int argc, char *argv[]));
-void Usage ARGS ((char *s));
-void DoPsCal ARGS ((void));
-int DoQueuedPs ARGS ((void));
-void DoSmallCal ARGS((char *m, int days, int first, int col, int which));
-void WriteProlog ARGS ((void));
-void WriteCalEntry ARGS ((void));
-void WriteOneEntry ARGS ((CalEntry *c));
-void GetSmallLocations ARGS ((void));
+void Init (int argc, char *argv[]);
+void Usage (char *s);
+void DoPsCal (void);
+int DoQueuedPs (void);
+void DoSmallCal (char *m, int days, int first, int col, int which);
+void WriteProlog (void);
+void WriteCalEntry (void);
+void WriteOneEntry (CalEntry *c);
+void GetSmallLocations (void);
 char *EatToken(char *in, char *out, int maxlen);
 
 /***************************************************************/
@@ -151,13 +132,7 @@ char *EatToken(char *in, char *out, int maxlen);
 /*   MAIN PROGRAM                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int main(int argc, char *argv[])
-#else
-int main(argc, argv)
-int argc;
-char argv[];
-#endif
+int main(int argc, char *argv[])
 {
     /* If stdin is a tty - probably wrong. */
 
@@ -199,11 +174,7 @@ char argv[];
 /*  DoPsCal - emit PostScript for the calendar.                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void DoPsCal(void)
-#else
-void DoPsCal()
-#endif
 {
     char month[40], year[40];
     char prevm[40], nextm[40];
@@ -413,11 +384,7 @@ void DoPsCal()
 /*  WriteProlog - write the PostScript prologue                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void WriteProlog(void)
-#else
-void WriteProlog()
-#endif
 {
     int i;
     int x = CurPage->xsize;
@@ -518,11 +485,7 @@ void WriteProlog()
 /*  WriteCalEntry - write all entries for one day              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void WriteCalEntry(void)
-#else
-void WriteCalEntry()
-#endif
 {
     CalEntry *c = CurEntries;
     CalEntry *d;
@@ -609,12 +572,7 @@ void WriteCalEntry()
 /*  WriteOneEntry - write an entry for one day                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void WriteOneEntry(CalEntry *c)
-#else
-void WriteOneEntry(c)
-CalEntry *c;
-#endif
 {
     int ch, i;
     char *s = c->entry;
@@ -677,13 +635,7 @@ CalEntry *c;
 /*  Init - set up parameters                                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void Init(int argc, char *argv[])
-#else
-void Init(argc, argv)
-int argc;
-char *argv[];
-#endif
+void Init(int argc, char *argv[])
 {
     char *s, *t;
     int i=1;
@@ -841,12 +793,7 @@ char *argv[];
 /*  Usage - print usage information                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void Usage(char *s)
-#else
-void Usage(s)
-char *s;
-#endif
+void Usage(char *s)
 {
     if (s) fprintf(stderr, "Rem2PS: %s\n\n", s);
 
@@ -875,13 +822,7 @@ char *s;
 /*  month.                                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void DoSmallCal(char *m, int days, int first, int col, int which)
-#else
-void DoSmallCal(m, days, first, col, which)
-char *m;
-int days, first, col;
-#endif
 {
     /* Do the small calendar */
     int i, j;
@@ -935,11 +876,7 @@ int days, first, col;
 /*  DoQueuedPs - do the queued PS and PSFILE reminders.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoQueuedPs(void)
-#else
-int DoQueuedPs()
-#endif
+int DoQueuedPs(void)
 {
     int i;
     int HadPS = 0;
@@ -1122,11 +1059,7 @@ int DoQueuedPs()
 /* Set up the locations for the small calendars.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void GetSmallLocations(void)
-#else
-void GetSmallLocations()
-#endif
+void GetSmallLocations(void)
 {
     char c;
     char *s = SmallLocation;
@@ -1191,13 +1124,7 @@ void GetSmallLocations()
 /* Read a space-delimited token into an output buffer.         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char  *EatToken(char *in, char *out, int maxlen)
-#else
-char *EatToken(in, out, maxlen)
-char *in, *out;
-int maxlen;
-#endif
+char  *EatToken(char *in, char *out, int maxlen)
 {
     int i = 0;
 

@@ -11,19 +11,12 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: sort.c,v 1.7 2005-09-28 02:39:14 dfs Exp $";
+static char const RCSID[] = "$Id: sort.c,v 1.8 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
@@ -43,8 +36,8 @@ typedef struct sortrem {
 /* The sorted reminder queue */
 static Sortrem *SortedQueue = (Sortrem *) NULL;
 
-PRIVATE Sortrem *MakeSortRem ARGS ((int jul, int tim, char *body, int typ, int prio));
-PRIVATE void IssueSortBanner ARGS ((int jul));
+static Sortrem *MakeSortRem (int jul, int tim, char *body, int typ, int prio);
+static void IssueSortBanner (int jul);
 
 /***************************************************************/
 /*                                                             */
@@ -53,14 +46,7 @@ PRIVATE void IssueSortBanner ARGS ((int jul));
 /*  Create a new Sortrem entry - return NULL on failure.       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE Sortrem *MakeSortRem(int jul, int tim, char *body, int typ, int prio)
-#else
-static Sortrem *MakeSortRem(jul, tim, body, typ, prio)
-int jul, tim;
-char *body;
-int typ, prio;
-#endif
+static Sortrem *MakeSortRem(int jul, int tim, char *body, int typ, int prio)
 {
     Sortrem *new = NEW(Sortrem);
     if (!new) return NULL;
@@ -86,15 +72,7 @@ int typ, prio;
 /*  Insert a reminder into the sort buffer                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int InsertIntoSortBuffer(int jul, int tim, char *body, int typ, int prio)
-#else
-int InsertIntoSortBuffer(jul, tim, body, typ, prio)
-int jul;
-int tim;
-char *body;
-int typ, prio;
-#endif
+int InsertIntoSortBuffer(int jul, int tim, char *body, int typ, int prio)
 {
     Sortrem *new = MakeSortRem(jul, tim, body, typ, prio);
     Sortrem *cur = SortedQueue, *prev = NULL;
@@ -147,11 +125,7 @@ int typ, prio;
 /*  Issue all of the sorted reminders and free memory.         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void IssueSortedReminders(void)
-#else
-void IssueSortedReminders()
-#endif
+void IssueSortedReminders(void)
 {
     Sortrem *cur = SortedQueue;
     Sortrem *next;
@@ -195,12 +169,7 @@ void IssueSortedReminders()
 /*  defined to take one argument.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void IssueSortBanner(int jul)
-#else
-static void IssueSortBanner(jul)
-int jul;
-#endif
+static void IssueSortBanner(int jul)
 {
     char BanExpr[64];
     int y, m, d;
@@ -233,14 +202,9 @@ int jul;
 /*  sorting direction by date and time, resp.                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int CompareRems(int dat1, int tim1, int prio1,
-                       int dat2, int tim2, int prio2,
-		       int bydate, int bytime, int byprio)
-#else
-int CompareRems(dat1, tim1, prio1, dat2, tim2, prio2, bydate, bytime, byprio)
-int dat1, tim1, prio1, dat2, tim2, prio2, bydate, bytime, byprio;
-#endif
+int CompareRems(int dat1, int tim1, int prio1,
+		int dat2, int tim2, int prio2,
+		int bydate, int bytime, int byprio)
 {
     int dafter, tafter, pafter;
 

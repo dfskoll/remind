@@ -1,6 +1,6 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.23 2005-07-02 04:10:15 dfs Exp $
+# $Id: Makefile.in,v 1.24 2005-09-30 03:29:32 dfs Exp $
 
 VERSION=03.00.24
 SHELL= /bin/sh
@@ -40,7 +40,7 @@ test: remind
 	sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -DUNIX -I. -I$(srcdir) $<
+	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
 
 rem2ps: rem2ps.o dynbuf.o
 	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o dynbuf.o
@@ -67,7 +67,7 @@ clobber:
 	rm -f *.o *~ remind rem2ps test.out core *.bak
 
 depend:
-	gccmakedep @DEFS@ -DUNIX $(REMINDSRCS) rem2ps.c
+	gccmakedep @DEFS@ $(REMINDSRCS) rem2ps.c
 
 # The next targets are not very useful to you.  I use them to build
 # distributions, etc.

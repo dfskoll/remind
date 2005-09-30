@@ -12,29 +12,14 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.12 2005-09-28 02:39:14 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.13 2005-09-30 03:29:32 dfs Exp $";
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
-
-#ifdef HAVE_STDARG_H
 #include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
 
 #include <ctype.h>
 #ifdef TIME_WITH_SYS_TIME
@@ -48,17 +33,7 @@ static char const RCSID[] = "$Id: main.c,v 1.12 2005-09-28 02:39:14 dfs Exp $";
 #endif
 #endif
 
-#ifdef AMIGA
 #include <sys/types.h>
-#endif
-
-#if defined(__MSDOS__) || defined(__OS2__)
-#include <dos.h>
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
 
 #include "types.h"
 #include "protos.h"
@@ -66,13 +41,7 @@ static char const RCSID[] = "$Id: main.c,v 1.12 2005-09-28 02:39:14 dfs Exp $";
 #include "globals.h"
 #include "err.h"
 
-PRIVATE void DoReminders ARGS ((void));
-
-#if !defined(HAVE_TIMEGM) && !defined(HAVE_MKTIME)
-PRIVATE long time_cheat ARGS ((int year, int month));
-long timegm ARGS((struct tm *tm));
-long timelocal ARGS((struct tm *tm));
-#endif
+static void DoReminders(void);
 
 /* Whooo... the putchar/Putchar/PutChar macros are a mess...
    my apologies... */
@@ -85,17 +54,9 @@ long timelocal ARGS((struct tm *tm));
 /**                                                           **/
 /***************************************************************/
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int main(int argc, char *argv[])
-#else
-int main(argc, argv)
-int argc;
-char *argv[];
-#endif
+int main(int argc, char *argv[])
 {
-#ifdef HAVE_QUEUED
     int pid;
-#endif
 
 /* The very first thing to do is to set up ErrFp to be stderr */
     ErrFp = stderr;
@@ -124,32 +85,17 @@ char *argv[];
 	if (!Hush) {
 	    if (DestroyOmitContexts())
 		Eprint("%s", ErrMsg[E_PUSH_NOPOP]);
-#ifdef HAVE_QUEUED
 	    if (!Daemon && !NextMode && !NumTriggered && !NumQueued) {
 		printf("%s\n", ErrMsg[E_NOREMINDERS]);
 	    } else if (!Daemon && !NextMode && !NumTriggered) {
 		printf(ErrMsg[M_QUEUED], NumQueued);
 	    }
-#else
-	    if (!NextMode && !NumTriggered) {
-		printf("%s\n", ErrMsg[E_NOREMINDERS]);
-	    }
-#endif
 	}
-
-	/* If it's MS-DOS, reset the file access date.           */
-	/* Note that OS/2 and DOS bound programs have __MSDOS__  */
-	/* defined, so this test should probably be modified.    */
-#if defined(__MSDOS__)
-	if (!UseStdin && (RealToday == JulianToday))
-	    SetAccessDate(InitialFile, RealToday);
-#endif
 
 	/* If there are sorted reminders, handle them */
 	if (SortByDate) IssueSortedReminders();
 
 	/* If there are any background reminders queued up, handle them */
-#ifdef HAVE_QUEUED
 	if (NumQueued || Daemon) {
 
 	    if (DontFork) {
@@ -167,7 +113,6 @@ char *argv[];
 		}
 	    }
 	}
-#endif
 	if (Iterations) {
 	    ClearGlobalOmits();
 	    DestroyOmitContexts();
@@ -186,11 +131,7 @@ char *argv[];
 /*  The normal case - we're not doing a calendar.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DoReminders(void)
-#else
-static void DoReminders()
-#endif
+static void DoReminders(void)
 {
     int r;
     Token tok;
@@ -304,12 +245,7 @@ static void DoReminders()
 /*  1 January 1990.                                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int Julian(int year, int month, int day)
-#else
-int Julian(year, month, day)
-int day, month, year;
-#endif
+int Julian(int year, int month, int day)
 {
     int y1 = BASE-1, y2 = year-1;
 
@@ -328,13 +264,7 @@ int day, month, year;
 /*  Convert a Julian date to year, month, day.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void FromJulian(int jul, int *y, int *m, int *d)
-#else
-void FromJulian(jul, y, m, d)
-int jul;
-int *y, *m, *d;
-#endif
+void FromJulian(int jul, int *y, int *m, int *d)
 {
     int try_yr = (jul / 365) + BASE;
     int try_mon = 0;
@@ -374,14 +304,7 @@ int *y, *m, *d;
 /*  zero, then just peek ahead; don't advance pointer.         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ParseChar(ParsePtr p, int *err, int peek)
-#else
-int ParseChar(p, err, peek)
-ParsePtr p;
-int *err;
-int peek;
-#endif
+int ParseChar(ParsePtr p, int *err, int peek)
 {
     Value val;
     int r;
@@ -453,14 +376,7 @@ int peek;
 /*  Parse the next non-space character.                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ParseNonSpaceChar(ParsePtr p, int *err, int peek)
-#else
-int ParseNonSpaceChar(p, err, peek)
-ParsePtr p;
-int *err;
-int peek;
-#endif
+int ParseNonSpaceChar(ParsePtr p, int *err, int peek)
 {
     int ch;
 
@@ -483,13 +399,7 @@ int peek;
 /*  Parse a token delimited by whitespace.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ParseToken(ParsePtr p, DynamicBuffer *dbuf)
-#else
-int ParseToken(p, dbuf)
-ParsePtr p;
-DynamicBuffer *dbuf;
-#endif
+int ParseToken(ParsePtr p, DynamicBuffer *dbuf)
 {
     int c, err;
 
@@ -525,13 +435,7 @@ DynamicBuffer *dbuf;
 /*  invalid.                                                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ParseIdentifier(ParsePtr p, DynamicBuffer *dbuf)
-#else
-int ParseIdentifier(p, dbuf)
-ParsePtr p;
-DynamicBuffer *dbuf;
-#endif
+int ParseIdentifier(ParsePtr p, DynamicBuffer *dbuf)
 {
     int c, err;
 
@@ -573,13 +477,7 @@ DynamicBuffer *dbuf;
 /* return the value.                                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int EvaluateExpr(ParsePtr p, Value *v)
-#else
-int EvaluateExpr(p, v)
-ParsePtr p;
-Value *v;
-#endif
+int EvaluateExpr(ParsePtr p, Value *v)
 {
 
     int bracketed = 0;
@@ -606,23 +504,9 @@ Value *v;
 /*  Eprint - print an error message.                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_STDARG_H
-#ifdef HAVE_PROTOS
-PUBLIC void Eprint(const char *fmt, ...)
-#else
-void Eprint(fmt)
-char *fmt;
-#endif
-#else
-/*VARARGS0*/
-void Eprint(va_alist)
-va_dcl
-#endif
+void Eprint(const char *fmt, ...)
 {
     va_list argptr;
-#ifndef HAVE_STDARG_H
-    char *fmt;
-#endif
 
     /* Check if more than one error msg. from this line */
     if (!FreshLine && !ShowAllErrors) return;
@@ -636,17 +520,10 @@ va_dcl
 	if (DebugFlag & DB_PRTLINE) OutputLine(ErrFp);
     } else fprintf(ErrFp, "       ");
 
-#ifdef HAVE_STDARG_H
     va_start(argptr, fmt);
-#else
-    va_start(argptr);
-    fmt = va_arg(argptr, char *);
-#endif
     (void) vfprintf(ErrFp, fmt, argptr);
     (void) fputc('\n', ErrFp);
-#ifndef HAVE_STDARG_H
     va_end(argptr);
-#endif
     return;
 }
 
@@ -658,12 +535,7 @@ va_dcl
 /*  simply involves escaping newlines.                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void OutputLine(FILE *fp)
-#else
-void OutputLine(fp)
-FILE *fp;
-#endif
+void OutputLine(FILE *fp)
 {
     register char *s = CurLine;
     register char c = 0;
@@ -683,13 +555,7 @@ FILE *fp;
 /*  Create a parser given a string buffer                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void CreateParser(char *s, ParsePtr p)
-#else
-void CreateParser(s, p)
-char *s;
-ParsePtr p;
-#endif
+void CreateParser(char *s, ParsePtr p)
 {
     p->text = s;
     p->pos = s;
@@ -708,12 +574,7 @@ ParsePtr p;
 /*  Destroy a parser, freeing up resources used.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DestroyParser(ParsePtr p)
-#else
-void DestroyParser(p)
-ParsePtr p;
-#endif
+void DestroyParser(ParsePtr p)
 {
     if (p->isnested && p->etext) {
 	free(p->etext);
@@ -729,13 +590,7 @@ ParsePtr p;
 /*  on a per-parser basis.                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int PushToken(const char *tok, ParsePtr p)
-#else
-int PushToken(tok, p)
-char *tok;
-ParsePtr p;
-#endif
+int PushToken(const char *tok, ParsePtr p)
 {
     DBufFree(&p->pushedToken);
     if (DBufPuts(&p->pushedToken, (char *) tok) != OK ||
@@ -754,26 +609,8 @@ ParsePtr p;
 /*  Return the system time in seconds past midnight            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC long SystemTime(int realtime)
-#else
-long SystemTime(realtime)
-int realtime;
-#endif
+long SystemTime(int realtime)
 {
-#if defined( __MSDOS__ ) && defined( __TURBOC__ )
-/* Get time in Turbo C */
-
-    struct time t;
-
-/* If time was supplied on command line, return it. */
-    if (!realtime && (SysTime != -1L)) return SysTime;
-
-    gettime(&t);
-    return (long) t.ti_hour * 3600L + (long) t.ti_min * 60L +
-	(long) t.ti_sec;
-#else
-/* Get time in Unix or with MSC */
     time_t tloc;
     struct tm *t;
 
@@ -783,8 +620,8 @@ int realtime;
     t = localtime(&tloc);
     return (long) t->tm_hour * 3600L + (long) t->tm_min * 60L +
 	(long) t->tm_sec;
-#endif
 }
+
 /***************************************************************/
 /*                                                             */
 /*  SystemDate                                                 */
@@ -794,25 +631,8 @@ int realtime;
 /*  year.)                                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int SystemDate(int *y, int *m, int *d)
-#else
-int SystemDate(y, m, d)
-int *d;
-int *m;
-int *y;
-#endif
+int SystemDate(int *y, int *m, int *d)
 {
-#if defined( __MSDOS__ ) && defined( __TURBOC__ )
-/* Get today's date in Turbo C */
-    struct date da;
-
-    getdate(&da);
-    *y = da.da_year;
-    *m = da.da_mon - 1;
-    *d = da.da_day;
-#else
-/* Get today's date in UNIX or with MSC */
     time_t tloc;
     struct tm *t;
 
@@ -822,7 +642,7 @@ int *y;
     *d = t->tm_mday;
     *m = t->tm_mon;
     *y = t->tm_year + 1900;
-#endif
+
     return Julian(*y, *m, *d);
 }
 
@@ -832,12 +652,7 @@ int *y;
 /*  DoIf - handle the IF command.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoIf(ParsePtr p)
-#else
-int DoIf(p)
-ParsePtr p;
-#endif
+int DoIf(ParsePtr p)
 {
     Value v;
     int r;
@@ -871,12 +686,7 @@ ParsePtr p;
 /*  DoElse - handle the ELSE command.                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoElse(ParsePtr p)
-#else
-int DoElse(p)
-ParsePtr p;
-#endif
+int DoElse(ParsePtr p)
 {
     unsigned syndrome;
 
@@ -895,12 +705,7 @@ ParsePtr p;
 /*  DoEndif - handle the Endif command.                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoEndif(ParsePtr p)
-#else
-int DoEndif(p)
-ParsePtr p;
-#endif
+int DoEndif(ParsePtr p)
 {
     if (!NumIfs) return E_ENDIF_NO_IF;
     NumIfs--;
@@ -914,12 +719,7 @@ ParsePtr p;
 /*  Handle the IFTRIG command.                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoIfTrig(ParsePtr p)
-#else
-int DoIfTrig(p)
-ParsePtr p;
-#endif
+int DoIfTrig(ParsePtr p)
 {
     int r;
     unsigned syndrome;
@@ -955,11 +755,7 @@ ParsePtr p;
 /*  stack, should we ignore the current line?                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ShouldIgnoreLine(void)
-#else
-int ShouldIgnoreLine()
-#endif
+int ShouldIgnoreLine(void)
 {
     register int i, syndrome;
 
@@ -981,12 +777,7 @@ int ShouldIgnoreLine()
 /*  Verify that current line contains no more tokens.          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int VerifyEoln(ParsePtr p)
-#else
-int VerifyEoln(p)
-ParsePtr p;
-#endif
+int VerifyEoln(ParsePtr p)
 {
     int r;
 
@@ -1012,12 +803,7 @@ ParsePtr p;
 /*  Set the debug options under program control.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoDebug(ParsePtr p)
-#else
-int DoDebug(p)
-ParsePtr p;
-#endif
+int DoDebug(ParsePtr p)
 {
     int err;
     int ch;
@@ -1086,12 +872,7 @@ ParsePtr p;
 /*  reminder is issued.                                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoBanner(ParsePtr p)
-#else
-int DoBanner(p)
-ParsePtr p;
-#endif
+int DoBanner(ParsePtr p)
 {
     int err;
     int c;
@@ -1129,12 +910,7 @@ ParsePtr p;
 /*                                                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoRun(ParsePtr p)
-#else
-int DoRun(p)
-ParsePtr p;
-#endif
+int DoRun(ParsePtr p)
 {
     int r;
 
@@ -1166,12 +942,7 @@ ParsePtr p;
 /*  Flush stdout and stderr                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoFlush(ParsePtr p)
-#else
-int DoFlush(p)
-ParsePtr p;
-#endif
+int DoFlush(ParsePtr p)
 {
     fflush(stdout);
     fflush(stderr);
@@ -1185,12 +956,7 @@ ParsePtr p;
 /*  Handle the EXIT command.                                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void DoExit(ParsePtr p)
-#else
-void DoExit(p)
-ParsePtr p;
-#endif
+void DoExit(ParsePtr p)
 {
     int r;
     Value v;
@@ -1207,12 +973,7 @@ ParsePtr p;
 /*  Issue an error message under program control.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoErrMsg(ParsePtr p)
-#else
-int DoErrMsg(p)
-ParsePtr p;
-#endif
+int DoErrMsg(ParsePtr p)
 {
     TimeTrig tt;
     Trigger t;
@@ -1254,12 +1015,7 @@ static int FoldArray[2][7] = {
     {2024, 2008, 2020, 2004, 2016, 2000, 2012}
 };
 
-#ifdef HAVE_PROTOS
-PUBLIC int CalcMinsFromUTC(int jul, int tim, int *mins, int *isdst)
-#else
-int CalcMinsFromUTC(jul, tim, mins, isdst)
-int jul, tim, *mins, *isdst;
-#endif
+int CalcMinsFromUTC(int jul, int tim, int *mins, int *isdst)
 {
 
 /* Convert jul and tim to an Unix tm struct */
@@ -1287,11 +1043,6 @@ int jul, tim, *mins, *isdst;
     local.tm_isdst = -1;  /* We don't know whether or not dst is in effect */
 
 
-#if !defined(HAVE_MKTIME)
-    loc_t = timelocal(&local);
-    local.tm_isdst = 0;
-    utc_t = timegm(&local);
-#else
     /* Horrible contortions to get minutes from UTC portably */
     loc_t = mktime(&local);
     if (loc_t == -1) return 1;
@@ -1304,21 +1055,10 @@ int jul, tim, *mins, *isdst;
     utc.tm_isdst = 0;
     utc_t = mktime(&utc);
     if (utc_t == -1) return 1;
-#endif
     /* Compute difference between local time and UTC in seconds.
        Be careful, since time_t might be unsigned. */
 
-#ifdef HAVE_DIFFTIME
     tdiff = (int) difftime(loc_t, utc_t);
-#else
-    /* time_t may be unsigned, hence the contortions */
-    if (loc_t < utc_t) {
-	tdiff = - (int) (utc_t - loc_t);
-    } else {
-	tdiff = (int) (loc_t - utc_t);
-    }
-#endif
-
     if (isdst_tmp) tdiff += 60*60;
     if (mins) *mins = (int)(tdiff / 60);
     if (isdst) *isdst = isdst_tmp;
@@ -1340,12 +1080,7 @@ int jul, tim, *mins, *isdst;
 /* A macro safe ONLY if used with arg with no side effects! */
 #define ISBLANK(c) (isspace(c) && (c) != '\n')
 
-#ifdef HAVE_PROTOS
-PUBLIC void FillParagraph(char *s)
-#else
-void FillParagraph(s)
-char *s;
-#endif
+void FillParagraph(char *s)
 {
 
     int line = 0;
@@ -1419,81 +1154,6 @@ char *s;
     }
 }
 
-#if !defined(HAVE_TIMEGM) && !defined(HAVE_MKTIME)
-#define		TGM_SEC		(1)
-#define		TGM_MIN		(60 * TGM_SEC)
-#define		TGM_HR		(60 * TGM_MIN)
-#define		TGM_DAY		(24 * TGM_HR)
-
-#ifdef HAVE_PROTOS
-PRIVATE long time_cheat(int year, int month)
-#else
-static long time_cheat (year, month)
-int year;
-int month;
-#endif
-{
-    long guess = time((long *) NULL);
-    struct tm g;
-    int diff;
-
-    g = *gmtime (&guess);
-    while ((diff = year - g.tm_year) > 0)
-    {
-	guess += diff * (363 - TGM_DAY);
-	g = *gmtime (&guess);
-    }
-    g.tm_mday--;
-    guess -= g.tm_sec * TGM_SEC + g.tm_min * TGM_MIN +
-	g.tm_hour * TGM_HR + g.tm_mday * TGM_DAY;
-    return (guess);
-}
-
-#ifdef HAVE_PROTOS
-PUBLIC long timegm (struct tm *tm)
-#else
-long timegm(tm)
-struct tm *tm;
-#endif
-{
-    long clock = time_cheat (tm->tm_year, tm->tm_mon);
-
-    return (clock + tm->tm_sec * TGM_SEC +
-	    tm->tm_min * TGM_MIN +
-	    tm->tm_hour * TGM_HR +
-	    (tm->tm_mday - 1) * TGM_DAY);
-}
-
-#ifdef HAVE_PROTOS
-PUBLIC long timelocal (struct tm *tm)
-#else
-long timelocal (tm)
-struct tm *tm;
-#endif
-{
-    long zero = 0;
-    struct tm epoch;
-    int tzmin;
-    long clock;
-    struct tm test;
-
-    epoch = *localtime (&zero);
-    tzmin = epoch.tm_hour * 60 + epoch.tm_min;
-    if (tzmin > 0)
-    {
-	tzmin = 24 * 60 - tzmin;
-	if (epoch.tm_year == 70)
-	    tzmin -= 24 * 60;
-    }
-    clock = timegm (tm) + tzmin * TGM_MIN;
-    test = *localtime (&clock);
-
-    if (test.tm_hour != tm->tm_hour)
-	clock -= TGM_HR;
-    return (clock);
-}
-#endif /* NEED_TIMEGM */
-
 /***************************************************************/
 /*                                                             */
 /*  LocalToUTC                                                 */
@@ -1501,12 +1161,7 @@ struct tm *tm;
 /*  Convert a local date/time to a UTC date/time.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void LocalToUTC(int locdate, int loctime, int *utcdate, int *utctime)
-#else
-void LocalToUTC(locdate, loctime, utcdate, utctime)
-int locdate, loctime, *utcdate, *utctime;
-#endif
+void LocalToUTC(int locdate, int loctime, int *utcdate, int *utctime)
 {
     int diff;
     int dummy;
@@ -1533,12 +1188,7 @@ int locdate, loctime, *utcdate, *utctime;
 /*  Convert a UTC date/time to a local date/time.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void UTCToLocal(int utcdate, int utctime, int *locdate, int *loctime)
-#else
-void UTCToLocal(utcdate, utctime, locdate, loctime)
-int utcdate, utctime, *locdate, *loctime;
-#endif
+void UTCToLocal(int utcdate, int utctime, int *locdate, int *loctime)
 {
     int diff;
     int dummy;
@@ -1567,34 +1217,11 @@ int utcdate, utctime, *locdate, *loctime;
 /* contents of the queue.  This does NOT work when the -f      */
 /* command-line flag is supplied.			       */
 /*							       */
-/* For OS/2, this has to be in the main thread. 	       */
-/*							       */
 /***************************************************************/
-#ifdef HAVE_QUEUED
 
-#ifdef __BORLANDC__
-void __cdecl SigIntHandler(int d)
-#else
-#ifdef HAVE_PROTOS
-RETSIGTYPE SigIntHandler(int d)
-#else
-RETSIGTYPE SigIntHandler()
-#endif
-#endif
+void SigIntHandler(int d)
 {
     signal(SIGINT, SigIntHandler);
-#ifdef __BORLANDC__
-    signal(SIGINT, SIG_DFL);
-#else
-#ifdef __OS2__
-    signal(SIGINT, SIG_ACK);
-#endif
-#endif
     GotSigInt();
-
-#ifndef UNIX
     exit(0);
-#endif
 }
-
-#endif /* HAVE_QUEUED */

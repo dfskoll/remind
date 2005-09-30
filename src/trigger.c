@@ -11,18 +11,11 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: trigger.c,v 1.5 2000-02-18 03:46:11 dfs Exp $";
+static char const RCSID[] = "$Id: trigger.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "expr.h"
 #include "protos.h"
@@ -34,10 +27,10 @@ static char const RCSID[] = "$Id: trigger.c,v 1.5 2000-02-18 03:46:11 dfs Exp $"
 #define GOT_YR 4
 #define GOT_WD 8
 
-static int	JYear		ARGS((int jul));
-static int	JMonth		ARGS((int jul));
-static int NextSimpleTrig ARGS((int startdate, Trigger *trig, int *err));
-static int GetNextTriggerDate ARGS((Trigger *trig, int start, int *err, int *nextstart));
+static int JYear(int jul);
+static int JMonth(int jul);
+static int NextSimpleTrig(int startdate, Trigger *trig, int *err);
+static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart);
 
 /***************************************************************/
 /*                                                             */
@@ -51,14 +44,7 @@ static int GetNextTriggerDate ARGS((Trigger *trig, int start, int *err, int *nex
 /*  so that dates with a REP can be handled properly.          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int NextSimpleTrig(int startdate, Trigger *trig, int *err)
-#else
-static int NextSimpleTrig(startdate, trig, err)
-int startdate;
-Trigger *trig;
-int *err;
-#endif
+static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 {
     int typ = 0;
     int d, m, y, j, d2, m2, y2;
@@ -271,12 +257,7 @@ int *err;
 /*  JMonth - Given a Julian date, what's the month?            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int JMonth(int jul)
-#else
-static int JMonth(jul)
-int jul;
-#endif
+static int JMonth(int jul)
 {
     int y, m, d;
     FromJulian(jul, &y, &m, &d);
@@ -288,12 +269,7 @@ int jul;
 /*  JYear - Given a Julian date, what's the year?              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int JYear(int jul)
-#else
-static int JYear(jul)
-int jul;
-#endif
+static int JYear(int jul)
 {
     int y, m, d;
     FromJulian(jul, &y, &m, &d);
@@ -310,15 +286,7 @@ int jul;
 /*  expired, -2 if can't compute trigger date.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart)
-#else
-static int GetNextTriggerDate(trig, start, err, nextstart)
-Trigger *trig;
-int start;
-int *err;
-int *nextstart;
-#endif
+static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart)
 {
     int simple, mod;
 
@@ -380,14 +348,7 @@ int *nextstart;
 /*  today's date.                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ComputeTrigger(int today, Trigger *trig, int *err)
-#else
-int ComputeTrigger(today, trig, err)
-int today;
-Trigger *trig;
-int *err;
-#endif
+int ComputeTrigger(int today, Trigger *trig, int *err)
 {
     int nattempts = 0,
 	start = today,

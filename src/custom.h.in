@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h.in,v 1.7 2000-02-18 03:45:46 dfs Exp $ */
+/* $Id: custom.h.in,v 1.8 2005-09-30 03:29:32 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -176,21 +176,6 @@
 #define IF_NEST (4*sizeof(unsigned int))
 
 /*---------------------------------------------------------------------*/
-/* Do we handle queued reminders?                                      */
-/*---------------------------------------------------------------------*/
-#if defined(UNIX) || defined(__OS2__)
-#define HAVE_QUEUED 1
-#endif
-
-/*---------------------------------------------------------------------*/
-/* Does our C compiler have prototypes?  Override this test if you     */
-/* are using a non-ANSI compiler that nevertheless has prototypes.     */
-/*---------------------------------------------------------------------*/
-#if defined(__STDC__) || defined(__TURBOC__) || defined(__BORLANDC__)
-#define HAVE_PROTOS 1
-#endif
-
-/*---------------------------------------------------------------------*/
 /* How many attempts to resolve a weird date spec?                     */
 /*---------------------------------------------------------------------*/
 #define TRIG_ATTEMPTS 25
@@ -225,9 +210,6 @@
 #define TAG_LEN 32
 
 #define PASSTHRU_LEN 24
-
-#define PUBLIC
-#define PRIVATE static
 
 #define PSBEGIN "# rem2ps begin"
 #define PSEND   "# rem2ps end"

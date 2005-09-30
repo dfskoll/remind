@@ -12,20 +12,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.10 2001-11-06 15:51:37 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.11 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "globals.h"
 #include "protos.h"
@@ -137,7 +130,7 @@ Token NonEnglishToks[] = {
 };
 #endif
 
-PRIVATE int TokStrCmp ARGS((const Token *t, const char *s));
+static int TokStrCmp (const Token *t, const char *s);
 
 /***************************************************************/
 /*                                                             */
@@ -147,13 +140,7 @@ PRIVATE int TokStrCmp ARGS((const Token *t, const char *s));
 /*  left square bracket, return a T_Illegal type.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *FindInitialToken(Token *tok, char *s)
-#else
-char *FindInitialToken(tok, s)
-Token *tok;
-char *s;
-#endif
+char *FindInitialToken(Token *tok, char *s)
 {
     DynamicBuffer buf;
     DBufInit(&buf);
@@ -180,13 +167,7 @@ char *s;
 /*  Given a string, which token is it?                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void FindToken(const char *s, Token *tok)
-#else
-void FindToken(s, tok)
-char *s;
-Token *tok;
-#endif
+void FindToken(const char *s, Token *tok)
 {
     register int top, bot, mid, r;
     int l;
@@ -268,13 +249,7 @@ Token *tok;
 /*  Rep - *n                                                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void FindNumericToken(const char *s, Token *t)
-#else
-void FindNumericToken(s, t)
-char *s;
-Token *t;
-#endif
+void FindNumericToken(const char *s, Token *t)
 {
     int mult = 1, hour, min;
 
@@ -353,13 +328,7 @@ Token *t;
 /*  Compare a token to a string.                               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int TokStrCmp(const Token *t, const char *s)
-#else
-static int TokStrCmp(t, s)
-Token *t;
-char *s;
-#endif
+static int TokStrCmp(const Token *t, const char *s)
 {
     register int r;
     char *tk = t->name;

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.17 2005-09-28 02:39:14 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.18 2005-09-30 03:29:32 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -19,40 +19,15 @@ static char const RCSID[] = "$Id: queue.c,v 1.17 2005-09-28 02:39:14 dfs Exp $";
 #endif
 
 /* We only want object code generated if we have queued reminders */
-#ifdef HAVE_QUEUED
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
-
-#ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
-#endif
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-#if defined(__OS2__) || defined(__MSDOS__)
-#include <io.h>
-#if defined(__BORLANDC__)
-#include <dos.h>
-#endif
-#include <process.h>
-#endif
 
 #include "globals.h"
 #include "err.h"
@@ -78,12 +53,12 @@ static QueuedRem *QueueHead;
 static time_t FileModTime;
 static struct stat StatBuf;
 
-PRIVATE void CheckInitialFile ARGS ((void));
-PRIVATE int CalculateNextTime ARGS ((QueuedRem *q));
-PRIVATE QueuedRem *FindNextReminder ARGS ((void));
-PRIVATE int CalculateNextTimeUsingSched ARGS ((QueuedRem *q));
-PRIVATE void DaemonWait ARGS ((unsigned int sleeptime));
-PRIVATE void reread ARGS((void));
+static void CheckInitialFile (void);
+static int CalculateNextTime (QueuedRem *q);
+static QueuedRem *FindNextReminder (void);
+static int CalculateNextTimeUsingSched (QueuedRem *q);
+static void DaemonWait (unsigned int sleeptime);
+static void reread (void);
 
 /***************************************************************/
 /*                                                             */
@@ -93,16 +68,8 @@ PRIVATE void reread ARGS((void));
 /*  enabled.                                                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int QueueReminder(ParsePtr p, Trigger *trig,
+int QueueReminder(ParsePtr p, Trigger *trig,
 			 TimeTrig *tim, const char *sched)
-#else
-int QueueReminder(p, trig, tim, sched)
-ParsePtr p;
-Trigger *trig,
-TimeTrig *tim;
-char *sched;
-#endif
 {
     QueuedRem *qelem;
 
@@ -140,11 +107,7 @@ char *sched;
 /*  Handle the issuing of queued reminders in the background   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void HandleQueuedReminders(void)
-#else
-void HandleQueuedReminders()
-#endif
+void HandleQueuedReminders(void)
 {
     QueuedRem *q = QueueHead;
     long TimeToSleep;
@@ -189,11 +152,7 @@ void HandleQueuedReminders()
 	q = q->next;
     }
 
-#ifdef __BORLANDC__
-    signal(SIGINT, SigIntHandler);
-#else
     if (!DontFork || Daemon) signal(SIGINT, SigIntHandler);
-#endif
 
     /* Sit in a loop, issuing reminders when necessary */
     while(1) {
@@ -269,9 +228,6 @@ void HandleQueuedReminders()
 	/* Calculate the next trigger time */
 	q->tt.nexttime = CalculateNextTime(q);
     }
-#ifdef __BORLANDC__
-    signal(SIGINT, SIG_DFL);
-#endif
     exit(0);
 }
 
@@ -287,12 +243,7 @@ void HandleQueuedReminders()
 /*  fails, revert to AT with delta and rep.                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CalculateNextTime(QueuedRem *q)
-#else
-static int CalculateNextTime(q)
-QueuedRem *q;
-#endif
+static int CalculateNextTime(QueuedRem *q)
 {
     int tim = q->tt.ttime;
     int rep = q->tt.rep;
@@ -329,11 +280,7 @@ QueuedRem *q;
 /*  Find the next reminder to trigger                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE QueuedRem *FindNextReminder(void)
-#else
-static QueuedRem *FindNextReminder()
-#endif
+static QueuedRem *FindNextReminder(void)
 {
     QueuedRem *q = QueueHead;
     QueuedRem *ans = NULL;
@@ -358,11 +305,7 @@ static QueuedRem *FindNextReminder()
 /* This will be necessary for OS/2 multithreaded.	       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
 void GotSigInt(void)
-#else
-void GotSigInt()
-#endif
 {
     QueuedRem *q = QueueHead;
 
@@ -394,11 +337,7 @@ void GotSigInt()
 /*  daemon.                                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void CheckInitialFile(void)
-#else
-static void CheckInitialFile()
-#endif
+static void CheckInitialFile(void)
 {
     /* If date has rolled around, or file has changed, spawn a new version. */
     time_t tim = FileModTime;
@@ -418,12 +357,7 @@ static void CheckInitialFile()
 /*  Call the scheduling function.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CalculateNextTimeUsingSched(QueuedRem *q)
-#else
-static int CalculateNextTimeUsingSched(q)
-QueuedRem *q;
-#endif
+static int CalculateNextTimeUsingSched(QueuedRem *q)
 {
     /* Use LineBuffer for temp. string storage. */
     int r;
@@ -480,12 +414,7 @@ QueuedRem *q;
 /*  Sleep or read command from stdin in "daemon -1" mode       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DaemonWait(unsigned int sleeptime)
-#else
-static DaemonWait(sleeptime)
-unsigned int sleeptime;
-#endif
+static void DaemonWait(unsigned int sleeptime)
 {
     fd_set readSet;
     struct timeval timeout;
@@ -552,13 +481,8 @@ unsigned int sleeptime;
 /*  Restarts Remind if date rolls over or REREAD cmd received  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void reread(void)
-#else
-static reread()
-#endif
+static void reread(void)
 {
     execvp(ArgV[0], ArgV);
 }
 
-#endif /* HAVE_QUEUED from way at the top */

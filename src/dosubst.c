@@ -12,20 +12,14 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.10 2000-02-18 03:45:48 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.11 2005-09-30 03:29:32 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
 
 #include "globals.h"
 #include "err.h"
@@ -52,16 +46,7 @@ static char TOMORROW[] = L_TOMORROW;
 /*  mode==CAL_MODE, process the %" sequence.                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode)
-#else
-int DoSubst(p, dbuf, t, tt, jul, mode)
-ParsePtr p;
-DynamicBuffer *dbuf;
-Trigger *t;
-TimeTrig *tt;
-int jul, mode;
-#endif
+int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode)
 {
     int diff = jul - JulianToday;
     int curtime = SystemTime(0) / 60;
@@ -92,14 +77,14 @@ int jul, mode;
     mplu = (mdiff == 1 ? "" : L_MPLU);
 #endif /* L_MPLU_OVER */
 
-#ifdef L_HPLU_OVER 
+#ifdef L_HPLU_OVER
     L_HPLU_OVER
 #else /* L_HPLU_OVER */
     hplu = (hdiff == 1 ? "" : L_HPLU);
 #endif /* L_HPLU_OVER */
 
     when = (tdiff < 0 ? L_AGO : L_FROMNOW);
-   
+
     h = tim / 60;
     min = tim % 60;
 
@@ -109,7 +94,7 @@ int jul, mode;
     pm = (h < 12) ? L_AM : L_PM;
 #endif
     hh = (h == 12) ? 12 : h % 12;
-   
+
     ch = curtime / 60;
     cmin = curtime % 60;
 
@@ -127,17 +112,17 @@ int jul, mode;
     case 1:
     case 21:
     case 31: plu = "st"; break;
-	
+
     case 2:
     case 22: plu = "nd"; break;
-      
+
     case 3:
     case 23: plu = "rd"; break;
-      
+
     default: plu = "th"; break;
     }
-#endif      
-   
+#endif
+
     while(1) {
 	c = ParseChar(p, &err, 0);
 	if (err) {
@@ -168,10 +153,10 @@ int jul, mode;
 	if (diff <= 1) {
 	    switch(UPPER(c)) {
 #ifndef L_NOTOMORROW_A
-            case 'A':
+	    case 'A':
 #endif
 #ifndef L_NOTOMORROW_B
-            case 'B':
+	    case 'B':
 #endif
 #ifndef L_NOTOMORROW_C
 	    case 'C':
@@ -210,35 +195,35 @@ int jul, mode;
 		SHIP_OUT(s);
 		done = 1;
 		break;
-		     
-            default: done = 0;
+
+	    default: done = 0;
 	    }
 	}
-     
+
 	if (!done) switch(UPPER(c)) {
 	case 'A':
 #ifdef L_A_OVER
 	    L_A_OVER
-#else	 
+#else
 	    sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
 		    MonthName[m], y);
 #endif
-            SHIP_OUT(s);
+	    SHIP_OUT(s);
 	    break;
-	       
+
 	case 'B':
 #ifdef L_B_OVER
 	    L_B_OVER
-#else	 
+#else
 	    sprintf(s, L_INXDAYS, diff);
 #endif
 	    SHIP_OUT(s);
-            break;
-	       
+	    break;
+
 	case 'C':
 #ifdef L_C_OVER
 	    L_C_OVER
-#else	 
+#else
 	    sprintf(s, "%s %s", L_ON, DayName[jul%7]);
 #endif
 	    SHIP_OUT(s);
@@ -247,7 +232,7 @@ int jul, mode;
 	case 'D':
 #ifdef L_D_OVER
 	    L_D_OVER
-#else	 
+#else
 	    sprintf(s, "%d", d);
 #endif
 	    SHIP_OUT(s);
@@ -256,7 +241,7 @@ int jul, mode;
 	case 'E':
 #ifdef L_E_OVER
 	    L_E_OVER
-#else	 
+#else
 	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DATESEP,
 		    m+1, DATESEP, y);
 #endif
@@ -266,7 +251,7 @@ int jul, mode;
 	case 'F':
 #ifdef L_F_OVER
 	    L_F_OVER
-#else	 
+#else
 	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DATESEP, d, DATESEP, y);
 #endif
 	    SHIP_OUT(s);
@@ -275,7 +260,7 @@ int jul, mode;
 	case 'G':
 #ifdef L_G_OVER
 	    L_G_OVER
-#else	 
+#else
 	    sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
 #endif
 	    SHIP_OUT(s);
@@ -284,7 +269,7 @@ int jul, mode;
 	case 'H':
 #ifdef L_H_OVER
 	    L_H_OVER
-#else	 
+#else
 	    sprintf(s, "%s %02d%c%02d", L_ON, d, DATESEP, m+1);
 #endif
 	    SHIP_OUT(s);
@@ -293,7 +278,7 @@ int jul, mode;
 	case 'I':
 #ifdef L_I_OVER
 	    L_I_OVER
-#else	 
+#else
 	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DATESEP, d);
 #endif
 	    SHIP_OUT(s);
@@ -461,9 +446,9 @@ int jul, mode;
 #ifdef L_1_OVER
 	    L_1_OVER
 #else
-	    if (tdiff == 0) 
+	    if (tdiff == 0)
 		sprintf(s, "%s", L_NOW);
-	    else if (hdiff == 0) 
+	    else if (hdiff == 0)
 		sprintf(s, "%d %s%s %s", mdiff, L_MINUTE, mplu, when);
 	    else if (mdiff == 0)
 		sprintf(s, "%d %s%s %s", hdiff, L_HOUR, hplu, when);
@@ -583,10 +568,10 @@ int jul, mode;
 	    SHIP_OUT(s);
 	    break;
 
-	case '_': 
-            if (mode != CAL_MODE && !MsgCommand)
+	case '_':
+	    if (mode != CAL_MODE && !MsgCommand)
 		sprintf(s, "%s", NL);
-            else
+	    else
 		sprintf(s, " ");
 	    SHIP_OUT(s);
 	    break;
@@ -653,7 +638,7 @@ int jul, mode;
 
     return OK;
 }
-   
+
 
 /***************************************************************/
 /*                                                             */
@@ -664,16 +649,8 @@ int jul, mode;
 /*  default triggers and a mode of NORMAL_MODE.                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoSubstFromString(char *source, DynamicBuffer *dbuf,
+int DoSubstFromString(char *source, DynamicBuffer *dbuf,
 			     int jul, int tim)
-#else
-int DoSubstFromString(source, dbuf, jul, tim)
-char *source;
-DynamicBuffer *dbuf;
-int jul;
-int tim;
-#endif
 {
     Trigger tempTrig;
     TimeTrig tempTime;
@@ -686,7 +663,7 @@ int tim;
     tempP.allownested = 0;
     tempTrig.typ = MSG_TYPE;
     tempTime.ttime = tim;
-   
+
     r = DoSubst(&tempP, dbuf, &tempTrig, &tempTime, jul, NORMAL_MODE);
     DestroyParser(&tempP);
     return r;

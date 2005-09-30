@@ -12,33 +12,22 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.9 2000-02-18 03:45:55 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.10 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 
 #ifdef HAVE_SYS_FILE_H
 #include <sys/file.h>
 #endif
 
-#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif
 
 #include <sys/stat.h>
 
@@ -46,13 +35,6 @@ static char const RCSID[] = "$Id: funcs.c,v 1.9 2000-02-18 03:45:55 dfs Exp $";
 #include <sys/time.h>
 #else
 #include <time.h>
-#endif
-
-#if defined(__MSDOS__) || defined(__OS2__)
-#include <io.h>
-#define R_OK 4
-#define W_OK 2
-#define X_OK 1
 #endif
 
 #ifndef R_OK
@@ -69,97 +51,77 @@ static char const RCSID[] = "$Id: funcs.c,v 1.9 2000-02-18 03:45:55 dfs Exp $";
 #include "version.h"
 
 /* Function prototypes */
-PRIVATE	int	FAbs		ARGS ((void));
-PRIVATE	int	FAccess		ARGS ((void));
-PRIVATE int     FArgs		ARGS ((void));
-PRIVATE	int	FAsc		ARGS ((void));
-PRIVATE	int	FBaseyr		ARGS ((void));
-PRIVATE	int	FChar		ARGS ((void));
-PRIVATE	int	FChoose		ARGS ((void));
-PRIVATE	int	FCoerce		ARGS ((void));
-PRIVATE	int	FDate		ARGS ((void));
-PRIVATE	int	FDay		ARGS ((void));
-PRIVATE	int	FDaysinmon	ARGS ((void));
-PRIVATE	int	FDefined	ARGS ((void));
-PRIVATE	int	FDosubst	ARGS ((void));
-PRIVATE	int	FEasterdate	ARGS ((void));
-PRIVATE int	FFiledate	ARGS ((void));
-PRIVATE	int	FFiledir	ARGS ((void));
-PRIVATE	int	FFilename	ARGS ((void));
-PRIVATE	int	FGetenv		ARGS ((void));
-PRIVATE int     FHebdate	ARGS ((void));
-PRIVATE int     FHebday		ARGS ((void));
-PRIVATE int     FHebmon		ARGS ((void));
-PRIVATE int     FHebyear	ARGS ((void));
-PRIVATE	int	FHour		ARGS ((void));
-PRIVATE	int	FIif		ARGS ((void));
-PRIVATE	int	FIndex		ARGS ((void));
-PRIVATE	int	FIsdst		ARGS ((void));
-PRIVATE	int	FIsomitted	ARGS ((void));
-PRIVATE	int	FLanguage	ARGS ((void));
-PRIVATE	int	FMax		ARGS ((void));
-PRIVATE	int	FMin		ARGS ((void));
-PRIVATE	int	FMinute		ARGS ((void));
-PRIVATE	int	FMinsfromutc	ARGS ((void));
-PRIVATE	int	FMoondate	ARGS ((void));
-PRIVATE	int	FMoonphase	ARGS ((void));
-PRIVATE	int	FMoontime	ARGS ((void));
-PRIVATE	int	FMon		ARGS ((void));
-PRIVATE	int	FMonnum		ARGS ((void));
-PRIVATE	int	FOrd		ARGS ((void));
-PRIVATE	int	FOstype 	ARGS ((void));
-PRIVATE	int	FPlural		ARGS ((void));
-PRIVATE	int	FSgn		ARGS ((void));
-PRIVATE int	FPsmoon		ARGS ((void));
-PRIVATE int	FPsshade	ARGS ((void));
-PRIVATE	int	FShell		ARGS ((void));
-PRIVATE	int	FStrlen		ARGS ((void));
-PRIVATE	int	FSubstr		ARGS ((void));
-PRIVATE	int	FDawn		ARGS ((void));
-PRIVATE	int	FDusk	 	ARGS ((void));
-PRIVATE	int	FSunset		ARGS ((void));
-PRIVATE	int	FSunrise	ARGS ((void));
-PRIVATE	int	FTime		ARGS ((void));
-PRIVATE	int	FTrigdate	ARGS ((void));
-PRIVATE	int	FTrigtime	ARGS ((void));
-PRIVATE	int	FTrigvalid	ARGS ((void));
-PRIVATE	int	FTypeof		ARGS ((void));
-PRIVATE	int	FUpper		ARGS ((void));
-PRIVATE	int	FValue		ARGS ((void));
-PRIVATE	int	FVersion	ARGS ((void));
-PRIVATE	int	FWkday		ARGS ((void));
-PRIVATE	int	FWkdaynum	ARGS ((void));
-PRIVATE	int	FYear		ARGS ((void));
-PRIVATE int	FIsleap         ARGS ((void));
-PRIVATE int	FLower          ARGS ((void));
-PRIVATE int	FNow            ARGS ((void));
-PRIVATE int	FRealnow            ARGS ((void));
-PRIVATE int	FRealtoday      ARGS ((void));
-PRIVATE int	FToday          ARGS ((void));
-PRIVATE int	FTrigger        ARGS ((void));
-PRIVATE int	CheckArgs       ARGS ((Operator *f, int nargs));
-PRIVATE int	CleanUpAfterFunc ARGS ((void));
-PRIVATE int	SunStuff	ARGS ((int rise, double cosz, int jul));
-
-#if defined(__MSDOS__) || defined(__BORLANDC__) || defined(AMIGA)
-PRIVATE FILE *os_popen  ARGS((char *cmd, char *mode));
-PRIVATE int   os_pclose ARGS((FILE *fp));
-#define POPEN os_popen
-#define PCLOSE os_pclose
-
-#if defined(_MSC_VER)
-#define popen _popen
-#define pclose _pclose
-#endif
-
-#elif defined(_MSC_VER)
-#define POPEN _popen
-#define PCLOSE _pclose
-
-#else
-#define POPEN popen
-#define PCLOSE pclose
-#endif
+static	int	FAbs		(void);
+static	int	FAccess		(void);
+static int     FArgs		(void);
+static	int	FAsc		(void);
+static	int	FBaseyr		(void);
+static	int	FChar		(void);
+static	int	FChoose		(void);
+static	int	FCoerce		(void);
+static	int	FDate		(void);
+static	int	FDay		(void);
+static	int	FDaysinmon	(void);
+static	int	FDefined	(void);
+static	int	FDosubst	(void);
+static	int	FEasterdate	(void);
+static int	FFiledate	(void);
+static	int	FFiledir	(void);
+static	int	FFilename	(void);
+static	int	FGetenv		(void);
+static int     FHebdate	(void);
+static int     FHebday		(void);
+static int     FHebmon		(void);
+static int     FHebyear	(void);
+static	int	FHour		(void);
+static	int	FIif		(void);
+static	int	FIndex		(void);
+static	int	FIsdst		(void);
+static	int	FIsomitted	(void);
+static	int	FLanguage	(void);
+static	int	FMax		(void);
+static	int	FMin		(void);
+static	int	FMinute		(void);
+static	int	FMinsfromutc	(void);
+static	int	FMoondate	(void);
+static	int	FMoonphase	(void);
+static	int	FMoontime	(void);
+static	int	FMon		(void);
+static	int	FMonnum		(void);
+static	int	FOrd		(void);
+static	int	FOstype 	(void);
+static	int	FPlural		(void);
+static	int	FSgn		(void);
+static int	FPsmoon		(void);
+static int	FPsshade	(void);
+static	int	FShell		(void);
+static	int	FStrlen		(void);
+static	int	FSubstr		(void);
+static	int	FDawn		(void);
+static	int	FDusk	 	(void);
+static	int	FSunset		(void);
+static	int	FSunrise	(void);
+static	int	FTime		(void);
+static	int	FTrigdate	(void);
+static	int	FTrigtime	(void);
+static	int	FTrigvalid	(void);
+static	int	FTypeof		(void);
+static	int	FUpper		(void);
+static	int	FValue		(void);
+static	int	FVersion	(void);
+static	int	FWkday		(void);
+static	int	FWkdaynum	(void);
+static	int	FYear		(void);
+static int	FIsleap         (void);
+static int	FLower          (void);
+static int	FNow            (void);
+static int	FRealnow            (void);
+static int	FRealtoday      (void);
+static int	FToday          (void);
+static int	FTrigger        (void);
+static int	CheckArgs       (Operator *f, int nargs);
+static int	CleanUpAfterFunc (void);
+static int	SunStuff	(int rise, double cosz, int jul);
 
 /* "Overload" the struct Operator definition */
 #define NO_MAX 127
@@ -284,13 +246,7 @@ int NumFuncs = sizeof(Func) / sizeof(Operator) ;
 /*  of arguments supplied.                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int CallFunc(Operator *f, int nargs)
-#else
-int CallFunc(f, nargs)
-Operator *f;
-int nargs;
-#endif
+int CallFunc(Operator *f, int nargs)
 {
     register int r = CheckArgs(f, nargs);
     int i;
@@ -340,13 +296,7 @@ int nargs;
 /*  for a function.                                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CheckArgs(Operator *f, int nargs)
-#else
-static int CheckArgs(f, nargs)
-Operator *f;
-int nargs;
-#endif
+static int CheckArgs(Operator *f, int nargs)
 {
     if (nargs < f->MINARGS) return E_2FEW_ARGS;
     if (nargs > f->MAXARGS && f->MAXARGS != NO_MAX) return E_2MANY_ARGS;
@@ -360,11 +310,7 @@ int nargs;
 /*  args and push the new value.                               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CleanUpAfterFunc(void)
-#else
-static int CleanUpAfterFunc()
-#endif
+static int CleanUpAfterFunc(void)
 {
     Value v;
     int i;
@@ -384,12 +330,7 @@ static int CleanUpAfterFunc()
 /*  Return a string value from a function.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int RetStrVal(const char *s)
-#else
-static int RetStrVal(s)
-char *s;
-#endif
+static int RetStrVal(const char *s)
 {
     RetVal.type = STR_TYPE;
     if (!s) {
@@ -411,11 +352,7 @@ char *s;
 /*  FStrlen - string length                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FStrlen(void)
-#else
-static int FStrlen()
-#endif
+static int FStrlen(void)
 {
     Value *v = &ARG(0);
     if (v->type != STR_TYPE) return E_BAD_TYPE;
@@ -429,11 +366,7 @@ static int FStrlen()
 /*  FBaseyr - system base year                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FBaseyr(void)
-#else
-static int FBaseyr()
-#endif
+static int FBaseyr(void)
 {
     RetVal.type = INT_TYPE;
     RetVal.v.val = BASE;
@@ -445,11 +378,7 @@ static int FBaseyr()
 /*  FDate - make a date from year, month, day.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FDate(void)
-#else
-static int FDate()
-#endif
+static int FDate(void)
 {
     int y, m, d;
     if (ARG(0).type != INT_TYPE ||
@@ -471,11 +400,7 @@ static int FDate()
 /*  FCoerce - type coercion function.                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FCoerce(void)
-#else
-static int FCoerce()
-#endif
+static int FCoerce(void)
 {
     char *s;
 
@@ -498,11 +423,7 @@ static int FCoerce()
 /*  FMax - select maximum from a list of args.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FMax(void)
-#else
-static int FMax()
-#endif
+static int FMax(void)
 {
     Value *maxptr;
     int i;
@@ -528,11 +449,7 @@ static int FMax()
 /*  FMin - select minimum from a list of args.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FMin(void)
-#else
-static int FMin()
-#endif
+static int FMin(void)
 {
     Value *minptr;
     int i;
@@ -558,11 +475,7 @@ static int FMin()
 /*  FAsc - ASCII value of first char of string                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FAsc(void)
-#else
-static int FAsc()
-#endif
+static int FAsc(void)
 {
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -575,11 +488,7 @@ static int FAsc()
 /*  FChar - build a string from ASCII values                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FChar(void)
-#else
-static int FChar()
-#endif
+static int FChar(void)
 {
 
     int i, len;
@@ -634,11 +543,7 @@ static int FChar()
 /*  FMon - get month (string)                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FDay(void)
-#else
-static int FDay()
-#endif
+static int FDay(void)
 {
     int y, m, d;
     if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
@@ -656,11 +561,7 @@ static int FDay()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FMonnum(void)
-#else
-static int FMonnum()
-#endif
+static int FMonnum(void)
 {
     int y, m, d;
     if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
@@ -678,11 +579,7 @@ static int FMonnum()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FYear(void)
-#else
-static int FYear()
-#endif
+static int FYear(void)
 {
     int y, m, d;
     if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
@@ -700,11 +597,7 @@ static int FYear()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FWkdaynum(void)
-#else
-static int FWkdaynum()
-#endif
+static int FWkdaynum(void)
 {
     if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -714,11 +607,7 @@ static int FWkdaynum()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FWkday(void)
-#else
-static int FWkday()
-#endif
+static int FWkday(void)
 {
     char *s;
 
@@ -734,11 +623,7 @@ static int FWkday()
     return RetStrVal(s);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FMon(void)
-#else
-static int FMon()
-#endif
+static int FMon(void)
 {
     char *s;
     int y, m, d;
@@ -771,11 +656,7 @@ static int FMon()
 /*  FTime - create a time from hour and minute                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FHour(void)
-#else
-static int FHour()
-#endif
+static int FHour(void)
 {
     if (ARG(0).type != TIM_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -783,11 +664,7 @@ static int FHour()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FMinute(void)
-#else
-static int FMinute()
-#endif
+static int FMinute(void)
 {
     if (ARG(0).type != TIM_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -795,11 +672,7 @@ static int FMinute()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FTime(void)
-#else
-static int FTime()
-#endif
+static int FTime(void)
 {
     int h, m;
 
@@ -820,11 +693,7 @@ static int FTime()
 /*  FSgn - signum function                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FAbs(void)
-#else
-static int FAbs()
-#endif
+static int FAbs(void)
 {
     int v;
 
@@ -835,11 +704,7 @@ static int FAbs()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FSgn(void)
-#else
-static int FSgn()
-#endif
+static int FSgn(void)
 {
     int v;
 
@@ -859,11 +724,7 @@ static int FSgn()
 /*  EG - ord(2) == "2nd", etc.                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FOrd(void)
-#else
-static int FOrd()
-#endif
+static int FOrd(void)
 {
     int t, u, v;
     char *s;
@@ -891,11 +752,7 @@ static int FOrd()
 /*  plural(n, str1, str2) --> "str1" or "str2"                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FPlural(void)
-#else
-static int FPlural()
-#endif
+static int FPlural(void)
 {
     if (ARG(0).type != INT_TYPE) return E_BAD_TYPE;
 
@@ -937,11 +794,7 @@ static int FPlural()
 /*  from 1.                                                    */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FChoose(void)
-#else
-static int FChoose()
-#endif
+static int FChoose(void)
 {
     int v;
 
@@ -958,11 +811,7 @@ static int FChoose()
 /*  FVersion - version of Remind                               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FVersion(void)
-#else
-static int FVersion()
-#endif
+static int FVersion(void)
 {
     return RetStrVal(VERSION);
 }
@@ -973,29 +822,9 @@ static int FVersion()
 /*  (UNIX, OS/2, or MSDOS)                                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FOstype(void)
-#else
-static int FOstype()
-#endif
+static int FOstype(void)
 {
-#ifdef UNIX
     return RetStrVal("UNIX");
-#else
-#ifdef __OS2__
-    return RetStrVal(OS2MODE ? "OS/2" : "MSDOS");
-#else
-#ifdef QDOS
-    return RetStrVal("QDOS / SMSQ");
-#else
-#ifdef AMIGA
-    return RetStrVal("AmigaDOS");
-#else
-    return RetStrVal("MSDOS");
-#endif
-#endif
-#endif
-#endif
 }
 
 /***************************************************************/
@@ -1004,11 +833,7 @@ static int FOstype()
 /*  FLower - convert string to lower-case                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FUpper(void)
-#else
-static int FUpper()
-#endif
+static int FUpper(void)
 {
     char *s;
 
@@ -1022,11 +847,7 @@ static int FUpper()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FLower(void)
-#else
-static int FLower()
-#endif
+static int FLower(void)
 {
     char *s;
 
@@ -1048,44 +869,28 @@ static int FLower()
 /*  FRealnow - return the true system time                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FToday(void)
-#else
-static int FToday()
-#endif
+static int FToday(void)
 {
     RetVal.type = DATE_TYPE;
     RetVal.v.val = JulianToday;
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FRealtoday(void)
-#else
-static int FRealtoday()
-#endif
+static int FRealtoday(void)
 {
     RetVal.type = DATE_TYPE;
     RetVal.v.val = RealToday;
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FNow(void)
-#else
-static int FNow()
-#endif
+static int FNow(void)
 {
     RetVal.type = TIM_TYPE;
     RetVal.v.val = (int) ( SystemTime(0) / 60L );
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FRealnow(void)
-#else
-static int FRealnow()
-#endif
+static int FRealnow(void)
 {
     RetVal.type = TIM_TYPE;
     RetVal.v.val = (int) ( SystemTime(1) / 60L );
@@ -1096,11 +901,7 @@ static int FRealnow()
 /*  FGetenv - get the value of an environment variable.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FGetenv(void)
-#else
-static int FGetenv()
-#endif
+static int FGetenv(void)
 {
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     return RetStrVal(getenv(ARG(0).v.str));
@@ -1114,11 +915,7 @@ static int FGetenv()
 /*  it is returned if variable is undefined.                   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FValue(void)
-#else
-static int FValue()
-#endif
+static int FValue(void)
 {
     Var *v;
 
@@ -1146,11 +943,7 @@ static int FValue()
 /*  Return 1 if a variable is defined, 0 if it is not.         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FDefined(void)
-#else
-static int FDefined()
-#endif
+static int FDefined(void)
 {
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
 
@@ -1171,33 +964,21 @@ static int FDefined()
 /*  vars.                                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FTrigdate(void)
-#else
-static int FTrigdate()
-#endif
+static int FTrigdate(void)
 {
     RetVal.type = DATE_TYPE;
     RetVal.v.val = LastTriggerDate;
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FTrigvalid(void)
-#else
-static int FTrigvalid()
-#endif
+static int FTrigvalid(void)
 {
     RetVal.type = INT_TYPE;
     RetVal.v.val = LastTrigValid;
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FTrigtime(void)
-#else
-static int FTrigtime()
-#endif
+static int FTrigtime(void)
 {
     RetVal.type = TIM_TYPE;
     RetVal.v.val = LastTriggerTime;
@@ -1211,11 +992,7 @@ static int FTrigtime()
 /*  Returns the number of days in mon,yr                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FDaysinmon(void)
-#else
-static int FDaysinmon()
-#endif
+static int FDaysinmon(void)
 {
     if (ARG(0).type != INT_TYPE || ARG(1).type != INT_TYPE) return E_BAD_TYPE;
 
@@ -1235,11 +1012,7 @@ static int FDaysinmon()
 /*  Return 1 if year is a leap year, zero otherwise.           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FIsleap(void)
-#else
-static int FIsleap()
-#endif
+static int FIsleap(void)
 {
     int y, m, d;
 
@@ -1263,11 +1036,7 @@ static int FIsleap()
 /*  Put out a date in a format suitable for triggering.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FTrigger(void)
-#else
-static int FTrigger()
-#endif
+static int FTrigger(void)
 {
     int y, m, d;
     int date, time;
@@ -1306,11 +1075,7 @@ static int FTrigger()
 /*  If run is disabled, will not be executed.                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FShell(void)
-#else
-static int FShell()
-#endif
+static int FShell(void)
 {
     DynamicBuffer buf;
     int ch, r;
@@ -1327,7 +1092,7 @@ static int FShell()
 	if (ARG(1).type != INT_TYPE) return E_BAD_TYPE;
 	maxlen = ARG(1).v.val;
     }
-    fp = POPEN(ARG(0).v.str, "r");
+    fp = popen(ARG(0).v.str, "r");
     if (!fp) return E_IO_ERR;
     while (1) {
 	ch = getc(fp);
@@ -1336,7 +1101,7 @@ static int FShell()
 	}
 	if (isspace(ch)) ch = ' ';
 	if (DBufPutc(&buf, (char) ch) != OK) {
-	    PCLOSE(fp);
+	    pclose(fp);
 	    DBufFree(&buf);
 	    return E_NO_MEM;
 	}
@@ -1349,12 +1114,8 @@ static int FShell()
     if (DBufLen(&buf) && DBufValue(&buf)[DBufLen(&buf)-1] == ' ') {
 	DBufValue(&buf)[DBufLen(&buf)-1] = 0;
     }
-#if defined(__MSDOS__) || defined(__OS2__)
-    if (DBufLen(&buf) > 1 && DBufValue(&buf)[DBufLen(&buf)-2] == ' ') {
-	DBufValue(&buf)[DBufLen(&buf)-2] = 0;
-    }
-#endif
-    PCLOSE(fp);
+
+    pclose(fp);
     r = RetStrVal(DBufValue(&buf));
     DBufFree(&buf);
     return r;
@@ -1367,11 +1128,7 @@ static int FShell()
 /*  Is a date omitted?                                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FIsomitted(void)
-#else
-static int FIsomitted()
-#endif
+static int FIsomitted(void)
 {
     if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -1386,11 +1143,7 @@ static int FIsomitted()
 /*  The substr function.  We destroy the value on the stack.   */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FSubstr(void)
-#else
-static int FSubstr()
-#endif
+static int FSubstr(void)
 {
     char *s, *t;
     int start, end;
@@ -1424,11 +1177,7 @@ static int FSubstr()
 /*  The index of one string embedded in another.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FIndex(void)
-#else
-static int FIndex()
-#endif
+static int FIndex(void)
 {
     char *s;
     int start;
@@ -1466,11 +1215,7 @@ static int FIndex()
 /*  The IIF function.                                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FIif(void)
-#else
-static int FIif()
-#endif
+static int FIif(void)
 {
     int istrue;
     int arg;
@@ -1503,11 +1248,7 @@ static int FIif()
 /*  Return name of current file                                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FFilename(void)
-#else
-static int FFilename()
-#endif
+static int FFilename(void)
 {
     return RetStrVal(FileName);
 }
@@ -1519,11 +1260,7 @@ static int FFilename()
 /*  Return directory of current file                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FFiledir(void)
-#else
-static int FFiledir()
-#endif
+static int FFiledir(void)
 {
     char *s;
     DynamicBuffer buf;
@@ -1538,14 +1275,7 @@ static int FFiledir()
     }
 
     s = DBufValue(&buf) + DBufLen(&buf) - 1;
-#if defined(__OS2__) || defined(__MSDOS__)
-    /* Both '\\' and '/' can be part of path; handle drive letters. */
-    while (s > DBufValue(&buf) && !strchr("\\/:", *s)) s--;
-    if (*s == ':') { s[1] = '.'; s += 2; }
-    if (s > DBufValue(&buf)) *s = '/';
-#else
     while (s > DBufValue(&buf) && *s != '/') s--;
-#endif
     if (*s == '/') {
 	*s = 0;
 	r = RetStrVal(DBufValue(&buf));
@@ -1560,11 +1290,7 @@ static int FFiledir()
 /*  The UNIX access() system call.                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FAccess(void)
-#else
-static int FAccess()
-#endif
+static int FAccess(void)
 {
     int amode;
     char *s;
@@ -1592,69 +1318,6 @@ static int FAccess()
     return OK;
 }
 
-#if defined(__MSDOS__) || defined(__BORLANDC__) || defined(AMIGA)
-/***************************************************************/
-/*                                                             */
-/*  popen and pclose                                           */
-/*                                                             */
-/*  These are some rather brain-dead kludges for MSDOS.        */
-/*  They are just sufficient for the shell() function, and     */
-/*  should NOT be viewed as general-purpose replacements       */
-/*  for the UNIX system calls.                                 */
-/*                                                             */
-/***************************************************************/
-#ifdef __TURBOC__
-#pragma argsused
-#endif
-
-static char *TmpFile;
-#ifdef HAVE_PROTOS
-PRIVATE FILE *os_popen(char *cmd, char *mode)
-#else
-static FILE *os_popen(cmd, mode)
-char *cmd, *mode;
-#endif
-{
-    char *s;
-
-#if defined(__OS2__) && !defined(__BORLANDC__)
-    if (OS2MODE)
-	return(popen(cmd, mode));
-#endif
-
-    TmpFile = tmpnam(NULL);
-    if (!TmpFile) return NULL;
-    s = (char *) malloc(strlen(cmd) + 3 + strlen(TmpFile) + 1);
-    if (!s) return NULL;
-    strcpy(s, cmd);
-    strcat(s, " > ");
-    strcat(s, TmpFile);
-    system(s);
-    free(s);
-    return fopen(TmpFile, "r");
-}
-
-#ifdef HAVE_PROTOS
-PRIVATE int os_pclose(FILE *fp)
-#else
-static int os_pclose(fp)
-FILE *fp;
-#endif
-{
-#if defined(__OS2__) && !defined(__BORLANDC__)
-    if (OS2MODE)
-	return(pclose(fp));
-#endif
-
-    unlink(TmpFile);
-#ifdef AMIGA
-    free(TmpFile);
-#endif
-    return fclose(fp);
-}
-
-#endif
-
 /***************************************************************/
 /*                                                             */
 /*  FTypeof                                                    */
@@ -1662,11 +1325,7 @@ FILE *fp;
 /*  Implement the typeof() function.                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FTypeof(void)
-#else
-static int FTypeof()
-#endif
+static int FTypeof(void)
 {
     switch(ARG(0).type) {
     case INT_TYPE:  return RetStrVal("INT");
@@ -1684,11 +1343,7 @@ static int FTypeof()
 /*  Implement the language() function.                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FLanguage(void)
-#else
-static int FLanguage()
-#endif
+static int FLanguage(void)
 {
     return RetStrVal(L_LANGNAME);
 }
@@ -1700,11 +1355,7 @@ static int FLanguage()
 /*  Implement the args() function.                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FArgs(void)
-#else
-static int FArgs()
-#endif
+static int FArgs(void)
 {
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
@@ -1719,11 +1370,7 @@ static int FArgs()
 /*  Implement the dosubst() function.                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FDosubst(void)
-#else
-static int FDosubst()
-#endif
+static int FDosubst(void)
 {
     int jul, tim, r;
     DynamicBuffer buf;
@@ -1758,11 +1405,7 @@ static int FDosubst()
 /*  Hebrew calendar support functions                          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FHebdate(void)
-#else
-static int FHebdate()
-#endif
+static int FHebdate(void)
 {
     int year, day, mon, jahr;
     int mout, dout;
@@ -1816,11 +1459,7 @@ static int FHebdate()
     } else return E_BAD_TYPE;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FHebday(void)
-#else
-static int FHebday()
-#endif
+static int FHebday(void)
 {
     int y, m, d;
 
@@ -1839,11 +1478,7 @@ static int FHebday()
     return OK;
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FHebmon(void)
-#else
-static int FHebmon()
-#endif
+static int FHebmon(void)
 {
     int y, m, d;
 
@@ -1861,11 +1496,7 @@ static int FHebmon()
     return RetStrVal(HebMonthName(m, y));
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FHebyear(void)
-#else
-static int FHebyear()
-#endif
+static int FHebyear(void)
 {
     int y, m, d;
 
@@ -1897,11 +1528,7 @@ static int FHebyear()
 /* arithmetic is fine, even on 16-bit machines.                 */
 /*                                                              */
 /****************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FEasterdate(void)
-#else
-static int FEasterdate()
-#endif
+static int FEasterdate(void)
 {
     int y, m, d;
     int g, c, x, z, e, n;
@@ -1946,31 +1573,18 @@ static int FEasterdate()
 /*  get minutes from UTC.                                      */
 /*                                                             */
 /***************************************************************/
-PRIVATE int FTimeStuff ARGS ((int wantmins));
-#ifdef HAVE_PROTOS
-PRIVATE int FIsdst(void)
-#else
-static int FIsdst()
-#endif
+static int FTimeStuff (int wantmins);
+static int FIsdst(void)
 {
     return FTimeStuff(0);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FMinsfromutc(void)
-#else
-static int FMinsfromutc()
-#endif
+static int FMinsfromutc(void)
 {
     return FTimeStuff(1);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FTimeStuff(int wantmins)
-#else
-static int FTimeStuff(wantmins)
-int wantmins;
-#endif
+static int FTimeStuff(int wantmins)
 {
     int jul, tim;
     int mins, dst;
@@ -2012,14 +1626,7 @@ int wantmins;
 #define DEGRAD (PI/180.0)
 #define RADDEG (180.0/PI)
 
-#ifdef HAVE_PROTOS
-PRIVATE int SunStuff(int rise, double cosz, int jul)
-#else
-static int SunStuff(rise, cosz, jul)
-int rise;
-double cosz;
-int jul;
-#endif
+static int SunStuff(int rise, double cosz, int jul)
 {
     int year, mon, day;
     int jan0;
@@ -2139,12 +1746,7 @@ int jul;
 /*  Sunrise and Sunset functions.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FSun(int rise)
-#else
-static int FSun(rise)
-int rise;
-#endif
+static int FSun(int rise)
 {
     int jul = JulianToday;
     static double cosz = -0.014543897;  /* for sunrise and sunset */
@@ -2169,36 +1771,20 @@ int rise;
     return OK;
 }
       
-#ifdef HAVE_PROTOS
-PRIVATE int FSunrise(void)
-#else
-static int FSunrise()
-#endif
+static int FSunrise(void)
 {
     return FSun(1);
 }
-#ifdef HAVE_PROTOS
-PRIVATE int FSunset(void)
-#else
-static int FSunset()
-#endif
+static int FSunset(void)
 {
     return FSun(0);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FDawn(void)
-#else
-static int FDawn()
-#endif
+static int FDawn(void)
 {
     return FSun(3);
 }
-#ifdef HAVE_PROTOS
-PRIVATE int FDusk(void)
-#else
-static int FDusk()
-#endif
+static int FDusk(void)
 {
     return FSun(2);
 }
@@ -2210,11 +1796,7 @@ static int FDusk()
 /*  Return modification date of a file                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FFiledate(void)
-#else
-static int FFiledate()
-#endif
+static int FFiledate(void)
 {
     struct stat statbuf;
     struct tm *t1;
@@ -2228,11 +1810,7 @@ static int FFiledate()
 	return OK;
     }
 
-#ifdef __TURBOC__
-    t1 = localtime( (time_t *) &(statbuf.st_mtime) );
-#else
     t1 = localtime(&(statbuf.st_mtime));
-#endif
 
     if (t1->tm_year + 1900 < BASE)
 	RetVal.v.val=0;
@@ -2249,11 +1827,7 @@ static int FFiledate()
 /*  Canned PostScript code for shading a calendar square       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FPsshade(void)
-#else
-static int FPsshade()
-#endif
+static int FPsshade(void)
 {
     char psbuff[256];
     char *s = psbuff;
@@ -2289,11 +1863,7 @@ static int FPsshade()
 /*  Canned PostScript code for generating moon phases          */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FPsmoon(void)
-#else
-static int FPsmoon()
-#endif
+static int FPsmoon(void)
 {
     char psbuff[512];
     char sizebuf[30];
@@ -2385,11 +1955,7 @@ static int FPsmoon()
 /*  Phase of moon for specified date/time.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int FMoonphase(void)
-#else
-static int FMoonphase()
-#endif
+static int FMoonphase(void)
 {
     int date, time;
 
@@ -2424,31 +1990,18 @@ static int FMoonphase()
 /*  Hunt for next occurrence of specified moon phase           */
 /*                                                             */
 /***************************************************************/
-PRIVATE int MoonStuff ARGS ((int want_time));
-#ifdef HAVE_PROTOS
-PRIVATE int FMoondate(void)
-#else
-static int FMoondate()
-#endif
+static int MoonStuff (int want_time);
+static int FMoondate(void)
 {
     return MoonStuff(0);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int FMoontime(void)
-#else
-static int FMoontime()
-#endif
+static int FMoontime(void)
 {
     return MoonStuff(1);
 }
 
-#ifdef HAVE_PROTOS
-PRIVATE int MoonStuff(int want_time)
-#else
-static int MoonStuff(want_time)
-int want_time;
-#endif
+static int MoonStuff(int want_time)
 {
     int startdate, starttim;
     int d, t;

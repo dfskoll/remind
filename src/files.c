@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: files.c,v 1.10 2000-02-18 03:45:54 dfs Exp $";
+static char const RCSID[] = "$Id: files.c,v 1.11 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 
@@ -27,29 +27,9 @@ static char const RCSID[] = "$Id: files.c,v 1.10 2000-02-18 03:45:54 dfs Exp $";
 #include <time.h>
 #endif
 
-#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-#if defined(__MSDOS__)
-#include <io.h>
-#endif
-
-#ifdef __MSC__
-#include <dos.h>
-#endif
 
 #include "types.h"
 #include "protos.h"
@@ -71,9 +51,7 @@ typedef struct cheader {
     struct cheader *next;
     char *filename;
     CachedLine *cache;
-#ifdef UNIX
     int ownedByMe;
-#endif
 } CachedFile;
 
 /* Define the structures needed by the INCLUDE file system */
@@ -84,9 +62,7 @@ typedef struct {
     int NumIfs;
     long offset;
     CachedLine *CLine;
-#ifdef UNIX
     int ownedByMe;
-#endif
 } IncludeStruct;
 
 static CachedFile *CachedFiles = (CachedFile *) NULL;
@@ -97,10 +73,10 @@ static FILE *fp;
 static IncludeStruct IStack[INCLUDE_NEST];
 static int IStackPtr = 0;
 
-PRIVATE int ReadLineFromFile ARGS ((void));
-PRIVATE int CacheFile ARGS ((const char *fname));
-PRIVATE void DestroyCache ARGS ((CachedFile *cf));
-PRIVATE int CheckSafety ARGS ((void));
+static int ReadLineFromFile (void);
+static int CacheFile (const char *fname);
+static void DestroyCache (CachedFile *cf);
+static int CheckSafety (void);
 
 /***************************************************************/
 /*                                                             */
@@ -109,11 +85,7 @@ PRIVATE int CheckSafety ARGS ((void));
 /*  Read a line from the file or cache.                        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ReadLine(void)
-#else
-int ReadLine()
-#endif
+int ReadLine(void)
 {
     int r;
 
@@ -144,11 +116,7 @@ int ReadLine()
 /*  Read a line from the file pointed to by fp.                */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int ReadLineFromFile(void)
-#else
-static int ReadLineFromFile()
-#endif
+static int ReadLineFromFile(void)
 {
     int l;
 
@@ -204,12 +172,7 @@ static int ReadLineFromFile()
 /*  ShouldCache is 1, cache the file                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int OpenFile(const char *fname)
-#else
-int OpenFile(fname)
-char *fname;
-#endif
+int OpenFile(const char *fname)
 {
     CachedFile *h = CachedFiles;
     int r;
@@ -224,11 +187,9 @@ char *fname;
 	    CLine = h->cache;
 	    STRSET(FileName, fname);
 	    LineNo = 0;
-#ifdef UNIX
 	    if (!h->ownedByMe) {
 		RunDisabled |= RUN_NOTOWNER;
 	    }
-#endif
 	    if (FileName) return OK; else return E_NO_MEM;
 	}
 	h = h->next;
@@ -270,12 +231,7 @@ char *fname;
 /*  Returns an indication of success or failure.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CacheFile(const char *fname)
-#else
-static int CacheFile(fname)
-char *fname;
-#endif
+static int CacheFile(const char *fname)
 {
     int r;
     CachedFile *cf;
@@ -295,13 +251,12 @@ char *fname;
 	return E_NO_MEM;
     }
 
-#ifdef UNIX
     if (RunDisabled & RUN_NOTOWNER) {
 	cf->ownedByMe = 0;
     } else {
 	cf->ownedByMe = 1;
     }
-#endif    
+
 /* Read the file */
     while(fp) {
 	r = ReadLineFromFile();
@@ -363,11 +318,7 @@ char *fname;
 /*  file, or return E_EOF                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int PopFile(void)
-#else
-int PopFile()
-#endif
+int PopFile(void)
 {
     IncludeStruct *i;
 
@@ -385,11 +336,9 @@ int PopFile()
     CLine = i->CLine;
     fp = NULL;
     STRSET(FileName, i->filename);
-#ifdef UNIX
     if (!i->ownedByMe) {
 	RunDisabled |= RUN_NOTOWNER;
     }
-#endif
     if (!CLine && (i->offset != -1L)) {
 	/* We must open the file, then seek to specified position */
 	if (strcmp(i->filename, "-")) {
@@ -412,12 +361,7 @@ int PopFile()
 /*  The INCLUDE command.                                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoInclude(ParsePtr p)
-#else
-int DoInclude(p)
-ParsePtr p;
-#endif
+int DoInclude(ParsePtr p)
 {     
     DynamicBuffer buf;
     int r, e;
@@ -444,12 +388,7 @@ ParsePtr p;
 /*  inclusion.                                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int IncludeFile(const char *fname)
-#else
-int IncludeFile(fname)
-char *fname;
-#endif
+int IncludeFile(const char *fname)
 {
     IncludeStruct *i;
     int r;
@@ -465,13 +404,11 @@ char *fname;
     i->IfFlags = IfFlags;
     i->CLine = CLine;
     i->offset = -1L;
-#ifdef UNIX
     if (RunDisabled & RUN_NOTOWNER) {
 	i->ownedByMe = 0;
     } else {
 	i->ownedByMe = 1;
     }
-#endif
     if (fp) {
 	i->offset = ftell(fp);
 	FCLOSE(fp);
@@ -496,22 +433,13 @@ char *fname;
 /* GetAccessDate - get the access date of a file.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int GetAccessDate(char *file)
-#else
-int GetAccessDate(file)
-char *file;
-#endif
+int GetAccessDate(char *file)
 {
     struct stat statbuf;
     struct tm *t1;
 
     if (stat(file, &statbuf)) return -1;
-#ifdef __TURBOC__
-    t1 = localtime( (time_t *) &(statbuf.st_atime) );
-#else
     t1 = localtime(&(statbuf.st_atime));
-#endif
 
     if (t1->tm_year + 1900 < BASE)
 	return 0;
@@ -521,82 +449,12 @@ char *file;
 
 /***************************************************************/
 /*                                                             */
-/*  SetAccessDate                                              */
-/*                                                             */
-/*  Used only by DOS to set access date after we close the     */
-/*  file.  Not needed for UNIX.                                */
-/*                                                             */
-/***************************************************************/
-#if defined(__MSDOS__)
-/*
- * WARNING WARNING WARNING WARNING
- * In the version of Turbo C which I have, there is a bug in the
- * stdio.h file.  The following lines correct the bug.  YOU MAY
- * HAVE TO REMOVE THESE LINES FOR LATER VERSIONS OF TURBOC
- */
-#ifdef __TURBOC__
-#ifndef fileno
-#define fileno(f) ((f)->fd)
-#endif
-#endif
-
-#ifdef HAVE_PROTOS
-PUBLIC int SetAccessDate(char *fname, int jul)
-#else
-int SetAccessDate(fname, jul)
-char *fname;
-int jul;
-#endif
-{
-
-#ifdef __TURBOC__   
-    int y, m, d;
-    struct ftime ft;
-    FILE *f;
-
-    FromJulian(jul, &y, &m, &d);
-    ft.ft_tsec = 0;
-    ft.ft_min = 0;
-    ft.ft_hour = 12;  /* Arbitrarily set time to noon. */
-    ft.ft_day = (unsigned int) d;
-    ft.ft_month = (unsigned int) m+1;
-    ft.ft_year = (unsigned int) (y - 1980);
-
-    f = fopen(fname, "r"); 
-    if (!f || setftime(fileno(f) , &ft)) {
-
-#else /* Must be MSC */
-    if (utime(fname, (struct utimbuf *) NULL)) {
-#endif   	
-	fprintf(ErrFp, ErrMsg[M_CANTSET_ACCESS], fname);
-
-#ifdef __TURBOC__
-	if (f) FCLOSE(f);
-#endif
-	return -1;
-    }
-
-#ifdef __TURBOC__
-    FCLOSE(f);
-#endif
-
-    return 0;
-}
-#endif /* __MSDOS__ */
-
-/***************************************************************/
-/*                                                             */
 /*  DestroyCache                                               */
 /*                                                             */
 /*  Free all the memory used by a cached file.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DestroyCache(CachedFile *cf)
-#else
-static void DestroyCache(cf)
-CachedFile *cf;
-#endif
+static void DestroyCache(CachedFile *cf)
 {
     CachedLine *cl, *cnext;
     CachedFile *temp;
@@ -629,11 +487,7 @@ CachedFile *cf;
 /*  Returns 1 if current file is top level, 0 otherwise.       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int TopLevel(void)
-#else
-int TopLevel()
-#endif
+int TopLevel(void)
 {
     return !IStackPtr;
 }
@@ -649,13 +503,8 @@ int TopLevel()
 /*  who we're running as.                                      */
 /*  As a side effect, if we don't own the file, we disable RUN */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int CheckSafety(void)
-#else
-static int CheckSafety()
-#endif
+static int CheckSafety(void)
 {
-#ifdef UNIX
     struct stat statbuf;
 
     if (fp == stdin) {
@@ -695,6 +544,5 @@ static int CheckSafety()
 	RunDisabled |= RUN_NOTOWNER;
     }
 
-#endif
     return 1;
 }

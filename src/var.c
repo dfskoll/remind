@@ -12,20 +12,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.9 2005-09-28 02:43:09 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.10 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "expr.h"
 #include "globals.h"
@@ -463,8 +456,8 @@ static SysVar SysVarArr[] = {
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
-static SysVar *FindSysVar ARGS((const char *name));
-static void DumpSysVar ARGS((const char *name, const SysVar *v));
+static SysVar *FindSysVar (const char *name);
+static void DumpSysVar (const char *name, const SysVar *v);
 /***************************************************************/
 /*                                                             */
 /*  SetSysVar                                                  */

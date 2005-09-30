@@ -12,19 +12,12 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: userfns.c,v 1.6 2000-02-18 03:46:13 dfs Exp $";
+static char const RCSID[] = "$Id: userfns.c,v 1.7 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "globals.h"
 #include "protos.h"
@@ -54,11 +47,11 @@ extern Operator Func[];
 extern Value ValStack[];
 extern int ValStackPtr;
 
-PRIVATE void DestroyUserFunc ARGS ((UserFunc *f));
-PRIVATE void FUnset ARGS ((char *name));
-PRIVATE void FSet ARGS ((UserFunc *f));
-PRIVATE int SetUpLocalVars ARGS ((UserFunc *f));
-PRIVATE void DestroyLocalVals ARGS ((UserFunc *f));
+static void DestroyUserFunc (UserFunc *f);
+static void FUnset (char *name);
+static void FSet (UserFunc *f);
+static int SetUpLocalVars (UserFunc *f);
+static void DestroyLocalVals (UserFunc *f);
 
 /***************************************************************/
 /*                                                             */
@@ -67,12 +60,7 @@ PRIVATE void DestroyLocalVals ARGS ((UserFunc *f));
 /*  Define a user-defined function - the FSET command.         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoFset(ParsePtr p)
-#else
-int DoFset(p)
-ParsePtr p;
-#endif
+int DoFset(ParsePtr p)
 {
     int r;
     int c;
@@ -183,12 +171,7 @@ ParsePtr p;
 /*  Free up all the resources used by a user-defined function. */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DestroyUserFunc(UserFunc *f)
-#else
-static void DestroyUserFunc(f)
-UserFunc *f;
-#endif
+static void DestroyUserFunc(UserFunc *f)
 {
     Var *v, *prev;
 
@@ -216,12 +199,7 @@ UserFunc *f;
 /*  it exists.                                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void FUnset(char *name)
-#else
-static void FUnset(name)
-char *name;
-#endif
+static void FUnset(char *name)
 {
     UserFunc *cur, *prev;
     int h;
@@ -247,12 +225,7 @@ char *name;
 /*  Insert a user-defined function into the hash table.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void FSet(UserFunc *f)
-#else
-static void FSet(f)
-UserFunc *f;
-#endif
+static void FSet(UserFunc *f)
 {
     int h = HashVal(f->name) % FUNC_HASH_SIZE;
     f->next = FuncHash[h];
@@ -266,13 +239,7 @@ UserFunc *f;
 /*  Call a user-defined function.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int CallUserFunc(char *name, int nargs)
-#else
-int CallUserFunc(name, nargs)
-char *name;
-int nargs;
-#endif
+int CallUserFunc(char *name, int nargs)
 {
     UserFunc *f;
     int h = HashVal(name) % FUNC_HASH_SIZE;
@@ -351,12 +318,7 @@ int nargs;
 /*  Set up the local variables from the stack frame.           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int SetUpLocalVars(UserFunc *f)
-#else
-static int SetUpLocalVars(f)
-UserFunc *f;
-#endif
+static int SetUpLocalVars(UserFunc *f)
 {
     int i, r;
     Var *var;
@@ -378,12 +340,7 @@ UserFunc *f;
 /*  the function.                                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void DestroyLocalVals(UserFunc *f)
-#else
-static void DestroyLocalVals(f)
-UserFunc *f;
-#endif
+static void DestroyLocalVals(UserFunc *f)
 {
     Var *v = f->locals;
 
@@ -400,12 +357,7 @@ UserFunc *f;
 /*  it is defined, or -1 if it is not defined.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int UserFuncExists(char *fn)
-#else
-int UserFuncExists(fn)
-char *fn;
-#endif
+int UserFuncExists(char *fn)
 {
     UserFunc *f;
     int h = HashVal(fn) % FUNC_HASH_SIZE;

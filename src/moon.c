@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: moon.c,v 1.5 2000-02-18 03:46:02 dfs Exp $";
+static char const RCSID[] = "$Id: moon.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
 
 /* All of these routines were adapted from the program "moontool"
    by John Walker, February 1988.  Here's the blurb from moontool:
@@ -61,10 +61,7 @@ static char const RCSID[] = "$Id: moon.c,v 1.5 2000-02-18 03:46:02 dfs Exp $";
    that credit and blame may be properly apportioned.
 
 */
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
@@ -75,14 +72,14 @@ static char const RCSID[] = "$Id: moon.c,v 1.5 2000-02-18 03:46:02 dfs Exp $";
 #include "err.h"
 
 /* Function prototypes */
-PRIVATE long jdate ARGS((int y, int mon, int day));
-PRIVATE double jtime ARGS((int y, int mon, int day, int hour, int min, int sec));
-PRIVATE void jyear ARGS((double td, int *yy, int *mm, int *dd));
-PRIVATE void jhms ARGS((double j, int *h, int *m, int *s));
-PRIVATE double meanphase ARGS((double sdate, double phase, double *usek));
-PRIVATE double truephase ARGS((double k, double phase));
-PRIVATE double kepler ARGS((double m, double ecc));
-PRIVATE double phase ARGS((double, double *, double *, double *, double *, double *, double *));
+static long jdate (int y, int mon, int day);
+static double jtime (int y, int mon, int day, int hour, int min, int sec);
+static void jyear (double td, int *yy, int *mm, int *dd);
+static void jhms (double j, int *h, int *m, int *s);
+static double meanphase (double sdate, double phase, double *usek);
+static double truephase (double k, double phase);
+static double kepler (double m, double ecc);
+static double phase (double, double *, double *, double *, double *, double *, double *);
 
 
 /*  Astronomical constants  */
@@ -151,12 +148,7 @@ PRIVATE double phase ARGS((double, double *, double *, double *, double *, doubl
 /*  Convert a date and time to Julian day and fraction.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE long jdate(int y, int mon, int day)
-#else
-static long jdate(y, mon, day)
-int y, mon, day;
-#endif
+static long jdate(int y, int mon, int day)
 {
     long c, m;
 
@@ -180,12 +172,7 @@ int y, mon, day;
 /*  i.e. Julian date plus day fraction, expressed as a double  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE double jtime(int y, int mon, int day, int hour, int min, int sec)
-#else
-static double jtime(y, mon, day, hour, min, sec)
-int y, mon, day, hour, min, sec;
-#endif
+static double jtime(int y, int mon, int day, int hour, int min, int sec)
 {
     return (jdate(y, mon, day)-0.5) +
 	(sec + 60L * (long) min + 3600L * (long) hour) / 86400.0;
@@ -198,13 +185,7 @@ int y, mon, day, hour, min, sec;
 /*  Convert a Julian date to year, month, day.                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void jyear(double td, int *yy, int *mm, int *dd)
-#else
-static void jyear(td, yy, mm, dd)
-double td;
-int *yy, *mm, *dd;
-#endif
+static void jyear(double td, int *yy, int *mm, int *dd)
 {
     double j, d, y, m;
 
@@ -239,13 +220,7 @@ int *yy, *mm, *dd;
 /*  Convert a Julian time to hour, minutes and seconds.        */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void jhms(double j, int *h, int *m, int *s)
-#else
-static void jhms(j, h, m, s)
-double j;
-int *h, *m, *s;
-#endif
+static void jhms(double j, int *h, int *m, int *s)
 {
     long ij;
 
@@ -273,13 +248,7 @@ int *h, *m, *s;
 /*  than this calculation reveals.			       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE double meanphase(double sdate, double phase, double *usek)
-#else
-static double meanphase(sdate, phase, usek)
-double sdate, phase;
-double *usek;
-#endif
+static double meanphase(double sdate, double phase, double *usek)
 {
     double k, t, t2, t3, nt1;
 
@@ -315,12 +284,7 @@ double *usek;
 /*  the true, corrected phase time.                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE double truephase(double k, double phase)
-#else
-static double truephase(k, phase)
-double k, phase;
-#endif
+static double truephase(double k, double phase)
 {
     double t, t2, t3, pt, m, mprime, f;
     int apcor = 0;
@@ -401,12 +365,7 @@ double k, phase;
 /*  Solve the equation of Kepler.                              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE double kepler(double m, double ecc)
-#else
-static double kepler(m, ecc)
-double m, ecc;
-#endif
+static double kepler(double m, double ecc)
 {
     double e, delta;
 #define EPSILON 1E-6
@@ -434,24 +393,13 @@ double m, ecc;
 /*   the centre of the Earth.				       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE double phase(double pdate,
-	             double *pphase,
-		     double *mage,
-		     double *dist,
-		     double *angdia,
-		     double *sudist,
-		     double *suangdia)
-#else
-static double phase(pdate, pphase, mage, dist, angdia, sudist, suangdia)
-double pdate;
-double *pphase; 		   /* Illuminated fraction */
-double *mage;			   /* Age of moon in days */
-double *dist;			   /* Distance in kilometres */
-double *angdia; 		   /* Angular diameter in degrees */
-double *sudist; 		   /* Distance to Sun */
-double *suangdia;                  /* Sun's angular diameter */
-#endif
+static double phase(double pdate,
+		    double *pphase,
+		    double *mage,
+		    double *dist,
+		    double *angdia,
+		    double *sudist,
+		    double *suangdia)
 {
 
     double Day, N, M, Ec, Lambdasun, ml, MM, MN, Ev, Ae, A3, MmP,
@@ -564,12 +512,7 @@ double *suangdia;                  /* Sun's angular diameter */
 /*  that date and time as a number from 0 to 360.              */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int MoonPhase(int date, int time)
-#else
-int MoonPhase(date, time)
-int date, time;
-#endif
+int MoonPhase(int date, int time)
 {
     int utcd, utct;
     int y, m, d;
@@ -599,12 +542,7 @@ int date, time;
 /*  0 to 3 for new, 1stq, full, 3rdq                           */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void HuntPhase(int startdate, int starttim, int phas, int *date, int *time)
-#else
-void HuntPhase(startdate, starttim, phas, date, time)
-int startdate, starttim, phas, *date, *time;
-#endif
+void HuntPhase(int startdate, int starttim, int phas, int *date, int *time)
 {
     int utcd, utct;
     int y, m, d;

@@ -14,7 +14,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: hbcal.c,v 1.4 2000-02-18 03:45:58 dfs Exp $";
+static char const RCSID[] = "$Id: hbcal.c,v 1.5 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>  /* For FILE used by protos.h - sigh. */
 #include "types.h"
@@ -64,7 +64,7 @@ static char MaxMonLen[] = {
     30, 30, 30, 29, 30, 30, 29, 30, 29, 30, 29, 30, 29, 29};
 
 static char HebIsLeap[] = {0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,1};
-  
+
 /***************************************************************/
 /*                                                             */
 /*  RoshHashana                                                */
@@ -73,12 +73,7 @@ static char HebIsLeap[] = {0,0,1,0,0,1,0,1,0,0,1,0,0,1,0,0,1,0,1};
 /*  Hebrew year.  (ie, 5751, not 1990)                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int RoshHashana(int i)
-#else
-int RoshHashana(i)
-int i;
-#endif     
+int RoshHashana(int i)
 {
     long j;
     j = DaysToHebYear(i-3744) - CORRECTION;
@@ -93,12 +88,7 @@ int i;
 /*  from new moon before Tishrey 1 5701.                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC long DaysToHebYear(int y)
-#else
-long DaysToHebYear(y)
-int y;
-#endif
+long DaysToHebYear(int y)
 {
     long m, nm, dw, s, l;
 
@@ -131,12 +121,7 @@ int y;
 /*                                                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DaysInHebYear(int y)
-#else
-int DaysInHebYear(y)
-int y;
-#endif
+int DaysInHebYear(int y)
 {
     long thisyear, nextyear;
 
@@ -153,12 +138,7 @@ int y;
 /*  given the LENGTH of the Hebrew year.                       */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *DaysInHebMonths(int ylen)
-#else
-char *DaysInHebMonths(ylen)
-int ylen;
-#endif
+char *DaysInHebMonths(int ylen)
 {
     static char monlen[13] =
     {30, 29, 30, 29, 30, 0, 29, 30, 29, 30, 29, 30, 29};
@@ -184,12 +164,7 @@ int ylen;
 /*  non-leap-years.                                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int HebToJul(int hy, int hm, int hd)
-#else
-int HebToJul(hy, hm, hd)
-int hy, hm, hd;
-#endif
+int HebToJul(int hy, int hm, int hd)
 {
     int ylen;
     char *monlens;
@@ -222,12 +197,7 @@ int hy, hm, hd;
 /*  non-leap-years.                                            */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void JulToHeb(int jul, int *hy, int *hm, int *hd)
-#else
-void JulToHeb(jul, hy, hm, hd)
-int jul, *hy, *hm, *hd;
-#endif
+void JulToHeb(int jul, int *hy, int *hm, int *hd)
 {
     int y, m, d;
     int rh;
@@ -263,12 +233,7 @@ int jul, *hy, *hm, *hd;
 /*  year.                                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int HebNameToNum(const char *mname)
-#else
-int HebNameToNum(mname)
-char *mname;
-#endif
+int HebNameToNum(const char *mname)
 {
     int i;
     int m=-1;
@@ -290,12 +255,7 @@ char *mname;
 /*  year.                                                      */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC char *HebMonthName(int m, int y)
-#else
-char *HebMonthName(m, y)
-int m, y;
-#endif
+char *HebMonthName(int m, int y)
 {
     if (m != ADARA && m != ADARB) return HebMonthNames[m];
 
@@ -331,13 +291,8 @@ int m, y;
 /*                     Change 30 Adar A to 30 Shvat in nonleap */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int GetValidHebDate(int yin, int min, int din, int adarbehave,
+int GetValidHebDate(int yin, int min, int din, int adarbehave,
                            int *mout, int *dout, int jahr)
-#else
-int GetValidHebDate(yin, min, din, adarbehave, mout, dout, jahr)
-int yin, min, din, adarbehave, *mout, *dout, jahr;
-#endif
 {
     char *monlen;
     int ylen;
@@ -436,13 +391,8 @@ int yin, min, din, adarbehave, *mout, *dout, jahr;
 /*  Returns 0 for success, non-zero for failure.               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int GetNextHebrewDate(int julstart, int hm, int hd,
+int GetNextHebrewDate(int julstart, int hm, int hd,
 			     int jahr, int adarbehave, int *ans)
-#else
-int GetNextHebrewDate(julstart, hm, hd, jahr, adarbehave, ans)
-int julstart, hm, hd, jahr, adarbehave, *ans;
-#endif
 {
     int r, yout, mout, dout, jul=1;
     int adarflag = adarbehave;
@@ -497,12 +447,7 @@ int julstart, hm, hd, jahr, adarbehave, *ans;
 /*  Given a date of death, compute the value to use for jahr.  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ComputeJahr(int y, int m, int d, int *ans)
-#else
-int ComputeJahr(y, m, d, ans)
-int y, m, d, *ans;
-#endif
+int ComputeJahr(int y, int m, int d, int *ans)
 {
     char *monlen;
     int len;

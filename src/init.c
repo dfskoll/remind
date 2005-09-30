@@ -13,32 +13,17 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.15 2005-04-12 01:27:56 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.16 2005-09-30 03:29:32 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif
-
-#ifdef HAVE_PWD_H
 #include <pwd.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 
 #include "types.h"
 #include "protos.h"
@@ -95,11 +80,8 @@ while (isdigit(*(s))) {    \
     s++;                   \
 }
 
-#ifdef UNIX
-PRIVATE void ChgUser ARGS((char *uname));
-#endif
-
-PRIVATE void InitializeVar ARGS ((char *str));
+static void ChgUser(char *u);
+static void InitializeVar(char *str);
 
 static char *BadDate = "Illegal date on command line\n";
 
@@ -110,13 +92,7 @@ static char *BadDate = "Illegal date on command line\n";
 /*  Initialize the system - called only once at beginning!     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC void InitRemind(int argc, char *argv[])
-#else
-void InitRemind(argc, argv)
-int argc;
-char *argv[];
-#endif
+void InitRemind(int argc, char *argv[])
 {
     char *arg;
     int i;
@@ -131,13 +107,11 @@ char *argv[];
     DBufPuts(&Banner, L_BANNER);
 
     /* Make sure remind is not installed set-uid or set-gid */
-#ifdef UNIX
     if (getgid() != getegid() ||
 	getuid() != geteuid()) {
 	fprintf(ErrFp, "\nRemind should not be installed set-uid or set-gid.\nCHECK YOUR SYSTEM SECURITY.\n");
 	exit(1);
     }
-#endif
 
     y = NO_YR;
     m = NO_MON;
@@ -151,19 +125,6 @@ char *argv[];
     }
     JulianToday = RealToday;
     FromJulian(JulianToday, &CurYear, &CurMon, &CurDay);
-
-#if !defined(HAVE_QUEUED)
-    DontFork = 1;
-    DontQueue = 1;
-    NumQueued = 0;
-    DontIssueAts = 0;
-    Daemon = 0;
-#elif defined(_MSC_VER) || defined(__BORLANDC__)
-    DontFork = 1;
-#elif defined(__OS2__) && defined (__MSDOS__)
-    if (DOSMODE)
-	DontFork = 1;
-#endif
 
     /* Parse the command-line options */
     i = 1;
@@ -186,14 +147,12 @@ char *argv[];
 		InitializeVar(arg);
 		while(*arg) arg++;
 		break;
-	   
+
 	    case 'n':
 	    case 'N':
 		NextMode = 1;
-#ifdef HAVE_QUEUED
 		DontQueue = 1;
 		Daemon = 0;
-#endif
 		break;
 
 	    case 'r':
@@ -248,16 +207,12 @@ char *argv[];
 		}
 		break;
 
-#if defined(UNIX) && defined(WANT_U_OPTION)
 	    case 'u':
 	    case 'U':
 		ChgUser(arg);
 		RunDisabled = RUN_CMDLINE;
 		while (*arg) arg++;
 		break;
-#endif	       
-
-#ifdef HAVE_QUEUED
 	    case 'z':
 	    case 'Z':
 		DontFork = 1;
@@ -287,7 +242,6 @@ char *argv[];
 	    case 'F':
 		DontFork = 1;
 		break;
-#endif
 	    case 'c':
 	    case 'C':
 		DoCalendar = 1;
@@ -410,10 +364,8 @@ char *argv[];
 		if (SysTime != -1L) Usage();
 		else {
 		    SysTime = (long) tok.val * 60L;
-#ifdef HAVE_QUEUED
 		    DontQueue = 1;
 		    Daemon = 0;
-#endif
 		}
 		break;
 
@@ -489,11 +441,7 @@ char *argv[];
 /*                                                             */
 /***************************************************************/
 #ifndef L_USAGE_OVERRIDE
-#ifdef HAVE_PROTOS
-PUBLIC void Usage(void)
-#else
-void Usage()
-#endif /* HAVE_PROTOS */
+void Usage(void)
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 David F. Skoll\n", VERSION, L_LANGNAME);
     fprintf(ErrFp, "Copyright 1999-2005 Roaring Penguin Software Inc.\n");
@@ -514,12 +462,10 @@ void Usage()
     fprintf(ErrFp, " -o     Ignore ONCE directives\n");
     fprintf(ErrFp, " -t     Trigger all future reminders regardless of delta\n");
     fprintf(ErrFp, " -h     `Hush' mode - be very quiet\n");
-#ifdef HAVE_QUEUED
     fprintf(ErrFp, " -a     Don't trigger timed reminders immediately - just queue them\n");
     fprintf(ErrFp, " -q     Don't queue timed reminders\n");
     fprintf(ErrFp, " -f     Trigger timed reminders by staying in foreground\n");
     fprintf(ErrFp, " -z[n]  Enter daemon mode, waking every n (5) minutes.\n");
-#endif
     fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline\n");
     fprintf(ErrFp, " -e     Divert messages normally sent to stderr to stdout\n");
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");
@@ -541,13 +487,7 @@ void Usage()
 /*  USER environment variables.                                */
 /*                                                             */
 /***************************************************************/
-#if defined(UNIX) && defined(WANT_U_OPTION)
-#ifdef HAVE_PROTOS
-PRIVATE void ChgUser(char *user)
-#else
-static void ChgUser(user)
-char *user;
-#endif /* HAVE_PROTOS */
+static void ChgUser(char *user)
 {
     uid_t myuid;
 
@@ -606,8 +546,6 @@ char *user;
 	putenv(logname);
     }
 }
-#endif /* UNIX && WANT_U_OPTION */
-   
 /***************************************************************/
 /*                                                             */
 /*  InitializeVar                                              */
@@ -615,12 +553,7 @@ char *user;
 /*  Initialize and preserve a variable                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void InitializeVar(char *str)
-#else
-static void InitializeVar(str)
-char *str;
-#endif
+static void InitializeVar(char *str)
 {
     char *varname, *expr;
 

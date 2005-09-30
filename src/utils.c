@@ -11,20 +11,13 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: utils.c,v 1.6 2005-09-28 02:43:09 dfs Exp $";
+static char const RCSID[] = "$Id: utils.c,v 1.7 2005-09-30 03:29:32 dfs Exp $";
 
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "globals.h"
 #include "protos.h"
@@ -115,21 +108,6 @@ int StrCmpi(const char *s1, const char *s2)
     return UPPER(*s1) - UPPER(*s2);
 }
 
-#ifndef HAVE_STRSTR
-char *strstr(char *s1, char *s2)
-{
-    char *s = s1;
-    int len2 = strlen(s2);
-    int len1 = strlen(s1);
-
-    while (s-s1 <= len1-len2) {
-	if (!strncmp(s, s2, len2)) return s;
-	s++;
-    }
-    return NULL;
-}
-#endif
-
 /***************************************************************/
 /*                                                             */
 /*  DateOK                                                     */
@@ -147,20 +125,3 @@ int DateOK(int y, int m, int d)
 	d > DaysInMonth(m, y) ) return 0;
     else return 1;
 }
-
-#ifdef BROKEN_PUTC
-/***************************************************************/
-/*                                                             */
-/*  Safe versions of putc and putchar                          */
-/*                                                             */
-/***************************************************************/
-int SafePutChar(int c)
-{
-    return putchar(c);
-}
-
-int SafePutc(int c, FILE *fp)
-{
-    return putc(c, fp);
-}
-#endif

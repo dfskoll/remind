@@ -12,25 +12,18 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: omit.c,v 1.6 2000-02-18 03:46:03 dfs Exp $";
+static char const RCSID[] = "$Id: omit.c,v 1.7 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
 #include "types.h"
 #include "protos.h"
 #include "globals.h"
 #include "err.h"
 
-PRIVATE int BexistsIntArray ARGS ((int array[], int num, int key));
-PRIVATE void InsertIntoSortedArray ARGS ((int *array, int num, int key));
+static int BexistsIntArray (int array[], int num, int key);
+static void InsertIntoSortedArray (int *array, int num, int key);
 
 /* Arrays for the global omits */
 static int FullOmitArray[MAX_FULL_OMITS];
@@ -57,11 +50,7 @@ static OmitContext *SavedOmitContexts = NULL;
 /*  Clear all the global OMIT context.                         */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int ClearGlobalOmits(void)
-#else
-int ClearGlobalOmits()
-#endif
+int ClearGlobalOmits(void)
 {
     NumFullOmits = NumPartialOmits = 0;
     return OK;
@@ -74,12 +63,7 @@ int ClearGlobalOmits()
 /*  The command-line function CLEAR-OMIT-CONTEXT               */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoClear(ParsePtr p)
-#else
-int DoClear(p)
-ParsePtr p;
-#endif
+int DoClear(ParsePtr p)
 {
     ClearGlobalOmits();
     return VerifyEoln(p);
@@ -94,11 +78,7 @@ ParsePtr p;
 /*  destroyed.                                                 */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DestroyOmitContexts(void)
-#else
-int DestroyOmitContexts()
-#endif
+int DestroyOmitContexts(void)
 {
     OmitContext *c = SavedOmitContexts;
     OmitContext *d;
@@ -123,12 +103,7 @@ int DestroyOmitContexts()
 /*  Push the OMIT context on to the stack.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int PushOmitContext(ParsePtr p)
-#else
-int PushOmitContext(p)
-ParsePtr p;
-#endif
+int PushOmitContext(ParsePtr p)
 {
     register int i;
     OmitContext *context;
@@ -171,12 +146,7 @@ ParsePtr p;
 /*  Pop the OMIT context off of the stack.                     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int PopOmitContext(ParsePtr p)
-#else
-int PopOmitContext(p)
-ParsePtr p;
-#endif
+int PopOmitContext(ParsePtr p)
 {
 
     register int i;
@@ -211,12 +181,7 @@ ParsePtr p;
 /*  Return non-zero if date is OMITted, zero if it is not.     */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int IsOmitted(int jul, int localomit)
-#else
-int IsOmitted(jul, localomit)
-int jul, localomit;
-#endif
+int IsOmitted(int jul, int localomit)
 {
     int y, m, d;
 
@@ -243,12 +208,7 @@ int jul, localomit;
 /*  element is found, 0 otherwise.                             */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE int BexistsIntArray(int array[], int num, int key)
-#else
-static int BexistsIntArray(array, num, key)
-int array[], num, key;
-#endif
+static int BexistsIntArray(int array[], int num, int key)
 {
     int top=num-1, bot=0, mid;
 
@@ -269,12 +229,7 @@ int array[], num, key;
 /*  room in the array for it.                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PRIVATE void InsertIntoSortedArray(int *array, int num, int key)
-#else
-static void InsertIntoSortedArray(array, num, key)
-int *array, num, key;
-#endif
+static void InsertIntoSortedArray(int *array, int num, int key)
 {
     /* num is number of elements CURRENTLY in the array. */
     int *cur = array+num;
@@ -293,12 +248,7 @@ int *array, num, key;
 /*  Do a global OMIT command.                                  */
 /*                                                             */
 /***************************************************************/
-#ifdef HAVE_PROTOS
-PUBLIC int DoOmit(ParsePtr p)
-#else
-int DoOmit(p)
-ParsePtr p;
-#endif
+int DoOmit(ParsePtr p)
 {
     int y = NO_YR, m = NO_MON, d = NO_DAY, r;
     Token tok;

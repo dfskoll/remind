@@ -12,7 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.8 2005-04-12 00:44:08 dfs Exp $ */
+/* $Id: globals.h,v 1.9 2005-09-30 03:29:32 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -172,12 +172,3 @@ EXTERN	int	MonthIndex[2][12]
 #endif
 ;
 
-#if defined(__OS2__)
-#if defined(_MSC_VER) || defined(__EMX__)
-#define OS2MODE (_osmode == OS2_MODE)
-#define DOSMODE (_osmode == DOS_MODE)
-#else
-#define OS2MODE 1
-#define DOSMODE 0
-#endif
-#endif

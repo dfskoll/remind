@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.13 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.14 2005-10-16 14:48:02 dfs Exp $";
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     ArgV = argv;
 
     InitRemind(argc, argv);
-    if(DoCalendar || DoSimpleCalendar) {
+    if (DoCalendar || (DoSimpleCalendar && (!NextMode || PsCal))) {
 	ProduceCalendar();
 	return 0;
     }

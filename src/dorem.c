@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.12 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.13 2005-10-16 14:48:02 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -532,11 +532,13 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
 {
     int r, y, m, d;
     char PrioExpr[25];
-    DynamicBuffer buf;
+    char tmpBuf[64];
+    DynamicBuffer buf, calRow;
     char *s;
     Value v;
 
     DBufInit(&buf);
+    DBufInit(&calRow);
     if (t->typ == RUN_TYPE && RunDisabled) return E_RUN_DISABLED;
     if (t->typ == PASSTHRU_TYPE ||
 	t->typ == CAL_TYPE ||
@@ -563,10 +565,54 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
 	    return OK;
 	}
 	FromJulian(jul, &y, &m, &d);
-	printf("%04d%c%02d%c%02d %s%s\n", y, DATESEP, m+1, DATESEP, d,
-	       SimpleTime(tim->ttime),
-	       DBufValue(&buf));
+ 	sprintf(tmpBuf, "%04d%c%02d%c%02d ", y, DATESEP, m+1, DATESEP, d);
+ 	if (DBufPuts(&calRow, tmpBuf) != OK) {
+ 	    DBufFree(&calRow);
+ 	    return E_NO_MEM;
+ 	}
+ 	/* If DoSimpleCalendar==1, output *all* simple calendar fields */
+ 	if (DoSimpleCalendar) {
+ 	    /* ignore passthru field when in NextMode */
+ 	    if (DBufPuts(&calRow, "* ") != OK) {
+ 		DBufFree(&calRow);
+ 		return E_NO_MEM;
+ 	    }
+ 	    if (t->tag[0]) {
+ 		sprintf(tmpBuf, "%s ", t->tag);
+ 	    } else {
+ 		sprintf(tmpBuf, "* ");
+ 	    }
+ 	    if (DBufPuts(&calRow, tmpBuf) != OK) {
+ 		DBufFree(&calRow);
+ 		return E_NO_MEM;
+ 	    }
+ 	    if (tim->duration != NO_TIME) {
+ 		sprintf(tmpBuf, "%d ", tim->duration);
+ 	    } else {
+ 		sprintf(tmpBuf, "* ");
+ 	    }
+ 	    if (DBufPuts(&calRow, tmpBuf) != OK) {
+ 		DBufFree(&calRow);
+ 		return E_NO_MEM;
+ 	    }
+ 	    if (tim->ttime != NO_TIME) {
+ 		sprintf(tmpBuf, "%d ", tim->ttime);
+ 	    } else {
+ 		sprintf(tmpBuf, "* ");
+ 	    }
+ 	    if (DBufPuts(&calRow, tmpBuf) != OK) {
+ 		DBufFree(&calRow);
+ 		return E_NO_MEM;
+ 	    }
+ 	}
+ 	if (DBufPuts(&calRow, SimpleTime(tim->ttime)) != OK) {
+ 	    DBufFree(&calRow);
+ 	    return E_NO_MEM;
+ 	}
+
+ 	printf("%s%s\n", DBufValue(&calRow), DBufValue(&buf));
 	DBufFree(&buf);
+	DBufFree(&calRow);
 	return OK;
     }
 

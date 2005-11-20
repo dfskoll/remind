@@ -1,5 +1,28 @@
 CHANGES TO REMIND
 
+* Version 3.0 Patch 24
+
++ MINOR ENHANCEMENTS
+
+- Permit the DURATION of a reminder to be as high as you like.  Previously,
+  DURATIONs could be at most 23:59.  Fix courtesy of Paul Pelzl.
+
+- The "-n" flag can be usefully combined with "-s", "-p" and "-l" now.
+  Fix courtesy of Paul Pelzl.
+
++ BUG FIXES
+
+- The "-k" command escapes all characters except those known to be
+  safe, rather than attempting to escape only characters thought to be
+  unsafe.
+
+- Removed the crufty code that supported non-ANSI C compilers.
+
+- Removed all support for non-UNIX/non-Linux systems.
+
+- Fixed a bug in the tokenizer that could make Remind segfault.  Fix courtesy
+  of Stan Tobias.
+
 * Version 3.0 Patch 23
 
 + MINOR ENHANCEMENTS

@@ -10,8 +10,9 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.6 2005-09-30 03:29:32 dfs Exp $ */
+/* $Id: types.h,v 1.7 2005-11-20 01:26:59 dfs Exp $ */
 
+#include <limits.h>
 #include "dynbuf.h"
 
 /* Values */
@@ -101,7 +102,7 @@ typedef Parser *ParsePtr;  /* Pointer to parser structure */
 #define BEFORE_SKIP 2
 #define AFTER_SKIP 3
 
-#define NO_TIME 1500 /* >1440, ie > than the largest possible legal time */
+#define NO_TIME INT_MAX
 
 #define NO_PRIORITY 5000 /* Default priority is midway between 0 and 9999 */
 
@@ -146,7 +147,8 @@ enum TokTypes
   T_Sched,
   T_Warn,
   T_Tag,
-  T_Duration
+  T_Duration,
+  T_LongTime
 };
 
 /* The structure of a token */

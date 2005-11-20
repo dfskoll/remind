@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.13 2005-10-16 14:48:02 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.14 2005-11-20 01:26:59 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -285,6 +285,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 	    DBufFree(&buf);
 	    switch(tok.type) {
 	    case T_Time:
+	    case T_LongTime:
 		tim->duration = tok.val;
 		break;
 	    default:
@@ -297,6 +298,11 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 	    if(r) return r;
 	    StrnCpy(trig->sched, DBufValue(&buf), VAR_NAME_LEN);
 	    DBufFree(&buf);
+	    break;
+
+	case T_LongTime:
+	    DBufFree(&buf);
+	    return E_BAD_TIME;
 	    break;
 
 	default:

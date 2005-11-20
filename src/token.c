@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.12 2005-11-20 00:40:51 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.13 2005-11-20 01:26:59 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -282,9 +282,13 @@ void FindNumericToken(const char *s, Token *t)
 	    s++;
 	    hour = t->val;
 	    PARSENUM(min, s);
-	    if (*s || hour > 23 || min > 59) return;  /* Illegal time */
+	    if (*s || min > 59) return;  /* Illegal time */
 	    t->val = hour*60 + min;  /* Convert to minutes past midnight */
-	    t->type = T_Time;
+	    if (hour <= 23) {
+		t->type = T_Time;
+	    } else {
+		t->type = T_LongTime;
+	    }
 	    return;
 	}
 

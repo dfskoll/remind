@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.11 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.12 2005-11-20 00:40:51 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -169,7 +169,7 @@ char *FindInitialToken(Token *tok, char *s)
 /***************************************************************/
 void FindToken(const char *s, Token *tok)
 {
-    register int top, bot, mid, r;
+    int top, bot, mid, r, max;
     int l;
 
     tok->type = T_Illegal;
@@ -197,6 +197,7 @@ void FindToken(const char *s, Token *tok)
     }
     bot = 0;
     top = sizeof(TokArray) / sizeof(TokArray[0]) - 1;
+    max = sizeof(TokArray) / sizeof(TokArray[0]);
 
     while(top >= bot) {
 	mid = (top + bot) / 2;
@@ -208,9 +209,13 @@ void FindToken(const char *s, Token *tok)
 		return;
 	    } else {
 		while (mid && !TokStrCmp(&TokArray[mid-1],s)) mid--;
-		while (!TokStrCmp(&TokArray[mid], s) && l < TokArray[mid].MinLen)
+		while (mid < max &&
+		       !TokStrCmp(&TokArray[mid], s) &&
+		       l < TokArray[mid].MinLen) {
 		    mid++;
-		if (!TokStrCmp(&TokArray[mid], s)) {
+		}
+		if (mid < max &&
+		    !TokStrCmp(&TokArray[mid], s)) {
 		    tok->type = TokArray[mid].type;
 		    tok->val = TokArray[mid].val;
 		    return;

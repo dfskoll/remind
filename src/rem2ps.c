@@ -12,7 +12,7 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.14 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: rem2ps.c,v 1.15 2005-12-31 23:05:24 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -601,7 +601,6 @@ void WriteOneEntry(CalEntry *c)
 	    PutChar(')');
 	    while(isspace((unsigned char)*s)) s++;
 	    if (!*s) {
-		printf("]\n");
 		goto finish;
 	    }
 	    PutChar('(');

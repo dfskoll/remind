@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.16 2005-09-30 03:33:53 dfs Exp $
+.\" $Id: remind.1,v 1.17 2006-11-02 20:50:16 dfs Exp $
 .TH REMIND 1 "11 April 2005"
 .UC 4
 .SH NAME
@@ -25,7 +25,7 @@ date by piping the output through \fBsort(1)\fR.
 .TP
 .B \-r
 The \fB\-r\fR option disables \fBRUN\fR directives and the \fBshell()\fR
-function
+function.  As of Remind 3.00.17, using \fB\-u\fR implies \fB\-r\fR.
 .TP
 .B \-c\fR\fIn\fR
 The \fB\-c\fR option causes \fBRemind\fR to produce a calendar which is sent to
@@ -200,7 +200,7 @@ environment variables HOME, SHELL and USER to the home directory, shell,
 and user name, respectively, of the specified user.  LOGNAME is also
 set to the specified user name.  This option is meant for
 use in shell scripts which mail reminders to all users.  Note that
-as of Remind 3.0.17, using \fB\-u\fR implies \fB\-r\fR -- the RUN
+as of Remind 3.00.17, using \fB\-u\fR implies \fB\-r\fR -- the RUN
 directive and shell() functions are disabled.
 .PP
 .RS

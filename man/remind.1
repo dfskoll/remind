@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.17 2006-11-02 20:50:16 dfs Exp $
+.\" $Id: remind.1,v 1.18 2007-01-25 02:28:53 dfs Exp $
 .TH REMIND 1 "11 April 2005"
 .UC 4
 .SH NAME
@@ -49,20 +49,29 @@ Any of \fIcol\fR, \fIpad\fR or \fIspc\fR can be omitted, providing you
 provide the correct number of commas.  Don't use any spaces in the option.
 .RE
 .TP
-.B \-s\fR\fIn\fR
+.B \-s\fR[\fBa\fR]\fIn\fR
 The \fB\-s\fR option is very similar to the \fB\-c\fR option, except
 that the output calendar is not formatted.  It is listed in a "simple
 format" which can be used as input for more sophisticated calendar-drawing
 programs.  If \fIn\fR starts with "+", then it is interpreted as a number
 of weeks.
+
+If you immediately follow the \fBs\fR with the letter
+\fBa\fR, then \fBRemind\fR displays reminders on the calendar on the
+day they actually occur \fIas well as\fR on any preceding days specified
+by the reminder's \fIdelta\fR.
 .TP
-.B \-p\fR\fIn\fR
+.B \-p\fR[\fBa\fR]\fIn\fR
 The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
 \fBRem2PS\fR program, which creates a PostScript calendar.  For this
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
 The format of the \fB\-p\fR output is described in the \fBrem2ps(1)\fR
-man page.
+man page.  If you immediately follow the \fBp\fR with the letter
+\fBa\fR, then \fBRemind\fR displays reminders on the calendar on the
+day they actually occur \fIas well as\fR on any preceding days specified
+by the reminder's \fIdelta\fR.
+
 .TP
 .B \-l
 If you use the \-l option in conjunction with the \-p option, then

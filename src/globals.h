@@ -12,7 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.9 2005-09-30 03:29:32 dfs Exp $ */
+/* $Id: globals.h,v 1.10 2007-01-25 02:29:00 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -42,6 +42,7 @@ EXTERN  INIT(	int     ShowAllErrors, 0);
 EXTERN  INIT(	int     DebugFlag, 0);
 EXTERN  INIT(   int	DoCalendar, 0);
 EXTERN  INIT(   int     DoSimpleCalendar, 0);
+EXTERN  INIT(   int     DoSimpleCalDelta, 0);
 EXTERN  INIT(   int     DoPrefixLineNo, 0);
 EXTERN	INIT(	int	MondayFirst, 0);
 EXTERN	INIT(	int	Iterations, 1);

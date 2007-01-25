@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.40 2005-04-14 17:34:34 dfs Exp $
+# $Id: tkremind,v 1.41 2007-01-25 02:28:58 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -623,7 +623,7 @@ proc LoadOptions {} {
 #***********************************************************************
 proc ConfigureCalWindow { month year firstDay numDays } {
     .h.title configure -text "$month $year"
-    wm title . "TkRemind - $month $year"
+    wm title . "$month $year - TkRemind"
     wm iconname . "$month $year"
     ConfigureCalFrame .cal $firstDay $numDays
 }

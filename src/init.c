@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.16 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.17 2007-01-25 02:29:00 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -258,6 +258,10 @@ void InitRemind(int argc, char *argv[])
 	    case 's':
 	    case 'S':
 		DoSimpleCalendar = 1;
+		if (*arg == 'a' || *arg == 'A') {
+			DoSimpleCalDelta = 1;
+			arg++;
+		}
 		if (*arg == '+') {
 		    arg++;
 		    PARSENUM(CalWeeks, arg);
@@ -272,6 +276,10 @@ void InitRemind(int argc, char *argv[])
 	    case 'P':
 		DoSimpleCalendar = 1;
 		PsCal = 1;
+		if (*arg == 'a' || *arg == 'A') {
+		    DoSimpleCalDelta = 1;
+		    arg++;
+		}
 		PARSENUM(CalMonths, arg);
 		if (!CalMonths) CalMonths = 1;
 		break;

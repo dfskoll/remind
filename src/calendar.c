@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.13 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.14 2007-01-25 02:29:00 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -648,7 +648,8 @@ static int DoCalRem(ParsePtr p, int col)
 
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
-    if (jul == JulianToday) {
+    if (jul == JulianToday ||
+	(DoSimpleCalDelta && trig.delta != NO_DELTA && jul-trig.delta <= JulianToday)) {
 	NumTriggered++;
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
 	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {

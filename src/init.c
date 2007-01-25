@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.17 2007-01-25 02:29:00 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.18 2007-01-25 02:32:25 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -463,8 +463,8 @@ void Usage(void)
     fprintf(ErrFp, " -c[n]  Produce a calendar for n (default 1) months\n");
     fprintf(ErrFp, " -c+[n] Produce a calendar for n (default 1) weeks\n");
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");
-    fprintf(ErrFp, " -s[+][n] Produce `simple calendar' for n (1) months (weeks)\n");
-    fprintf(ErrFp, " -p[n]  Same as -s, but input compatible with rem2ps\n");
+    fprintf(ErrFp, " -s[a][+][n] Produce `simple calendar' for n (1) months (weeks)\n");
+    fprintf(ErrFp, " -p[a][n] Same as -s, but input compatible with rem2ps\n");
     fprintf(ErrFp, " -l     Prefix each simple calendar line with line number and filename comment\n");
     fprintf(ErrFp, " -v     Verbose mode\n");
     fprintf(ErrFp, " -o     Ignore ONCE directives\n");

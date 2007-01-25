@@ -8,12 +8,12 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999-2005 by Roaring Penguin Software Inc.   */
+/*  Copyright (C) 1999-2007 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.18 2007-01-25 02:32:25 dfs Exp $";
+static char const RCSID[] = "$Id: init.c,v 1.19 2007-01-25 02:33:18 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>
@@ -452,7 +452,7 @@ void InitRemind(int argc, char *argv[])
 void Usage(void)
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 David F. Skoll\n", VERSION, L_LANGNAME);
-    fprintf(ErrFp, "Copyright 1999-2005 Roaring Penguin Software Inc.\n");
+    fprintf(ErrFp, "Copyright 1999-2007 Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

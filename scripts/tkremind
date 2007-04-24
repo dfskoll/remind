@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.41 2007-01-25 02:28:58 dfs Exp $
+# $Id: tkremind,v 1.42 2007-04-24 14:34:48 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -2685,7 +2685,7 @@ proc ShowTodaysReminders {} {
     CenterWindow $w
 
     # Grab the reminders
-    set stuff [exec -keepnewline $Remind -q -a -r $ReminderFile 2>/dev/null]
+    set stuff [exec -keepnewline $Remind -g -q -a -r $ReminderFile 2>/dev/null]
     $w.text insert end $stuff
     $w.text configure -state disabled
 }

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.14 2007-01-25 02:29:00 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.15 2007-06-05 02:44:30 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -726,10 +726,13 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	e->lineno = LineNo;
 
-	/* Ugly hack... a SPECIAL COLOR is not treated as "passthru"
-	   to preserve ordering and make it behave like a MSG-type reminder */
+	/* Ugly hack... SPECIAL COLOR and SPECIAL HTML are not treated
+	   as "passthru" to preserve ordering and make them behave like
+	   a MSG-type reminder */
 
-	if (trig.typ == PASSTHRU_TYPE && strcmp(trig.passthru, "COLOR")) {
+	if (trig.typ == PASSTHRU_TYPE &&
+	    strcmp(trig.passthru, "COLOR") &&
+	    strcmp(trig.passthru, "HTML")) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
 	    e->pos = e->passthru;
 	    e->time = NO_TIME;

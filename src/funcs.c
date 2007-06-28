@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.11 2007-06-28 03:04:44 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.12 2007-06-28 03:20:37 dfs Exp $";
 
 #include <stdio.h>
 
@@ -1040,27 +1040,51 @@ static int FIsleap(void)
 static int FTrigger(void)
 {
     int y, m, d;
-    int date, time;
-    char buf[40];
+    int date, tim;
+    char buf[128];
 
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    date = ARG(0).v.val;
-    if (Nargs > 2) {
-	if (ARG(2).type != INT_TYPE) return E_BAD_TYPE;
-	if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
-	if (ARG(2).v.val) {
-	    UTCToLocal(ARG(0).v.val, ARG(1).v.val, &date, &time);
-	} else {
-	    date = ARG(0).v.val;
-	    time = ARG(1).v.val;
+    tim = NO_TIME;
+    if (ARG(0).type != DATE_TYPE &&
+	ARG(0).type != DATETIME_TYPE) return E_BAD_TYPE;
+
+    if (ARG(0).type == DATE_TYPE) {
+	date = ARG(0).v.val;
+    } else {
+	date = ARG(0).v.val / 1440;
+	tim = ARG(0).v.val % 1440;
+    }
+
+    if (ARG(0).type == DATE_TYPE) {
+	if (Nargs > 2) {
+	    /* Date Time UTCFlag */
+	    if (ARG(0).type == DATETIME_TYPE) return E_BAD_TYPE;
+	    if (ARG(2).type != INT_TYPE) return E_BAD_TYPE;
+	    if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	    tim = ARG(1).v.val;
+	    if (ARG(2).v.val) {
+		UTCToLocal(date, tim, &date, &tim);
+	    }
+	} else if (Nargs > 1) {
+	    /* Date Time */
+	    if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	    tim = ARG(1).v.val;
+	}
+    } else {
+	if (Nargs > 2) {
+	    return E_2MANY_ARGS;
+	} else if (Nargs > 1) {
+	    /* DateTime UTCFlag */
+	    if (ARG(1).type != INT_TYPE) return E_BAD_TYPE;
+	    if (ARG(1).v.val) {
+		UTCToLocal(date, tim, &date, &tim);
+	    }
 	}
     }
+
     FromJulian(date, &y, &m, &d);
-    if (Nargs > 1) {
-	if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
-	if (Nargs == 2) time = ARG(1).v.val;
+    if (tim != NO_TIME) {
 	sprintf(buf, "%d %s %d AT %02d:%02d", d, EnglishMonthName[m], y,
-		time/60, time%60);
+		tim/60, tim%60);
     } else {
 	sprintf(buf, "%d %s %d", d, EnglishMonthName[m], y);
     }

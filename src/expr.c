@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.10 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.11 2007-06-28 03:04:44 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -44,7 +44,7 @@ static int Multiply(void), Divide(void), Mod(void), Add(void),
     Compare(int);
 
 static int MakeValue (char *s, Value *v, Var *locals);
-static int ParseLiteralDate (char **s, int *jul);
+static int ParseLiteralDate (char **s, int *jul, int *tim);
 
 /* Binary operators - all left-associative */
 
@@ -468,10 +468,15 @@ static int MakeValue(char *s, Value *v, Var *locals)
 	return OK;
     } else if (*s == '\'') { /* It's a literal date */
 	s++;
-	if ((r=ParseLiteralDate(&s, &h))) return r;
+	if ((r=ParseLiteralDate(&s, &h, &m))) return r;
 	if (*s != '\'') return E_BAD_DATE;
-	v->type = DATE_TYPE;
-	v->v.val = h;
+	if (m == NO_TIME) {
+	    v->type = DATE_TYPE;
+	    v->v.val = h;
+	} else {
+	    v->type = DATETIME_TYPE;
+	    v->v.val = (h * 1440) + m;
+	}
 	return OK;
     } else if (isdigit(*s)) { /* It's a number - use len to hold it.*/
 	len = 0;
@@ -529,13 +534,34 @@ static int MakeValue(char *s, Value *v, Var *locals)
 /***************************************************************/
 int DoCoerce(char type, Value *v)
 {
-    int h, d, m, y, i;
+    int h, d, m, y, i, k;
     char *s;
 
     /* Do nothing if value is already the right type */
     if (type == v->type) return OK;
 
     switch(type) {
+    case DATETIME_TYPE:
+	switch(v->type) {
+	case INT_TYPE:
+	    v->type = DATETIME_TYPE;
+	    return OK;
+	case DATE_TYPE:
+	    v->type = DATETIME_TYPE;
+	    v->v.val *= 1440;
+	    return OK;
+	case STR_TYPE:
+	    s = v->v.str;
+	    if (ParseLiteralDate(&s, &i, &m)) return E_CANT_COERCE;
+	    if (*s) return E_CANT_COERCE;
+	    v->type = DATETIME_TYPE;
+	    free(v->v.str);
+	    if (m == NO_TIME) m = 0;
+	    v->v.val = i * 1440 + m;
+	    return OK;
+	default:
+	    return E_CANT_COERCE;
+	}
     case STR_TYPE:
 	switch(v->type) {
 	case INT_TYPE: sprintf(CoerceBuf, "%d", v->v.val); break;
@@ -545,6 +571,15 @@ int DoCoerce(char type, Value *v)
 	case DATE_TYPE: FromJulian(v->v.val, &y, &m, &d);
 	    sprintf(CoerceBuf, "%04d%c%02d%c%02d",
 		    y, DATESEP, m+1, DATESEP, d);
+	    break;
+	case DATETIME_TYPE:
+	    i = v->v.val / 1440;
+	    FromJulian(i, &y, &m, &d);
+	    k = v->v.val % 1440;
+	    h = k / 60;
+	    i = k % 60;
+	    sprintf(CoerceBuf, "%04d%c%02d%c%02d %02d%c%02d",
+		    y, DATESEP, m+1, DATESEP, d, h, TIMESEP, i);
 	    break;
 	default: return E_CANT_COERCE;
 	}
@@ -582,6 +617,7 @@ int DoCoerce(char type, Value *v)
 
 	case DATE_TYPE:
 	case TIM_TYPE:
+	case DATETIME_TYPE:
 	    v->type = INT_TYPE;
 	    return OK;
 
@@ -598,11 +634,16 @@ int DoCoerce(char type, Value *v)
 
 	case STR_TYPE:
 	    s = v->v.str;
-	    if (ParseLiteralDate(&s, &i)) return E_CANT_COERCE;
+	    if (ParseLiteralDate(&s, &i, &m)) return E_CANT_COERCE;
 	    if (*s) return E_CANT_COERCE;
 	    v->type = DATE_TYPE;
 	    free(v->v.str);
 	    v->v.val = i;
+	    return OK;
+
+	case DATETIME_TYPE:
+	    v->type = DATE_TYPE;
+	    v->v.val /= 1440;
 	    return OK;
 
 	default: return E_CANT_COERCE;
@@ -611,6 +652,7 @@ int DoCoerce(char type, Value *v)
     case TIM_TYPE:
 	switch(v->type) {
 	case INT_TYPE:
+	case DATETIME_TYPE:
 	    v->type = TIM_TYPE;
 	    v->v.val %= 1440;
 	    if (v->v.val < 0) v->v.val += 1440;
@@ -680,6 +722,16 @@ static int Add(void)
 	return OK;
     }
 
+/* If it's a datetime plus an int, add 'em */
+    if ((v1.type == DATETIME_TYPE && v2.type == INT_TYPE) ||
+	(v1.type == INT_TYPE && v2.type == DATETIME_TYPE)) {
+	v1.v.val += v2.v.val;
+	if (v1.v.val < 0) return E_DATE_OVER;
+	v1.type = DATETIME_TYPE;
+	PushValStack(v1);
+	return OK;
+    }
+
 /* If it's a time plus an int, add 'em mod 1440 */
     if ((v1.type == TIM_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == TIM_TYPE)) {
@@ -744,6 +796,14 @@ static int Subtract(void)
 
     /* If it's a date minus an int, do subtraction, checking for underflow */
     if (v1.type == DATE_TYPE && v2.type == INT_TYPE) {
+	v1.v.val -= v2.v.val;
+	if (v1.v.val < 0) return E_DATE_OVER;
+	PushValStack(v1);
+	return OK;
+    }
+
+    /* If it's a datetime minus an int, do subtraction, checking for underflow */
+    if (v1.type == DATETIME_TYPE && v2.type == INT_TYPE) {
 	v1.v.val -= v2.v.val;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);
@@ -1059,6 +1119,11 @@ void PrintValue (Value *v, FILE *fp)
 	FromJulian(v->v.val, &y, &m, &d);
 	fprintf(fp, "%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
     }
+    else if (v->type == DATETIME_TYPE) {
+	FromJulian(v->v.val / 1440, &y, &m, &d);
+	fprintf(fp, "%04d%c%02d%c%02d %02d%c%02d", y, DATESEP, m+1, DATESEP, d,
+		(v->v.val % 1440) / 60, TIMESEP, (v->v.val % 1440) % 60);
+    }
     else fprintf(fp, "ERR");
 }
 
@@ -1086,15 +1151,19 @@ int CopyValue(Value *dest, const Value *src)
 /*                                                             */
 /*  ParseLiteralDate                                           */
 /*                                                             */
-/*  Parse a literal date.  Return result in jul, update s.     */
+/*  Parse a literal date or datetime.  Return result in jul    */
+/*  and tim; update s.                                         */
 /*                                                             */
 /***************************************************************/
-static int ParseLiteralDate(char **s, int *jul)
+static int ParseLiteralDate(char **s, int *jul, int *tim)
 {
     int y, m, d;
+    int hour, min;
 
     y=0; m=0; d=0;
+    hour=0; min=0;
 
+    *tim = NO_TIME;
     if (!isdigit(**s)) return E_BAD_DATE;
     while (isdigit(**s)) {
 	y *= 10;
@@ -1118,6 +1187,23 @@ static int ParseLiteralDate(char **s, int *jul)
     if (!DateOK(y, m, d)) return E_BAD_DATE;
 
     *jul = Julian(y, m, d);
+
+    /* Do we have a time part as well? */
+    if (**s == ' ') {
+	(*s)++;
+	while(isdigit(**s)) {
+	    hour *= 10;
+	    hour += *(*s)++ - '0';
+	}
+	if (**s != ':' && **s != '.' && **s != TIMESEP) return E_BAD_TIME;
+	(*s)++;
+	while(isdigit(**s)) {
+	    min *= 10;
+	    min += *(*s)++ - '0';
+	}
+	if (hour > 23 || min > 59) return E_BAD_TIME;
+	*tim = hour * 60 + min;
+    }
 
     return OK;
 }

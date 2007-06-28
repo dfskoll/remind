@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.10 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.11 2007-06-28 03:04:44 dfs Exp $";
 
 #include <stdio.h>
 
@@ -415,6 +415,7 @@ static int FCoerce(void)
     else if (! StrCmpi(s, "date")) return DoCoerce(DATE_TYPE, &RetVal);
     else if (! StrCmpi(s, "time")) return DoCoerce(TIM_TYPE, &RetVal);
     else if (! StrCmpi(s, "string")) return DoCoerce(STR_TYPE, &RetVal);
+    else if (! StrCmpi(s, "datetime")) return DoCoerce(DATETIME_TYPE, &RetVal);
     else return E_CANT_COERCE;
 }
 

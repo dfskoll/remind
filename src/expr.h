@@ -10,14 +10,15 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: expr.h,v 1.4 2000-02-18 03:45:53 dfs Exp $ */
+/* $Id: expr.h,v 1.5 2007-06-28 03:04:44 dfs Exp $ */
 
 /* Define the types of values */
-#define ERR_TYPE 0
-#define INT_TYPE 1
-#define TIM_TYPE 2
-#define DATE_TYPE 3
-#define STR_TYPE 4
+#define ERR_TYPE      0
+#define INT_TYPE      1
+#define TIM_TYPE      2
+#define DATE_TYPE     3
+#define STR_TYPE      4
+#define DATETIME_TYPE 5
 
 /* Define stuff for parsing expressions */
 #define BEG_OF_EXPR '['

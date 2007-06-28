@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.11 2007-06-28 03:04:44 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.12 2007-06-28 21:57:07 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -820,6 +820,7 @@ static int Subtract(void)
 
     /* If it's a time minus a time or a date minus a date, do it */
     if ((v1.type == TIM_TYPE && v2.type == TIM_TYPE) ||
+	(v1.type == DATETIME_TYPE && v2.type == DATETIME_TYPE) ||
 	(v1.type == DATE_TYPE && v2.type == DATE_TYPE)) {
 	v1.v.val -= v2.v.val;
 	v1.type = INT_TYPE;

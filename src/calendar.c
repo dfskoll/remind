@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.15 2007-06-05 02:44:30 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.16 2007-06-29 02:11:02 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -638,7 +638,22 @@ static int DoCalRem(ParsePtr p, int col)
 	strcpy(trig.passthru, "PSFile");
 	trig.typ = PASSTHRU_TYPE;
     }
-    if (!PsCal && trig.typ == PASSTHRU_TYPE) return OK;
+    if (!PsCal) {
+	if (trig.typ == PASSTHRU_TYPE) {
+	    if (strcmp(trig.passthru, "COLOR")) return OK;
+	    /* Strip off the three color numbers */
+	    DBufFree(&buf);
+	    r=ParseToken(p, &buf);
+	    DBufFree(&buf);
+	    if (r) return r;
+	    r=ParseToken(p, &buf);
+	    DBufFree(&buf);
+	    if (r) return r;
+	    r=ParseToken(p, &buf);
+	    DBufFree(&buf);
+	    if (r) return r;
+	}
+    }
 
     /* Remove any "at" times from PS or PSFILE reminders */
     if (trig.typ == PASSTHRU_TYPE && strcmp(trig.passthru, "COLOR")) {

@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.15 2007-06-29 01:52:36 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.16 2007-06-29 02:11:02 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -535,7 +535,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
 /*  Trigger the reminder if it's a RUN or MSG type.            */
 /*                                                             */
 /***************************************************************/
-    int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
+int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 {
     int r, y, m, d;
     char PrioExpr[25];
@@ -547,11 +547,25 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
     DBufInit(&buf);
     DBufInit(&calRow);
     if (t->typ == RUN_TYPE && RunDisabled) return E_RUN_DISABLED;
-    if (t->typ == PASSTHRU_TYPE ||
+    if ((t->typ == PASSTHRU_TYPE && strcmp(t->passthru, "COLOR")) ||
 	t->typ == CAL_TYPE ||
 	t->typ == PS_TYPE ||
 	t->typ == PSF_TYPE)
 	return OK;
+
+    /* Handle COLOR types */
+    if (t->typ == PASSTHRU_TYPE && !strcmp(t->passthru, "COLOR")) {
+	/* Strip off three tokens */
+	r = ParseToken(p, &buf);
+	DBufFree(&buf);
+	if (r) return r;
+	r = ParseToken(p, &buf);
+	DBufFree(&buf);
+	if (r) return r;
+	r = ParseToken(p, &buf);
+	DBufFree(&buf);
+	if (r) return r;
+    }
 /* If it's a MSG-type reminder, and no -k option was used, issue the banner. */
     if ((t->typ == MSG_TYPE || t->typ == MSF_TYPE) 
 	&& !NumTriggered && !NextMode && !MsgCommand) {
@@ -676,6 +690,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
    reminder now. */
     switch(t->typ) {
     case MSG_TYPE:
+    case PASSTHRU_TYPE:
 	if (MsgCommand) {
 	    DoMsgCommand(MsgCommand, DBufValue(&buf));
 	} else {

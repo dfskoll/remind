@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: trigger.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: trigger.c,v 1.7 2007-06-29 01:52:36 dfs Exp $";
 
 #include <stdio.h>
 
@@ -357,6 +357,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	result;
 
     LastTrigValid = 0;
+
 /* Assume everything works */
     *err = OK;
 

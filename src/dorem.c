@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.14 2005-11-20 01:26:59 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.15 2007-06-29 01:52:36 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -151,6 +151,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
     tim->delta = NO_DELTA;
     tim->rep   = NO_REP;
     tim->duration = NO_TIME;
+    LastTriggerTime = NO_TIME;
 
     while(1) {
 	/* Read space-delimited string */

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.13 2007-06-29 01:17:39 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.14 2007-06-29 01:52:36 dfs Exp $";
 
 #include <stdio.h>
 
@@ -1084,8 +1084,13 @@ static int FDefined(void)
 /***************************************************************/
 static int FTrigdate(void)
 {
-    RetVal.type = DATE_TYPE;
-    RetVal.v.val = LastTriggerDate;
+    if (LastTrigValid) {
+	RetVal.type = DATE_TYPE;
+	RetVal.v.val = LastTriggerDate;
+    } else {
+	RetVal.type = INT_TYPE;
+	RetVal.v.val = 0;
+    }
     return OK;
 }
 
@@ -1098,15 +1103,28 @@ static int FTrigvalid(void)
 
 static int FTrigtime(void)
 {
-    RetVal.type = TIME_TYPE;
-    RetVal.v.val = LastTriggerTime;
+    if (LastTriggerTime != NO_TIME) {
+	RetVal.type = TIME_TYPE;
+	RetVal.v.val = LastTriggerTime;
+    } else {
+	RetVal.type = INT_TYPE;
+	RetVal.v.val = 0;
+    }
     return OK;
 }
 
 static int FTrigdatetime(void)
 {
-    RetVal.type = DATETIME_TYPE;
-    RetVal.v.val = LastTriggerDate * MINUTES_PER_DAY + LastTriggerTime;
+    if (!LastTrigValid) {
+	RetVal.type = INT_TYPE;
+	RetVal.v.val = 0;
+    } else if (LastTriggerTime != NO_TIME) {
+	RetVal.type = DATETIME_TYPE;
+	RetVal.v.val = LastTriggerDate * MINUTES_PER_DAY + LastTriggerTime;
+    } else {
+	RetVal.type = DATE_TYPE;
+	RetVal.v.val = LastTriggerDate;
+    }
     return OK;
 }
 

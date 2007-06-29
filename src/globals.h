@@ -12,7 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.10 2007-01-25 02:29:00 dfs Exp $ */
+/* $Id: globals.h,v 1.11 2007-06-29 01:17:40 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -23,6 +23,8 @@
 #define EXTERN extern
 #define INIT(var, val) var
 #endif
+
+#define MINUTES_PER_DAY 1440
 
 #define DaysInYear(y) (((y) % 4) ? 365 : ((!((y) % 100) && ((y) % 400)) ? 365 : 366 ))
 #define IsLeapYear(y) (((y) % 4) ? 0 : ((!((y) % 100) && ((y) % 400)) ? 0 : 1 ))

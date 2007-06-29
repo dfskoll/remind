@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.12 2007-06-28 03:20:37 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.13 2007-06-29 01:17:39 dfs Exp $";
 
 #include <stdio.h>
 
@@ -51,6 +51,10 @@ static char const RCSID[] = "$Id: funcs.c,v 1.12 2007-06-28 03:20:37 dfs Exp $";
 #include "version.h"
 
 /* Function prototypes */
+static int FCurrent (void);
+static int FTimepart(void);
+static int FDatepart(void);
+static int FRealCurrent(void);
 static	int	FAbs		(void);
 static	int	FAccess		(void);
 static int     FArgs		(void);
@@ -60,12 +64,14 @@ static	int	FChar		(void);
 static	int	FChoose		(void);
 static	int	FCoerce		(void);
 static	int	FDate		(void);
+static	int	FDateTime	(void);
 static	int	FDay		(void);
 static	int	FDaysinmon	(void);
 static	int	FDefined	(void);
 static	int	FDosubst	(void);
 static	int	FEasterdate	(void);
 static int	FFiledate	(void);
+static int	FFiledatetime	(void);
 static	int	FFiledir	(void);
 static	int	FFilename	(void);
 static	int	FGetenv		(void);
@@ -84,6 +90,7 @@ static	int	FMin		(void);
 static	int	FMinute		(void);
 static	int	FMinsfromutc	(void);
 static	int	FMoondate	(void);
+static	int	FMoondatetime	(void);
 static	int	FMoonphase	(void);
 static	int	FMoontime	(void);
 static	int	FMon		(void);
@@ -103,6 +110,7 @@ static	int	FSunset		(void);
 static	int	FSunrise	(void);
 static	int	FTime		(void);
 static	int	FTrigdate	(void);
+static	int	FTrigdatetime	(void);
 static	int	FTrigtime	(void);
 static	int	FTrigvalid	(void);
 static	int	FTypeof		(void);
@@ -154,6 +162,15 @@ extern int ValStackPtr;
    from 0 to (Nargs - 1) */
 #define ARG(x) (ValStack[ValStackPtr - Nargs + (x)])
 
+/* Macro for getting date part of a date or datetime value */
+#define DATEPART(x) ((x).type == DATE_TYPE ? (x).v.val : ((x).v.val / MINUTES_PER_DAY))
+
+/* Macro for getting time part of a time or datetime value */
+#define TIMEPART(x) ((x).type == TIME_TYPE ? (x).v.val : ((x).v.val % MINUTES_PER_DAY))
+
+#define HASDATE(x) ((x).type == DATE_TYPE || (x).type == DATETIME_TYPE)
+#define HASTIME(x) ((x).type == TIME_TYPE || (x).type == DATETIME_TYPE)
+
 /* Macro for copying a value while destroying original copy */
 #define DCOPYVAL(x, y) ( (x) = (y), (y).type = ERR_TYPE )
 
@@ -173,7 +190,10 @@ Operator Func[] = {
     {   "char",		1,	NO_MAX,	FChar	},
     {   "choose",	2,	NO_MAX, FChoose },
     {   "coerce",	2,	2,	FCoerce },
+    {   "current",      0,      0,      FCurrent },
     {   "date",		3,	3,	FDate	},
+    {   "datepart",	1,	1,	FDatepart },
+    {   "datetime",	2,	5,	FDateTime },
     {   "dawn",		0,	1,	FDawn},
     {   "day",		1,	1,	FDay	},
     {   "daysinmon",	2,	2,	FDaysinmon },
@@ -182,6 +202,7 @@ Operator Func[] = {
     {   "dusk",		0,	1,	FDusk },
     {   "easterdate",	1,	1,	FEasterdate },
     {	"filedate",	1,	1,	FFiledate },
+    {	"filedatetime",	1,	1,	FFiledatetime },
     {	"filedir",	0,	0,	FFiledir },
     {   "filename",	0,	0,	FFilename },
     {   "getenv",	1,	1,	FGetenv },
@@ -204,6 +225,7 @@ Operator Func[] = {
     {   "mon",		1,	1,	FMon	},
     {   "monnum",	1,	1,	FMonnum },
     {	"moondate",	1,	3,	FMoondate },
+    {	"moondatetime",	1,	3,	FMoondatetime },
     {	"moonphase",	0,	2,	FMoonphase },
     {	"moontime",	1,	3,	FMoontime },
     {   "now",		0,	0,	FNow	},
@@ -212,6 +234,7 @@ Operator Func[] = {
     {   "plural",	1,	3,	FPlural },
     {	"psmoon",	1,	4,	FPsmoon},
     {	"psshade",	1,	3,	FPsshade},
+    {   "realcurrent",  0,      0,      FRealCurrent},
     {   "realnow",      0,      0,      FRealnow},
     {   "realtoday",    0,      0,      FRealtoday },
     {   "sgn",		1,	1,	FSgn	},
@@ -221,8 +244,10 @@ Operator Func[] = {
     {   "sunrise",	0,	1,	FSunrise},
     {   "sunset",	0,	1,	FSunset },
     {   "time",		2,	2,	FTime	},
+    {   "timepart",	1,	1,	FTimepart },
     {   "today",	0,	0,	FToday	},
     {   "trigdate",	0,	0,	FTrigdate },
+    {   "trigdatetime",	0,	0,	FTrigdatetime },
     {   "trigger",	1,	3,	FTrigger },
     {   "trigtime",	0,	0,	FTrigtime },
     {   "trigvalid",	0,	0,	FTrigvalid },
@@ -397,6 +422,69 @@ static int FDate(void)
 
 /***************************************************************/
 /*                                                             */
+/*  FDateTime - make a datetime from one of these combos:      */
+/*  DATE, TIME                                                 */
+/*  DATE, HOUR, MINUTE                                         */
+/*  YEAR, MONTH, DAY, TIME                                     */
+/*  YEAR, MONTH, DAY, HOUR, MINUTE                             */
+/*                                                             */
+/***************************************************************/
+static int FDateTime(void)
+{
+    int y, m, d;
+
+    RetVal.type = DATETIME_TYPE;
+
+    switch(Nargs) {
+    case 2:
+	if (ARG(0).type != DATE_TYPE ||
+	    ARG(1).type != TIME_TYPE) return E_BAD_TYPE;
+	RetVal.v.val = (MINUTES_PER_DAY * ARG(0).v.val) + ARG(1).v.val;
+	return OK;
+    case 3:
+	if (ARG(0).type != DATE_TYPE ||
+	    ARG(1).type != INT_TYPE ||
+	    ARG(2).type != INT_TYPE) return E_BAD_TYPE;
+	if (ARG(1).v.val < 0 || ARG(2).v.val < 0) return E_2LOW;
+	if (ARG(1).v.val > 23 || ARG(2).v.val > 59) return E_2HIGH;
+	RetVal.v.val = (MINUTES_PER_DAY * ARG(0).v.val) + 60 * ARG(1).v.val + ARG(2).v.val;
+	return OK;
+    case 4:
+	if (ARG(0).type != INT_TYPE ||
+	    ARG(1).type != INT_TYPE ||
+	    ARG(2).type != INT_TYPE ||
+	    ARG(3).type != TIME_TYPE) return E_BAD_TYPE;
+	y = ARG(0).v.val;
+	m = ARG(1).v.val - 1;
+	d = ARG(2).v.val;
+
+	if (!DateOK(y, m, d)) return E_BAD_DATE;
+	RetVal.v.val = Julian(y, m, d) * MINUTES_PER_DAY + ARG(3).v.val;
+	return OK;
+    case 5:
+	if (ARG(0).type != INT_TYPE ||
+	    ARG(1).type != INT_TYPE ||
+	    ARG(2).type != INT_TYPE ||
+	    ARG(3).type != INT_TYPE ||
+	    ARG(4).type != INT_TYPE) return E_BAD_TYPE;
+
+	y = ARG(0).v.val;
+	m = ARG(1).v.val - 1;
+	d = ARG(2).v.val;
+	if (!DateOK(y, m, d)) return E_BAD_DATE;
+
+	if (ARG(3).v.val < 0 || ARG(4).v.val < 0) return E_2LOW;
+	if (ARG(3).v.val > 23 || ARG(4).v.val > 59) return E_2HIGH;
+	RetVal.v.val = Julian(y, m, d) * MINUTES_PER_DAY + ARG(3).v.val * 60 + ARG(4).v.val;
+	return OK;
+
+    default:
+	return E_2MANY_ARGS;
+    }
+}
+
+/***************************************************************/
+/*                                                             */
 /*  FCoerce - type coercion function.                          */
 /*                                                             */
 /***************************************************************/
@@ -413,7 +501,7 @@ static int FCoerce(void)
 
     if (! StrCmpi(s, "int")) return DoCoerce(INT_TYPE, &RetVal);
     else if (! StrCmpi(s, "date")) return DoCoerce(DATE_TYPE, &RetVal);
-    else if (! StrCmpi(s, "time")) return DoCoerce(TIM_TYPE, &RetVal);
+    else if (! StrCmpi(s, "time")) return DoCoerce(TIME_TYPE, &RetVal);
     else if (! StrCmpi(s, "string")) return DoCoerce(STR_TYPE, &RetVal);
     else if (! StrCmpi(s, "datetime")) return DoCoerce(DATETIME_TYPE, &RetVal);
     else return E_CANT_COERCE;
@@ -546,13 +634,15 @@ static int FChar(void)
 /***************************************************************/
 static int FDay(void)
 {
-    int y, m, d;
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheJul)
+    int y, m, d, v;
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
+    if (v == CacheJul)
 	d = CacheDay;
     else {
-	FromJulian(ARG(0).v.val, &y, &m, &d);
-	CacheJul = ARG(0).v.val;
+	FromJulian(v, &y, &m, &d);
+	CacheJul = v;
 	CacheYear = y;
 	CacheMon = m;
 	CacheDay = d;
@@ -564,13 +654,15 @@ static int FDay(void)
 
 static int FMonnum(void)
 {
-    int y, m, d;
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheJul)
+    int y, m, d, v;
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
+    if (v == CacheJul)
 	m = CacheMon;
     else {
-	FromJulian(ARG(0).v.val, &y, &m, &d);
-	CacheJul = ARG(0).v.val;
+	FromJulian(v, &y, &m, &d);
+	CacheJul = v;
 	CacheYear = y;
 	CacheMon = m;
 	CacheDay = d;
@@ -582,13 +674,15 @@ static int FMonnum(void)
 
 static int FYear(void)
 {
-    int y, m, d;
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheJul)
+    int y, m, d, v;
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
+    if (v == CacheJul)
 	y = CacheYear;
     else {
-	FromJulian(ARG(0).v.val, &y, &m, &d);
-	CacheJul = ARG(0).v.val;
+	FromJulian(v, &y, &m, &d);
+	CacheJul = v;
 	CacheYear = y;
 	CacheMon = m;
 	CacheDay = d;
@@ -600,11 +694,14 @@ static int FYear(void)
 
 static int FWkdaynum(void)
 {
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
+    int v;
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
     RetVal.type = INT_TYPE;
 
     /* Correct so that 0 = Sunday */
-    RetVal.v.val = (ARG(0).v.val+1) % 7;
+    RetVal.v.val = (v+1) % 7;
     return OK;
 }
 
@@ -612,7 +709,7 @@ static int FWkday(void)
 {
     char *s;
 
-    if (ARG(0).type != DATE_TYPE && ARG(0).type != INT_TYPE) return E_BAD_TYPE;
+    if (!HASDATE(ARG(0)) && ARG(0).type != INT_TYPE) return E_BAD_TYPE;
     if (ARG(0).type == INT_TYPE) {
 	if (ARG(0).v.val < 0) return E_2LOW;
 	if (ARG(0).v.val > 6) return E_2HIGH;
@@ -620,27 +717,28 @@ static int FWkday(void)
 	ARG(0).v.val--;
 	if (ARG(0).v.val < 0) ARG(0).v.val = 6;
 	s = DayName[ARG(0).v.val];
-    } else s = DayName[ARG(0).v.val % 7];
+    } else s = DayName[DATEPART(ARG(0)) % 7];
     return RetStrVal(s);
 }
 
 static int FMon(void)
 {
     char *s;
-    int y, m, d;
+    int y, m, d, v;
 
-    if (ARG(0).type != DATE_TYPE && ARG(0).type != INT_TYPE)
-	return E_BAD_TYPE;
+    if (!HASDATE(ARG(0)) && ARG(0).type != INT_TYPE) return E_BAD_TYPE;
+
     if (ARG(0).type == INT_TYPE) {
 	m = ARG(0).v.val - 1;
 	if (m < 0) return E_2LOW;
 	if (m > 11) return E_2HIGH;
     } else {
-	if (ARG(0).v.val == CacheJul)
+	v = DATEPART(ARG(0));
+	if (v == CacheJul)
 	    m = CacheMon;
 	else {
-	    FromJulian(ARG(0).v.val, &y, &m, &d);
-	    CacheJul = ARG(0).v.val;
+	    FromJulian(v, &y, &m, &d);
+	    CacheJul = v;
 	    CacheYear = y;
 	    CacheMon = m;
 	    CacheDay = d;
@@ -659,17 +757,21 @@ static int FMon(void)
 /***************************************************************/
 static int FHour(void)
 {
-    if (ARG(0).type != TIM_TYPE) return E_BAD_TYPE;
+    int v;
+    if (!HASTIME(ARG(0))) return E_BAD_TYPE;
+    v = TIMEPART(ARG(0));
     RetVal.type = INT_TYPE;
-    RetVal.v.val = ARG(0).v.val / 60;
+    RetVal.v.val = v / 60;
     return OK;
 }
 
 static int FMinute(void)
 {
-    if (ARG(0).type != TIM_TYPE) return E_BAD_TYPE;
+    int v;
+    if (!HASTIME(ARG(0))) return E_BAD_TYPE;
+    v = TIMEPART(ARG(0));
     RetVal.type = INT_TYPE;
-    RetVal.v.val = ARG(0).v.val % 60;
+    RetVal.v.val = v % 60;
     return OK;
 }
 
@@ -683,7 +785,7 @@ static int FTime(void)
     m = ARG(1).v.val;
     if (h<0 || m<0) return E_2LOW;
     if (h>23 || m>59) return E_2HIGH;
-    RetVal.type = TIM_TYPE;
+    RetVal.type = TIME_TYPE;
     RetVal.v.val = h*60 + m;
     return OK;
 }
@@ -886,17 +988,32 @@ static int FRealtoday(void)
 
 static int FNow(void)
 {
-    RetVal.type = TIM_TYPE;
+    RetVal.type = TIME_TYPE;
     RetVal.v.val = (int) ( SystemTime(0) / 60L );
     return OK;
 }
 
 static int FRealnow(void)
 {
-    RetVal.type = TIM_TYPE;
+    RetVal.type = TIME_TYPE;
     RetVal.v.val = (int) ( SystemTime(1) / 60L );
     return OK;
 }
+
+static int FCurrent(void)
+{
+    RetVal.type = DATETIME_TYPE;
+    RetVal.v.val = JulianToday * MINUTES_PER_DAY + (SystemTime(0) / 60);
+    return OK;
+}
+
+static int FRealCurrent(void)
+{
+    RetVal.type = DATETIME_TYPE;
+    RetVal.v.val = RealToday * MINUTES_PER_DAY + (SystemTime(1) / 60);
+    return OK;
+}
+
 /***************************************************************/
 /*                                                             */
 /*  FGetenv - get the value of an environment variable.        */
@@ -981,8 +1098,15 @@ static int FTrigvalid(void)
 
 static int FTrigtime(void)
 {
-    RetVal.type = TIM_TYPE;
+    RetVal.type = TIME_TYPE;
     RetVal.v.val = LastTriggerTime;
+    return OK;
+}
+
+static int FTrigdatetime(void)
+{
+    RetVal.type = DATETIME_TYPE;
+    RetVal.v.val = LastTriggerDate * MINUTES_PER_DAY + LastTriggerTime;
     return OK;
 }
 
@@ -1017,11 +1141,11 @@ static int FIsleap(void)
 {
     int y, m, d;
 
-    if (ARG(0).type != INT_TYPE && ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
+    if (ARG(0).type != INT_TYPE && !HASDATE(ARG(0))) return E_BAD_TYPE;
 
     /* If it's a date, extract the year */
-    if (ARG(0).type == DATE_TYPE)
-	FromJulian(ARG(0).v.val, &y, &m, &d);
+    if (HASDATE(ARG(0)))
+	FromJulian(DATEPART(ARG(0)), &y, &m, &d);
     else
 	y = ARG(0).v.val;
 
@@ -1050,8 +1174,8 @@ static int FTrigger(void)
     if (ARG(0).type == DATE_TYPE) {
 	date = ARG(0).v.val;
     } else {
-	date = ARG(0).v.val / 1440;
-	tim = ARG(0).v.val % 1440;
+	date = ARG(0).v.val / MINUTES_PER_DAY;
+	tim = ARG(0).v.val % MINUTES_PER_DAY;
     }
 
     if (ARG(0).type == DATE_TYPE) {
@@ -1059,14 +1183,14 @@ static int FTrigger(void)
 	    /* Date Time UTCFlag */
 	    if (ARG(0).type == DATETIME_TYPE) return E_BAD_TYPE;
 	    if (ARG(2).type != INT_TYPE) return E_BAD_TYPE;
-	    if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	    if (ARG(1).type != TIME_TYPE) return E_BAD_TYPE;
 	    tim = ARG(1).v.val;
 	    if (ARG(2).v.val) {
 		UTCToLocal(date, tim, &date, &tim);
 	    }
 	} else if (Nargs > 1) {
 	    /* Date Time */
-	    if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	    if (ARG(1).type != TIME_TYPE) return E_BAD_TYPE;
 	    tim = ARG(1).v.val;
 	}
     } else {
@@ -1155,9 +1279,9 @@ static int FShell(void)
 /***************************************************************/
 static int FIsomitted(void)
 {
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
-    RetVal.v.val = IsOmitted(ARG(0).v.val, 0);
+    RetVal.v.val = IsOmitted(DATEPART(ARG(0)), 0);
     return OK;
 }
 
@@ -1355,8 +1479,9 @@ static int FTypeof(void)
     switch(ARG(0).type) {
     case INT_TYPE:  return RetStrVal("INT");
     case DATE_TYPE: return RetStrVal("DATE");
-    case TIM_TYPE:  return RetStrVal("TIME");
+    case TIME_TYPE:  return RetStrVal("TIME");
     case STR_TYPE:  return RetStrVal("STRING");
+    case DATETIME_TYPE: return RetStrVal("DATETIME");
     default:        return RetStrVal("ERR");
     }
 }
@@ -1406,10 +1531,18 @@ static int FDosubst(void)
     tim = NO_TIME;
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     if (Nargs >= 2) {
-	if (ARG(1).type != DATE_TYPE) return E_BAD_TYPE;
-	jul = ARG(1).v.val;
+	if (ARG(1).type == DATETIME_TYPE) {
+	    jul = DATEPART(ARG(1));
+	    tim = TIMEPART(ARG(1));
+	} else {
+	    if (ARG(1).type != DATE_TYPE) return E_BAD_TYPE;
+	    jul = ARG(1).v.val;
+	}
 	if (Nargs >= 3) {
-	    if (ARG(2).type != TIM_TYPE) return E_BAD_TYPE;
+	    if (ARG(1).type == DATETIME_TYPE) {
+		return E_2MANY_ARGS;
+	    }
+	    if (ARG(2).type != TIME_TYPE) return E_BAD_TYPE;
 	    tim = ARG(2).v.val;
 	}
     }
@@ -1475,8 +1608,8 @@ static int FHebdate(void)
 	RetVal.v.val = r;
 	RetVal.type = DATE_TYPE;
 	return OK;
-    } else if (ARG(2).type == DATE_TYPE) {
-	r = GetNextHebrewDate(ARG(2).v.val, mon, day, jahr, adarbehave, &ans);
+    } else if (HASDATE(ARG(2))) {
+	r = GetNextHebrewDate(DATEPART(ARG(2)), mon, day, jahr, adarbehave, &ans);
 	if (r) return r;
 	RetVal.v.val = ans;
 	RetVal.type = DATE_TYPE;
@@ -1486,14 +1619,15 @@ static int FHebdate(void)
 
 static int FHebday(void)
 {
-    int y, m, d;
+    int y, m, d, v;
 
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheHebJul)
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+    if (v == CacheHebJul)
 	d = CacheHebDay;
     else {
-	JulToHeb(ARG(0).v.val, &y, &m, &d);
-	CacheHebJul = ARG(0).v.val;
+	JulToHeb(v, &y, &m, &d);
+	CacheHebJul = v;
 	CacheHebYear = y;
 	CacheHebMon = m;
 	CacheHebDay = d;
@@ -1505,15 +1639,17 @@ static int FHebday(void)
 
 static int FHebmon(void)
 {
-    int y, m, d;
+    int y, m, d, v;
 
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheHebJul) {
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
+    if (v == CacheHebJul) {
 	m = CacheHebMon;
 	y = CacheHebYear;
     } else {
-	JulToHeb(ARG(0).v.val, &y, &m, &d);
-	CacheHebJul = ARG(0).v.val;
+	JulToHeb(v, &y, &m, &d);
+	CacheHebJul = v;
 	CacheHebYear = y;
 	CacheHebMon = m;
 	CacheHebDay = d;
@@ -1523,14 +1659,16 @@ static int FHebmon(void)
 
 static int FHebyear(void)
 {
-    int y, m, d;
+    int y, m, d, v;
 
-    if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-    if (ARG(0).v.val == CacheHebJul)
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    v = DATEPART(ARG(0));
+
+    if (v == CacheHebJul)
 	y = CacheHebYear;
     else {
-	JulToHeb(ARG(0).v.val, &y, &m, &d);
-	CacheHebJul = ARG(0).v.val;
+	JulToHeb(v, &y, &m, &d);
+	CacheHebJul = v;
 	CacheHebYear = y;
 	CacheHebMon = m;
 	CacheHebDay = d;
@@ -1561,8 +1699,8 @@ static int FEasterdate(void)
 	y = ARG(0).v.val;
 	if (y < BASE) return E_2LOW;
 	else if (y > BASE+YR_RANGE) return E_2HIGH;
-    } else if (ARG(0).type == DATE_TYPE) {
-	FromJulian(ARG(0).v.val, &y, &m, &d);  /* We just want the year */
+    } else if (HASDATE(ARG(0))) {
+	FromJulian(DATEPART(ARG(0)), &y, &m, &d);  /* We just want the year */
     } else return E_BAD_TYPE;
 
     do {
@@ -1586,7 +1724,7 @@ static int FEasterdate(void)
 
 	RetVal.type = DATE_TYPE;
 	RetVal.v.val = Julian(y, m, d);
-	y++; } while (ARG(0).type == DATE_TYPE && RetVal.v.val < ARG(0).v.val);
+	y++; } while (HASDATE(ARG(0)) && RetVal.v.val < DATEPART(ARG(0)));
 
     return OK;
 }
@@ -1618,10 +1756,14 @@ static int FTimeStuff(int wantmins)
     tim = 0;
 
     if (Nargs >= 1) {
-	if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-	jul = ARG(0).v.val;
+	if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+	jul = DATEPART(ARG(0));
+	if (HASTIME(ARG(0))) {
+	    tim = TIMEPART(ARG(0));
+	}
 	if (Nargs >= 2) {
-	    if (ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	    if (HASTIME(ARG(0))) return E_2MANY_ARGS;
+	    if (ARG(1).type != TIME_TYPE) return E_BAD_TYPE;
 	    tim = ARG(1).v.val;
 	}
     }
@@ -1778,24 +1920,24 @@ static int FSun(int rise)
     int r;
 
     if (Nargs >= 1) {
-	if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-	jul = ARG(0).v.val;
+	if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+	jul = DATEPART(ARG(0));
     }
-   
+
     r = SunStuff(rise, cosz, jul);
     if (r == NO_TIME) {
 	RetVal.v.val = 0;
 	RetVal.type = INT_TYPE;
     } else if (r == -NO_TIME) {
-	RetVal.v.val = 1440;
+	RetVal.v.val = MINUTES_PER_DAY;
 	RetVal.type = INT_TYPE;
     } else {
 	RetVal.v.val = r;
-	RetVal.type = TIM_TYPE;
+	RetVal.type = TIME_TYPE;
     }
     return OK;
 }
-      
+
 static int FSunrise(void)
 {
     return FSun(1);
@@ -1841,6 +1983,37 @@ static int FFiledate(void)
 	RetVal.v.val=0;
     else
 	RetVal.v.val=Julian(t1->tm_year+1900, t1->tm_mon, t1->tm_mday);
+
+    return OK;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FFiledatetime                                              */
+/*                                                             */
+/*  Return modification datetime of a file                     */
+/*                                                             */
+/***************************************************************/
+static int FFiledatetime(void)
+{
+    struct stat statbuf;
+    struct tm *t1;
+
+    RetVal.type = DATETIME_TYPE;
+
+    if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
+
+    if (stat(ARG(0).v.str, &statbuf)) {
+	RetVal.v.val = 0;
+	return OK;
+    }
+
+    t1 = localtime(&(statbuf.st_mtime));
+
+    if (t1->tm_year + 1900 < BASE)
+	RetVal.v.val=0;
+    else
+	RetVal.v.val = MINUTES_PER_DAY * Julian(t1->tm_year+1900, t1->tm_mon, t1->tm_mday) + t1->tm_hour * 60 + t1->tm_min;
 
     return OK;
 }
@@ -1990,12 +2163,17 @@ static int FMoonphase(void)
 	time = 0;
 	break;
     case 1:
-	if (ARG(0).type != DATE_TYPE) return E_BAD_TYPE;
-	date = ARG(0).v.val;
-	time = 0;
+	if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+	date = DATEPART(ARG(0));
+	if (HASTIME(ARG(0))) {
+	    time = TIMEPART(ARG(0));
+	} else {
+	    time = 0;
+	}
 	break;
     case 2:
-	if (ARG(0).type != DATE_TYPE && ARG(1).type != TIM_TYPE) return E_BAD_TYPE;
+	if (ARG(0).type == DATETIME_TYPE) return E_2MANY_ARGS;
+	if (ARG(0).type != DATE_TYPE && ARG(1).type != TIME_TYPE) return E_BAD_TYPE;
 	date = ARG(0).v.val;
 	time = ARG(1).v.val;
 	break;
@@ -2018,15 +2196,20 @@ static int FMoonphase(void)
 static int MoonStuff (int want_time);
 static int FMoondate(void)
 {
-    return MoonStuff(0);
+    return MoonStuff(DATE_TYPE);
 }
 
 static int FMoontime(void)
 {
-    return MoonStuff(1);
+    return MoonStuff(TIME_TYPE);
 }
 
-static int MoonStuff(int want_time)
+static int FMoondatetime(void)
+{
+    return MoonStuff(DATETIME_TYPE);
+}
+
+static int MoonStuff(int type_wanted)
 {
     int startdate, starttim;
     int d, t;
@@ -2038,23 +2221,49 @@ static int MoonStuff(int want_time)
     if (ARG(0).v.val < 0) return E_2LOW;
     if (ARG(0).v.val > 3) return E_2HIGH;
     if (Nargs >= 2) {
-	if (ARG(1).type != DATE_TYPE) return E_BAD_TYPE;
-	startdate = ARG(1).v.val;
+	if (!HASDATE(ARG(1))) return E_BAD_TYPE;
+	startdate = DATEPART(ARG(1));
+	if (HASTIME(ARG(1))) {
+		starttim = TIMEPART(ARG(1));
+	}
+
 	if (Nargs >= 3) {
-	    if (ARG(2).type != TIM_TYPE) return E_BAD_TYPE;
+	    if (HASTIME(ARG(1))) return E_2MANY_ARGS;
+	    if (ARG(2).type != TIME_TYPE) return E_BAD_TYPE;
 	    starttim = ARG(2).v.val;
 	}
     }
 
     HuntPhase(startdate, starttim, ARG(0).v.val, &d, &t);
-    if (want_time) {
-	RetVal.type = TIM_TYPE;
+    RetVal.type = type_wanted;
+    switch(type_wanted) {
+    case TIME_TYPE:
 	RetVal.v.val = t;
-    } else {
-	RetVal.type = DATE_TYPE;
+	break;
+    case DATE_TYPE:
 	RetVal.v.val = d;
+	break;
+    case DATETIME_TYPE:
+	RetVal.v.val = d * MINUTES_PER_DAY + t;
+	break;
+    default:
+	return E_BAD_TYPE;
     }
     return OK;
 }
 
+static int FTimepart(void)
+{
+    if (ARG(0).type != DATETIME_TYPE) return E_BAD_TYPE;
+    RetVal.type = TIME_TYPE;
+    RetVal.v.val = TIMEPART(ARG(0));
+    return OK;
+}
 
+static int FDatepart(void)
+{
+    if (ARG(0).type != DATETIME_TYPE) return E_BAD_TYPE;
+    RetVal.type = DATE_TYPE;
+    RetVal.v.val = DATEPART(ARG(0));
+    return OK;
+}

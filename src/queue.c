@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.18 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.19 2007-06-29 01:17:40 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -110,7 +110,7 @@ int QueueReminder(ParsePtr p, Trigger *trig,
 void HandleQueuedReminders(void)
 {
     QueuedRem *q = QueueHead;
-    long TimeToSleep;
+    int TimeToSleep;
     unsigned SleepTime;
     Parser p;
     Trigger trig;
@@ -164,16 +164,16 @@ void HandleQueuedReminders(void)
 	if (Daemon && !q) {
 	    if (Daemon < 0) {
 		/* Sleep until midnight */
-		TimeToSleep = (long) 1440*60L - SystemTime(0);
+		TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(0);
 	    } else {
-		TimeToSleep = (long) 60*Daemon;
+		TimeToSleep = 60*Daemon;
 	    }
 	} else {
-	    TimeToSleep = (long) q->tt.nexttime * 60L - SystemTime(0);
+	    TimeToSleep = q->tt.nexttime * 60L - SystemTime(0);
 	}
 
 	while (TimeToSleep > 0L) {
-	    SleepTime = (unsigned) ((TimeToSleep > 30000L) ? 30000 : TimeToSleep);
+	    SleepTime = TimeToSleep;
 
 	    if (Daemon > 0 && SleepTime > 60*Daemon) SleepTime = 60*Daemon;
 
@@ -188,12 +188,12 @@ void HandleQueuedReminders(void)
 	    if (Daemon && !q) {
 		if (Daemon < 0) {
 		    /* Sleep until midnight */
-		    TimeToSleep = (long) 1440*60L - SystemTime(0);
+		    TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(0);
 		} else {
-		    TimeToSleep = (long) 60*Daemon;
+		    TimeToSleep = 60*Daemon;
 		}
 	    } else {
-		TimeToSleep = (long) q->tt.nexttime * 60L - SystemTime(0);
+		TimeToSleep = q->tt.nexttime * 60L - SystemTime(0);
 	    }
 
 	}
@@ -382,7 +382,7 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 	    q->sched[0] = 0;
 	    return NO_TIME;
 	}
-	if (v.type == TIM_TYPE) {
+	if (v.type == TIME_TYPE) {
 	    ThisTime = v.v.val;
 	} else if (v.type == INT_TYPE) {
 	    if (v.v.val > 0)
@@ -396,7 +396,7 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 	    return NO_TIME;
 	}
 	if (ThisTime < 0) ThisTime = 0;        /* Can't be less than 00:00 */
-	if (ThisTime > 1439) ThisTime = 1439;  /* or greater than 11:59 */
+	if (ThisTime > (MINUTES_PER_DAY-1)) ThisTime = (MINUTES_PER_DAY-1);  /* or greater than 11:59 */
 	if (ThisTime > q->tt.nexttime) return ThisTime;
 	if (ThisTime <= LastTime) {
 	    q->sched[0] = 0;

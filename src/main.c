@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: main.c,v 1.14 2005-10-16 14:48:02 dfs Exp $";
+static char const RCSID[] = "$Id: main.c,v 1.15 2007-06-29 01:17:40 dfs Exp $";
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -1171,10 +1171,10 @@ void LocalToUTC(int locdate, int loctime, int *utcdate, int *utctime)
 
     loctime -= diff;
     if (loctime < 0) {
-	loctime += 1440;
+	loctime += MINUTES_PER_DAY;
 	locdate--;
-    } else if (loctime >= 1440) {
-	loctime -= 1440;
+    } else if (loctime >= MINUTES_PER_DAY) {
+	loctime -= MINUTES_PER_DAY;
 	locdate++;
     }
     *utcdate = locdate;
@@ -1199,10 +1199,10 @@ void UTCToLocal(int utcdate, int utctime, int *locdate, int *loctime)
 
     utctime += diff;
     if (utctime < 0) {
-	utctime += 1440;
+	utctime += MINUTES_PER_DAY;
 	utcdate--;
-    } else if (utctime >= 1440) {
-	utctime -= 1440;
+    } else if (utctime >= MINUTES_PER_DAY) {
+	utctime -= MINUTES_PER_DAY;
 	utcdate++;
     }
     *locdate = utcdate;

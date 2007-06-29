@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.12 2007-06-28 21:57:07 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.13 2007-06-29 01:17:39 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -475,7 +475,7 @@ static int MakeValue(char *s, Value *v, Var *locals)
 	    v->v.val = h;
 	} else {
 	    v->type = DATETIME_TYPE;
-	    v->v.val = (h * 1440) + m;
+	    v->v.val = (h * MINUTES_PER_DAY) + m;
 	}
 	return OK;
     } else if (isdigit(*s)) { /* It's a number - use len to hold it.*/
@@ -495,7 +495,7 @@ static int MakeValue(char *s, Value *v, Var *locals)
 		s++;
 	    }
 	    if (*s || h>23 || m>59) return E_BAD_TIME;
-	    v->type = TIM_TYPE;
+	    v->type = TIME_TYPE;
 	    v->v.val = h*60 + m;
 	    return OK;
 	}
@@ -548,7 +548,7 @@ int DoCoerce(char type, Value *v)
 	    return OK;
 	case DATE_TYPE:
 	    v->type = DATETIME_TYPE;
-	    v->v.val *= 1440;
+	    v->v.val *= MINUTES_PER_DAY;
 	    return OK;
 	case STR_TYPE:
 	    s = v->v.str;
@@ -557,7 +557,7 @@ int DoCoerce(char type, Value *v)
 	    v->type = DATETIME_TYPE;
 	    free(v->v.str);
 	    if (m == NO_TIME) m = 0;
-	    v->v.val = i * 1440 + m;
+	    v->v.val = i * MINUTES_PER_DAY + m;
 	    return OK;
 	default:
 	    return E_CANT_COERCE;
@@ -565,7 +565,7 @@ int DoCoerce(char type, Value *v)
     case STR_TYPE:
 	switch(v->type) {
 	case INT_TYPE: sprintf(CoerceBuf, "%d", v->v.val); break;
-	case TIM_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60,
+	case TIME_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60,
 			       TIMESEP, v->v.val % 60);
 	break;
 	case DATE_TYPE: FromJulian(v->v.val, &y, &m, &d);
@@ -573,12 +573,12 @@ int DoCoerce(char type, Value *v)
 		    y, DATESEP, m+1, DATESEP, d);
 	    break;
 	case DATETIME_TYPE:
-	    i = v->v.val / 1440;
+	    i = v->v.val / MINUTES_PER_DAY;
 	    FromJulian(i, &y, &m, &d);
-	    k = v->v.val % 1440;
+	    k = v->v.val % MINUTES_PER_DAY;
 	    h = k / 60;
 	    i = k % 60;
-	    sprintf(CoerceBuf, "%04d%c%02d%c%02d %02d%c%02d",
+	    sprintf(CoerceBuf, "%04d%c%02d%c%02d@%02d%c%02d",
 		    y, DATESEP, m+1, DATESEP, d, h, TIMESEP, i);
 	    break;
 	default: return E_CANT_COERCE;
@@ -616,7 +616,7 @@ int DoCoerce(char type, Value *v)
 	    return OK;
 
 	case DATE_TYPE:
-	case TIM_TYPE:
+	case TIME_TYPE:
 	case DATETIME_TYPE:
 	    v->type = INT_TYPE;
 	    return OK;
@@ -643,19 +643,19 @@ int DoCoerce(char type, Value *v)
 
 	case DATETIME_TYPE:
 	    v->type = DATE_TYPE;
-	    v->v.val /= 1440;
+	    v->v.val /= MINUTES_PER_DAY;
 	    return OK;
 
 	default: return E_CANT_COERCE;
 	}
 
-    case TIM_TYPE:
+    case TIME_TYPE:
 	switch(v->type) {
 	case INT_TYPE:
 	case DATETIME_TYPE:
-	    v->type = TIM_TYPE;
-	    v->v.val %= 1440;
-	    if (v->v.val < 0) v->v.val += 1440;
+	    v->type = TIME_TYPE;
+	    v->v.val %= MINUTES_PER_DAY;
+	    if (v->v.val < 0) v->v.val += MINUTES_PER_DAY;
 	    return OK;
 
 	case STR_TYPE:
@@ -676,7 +676,7 @@ int DoCoerce(char type, Value *v)
 		m += *s++ - '0';
 	    }
 	    if (*s || h>23 || m>59) return E_CANT_COERCE;
-	    v->type = TIM_TYPE;
+	    v->type = TIME_TYPE;
 	    free(v->v.str);
 	    v->v.val = h*60+m;
 	    return OK;
@@ -732,12 +732,12 @@ static int Add(void)
 	return OK;
     }
 
-/* If it's a time plus an int, add 'em mod 1440 */
-    if ((v1.type == TIM_TYPE && v2.type == INT_TYPE) ||
-	(v1.type == INT_TYPE && v2.type == TIM_TYPE)) {
-	v1.v.val = (v1.v.val + v2.v.val) % 1440;
-	if (v1.v.val < 0) v1.v.val += 1440;
-	v1.type = TIM_TYPE;
+/* If it's a time plus an int, add 'em mod MINUTES_PER_DAY */
+    if ((v1.type == TIME_TYPE && v2.type == INT_TYPE) ||
+	(v1.type == INT_TYPE && v2.type == TIME_TYPE)) {
+	v1.v.val = (v1.v.val + v2.v.val) % MINUTES_PER_DAY;
+	if (v1.v.val < 0) v1.v.val += MINUTES_PER_DAY;
+	v1.type = TIME_TYPE;
 	PushValStack(v1);
 	return OK;
     }
@@ -810,16 +810,16 @@ static int Subtract(void)
 	return OK;
     }
 
-    /* If it's a time minus an int, do subtraction mod 1440 */
-    if (v1.type == TIM_TYPE && v2.type == INT_TYPE) {
-	v1.v.val = (v1.v.val - v2.v.val) % 1440;
-	if (v1.v.val < 0) v1.v.val += 1440;
+    /* If it's a time minus an int, do subtraction mod MINUTES_PER_DAY */
+    if (v1.type == TIME_TYPE && v2.type == INT_TYPE) {
+	v1.v.val = (v1.v.val - v2.v.val) % MINUTES_PER_DAY;
+	if (v1.v.val < 0) v1.v.val += MINUTES_PER_DAY;
 	PushValStack(v1);
 	return OK;
     }
 
     /* If it's a time minus a time or a date minus a date, do it */
-    if ((v1.type == TIM_TYPE && v2.type == TIM_TYPE) ||
+    if ((v1.type == TIME_TYPE && v2.type == TIME_TYPE) ||
 	(v1.type == DATETIME_TYPE && v2.type == DATETIME_TYPE) ||
 	(v1.type == DATE_TYPE && v2.type == DATE_TYPE)) {
 	v1.v.val -= v2.v.val;
@@ -1114,16 +1114,16 @@ void PrintValue (Value *v, FILE *fp)
 	if (*s) fprintf(fp, "...");
     }
     else if (v->type == INT_TYPE) fprintf(fp, "%d", v->v.val);
-    else if (v->type == TIM_TYPE) fprintf(fp, "%02d%c%02d", v->v.val / 60,
-					  TIMESEP, v->v.val % 60);
+    else if (v->type == TIME_TYPE) fprintf(fp, "%02d%c%02d", v->v.val / 60,
+					   TIMESEP, v->v.val % 60);
     else if (v->type == DATE_TYPE) {
 	FromJulian(v->v.val, &y, &m, &d);
 	fprintf(fp, "%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
     }
     else if (v->type == DATETIME_TYPE) {
-	FromJulian(v->v.val / 1440, &y, &m, &d);
-	fprintf(fp, "%04d%c%02d%c%02d %02d%c%02d", y, DATESEP, m+1, DATESEP, d,
-		(v->v.val % 1440) / 60, TIMESEP, (v->v.val % 1440) % 60);
+	FromJulian(v->v.val / MINUTES_PER_DAY, &y, &m, &d);
+	fprintf(fp, "%04d%c%02d%c%02d@%02d%c%02d", y, DATESEP, m+1, DATESEP, d,
+		(v->v.val % MINUTES_PER_DAY) / 60, TIMESEP, (v->v.val % MINUTES_PER_DAY) % 60);
     }
     else fprintf(fp, "ERR");
 }
@@ -1190,7 +1190,7 @@ static int ParseLiteralDate(char **s, int *jul, int *tim)
     *jul = Julian(y, m, d);
 
     /* Do we have a time part as well? */
-    if (**s == ' ') {
+    if (**s == ' ' || **s == '@') {
 	(*s)++;
 	while(isdigit(**s)) {
 	    hour *= 10;

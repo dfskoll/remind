@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.13 2005-04-14 17:33:26 dfs Exp $
+# $Id: build.tk,v 1.14 2007-07-01 20:13:37 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -34,7 +34,7 @@ proc SetConfigDefaults {} {
     set Config(LON_MIN) 39
     set Config(LOCATION) "Ottawa"
     set Config(DEFAULT_PAGE) "Letter"
-    set Config(DATESEP) "/"
+    set Config(DATESEP) "-"
     set Config(TIMESEP) ":"
     set Config(ISOLATIN1) 0
     set Config(IBMEXTENDED) 0

@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.12 2007-07-01 14:49:47 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.13 2007-07-01 20:12:16 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -35,7 +35,45 @@ static char const RCSID[] = "$Id: var.c,v 1.12 2007-07-01 14:49:47 dfs Exp $";
 
 static Var *VHashTbl[VAR_HASH_SIZE];
 
-typedef void (*sysvar_func)(Value *);
+typedef int (*SysVarFunc)(int, Value *);
+
+static int date_sep_func(int do_set, Value *val)
+{
+    if (!do_set) {
+	val->v.str = malloc(2);
+	if (!val->v.str) return E_NO_MEM;
+	val->v.str[0] = DateSep;
+	val->v.str[1] = 0;
+	val->type = STR_TYPE;
+	return OK;
+    }
+    if (val->type != STR_TYPE) return E_BAD_TYPE;
+    if (strcmp(val->v.str, "/") &&
+	strcmp(val->v.str, "-")) {
+	return E_BAD_TYPE;
+    }
+    DateSep = val->v.str[0];
+    return OK;
+}
+
+static int time_sep_func(int do_set, Value *val)
+{
+    if (!do_set) {
+	val->v.str = malloc(2);
+	if (!val->v.str) return E_NO_MEM;
+	val->v.str[0] = TimeSep;
+	val->v.str[1] = 0;
+	val->type = STR_TYPE;
+	return OK;
+    }
+    if (val->type != STR_TYPE) return E_BAD_TYPE;
+    if (strcmp(val->v.str, ":") &&
+	strcmp(val->v.str, ".")) {
+	return E_BAD_TYPE;
+    }
+    TimeSep = val->v.str[0];
+    return OK;
+}
 
 /***************************************************************/
 /*                                                             */
@@ -423,6 +461,7 @@ static SysVar SysVarArr[] = {
     {   "CalcUTC",	  1,	INT_TYPE,	&CalculateUTC,	0,	1   },
     {   "CalMode",	  0,	INT_TYPE,	&DoCalendar,	0,	0   },
     {   "Daemon",	  0,	INT_TYPE,	&Daemon,	0,	0   },
+    {   "DateSep",        1,    SPECIAL_TYPE,   date_sep_func,  0,      0   },
     {   "DefaultPrio",	  1,	INT_TYPE,	&DefaultPrio,	0,	9999 },
     {   "DontFork",	  0,	INT_TYPE,	&DontFork,	0,	0   },
     {   "DontQueue",	  0,	INT_TYPE,	&DontQueue,	0,	0   },
@@ -454,7 +493,8 @@ static SysVar SysVarArr[] = {
     {   "SortByDate",	  0,	INT_TYPE,	&SortByDate,	0,	0},
     {   "SortByPrio",	  0,	INT_TYPE,	&SortByPrio,	0,	0},
     {   "SortByTime",	  0,	INT_TYPE,	&SortByTime,	0,	0},
-    {   "SubsIndent",	  1,	INT_TYPE,	&SubsIndent,	0,	132}
+    {   "SubsIndent",	  1,	INT_TYPE,	&SubsIndent,	0,	132},
+    {   "TimeSep",        1,    SPECIAL_TYPE,   time_sep_func,  0,      0   }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
@@ -471,15 +511,18 @@ int SetSysVar(const char *name, Value *value)
 {
     SysVar *v = FindSysVar(name);
     if (!v) return E_NOSUCH_VAR;
-    if (v->type != value->type) return E_BAD_TYPE;
+    if (v->type != SPECIAL_TYPE &&
+	v->type != value->type) return E_BAD_TYPE;
     if (!v->modifiable) {
 	Eprint("%s: `$%s'", ErrMsg[E_CANT_MODIFY], name);
 	return E_CANT_MODIFY;
     }
 
-/* If it's a string variable, special measures must be taken */
     if (v->type == SPECIAL_TYPE) {
+	SysVarFunc f = (SysVarFunc) v->value;
+	return f(1, value);
     } else if (v->type == STR_TYPE) {
+        /* If it's a string variable, special measures must be taken */
 	if (v->been_malloced) free(*((char **)(v->value)));
 	v->been_malloced = 1;
 	*((char **) v->value) = value->v.str;
@@ -506,6 +549,8 @@ int GetSysVar(const char *name, Value *val)
     val->type = ERR_TYPE;
     if (!v) return E_NOSUCH_VAR;
     if (v->type == SPECIAL_TYPE) {
+	SysVarFunc f = (SysVarFunc) v->value;
+	return f(0, val);
     } else if (v->type == STR_TYPE) {
 	val->v.str = StrDup(*((char **) v->value));
 	if (!val->v.str) return E_NO_MEM;
@@ -587,13 +632,28 @@ static void DumpSysVar(const char *name, const SysVar *v)
 
     buffer[0]='$'; buffer[1] = 0;
     if (name) strcat(buffer, name); else strcat(buffer, v->name);
-    fprintf(ErrFp, "%*s  ", VAR_NAME_LEN, buffer);
+    fprintf(ErrFp, "%*s  ", VAR_NAME_LEN+1, buffer);
     if (v) {
-	if (v->type == STR_TYPE) {
+	if (v->type == SPECIAL_TYPE) {
+	    Value val;
+	    SysVarFunc f = (SysVarFunc) v->value;
+	    f(0, &val);
+	    if (DoCoerce(STR_TYPE, &val) == OK) {
+		fprintf(ErrFp, "\"%s\"\n", val.v.str);
+	    }
+	    DestroyValue(val);
+	} else if (v->type == STR_TYPE) {
 	    char *s = *((char **)v->value);
 	    int y;
 	    Putc('"', ErrFp);
-	    for (y=0; y<MAX_PRT_LEN && *s; y++) Putc(*s++, ErrFp);
+	    for (y=0; y<MAX_PRT_LEN && *s; y++) {
+		if (*s == '"') {
+		    fprintf(ErrFp, "\" + char(34) + \"");
+		    s++;
+		} else {
+		    Putc(*s++, ErrFp);
+		}
+	    }
 	    Putc('"', ErrFp);
 	    if (*s) fprintf(ErrFp, "...");
 	    Putc('\n', ErrFp);

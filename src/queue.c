@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.19 2007-06-29 01:17:40 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.20 2007-07-01 20:12:15 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -314,8 +314,8 @@ void GotSigInt(void)
     while (q) {
 	if (q->tt.nexttime != NO_TIME) {
 	    printf("Trigger: %02d%c%02d  Activate: %02d%c%02d  Rep: %d  Delta: %d  Sched: %s",
-		   q->tt.ttime / 60, TIMESEP, q->tt.ttime % 60,
-		   q->tt.nexttime / 60, TIMESEP, q->tt.nexttime % 60,
+		   q->tt.ttime / 60, TimeSep, q->tt.ttime % 60,
+		   q->tt.nexttime / 60, TimeSep, q->tt.nexttime % 60,
 		   q->tt.rep, q->tt.delta, q->sched);
 	    if (*q->sched) printf("(%d)", q->ntrig+1);
 	    printf("%s", NL);

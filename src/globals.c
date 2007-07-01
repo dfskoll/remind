@@ -14,10 +14,11 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: globals.c,v 1.4 2000-02-18 03:45:56 dfs Exp $";
+static char const RCSID[] = "$Id: globals.c,v 1.5 2007-07-01 20:12:15 dfs Exp $";
 
 #include <stdio.h>   /* For defintion of FILE - sigh! */
 #include "types.h"
+#include "custom.h"
 #define MK_GLOBALS
 #include "globals.h"
 #include "err.h"

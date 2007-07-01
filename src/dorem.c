@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.16 2007-06-29 02:11:02 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.17 2007-07-01 20:12:15 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -586,7 +586,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	    return OK;
 	}
 	FromJulian(jul, &y, &m, &d);
- 	sprintf(tmpBuf, "%04d%c%02d%c%02d ", y, DATESEP, m+1, DATESEP, d);
+ 	sprintf(tmpBuf, "%04d%c%02d%c%02d ", y, DateSep, m+1, DateSep, d);
  	if (DBufPuts(&calRow, tmpBuf) != OK) {
  	    DBufFree(&calRow);
  	    return E_NO_MEM;

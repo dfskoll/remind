@@ -16,7 +16,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.10 2000-02-18 03:53:49 dfs Exp $ */
+/* $Id: finnish.h,v 1.11 2007-07-01 20:12:19 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -166,18 +166,18 @@
 #define L_A_OVER sprintf(s, "%s%s %d. %s%s %d", DayName[jul%7], L_ON, d, \
 			 MonthName[m], L_PARTIT, y);
 #define L_C_OVER sprintf(s, "%s%s", DayName[jul%7], L_ON);
-#define L_E_OVER sprintf(s, "%02d%c%02d%c%04d", d, DATESEP, m+1, DATESEP, \
+#define L_E_OVER sprintf(s, "%02d%c%02d%c%04d", d, DateSep, m+1, DateSep, \
 			 y);
-#define L_F_OVER sprintf(s, "%02d%c%02d%c%04d", m+1, DATESEP, d, DATESEP, y);
+#define L_F_OVER sprintf(s, "%02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
 #define L_G_OVER sprintf(s, "%s%s %d. %s%s", DayName[jul%7], L_ON, d, \
 			 MonthName[m], L_PARTIT);
-#define L_H_OVER sprintf(s, "%02d%c%02d", d, DATESEP, m+1);
-#define L_I_OVER sprintf(s, "%02d%c%02d", m+1, DATESEP, d);
+#define L_H_OVER sprintf(s, "%02d%c%02d", d, DateSep, m+1);
+#define L_I_OVER sprintf(s, "%02d%c%02d", m+1, DateSep, d);
 #define L_J_OVER sprintf(s, "%s%s %sn %d%s %d", DayName[jul%7], L_ON, \
 			 MonthName[m], d, plu, y);
 #define L_K_OVER sprintf(s, "%s%s %sn %d%s", DayName[jul%7], L_ON, \
 			 MonthName[m], d, plu);
-#define L_L_OVER sprintf(s, "%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
+#define L_L_OVER sprintf(s, "%04d%c%02d%c%02d", y, DateSep, m+1, DateSep, d);
 #define L_Q_OVER sprintf(s, "n");
 #define L_U_OVER sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, \
 			 d, plu, MonthName[m], L_PARTIT, y);

@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.16 2007-06-29 02:11:02 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.17 2007-07-01 20:12:15 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -903,7 +903,7 @@ char *SimpleTime(int tim)
 	    if (h == 0) hh=12;
 	    else if (h > 12) hh=h-12;
 	    else hh=h;
-	    sprintf(buf, "%2d%c%02d%s ", hh, TIMESEP, min, (h>=12) ? L_PM : L_AM);
+	    sprintf(buf, "%2d%c%02d%s ", hh, TimeSep, min, (h>=12) ? L_PM : L_AM);
 	}
 	break;
 
@@ -911,7 +911,7 @@ char *SimpleTime(int tim)
 	if (tim != NO_TIME) {
 	    h = tim / 60;
 	    min = tim % 60;
-	    sprintf(buf, "%02d%c%02d ", h, TIMESEP, min);
+	    sprintf(buf, "%02d%c%02d ", h, TimeSep, min);
 	}
 	break;
     }

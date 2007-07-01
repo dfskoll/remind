@@ -12,7 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: danish.h,v 1.7 2000-02-18 03:46:17 dfs Exp $ */
+/* $Id: danish.h,v 1.8 2007-07-01 20:12:19 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Danish"
@@ -103,11 +103,11 @@
 #define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<5) ? " om natten" : " om formiddagen" : (hour > 17) ? " om aftenen" : " om eftermiddagen";
 #define L_ORDINAL_OVERRIDE		plu = ".";
 #define L_A_OVER                        sprintf(s, "%s %s, den %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y);
-#define L_E_OVER                        sprintf(s, "den %02d%c%02d%c%04d", d, DATESEP, m+1, DATESEP, y);
-#define L_F_OVER                        sprintf(s, "den %02d%c%02d%c%04d", m+1, DATESEP, d, DATESEP, y);
+#define L_E_OVER                        sprintf(s, "den %02d%c%02d%c%04d", d, DateSep, m+1, DateSep, y);
+#define L_F_OVER                        sprintf(s, "den %02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
 #define	L_G_OVER			sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]);
-#define L_H_OVER                        sprintf(s, "den %02d%c%02d", d, DATESEP, m+1);
-#define L_I_OVER                        sprintf(s, "den %02d%c%02d", m+1, DATESEP, d);
+#define L_H_OVER                        sprintf(s, "den %02d%c%02d", d, DateSep, m+1);
+#define L_I_OVER                        sprintf(s, "den %02d%c%02d", m+1, DateSep, d);
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
 

@@ -12,7 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.11 2007-06-29 01:17:40 dfs Exp $ */
+/* $Id: globals.h,v 1.12 2007-07-01 20:12:15 dfs Exp $ */
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -71,7 +71,8 @@ EXTERN  INIT(	int 	DontQueue, 0);
 EXTERN  INIT(   int     NumQueued, 0);
 EXTERN  INIT(   int     DontIssueAts, 0);
 EXTERN  INIT(   int     Daemon, 0);
-
+EXTERN  INIT(   char    DateSep, DATESEP);
+EXTERN  INIT(   char    TimeSep, TIMESEP);
 
 EXTERN  INIT(   int     ScFormat, SC_AMPM);
 EXTERN  INIT(   int     MaxSatIter, 150);

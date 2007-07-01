@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: expr.c,v 1.13 2007-06-29 01:17:39 dfs Exp $";
+static char const RCSID[] = "$Id: expr.c,v 1.14 2007-07-01 20:12:15 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -240,7 +240,7 @@ static int ParseExprToken(DynamicBuffer *buf, char **in)
     }
 
     /* Parse a constant, variable name or function */
-    while (ISID(**in) || **in == ':' || **in == '.' || **in == TIMESEP) {
+    while (ISID(**in) || **in == ':' || **in == '.' || **in == TimeSep) {
 	if (DBufPutc(buf, **in) != OK) {
 	    DBufFree(buf);
 	    return E_NO_MEM;
@@ -484,7 +484,7 @@ static int MakeValue(char *s, Value *v, Var *locals)
 	    len *= 10;
 	    len += (*s++ - '0');
 	}
-	if (*s == ':' || *s == '.' || *s == TIMESEP) { /* Must be a literal time */
+	if (*s == ':' || *s == '.' || *s == TimeSep) { /* Must be a literal time */
 	    s++;
 	    if (!isdigit(*s)) return E_BAD_TIME;
 	    h = len;
@@ -566,11 +566,11 @@ int DoCoerce(char type, Value *v)
 	switch(v->type) {
 	case INT_TYPE: sprintf(CoerceBuf, "%d", v->v.val); break;
 	case TIME_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60,
-			       TIMESEP, v->v.val % 60);
+			       TimeSep, v->v.val % 60);
 	break;
 	case DATE_TYPE: FromJulian(v->v.val, &y, &m, &d);
 	    sprintf(CoerceBuf, "%04d%c%02d%c%02d",
-		    y, DATESEP, m+1, DATESEP, d);
+		    y, DateSep, m+1, DateSep, d);
 	    break;
 	case DATETIME_TYPE:
 	    i = v->v.val / MINUTES_PER_DAY;
@@ -579,7 +579,7 @@ int DoCoerce(char type, Value *v)
 	    h = k / 60;
 	    i = k % 60;
 	    sprintf(CoerceBuf, "%04d%c%02d%c%02d@%02d%c%02d",
-		    y, DATESEP, m+1, DATESEP, d, h, TIMESEP, i);
+		    y, DateSep, m+1, DateSep, d, h, TimeSep, i);
 	    break;
 	default: return E_CANT_COERCE;
 	}
@@ -667,7 +667,7 @@ int DoCoerce(char type, Value *v)
 		h *= 10;
 		h += *s++ - '0';
 	    }
-	    if (*s != ':' && *s != '.' && *s != TIMESEP)
+	    if (*s != ':' && *s != '.' && *s != TimeSep)
 		return E_CANT_COERCE;
 	    s++;
 	    if (!isdigit(*s)) return E_CANT_COERCE;
@@ -1115,15 +1115,15 @@ void PrintValue (Value *v, FILE *fp)
     }
     else if (v->type == INT_TYPE) fprintf(fp, "%d", v->v.val);
     else if (v->type == TIME_TYPE) fprintf(fp, "%02d%c%02d", v->v.val / 60,
-					   TIMESEP, v->v.val % 60);
+					   TimeSep, v->v.val % 60);
     else if (v->type == DATE_TYPE) {
 	FromJulian(v->v.val, &y, &m, &d);
-	fprintf(fp, "%04d%c%02d%c%02d", y, DATESEP, m+1, DATESEP, d);
+	fprintf(fp, "%04d%c%02d%c%02d", y, DateSep, m+1, DateSep, d);
     }
     else if (v->type == DATETIME_TYPE) {
 	FromJulian(v->v.val / MINUTES_PER_DAY, &y, &m, &d);
-	fprintf(fp, "%04d%c%02d%c%02d@%02d%c%02d", y, DATESEP, m+1, DATESEP, d,
-		(v->v.val % MINUTES_PER_DAY) / 60, TIMESEP, (v->v.val % MINUTES_PER_DAY) % 60);
+	fprintf(fp, "%04d%c%02d%c%02d@%02d%c%02d", y, DateSep, m+1, DateSep, d,
+		(v->v.val % MINUTES_PER_DAY) / 60, TimeSep, (v->v.val % MINUTES_PER_DAY) % 60);
     }
     else fprintf(fp, "ERR");
 }
@@ -1170,7 +1170,7 @@ static int ParseLiteralDate(char **s, int *jul, int *tim)
 	y *= 10;
 	y += *(*s)++ - '0';
     }
-    if (**s != '/' && **s != '-' && **s != DATESEP) return E_BAD_DATE;
+    if (**s != '/' && **s != '-' && **s != DateSep) return E_BAD_DATE;
     (*s)++;
     if (!isdigit(**s)) return E_BAD_DATE;
     while (isdigit(**s)) {
@@ -1178,7 +1178,7 @@ static int ParseLiteralDate(char **s, int *jul, int *tim)
 	m += *(*s)++ - '0';
     }
     m--;
-    if (**s != '/' && **s != '-' && **s != DATESEP) return E_BAD_DATE;
+    if (**s != '/' && **s != '-' && **s != DateSep) return E_BAD_DATE;
     (*s)++;
     if (!isdigit(**s)) return E_BAD_DATE;
     while (isdigit(**s)) {
@@ -1196,7 +1196,7 @@ static int ParseLiteralDate(char **s, int *jul, int *tim)
 	    hour *= 10;
 	    hour += *(*s)++ - '0';
 	}
-	if (**s != ':' && **s != '.' && **s != TIMESEP) return E_BAD_TIME;
+	if (**s != ':' && **s != '.' && **s != TimeSep) return E_BAD_TIME;
 	(*s)++;
 	while(isdigit(**s)) {
 	    min *= 10;

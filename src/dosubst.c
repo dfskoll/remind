@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.11 2005-09-30 03:29:32 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.12 2007-07-01 20:12:15 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -242,8 +242,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_E_OVER
 	    L_E_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DATESEP,
-		    m+1, DATESEP, y);
+	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DateSep,
+		    m+1, DateSep, y);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -252,7 +252,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_F_OVER
 	    L_F_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DATESEP, d, DATESEP, y);
+	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DateSep, d, DateSep, y);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -270,7 +270,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_H_OVER
 	    L_H_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d", L_ON, d, DATESEP, m+1);
+	    sprintf(s, "%s %02d%c%02d", L_ON, d, DateSep, m+1);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -279,7 +279,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_I_OVER
 	    L_I_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DATESEP, d);
+	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DateSep, d);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -308,7 +308,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_L_OVER
 	    L_L_OVER
 #else
-	    sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DATESEP, m+1, DATESEP, d);
+	    sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DateSep, m+1, DateSep, d);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -463,7 +463,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_2_OVER
 	    L_2_OVER
 #else
-	    sprintf(s, "%s %d%c%02d%s", L_AT, hh, TIMESEP, min, pm);
+	    sprintf(s, "%s %d%c%02d%s", L_AT, hh, TimeSep, min, pm);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -473,7 +473,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    L_3_OVER
 #else
 
-	    sprintf(s, "%s %02d%c%02d", L_AT, h, TIMESEP, min);
+	    sprintf(s, "%s %02d%c%02d", L_AT, h, TimeSep, min);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -554,7 +554,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_AT_OVER
 	    L_AT_OVER
 #else
-	    sprintf(s, "%d%c%02d%s", chh, TIMESEP, cmin, cpm);
+	    sprintf(s, "%d%c%02d%s", chh, TimeSep, cmin, cpm);
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -563,7 +563,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_HASH_OVER
 	    L_HASH_OVER
 #else
-	    sprintf(s, "%02d%c%02d", ch, TIMESEP, cmin);
+	    sprintf(s, "%02d%c%02d", ch, TimeSep, cmin);
 #endif
 	    SHIP_OUT(s);
 	    break;

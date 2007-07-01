@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.13 2005-11-20 01:26:59 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.14 2007-07-01 20:12:15 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -278,7 +278,7 @@ void FindNumericToken(const char *s, Token *t)
 	    return;
 	}
 	/* If we hit a colon or a period, we've probably got a time hr:min */
-	if (*s == ':' || *s == '.' || *s == TIMESEP) {
+	if (*s == ':' || *s == '.' || *s == TimeSep) {
 	    s++;
 	    hour = t->val;
 	    PARSENUM(min, s);

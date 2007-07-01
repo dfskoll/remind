@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.36 2007-03-26 19:37:56 dfs Exp $ */
+/* $Id: custom.h,v 1.37 2007-07-01 14:49:47 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -41,11 +41,11 @@
 /* #define DEFAULT_PAGE {"A4", 595, 842} */
   
 /*---------------------------------------------------------------------*/
-/* DATESEP:  The default date separator.  North American usage is '/'; */
-/* others may prefer '-'.                                              */
+/* DATESEP:  The default date separator.  Standard usage is '-';       */
+/* others may prefer '/'.                                              */
 /*---------------------------------------------------------------------*/
-#define DATESEP '/'
-/* #define DATESEP '-' */
+#define DATESEP '-'
+/* #define DATESEP '/' */
 
 /*---------------------------------------------------------------------*/
 /* TIMESEP:  The default time separator.  North American usage is ':'; */

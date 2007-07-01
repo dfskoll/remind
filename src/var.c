@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.11 2007-06-29 02:11:02 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.12 2007-07-01 14:49:47 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -34,6 +34,8 @@ static char const RCSID[] = "$Id: var.c,v 1.11 2007-06-29 02:11:02 dfs Exp $";
 #define UNDEF	 ErrMsg[E_UNDEF]
 
 static Var *VHashTbl[VAR_HASH_SIZE];
+
+typedef void (*sysvar_func)(Value *);
 
 /***************************************************************/
 /*                                                             */
@@ -476,7 +478,8 @@ int SetSysVar(const char *name, Value *value)
     }
 
 /* If it's a string variable, special measures must be taken */
-    if (v->type == STR_TYPE) {
+    if (v->type == SPECIAL_TYPE) {
+    } else if (v->type == STR_TYPE) {
 	if (v->been_malloced) free(*((char **)(v->value)));
 	v->been_malloced = 1;
 	*((char **) v->value) = value->v.str;
@@ -502,7 +505,8 @@ int GetSysVar(const char *name, Value *val)
 
     val->type = ERR_TYPE;
     if (!v) return E_NOSUCH_VAR;
-    if (v->type == STR_TYPE) {
+    if (v->type == SPECIAL_TYPE) {
+    } else if (v->type == STR_TYPE) {
 	val->v.str = StrDup(*((char **) v->value));
 	if (!val->v.str) return E_NO_MEM;
     } else {

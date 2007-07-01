@@ -1,5 +1,5 @@
-.\" $Id: remind.1,v 1.18 2007-01-25 02:28:53 dfs Exp $
-.TH REMIND 1 "11 April 2005"
+.\" $Id: remind.1,v 1.19 2007-07-01 14:49:44 dfs Exp $
+.TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -103,16 +103,16 @@ The \fB\-h\fR option ("hush...") suppresses certain warning and information
 messages.  In particular, if no reminders are triggered, this mode
 produces no output.
 .TP
-\fB\-a\fR (UNIX and OS/2 only)
+\fB\-a\fR
 The \fB\-a\fR option causes \fBRemind\fR not to immediately trigger timed
 reminders which would also be queued.  It also causes \fBRemind\fR not to
 place timed reminders in a calendar.
 .TP
-\fB\-q\fR (UNIX and OS/2 only)
+\fB\-q\fR
 The \fB\-q\fR option causes \fBRemind\fR not to queue timed reminders
 for later execution.
 .TP
-\fB\-f\fR (UNIX and OS/2 only)
+\fB\-f\fR
 The \fB\-f\fR option causes \fBRemind\fR to remain in the foreground
 when processing queued reminders, rather than forking off
 a background process to handle them.
@@ -189,7 +189,7 @@ characters are escaped, the program you execute with the \fB\-k\fR
 option must be prepared to handle the entire message as a single argument.
 .RE
 .TP
-\fB\-z\fR[\fIn\fR] (UNIX and OS/2 only)
+\fB\-z\fR[\fIn\fR]
 Runs \fBRemind\fR in the daemon mode.  If \fIn\fR is supplied, it
 specifies how often (in minutes) \fBRemind\fR should wake up to
 check if the reminder script has been changed.  \fIN\fR defaults
@@ -202,7 +202,7 @@ special mode called \fBserver mode\fR.  This is documented
 in the tkremind man page; see tkremind(1).
 .RE
 .TP
-\fB\-u\fR\fIname\fR  (UNIX version only)
+\fB\-u\fR\fIname\fR
 Runs \fBRemind\fR with the uid and gid of the user specified by \fIname\fR.
 The option changes the uid and gid as described, and sets the
 environment variables HOME, SHELL and USER to the home directory, shell,
@@ -760,9 +760,8 @@ for a timed reminder is the same as the current system date, the
 reminder is queued for later activation.  When \fBRemind\fR has
 finished processing the reminder file, it puts itself in the
 background, and activates timed reminders when the system time reached
-the specified time.  (Unfortunately, the MS-DOS version does not have
-this ability -- most of this section applies only to the UNIX and OS/2
-versions.)
+the specified time.
+
 .PP
 If the trigger date is \fInot\fR the same as the system date, the reminder
 is not queued.
@@ -923,19 +922,19 @@ On 18 October 1990, it would print "Meeting with Bob today."
 is replaced with "\fIday\fR", the day of the month.
 .TP
 .B %e
-is replaced with "on \fIdd/mm/yyyy\fR"
+is replaced with "on \fIdd-mm-yyyy\fR"
 .TP
 .B %f
-is replaced with "on \fImm/dd/yyyy\fR"
+is replaced with "on \fImm-dd-yyyy\fR"
 .TP
 .B %g
 is replaced with "on \fIweekday, day month\fR"
 .TP
 .B %h
-is replaced with "on \fIdd/mm\fR"
+is replaced with "on \fIdd-mm\fR"
 .TP
 .B %i
-is replaced with "on \fImm/dd\fR"
+is replaced with "on \fImm-dd\fR"
 .TP
 .B %j
 is replaced with "on \fIweekday, month day-th, year\fR"  This form appends the
@@ -945,7 +944,7 @@ characters "st", "nd", "rd" or "th" to the day of the month, as appropriate.
 is replaced with "on \fIweekday, month day-th\fR"
 .TP
 .B %l
-is replaced with "on \fIyyyy/mm/dd\fR"
+is replaced with "on \fIyyyy-mm-dd\fR"
 .TP
 .B %m
 is replaced with "\fImonth\fR", the name of the month.
@@ -1276,7 +1275,7 @@ your main .reminders file, include the following lines:
 	RUN ON    # Re-enable RUN
 .fi
 .PP
-In addition, \fBRemind\fR on UNIX contains a few other security
+In addition, \fBRemind\fR contains a few other security
 features.  It will not read a file which is group- or world-writable.
 It will not run set-uid.  If it reads a file you don't own, it will
 disable RUN and the shell() function.  And if it is run as \fIroot\fR,
@@ -1312,7 +1311,7 @@ You can disable the banner completely with BANNER %.  Or you can create
 a custom banner:
 .PP
 .nf
-	BANNER Hi - here are your reminders for %y/%t/%r:
+	BANNER Hi - here are your reminders for %y-%t-%r:
 .fi
 .SH CONTROLLING THE OMIT CONTEXT
 .PP
@@ -1350,7 +1349,7 @@ expressions, but operate on different types of objects.
 .PP
 .B DATA TYPES
 .PP
-\fBRemind\fR expressions understand four types of objects:
+\fBRemind\fR expressions operate on five types of objects:
 .TP
 .B INT
 The \fBINT\fR data type consists of the integers representable in one machine
@@ -1370,6 +1369,11 @@ of minutes since midnight.
 The \fBDATE\fR data type consists of dates (later than 1 January 1990.)
 Internally, \fBDATE\fR objects are stored as the number of days since
 1 January 1990.
+.TP
+.B DATETIME
+The \fBDATETIME\fR data type consists of a date and time together.
+Internally, \fBDATETIME\fR objects are stored as the number of minutes
+since midnight, 1 January 1990.
 .PP
 .B CONSTANTS
 .PP
@@ -1406,7 +1410,7 @@ from division or subtraction of integers.  Examples:
 .RS
 \'1993/02/22', '1992-12-25', '1999/01/01'
 .PP
-Note that \fBDATE\fR constants are \fIprinted\fR
+Note that \fBDATE\fR values are \fIprinted\fR
 without the quotes.  Although either '-' or '/' is accepted as a date
 separator on input, when dates are printed, only one will be used.  The
 choice of whether to use '-' or '/' is made at compile-time.
@@ -1414,6 +1418,18 @@ Note also that versions
 of \fBRemind\fR prior to 03.00.01 did not support date constants.  In those
 versions, you must create dates using the \fBdate()\fR function.  Also,
 versions prior to 03.00.02 did not support the '-' date separator.
+.RE
+.TP
+.B DATETIME constants
+\fBDATETIME\fR constants are expressed similarly to \fBDATE\fR constants
+with the addition of an "@HH:MM" part.  For example:
+.PP
+.RS
+\'2008-04-05@23:11', '1999/02/03@14:06', '2001-04-07@08:30'
+.PP
+\fBDATETIME\fR values are printed without the quotes.  Notes about date
+and time separator characters for \fBDATE\fR and \fBTIME\fR constants apply
+also to \fBDATETIME\fR constants.
 .RE
 .PP
 .B OPERATORS
@@ -2145,9 +2161,8 @@ Returns a string which is the ordinal number \fInum\fR.  For example,
 \fBord(2)\fR returns "2nd", and \fBord(213)\fR returns "213th".
 .TP
 .B ostype()
-Returns "UNIX" on UNIX systems, "MSDOS" on MS-DOS systems, and "OS/2"
-on OS/2 systems.  If you run \fBRemind\fR in an MS-DOS box under OS/2,
-this function returns "MSDOS".
+Returns "UNIX".  Remind used to run on OS/2 and MS-DOS, but does not
+any longer.
 .TP
 .B plural(i_num [,s_str1 [,s_str2]])
 Can take from one to three arguments.  If one argument is supplied, returns

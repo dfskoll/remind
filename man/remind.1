@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.19 2007-07-01 14:49:44 dfs Exp $
+.\" $Id: remind.1,v 1.20 2007-07-03 03:36:52 dfs Exp $
 .TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
@@ -1483,6 +1483,10 @@ obtained by adding
 \fBINT\fR + \fBDATE\fR or \fBDATE\fR + \fBINT\fR - returns a \fBDATE\fR
 obtained by adding \fBINT\fR days to the original \fBDATE\fR.
 .PP
+\fBINT\fR + \fBDATETIME\fR or \fBDATETIME\fR + \fBINT\fR - returns a
+\fBDATETIME\fR obtained by adding \fBINT\fR minutes to the original
+\fBDATETIME\fR.
+.PP
 \fBSTRING\fR + \fBSTRING\fR - returns a \fBSTRING\fR which is the
 concatenation of the two original
 \fBSTRING\fRs.
@@ -1505,6 +1509,9 @@ between two \fBDATE\fRs.
 \fBTIME\fR - \fBTIME\fR - returns (as an \fBINT\fR) the difference in minutes
 between two \fBTIME\fRs.
 .PP
+\fBDATETIME\fR - \fBDATETIME\fR - returns (as an \fBINT\fR) the
+difference in minutes between two \fBDATETIME\fRs.
+.PP
 \fBDATE\fR - \fBINT\fR - returns a \fBDATE\fR which is \fBINT\fR days
 earlier than
 the original \fBDATE\fR.
@@ -1512,6 +1519,10 @@ the original \fBDATE\fR.
 \fBTIME\fR - \fBINT\fR - returns a \fBTIME\fR which is \fBINT\fR minutes
 earlier
 than the original \fBTIME\fR.
+.PP
+\fBDATETIME\fR - \fBINT\fR - returns a \fBDATETIME\fR which is \fBINT\fR minutes
+earlier
+than the original \fBDATETIME\fR.
 .RE
 .TP
 .B <, <=, >, and >=
@@ -1635,6 +1646,11 @@ If non-zero, then the \fB\-c\fR option was supplied on the command line.
 If the daemon mode \fB\-z\fR was invoked, contains the number of
 minutes between wakeups.  If not running in daemon mode, contains
 0.  For the MS-DOS version, always contains 0.
+.TP
+.B $DateSep
+This variable can be set only to "/" or "-".  It holds the character
+used to separate portions of a date when \fBRemind\fR prints a DATE or
+DATETIME value.
 .TP
 .B $DefaultPrio
 The default priority assigned to reminders without a \fBPRIORITY\fR
@@ -1805,6 +1821,11 @@ The number of spaces by which all lines (except the first) of an
 Note:  If any of the calendar modes are in effect, then the
 values of $Daemon, $DontFork, $DontTrigAts, $DontQueue, $HushMode,
 $IgnoreOnce, $InfDelta, and $NextMode are not meaningful.
+.TP
+.B $TimeSep
+This variable can be set only to ":" or ".".  It holds the character
+used to separate portions of a time when \fBRemind\fR prints a TIME or
+DATETIME value.
 .PP
 .B BUILT-IN FUNCTIONS
 .PP

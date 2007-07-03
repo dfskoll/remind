@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.8 2000-02-18 03:53:52 dfs Exp $ */
+/* $Id: portbr.h,v 1.9 2007-07-03 03:42:46 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -253,11 +253,7 @@ EXTERN char *ErrMsg[] =
 /* The following is only used in init.c */
 #ifdef L_IN_INIT
 #define L_USAGE_OVERRIDE 1
-#ifdef HAVE_PROTOS
-PUBLIC void Usage(void)
-#else
-void Usage()
-#endif /* HAVE_PROTOS */
+void Usage(void)
 {
     fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-1998 David F. Skoll\n", VERSION, L_LANGNAME);
     fprintf(ErrFp, "(C) 1999-2000 Roaring Penguin Software Inc.\n");

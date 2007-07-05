@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.20 2007-07-03 03:36:52 dfs Exp $
+.\" $Id: remind.1,v 1.21 2007-07-05 02:02:01 dfs Exp $
 .TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
@@ -1373,7 +1373,8 @@ Internally, \fBDATE\fR objects are stored as the number of days since
 .B DATETIME
 The \fBDATETIME\fR data type consists of a date and time together.
 Internally, \fBDATETIME\fR objects are stored as the number of minutes
-since midnight, 1 January 1990.
+since midnight, 1 January 1990.  You can think of a \fBDATETIME\fR object
+as being the combination of \fBDATE\fR and \fBTIME\fR parts.
 .PP
 .B CONSTANTS
 .PP
@@ -1837,13 +1838,13 @@ call.  Otherwise, \fBRemind\fR will interpret it as a variable name,
 and probably not work correctly.
 .PP
 In the descriptions below, short forms are used to denote acceptable
-types for the arguments.  The characters "i", "s", "d" and "t" denote
-\fBINT\fR, \fBSTRING\fR, \fBDATE\fR and \fBTIME\fR arguments,
+types for the arguments.  The characters "i", "s", "d", "t" and "q" denote
+\fBINT\fR, \fBSTRING\fR, \fBDATE\fR, \fBTIME\fR and \fBDATETIME\fR arguments,
 respectively.  If an argument can be one of several types, the characters
 are concatenated.  For example, "di_arg" denotes an argument which can be
 a \fBDATE\fR or an \fBINT\fR.  "x_arg" denotes an argument which can be
 of any type.  The type of the argument is followed by
-an underscore and an identifier naming the argument, for convenience.
+an underscore and an identifier naming the argument.
 .PP
 The built-in functions are:
 .TP
@@ -1884,8 +1885,7 @@ argument.  As a special case, \fBchar(0)\fR returns "".
 .RS
 Note that because \fBRemind\fR does not support escaping of characters
 in strings, the only way to get a double-quote in a string is to use
-\fBchar(34)\fR.  Yes, I know it's not portable - it assumes ASCII
-coding.
+\fBchar(34)\fR.
 .RE
 .TP
 .B choose(i_index, x_arg1 [,x_arg2...])
@@ -1910,7 +1910,7 @@ evaluated.
 .B coerce(s_type, x_arg)
 This function converts \fIarg\fR to the specified \fItype\fR, if such
 conversion is possible.  \fIType\fR must be one of "INT", "STRING",
-"DATE" or "TIME" (case-insensitive).
+"DATE", "TIME" or "DATETIME" (case-insensitive).
 The conversion rules are as follows:
 .RS
 .PP
@@ -1923,31 +1923,41 @@ consisting of its printed representation.
 If \fItype\fR is "DATE", then an \fBINT\fR \fIarg\fR is converted
 by interpreting it as the number of days since 1 January \fBbaseyr()\fR.
 A \fBSTRING\fR \fIarg\fR is converted by attempting to read it as if
-it were a printed date.  A \fBTIME\fR \fIarg\fR cannot be converted to
+it were a printed date.  A \fBDATETIME\fR is converted to a date by
+dropping the time component.  A \fBTIME\fR \fIarg\fR cannot be converted to
 a date.
 .PP
 If \fItype\fR is "TIME", then an \fBINT\fR \fIarg\fR is converted
 by interpreting it as the number of minutes since midnight.
 A \fBSTRING\fR \fIarg\fR is converted by attempting to read it as if
-it were a printed time.  A \fBDATE\fR \fIarg\fR cannot be converted to
+it were a printed time.  A \fBDATETIME\fR is converted to a time by
+dropping the date component.  A \fBDATE\fR \fIarg\fR cannot be converted to
 a time.
 .PP
-If \fItype\fR is "INT", then \fBDATE\fR and \fBTIME\fR arguments are
-converted using the reverse of procedures described above.  A
-\fBSTRING\fR \fIarg\fR is converted by parsing it as an integer.
+If \fItype\fR is "DATETIME", then an \fBINT\fR \fIarg\fR is converted
+by interpreting it as the number of minutes since midnight, 1 January
+\fBbaseyr()\fR.  A \fBSTRING\fR is converted by attempting to read it as if
+it were a printed datetime.  Other types cannot be converted to a datetime.
+.PP
+If \fItype\fR is "INT", then \fBDATE\fR, \fBTIME\fR and \fBDATETIME\fR
+arguments are converted using the reverse of procedures described
+above.  A \fBSTRING\fR \fIarg\fR is converted by parsing it as an
+integer.
 .RE
 .TP
 .B date(i_y, i_m, i_d)
 The \fBdate()\fR function returns a \fBDATE\fR object with the year,
 month and day components specified by \fIy\fR, \fIm\fR and \fId\fR.
 .TP
-.B dawn([d_date])
+.B dawn([dq_date])
 Returns the time of "civil dawn" on the specified \fIdate\fR.  If \fIdate\fR
-is omitted, defaults to \fBtoday()\fR.
+is omitted, defaults to \fBtoday()\fR.  If a \fIdatetime\fR object is
+supplied, only the date component is used.
 .TP
-.B day(d_date)
-This function takes a \fBDATE\fR as an argument, and returns an \fBINT\fR
-which is the day-of-month component of \fIdate\fR.
+.B day(dq_date)
+This function takes a \fBDATE\fR or \fBDATETIME\fR as an argument, and
+returns an \fBINT\fR which is the day-of-month component of
+\fIdate\fR.
 .TP
 .B daysinmon(i_m, i_y)
 Returns the number of days in month \fIm\fR (1-12) of the year \fIy\fR.
@@ -1972,12 +1982,13 @@ The second example will attempt to evaluate X, and will return an
 error if it is undefined or not of type \fBSTRING\fR.
 .RE
 .TP
-.B dosubst(s_str [,d_date [,t_time]])
-Returns a \fBSTRING\fR which is the result of passing \fIstr\fR through
-the substitution filter described earlier.  The parameters \fIdate\fR
-and \fItime\fR establish the effective trigger date and time used by the
-substitution filter.  If \fIdate\fR and \fItime\fR are omitted, they
-default to \fBtoday()\fR and \fBnow()\fR.
+.B dosubst(s_str [,d_date [,t_time]]) \fRor\fB dosubst(s_str [,q_datetime])
+Returns a \fBSTRING\fR which is the result of passing \fIstr\fR
+through the substitution filter described earlier.  The parameters
+\fIdate\fR and \fItime\fR (or \fIdatetime\fR) establish the effective
+trigger date and time used by the substitution filter.  If \fIdate\fR
+and \fItime\fR are omitted, they default to \fBtoday()\fR and
+\fBnow()\fR.
 .RS
 .PP
 Note that if \fIstr\fR does not end with "%", a newline character will be
@@ -1989,19 +2000,25 @@ will produce undefined results.
 \fBRemind\fR.
 .RE
 .TP
-.B dusk([d_date])
+.B dusk([dq_date])
 Returns the time of "civil twilight" on the specified \fIdate\fR.  If
 \fIdate\fR is omitted, defaults to \fBtoday()\fR.
 .TP
-.B easterdate(di_arg)
+.B easterdate(dqi_arg)
 If \fIarg\fR is an \fBINT\fR, then returns the date of Easter Sunday
-for the specified year.  If \fIarg\fR is a \fBDATE\fR, then returns the
-date of the next Easter Sunday on or after \fIarg\fR.
+for the specified year.  If \fIarg\fR is a \fBDATE\fR or
+\fBDATETIME\fR, then returns the date of the next Easter Sunday on or
+after \fIarg\fR.  (The time component of a datetime is ignored.)
 .TP
 .B filedate(s_filename)
 Returns the modification date of \fIfilename\fR.  If \fIfilename\fR
 does not exist, or its modification date is before the year
 \fBbaseyr()\fR, then 1 January of \fBbaseyr()\fR is returned.
+.TP
+.B filedatetime(s_filename)
+Returns the modification date and time of \fIfilename\fR.  If \fIfilename\fR
+does not exist, or its modification date is before the year
+\fBbaseyr()\fR, then midnight, 1 January of \fBbaseyr()\fR is returned.
 .TP
 .B filedir()
 Returns the directory which contains the current file being
@@ -2030,7 +2047,7 @@ environment variable is not defined.  Note that the names of environment
 variables are generally case-sensitive; thus, getenv("HOME") is not
 the same as getenv("home").
 .TP
-.B hour(t_time)
+.B hour(tq_time)
 Returns the hour component of \fItime\fR.
 .TP
 .B iif(si_test1, x_arg1, [si_test2, x_arg2,...], x_default)
@@ -2052,7 +2069,7 @@ The optional parameter \fIstart\fR specifies the position in
 \fIsearch\fR at which to start looking for \fItarget\fR.
 .RE
 .TP
-.B isdst([d_date [,t_time]])
+.B isdst([d_date [,t_time]]) \fRor\fB isdst(q_datetime)
 Returns a positive number if daylight savings time is in
 effect on the specified date and time.  \fIDate\fR
 defaults to \fBtoday()\fR and \fItime\fR defaults to midnight.
@@ -2062,25 +2079,26 @@ Note that this function is only as reliable as the C run-time library
 functions.  It is available starting with version 03.00.07 of \fBRemind\fR.
 .RE
 .TP
-.B isleap(id_arg)
+.B isleap(idq_arg)
 Returns 1 if \fIarg\fR is a leap year, and 0 otherwise.  \fIArg\fR can
-be either an \fBINT\fR or a \fBDATE\fR object.  If a \fBDATE\fR is
-supplied, then the year component is used in the test.
+be an \fBINT\fR, \fBDATE\fR or \fBDATETIME\fR object.  If a \fBDATE\fR
+or \fBDATETIME\fR is supplied, then the year component is used in the test.
 .TP
-.B isomitted(d_date)
+.B isomitted(dq_date)
 Returns 1 if \fIdate\fR is omitted, given the current global \fBOMIT\fR
-context.  Returns 0 otherwise.
+context.  Returns 0 otherwise.  (If a datetime is supplied, only the
+date part is used.)
 .TP
-.B hebdate(i_day, s_hebmon [,id_yrstart [,i_jahr [,i_aflag]]])
+.B hebdate(i_day, s_hebmon [,idq_yrstart [,i_jahr [,i_aflag]]])
 Support for Hebrew dates - see the section "The Hebrew Calendar"
 .TP
-.B hebday(d_date)
+.B hebday(dq_date)
 Support for Hebrew dates - see the section "The Hebrew Calendar"
 .TP
-.B hebmon(d_date)
+.B hebmon(dq_date)
 Support for Hebrew dates - see the section "The Hebrew Calendar"
 .TP
-.B hebyear(d_date)
+.B hebyear(dq_date)
 Support for Hebrew dates - see the section "The Hebrew Calendar"
 .TP
 .B language()
@@ -2105,7 +2123,7 @@ Can take any number of arguments, and returns the minimum.  The arguments
 can be of any type, but must all be of the same type.  They are compared
 as with the < operator.
 .TP
-.B minsfromutc([d_date [,t_time]])
+.B minsfromutc([d_date [,t_time]]) \fRor\fB minsfromutc(q_datetime)
 Returns the number of minutes from Universal Time Coordinated
 (formerly GMT) to
 local time on the specified date and time.  \fIDate\fR defaults to
@@ -2118,19 +2136,19 @@ Note that this function is only as reliable as the C run-time library
 functions.  It is available starting with version 03.00.07 of \fBRemind\fR.
 .RE
 .TP
-.B minute(t_time)
+.B minute(tq_time)
 Returns the minute component of \fItime\fR.
 .TP
-.B mon(di_arg)
-If \fIarg\fR is of \fBDATE\fR type, returns a string which names the month
-component of the date.  If \fIarg\fR is an \fBINT\fR from 1 to
-12, returns a string which names the month.
+.B mon(dqi_arg)
+If \fIarg\fR is of \fBDATE\fR or \fBDATETIME\fR type, returns a string
+which names the month component of the date.  If \fIarg\fR is an
+\fBINT\fR from 1 to 12, returns a string which names the month.
 .TP
-.B monnum(d_date)
+.B monnum(dq_date)
 Returns an \fBINT\fR from 1 to 12, representing the month component of
 \fIdate\fR.
 .TP
-.B "moondate(i_phase [,d_date [,t_time]])"
+.B moondate(i_phase [,d_date [,t_time]]) \fRor\fB moondate(i_phase, q_datetime)
 This function returns the date of the first occurrence of the phase
 \fIphase\fR of the moon on or after \fIdate\fR and \fItime\fR.
 \fIPhase\fR can range from 0 to 3, with 0 signifying new moon, 1 first
@@ -2147,7 +2165,7 @@ For example, the following returns the date of the next full moon:
 .PP
 .RE
 .TP
-.B "moontime(i_phase [,d_date [,t_time]])"
+.B moontime(i_phase [,d_date [,t_time]]) \fRor\fB moontime(i_phase, q_datetime)
 This function returns the time of the first occurrence of the phase
 \fIphase\fR of the moon on or after \fIdate\fR and \fItime\fR.
 \fIPhase\fR can range from 0 to 3, with 0 signifying new moon, 1 first
@@ -2167,7 +2185,7 @@ For example, the following returns the date and time of the next full moon:
 .PP
 .RE
 .TP
-.B moonphase([d_date [,t_time]])
+.B moonphase([d_date [,t_time]]) \fRor\fB moonphase(q_datetime)
 This function returns the phase of the moon on \fIdate\fR and \fItime\fR,
 which default to \fBtoday()\fR and midnight, respectively.  The returned
 value is an integer from 0 to 359, representing the phase of the moon
@@ -2289,13 +2307,13 @@ Returns a \fBSTRING\fR consisting of all characters in \fIstr\fR from
 from 1.  If \fIend\fR is not supplied, then it defaults to the length
 of \fIstr\fR.
 .TP
-.B sunrise([d_date])
+.B sunrise([dq_date])
 Returns a \fBTIME\fR indicating the time of sunrise on the specified
 \fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
 may be no sunrise on a particular day, in which case \fBsunrise()\fR
 returns the \fBINT\fR 0 if the sun never sets, or 1440 if it never rises.
 .TP
-.B sunset([d_date])
+.B sunset([dq_date])
 Returns a \fBTIME\fR indicating the time of sunset on the specified
 \fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
 may be no sunset on a particular day, in which case \fBsunset()\fR
@@ -2326,8 +2344,16 @@ calendar entry currently being computed.
 Returns the calculated trigger date of the last \fBREM\fR
 or \fBIFTRIG\fR command.  If used
 in the \fIbody\fR of a \fBREM\fR command, returns that command's trigger date.
+If the most recent \fBREM\fR command did not yield a computable trigger
+date, returns the integer 0.
 .TP
-.B trigger(d_date [,t_time [,i_utcflag]])
+.B trigdatetime()
+Similar to trigdate(), but returns a \fBDATETIME\fR if the most recent
+triggerable \fBREM\fR command had an \fBAT\fR clause.  If there was no
+\fBAT\fR clause, returns a \fBDATE\fR.  If no trigger could be computed,
+returns the integer 0.
+.TP
+.B trigger(d_date [,t_time [,i_utcflag]]) \fRor\fB trigger(q_datetime [,i_utcflag])
 Returns a string suitable for use in a \fBREM\fR command, allowing you
 to calculate trigger dates in advance.  (See the section "Expression
 pasting" for more information.)  Note that \fBtrigger()\fR
@@ -2339,15 +2365,19 @@ the \fIdate\fR and \fItime\fR are the local date and time; however, if
 interpreted as UTC times, and are converted to local time.  Examples:
 .RS
 .PP
-trigger('1993/04/01')
+     trigger('1993/04/01')
 .PP
 returns "1 April 1993",
 .PP
-trigger('1994/08/09', 12:33)
+     trigger('1994/08/09', 12:33)
 .PP
-returns "9 August 1994 AT 12:33", and
+returns "9 August 1994 AT 12:33", as does:
 .PP
-trigger('1994/12/01', 03:00, 1)
+     trigger('1994/08/09@12:33').
+.PP
+Finally:
+.PP
+     trigger('1994/12/01', 03:00, 1)
 .PP
 returns "30 November 1994 AT 22:00" for EST, which is 5 hours behind UTC.
 The value for your time zone may differ.
@@ -2355,6 +2385,8 @@ The value for your time zone may differ.
 .TP
 .B trigtime()
 Returns the time of the last \fBREM\fR command with an \fBAT\fR clause.
+If the last \fBREM\fR did not have an \fBAT\fR clause, returns the integer
+0.
 .TP
 .B trigvalid()
 Returns 1 if the value returned by \fBtrigdate()\fR is valid for the most
@@ -2368,7 +2400,7 @@ command can never be triggered:
 .PP
 .TP
 .B typeof(x_arg)
-Returns "STRING", "INT", "DATE" or "TIME", depending on the type of \fIarg\fR.
+Returns "STRING", "INT", "DATE", "TIME" or "DATETIME", depending on the type of \fIarg\fR.
 .TP
 .B upper(s_string)
 Returns a \fBSTRING\fR with all lower-case characters in \fIstring\fR
@@ -2391,16 +2423,17 @@ Returns a string specifying the version of \fBRemind\fR.  For version
 \fBRemind\fR are released, the value returned by \fBversion()\fR will
 strictly increase, according to the rules for string ordering.
 .TP
-.B wkday(di_arg)
-If \fIarg\fR is a \fBDATE\fR, returns a string representing the day of the
-week of the date.  If \fIarg\fR is an \fBINT\fR from 0 to 6, returns
-the corresponding weekday ("Sunday" to "Saturday").
+.B wkday(dqi_arg)
+If \fIarg\fR is a \fBDATE\fR or \fBDATETIME\fR, returns a string
+representing the day of the week of the date.  If \fIarg\fR is an
+\fBINT\fR from 0 to 6, returns the corresponding weekday ("Sunday" to
+"Saturday").
 .TP
-.B wkdaynum(d_date)
+.B wkdaynum(dq_date)
 Returns a number from 0 to 6 representing the day-of-week of the specified
 \fIdate\fR.  (0 represents Sunday, and 6 represents Saturday.)
 .TP
-.B year(d_date)
+.B year(dq_date)
 Returns a \fBINT\fR which is the year component of \fIdate\fR.
 .SH EXPRESSION PASTING
 .PP

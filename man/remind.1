@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.22 2007-07-05 02:05:41 dfs Exp $
+.\" $Id: remind.1,v 1.23 2007-07-08 18:21:39 dfs Exp $
 .TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
@@ -1945,9 +1945,31 @@ above.  A \fBSTRING\fR \fIarg\fR is converted by parsing it as an
 integer.
 .RE
 .TP
+.B current()
+Returns the current date and time as a DATETIME object.  This may be the
+actual date and time, or may be the date and time supplied on the command line.
+.TP
 .B date(i_y, i_m, i_d)
 The \fBdate()\fR function returns a \fBDATE\fR object with the year,
 month and day components specified by \fIy\fR, \fIm\fR and \fId\fR.
+.TP
+.B datetime(args)
+The \fBdatetime()\fR function can take anywhere from two to five arguments.
+It always returns a DATETIME generated from its arguments.
+.RS
+.PP
+If you supply two arguments, the first must be a DATE and the second a TIME.
+.PP
+If you supply three arguments, the first
+must be a DATE and the second and third must be INTs.  The second and
+third arguments are interpreted as hours and minutes and converted to a TIME.
+.PP
+If you supply four arguments, the first three must be INTs, interpreted
+as the year, month and day.  The fourth argument must be a TIME.
+.PP
+Finally, if you supply five arguments, they must all be INTs and are
+interpreted as year, month, day, hour and minute.
+.RE
 .TP
 .B dawn([dq_date])
 Returns the time of "civil dawn" on the specified \fIdate\fR.  If \fIdate\fR
@@ -2185,6 +2207,10 @@ For example, the following returns the date and time of the next full moon:
 .PP
 .RE
 .TP
+.B moondatetime(i_phase [,d_date [,t_time]]) \fRor\fB moondatetime(i_phase, q_datetime)
+This function is similar to \fBmoondate\fR and \fBmoontime\fR, but returns
+a DATETIME result.
+.TP
 .B moonphase([d_date [,t_time]]) \fRor\fB moonphase(q_datetime)
 This function returns the phase of the moon on \fIdate\fR and \fItime\fR,
 which default to \fBtoday()\fR and midnight, respectively.  The returned
@@ -2270,6 +2296,11 @@ Note that \fBpsmoon\fR and \fBpsshade\fR are deprecated; instead
 you should use the SPECIAL SHADE and SPECIAL MOON reminders
 as described in "Out-of-Band Reminders."
 .RE
+.TP
+.B realcurrent()
+Returns (as a DATETIME) the true date and time of day as provided by
+the operating system.  This is in contrast to \fBcurrent()\fR, which
+may return a time supplied on the command line.
 .TP
 .B realnow()
 Returns the true time of day as provided by the operating system.
@@ -2401,6 +2432,22 @@ command can never be triggered:
 .TP
 .B typeof(x_arg)
 Returns "STRING", "INT", "DATE", "TIME" or "DATETIME", depending on the type of \fIarg\fR.
+.TP
+.B tzconvert(q_datetime, s_srczone [,s_dstzone])
+Converts \fBdatetime\fR from the time zone named by \fBsrczone\fR to the
+time zone named by \fBdstzone\fR.  If \fBdstzone\fR is omitted, the
+default system time zone is used.  The return value is a DATETIME.  Time
+zone names are system-dependent; consult your operating system for legal
+values.  Here is an example:
+.PP
+.nf
+    tzconvert('2007-07-08@01:14', "Canada/Eastern", "Canada/Pacific")
+
+          returns
+
+    2007-07-07@22:14
+.fi
+.PP
 .TP
 .B upper(s_string)
 Returns a \fBSTRING\fR with all lower-case characters in \fIstring\fR

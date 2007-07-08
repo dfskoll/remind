@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.14 2007-06-29 01:52:36 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.15 2007-07-08 16:57:47 dfs Exp $";
 
 #include <stdio.h>
 
@@ -127,6 +127,7 @@ static int	FRealnow            (void);
 static int	FRealtoday      (void);
 static int	FToday          (void);
 static int	FTrigger        (void);
+static int      FTzconvert      (void);
 static int	CheckArgs       (Operator *f, int nargs);
 static int	CleanUpAfterFunc (void);
 static int	SunStuff	(int rise, double cosz, int jul);
@@ -252,6 +253,7 @@ Operator Func[] = {
     {   "trigtime",	0,	0,	FTrigtime },
     {   "trigvalid",	0,	0,	FTrigvalid },
     {   "typeof",       1,      1,      FTypeof },
+    {   "tzconvert",    2,      3,      FTzconvert },
     {   "upper",	1,	1,	FUpper	},
     {   "value",	1,	2,	FValue	},
     {   "version",      0,      0,      FVersion },
@@ -2283,5 +2285,110 @@ static int FDatepart(void)
     if (ARG(0).type != DATETIME_TYPE) return E_BAD_TYPE;
     RetVal.type = DATE_TYPE;
     RetVal.v.val = DATEPART(ARG(0));
+    return OK;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FTz                                                        */
+/*                                                             */
+/*  Conversion between different timezones.                    */
+/*                                                             */
+/***************************************************************/
+static int tz_set_tz(char const *tz)
+{
+    int r;
+    if (tz == NULL) {
+        r = unsetenv("TZ");
+    } else {
+        r = setenv("TZ", tz, 1);
+    }
+    tzset();
+    return r;
+}
+
+static int tz_convert(int year, int month, int day,
+                      int hour, int minute,
+                      char const *src_tz, char const *tgt_tz,
+                      struct tm *tm)
+{
+    int r;
+    time_t t;
+    struct tm *res;
+    char *old_tz;
+
+    /* init tm struct */
+    tm->tm_sec = 0;
+    tm->tm_min = minute;
+    tm->tm_hour = hour;
+    tm->tm_mday = day;
+    tm->tm_mon = month;
+    tm->tm_year = year - 1900;
+    tm->tm_wday = 0; /* ignored by mktime */
+    tm->tm_yday = 0; /* ignored by mktime */
+    tm->tm_isdst = -1;  /* information not available */
+
+    /* backup old TZ env var */
+    old_tz = getenv("TZ");
+    if (tgt_tz == NULL) {
+        tgt_tz = old_tz;
+    }
+
+    /* set source TZ */
+    r = tz_set_tz(src_tz);
+    if (r == -1) {
+        return -1;
+    }
+
+    /* create timestamp in UTC */
+    t = mktime(tm);
+
+    /* set target TZ */
+    r = tz_set_tz(tgt_tz);
+    if (r == -1) {
+        tz_set_tz(old_tz);
+        return -1;
+    }
+
+    /* convert to target TZ */
+    res = localtime_r(&t, tm);
+
+    /* restore old TZ */
+    tz_set_tz(old_tz);
+
+    /* return result */
+    if (res == NULL) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+static int FTzconvert(void)
+{
+    int year, month, day, hour, minute, r;
+    int jul, tim;
+    struct tm tm;
+    if (ARG(0).type != DATETIME_TYPE ||
+	ARG(1).type != STR_TYPE) return E_BAD_TYPE;
+    if (Nargs == 3 && ARG(2).type != STR_TYPE) return E_BAD_TYPE;
+
+    FromJulian(DATEPART(ARG(0)), &year, &month, &day);
+    r = TIMEPART(ARG(0));
+    hour = r / 60;
+    minute = r % 60;
+    if (Nargs == 2) {
+	r = tz_convert(year, month, day, hour, minute, ARG(1).v.str, NULL,
+		       &tm);
+    } else {
+	r = tz_convert(year, month, day, hour, minute,
+		       ARG(1).v.str, ARG(2).v.str,
+		       &tm);
+    }
+    if (r == -1) return E_CANT_CONVERT_TZ;
+    jul = Julian(tm.tm_year + 1900, tm.tm_mon, tm.tm_mday);
+    tim = tm.tm_hour * 60 + tm.tm_min;
+    RetVal.type = DATETIME_TYPE;
+    RetVal.v.val = jul * MINUTES_PER_DAY + tim;
     return OK;
 }

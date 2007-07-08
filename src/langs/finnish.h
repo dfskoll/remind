@@ -16,7 +16,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.12 2007-07-03 03:42:46 dfs Exp $ */
+/* $Id: finnish.h,v 1.13 2007-07-08 16:57:49 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -308,7 +308,8 @@ EXTERN char *ErrMsg[] =
     "Ei viestej\xE4.",
     "%d viesti(\xE4) t\xE4m\xE4n p\xE4iv\xE4n jonossa.\n",
     "Numero puuttuu",
-    "Virheellinen funktio WARN-lausekkeessa"
+    "Virheellinen funktio WARN-lausekkeessa",
+    "Can't convert between time zones"
 
 #elif IBMEXTENDED
     "Ok",
@@ -409,7 +410,8 @@ EXTERN char *ErrMsg[] =
     "Ei viestej\x84.",
     "%d viesti(\x84) t\x84m\x84n p\x84iv\x84n jonossa.\n",
     "Numero puuttuu"
-    "Virheellinen funktio WARN-lausekkeessa"
+    "Virheellinen funktio WARN-lausekkeessa",
+    "Can't convert between time zones"
 #else
     "Ok",
     "Puuttuva ']'",
@@ -509,7 +511,9 @@ EXTERN char *ErrMsg[] =
     "Ei viestej{.",
     "%d viesti({) t{m{n p{iv{n jonossa.\n",
     "Numero puuttuu",
-    "Virheellinen funktio WARN-lausekkeessa"
+    "Virheellinen funktio WARN-lausekkeessa",
+    "Can't convert between time zones"
+
 #endif
 };
 #endif /* MK_GLOBALS */

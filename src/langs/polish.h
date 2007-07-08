@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.10 2007-07-03 03:42:46 dfs Exp $ */
+/* $Id: polish.h,v 1.11 2007-07-08 16:57:49 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
@@ -280,7 +280,8 @@ EXTERN char *ErrMsg[] =
     "Brak przypomnie\361.",
     "%d Przypomnienia zakolejkowane na p\363\274niej.\n",
     "Spodziewana liczba",
-    "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)"
+    "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
+    "Can't convert between time zones"
 #else /* ISOLATIN1 */
     "OK",
     "Brakujacy ']'",
@@ -380,7 +381,8 @@ EXTERN char *ErrMsg[] =
     "Brak przypomnien.",
     "%d Przypomnienia zakolejkowane na pozniej.\n",
     "Spodziewana liczba",
-    "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)"
+    "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
+    "Can't convert between time zones"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

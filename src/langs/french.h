@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.10 2007-07-03 03:42:46 dfs Exp $ */
+/* $Id: french.h,v 1.11 2007-07-08 16:57:49 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -245,7 +245,8 @@ EXTERN char *ErrMsg[] =
     "Pas de rappels.",
     "%d rappel(s) en file pour aujourd'hui.\n",
     "Nombre attendu",
-    "Fonction ill\351gale apr\350s WARN"
+    "Fonction ill\351gale apr\350s WARN",
+    "Can't convert between time zones"
 #else /* ISOLATIN1 */
     "Ok",
     "']' manquant",
@@ -345,7 +346,8 @@ EXTERN char *ErrMsg[] =
     "Pas de rappels.",
     "%d rappel(s) en file pour aujourd'hui.\n",
     "Nombre attendu",
-    "Fonction illegale apres WARN"
+    "Fonction illegale apres WARN",
+    "Can't convert between time zones"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.9 2007-07-03 03:42:46 dfs Exp $ */
+/* $Id: portbr.h,v 1.10 2007-07-08 16:57:49 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -246,7 +246,8 @@ EXTERN char *ErrMsg[] =
     "Sem compromissos.",
     "%d compromisso(s) colocados na fila para mais tarde.\n",
     "Esperando numero",
-    "Funcao ilegal na clausula WARN"
+    "Funcao ilegal na clausula WARN",
+    "Can't convert between time zones"
 };
 #endif /* MK_GLOBALS */
 

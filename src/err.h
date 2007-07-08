@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: err.h,v 1.4 2000-02-18 03:45:51 dfs Exp $ */
+/* $Id: err.h,v 1.5 2007-07-08 16:57:47 dfs Exp $ */
 
 /* Note that not all of the "errors" are really errors - some are just
    messages for information purposes.  Constants beginning with M_ should
@@ -118,6 +118,7 @@
 #define M_QUEUED	     96
 #define E_EXPECTING_NUMBER   97
 #define M_BAD_WARN_FUNC      98
+#define E_CANT_CONVERT_TZ    99
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -230,7 +231,8 @@ EXTERN char *ErrMsg[]
     "No reminders.",
     "%d reminder(s) queued for later today.\n",
     "Expecting number",
-    "Bad function in WARN clause"
+    "Bad function in WARN clause",
+    "Can't convert between time zones"
 }
 #endif /* MK_GLOBALS */
 ;

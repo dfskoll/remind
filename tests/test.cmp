@@ -747,84 +747,84 @@ set a080 easterdate(1995)
 easterdate(1995) => 1995-04-16
 set a081 ""
 dump
-    Variable  Value
+        Variable  Value
 
-        a017  29
-        a036  "bar"
-        a055  1
-        a074  "on Tuesday, 5 May, 1992 in 444 days' tim"...
-        a008  "11:44"
-        a027  0
-        a046  "ies"
-        a065  1
-        a018  1
-        a037  1991-02-15
-        a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-        a075  "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
-        a028  1
-        a047  -1
-        a066  0
-        a019  0
-        a038  33
-        a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-        a076  "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
-        a029  0
-        a048  "foo"
-        a067  "INT"
-        a039  "February"
-        a058  "03.01.00"
-        a077  "1992 92
+            a017  29
+            a036  "bar"
+            a055  1
+            a074  "on Tuesday, 5 May, 1992 in 444 days' tim"...
+            a008  "11:44"
+            a027  0
+            a046  "ies"
+            a065  1
+            a018  1
+            a037  1991-02-15
+            a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+            a075  "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
+            a028  1
+            a047  -1
+            a066  0
+            a019  0
+            a038  33
+            a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+            a076  "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
+            a029  0
+            a048  "foo"
+            a067  "INT"
+            a039  "February"
+            a058  "03.01.00"
+            a077  "1992 92
 "
-        a049  21
-        a068  "STRING"
-        a059  "Saturday"
-        a078  1991-03-31
-        a069  "TIME"
-        a079  1992-04-19
-        a000  1
-        a010  12
-        a001  1
-        a020  "../tests/test.rem"
-        a011  704
-        a030  1
-        a002  102
-        a021  "foo bar baz"
-        a040  2
-        a012  411
-        a031  "foobarbaz"
-        a003  1990
-        a022  11
-        a041  "3rd"
-        a060  6
-        a013  1992-02-02
-        a032  34
-        a070  "DATE"
-        a004  "B7BMB"
-        a023  1
-        a042  "4th"
-        a061  1991
-        a080  1995-04-16
-        a033  "foo"
-        a052  03:07
-        a071  2
-        a005  "baz"
-        a024  0
-        a043  "UNIX"
-        a062  -19
-        a081  ""
-        a015  16
-        a034  1991-02-17
-        a053  1992-01-10
-        a072  0
-        a006  "1"
-        a025  4
-        a044  "s"
-        a063  0
-        a016  28
-        a035  1
-        a054  11:22
-        a007  "1991-02-16"
-        a026  7
-        a045  "iess"
-        a064  1
+            a049  21
+            a068  "STRING"
+            a059  "Saturday"
+            a078  1991-03-31
+            a069  "TIME"
+            a079  1992-04-19
+            a000  1
+            a010  12
+            a001  1
+            a020  "../tests/test.rem"
+            a011  704
+            a030  1
+            a002  102
+            a021  "foo bar baz"
+            a040  2
+            a012  411
+            a031  "foobarbaz"
+            a003  1990
+            a022  11
+            a041  "3rd"
+            a060  6
+            a013  1992-02-02
+            a032  34
+            a070  "DATE"
+            a004  "B7BMB"
+            a023  1
+            a042  "4th"
+            a061  1991
+            a080  1995-04-16
+            a033  "foo"
+            a052  03:07
+            a071  2
+            a005  "baz"
+            a024  0
+            a043  "UNIX"
+            a062  -19
+            a081  ""
+            a015  16
+            a034  1991-02-17
+            a053  1992-01-10
+            a072  0
+            a006  "1"
+            a025  4
+            a044  "s"
+            a063  0
+            a016  28
+            a035  1
+            a054  11:22
+            a007  "1991-02-16"
+            a026  7
+            a045  "iess"
+            a064  1
 

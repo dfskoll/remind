@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.17 2007-07-01 20:12:15 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.18 2007-07-08 18:42:13 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -565,6 +565,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	r = ParseToken(p, &buf);
 	DBufFree(&buf);
 	if (r) return r;
+	t->typ = MSG_TYPE;
     }
 /* If it's a MSG-type reminder, and no -k option was used, issue the banner. */
     if ((t->typ == MSG_TYPE || t->typ == MSF_TYPE) 

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.in,v 1.9 2005-09-30 03:33:52 dfs Exp $
+dnl $Id: configure.in,v 1.10 2007-07-09 01:55:45 dfs Exp $
 
 AC_INIT(src/queue.c)
 
@@ -40,4 +40,5 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wstrict-prototypes"
 fi
 
+AC_CHECK_FUNCS(setenv unsetenv)
 AC_OUTPUT(src/Makefile)

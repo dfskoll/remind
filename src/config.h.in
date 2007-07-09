@@ -1,12 +1,9 @@
 /* src/config.h.in.  Generated automatically from configure.in by autoheader.  */
 
-/* $Id: config.h.in,v 1.5 2005-09-30 03:29:32 dfs Exp $ */
+/* $Id: config.h.in,v 1.6 2007-07-09 01:55:47 dfs Exp $ */
 
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
-
-/* Define if you have the vprintf function.  */
-#undef HAVE_VPRINTF
 
 /* Define if you can safely include both <sys/time.h> and <time.h>.  */
 #undef TIME_WITH_SYS_TIME
@@ -16,5 +13,9 @@
 
 /* Define if you have the <sys/file.h> header file.  */
 #undef HAVE_SYS_FILE_H
+
+#undef HAVE_SETENV
+
+#undef HAVE_UNSETENV
 
 #include "custom.h"

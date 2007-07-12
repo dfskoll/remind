@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.7 2005-11-20 01:26:59 dfs Exp $ */
+/* $Id: types.h,v 1.8 2007-07-12 03:14:36 dfs Exp $ */
 
 #include <limits.h>
 #include "dynbuf.h"
@@ -169,8 +169,10 @@ typedef struct {
 #define IF_ELSE_MASK 2
 
 /* Flags for the DoSubst function */
-#define NORMAL_MODE 0
-#define CAL_MODE 1
+#define NORMAL_MODE  0
+#define CAL_MODE     1
+#define ADVANCE_MODE 2
+
 #define QUOTE_MARKER 1 /* Unlikely character to appear in reminder */
 
 /* Flags for disabling run */

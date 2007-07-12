@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.18 2007-07-12 03:09:44 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.19 2007-07-12 03:14:36 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -694,10 +694,10 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	oldLen = DBufLen(&obuf);
 
-	/* In -sa mode, run in NORMAL mode if we're triggering
+	/* In -sa mode, run in ADVANCE mode if we're triggering
 	 * before the actual date */
 	if (jul != JulianToday) {
-	    r = DoSubst(p, &obuf, &trig, &tim, jul, NORMAL_MODE);
+	    r = DoSubst(p, &obuf, &trig, &tim, jul, ADVANCE_MODE);
 	} else {
 	    r = DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE);
 	}

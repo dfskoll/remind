@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.12 2007-07-01 20:12:15 dfs Exp $";
+static char const RCSID[] = "$Id: dosubst.c,v 1.13 2007-07-12 03:14:36 dfs Exp $";
 
 #define L_IN_DOSUBST
 #include <stdio.h>
@@ -44,6 +44,7 @@ static char TOMORROW[] = L_TOMORROW;
 /*  Process the % escapes in the reminder.  If                 */
 /*  mode==NORMAL_MODE, ignore the %" sequence.  If             */
 /*  mode==CAL_MODE, process the %" sequence.                   */
+/*  If mode==ADVANCE_MODE, ignore %" but don't add newline     */
 /*                                                             */
 /***************************************************************/
 int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode)
@@ -131,7 +132,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	}
 	if (c == '\n') continue;
 	if (!c) {
-	    if (mode != CAL_MODE && t->typ != RUN_TYPE && !MsgCommand) {
+	    if (mode != CAL_MODE && mode != ADVANCE_MODE &&
+		t->typ != RUN_TYPE && !MsgCommand) {
 		if (DBufPutc(dbuf, '\n') != OK) return E_NO_MEM;
 	    }
 	    break;
@@ -569,7 +571,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    break;
 
 	case '_':
-	    if (mode != CAL_MODE && !MsgCommand)
+	    if (mode != CAL_MODE && mode != ADVANCE_MODE && !MsgCommand)
 		sprintf(s, "%s", NL);
 	    else
 		sprintf(s, " ");
@@ -602,7 +604,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 /* If there are NO quotes, then:  If CAL_MODE && RUN_TYPE, we don't want the
    reminder in the calendar.  Zero the output buffer and quit. */
     if (!has_quote) {
-	if (mode == CAL_MODE && t->typ == RUN_TYPE) {
+	if ((mode == ADVANCE_MODE || mode == CAL_MODE) && t->typ == RUN_TYPE) {
 	    *DBufValue(dbuf) = 0;
 	    dbuf->len = 0;
 	}
@@ -614,7 +616,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 
     ss = DBufValue(dbuf) + origLen;
     os = ss;
-    if (mode == NORMAL_MODE) {
+    if (mode == NORMAL_MODE || mode == ADVANCE_MODE) {
 	while (*ss) {
 	    if (*ss != QUOTE_MARKER) *os++ = *ss;
 	    ss++;

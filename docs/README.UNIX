@@ -1,5 +1,5 @@
-$Id: README.UNIX,v 1.5 2000-02-18 03:45:33 dfs Exp $
-REMIND version 3.0 for UNIX
+$Id: README.UNIX,v 1.6 2007-07-12 04:25:38 dfs Exp $
+REMIND version 3.1 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
 in the man page, "remind.1".
@@ -126,9 +126,4 @@ exit
 
 --
 David F. Skoll <dfs@roaringpenguin.com>
-986 Eiffel Avenue
-Ottawa, Ontario K2C 0J2
-CANADA
-
-Tel. (613) 225-8687
-http://www.roaringpenguin.com/remind.html
+http://www.roaringpenguin.com/remind/

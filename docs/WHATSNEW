@@ -1,5 +1,49 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 0
+
++ MAJOR ENHANCEMENTS
+
+- Remind now has a new datatype: A DATETIME object represents a date AND
+  a time (to the nearest minute).  DATETIME constants are written
+  as '2007-09-01@14:33'.  Various operators and functions have been
+  modified to do sensible things with DATETIMEs and several new DATETIME
+  functions have been added.
+
+- The SPECIAL COLOR reminder type has been hacked to behave more like
+  a MSG type.  It sorts properly and is emitted as a normal reminder
+  in non-calendar mode.  Simlarly, SPECIAL HTML sorts with -g as well.
+
++ MINOR ENHANCEMENTS
+
+- A new "tzconvert" function lets you convert datetimes between different
+  time zones.  It's only as good as your C library, so test thoroughly
+  please!  Based on a patch from Stefan Wehr.
+
+- TkRemind sorts reminders by invoking Remind with the '-g' option.
+
+- The time and date separator characters can be changed at runtime by
+  setting $TimeSep and $DateSep respectively.
+
+- The simple calendar ('-s') option can be immediately followed by an 'a'.
+  This causes Remind to output reminders with deltas before the actual
+  trigger date.  Based loosely on an idea from Frank Terbeck.
+
++ MINOR CHANGES
+
+- Default date separator is now '-' instead of '/'
+
+- trigdate() and trigtime() behave differently - they return the integer 0
+  if the last reminder could not be computed or did not have an AT clause
+  (respectively).
+
+- Maximum length of variable names has been increased from 12 to 16 characters.
+
++ BUG FIXES
+
+- rem2ps would produce invalid PostScript in some rare cases
+  (eg, for February 2007).  This has been fixed.
+
 * Version 3.0 Patch 24
 
 + MINOR ENHANCEMENTS

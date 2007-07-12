@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: types.h,v 1.8 2007-07-12 03:14:36 dfs Exp $ */
+/* $Id: types.h,v 1.9 2007-07-12 23:36:03 dfs Exp $ */
 
 #include <limits.h>
 #include "dynbuf.h"
@@ -189,3 +189,7 @@ typedef struct {
 #define SORT_NONE    0
 #define SORT_ASCEND  1
 #define SORT_DESCEND 2
+
+/* Flags for FROM / SCANFROM */
+#define SCANFROM_TYPE 0
+#define FROM_TYPE     1

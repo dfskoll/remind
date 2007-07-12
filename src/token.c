@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.14 2007-07-01 20:12:15 dfs Exp $";
+static char const RCSID[] = "$Id: token.c,v 1.15 2007-07-12 23:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -61,6 +61,7 @@ Token TokArray[] = {
     { "february",	3,	T_Month,	1 },
     { "flush",		5,	T_Flush,	0 },
     { "friday",		3,	T_WkDay,	4 },
+    { "from",		4,	T_Scanfrom,	FROM_TYPE },
     { "fset",		4,	T_Fset,		0 },
     { "if",		2,	T_If,		0 },
     { "iftrig",		6,	T_IfTrig,	0 },
@@ -87,7 +88,7 @@ Token TokArray[] = {
     { "run",		3,	T_RemType,	RUN_TYPE },
     { "satisfy",	7,	T_RemType,      SAT_TYPE },
     { "saturday",	3,	T_WkDay,	5 },
-    { "scanfrom",	4,	T_Scanfrom,	0 },
+    { "scanfrom",	4,	T_Scanfrom,	SCANFROM_TYPE },
     { "sched",		5,	T_Sched,	0 },
     { "september",	3,	T_Month,	8 },
     { "set",		3,	T_Set,		0 },

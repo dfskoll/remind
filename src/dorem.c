@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.18 2007-07-08 18:42:13 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.19 2007-07-12 23:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -33,7 +33,7 @@ static char const DontEscapeMe[] =
 
 static int ParseTimeTrig (ParsePtr s, TimeTrig *tim);
 static int ParseLocalOmit (ParsePtr s, Trigger *t);
-static int ParseScanFrom (ParsePtr s, Trigger *t);
+static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
 static int ParsePriority (ParsePtr s, Trigger *t);
 static int ParseUntil (ParsePtr s, Trigger *t);
 static int ShouldTriggerBasedOnWarn (Trigger *t, int jul);
@@ -193,7 +193,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 
 	case T_Scanfrom:
 	    DBufFree(&buf);
-	    r=ParseScanFrom(s, trig);
+	    r=ParseScanFrom(s, trig, tok.val);
 	    if (r) return r;
 	    break;
 
@@ -463,10 +463,10 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 
 /***************************************************************/
 /*                                                             */
-/*  ParseScanFrom - parse the SCANFROM portion of a reminder   */
+/*  ParseScanFrom - parse the FROM/SCANFROM portion            */
 /*                                                             */
 /***************************************************************/
-static int ParseScanFrom(ParsePtr s, Trigger *t)
+static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 {
     int y = NO_YR,
 	m = NO_MON,
@@ -522,6 +522,12 @@ static int ParseScanFrom(ParsePtr s, Trigger *t)
 		return E_BAD_DATE;
 	    }
 	    t->scanfrom = Julian(y, m, d);
+	    if (type == FROM_TYPE) {
+		if (t->scanfrom < JulianToday) {
+		    t->scanfrom = JulianToday;
+		}
+	    }
+
 	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;

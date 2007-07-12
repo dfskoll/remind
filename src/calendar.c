@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.17 2007-07-01 20:12:15 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.18 2007-07-12 03:09:44 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -663,8 +663,11 @@ static int DoCalRem(ParsePtr p, int col)
 
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
-    if (jul == JulianToday ||
-	(DoSimpleCalDelta && trig.delta != NO_DELTA && jul-trig.delta <= JulianToday)) {
+    if ((jul == JulianToday) ||
+	(jul > JulianToday &&
+	 DoSimpleCalDelta &&
+	 trig.delta != NO_DELTA &&
+	 jul - abs(trig.delta) <= JulianToday)) {
 	NumTriggered++;
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
 	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
@@ -690,7 +693,15 @@ static int DoCalRem(ParsePtr p, int col)
 	    }
 	}
 	oldLen = DBufLen(&obuf);
-	if ( (r=DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE)) ) {
+
+	/* In -sa mode, run in NORMAL mode if we're triggering
+	 * before the actual date */
+	if (jul != JulianToday) {
+	    r = DoSubst(p, &obuf, &trig, &tim, jul, NORMAL_MODE);
+	} else {
+	    r = DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE);
+	}
+	if (r) {
 	    DBufFree(&obuf);
 	    return r;
 	}

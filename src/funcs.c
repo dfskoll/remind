@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.17 2007-07-12 03:29:14 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.18 2007-07-12 12:12:25 dfs Exp $";
 
 #include <stdio.h>
 
@@ -2313,7 +2313,7 @@ static int setenv(char const *varname, char const *val, int overwrite)
 #ifndef HAVE_UNSETENV
 /* This is NOT a general-purpose replacement for unsetenv.  It's only
  * used for the timezone stuff! */
-static int unsetenv(char const *varname)
+static void unsetenv(char const *varname)
 {
     static char tzbuf[8];
     if (strcmp(varname, "TZ")) {
@@ -2321,7 +2321,7 @@ static int unsetenv(char const *varname)
 	abort();
     }
     sprintf(tzbuf, "%s", varname);
-    return(putenv(tzbuf));
+    putenv(tzbuf);
 }
 #endif
 
@@ -2336,7 +2336,8 @@ static int tz_set_tz(char const *tz)
 {
     int r;
     if (tz == NULL) {
-        r = unsetenv("TZ");
+       unsetenv("TZ");
+       r = 0;
     } else {
         r = setenv("TZ", tz, 1);
     }

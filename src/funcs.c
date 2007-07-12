@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: funcs.c,v 1.16 2007-07-08 18:32:07 dfs Exp $";
+static char const RCSID[] = "$Id: funcs.c,v 1.17 2007-07-12 03:29:14 dfs Exp $";
 
 #include <stdio.h>
 
@@ -2287,6 +2287,43 @@ static int FDatepart(void)
     RetVal.v.val = DATEPART(ARG(0));
     return OK;
 }
+
+#ifndef HAVE_SETENV
+/* This is NOT a general-purpose replacement for setenv.  It's only
+ * used for the timezone stuff! */
+static int setenv(char const *varname, char const *val, int overwrite)
+{
+    static char tzbuf[256];
+    if (strcmp(varname, "TZ")) {
+	fprintf(stderr, "built-in setenv can only be used with TZ\n");
+	abort();
+    }
+    if (!overwrite) {
+	fprintf(stderr, "built-in setenv must have overwrite=1\n");
+	abort();
+    }
+
+    if (strlen(val) > 250) {
+	return -1;
+    }
+    sprintf(tzbuf, "%s=%s", varname, val);
+    return(putenv(tzbuf));
+}
+#endif
+#ifndef HAVE_UNSETENV
+/* This is NOT a general-purpose replacement for unsetenv.  It's only
+ * used for the timezone stuff! */
+static int unsetenv(char const *varname)
+{
+    static char tzbuf[8];
+    if (strcmp(varname, "TZ")) {
+	fprintf(stderr, "built-in unsetenv can only be used with TZ\n");
+	abort();
+    }
+    sprintf(tzbuf, "%s", varname);
+    return(putenv(tzbuf));
+}
+#endif
 
 /***************************************************************/
 /*                                                             */

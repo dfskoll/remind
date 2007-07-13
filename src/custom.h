@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.40 2007-07-13 03:40:24 dfs Exp $ */
+/* $Id: custom.h,v 1.41 2007-07-13 03:43:30 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -146,7 +146,7 @@
 /* VAR_NAME_LEN: The maximum length of variable names.  Don't make it  */
 /*               any less than 12.                                     */
 /*---------------------------------------------------------------------*/
-#define VAR_NAME_LEN 12
+#define VAR_NAME_LEN 16
 
 /*---------------------------------------------------------------------*/
 /* MAX_PRT_LEN: The maximum number of characters to print when         */
@@ -178,17 +178,17 @@
 /*---------------------------------------------------------------------*/
 /* How many attempts to resolve a weird date spec?                     */
 /*---------------------------------------------------------------------*/
-#define TRIG_ATTEMPTS 25
+#define TRIG_ATTEMPTS 50
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form YYYY MM DD do we handle?          */
 /*---------------------------------------------------------------------*/
-#define MAX_FULL_OMITS 75
+#define MAX_FULL_OMITS 250
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form MM DD do we handle?               */
 /*---------------------------------------------------------------------*/
-#define MAX_PARTIAL_OMITS 75
+#define MAX_PARTIAL_OMITS 250
 
 /*---------------------------------------------------------------------*/
 /* A newline - some systems need "\n\r"                                */

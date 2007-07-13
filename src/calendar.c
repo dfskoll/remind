@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.21 2007-07-13 03:36:18 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.22 2007-07-13 03:40:24 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -668,7 +668,9 @@ static int DoCalRem(ParsePtr p, int col)
 	tim.ttime = NO_TIME;
     }
     if ((jul == JulianToday) ||
-	(DoSimpleCalendar && ShouldTriggerReminder(&trig, &tim, jul))) {
+	(DoSimpleCalendar &&
+	 DoSimpleCalDelta &&
+	 ShouldTriggerReminder(&trig, &tim, jul))) {
 	NumTriggered++;
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
 	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {

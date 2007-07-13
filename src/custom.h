@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.39 2007-07-08 18:46:23 dfs Exp $ */
+/* $Id: custom.h,v 1.40 2007-07-13 03:40:24 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -111,7 +111,9 @@
 /* WANT_SHELL_ESCAPING:  Define this if you want special shell         */
 /* characters to be escaped with a backslash for the -k option.        */
 /*---------------------------------------------------------------------*/
+#if defined(UNIX)
 #define WANT_SHELL_ESCAPING 1
+#endif
 
 /*---------------------------------------------------------------------*/
 /* Some implementations have a broken 'putc' and 'putchar'.            */
@@ -144,7 +146,7 @@
 /* VAR_NAME_LEN: The maximum length of variable names.  Don't make it  */
 /*               any less than 12.                                     */
 /*---------------------------------------------------------------------*/
-#define VAR_NAME_LEN 16
+#define VAR_NAME_LEN 12
 
 /*---------------------------------------------------------------------*/
 /* MAX_PRT_LEN: The maximum number of characters to print when         */
@@ -176,17 +178,17 @@
 /*---------------------------------------------------------------------*/
 /* How many attempts to resolve a weird date spec?                     */
 /*---------------------------------------------------------------------*/
-#define TRIG_ATTEMPTS 75
+#define TRIG_ATTEMPTS 25
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form YYYY MM DD do we handle?          */
 /*---------------------------------------------------------------------*/
-#define MAX_FULL_OMITS 500
+#define MAX_FULL_OMITS 75
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form MM DD do we handle?               */
 /*---------------------------------------------------------------------*/
-#define MAX_PARTIAL_OMITS 500
+#define MAX_PARTIAL_OMITS 75
 
 /*---------------------------------------------------------------------*/
 /* A newline - some systems need "\n\r"                                */

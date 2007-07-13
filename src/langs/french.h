@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: french.h,v 1.11 2007-07-08 16:57:49 dfs Exp $ */
+/* $Id: french.h,v 1.12 2007-07-13 03:36:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "French"
@@ -221,7 +221,7 @@ EXTERN char *ErrMsg[] =
     "Heure attendue apr\350s AT",
     "Mot-cl\351 UNTIL utilis\351 deux fois",
     "Sp\351cification de date incompl\350te",
-    "Mot-cl\351 SCANFROM utilis\351 deux fois",
+    "Mot-cl\351 FROM/SCANFROM utilis\351 deux fois",
     "Variable",
     "Valeur",
     "*NON-DEFINI*",
@@ -322,7 +322,7 @@ EXTERN char *ErrMsg[] =
     "Heure attendue apres AT",
     "Mot-cle UNTIL utilise deux fois",
     "Specification de date incomplete",
-    "Mot-cle SCANFROM utilise deux fois",
+    "Mot-cle FROM/SCANFROM utilise deux fois",
     "Variable",
     "Valeur",
     "*NON-DEFINI*",

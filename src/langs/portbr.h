@@ -15,7 +15,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: portbr.h,v 1.10 2007-07-08 16:57:49 dfs Exp $ */
+/* $Id: portbr.h,v 1.11 2007-07-13 03:36:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Brazilian Portuguese"
@@ -222,7 +222,7 @@ EXTERN char *ErrMsg[] =
     "Esperando hora apos AT",
     "Keyword UNTIL usada duas vezes",
     "Especificacao de data incompleta",
-    "Keyword SCANFROM usada duas vezes",
+    "Keyword FROM/SCANFROM usada duas vezes",
     "Variavel",
     "Valor",
     "*INDEFINIDO*",

@@ -10,7 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: err.h,v 1.5 2007-07-08 16:57:47 dfs Exp $ */
+/* $Id: err.h,v 1.6 2007-07-13 03:36:18 dfs Exp $ */
 
 /* Note that not all of the "errors" are really errors - some are just
    messages for information purposes.  Constants beginning with M_ should
@@ -207,7 +207,7 @@ EXTERN char *ErrMsg[]
     "Expecting time after AT",
     "UNTIL keyword used twice",
     "Incomplete date specification",
-    "SCANFROM keyword used twice",
+    "FROM/SCANFROM keyword used twice",
     "Variable",
     "Value",
     "*UNDEFINED*",

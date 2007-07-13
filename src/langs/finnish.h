@@ -16,7 +16,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: finnish.h,v 1.13 2007-07-08 16:57:49 dfs Exp $ */
+/* $Id: finnish.h,v 1.14 2007-07-13 03:36:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Finnish"
@@ -284,7 +284,7 @@ EXTERN char *ErrMsg[] =
     "AT-sanan per\xE4st\xE4 puuttuu aika",
     "UNTIL-sanaa k\xE4ytetty kahdesti",
     "Ep\xE4t\xE4ydellinen p\xE4iv\xE4ys",
-    "SCANFROM-sanaa k\xE4ytetty kahdesti",
+    "FROM/SCANFROM-sanaa k\xE4ytetty kahdesti",
     "Muuttuja",
     "Arvo",
     "*M\xC4\xC4RITTELEM\xC4T\xD6N*",
@@ -386,7 +386,7 @@ EXTERN char *ErrMsg[] =
     "AT-sanan per\x84st\x84 puuttuu aika",
     "UNTIL-sanaa k\x84ytetty kahdesti",
     "Ep\x84t\x84ydellinen p\x84iv\x84ys",
-    "SCANFROM-sanaa k\x84ytetty kahdesti",
+    "FROM/SCANFROM-sanaa k\x84ytetty kahdesti",
     "Muuttuja",
     "Arvo",
     "*M\x8E\x8ERITTELEM\x8ET\x99N*",
@@ -487,7 +487,7 @@ EXTERN char *ErrMsg[] =
     "AT-sanan per{st{ puuttuu aika",
     "UNTIL-sanaa k{ytetty kahdesti",
     "Ep{t{ydellinen p{iv{ys",
-    "SCANFROM-sanaa k{ytetty kahdesti",
+    "FROM/SCANFROM-sanaa k{ytetty kahdesti",
     "Muuttuja",
     "Arvo",
     "*M[[RITTELEM[T\\N*",

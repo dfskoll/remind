@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.20 2007-07-12 04:31:52 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.21 2007-07-13 03:36:18 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -663,16 +663,13 @@ static int DoCalRem(ParsePtr p, int col)
 
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
+    /* Suppress time if it's not today */
+    if (jul != JulianToday) {
+	tim.ttime = NO_TIME;
+    }
     if ((jul == JulianToday) ||
-	(jul > JulianToday &&
-	 DoSimpleCalDelta &&
-	 trig.delta != NO_DELTA &&
-	 jul - abs(trig.delta) <= JulianToday)) {
+	(DoSimpleCalendar && ShouldTriggerReminder(&trig, &tim, jul))) {
 	NumTriggered++;
-	/* Suppress time if it's not today */
-	if (jul != JulianToday) {
-	    tim.ttime = NO_TIME;
-	}
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
 	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
 		DBufFree(&obuf);

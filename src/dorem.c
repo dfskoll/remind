@@ -13,7 +13,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.19 2007-07-12 23:36:03 dfs Exp $";
+static char const RCSID[] = "$Id: dorem.c,v 1.20 2007-07-13 03:36:18 dfs Exp $";
 
 #include <stdio.h>
 #include <ctype.h>
@@ -476,6 +476,12 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
     int r;
     DynamicBuffer buf;
     DBufInit(&buf);
+    char const *word;
+    if (type == SCANFROM_TYPE) {
+	word = "SCANFROM";
+    } else {
+	word = "FROM";
+    }
 
     if (t->scanfrom != NO_DATE) return E_SCAN_TWICE;
 
@@ -487,7 +493,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 	case T_Year:
 	    DBufFree(&buf);
 	    if (y != NO_YR) {
-		Eprint("SCANFROM: %s", ErrMsg[E_YR_TWICE]);
+		Eprint("%s: %s", word, ErrMsg[E_YR_TWICE]);
 		return E_YR_TWICE;
 	    }
 	    y = tok.val;
@@ -496,7 +502,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 	case T_Month:
 	    DBufFree(&buf);
 	    if (m != NO_MON) {
-		Eprint("SCANFROM: %s", ErrMsg[E_MON_TWICE]);
+		Eprint("%s: %s", word, ErrMsg[E_MON_TWICE]);
 		return E_MON_TWICE;
 	    }
 	    m = tok.val;
@@ -505,7 +511,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 	case T_Day:
 	    DBufFree(&buf);
 	    if (d != NO_DAY) {
-		Eprint("SCANFROM: %s", ErrMsg[E_DAY_TWICE]);
+		Eprint("%s: %s", word, ErrMsg[E_DAY_TWICE]);
 		return E_DAY_TWICE;
 	    }
 	    d = tok.val;
@@ -513,7 +519,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 
 	default:
 	    if (y == NO_YR || m == NO_MON || d == NO_DAY) {
-		Eprint("SCANFROM: %s", ErrMsg[E_INCOMPLETE]);
+		Eprint("%s: %s", word, ErrMsg[E_INCOMPLETE]);
 		DBufFree(&buf);
 		return E_INCOMPLETE;
 	    }

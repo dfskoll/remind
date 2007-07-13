@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.23 2007-07-08 18:21:39 dfs Exp $
+.\" $Id: remind.1,v 1.24 2007-07-13 03:36:15 dfs Exp $
 .TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
@@ -294,7 +294,7 @@ Its syntax is:
 [\fBSCHED\fR \fIsched_function\fR]
 [\fBWARN\fR \fIwarn_function\fR]
 [\fBUNTIL\fR \fIexpiry_date\fR]
-[\fBSCANFROM\fR \fIscan_date\fR]
+[\fBSCANFROM\fR \fIscan_date\fR | \fBFROM\fR \fIstart_date\fR]
 [\fBDURATION\fR \fIduration\fR]
 [\fBTAG\fR \fItag\fR]
 <\fBMSG\fR | \fBMSF\fR | \fBRUN\fR | \fBCAL\fR | \fBSATISFY\fR |
@@ -648,12 +648,13 @@ trigger date; thereafter, the reminder repeats with the specified
 period.  Similarly, if you specify a weekday, it is used only to calculate
 the initial date, and does not affect the repetition period.
 .PP
-.B SCANFROM
+.B SCANFROM \fRand\fB FROM
 .PP
-The \fBSCANFROM\fR keyword is for advanced \fBRemind\fR programmers
+The \fBSCANFROM\fR and \fBFROM\fR keywords are for advanced \fBRemind\fR programmers
 only, and will be explained in the section "Details about Trigger Computation"
 near the end of this manual.  Note that \fBSCANFROM\fR is available only
-in versions of \fBRemind\fR from 03.00.04 up.
+in versions of \fBRemind\fR from 03.00.04 up.  \fBFROM\fR is available only
+from 03.01.00 and later.
 .PP
 .B PRIORITY
 .PP
@@ -3838,6 +3839,29 @@ In general, use \fBSCANFROM\fR as shown for safe movable \fBOMITs\fR.  The
 amount you should scan back by (7 days in the example above) depends on
 the number of possible consecutive \fBOMITted\fR days which may occur, and
 on the range of the movable holiday.  Generally, a value of 7 is safe.
+.PP
+The \fBFROM\fR clause operates almost like the counterpoint to
+\fBUNTIL\fR.  It prevents the reminder from triggering before the
+\fBFROM\fR date.  For example, the following reminder:
+.PP
+.nf
+	REM Mon Thu FROM 23 Jul 2007 UNTIL 2 Aug 2007 MSG Test
+.fi
+.PP
+will trigger on Mondays and Thursdays between 23 July 2007 and
+2 August 2007 inclusive.
+.PP
+\fBFROM\fR is really just syntactic sugar; you could implement
+the reminder above as follows:
+.PP
+.nf
+	REM Mon Thu SCANFROM [trigger(max(today(), '2007-07-23'))] \\
+            UNTIL 2 Aug 2007 MSG Test
+.fi
+.PP
+but that's a lot harder to read.  Internally, \fBRemind\fR
+treats \fBFROM\fR exactly as illustrated using \fBSCANFROM\fR.  For
+that reason, you cannot use both \fBFROM\fR and \fBSCANFROM\fR.
 .PP
 Note that if you use one \fBREM\fR command to calculate a trigger date,
 perform date calculations (addition or subtraction, for example) and

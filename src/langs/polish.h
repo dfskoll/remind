@@ -14,7 +14,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: polish.h,v 1.11 2007-07-08 16:57:49 dfs Exp $ */
+/* $Id: polish.h,v 1.12 2007-07-13 03:36:21 dfs Exp $ */
 
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Polish"
@@ -256,7 +256,7 @@ EXTERN char *ErrMsg[] =
     "Po AT oczekiwany jest czas",
     "S\263owo UNTIL u\277yte dw\363krotnie",
     "Niekompletna specyfikacja daty",
-    "S\263owo SCANFROM u\277yte dw\363krotnie",
+    "S\263owo FROM/SCANFROM u\277yte dw\363krotnie",
     "Zmienna",
     "Warto\266\346",
     "*NIE ZDEFINIOWANE*",
@@ -357,7 +357,7 @@ EXTERN char *ErrMsg[] =
     "Po AT oczekiwany jest czas",
     "Slowo UNTIL uzyte dwokrotnie",
     "Niekompletna specyfikacja daty",
-    "Slowo SCANFROM uzyte dwokrotnie",
+    "Slowo FROM/SCANFROM uzyte dwokrotnie",
     "Zmienna",
     "Wartosc",
     "*UNDEFINED*",

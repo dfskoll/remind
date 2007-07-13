@@ -1,10 +1,10 @@
 # Makefile.in for REMIND
 # 
-# $Id: Makefile.in,v 1.25 2007-06-29 01:23:36 dfs Exp $
+# $Id: Makefile.in,v 1.26 2007-07-13 12:19:13 dfs Exp $
 
 VERSION=03.01.00
 SHELL= /bin/sh
-
+BETA = 1
 srcdir=@srcdir@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -80,9 +80,9 @@ distro:
 	rm -f remind-$(VERSION)
 
 beta-tgz:
-	ln -s .. remind-$(VERSION)-BETA
-	peekentry `find remind-$(VERSION)-BETA -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION)-BETA.tar
-	gzip -f -v -9 remind-$(VERSION)-BETA.tar
-	rm -f remind-$(VERSION)-BETA
+	ln -s .. remind-$(VERSION)-BETA-$(BETA)
+	peekentry `find remind-$(VERSION)-BETA-$(BETA) -depth -follow -name 'Entries' -print` | xargs tar cvf remind-$(VERSION)-BETA-$(BETA).tar
+	gzip -f -v -9 remind-$(VERSION)-BETA-$(BETA).tar
+	rm -f remind-$(VERSION)-BETA-$(BETA)
 #---------------- Stuff after this added by "make depend" -----------------
 

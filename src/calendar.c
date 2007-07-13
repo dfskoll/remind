@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.22 2007-07-13 03:40:24 dfs Exp $";
+static char const RCSID[] = "$Id: calendar.c,v 1.23 2007-07-13 12:19:13 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -663,19 +663,24 @@ static int DoCalRem(ParsePtr p, int col)
 
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
-    /* Suppress time if it's not today */
-    if (jul != JulianToday) {
-	tim.ttime = NO_TIME;
-    }
     if ((jul == JulianToday) ||
 	(DoSimpleCalendar &&
 	 DoSimpleCalDelta &&
 	 ShouldTriggerReminder(&trig, &tim, jul))) {
 	NumTriggered++;
+
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
-	    if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
-		DBufFree(&obuf);
-		return E_NO_MEM;
+	    /* Suppress time if it's not today */
+	    if (jul != JulianToday) {
+		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
+		    DBufFree(&obuf);
+		    return E_NO_MEM;
+		}
+	    } else {
+		if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
+		    DBufFree(&obuf);
+		    return E_NO_MEM;
+		}
 	    }
 	}
 	if (trig.typ != PASSTHRU_TYPE &&
@@ -775,7 +780,11 @@ static int DoCalRem(ParsePtr p, int col)
 		e->passthru[0] = 0;
 	    }
 	    e->pos = e->text;
-	    e->time = tim.ttime;
+	    if (jul == JulianToday) {
+		e->time = tim.ttime;
+	    } else {
+		e->time = NO_TIME;
+	    }
 	    e->next = CurCol;
 	    CalColumn[col] = e;
 	    SortCol(&CalColumn[col]);

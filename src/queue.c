@@ -11,7 +11,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.20 2007-07-01 20:12:15 dfs Exp $";
+static char const RCSID[] = "$Id: queue.c,v 1.21 2007-07-14 17:18:11 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__
@@ -227,6 +227,7 @@ void HandleQueuedReminders(void)
 
 	/* Calculate the next trigger time */
 	q->tt.nexttime = CalculateNextTime(q);
+	DestroyParser(&p);
     }
     exit(0);
 }

@@ -1,4 +1,4 @@
-.\" $Id: remind.1,v 1.24 2007-07-13 03:36:15 dfs Exp $
+.\" $Id: remind.1,v 1.25 2007-07-17 01:30:12 dfs Exp $
 .TH REMIND 1 "1 July 2007"
 .UC 4
 .SH NAME
@@ -3633,6 +3633,8 @@ Calculations" by E. M. Reingold and Nachum Dershowitz.
 The \fBSPECIAL\fR keyword is used to transmit "out-of-band" information
 to \fBRemind\fR backends, such as \fBtkremind\fR or \fBRem2PS\fR.
 They are used only when piping data from a \fBremind -p\fR line.
+(Note that the COLOR special is an exception; it downgrades to the
+equivalent of MSG in \fBremind's\fR normal mode of operation.)
 .PP
 The various \fBSPECIAL\fRs recognized are particular for each
 backend; however, there are three \fBSPECIAL\fRs which all backends
@@ -3693,6 +3695,8 @@ Immediately following COLOR should be three decimal numbers ranging
 from 0 to 255 specifying red, green and blue intensities, respectively.
 The rest of the line is the text to put in the calendar.
 .PP
+The COLOR special is "doubly special", because in its normal operating
+mode, \fBremind\fR treats a COLOR special just like a MSG-type reminder.
 .SH MISCELLANEOUS
 .PP
 .B COMMAND ABBREVIATIONS

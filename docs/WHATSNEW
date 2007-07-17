@@ -1,6 +1,23 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 0
+* Version 3.1 Patch 0 - BETA 2
+
++ MAJOR ENHANCEMENTS
+
+- Added the FROM clause.  This lets you write reminders like:
+
+  REM Mon FROM 16 July 2007 UNTIL 13 Aug 2007 MSG Some Mondays...
+
++ BUG FIXES
+
+- Fixed a potential memory leak in queue.c
+
+- Fixed compile error on Mac OS X.
+
+- Fixed behaviour of "-sa" option so deltas correctly obey omitted days
+  and the scheduling function (if one is used).
+
+* Version 3.1 Patch 0 - BETA 1
 
 + MAJOR ENHANCEMENTS
 

@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.42 2007-04-24 14:34:48 dfs Exp $
+# $Id: tkremind,v 1.43 2007-07-17 08:57:38 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -271,7 +271,7 @@ proc CreateCalFrame { w dayNames } {
 	    set index $i
 	}
 
-	label $w.day$i -text [lindex $dayNames $index] -justify center
+	label $w.day$i -border 1 -text [lindex $dayNames $index] -justify center
 	grid configure $w.day$i -row 0 -column $i -sticky ew
     }
     for {set i 0} {$i < 6} {incr i} {
@@ -279,9 +279,9 @@ proc CreateCalFrame { w dayNames } {
 	for {set j 0} {$j < 7} {incr j} {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
-		    -state disabled -relief flat
-	    text $w.t$f -width 12 -height $h -wrap word -relief flat \
-		    -state disabled -takefocus 0 -cursor {}
+		    -state disabled -relief flat -border 0 -padx 0 -pady 0
+	    text $w.t$f -width 12 -height $h -border 1 -wrap word -relief flat \
+		-state disabled -takefocus 0 -cursor {}
 	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
 	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
@@ -392,22 +392,22 @@ proc ConfigureCalFrame { w firstDay numDays } {
 proc CreateCalWindow { dayNames } {
     global Option
     frame .h
-    label .h.title -text "" -justify center -pady 2 -relief raised
+    label .h.title -text "" -justify center -pady 1 -border 1 -relief raised
     pack .h.title -side top -fill x
     pack .h -side top -expand 0 -fill x
 
     CreateCalFrame .cal $dayNames
 
     frame .b
-    button .b.prev -text {<-} -command {MoveMonth -1}
-    button .b.this -text {Today} -command {ThisMonth}
-    button .b.next -text {->} -command {MoveMonth 1}
-    button .b.goto -text {Go To Date...} -command {GotoDialog}
-    button .b.print -text {Print...} -command {DoPrint}
-    button .b.quit -text {Quit} -command {Quit}
-    button .b.options -text {Options...} -command EditOptions
-    label .b.status -text "" -width 25 -relief sunken
-    label .b.nqueued -text "" -width 20 -relief sunken
+    button .b.prev -text {<-} -command {MoveMonth -1} -border 1
+    button .b.this -text {Today} -command {ThisMonth} -border 1
+    button .b.next -text {->} -command {MoveMonth 1} -border 1
+    button .b.goto -text {Go To Date...} -command {GotoDialog} -border 1
+    button .b.print -text {Print...} -command {DoPrint} -border 1
+    button .b.quit -text {Quit} -command {Quit} -border 1
+    button .b.options -text {Options...} -command EditOptions -border 1
+    label .b.status -text "" -width 25 -relief sunken -border 1
+    label .b.nqueued -text "" -width 20 -relief sunken -border 1
     pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x

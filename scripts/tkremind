@@ -12,7 +12,7 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.43 2007-07-17 08:57:38 dfs Exp $
+# $Id: tkremind,v 1.44 2007-07-29 03:17:58 dfs Exp $
 
 # the next line restarts using wish \
 exec wish "$0" "$@"
@@ -990,11 +990,11 @@ proc DoGoto {} {
     global CurYear CurMonth MonthNames
     set year [.g.y.e get]
     if { ! [regexp {^[0-9]+$} $year] } {
-	tk_dialog .error Error {Illegal year specified (1990-2078)} error 0 Ok
+	tk_dialog .error Error {Illegal year specified (1990-5990)} error 0 Ok
 	return
     }
-    if { $year < 1990 || $year > 2078 } {
-	tk_dialog .error Error {Illegal year specified (1990-2078)} error 0 Ok
+    if { $year < 1990 || $year > 5990 } {
+	tk_dialog .error Error {Illegal year specified (1990-5990)} error 0 Ok
 	return
     }
     set month [lsearch -exact $MonthNames [.g.mon cget -text]]

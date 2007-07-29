@@ -12,7 +12,7 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.13 2007-07-01 20:12:16 dfs Exp $";
+static char const RCSID[] = "$Id: var.c,v 1.14 2007-07-29 03:16:40 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -454,7 +454,8 @@ typedef struct {
 #define been_malloced min
 
 /* Flag for no min/max constraint */
-#define ANY 4532
+#define ANY -31415926
+
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
     /* name		  mod	type		value		min/mal	max */

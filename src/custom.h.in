@@ -11,7 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h.in,v 1.10 2007-07-13 03:43:30 dfs Exp $ */
+/* $Id: custom.h.in,v 1.11 2007-07-29 03:16:40 dfs Exp $ */
 
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
@@ -134,13 +134,10 @@
 #define BASE 1990
 
 /*---------------------------------------------------------------------*/
-/* YR_RANGE: The range of years allowed.  Computers with 16-bit        */
-/*           integers can handle about 89 years worth of reminders; if */
-/*           you use 32-bit integers, you can handle over 5 867 000    */
-/*           years.  Note that YR_RANGE is set to 88 rather than 89    */
-/*           because we can range up to the last day of the 88th year. */
+/* YR_RANGE: The range of years allowed.  With 32-bit signed integers, */
+/* the DATETIME type can store 2^31 minutes or about 4074 years.       */
 /*---------------------------------------------------------------------*/
-#define YR_RANGE 88
+#define YR_RANGE 4000
 
 /*---------------------------------------------------------------------*/
 /* VAR_NAME_LEN: The maximum length of variable names.  Don't make it  */

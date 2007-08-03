@@ -12,8 +12,6 @@
 #
 #--------------------------------------------------------------
 
-# $Id: build.tk,v 1.14 2007-07-01 20:13:37 dfs Exp $
-
 # the next line restarts using wish \
 exec wish "$0" "$@"
 

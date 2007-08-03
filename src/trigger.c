@@ -352,7 +352,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 {
     int nattempts = 0,
 	start = today,
-	nextstart,
+	nextstart = today,
 	y, m, d,
 	result;
 

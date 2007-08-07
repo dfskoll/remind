@@ -34,5 +34,7 @@ If you do NOT have Tcl/Tk or are NOT running X Windows:
 
 5) Type: "make install" -- you may need to be root to do this.
 
+$Id: README,v 1.8 2007-07-12 04:27:44 dfs Exp $
+
 Contact info: mailto:dfs@roaringpenguin.com
 Home page:    http://www.roaringpenguin.com/remind

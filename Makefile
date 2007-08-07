@@ -1,5 +1,7 @@
 # Top-level Makefile for Remind.
 
+# $Id: Makefile,v 1.29 2007-03-26 19:38:07 dfs Exp $
+
 all: src/Makefile
 	@echo ""
 	@echo "*******************"

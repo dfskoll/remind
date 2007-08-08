@@ -11,8 +11,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: trigger.c,v 1.7 2007-06-29 01:52:36 dfs Exp $";
-
 #include <stdio.h>
 
 #include <stdlib.h>

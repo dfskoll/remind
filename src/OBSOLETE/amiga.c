@@ -12,7 +12,6 @@
 /*                                                             */
 /***************************************************************/
 #include "config.h"
-static char const RCSID[] = "$Id: amiga.c,v 1.1 2000-03-15 16:03:57 dfs Exp $";
 
 #include <stdlib.h>
 #include <string.h>

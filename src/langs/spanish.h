@@ -12,8 +12,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: spanish.h,v 1.3 2000-02-18 03:46:28 dfs Exp $ */
-
 #define L_LANGNAME "Spanish"
 
 /* Nombres de los di'as de la semana */

@@ -10,8 +10,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: lang.h,v 1.6 2000-12-18 14:05:32 dfs Exp $ */
-
 /* I'm chauvinistic and name each language with its English name... */
 
 #define ENGLISH    0 /* original   by David F. Skoll                   */

@@ -10,8 +10,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: expr.h,v 1.7 2007-07-01 14:49:47 dfs Exp $ */
-
 /* Define the types of values */
 #define ERR_TYPE      0
 #define INT_TYPE      1

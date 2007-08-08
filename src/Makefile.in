@@ -1,6 +1,5 @@
 # Makefile.in for REMIND
-# 
-# $Id: Makefile.in,v 1.26 2007-07-13 12:19:13 dfs Exp $
+#
 
 VERSION=03.01.00
 SHELL= /bin/sh

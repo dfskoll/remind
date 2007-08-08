@@ -5,8 +5,6 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999-2000 by Roaring Penguin Software Inc.
 
-# $Id: calps,v 1.3 2000-02-18 03:46:35 dfs Exp $
-
 echo "Content-type: application/postscript"
 echo
 

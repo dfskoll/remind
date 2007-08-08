@@ -11,7 +11,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: moon.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
 
 /* All of these routines were adapted from the program "moontool"
    by John Walker, February 1988.  Here's the blurb from moontool:

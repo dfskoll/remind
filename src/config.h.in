@@ -1,7 +1,5 @@
 /* src/config.h.in.  Generated automatically from configure.in by autoheader.  */
 
-/* $Id: config.h.in,v 1.6 2007-07-09 01:55:47 dfs Exp $ */
-
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
 

@@ -10,8 +10,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: err.h,v 1.6 2007-07-13 03:36:18 dfs Exp $ */
-
 /* Note that not all of the "errors" are really errors - some are just
    messages for information purposes.  Constants beginning with M_ should
    never be returned as error indicators - they should only be used to

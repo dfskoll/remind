@@ -11,8 +11,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: icelandic.h,v 1.1 2000-12-18 14:05:33 dfs Exp $ */
-
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Icelandic"
 

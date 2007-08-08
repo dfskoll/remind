@@ -13,7 +13,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: init.c,v 1.19 2007-01-25 02:33:18 dfs Exp $";
 
 #define L_IN_INIT 1
 #include <stdio.h>

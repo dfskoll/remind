@@ -3,10 +3,8 @@
 
 # This file is part of REMIND
 #
-# $Id: remind-all.sh,v 1.4 2000-02-18 03:45:39 dfs Exp $
-#
-# REMIND is Copyright (C) 1992-1998 by David F. Skoll        
-# Copyright (C) 1999-2000 Roaring Penguin Software Inc.
+# REMIND is Copyright (C) 1992-1998 by David F. Skoll
+# Copyright (C) 1999-2007 Roaring Penguin Software Inc.
 # This file is Copyright (C) 1990 by Bill Aten
 
 # Thanks to Bill Aten for this script.

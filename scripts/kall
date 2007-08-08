@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# $Id: kall,v 1.1 1998-01-15 02:50:20 dfs Exp $
-#
 # kall - kill all processes belonging to this user that match
 #           specified string.
 

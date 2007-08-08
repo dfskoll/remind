@@ -11,7 +11,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: queue.c,v 1.21 2007-07-14 17:18:11 dfs Exp $";
 
 /* Solaris needs this to get select() prototype */
 #ifdef __sun__

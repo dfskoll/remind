@@ -11,8 +11,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: custom.h,v 1.42 2007-07-29 03:16:40 dfs Exp $ */
-
 /*---------------------------------------------------------------------*/
 /* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
 /* LON_DEG, LON_MIN and LON_SEC: Longitude of your location            */

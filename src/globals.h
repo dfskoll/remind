@@ -12,8 +12,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: globals.h,v 1.12 2007-07-01 20:12:15 dfs Exp $ */
-
 #ifdef MK_GLOBALS
 #undef EXTERN
 #define EXTERN

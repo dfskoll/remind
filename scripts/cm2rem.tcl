@@ -13,8 +13,6 @@
 #
 #--------------------------------------------------------------
 
-# $Id: cm2rem.tcl,v 1.3 2000-02-18 03:45:38 dfs Exp $
-
 # the next line restarts using tclsh \
 exec tclsh "$0" "$@"
 

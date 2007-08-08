@@ -13,8 +13,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dorem.c,v 1.20 2007-07-13 03:36:18 dfs Exp $";
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>

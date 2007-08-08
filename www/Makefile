@@ -3,8 +3,6 @@
 # Copyright (C) 1992-1997 by David F. Skoll
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
-# $Id: Makefile,v 1.13 2000-06-26 14:44:17 dfs Exp $
-
 # The complete name of your www host.  Example: www.mycompany.com
 WWWHOST = localhost
 # WWWHOST = www.mycompany.com

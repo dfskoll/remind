@@ -12,7 +12,6 @@
 
 #include "config.h"
 #include "dynbuf.h"
-static char const RCSID[] = "$Id: rem2ps.c,v 1.15 2005-12-31 23:05:24 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

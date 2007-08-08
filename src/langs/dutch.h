@@ -16,8 +16,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: dutch.h,v 1.5 2000-02-18 03:46:18 dfs Exp $ */
-
 /* The very first define in a language support file must be L_LANGNAME: */
 #define L_LANGNAME "Dutch"
 

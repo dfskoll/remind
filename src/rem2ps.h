@@ -10,8 +10,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: rem2ps.h,v 1.5 2004-08-11 01:55:32 dfs Exp $ */
-
 char *PSProlog1[] =
 {
     "% This file was produced by Remind and Rem2PS, written by",

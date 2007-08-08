@@ -1,5 +1,4 @@
 # Makefile for REMIND for Turbo C for MSDOS
-# $Id: makefile.tc,v 1.1 2000-03-15 16:03:57 dfs Exp $
 
 CC= tcc
 

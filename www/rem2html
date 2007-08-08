@@ -2,8 +2,6 @@
 
 # rem2html
 #
-# $Id: rem2html,v 1.13 2005-04-12 00:51:36 dfs Exp $
-#
 # A script to convert from the output of "remind -p" to Hyper-Text Markup
 # Language (HTML), the text format used in WWW documents.  By default, it
 # outputs a stand-alone file which can be fed directly into a web browser.

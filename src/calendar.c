@@ -11,7 +11,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: calendar.c,v 1.23 2007-07-13 12:19:13 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

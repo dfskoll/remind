@@ -12,7 +12,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: omit.c,v 1.7 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>
 

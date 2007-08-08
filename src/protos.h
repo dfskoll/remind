@@ -10,8 +10,6 @@
 /*                                                             */
 /***************************************************************/
 
-/* $Id: protos.h,v 1.10 2005-09-30 03:29:32 dfs Exp $ */
-
 /* Define a string assignment macro - be careful!!! */
 #define STRSET(x, str) { if (x) free(x); (x) = StrDup(str); }
 

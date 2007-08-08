@@ -13,7 +13,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: os2func.c,v 1.1 2000-03-15 16:03:57 dfs Exp $";
 
 #ifdef OS2_POPUP
 #define INCL_VIO

@@ -11,7 +11,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: utils.c,v 1.7 2005-09-30 03:29:32 dfs Exp $";
 
 #include <string.h>
 #include <stdio.h>

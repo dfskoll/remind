@@ -14,7 +14,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: hbcal.c,v 1.5 2005-09-30 03:29:32 dfs Exp $";
 
 #include <stdio.h>  /* For FILE used by protos.h - sigh. */
 #include "types.h"

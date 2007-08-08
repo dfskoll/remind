@@ -2,8 +2,6 @@
 
 # Shell script to mail all users reminders.
 
-# $Id: remind-all.csh,v 1.1 1998-01-15 02:50:21 dfs Exp $
-
 # Run it AFTER MIDNIGHT so that date is correct!
 # On our system, we have the following in our crontab:
 # 05 5 * * * /usr/share/lib/remind/remind-all > /dev/null 2>&1

@@ -12,8 +12,6 @@
 /***************************************************************/
 
 static char const RCSID[] =
-"$Id: dynbuf.c,v 1.6 2005-09-30 03:29:32 dfs Exp $";
-
 #include "config.h"
 #include "dynbuf.h"
 #include "err.h"

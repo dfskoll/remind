@@ -1,5 +1,4 @@
 REM2HTML
-$Id: README.rem2html,v 1.3 1998-01-24 03:20:11 dfs Exp $
 
 Rem2HTML is a Perl script which transforms the output of
 `remind -p ...' to an HTML table.  Type `perl rem2html --help' for

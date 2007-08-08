@@ -12,8 +12,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: dosubst.c,v 1.13 2007-07-12 03:14:36 dfs Exp $";
-
 #define L_IN_DOSUBST
 #include <stdio.h>
 #include <string.h>

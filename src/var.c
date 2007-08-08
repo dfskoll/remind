@@ -7,12 +7,11 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-1998 by David F. Skoll                  */
-/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
+/*  Copyright (C) 1999-2007 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: var.c,v 1.14 2007-07-29 03:16:40 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

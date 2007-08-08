@@ -1,7 +1,5 @@
 # Makefile for REMIND
 #
-# $Id: makefile.os2,v 1.1 2000-03-15 16:03:57 dfs Exp $
-#
 # THIS IS OUT OF DATE!
 #
 # - for GNU gcc (emx 0.8g kit) [executables for OS/2 2.x or DOS (32-bit)]

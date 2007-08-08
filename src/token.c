@@ -12,7 +12,6 @@
 /***************************************************************/
 
 #include "config.h"
-static char const RCSID[] = "$Id: token.c,v 1.15 2007-07-12 23:36:03 dfs Exp $";
 
 #include <stdio.h>
 #include <string.h>

@@ -1,5 +1,4 @@
 # Makefile for REMIND for Microsoft C for MSDOS
-# $Id: makefile.msc,v 1.1 2000-03-15 16:03:57 dfs Exp $
 
 OBJS= calendar.obj dorem.obj dosubst.obj expr.obj files.obj funcs.obj \
 globals.obj init.obj main.obj omit.obj token.obj trigger.obj userfns.obj \

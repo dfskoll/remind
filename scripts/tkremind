@@ -12,8 +12,6 @@
 #
 #--------------------------------------------------------------
 
-# $Id: tkremind,v 1.44 2007-07-29 03:17:58 dfs Exp $
-
 # the next line restarts using wish \
 exec wish "$0" "$@"
 

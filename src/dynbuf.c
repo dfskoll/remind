@@ -11,7 +11,6 @@
 /*                                                             */
 /***************************************************************/
 
-static char const RCSID[] =
 #include "config.h"
 #include "dynbuf.h"
 #include "err.h"

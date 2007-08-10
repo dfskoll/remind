@@ -17,6 +17,20 @@ exec wish "$0" "$@"
 
 wm withdraw .
 
+proc missing_tcllib { pkg } {
+    catch { puts stderr "Could not find the '$pkg' package -- you must install tcllib.\nPlease see http://tcllib.sourceforge.net/" }
+    tk_dialog .err "Error: tcllib not installed" "Could not find the '$pkg' package -- you must install tcllib.  Please see http://tcllib.sourceforge.net/" error 0 OK
+    exit 1
+}
+if {[catch {package require mime}]} {
+    missing_tcllib mime
+}
+
+if {[catch {package require smtp}]} {
+    missing_tcllib smtp
+}
+
+
 # Check that we have the right version of wish
 if {$tcl_version < 8.0} {
     tk_dialog .error Error "You need wish version 8.0 or higher to run TkRemind; you have $tcl_version" error 0 OK
@@ -55,6 +69,12 @@ set OptDescr(FeedReminder) "(0/1) If 1, feed the reminder to RunCmd on standard 
 
 set Option(Editor) "emacs +%d %s"
 set OptDescr(Editor) "(String) Specify command to edit a file.  %d is replaced with line number and %s with filename"
+
+set Option(MailAddr) ""
+set OptDescr(MailAddr) "(String) Specify an e-mail address to which reminders should be sent if the popup window is not manually dismissed"
+
+set Option(SMTPServer) "127.0.0.1"
+set OptDescr(SMTPServer) "(String) IP address or host name of SMTP server to use for sending e-mail"
 
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
@@ -484,6 +504,22 @@ proc EditOptions {} {
     pack $w.cmd -in $w.rf -side left -expand 1 -fill x
     $w.cmd insert 0 $tmpOpt(RunCmd)
 
+    frame $w.sep3 -border 1 -relief sunken
+    # E-mail reminder if popup not dismissed
+    frame $w.eml
+    label $w.lab_email_address -text "E-mail reminders here if popup not dismissed:" -anchor w -justify left
+    entry $w.email_address -width 30
+    pack $w.lab_email_address -in $w.eml -side left -expand 0 -fill none
+    pack $w.email_address -in $w.eml -side left -expand 1 -fill x
+    $w.email_address insert 0 $tmpOpt(MailAddr)
+
+    frame $w.fsmtp
+    label $w.lab_smtp -text "Name or IP address of SMTP server:" -anchor w -justify left
+    entry $w.smtp -width 30
+    pack $w.lab_smtp -in $w.fsmtp -side left -expand 0 -fill none
+    pack $w.smtp -in $w.fsmtp -side left -expand 1 -fill x
+    $w.smtp insert 0 $tmpOpt(SMTPServer)
+
     # Editor
     frame $w.ef
     label $w.el -text "Text Editor:" -anchor w -justify left
@@ -508,6 +544,9 @@ proc EditOptions {} {
     pack $w.sep1 -in $w.f -side top -expand 0 -fill x -ipady 1
     pack $w.rf -in $w.f -side top -expand 0 -fill x
     pack $w.feed -in $w.f -side top -expand 0 -fill x
+    pack $w.sep3 -in $w.f -side top -expand 0 -fill x -ipady 1
+    pack $w.eml -in $w.f -side top -expand 0 -fill x
+    pack $w.fsmtp -in $w.f -side top -expand 0 -fill x
     pack $w.ef -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
@@ -532,6 +571,9 @@ proc ApplyOptions { w } {
     global Option tmpOpt
     set tmpOpt(RunCmd) [$w.cmd get]
     set tmpOpt(Editor) [$w.editor get]
+    set tmpOpt(MailAddr) [$w.email_address get]
+    set tmpOpt(SMTPServer) [$w.smtp get]
+
     # Copy working copy to real option set
     foreach name [array names tmpOpt] {
 	set Option($name) $tmpOpt($name)
@@ -2154,8 +2196,10 @@ proc main {} {
     }
 
     global AppendFile HighestTagSoFar DayNames
-    puts "\nTkRemind Copyright (C) 1996-1998 David F. Skoll"
-    puts "Copyright (C) 1999-2000 Roaring Penguin Software Inc."
+    catch {
+	puts "\nTkRemind Copyright (C) 1996-1998 David F. Skoll"
+	puts "Copyright (C) 1999-2007 Roaring Penguin Software Inc."
+    }
     LoadOptions
     CreateMoonImages
     Initialize
@@ -2703,6 +2747,21 @@ proc InteractiveDeleteReminder { tag } {
 	DeleteTaggedReminder $tag
 	FillCalWindow
 	RestartBackgroundRemindDaemon
+    }
+}
+
+proc SendMail { sender recipient subject body } {
+    global Option
+
+    if {"$Option(MailAddr)" == ""} {
+	return
+    }
+    catch {
+	set token [mime::initialize -canonical text/plain -string $body]
+	mime::setheader $token Subject $subject
+	mime::setheader $token From "Reminder Service <>"
+	mime::setheader $token Auto-Submitted "auto-generated"
+	smtp::sendmessage $token -originator "<>" -servers $Option(SMTPServer) -recipients $Option(MailAddr)
     }
 }
 

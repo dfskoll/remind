@@ -2772,7 +2772,7 @@ proc ClosePopup { w after_token mail_addr close_win ignore_or_kill tag reminder 
 	catch { destroy $w }
     }
 
-    if {$mail_addr} {
+    if {"$mail_addr" != ""} {
 	catch {
 	    SendMail $mail_addr "Reminder for $rem_time" $reminder
 	}

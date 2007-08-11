@@ -2114,6 +2114,7 @@ proc IssueBackgroundReminder { file time now tag } {
     # Automatically shut down window after a minute if option says so
     set after_token [after 60000 [list ClosePopup $w "" $Option(MailAddr) $Option(AutoClose) "" $tag $msg $time]]
 
+    wm protocol $w WM_DELETE_WINDOW [list ClosePopup $w $after_token "" 1 "" $tag $msg $time]
     button $w.ok -text "OK" -command [list ClosePopup $w $after_token "" 1 "" $tag $msg $time]
     if {$tag != "*"} {
 	button $w.nomore -text "Don't remind me again today" -command [list ClosePopup $w $after_token "" 1 "ignore" $tag $msg $time]
@@ -2753,12 +2754,13 @@ proc SendMail { recipient subject body } {
     if {"$Option(MailAddr)" == ""} {
 	return
     }
-    catch {
-	set token [mime::initialize -canonical text/plain -string $body]
+    if {[catch {set token [mime::initialize -canonical text/plain -string $body]
 	mime::setheader $token Subject $subject
 	mime::setheader $token From "Reminder Service <>"
+	mime::setheader $token To "<$recipient>"
 	mime::setheader $token Auto-Submitted "auto-generated"
-	smtp::sendmessage $token -originator "<>" -servers $Option(SMTPServer) -recipients $Option(MailAddr)
+	smtp::sendmessage $token -originator "" -servers $Option(SMTPServer) -recipients $Option(MailAddr)} err]} {
+	puts stderr "ERROR sending mail: $err"
     }
 }
 
@@ -2773,9 +2775,7 @@ proc ClosePopup { w after_token mail_addr close_win ignore_or_kill tag reminder 
     }
 
     if {"$mail_addr" != ""} {
-	catch {
-	    SendMail $mail_addr "Reminder for $rem_time" $reminder
-	}
+	SendMail $mail_addr "Reminder for $rem_time" "Hello,\n\nThe following reminder is scheduled for $rem_time:\n\n$reminder\nRegards,\n\nTkRemind\n"
     }
     if {"$ignore_or_kill" == "ignore"} {
 	set Ignore($tag) 1

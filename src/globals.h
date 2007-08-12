@@ -71,7 +71,7 @@ EXTERN  INIT(   int     DontIssueAts, 0);
 EXTERN  INIT(   int     Daemon, 0);
 EXTERN  INIT(   char    DateSep, DATESEP);
 EXTERN  INIT(   char    TimeSep, TIMESEP);
-
+EXTERN  INIT(   int     SynthesizeTags, 0);
 EXTERN  INIT(   int     ScFormat, SC_AMPM);
 EXTERN  INIT(   int     MaxSatIter, 150);
 EXTERN  INIT(	char	*FileName, NULL);

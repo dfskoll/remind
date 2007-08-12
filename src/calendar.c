@@ -23,6 +23,7 @@
 #include "expr.h"
 #include "globals.h"
 #include "err.h"
+#include "md5.h"
 
 /* Data structures used by the calendar */
 typedef struct cal_entry {
@@ -748,7 +749,11 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	StrnCpy(e->tag, trig.tag, TAG_LEN);
 	if (!e->tag[0]) {
-	    strcpy(e->tag, "*");
+	    if (SynthesizeTags) {
+		SynthesizeTag(e->tag);
+	    } else {
+		strcpy(e->tag, "*");
+	    }
 	}
 	e->duration = tim.duration;
 	e->priority = trig.priority;
@@ -810,8 +815,7 @@ static void WriteSimpleEntries(int col, int jul)
     while(e) {
 	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d ", y, m+1, d);
-	printf("%s ", e->passthru);
-	printf("%s ", e->tag);
+	printf("%s %s ", e->passthru, e->tag);
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);
 	} else {
@@ -976,3 +980,22 @@ static void SortCol(CalEntry **col)
 	}
     }
 }
+
+void SynthesizeTag(char *out)
+{
+    struct MD5Context ctx;
+    unsigned char buf[16];
+    MD5Init(&ctx);
+    MD5Update(&ctx, (unsigned char *) CurLine, strlen(CurLine));
+    MD5Final(buf, &ctx);
+    sprintf(out, "__syn__%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+	    (unsigned int) buf[0], (unsigned int) buf[1],
+	    (unsigned int) buf[2], (unsigned int) buf[3],
+	    (unsigned int) buf[4], (unsigned int) buf[5],
+	    (unsigned int) buf[6], (unsigned int) buf[7],
+	    (unsigned int) buf[8], (unsigned int) buf[9],
+	    (unsigned int) buf[10], (unsigned int) buf[11],
+	    (unsigned int) buf[12], (unsigned int) buf[13],
+	    (unsigned int) buf[14], (unsigned int) buf[15]);
+}
+

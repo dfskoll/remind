@@ -132,4 +132,4 @@ void HuntPhase (int startdate, int starttim, int phas, int *date, int *time);
 int CompareRems (int dat1, int tim1, int prio1, int dat2, int tim2, int prio2, int bydate, int bytime, int byprio);
 void SigIntHandler (int d);
 void GotSigInt (void);
-
+void SynthesizeTag(char *);

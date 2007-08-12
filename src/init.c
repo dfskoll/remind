@@ -169,6 +169,11 @@ void InitRemind(int argc, char *argv[])
 		IgnoreOnce = 1;
 		break;
 
+	    case 'y':
+	    case 'Y':
+		SynthesizeTags = 1;
+		break;
+
 	    case 't':
 	    case 'T':
 		InfiniteDelta = 1;
@@ -481,6 +486,7 @@ void Usage(void)
     fprintf(ErrFp, " -g[ddd] Sort reminders by date, time and priority before issuing\n");
     fprintf(ErrFp, " -ivar=val Initialize var to val and preserve var\n");
     fprintf(ErrFp, " -m     Start calendar with Monday rather than Sunday\n");
+    fprintf(ErrFp, " -y     Synthesize tags for tagless reminders\n");
     exit(1);
 }
 #endif /* L_USAGE_OVERRIDE */

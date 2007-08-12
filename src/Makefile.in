@@ -28,9 +28,11 @@ MANS=		$(srcdir)/../man/kall.1 $(srcdir)/../man/rem.1 \
 .SUFFIXES: .c .o
 
 REMINDSRCS=	calendar.c dynbuf.c dorem.c dosubst.c expr.c files.c funcs.c \
-		globals.c hbcal.c init.c main.c moon.c omit.c queue.c sort.c \
-		token.c trigger.c userfns.c utils.c var.c
+		globals.c hbcal.c init.c main.c md5.c moon.c omit.c queue.c \
+		sort.c token.c trigger.c userfns.c utils.c var.c
 
+REMINDHDRS=config.h custom.h dynbuf.h err.h expr.h globals.h lang.h \
+	   md5.h protos.h rem2ps.h types.h version.h
 REMINDOBJS= $(REMINDSRCS:.c=.o)
 
 all: remind rem2ps

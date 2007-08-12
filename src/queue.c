@@ -95,6 +95,9 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     qelem->ntrig = 0;
     strcpy(qelem->sched, sched);
     strcpy(qelem->tag, trig->tag);
+    if (!qelem->tag && SynthesizeTags) {
+	SynthesizeTag(qelem->tag);
+    }
     QueueHead = qelem;
     return OK;
 }

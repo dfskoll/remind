@@ -29,3 +29,4 @@ distclean: clean
 
 src/Makefile: src/Makefile.in
 	./configure
+# DO NOT DELETE

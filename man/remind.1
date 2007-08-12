@@ -217,6 +217,10 @@ case, it only changes the environment variables as described above.
 It does not change the effective uid or gid.
 .RE
 .TP
+\fB-y\fR
+Causes \fBRemind\fR to synthesize a tag for any reminder that lacks a
+TAG clause.
+.TP
 \fB\-i\fR\fIvar\fR\fB=\fR\fIexpr\fR
 Sets the value of the specified \fIvar\fR to \fIexpr\fR, and \fBpreserves\fR
 \fIvar\fR.  \fIExpr\fR can be any valid \fBRemind\fR expression.  See the
@@ -849,7 +853,14 @@ tags; you should \fInot\fR use the \fBTAG\fR keyword yourself, or
 your script will interact badly with back-ends.
 .PP
 The \fBTAG\fR keyword is followed by a tag consisting of up to
-32 characters.
+48 characters.
+.PP
+If you supply the \fB\-y\fR option to \fBRemind\fR, then any
+reminder that lacks a \fBTAG\fR will have one synthesized.  The
+synthesized tag consists of the characters "__syn__" followed
+by the hexadecimal representation of the MD5 sum of the REM
+command line.  This lets you give a more-or-less unique identifier
+to each distinct REM command.
 .PP
 The \fBDURATION\fR keyword makes sense only for timed reminders;
 it specifies the duration of an event.  Currently, this is not

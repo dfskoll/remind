@@ -204,7 +204,7 @@
 /*---------------------------------------------------------------------*/
 #define TAG_LEN 48
 
-#define PASSTHRU_LEN 48
+#define PASSTHRU_LEN 32
 
 #define PSBEGIN "# rem2ps begin"
 #define PSEND   "# rem2ps end"

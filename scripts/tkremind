@@ -155,7 +155,7 @@ proc Initialize {} {
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst
 
-    set CommandLine "|$Remind -itkremind=1 -p -l"
+    set CommandLine "|$Remind -itkremind=1 -p -y -l"
     set PSCmd "$Remind -p -l"
     set i 0
     while {$i < $argc} {

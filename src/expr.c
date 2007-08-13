@@ -366,8 +366,8 @@ int Evaluate(char **s, Var *locals)
 		    r = CallUserFunc(ufname, args);
 		    free(ufname);
 		}
-		if (r) return r;
 		DBufFree(&ExprBuf);
+		if (r) return r;
 	    }
 	} else { /* Unary operator */
 	    f = FindFunc(DBufValue(&ExprBuf), UnOp, NUM_UN_OPS);

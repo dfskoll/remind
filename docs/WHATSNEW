@@ -20,6 +20,10 @@ CHANGES TO REMIND
 
 + MINOR ENHANCEMENTS
 
+- TkRemind can e-mail you reminders if you don't dismiss the popup window
+  after one minute.  This is useful if you need to leave your workstation
+  but want reminders to "follow" you via e-mail.
+
 - A new "-y" option to Remind generates tags for all reminders that lack
   a TAG clause.  This may be useful for conversion tools that want each
   reminder to have a unique identifier.

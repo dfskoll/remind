@@ -211,6 +211,18 @@ If selected, feeds the text of the reminder to the command described
 above.
 
 .TP
+.B E-mail reminders here if popup not dismissed
+If you enter a non-blank e-mail address in this field, then \fBTkRemind\fR
+will e-mail you a reminder if you don't dismiss the popup box within
+one minute.  This is useful if you need to leave your terminal but
+want your reminders to "follow" you via e-mail.
+
+.TP
+.B Name or IP address of SMTP server
+\fBTkRemind\fR uses a direct SMTP connection to send mail.  Enter the
+IP address of your SMTP server here.
+
+.TP
 .B Text Editor
 This specifies a text editor to invoke when a reminder is right-clicked.
 The characters "%d" are replaced with the lined number of the file

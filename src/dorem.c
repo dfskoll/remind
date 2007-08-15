@@ -473,8 +473,9 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
     Token tok;
     int r;
     DynamicBuffer buf;
-    DBufInit(&buf);
     char const *word;
+
+    DBufInit(&buf);
     if (type == SCANFROM_TYPE) {
 	word = "SCANFROM";
     } else {

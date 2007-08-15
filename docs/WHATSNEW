@@ -1,25 +1,12 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 0 - BETA 2
+* Version 3.1 Patch 0 - 14 August 2007
 
 + MAJOR ENHANCEMENTS
 
 - Added the FROM clause.  This lets you write reminders like:
 
   REM Mon FROM 16 July 2007 UNTIL 13 Aug 2007 MSG Some Mondays...
-
-+ BUG FIXES
-
-- Fixed a potential memory leak in queue.c
-
-- Fixed compile error on Mac OS X.
-
-- Fixed behaviour of "-sa" option so deltas correctly obey omitted days
-  and the scheduling function (if one is used).
-
-* Version 3.1 Patch 0 - BETA 1
-
-+ MAJOR ENHANCEMENTS
 
 - Remind now has a new datatype: A DATETIME object represents a date AND
   a time (to the nearest minute).  DATETIME constants are written
@@ -32,6 +19,10 @@ CHANGES TO REMIND
   in non-calendar mode.  Simlarly, SPECIAL HTML sorts with -g as well.
 
 + MINOR ENHANCEMENTS
+
+- A new "-y" option to Remind generates tags for all reminders that lack
+  a TAG clause.  This may be useful for conversion tools that want each
+  reminder to have a unique identifier.
 
 - A new "tzconvert" function lets you convert datetimes between different
   time zones.  It's only as good as your C library, so test thoroughly
@@ -57,6 +48,13 @@ CHANGES TO REMIND
 - Maximum length of variable names has been increased from 12 to 16 characters.
 
 + BUG FIXES
+
+- Fixed a potential memory leak in queue.c
+
+- Fixed compile error on Mac OS X.
+
+- Fixed behaviour of "-sa" option so deltas correctly obey omitted days
+  and the scheduling function (if one is used).
 
 - rem2ps would produce invalid PostScript in some rare cases
   (eg, for February 2007).  This has been fixed.

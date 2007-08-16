@@ -598,7 +598,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	    return OK;
 	}
 	FromJulian(jul, &y, &m, &d);
- 	sprintf(tmpBuf, "%04d%c%02d%c%02d ", y, DateSep, m+1, DateSep, d);
+ 	sprintf(tmpBuf, "%04d/%02d/%02d ", y, m+1, d);
  	if (DBufPuts(&calRow, tmpBuf) != OK) {
  	    DBufFree(&calRow);
  	    return E_NO_MEM;

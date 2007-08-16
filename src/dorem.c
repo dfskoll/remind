@@ -893,7 +893,7 @@ int DoMsgCommand(char *cmd, char *msg)
     msg = DBufValue(&buf);
 
     /* Do "%s" substitution */
-    l = strlen(cmd)-1;
+    l = strlen(cmd);
     for (i=0; i<l; i++) {
 	if (cmd[i] == '%' && cmd[i+1] == 's') {
 	    ++i;
@@ -908,11 +908,6 @@ int DoMsgCommand(char *cmd, char *msg)
 	    }
 	}
     }
-    if (l >= 0 && DBufPutc(&execBuffer, cmd[l]) != OK) {
-	r = E_NO_MEM;
-	goto finished;
-    }
-
     r = OK;
 
     system(DBufValue(&execBuffer));

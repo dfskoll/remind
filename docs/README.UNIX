@@ -28,30 +28,6 @@ If you do NOT have Tcl/Tk or are NOT running X Windows:
 The subdirectory "www" contains scripts for making a nice calendar
 web server.  See the files README and Makefile in that directory.
 
-Two shell scripts, "scripts/remind-all.csh" and
-"scripts/remind-all.sh" are provided. These allow automatic mailing of
-reminders to all users who create a $HOME/.reminders file.  These two
-scripts are equivalent; one is a "sh" script and the other is a "csh"
-script.  Pick the one you want to use, and follow the instructions in
-the opening comments of the script.
-
-A shell script called "scripts/rem" is provided for those who like to have
-'remind' assume a default reminders file.  A man page for this script
-is provided.  You should examine the script to ensure that the defaults
-are correct.
-
-Many people have asked me why I supply the "rem" script instead of
-having Remind assume a default file.  The answer is: That's how I like
-it!  My personal preference is for a program which normally takes
-parameters to display usage information when invoked with no
-parameters.  I like that behaviour so I can quickly get an idea of
-what a program does without poring through the man page.  And I think
-I'll keep Remind that way.  Sorry to all who dislike it. :-)
-
-A shell script called "scripts/kall" is provided so you can kill your
-background remind processes when you log out.  See the man page.  Note
-that kall depends on the output of "ps", and may not be portable.
-
 The file "examples/defs.rem" has some sample Remind definitions and
 commands, as well as U.S. and Jewish holidays.
 

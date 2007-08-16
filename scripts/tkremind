@@ -1280,7 +1280,7 @@ proc RemindDialogToOptions { w } {
 		lappend ans "-global-$winstem" [eval set $winstem]
 	    }
 	    "Entry" {
-		lappend ans "-entry-$winstem" [$win get]
+		lappend ans "-entry-$winstem" [string map -nocase {"\n" " "} [$win get]]
 	    }
 	}
     }
@@ -1559,7 +1559,7 @@ proc CreateReminder {w} {
 	regsub -- {^-stdin-\([0-9]*\): } $err {} err
 	error "Error from Remind: $err"
     }
-    append rem " MSG $body"
+    append rem " MSG " [string map -nocase {"\n" " "} $body]
     return $rem
 }
 

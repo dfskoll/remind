@@ -121,10 +121,10 @@ numbers.
 numbers.
 
 .PP
-Type "rem2ps -m help" for a list of available media.  Note that the media
+Type "rem2ps \-m help" for a list of available media.  Note that the media
 type (and all \fBRem2ps\fR options) are case-sensitive.  If you don't use
 the \fB\-m\fR option, the media defaults to a compiled-in default - this
-is usually Letter for North America and A4 for Europe.  The "-m help"
+is usually Letter for North America and A4 for Europe.  The "\-m help"
 option will display the compiled-in default.
 .RE
 .TP
@@ -137,7 +137,7 @@ specifying:
 .RS
 .PP
 .nf
-	-ftshe Helvetica -fd Helvetica-BoldOblique
+	\-ftshe Helvetica \-fd Helvetica-BoldOblique
 .fi
 .PP
 In other words, the heading, entry and small-calendar fonts are set
@@ -153,7 +153,7 @@ are equivalent to specifying:
 .RS
 .PP
 .nf
-	-sthd 14 -se 8
+	\-sthd 14 \-se 8
 .fi
 .PP
 In other words, the heading and day numbers are 14-point fonts, and the
@@ -179,7 +179,7 @@ for good output:
 .PP
 .nf
 	# This gives good results for putting into a binder
-	rem2ps -ol 72 -sh 12
+	rem2ps \-ol 72 \-sh 12
 .fi
 .SH USAGE
 To use \fBRem2ps\fR, you should pipe the output of \fBRemind\fR with the \fB\-p\fR
@@ -187,14 +187,14 @@ option to \fBRem2ps\fR, and then send the result to a printer.  This is most eas
 illustrated with examples:
 .PP
 .nf
-	remind -p12 /dev/null 1 jan 1994 | rem2ps | lpr -Plaser
+	remind \-p12 /dev/null 1 jan 1994 | rem2ps | lpr \-Plaser
 .fi
 .PP
 That example creates a blank calendar for the entire year of 1994, and
 sends it the the printer named "laser."
 .PP
 .nf
-	remind -p ~/.reminders | rem2ps -l -sd 18 > cal.ps
+	remind \-p ~/.reminders | rem2ps \-l \-sd 18 > cal.ps
 .fi
 .PP
 This reminder creates a calendar for the current month, filling in

@@ -1392,7 +1392,7 @@ as being the combination of \fBDATE\fR and \fBTIME\fR parts.
 The following examples illustrate constants in \fBRemind\fR expressions:
 .TP
 .B INT constants
-12, 36, -10, 0, 1209
+12, 36, \-10, 0, 1209
 .TP
 .B STRING constants
 "Hello there", "This is a test", "\\n\\gosd\\w", ""
@@ -2351,13 +2351,13 @@ of \fIstr\fR.
 .TP
 .B sunrise([dq_date])
 Returns a \fBTIME\fR indicating the time of sunrise on the specified
-\fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
+\fIdate\fR (default \fBtoday()\fR.)  In high latitudes, there
 may be no sunrise on a particular day, in which case \fBsunrise()\fR
 returns the \fBINT\fR 0 if the sun never sets, or 1440 if it never rises.
 .TP
 .B sunset([dq_date])
 Returns a \fBTIME\fR indicating the time of sunset on the specified
-\fIdate\fR (default \fBtoday()\fR.)  In high lattitudes, there
+\fIdate\fR (default \fBtoday()\fR.)  In high latitudes, there
 may be no sunset on a particular day, in which case \fBsunset()\fR
 returns the \fBINT\fR 0 if the sun never rises, or 1440 if it never
 sets.
@@ -3406,7 +3406,7 @@ be preceded by "(not important)".
 .fi
 .PP
 In Calendar Mode (with the \fB\-c\fR, \fB\-s\fR or \fB\-p\fR options),
-an analagous pair of functions named \fBcalprefix()\fR and
+an analogous pair of functions named \fBcalprefix()\fR and
 \fBcalsuffix()\fR can be defined.  They work with all reminders that
 produce an entry in the calendar (i.e., \fBCAL\fR- and possibly
 \fBRUN\fR-type reminders as well as \fBMSG\fR-type reminders.)
@@ -3951,7 +3951,7 @@ Liviu Daia
 Rafa Couto
 .PP
 \fBIcelandic\fR --
-Björn Davíðsson
+Bj\(:orn Dav\('i\[Sd]sson
 .SH BUGS
 .PP
 There's no good reason why read-only system variables are not
@@ -3979,4 +3979,4 @@ Catalog\fR, Jewish Publication Society of America.
 .PP
 .SH SEE ALSO
 .PP
-rem, elm, kall, rem2ps, tkremind
+rem2ps, tkremind

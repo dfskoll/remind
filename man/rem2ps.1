@@ -350,7 +350,9 @@ The remaining data consists of calendar entries, in the following format:
 \fIyyyy/mm/dd special tag dur time body\fR
 .PP
 Here, \fIyyyy\fR is the year, \fImm\fR is the month (01-12) and
-\fIdd\fR is the day of the month.
+\fIdd\fR is the day of the month.  Note that the date components are
+always separated by "/" even if the date separator in \fBRemind\fR has
+been set to "-".  The consistent use of "/" is designed to ease parsing.
 .PP
 \fIspecial\fR is a string used
 for "out-of-band" communication with back-ends.  If the reminder

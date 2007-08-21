@@ -2230,11 +2230,14 @@ in degrees.  0 is a new moon, 180 is a full moon, 90 is first-quarter, etc.
 .TP
 .B nonomitted(dq_start, dq_end [,s_wkday...])
 This function returns the number of \fInon-\fRomitted days between
-\fIstart\fR and \fIend\fR.  Note that \fIend\fR must be greater than or
+\fIstart\fR and \fIend\fR.  If \fIstart\fR is non-omitted, then it is
+counted.  \fIend\fR is never counted.
+.RS
+.PP
+Note that \fIend\fR must be greater than or
 equal to \fIstart\fR or an error is reported.  In addition to using
 the global OMIT context, you can supply additional arguments that are
 names of weekdays to be omitted.
-.RS
 .PP
 For example, the following line sets a to 11 (assuming no global OMITs):
 .PP
@@ -2281,7 +2284,7 @@ following conditions:
 the previous Monday and tomorrow, or
 .PP
 2) It's a Friday and there are four or fewer non-omitted days between the
-prevsious Monday and tomorrow.  We need the "or fewer" condition to handle
+previous Monday and tomorrow.  We need the "or fewer" condition to handle
 the case of more than one holiday in a given week.  If that happens,
 garbage day still only moves by one day.
 .PP

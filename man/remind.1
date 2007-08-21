@@ -2262,7 +2262,7 @@ day is Thursday, but if any of Monday through Thursday of a week is a holiday,
 the collection day moves to Friday.  Here's one way to solve it:
 .PP
 .nf
-   FSET prev_monday(x) x - (coerce("INT", x) % 7)
+   FSET prev_monday(x) x - wkdaynum(x-1) % 7
 
    REM Thu Fri SATISFY [wkdaynum(trigdate()) == 4 && \\
             nonomitted(prev_monday(today()), today()+1) == 4 || \\

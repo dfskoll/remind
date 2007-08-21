@@ -51,7 +51,7 @@
 
 /* Function prototypes */
 static int FCurrent (void);
-static int FCycle (void);
+static int FNonomitted (void);
 static int FTimepart(void);
 static int FDatepart(void);
 static int FRealCurrent(void);
@@ -192,7 +192,6 @@ Operator Func[] = {
     {   "choose",	2,	NO_MAX, FChoose },
     {   "coerce",	2,	2,	FCoerce },
     {   "current",      0,      0,      FCurrent },
-    {   "cycle",        3,      NO_MAX, FCycle },
     {   "date",		3,	3,	FDate	},
     {   "datepart",	1,	1,	FDatepart },
     {   "datetime",	2,	5,	FDateTime },
@@ -230,6 +229,7 @@ Operator Func[] = {
     {	"moondatetime",	1,	3,	FMoondatetime },
     {	"moonphase",	0,	2,	FMoonphase },
     {	"moontime",	1,	3,	FMoontime },
+    {   "nonomitted",   2,      NO_MAX, FNonomitted },
     {   "now",		0,	0,	FNow	},
     {   "ord",		1,	1,	FOrd	},
     {   "ostype",       0,      0,      FOstype },
@@ -2442,38 +2442,32 @@ static int FTzconvert(void)
 }
 
 static int
-FCycle(void)
+FNonomitted(void)
 {
-    int d1, d2, modulus, ans, localomit, i;
+    int d1, d2, ans, localomit, i;
 
     Token tok;
 
     if (!HASDATE(ARG(0)) ||
-	!HASDATE(ARG(1)) ||
-	ARG(2).type != INT_TYPE) {
-	return E_BAD_TYPE;
+	!HASDATE(ARG(1))) {
     }
-    modulus = ARG(2).v.val;
-    if (modulus < 0) return E_2LOW;
     d1 = DATEPART(ARG(0));
     d2 = DATEPART(ARG(1));
     if (d2 < d1) return E_2LOW;
 
     localomit = 0;
-    for (i=3; i<Nargs; i++) {
+    for (i=2; i<Nargs; i++) {
 	if (ARG(i).type != STR_TYPE) return E_BAD_TYPE;
 	FindToken(ARG(i).v.str, &tok);
-	if (tok.type != T_WkDay) return E_BAD_TYPE;
+	if (tok.type != T_WkDay) return E_UNKNOWN_TOKEN;
 	localomit |= (1 << tok.val);
     }
 
     ans = 0;
     while (d1 < d2) {
-	if (!IsOmitted(d1, localomit)) {
+	if (!IsOmitted(d1++, localomit)) {
 	    ans++;
-	    if (modulus > 0 && ans >= modulus) ans = 0;
 	}
-	d1++;
     }
     RetVal.type = INT_TYPE;
     RetVal.v.val = ans;

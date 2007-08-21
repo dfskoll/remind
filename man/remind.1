@@ -2227,6 +2227,67 @@ This function returns the phase of the moon on \fIdate\fR and \fItime\fR,
 which default to \fBtoday()\fR and midnight, respectively.  The returned
 value is an integer from 0 to 359, representing the phase of the moon
 in degrees.  0 is a new moon, 180 is a full moon, 90 is first-quarter, etc.
+.TB
+.B nonomitted(dq_start, dq_end [,s_wkday...])
+This function returns the number of \fInon-\fRomitted days between
+\fIstart\fR and \fIend\fR.  Note that \fIend\fR must be greater than or
+equal to \fIstart\fR or an error is reported.  In addition to using
+the global OMIT context, you can supply additional arguments that are
+names of weekdays to be omitted.
+.RS
+.PP
+For example, the following line sets a to 11 (assuming no global OMITs):
+.PP
+.nf
+	set a nonomitted('2007-08-01', '2007-08-16', "Sat", "Sun")
+.fi
+.PP
+because Thursday, 16 August 2007 is the 11th working day (not counting
+Saturday and Sunday) after Wednesday, 1 August 2007.
+.PP
+\fBnonomitted\fR has various uses.  For example, many schools
+run on a six-day cycle and the day number is not incremented on holidays.
+Suppose the school year starts with Day 1 on 4 September 2007.  The following
+reminder will label day numbers in a calendar:
+.PP
+.nf
+   IF today() >= '2007-09-04'
+       set daynum nonomitted('2007-09-04', today(), "Sat", "Sun")
+       REM OMIT SAT SUN SKIP CAL Day [(daynum % 6) + 1]
+   ENDIF
+.fi
+.PP
+Here's a more complex example:  Suppose your normal garbage-collection
+day is Thursday, but if any of Monday through Thursday of a week is a holiday,
+the collection day moves to Friday.  Here's one way to solve it:
+.PP
+.nf
+   FSET prev_monday(x) x - (coerce("INT", x) % 7)
+
+   REM Thu Fri SATISFY [wkdaynum(trigdate()) == 4 && \\
+            nonomitted(prev_monday(today()), today()+1) == 4 || \\
+            wkdaynum(trigdate()) == 5 && \\
+            nonomitted(prev_monday(today()), today()+1) <= 4] \\
+            MSG Garbage Day
+.fi
+.PP
+Whew!  (You'll need to see "THE SATISFY CLAUSE" later on.)  We'd
+better explain that one: The prev_monday helper function takes a date
+and returns the date of the previous Monday.  The REM command will
+trigger on the first Thursday or Friday that satisfies one of the
+following conditions:
+.PP
+1) Either it's a Thursday and there are exactly four non-omitted days between
+the previous Monday and tomorrow, or
+.PP
+2) It's a Friday and there are four or fewer non-omitted days between the
+prevsious Monday and tomorrow.  We need the "or fewer" condition to handle
+the case of more than one holiday in a given week.  If that happens,
+garbage day still only moves by one day.
+.PP
+Obviously, the answer you get from \fBnonomitted\fR depends on the global
+OMIT context.  If you use moveable OMITs, you may get inconsistent results.
+.RE
 .TP
 .B now()
 Returns the current system time, as a \fBTIME\fR type.  This may be

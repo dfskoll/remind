@@ -51,6 +51,7 @@
 
 /* Function prototypes */
 static int FCurrent (void);
+static int FCycle (void);
 static int FTimepart(void);
 static int FDatepart(void);
 static int FRealCurrent(void);
@@ -191,6 +192,7 @@ Operator Func[] = {
     {   "choose",	2,	NO_MAX, FChoose },
     {   "coerce",	2,	2,	FCoerce },
     {   "current",      0,      0,      FCurrent },
+    {   "cycle",        3,      NO_MAX, FCycle },
     {   "date",		3,	3,	FDate	},
     {   "datepart",	1,	1,	FDatepart },
     {   "datetime",	2,	5,	FDateTime },
@@ -2436,5 +2438,44 @@ static int FTzconvert(void)
     tim = tm.tm_hour * 60 + tm.tm_min;
     RetVal.type = DATETIME_TYPE;
     RetVal.v.val = jul * MINUTES_PER_DAY + tim;
+    return OK;
+}
+
+static int
+FCycle(void)
+{
+    int d1, d2, modulus, ans, localomit, i;
+
+    Token tok;
+
+    if (!HASDATE(ARG(0)) ||
+	!HASDATE(ARG(1)) ||
+	ARG(2).type != INT_TYPE) {
+	return E_BAD_TYPE;
+    }
+    modulus = ARG(2).v.val;
+    if (modulus < 1) return E_2LOW;
+    d1 = DATEPART(ARG(0));
+    d2 = DATEPART(ARG(1));
+    if (d2 < d1) return E_2LOW;
+
+    localomit = 0;
+    for (i=3; i<Nargs; i++) {
+	if (ARG(i).type != STR_TYPE) return E_BAD_TYPE;
+	FindToken(ARG(i).v.str, &tok);
+	if (tok.type != T_WkDay) return E_BAD_TYPE;
+	localomit |= (1 << tok.val);
+    }
+
+    ans = 0;
+    while (d1 < d2) {
+	if (!IsOmitted(d1, localomit)) {
+	    ans++;
+	    if (ans >= modulus) ans = 0;
+	}
+	d1++;
+    }
+    RetVal.type = INT_TYPE;
+    RetVal.v.val = ans;
     return OK;
 }

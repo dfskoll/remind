@@ -2454,7 +2454,7 @@ FCycle(void)
 	return E_BAD_TYPE;
     }
     modulus = ARG(2).v.val;
-    if (modulus < 1) return E_2LOW;
+    if (modulus < 0) return E_2LOW;
     d1 = DATEPART(ARG(0));
     d2 = DATEPART(ARG(1));
     if (d2 < d1) return E_2LOW;
@@ -2471,7 +2471,7 @@ FCycle(void)
     while (d1 < d2) {
 	if (!IsOmitted(d1, localomit)) {
 	    ans++;
-	    if (ans >= modulus) ans = 0;
+	    if (modulus > 0 && ans >= modulus) ans = 0;
 	}
 	d1++;
     }

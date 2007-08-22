@@ -4,12 +4,12 @@
 # Copyright (C) 1999 by Roaring Penguin Software Inc.
 
 # The complete name of your www host.  Example: www.mycompany.com
-WWWHOST = localhost
+WWWHOST = magnesium.roaringpenguin.com
 # WWWHOST = www.mycompany.com
  
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.
-SCRIPTDIR = /home/httpd/cgi-bin
+SCRIPTDIR = /var/www/cgi-bin
 # SCRIPTDIR = /home/dfs/Remind/www/TEST
 
 # Where the scripts live as seen by the web browser.  If
@@ -19,10 +19,10 @@ CGIDIR = /cgi-bin
 # The complete path to the directory containing the HTML file "calendar.html".
 #  This is a sample file containing links to all the scripts.  This path
 # should be the path as seen by the UNIX operating system
-HTMLDIR = /home/httpd/html/remind
+HTMLDIR = /var/www/html/remind
 
 # Where you stick images, as seen by UNIX
-IMAGEDIR = /home/httpd/html/remind
+IMAGEDIR = /var/www/html/remind
 
 # Where images are, as seen by web browers
 IMAGEBASE = /remind

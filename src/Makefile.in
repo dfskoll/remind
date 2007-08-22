@@ -1,7 +1,7 @@
 # Makefile.in for REMIND
 #
 
-VERSION=03.01.00
+VERSION=03.01.01
 SHELL= /bin/sh
 BETA = 1
 srcdir=@srcdir@

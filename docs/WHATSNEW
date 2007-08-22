@@ -1,5 +1,32 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 1 - 23 August 2007
+
++ MAJOR ENHANCEMENTS
+
+- Added the "nonomitted" function that solves a number of
+  moving-reminder-in-response-to-holiday problems.  The real-world
+  problems solved are the "moving-garbage-day" problem and the
+  "six-day-school-cycle" problem.
+
++ MINOR ENHANCEMENTS
+
+- A few minor performance improvements in response to profiling runs.
+
++ BUG FIXES
+
+- Prevent compilation failure with gcc 2.95.
+
+- Fix trailing "s" bug with -k option.  This was fixed in Debian's release,
+  but the Debian maintainer never bothered to let me know.
+
+- Removed obsolete scripts: kall, rem, remind-all.
+
+- Made "-n" output always use "/" as date separator for consistency with
+  "-p" and "-s".
+
+- Various man-page fixes.
+
 * Version 3.1 Patch 0 - 14 August 2007
 
 + MAJOR ENHANCEMENTS

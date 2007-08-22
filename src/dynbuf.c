@@ -73,7 +73,7 @@ void DBufInit(DynamicBuffer *dbuf)
 }
 
 /**********************************************************************
-%FUNCTION: DBufPutc
+%FUNCTION: DBufPutcFN
 %ARGUMENTS:
  dbuf -- pointer to a dynamic buffer
  c -- character to append to buffer
@@ -82,7 +82,7 @@ void DBufInit(DynamicBuffer *dbuf)
 %DESCRIPTION:
  Appends a character to the buffer.
 **********************************************************************/
-int DBufPutc(DynamicBuffer *dbuf, char c)
+int DBufPutcFN(DynamicBuffer *dbuf, char c)
 {
     if (dbuf->allocatedLen == dbuf->len+1) {
 	if (DBufMakeRoom(dbuf, dbuf->len+1) != OK) return E_NO_MEM;

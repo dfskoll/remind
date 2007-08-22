@@ -24,12 +24,14 @@ typedef struct {
 } DynamicBuffer;
 
 void DBufInit(DynamicBuffer *dbuf);
-int DBufPutc(DynamicBuffer *dbuf, char c);
+int DBufPutcFN(DynamicBuffer *dbuf, char c);
 int DBufPuts(DynamicBuffer *dbuf, char *str);
 void DBufFree(DynamicBuffer *dbuf);
 int DBufGets(DynamicBuffer *dbuf, FILE *fp);
 
 #define DBufValue(bufPtr) ((bufPtr)->buffer)
 #define DBufLen(bufPtr) ((bufPtr)->len)
+
+#define DBufPutc(dbuf, c) ( (dbuf)->allocatedLen < (dbuf)->len+1 ) ? (dbuf)->buffer[(dbuf)->len++] = c, (dbuf)->buffer[(dbuf)->len] = 0, OK : DBufPutcFN((dbuf), c)
 
 #endif /* DYNBUF_H */

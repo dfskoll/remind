@@ -21,7 +21,7 @@
 #include "globals.h"
 #include "protos.h"
 
-#define UPPER(c) (islower(c) ? toupper(c) : c)
+#define UPPER(c) toupper(c)
 
 /***************************************************************/
 /*                                                             */

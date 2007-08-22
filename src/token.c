@@ -34,8 +34,6 @@ while (isdigit(*(string))) { \
     string++; \
 }
 
-#define UPPER(c) (islower(c) ? toupper(c) : c)
-
 /* The big array holding all recognized (literal) tokens in reminder file.
    Keep this array sorted, or software will not work. */
 Token TokArray[] = {
@@ -342,7 +340,7 @@ static int TokStrCmp(const Token *t, const char *s)
     register int r;
     char *tk = t->name;
     while(*tk && *s && !(*s == ',' && *(s+1) == 0)) {
-	r = UPPER(*tk) - UPPER(*s);
+	r = *tk - tolower(*s);
 	tk++;
 	s++;
 	if (r) return r;

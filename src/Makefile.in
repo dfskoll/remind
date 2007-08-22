@@ -42,10 +42,10 @@ test: remind
 	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
 
 rem2ps: rem2ps.o dynbuf.o
-	@CC@ @LDFLAGS@ -o rem2ps rem2ps.o dynbuf.o
+	@CC@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o
 
 remind: $(REMINDOBJS)
-	@CC@ @LDFLAGS@ -o remind $(REMINDOBJS) @LIBS@
+	@CC@ @LDFLAGS@ $(LDEXTRA) -o remind $(REMINDOBJS) @LIBS@
 
 install: all
 	-mkdir -p $(DESTDIR)$(bindir) || true

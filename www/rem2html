@@ -171,16 +171,16 @@ sub parse_input {
 	  }
 	  next if ($phase > 3);
 	  if ($phase == 0) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/newmoon.png\" ALT=\"New Moon\"" .
+	      $text = "<IMAGE SRC=\"$DefaultImageDir/newmoon.png\" ALT=\"New Moon\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } elsif ($phase == 1) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/firstquarter.png\" ALT=\"First Quarter\"" .
+	      $text = "<IMAGE SRC=\"$DefaultImageDir/firstquarter.png\" ALT=\"First Quarter\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } elsif ($phase == 2) {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/fullmoon.png\" ALT=\"Full Moon\"" .
+	      $text = "<IMAGE SRC=\"$DefaultImageDir/fullmoon.png\" ALT=\"Full Moon\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  } else {
-	      $text = "<P ALIGN=RIGHT><IMAGE SRC=\"$DefaultImageDir/lastquarter.png\" ALT=\"Last Quarter\"" .
+	      $text = "<IMAGE SRC=\"$DefaultImageDir/lastquarter.png\" ALT=\"Last Quarter\"" .
 		  "WIDTH=16 HEIGHT=16> <FONT SIZE=\"-2\">" . escape_html($text);
 	  }
 	  $moons[$day] = $text . "</FONT> ";

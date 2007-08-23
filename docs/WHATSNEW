@@ -20,10 +20,13 @@ CHANGES TO REMIND
 - Fix trailing "s" bug with -k option.  This was fixed in Debian's release,
   but the Debian maintainer never bothered to let me know.
 
-- Removed obsolete scripts: kall, rem, remind-all.
+- Removed obsolete scripts: kall, rem, remind-all.sh, remind-all.csh
 
 - Made "-n" output always use "/" as date separator for consistency with
   "-p" and "-s".
+
+- Moon PNG images are transparent.  Output of moon phases in rem2html
+  improved slightly.
 
 - Various man-page fixes.
 

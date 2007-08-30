@@ -552,11 +552,13 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     char PrioExpr[25];
     char tmpBuf[64];
     DynamicBuffer buf, calRow;
+    DynamicBuffer pre_buf;
     char *s;
     Value v;
 
     DBufInit(&buf);
     DBufInit(&calRow);
+    DBufInit(&pre_buf);
     if (t->typ == RUN_TYPE && RunDisabled) return E_RUN_DISABLED;
     if ((t->typ == PASSTHRU_TYPE && strcmp(t->passthru, "COLOR")) ||
 	t->typ == CAL_TYPE ||
@@ -568,12 +570,18 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     if (t->typ == PASSTHRU_TYPE && !strcmp(t->passthru, "COLOR")) {
 	/* Strip off three tokens */
 	r = ParseToken(p, &buf);
+	DBufPuts(&pre_buf, DBufValue(&buf));
+	DBufPutc(&pre_buf, ' ');
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
+	DBufPuts(&pre_buf, DBufValue(&buf));
+	DBufPutc(&pre_buf, ' ');
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
+	DBufPuts(&pre_buf, DBufValue(&buf));
+	DBufPutc(&pre_buf, ' ');
 	DBufFree(&buf);
 	if (r) return r;
 	t->typ = MSG_TYPE;
@@ -595,12 +603,14 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	if ( (r=DoSubst(p, &buf, t, tim, jul, CAL_MODE)) ) return r;
 	if (!DBufLen(&buf)) {
 	    DBufFree(&buf);
+	    DBufFree(&pre_buf);
 	    return OK;
 	}
 	FromJulian(jul, &y, &m, &d);
  	sprintf(tmpBuf, "%04d/%02d/%02d ", y, m+1, d);
  	if (DBufPuts(&calRow, tmpBuf) != OK) {
  	    DBufFree(&calRow);
+	    DBufFree(&pre_buf);
  	    return E_NO_MEM;
  	}
  	/* If DoSimpleCalendar==1, output *all* simple calendar fields */
@@ -608,6 +618,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
  	    /* ignore passthru field when in NextMode */
  	    if (DBufPuts(&calRow, "* ") != OK) {
  		DBufFree(&calRow);
+		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
  	    if (t->tag[0]) {
@@ -617,6 +628,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
  	    }
  	    if (DBufPuts(&calRow, tmpBuf) != OK) {
  		DBufFree(&calRow);
+		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
  	    if (tim->duration != NO_TIME) {
@@ -626,6 +638,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
  	    }
  	    if (DBufPuts(&calRow, tmpBuf) != OK) {
  		DBufFree(&calRow);
+		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
  	    if (tim->ttime != NO_TIME) {
@@ -635,16 +648,19 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
  	    }
  	    if (DBufPuts(&calRow, tmpBuf) != OK) {
  		DBufFree(&calRow);
+		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
  	}
  	if (DBufPuts(&calRow, SimpleTime(tim->ttime)) != OK) {
  	    DBufFree(&calRow);
+	    DBufFree(&pre_buf);
  	    return E_NO_MEM;
  	}
 
- 	printf("%s%s\n", DBufValue(&calRow), DBufValue(&buf));
+ 	printf("%s%s%s\n", DBufValue(&calRow), DBufValue(&pre_buf), DBufValue(&buf));
 	DBufFree(&buf);
+	DBufFree(&pre_buf);
 	DBufFree(&calRow);
 	return OK;
     }

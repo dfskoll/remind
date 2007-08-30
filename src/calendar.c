@@ -591,10 +591,11 @@ static int DoCalRem(ParsePtr p, int col)
     CalEntry *CurPs = CalPs[col];
     CalEntry *e;
     char *s, *s2;
-    DynamicBuffer buf, obuf;
+    DynamicBuffer buf, obuf, pre_buf;
     Token tok;
 
     DBufInit(&buf);
+    DBufInit(&pre_buf);
 
     /* Parse the trigger date and time */
     if ( (r=ParseRem(p, &trig, &tim)) ) return r;
@@ -638,21 +639,28 @@ static int DoCalRem(ParsePtr p, int col)
 	strcpy(trig.passthru, "PSFile");
 	trig.typ = PASSTHRU_TYPE;
     }
-    if (!PsCal) {
-	if (trig.typ == PASSTHRU_TYPE) {
-	    if (strcmp(trig.passthru, "COLOR")) return OK;
-	    /* Strip off the three color numbers */
-	    DBufFree(&buf);
-	    r=ParseToken(p, &buf);
-	    DBufFree(&buf);
-	    if (r) return r;
-	    r=ParseToken(p, &buf);
-	    DBufFree(&buf);
-	    if (r) return r;
-	    r=ParseToken(p, &buf);
-	    DBufFree(&buf);
-	    if (r) return r;
-	}
+    if (trig.typ == PASSTHRU_TYPE) {
+      if (!PsCal && strcmp(trig.passthru, "COLOR")) return OK;
+      /* Strip off the three color numbers */
+      DBufFree(&buf);
+      r=ParseToken(p, &buf);
+      DBufPuts(&pre_buf, DBufValue(&buf));
+      DBufPutc(&pre_buf, ' ');
+      DBufFree(&buf);
+      if (r) return r;
+      r=ParseToken(p, &buf);
+      DBufPuts(&pre_buf, DBufValue(&buf));
+      DBufPutc(&pre_buf, ' ');
+      DBufFree(&buf);
+      if (r) return r;
+      r=ParseToken(p, &buf);
+      DBufPuts(&pre_buf, DBufValue(&buf));
+      DBufPutc(&pre_buf, ' ');
+      DBufFree(&buf);
+      if (r) return r;
+      if (!PsCal && !DoSimpleCalendar) {
+	DBufFree(&pre_buf);
+      }
     }
 
     /* Remove any "at" times from PS or PSFILE reminders */
@@ -674,11 +682,13 @@ static int DoCalRem(ParsePtr p, int col)
 	    if (jul != JulianToday) {
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);
+		    DBufFree(&pre_buf);
 		    return E_NO_MEM;
 		}
 	    } else {
 		if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
 		    DBufFree(&obuf);
+		    DBufFree(&pre_buf);
 		    return E_NO_MEM;
 		}
 	    }
@@ -694,6 +704,7 @@ static int DoCalRem(ParsePtr p, int col)
 		    if (DBufPuts(&obuf, v.v.str) != OK) {
 			DestroyValue(v);
 			DBufFree(&obuf);
+			DBufFree(&pre_buf);
 			return E_NO_MEM;
 		    }
 		}
@@ -710,11 +721,13 @@ static int DoCalRem(ParsePtr p, int col)
 	    r = DoSubst(p, &obuf, &trig, &tim, jul, CAL_MODE);
 	}
 	if (r) {
+	    DBufFree(&pre_buf);
 	    DBufFree(&obuf);
 	    return r;
 	}
 	if (DBufLen(&obuf) <= oldLen) {
 	    DBufFree(&obuf);
+	    DBufFree(&pre_buf);
 	    return OK;
 	}
 	if (trig.typ != PASSTHRU_TYPE &&
@@ -728,6 +741,7 @@ static int DoCalRem(ParsePtr p, int col)
 		    if (DBufPuts(&obuf, v.v.str) != OK) {
 			DestroyValue(v);
 			DBufFree(&obuf);
+			DBufFree(&pre_buf);
 			return E_NO_MEM;
 		    }
 		}
@@ -736,13 +750,17 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	s = DBufValue(&obuf);
 	if (!DoSimpleCalendar) while (isspace(*s)) s++;
+	DBufPuts(&pre_buf, s);
+	s = DBufValue(&pre_buf);
 	e = NEW(CalEntry);
 	if (!e) {
 	    DBufFree(&obuf);
+	    DBufFree(&pre_buf);
 	    return E_NO_MEM;
 	}
 	e->text = StrDup(s);
 	DBufFree(&obuf);
+	DBufFree(&pre_buf);
 	if (!e->text) {
 	    free(e);
 	    return E_NO_MEM;

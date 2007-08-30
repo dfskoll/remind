@@ -10,6 +10,7 @@ exec_prefix=@exec_prefix@
 mandir=@mandir@
 bindir=@bindir@
 datadir=@datadir@
+datarootdir=@datarootdir@
 VPATH=$(srcdir)
 
 INSTALL=@INSTALL@
@@ -18,6 +19,7 @@ INSTALL_DATA=@INSTALL_DATA@
 
 PROGS=		remind rem2ps
 SCRIPTS=	$(srcdir)/../scripts/tkremind $(srcdir)/../scripts/cm2rem.tcl
+PERLSCRIPTS=    rem
 
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
 		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1
@@ -51,6 +53,10 @@ install: all
 	-mkdir -p $(DESTDIR)$(bindir) || true
 	for prog in $(PROGS) $(SCRIPTS) ; do \
 		$(INSTALL_PROGRAM) $$prog $(DESTDIR)$(bindir) || exit 1; \
+	done
+	for prog in $(PERLSCRIPTS) ; do \
+		sed -e 's|#!/usr/bin/perl|#!@PERL@|' < $(srcdir)/../scripts/$$prog > $(DESTDIR)$(bindir)/$$prog || exit 1; \
+		chmod 755 $(DESTDIR)$(bindir)/$$prog || exit 1; \
 	done
 	-strip $(DESTDIR)$(bindir)/remind || true
 	-strip $(DESTDIR)$(bindir)/rem2ps || true

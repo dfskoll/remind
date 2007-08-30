@@ -2,3 +2,5 @@ Files in this directory:
 
 tkremind     -- Tcl/Tk graphical calendar using Remind as engine
 cm2rem.tcl   -- Convert Sun's "cm" calendar manager files to Remind.
+rem          -- Invoke "remind" with default script ~/.reminders or contents
+                of environment variable DOTREMINDERS

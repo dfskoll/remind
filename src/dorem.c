@@ -145,6 +145,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
     trig->sched[0] = 0;
     trig->warn[0] = 0;
     trig->tag[0] = 0;
+    trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
     tim->delta = NO_DELTA;
     tim->rep   = NO_REP;

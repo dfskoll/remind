@@ -41,6 +41,7 @@ typedef struct queuedrem {
     int RunDisabled;
     int ntrig;
     char *text;
+    char passthru[PASSTHRU_LEN+1];
     char sched[VAR_NAME_LEN+1];
     char tag[TAG_LEN+1];
     TimeTrig tt;
@@ -89,6 +90,7 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     }
     NumQueued++;
     qelem->typ = trig->typ;
+    strcpy(qelem->passthru, trig->passthru);
     qelem->tt = *tim;
     qelem->next = QueueHead;
     qelem->RunDisabled = RunDisabled;
@@ -203,6 +205,7 @@ void HandleQueuedReminders(void)
 	/* Trigger the reminder */
 	CreateParser(q->text, &p);
 	trig.typ = q->typ;
+	strcpy(trig.passthru, q->passthru);
 	RunDisabled = q->RunDisabled;
 	if (Daemon < 0) {
 	    printf("NOTE reminder %s ",
@@ -322,8 +325,11 @@ void GotSigInt(void)
 		   q->tt.rep, q->tt.delta, q->sched);
 	    if (*q->sched) printf("(%d)", q->ntrig+1);
 	    printf("%s", NL);
-	    printf("Text: %s %s%s%s", ((q->typ == MSG_TYPE) ? "MSG" :
-				       ((q->typ == MSF_TYPE) ? "MSF" :"RUN")),
+	    printf("Text: %s %s%s%s%s%s", ((q->typ == MSG_TYPE) ? "MSG" :
+				       ((q->typ == MSF_TYPE) ? "MSF" : 
+					((q->typ == RUN_TYPE) ? "RUN" : "SPECIAL"))),
+		   q->passthru,
+		   (*(q->passthru)) ? " " : "",
 		   q->text,
 		   NL, NL);
 	}

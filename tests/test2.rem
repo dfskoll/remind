@@ -26,3 +26,6 @@ REM 12 AUG SPECIAL MOON 0
 # Test nonomitted
 REM MSG [nonomitted('2007-08-01', today())] NonOmit-1
 REM MSG [nonomitted('2007-08-01', today(), "Sat", "Sun")] NonOmit-2
+
+# Test SPECIAL COLOR with an AT clause
+REM 20 AUG AT 13:45 SPECIAL COLOR 6 7 8 Mooo!

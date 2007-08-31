@@ -435,6 +435,11 @@ proc CreateCalWindow { dayNames } {
     wm iconname . ""
     wm protocol . WM_DELETE_WINDOW Quit
     wm deiconify .
+    bind . <Control-KeyPress-q> Quit
+    bind . <KeyPress-Left> ".b.prev invoke"
+    bind . <KeyPress-Right> ".b.next invoke"
+    bind . <KeyPress-Home> ".b.this invoke"
+
     if {$Option(StartIconified)} {
 	wm iconify .
     }
@@ -1241,6 +1246,9 @@ proc CreateModifyDialog {w day firstDay args} {
     }
 
     bind $w <KeyPress-Escape> "$w.but1 invoke"
+    if {$nbut >= 2} {
+	bind $w.entry <KeyPress-Return> "$w.but2 invoke"
+    }
     set ModifyDialogResult 0
 
     # Center the window on the root

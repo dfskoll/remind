@@ -10,3 +10,4 @@ src/*.tar.gz*
 tests/test.out
 .gitignore
 *~
+src/rem2ps

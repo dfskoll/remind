@@ -1,0 +1,12 @@
+*.bak
+autom4te.cache
+config.log
+config.status
+src/Makefile
+*.o
+src/config.h
+src/remind
+src/*.tar.gz*
+tests/test.out
+.gitignore
+*~

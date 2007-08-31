@@ -1,3 +1,5 @@
+Test 1
+
 # Test file for REMIND
 #
 # Use this file to test the date calculation routines
@@ -828,3 +830,243 @@ dump
             a045  "iess"
             a064  1
 
+
+Test 2
+
+# rem2ps begin
+August 2007 31 3 0
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday
+July 31
+September 30
+2007/08/01 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/01 * * * * 0 NonOmit-1
+2007/08/01 * * * * 0 NonOmit-2
+2007/08/02 COLOR * * * 255 0 0 Red Thursday
+2007/08/02 * * * * 1 NonOmit-1
+2007/08/02 * * * * 1 NonOmit-2
+2007/08/03 * * * * 2 NonOmit-1
+2007/08/03 * * * * 2 NonOmit-2
+2007/08/04 * * * * 3 NonOmit-1
+2007/08/04 * * * * 3 NonOmit-2
+2007/08/05 * * * * 4 NonOmit-1
+2007/08/05 * * * * 3 NonOmit-2
+2007/08/06 * * * * 5 NonOmit-1
+2007/08/06 * * * * 3 NonOmit-2
+2007/08/07 * * * * 6 NonOmit-1
+2007/08/07 * * * * 4 NonOmit-2
+2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/08 * * * * 7 NonOmit-1
+2007/08/08 * * * * 5 NonOmit-2
+2007/08/09 COLOR * * * 255 0 0 Red Thursday
+2007/08/09 * * * * 8 NonOmit-1
+2007/08/09 * * * * 6 NonOmit-2
+2007/08/10 * * * * 9 NonOmit-1
+2007/08/10 * * * * 7 NonOmit-2
+2007/08/11 * * * * 10 NonOmit-1
+2007/08/11 * * * * 8 NonOmit-2
+2007/08/12 * * * * 11 NonOmit-1
+2007/08/12 * * * * 8 NonOmit-2
+2007/08/13 * * * * 12 NonOmit-1
+2007/08/13 * * * * 8 NonOmit-2
+2007/08/14 * * * * 13 NonOmit-1
+2007/08/14 * * * * 9 NonOmit-2
+2007/08/15 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/15 * * * * 13 NonOmit-1
+2007/08/15 * * * * 9 NonOmit-2
+2007/08/16 COLOR * * * 255 0 0 Red Thursday
+2007/08/16 * * * * 14 NonOmit-1
+2007/08/16 * * * * 10 NonOmit-2
+2007/08/17 * * * * 15 NonOmit-1
+2007/08/17 * * * * 11 NonOmit-2
+2007/08/18 * * * * 16 NonOmit-1
+2007/08/18 * * * * 12 NonOmit-2
+2007/08/19 * * * * 17 NonOmit-1
+2007/08/19 * * * * 12 NonOmit-2
+2007/08/20 * * * * 18 NonOmit-1
+2007/08/20 * * * * 12 NonOmit-2
+2007/08/21 * * * * 19 NonOmit-1
+2007/08/21 * * * * 13 NonOmit-2
+2007/08/22 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/22 * * * * 20 NonOmit-1
+2007/08/22 * * * * 14 NonOmit-2
+2007/08/23 COLOR * * * 255 0 0 Red Thursday
+2007/08/23 * * * * 21 NonOmit-1
+2007/08/23 * * * * 15 NonOmit-2
+2007/08/24 * * * * 22 NonOmit-1
+2007/08/24 * * * * 16 NonOmit-2
+2007/08/25 * * * * 23 NonOmit-1
+2007/08/25 * * * * 17 NonOmit-2
+2007/08/26 * * * * 24 NonOmit-1
+2007/08/26 * * * * 17 NonOmit-2
+2007/08/27 * * * * 25 NonOmit-1
+2007/08/27 * * * * 17 NonOmit-2
+2007/08/28 * * * * 26 NonOmit-1
+2007/08/28 * * * * 18 NonOmit-2
+2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/29 * * * * 27 NonOmit-1
+2007/08/29 * * * * 19 NonOmit-2
+2007/08/30 COLOR * * * 255 0 0 Red Thursday
+2007/08/30 * * * * 28 NonOmit-1
+2007/08/30 * * * * 20 NonOmit-2
+2007/08/31 * * * * 29 NonOmit-1
+2007/08/31 * * * * 21 NonOmit-2
+# rem2ps end
+
+Test 3
+
+2007/08/01 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/01 * * * * 0 NonOmit-1
+2007/08/01 * * * * 0 NonOmit-2
+2007/08/02 COLOR * * * 255 0 0 Red Thursday
+2007/08/02 * * * * 1 NonOmit-1
+2007/08/02 * * * * 1 NonOmit-2
+2007/08/03 * * * * 2 NonOmit-1
+2007/08/03 * * * * 2 NonOmit-2
+2007/08/04 * * * * 3 NonOmit-1
+2007/08/04 * * * * 3 NonOmit-2
+2007/08/05 * * * * 4 NonOmit-1
+2007/08/05 * * * * 3 NonOmit-2
+2007/08/06 * * * * 5 NonOmit-1
+2007/08/06 * * * * 3 NonOmit-2
+2007/08/07 * * * * 6 NonOmit-1
+2007/08/07 * * * * 4 NonOmit-2
+2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/08 * * * * 7 NonOmit-1
+2007/08/08 * * * * 5 NonOmit-2
+2007/08/09 COLOR * * * 255 0 0 Red Thursday
+2007/08/09 * * * * 8 NonOmit-1
+2007/08/09 * * * * 6 NonOmit-2
+2007/08/10 * * * * 9 NonOmit-1
+2007/08/10 * * * * 7 NonOmit-2
+2007/08/11 * * * * 10 NonOmit-1
+2007/08/11 * * * * 8 NonOmit-2
+2007/08/12 * * * * 11 NonOmit-1
+2007/08/12 * * * * 8 NonOmit-2
+2007/08/13 * * * * 12 NonOmit-1
+2007/08/13 * * * * 8 NonOmit-2
+2007/08/14 * * * * 13 NonOmit-1
+2007/08/14 * * * * 9 NonOmit-2
+2007/08/15 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/15 * * * * 13 NonOmit-1
+2007/08/15 * * * * 9 NonOmit-2
+2007/08/16 COLOR * * * 255 0 0 Red Thursday
+2007/08/16 * * * * 14 NonOmit-1
+2007/08/16 * * * * 10 NonOmit-2
+2007/08/17 * * * * 15 NonOmit-1
+2007/08/17 * * * * 11 NonOmit-2
+2007/08/18 * * * * 16 NonOmit-1
+2007/08/18 * * * * 12 NonOmit-2
+2007/08/19 * * * * 17 NonOmit-1
+2007/08/19 * * * * 12 NonOmit-2
+2007/08/20 * * * * 18 NonOmit-1
+2007/08/20 * * * * 12 NonOmit-2
+2007/08/21 * * * * 19 NonOmit-1
+2007/08/21 * * * * 13 NonOmit-2
+2007/08/22 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/22 * * * * 20 NonOmit-1
+2007/08/22 * * * * 14 NonOmit-2
+2007/08/23 COLOR * * * 255 0 0 Red Thursday
+2007/08/23 * * * * 21 NonOmit-1
+2007/08/23 * * * * 15 NonOmit-2
+2007/08/24 * * * * 22 NonOmit-1
+2007/08/24 * * * * 16 NonOmit-2
+2007/08/25 * * * * 23 NonOmit-1
+2007/08/25 * * * * 17 NonOmit-2
+2007/08/26 * * * * 24 NonOmit-1
+2007/08/26 * * * * 17 NonOmit-2
+2007/08/27 * * * * 25 NonOmit-1
+2007/08/27 * * * * 17 NonOmit-2
+2007/08/28 * * * * 26 NonOmit-1
+2007/08/28 * * * * 18 NonOmit-2
+2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/29 * * * * 27 NonOmit-1
+2007/08/29 * * * * 19 NonOmit-2
+2007/08/30 COLOR * * * 255 0 0 Red Thursday
+2007/08/30 * * * * 28 NonOmit-1
+2007/08/30 * * * * 20 NonOmit-2
+2007/08/31 * * * * 29 NonOmit-1
+2007/08/31 * * * * 21 NonOmit-2
+
+Test 4
+
+2007/08/01 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/01 * * * * 0 NonOmit-1
+2007/08/01 * * * * 0 NonOmit-2
+2007/08/02 COLOR * * * 255 0 0 Red Thursday
+2007/08/02 * * * * 1 NonOmit-1
+2007/08/02 * * * * 1 NonOmit-2
+2007/08/03 * * * * 2 NonOmit-1
+2007/08/03 * * * * 2 NonOmit-2
+2007/08/04 * * * * 3 NonOmit-1
+2007/08/04 * * * * 3 NonOmit-2
+2007/08/05 * * * * 4 NonOmit-1
+2007/08/05 * * * * 3 NonOmit-2
+2007/08/06 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
+2007/08/06 * * * * 5 NonOmit-1
+2007/08/06 * * * * 3 NonOmit-2
+2007/08/07 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
+2007/08/07 * * * * 6 NonOmit-1
+2007/08/07 * * * * 4 NonOmit-2
+2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/08 * * * * 7 NonOmit-1
+2007/08/08 * * * * 5 NonOmit-2
+2007/08/09 COLOR * * * 255 0 0 Red Thursday
+2007/08/09 * * * * 8 NonOmit-1
+2007/08/09 * * * * 6 NonOmit-2
+2007/08/10 * * * * 9 NonOmit-1
+2007/08/10 * * * * 7 NonOmit-2
+2007/08/11 * * * * 10 NonOmit-1
+2007/08/11 * * * * 8 NonOmit-2
+2007/08/12 COLOR * * * 0 0 255 Blue Wednesday is in 3 days' time
+2007/08/12 * * * * 11 NonOmit-1
+2007/08/12 * * * * 8 NonOmit-2
+2007/08/13 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
+2007/08/13 * * * * 12 NonOmit-1
+2007/08/13 * * * * 8 NonOmit-2
+2007/08/14 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
+2007/08/14 * * * * 13 NonOmit-1
+2007/08/14 * * * * 9 NonOmit-2
+2007/08/15 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/15 * * * * 13 NonOmit-1
+2007/08/15 * * * * 9 NonOmit-2
+2007/08/16 COLOR * * * 255 0 0 Red Thursday
+2007/08/16 * * * * 14 NonOmit-1
+2007/08/16 * * * * 10 NonOmit-2
+2007/08/17 * * * * 15 NonOmit-1
+2007/08/17 * * * * 11 NonOmit-2
+2007/08/18 * * * * 16 NonOmit-1
+2007/08/18 * * * * 12 NonOmit-2
+2007/08/19 * * * * 17 NonOmit-1
+2007/08/19 * * * * 12 NonOmit-2
+2007/08/20 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
+2007/08/20 * * * * 18 NonOmit-1
+2007/08/20 * * * * 12 NonOmit-2
+2007/08/21 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
+2007/08/21 * * * * 19 NonOmit-1
+2007/08/21 * * * * 13 NonOmit-2
+2007/08/22 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/22 * * * * 20 NonOmit-1
+2007/08/22 * * * * 14 NonOmit-2
+2007/08/23 COLOR * * * 255 0 0 Red Thursday
+2007/08/23 * * * * 21 NonOmit-1
+2007/08/23 * * * * 15 NonOmit-2
+2007/08/24 * * * * 22 NonOmit-1
+2007/08/24 * * * * 16 NonOmit-2
+2007/08/25 * * * * 23 NonOmit-1
+2007/08/25 * * * * 17 NonOmit-2
+2007/08/26 * * * * 24 NonOmit-1
+2007/08/26 * * * * 17 NonOmit-2
+2007/08/27 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
+2007/08/27 * * * * 25 NonOmit-1
+2007/08/27 * * * * 17 NonOmit-2
+2007/08/28 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
+2007/08/28 * * * * 26 NonOmit-1
+2007/08/28 * * * * 18 NonOmit-2
+2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
+2007/08/29 * * * * 27 NonOmit-1
+2007/08/29 * * * * 19 NonOmit-2
+2007/08/30 COLOR * * * 255 0 0 Red Thursday
+2007/08/30 * * * * 28 NonOmit-1
+2007/08/30 * * * * 20 NonOmit-2
+2007/08/31 * * * * 29 NonOmit-1
+2007/08/31 * * * * 21 NonOmit-2

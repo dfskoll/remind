@@ -12,7 +12,22 @@
 # ---------------------------------------------------------------------------
 
 TEST_GETENV="foo bar baz" ; export TEST_GETENV
-../src/remind -e -dxte ../tests/test.rem 16 feb 1991 > ../tests/test.out
+echo "Test 1" > ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -e -dxte ../tests/test.rem 16 feb 1991 >> ../tests/test.out
+echo "" >> ../tests/test.out
+echo "Test 2" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+echo "" >> ../tests/test.out
+echo "Test 3" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -s ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+echo "" >> ../tests/test.out
+echo "Test 4" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -sa ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

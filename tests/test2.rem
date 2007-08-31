@@ -1,0 +1,22 @@
+# Make things sane
+set $TimeSep ":"
+set $DateSep "/"
+set $LatDeg  45 
+set $LatMin  24 
+set $LatSec  0  
+set $Location  "Ottawa"
+set $LongDeg  75
+set $LongMin  39
+set $LongSec  0 
+
+clear-omit-context
+
+omit 14 aug
+
+# Test the SPECIAL COLOR escapes
+REM WED +2 SPECIAL COLOR 0 0 255 %"Blue Wednesday%" is %b
+REM THU SPECIAL COLOR 255 0 0 Red Thursday
+
+# Test nonomitted
+REM MSG [nonomitted('2007-08-01', today())] NonOmit-1
+REM MSG [nonomitted('2007-08-01', today(), "Sat", "Sun")] NonOmit-2

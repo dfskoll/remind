@@ -1,0 +1,18 @@
+.TH REM 1 "30 August 2007"
+.UC4
+.SH NAME
+rem \- Invoke Remind with a default filename
+.SH SYNOPSIS
+.B rem [\fIoptions\fR]
+.SH DESCRIPTION
+\fBrem\fR is a Perl script that invokes \fBremind\fR with the specified
+\fIoptions\fR, if any, and with a default filename.
+.PP
+If the environment variable DOTREMINDERS is set, \fBremind\fR is invoked
+with DOTREMINDERS' value as the filename.  Otherwise, \fBremind\fR is
+invoked with the filename $HOME/.reminders
+.PP
+.SH AUTHOR
+Rem was written by David F. Skoll <dfs@roaringpenguin.com>
+.SH SEE ALSO
+\fBremind\fR

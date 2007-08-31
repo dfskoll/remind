@@ -844,6 +844,7 @@ September 30
 2007/08/02 COLOR * * * 255 0 0 Red Thursday
 2007/08/02 * * * * 1 NonOmit-1
 2007/08/02 * * * * 1 NonOmit-2
+2007/08/03 SHADE * * * 0 255 0
 2007/08/03 * * * * 2 NonOmit-1
 2007/08/03 * * * * 2 NonOmit-2
 2007/08/04 * * * * 3 NonOmit-1
@@ -860,10 +861,12 @@ September 30
 2007/08/09 COLOR * * * 255 0 0 Red Thursday
 2007/08/09 * * * * 8 NonOmit-1
 2007/08/09 * * * * 6 NonOmit-2
+2007/08/10 SHADE * * * 0 255 0
 2007/08/10 * * * * 9 NonOmit-1
 2007/08/10 * * * * 7 NonOmit-2
 2007/08/11 * * * * 10 NonOmit-1
 2007/08/11 * * * * 8 NonOmit-2
+2007/08/12 MOON * * * 0
 2007/08/12 * * * * 11 NonOmit-1
 2007/08/12 * * * * 8 NonOmit-2
 2007/08/13 * * * * 12 NonOmit-1
@@ -876,6 +879,7 @@ September 30
 2007/08/16 COLOR * * * 255 0 0 Red Thursday
 2007/08/16 * * * * 14 NonOmit-1
 2007/08/16 * * * * 10 NonOmit-2
+2007/08/17 SHADE * * * 0 255 0
 2007/08/17 * * * * 15 NonOmit-1
 2007/08/17 * * * * 11 NonOmit-2
 2007/08/18 * * * * 16 NonOmit-1
@@ -892,6 +896,7 @@ September 30
 2007/08/23 COLOR * * * 255 0 0 Red Thursday
 2007/08/23 * * * * 21 NonOmit-1
 2007/08/23 * * * * 15 NonOmit-2
+2007/08/24 SHADE * * * 0 255 0
 2007/08/24 * * * * 22 NonOmit-1
 2007/08/24 * * * * 16 NonOmit-2
 2007/08/25 * * * * 23 NonOmit-1
@@ -908,6 +913,7 @@ September 30
 2007/08/30 COLOR * * * 255 0 0 Red Thursday
 2007/08/30 * * * * 28 NonOmit-1
 2007/08/30 * * * * 20 NonOmit-2
+2007/08/31 SHADE * * * 0 255 0
 2007/08/31 * * * * 29 NonOmit-1
 2007/08/31 * * * * 21 NonOmit-2
 # rem2ps end

@@ -641,25 +641,27 @@ static int DoCalRem(ParsePtr p, int col)
     }
     if (trig.typ == PASSTHRU_TYPE) {
       if (!PsCal && strcmp(trig.passthru, "COLOR")) return OK;
-      /* Strip off the three color numbers */
-      DBufFree(&buf);
-      r=ParseToken(p, &buf);
-      DBufPuts(&pre_buf, DBufValue(&buf));
-      DBufPutc(&pre_buf, ' ');
-      DBufFree(&buf);
-      if (r) return r;
-      r=ParseToken(p, &buf);
-      DBufPuts(&pre_buf, DBufValue(&buf));
-      DBufPutc(&pre_buf, ' ');
-      DBufFree(&buf);
-      if (r) return r;
-      r=ParseToken(p, &buf);
-      DBufPuts(&pre_buf, DBufValue(&buf));
-      DBufPutc(&pre_buf, ' ');
-      DBufFree(&buf);
-      if (r) return r;
-      if (!PsCal && !DoSimpleCalendar) {
-	DBufFree(&pre_buf);
+      if (!strcmp(trig.passthru, "COLOR")) {
+	  /* Strip off the three color numbers */
+	  DBufFree(&buf);
+	  r=ParseToken(p, &buf);
+	  DBufPuts(&pre_buf, DBufValue(&buf));
+	  DBufPutc(&pre_buf, ' ');
+	  DBufFree(&buf);
+	  if (r) return r;
+	  r=ParseToken(p, &buf);
+	  DBufPuts(&pre_buf, DBufValue(&buf));
+	  DBufPutc(&pre_buf, ' ');
+	  DBufFree(&buf);
+	  if (r) return r;
+	  r=ParseToken(p, &buf);
+	  DBufPuts(&pre_buf, DBufValue(&buf));
+	  DBufPutc(&pre_buf, ' ');
+	  DBufFree(&buf);
+	  if (r) return r;
+	  if (!PsCal && !DoSimpleCalendar) {
+	      DBufFree(&pre_buf);
+	  }
       }
     }
 

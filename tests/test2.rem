@@ -17,6 +17,12 @@ omit 14 aug
 REM WED +2 SPECIAL COLOR 0 0 255 %"Blue Wednesday%" is %b
 REM THU SPECIAL COLOR 255 0 0 Red Thursday
 
+# Test SPECIAL SHADE
+REM FRI SPECIAL SHADE 0 255 0
+
+# Test SPECIAL MOON
+REM 12 AUG SPECIAL MOON 0
+
 # Test nonomitted
 REM MSG [nonomitted('2007-08-01', today())] NonOmit-1
 REM MSG [nonomitted('2007-08-01', today(), "Sat", "Sun")] NonOmit-2

@@ -490,7 +490,7 @@ IF !InIsrael
    [_h(16, "Tishrey")] MSG %"Sukkot 2%"
 ENDIF
 
-[_h(21, "Tishrey")] ++4 MSG %"Hashana Rabba%" is %b.
+[_h(21, "Tishrey")] ++4 MSG %"Hoshana Rabba%" is %b.
 [_h(22, "Tishrey")] ++4 MSG %"Shemini Atzeret%" is %b.
 
 IF InIsrael
@@ -518,7 +518,8 @@ IF !Reform
 ENDIF
 
 [_h(15, "Shvat")] ++4 MSG %"Tu B'Shvat%" is %b.
-[_h(15, "Adar A")] ++4 MSG %"Purim Katan%" is %b.
+[_h(14, "Adar A")] ++4 MSG %"Purim Katan%" is %b.
+[_h(15, "Adar A")] ++4 MSG %"Shushan Purim Katan%" is %b.
 
 # If Purim is on Sunday, then Fast of Esther is 11 Adar.
 IF WKDAYNUM(_h2(13, "Adar")) != 6
@@ -527,6 +528,7 @@ ELSE
    REM [TRIGGER(_h2(11, "Adar"))] ++4 MSG %"Fast of Esther%" is %b.
 ENDIF
 [_h(14, "Adar")] ++4 MSG %"Purim%" is %b.
+[_h(15, "Adar")] ++4 MSG %"Shushan Purim%" is %b.
 [_h(15, "Nisan")] ++4 MSG %"Pesach%" is %b.
 
 IF !InIsrael

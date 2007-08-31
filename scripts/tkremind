@@ -300,8 +300,6 @@ proc CreateCalFrame { w dayNames } {
 		    -state disabled -relief flat -border 0 -padx 0 -pady 0
 	    text $w.t$f -width 12 -height $h -border 1 -spacing3 3 -wrap word -relief flat \
 		-state disabled -takefocus 0 -cursor {}
-	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
-	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
 	    $w.t$f tag bind REM <ButtonPress-3> "FireEditor $w.t$f"
 
@@ -343,8 +341,6 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	foreach t [$w.t$i tag names] {
 	    $w.t$i tag delete $t
 	}
-	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
-	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
@@ -361,8 +357,6 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	foreach t [$w.t$i tag names] {
 	    $w.t$i tag delete $t
 	}
-	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
-	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
@@ -388,8 +382,6 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	foreach t [$w.t$i tag names] {
 	    $w.t$i tag delete $t
 	}
-	$w.t$i tag bind TAGGED <Enter> "TaggedEnter $w.t$i"
-	$w.t$i tag bind TAGGED <Leave> "TaggedLeave $w.t$i"
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
@@ -766,6 +758,8 @@ proc FillCalWindow {} {
 	.cal.t$n configure -state normal
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
 	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" $extratags $fntag]
+	    .cal.t$n tag bind "TKTAG$tagno" <Enter> "TaggedEnter .cal.t$n"
+	    .cal.t$n tag bind "TKTAG$tagno" <Leave> "TaggedLeave .cal.t$n"
 	} else {
 	    .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
 	}

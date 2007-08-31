@@ -298,7 +298,7 @@ proc CreateCalFrame { w dayNames } {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
 		    -state disabled -relief flat -border 0 -padx 0 -pady 0
-	    text $w.t$f -width 12 -height $h -border 1 -wrap word -relief flat \
+	    text $w.t$f -width 12 -height $h -border 1 -spacing3 3 -wrap word -relief flat \
 		-state disabled -takefocus 0 -cursor {}
 	    $w.t$f tag bind TAGGED <Enter> "TaggedEnter $w.t$f"
 	    $w.t$f tag bind TAGGED <Leave> "TaggedLeave $w.t$f"
@@ -701,10 +701,6 @@ proc FillCalWindow {} {
     ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
     set offset [CalEntryOffset $firstWkday]
 
-    for {set i 1} {$i <= 31} {incr i} {
-	set didSomething($i) 0
-    }
-
     set fntag "x"
     while { [gets $file line] >= 0 } {
 	# File info
@@ -763,10 +759,6 @@ proc FillCalWindow {} {
 	    continue
 	}
 	.cal.t$n configure -state normal
-	if { $didSomething($day) } {
-	    .cal.t$n insert end " .....\n"
-	}
-	set didSomething($day) 1
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
 	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" $extratags $fntag]
 	} else {

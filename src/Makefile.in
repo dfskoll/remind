@@ -22,7 +22,8 @@ SCRIPTS=	$(srcdir)/../scripts/tkremind $(srcdir)/../scripts/cm2rem.tcl
 PERLSCRIPTS=    rem
 
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
-		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1
+		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1 \
+		$(srcdir)/../man/rem.1
 
 .SUFFIXES:
 .SUFFIXES: .c .o

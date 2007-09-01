@@ -87,8 +87,7 @@
 
 /*---------------------------------------------------------------------*/
 /* WANT_U_OPTION: Comment out the next define to permanently disable   */
-/* the -u option.  If you do this, however, remind-all.[c]sh will not  */
-/* work.                                                               */
+/* the -u option.                                                      */
 /*---------------------------------------------------------------------*/
 #define WANT_U_OPTION 1
 

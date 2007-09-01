@@ -3243,12 +3243,6 @@ You should not have any spaces between the \fB\-i\fR option and the equal
 sign; otherwise, strange variable names are created that can only be accessed
 with the \fBvalue()\fR or \fBdefined()\fR functions.
 .PP
-If your site uses the \fBRemind-all\fR shell script to mail reminders
-to users, the script will initialize the variable \fIremind_all\fR to 1
-using the \fB\-i\fR option.  Thus, you can detect when your reminder
-script is being processed by \fBRemind-all\fR and can use this information
-to control which reminders you want mailed to you.
-.PP
 .SH MORE ABOUT POSTSCRIPT
 .PP
 The \fBPS\fR and \fBPSFILE\fR reminders pass PostScript code directly

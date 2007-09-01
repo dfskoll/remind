@@ -19,7 +19,6 @@ INSTALL_DATA=@INSTALL_DATA@
 
 PROGS=		remind rem2ps
 SCRIPTS=	$(srcdir)/../scripts/tkremind $(srcdir)/../scripts/cm2rem.tcl
-PERLSCRIPTS=    rem
 
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
 		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1 \
@@ -50,21 +49,21 @@ rem2ps: rem2ps.o dynbuf.o
 remind: $(REMINDOBJS)
 	@CC@ @LDFLAGS@ $(LDEXTRA) -o remind $(REMINDOBJS) @LIBS@
 
-install: all
+install-nostripped: all
 	-mkdir -p $(DESTDIR)$(bindir) || true
 	for prog in $(PROGS) $(SCRIPTS) ; do \
 		$(INSTALL_PROGRAM) $$prog $(DESTDIR)$(bindir) || exit 1; \
 	done
-	for prog in $(PERLSCRIPTS) ; do \
-		sed -e 's|#!/usr/bin/perl|#!@PERL@|' < $(srcdir)/../scripts/$$prog > $(DESTDIR)$(bindir)/$$prog || exit 1; \
-		chmod 755 $(DESTDIR)$(bindir)/$$prog || exit 1; \
-	done
-	-strip $(DESTDIR)$(bindir)/remind || true
-	-strip $(DESTDIR)$(bindir)/rem2ps || true
+	rm -f $(DESTDIR)$(bindir)/rem > /dev/null 2>&1 || true
+	ln -s remind $(DESTDIR)$(bindir)/rem
 	-mkdir -p $(DESTDIR)$(mandir)/man1 || true
 	for man in $(MANS) ; do  \
 		$(INSTALL_DATA) $$man $(DESTDIR)$(mandir)/man1 || exit 1; \
 	done
+
+install: install-nostripped
+	strip $(DESTDIR)$(bindir)/remind || true
+	strip $(DESTDIR)$(bindir)/rem2ps || true
 
 clean:
 	rm -f *.o *~ core *.bak $(PROGS)

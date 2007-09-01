@@ -84,6 +84,37 @@ static void InitializeVar(char *str);
 
 static char *BadDate = "Illegal date on command line\n";
 
+static DynamicBuffer default_filename_buf;
+
+/***************************************************************/
+/*                                                             */
+/*  DefaultFilename                                            */
+/*                                                             */
+/*  If we're invoked as "rem" rather than "remind", use a      */
+/*  default filename.  Use $DOTREMINDERS or $HOME/.reminders   */
+/*                                                             */
+/***************************************************************/
+static char *DefaultFilename(void)
+{
+    char *s;
+
+    DBufInit(&default_filename_buf);
+
+    s = getenv("DOTREMINDERS");
+    if (s) {
+	return s;
+    }
+
+    s = getenv("HOME");
+    if (!s) {
+	fprintf(stderr, "HOME environment variable not set.  Unable to determine reminder file.\n");
+	exit(1);
+    }
+    DBufPuts(&default_filename_buf, s);
+    DBufPuts(&default_filename_buf, "/.reminders");
+    return DBufValue(&default_filename_buf);
+}
+
 /***************************************************************/
 /*                                                             */
 /*  InitRemind                                                 */
@@ -97,6 +128,8 @@ void InitRemind(int argc, char *argv[])
     int i;
     int y, m, d, rep;
     Token tok;
+    int InvokedAsRem = 0;
+    char *s;
 
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
@@ -124,6 +157,19 @@ void InitRemind(int argc, char *argv[])
     }
     JulianToday = RealToday;
     FromJulian(JulianToday, &CurYear, &CurMon, &CurDay);
+
+    /* See if we were invoked as "rem" rather than "remind" */
+    if (argv[0]) {
+	s = strrchr(argv[0], '/');
+	if (!s) {
+	    s = argv[0];
+	} else {
+	    s++;
+	}
+	if (!strcmp(s, "rem")) {
+	    InvokedAsRem = 1;
+	}
+    }
 
     /* Parse the command-line options */
     i = 1;
@@ -360,11 +406,15 @@ void InitRemind(int argc, char *argv[])
     }
 
     /* Get the filename. */
-    if (i >= argc) {
-	Usage();
-	exit(1);
+    if (!InvokedAsRem) {
+	if (i >= argc) {
+	    Usage();
+	    exit(1);
+	}
+	InitialFile = argv[i++];
+    } else {
+	InitialFile = DefaultFilename();
     }
-    InitialFile = argv[i++];
 
     /* Get the date, if any */
     if (i < argc) {

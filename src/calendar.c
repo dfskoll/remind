@@ -41,7 +41,6 @@ typedef struct cal_entry {
 
 /* Global variables */
 static CalEntry *CalColumn[7];
-static CalEntry *CalPs[7];
 
 static int ColSpaces;
 
@@ -588,7 +587,6 @@ static int DoCalRem(ParsePtr p, int col)
     int r;
     int jul;
     CalEntry *CurCol = CalColumn[col];
-    CalEntry *CurPs = CalPs[col];
     CalEntry *e;
     char *s, *s2;
     DynamicBuffer buf, obuf, pre_buf;
@@ -780,44 +778,20 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	e->lineno = LineNo;
 
-	/* Ugly hack... SPECIAL COLOR and SPECIAL HTML are not treated
-	   as "passthru" to preserve ordering and make them behave like
-	   a MSG-type reminder */
-
-	if (trig.typ == PASSTHRU_TYPE &&
-	    strcmp(trig.passthru, "COLOR") &&
-	    strcmp(trig.passthru, "HTML")) {
+	if (trig.typ == PASSTHRU_TYPE) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
-	    e->pos = e->passthru;
-	    if (!strcmp(trig.passthru, "PostScript") ||
-		!strcmp(trig.passthru, "PSFile")) {
-		e->time = NO_TIME;
-	    } else {
-		if (jul == JulianToday) {
-		    e->time = tim.ttime;
-		} else {
-		    e->time = NO_TIME;
-		}
-	    }
-	    e->next = CurPs;
-	    CalPs[col] = e;
-	    SortCol(&CalPs[col]);
 	} else {
-	    if (trig.typ == PASSTHRU_TYPE) {
-		StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
-	    } else {
-		e->passthru[0] = 0;
-	    }
-	    e->pos = e->text;
-	    if (jul == JulianToday) {
-		e->time = tim.ttime;
-	    } else {
-		e->time = NO_TIME;
-	    }
-	    e->next = CurCol;
-	    CalColumn[col] = e;
-	    SortCol(&CalColumn[col]);
+	    e->passthru[0] = 0;
 	}
+	e->pos = e->text;
+	if (jul == JulianToday) {
+	    e->time = tim.ttime;
+	} else {
+	    e->time = NO_TIME;
+	}
+	e->next = CurCol;
+	CalColumn[col] = e;
+	SortCol(&CalColumn[col]);
     }
     return OK;
 }
@@ -831,44 +805,11 @@ static int DoCalRem(ParsePtr p, int col)
 /***************************************************************/
 static void WriteSimpleEntries(int col, int jul)
 {
-    CalEntry *e = CalPs[col];
+    CalEntry *e = CalColumn[col];
     CalEntry *n;
     int y, m, d;
 
-/* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
-    while(e) {
-	if (e->passthru) {
-	    if (!strcmp(e->passthru, "PostScript") ||
-		!strcmp(e->passthru, "PSFile")) {
-		e->duration = NO_TIME;
-		e->time = NO_TIME;
-	    }
-	}
-
-	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
-	printf("%04d/%02d/%02d ", y, m+1, d);
-	printf("%s %s ", e->passthru, e->tag);
-	if (e->duration != NO_TIME) {
-	    printf("%d ", e->duration);
-	} else {
-	    printf("* ");
-	}
-	if (e->time != NO_TIME) {
-	    printf("%d ", e->time);
-	} else {
-	    printf("* ");
-	}
-	printf("%s\n", e->text);
-	free(e->text);
-	free(e->filename);
-	n = e->next;
-	free(e);
-	e = n;
-    }
-    CalPs[col] = NULL;
-
-    e = CalColumn[col];
     while(e) {
 	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d", y, m+1, d);

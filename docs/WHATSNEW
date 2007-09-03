@@ -1,5 +1,49 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 2
+
++ MINOR ENHANCEMENTS
+
+- tkremind: Added some key bindings to make navigation easier.
+
+- tkremind: Made calendar boxes use space more efficiently.
+
+- remind: The functionality of "rem" is now built into remind.  If you
+  invoke remind as "rem", then it uses a default filename.  The installer
+  sets up "rem" as a symbolic link to "remind".
+
++ CHANGE
+
+- "remind -p" no longer sorts SPECIAL reminders before non-SPECIAL.
+
+  *** THIS MAY AFFECT BACKENDS ***
+
+  Backends supplied by Roaring Penguin (rem2ps, rem2html and tkremind)
+  are known to work properly.
+
+- "remind -p" no longer suppresses any AT-time associated with SPECIAL
+  reminders.
+
+  *** THIS MAY AFFECT BACKENDS ***
+
+  Backends supplied by Roaring Penguin (rem2ps, rem2html and tkremind)
+  are known to work properly.
+
++ BUG FIXES
+
+- examples/defs.rem: A few corrections to Jewish holidays courtesy of
+  Art Werschulz.
+
+- src/Makefile.in: Added install-nostripped target.
+
+- SPECIAL COLOR now works more like MSG, including proper support for AT and
+  for the %" %" escape sequence.
+
+- SPECIAL COLOR is queued correctly if it has an AT clause.
+
+- Using the psshade() or psmoon() functions emits a warning on stderr.  You
+  should use SPECIAL SHADE or SPECIAL MOON instead.
+
 * Version 3.1 Patch 1 - 23 August 2007
 
 + MAJOR ENHANCEMENTS

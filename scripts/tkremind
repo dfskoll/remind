@@ -428,9 +428,9 @@ proc CreateCalWindow { dayNames } {
     wm protocol . WM_DELETE_WINDOW Quit
     wm deiconify .
     bind . <Control-KeyPress-q> Quit
-    bind . <KeyPress-Left> ".b.prev invoke"
-    bind . <KeyPress-Right> ".b.next invoke"
-    bind . <KeyPress-Home> ".b.this invoke"
+    bind . <KeyPress-Left> ".b.prev flash; .b.prev invoke"
+    bind . <KeyPress-Right> ".b.next flash; .b.next invoke"
+    bind . <KeyPress-Home> ".b.this flash; .b.this invoke"
 
     if {$Option(StartIconified)} {
 	wm iconify .
@@ -1239,9 +1239,9 @@ proc CreateModifyDialog {w day firstDay args} {
 	pack $w.but$nbut -side left -anchor w -in $w.buttons -expand 1 -fill x
     }
 
-    bind $w <KeyPress-Escape> "$w.but1 invoke"
+    bind $w <KeyPress-Escape> "$w.but1 flash; $w.but1 invoke"
     if {$nbut >= 2} {
-	bind $w.entry <KeyPress-Return> "$w.but2 invoke"
+	bind $w.entry <KeyPress-Return> "$w.but2 flash; $w.but2 invoke"
     }
     set ModifyDialogResult 0
 
@@ -1728,7 +1728,7 @@ proc EditReminder {rem args} {
     }
     pack .edit.t -side top -fill both -expand 1
     pack .edit.f -side top -fill x -expand 1
-    bind .edit <KeyPress-Escape> ".edit.but1 invoke"
+    bind .edit <KeyPress-Escape> ".edit.but1 flash; .edit.but1 invoke"
     set ModifyDialogResult 0
     CenterWindow .edit
     tkwait visibility .edit

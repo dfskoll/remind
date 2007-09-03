@@ -665,12 +665,6 @@ static int DoCalRem(ParsePtr p, int col)
       }
     }
 
-    /* Remove any "at" times from PS or PSFILE reminders */
-    if (trig.typ == PASSTHRU_TYPE && strcmp(trig.passthru, "COLOR")) {
-	tim.ttime = NO_TIME;
-	tim.duration = NO_TIME;
-    }
-
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
     if ((jul == JulianToday) ||
@@ -680,8 +674,10 @@ static int DoCalRem(ParsePtr p, int col)
 	NumTriggered++;
 
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
-	    /* Suppress time if it's not today */
-	    if (jul != JulianToday) {
+	    /* Suppress time if it's not today or if it's a non-COLOR special */
+	    if (jul != JulianToday ||
+		(trig.typ == PASSTHRU_TYPE &&
+		 strcmp(trig.passthru, "COLOR"))) {
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);
 		    DBufFree(&pre_buf);
@@ -793,7 +789,16 @@ static int DoCalRem(ParsePtr p, int col)
 	    strcmp(trig.passthru, "HTML")) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
 	    e->pos = e->passthru;
-	    e->time = NO_TIME;
+	    if (!strcmp(trig.passthru, "PostScript") ||
+		!strcmp(trig.passthru, "PSFile")) {
+		e->time = NO_TIME;
+	    } else {
+		if (jul == JulianToday) {
+		    e->time = tim.ttime;
+		} else {
+		    e->time = NO_TIME;
+		}
+	    }
 	    e->next = CurPs;
 	    CalPs[col] = e;
 	    SortCol(&CalPs[col]);
@@ -833,6 +838,14 @@ static void WriteSimpleEntries(int col, int jul)
 /* Do all the PASSTHRU entries first, if any */
     FromJulian(jul, &y, &m, &d);
     while(e) {
+	if (e->passthru) {
+	    if (!strcmp(e->passthru, "PostScript") ||
+		!strcmp(e->passthru, "PSFile")) {
+		e->duration = NO_TIME;
+		e->time = NO_TIME;
+	    }
+	}
+
 	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	printf("%04d/%02d/%02d ", y, m+1, d);
 	printf("%s %s ", e->passthru, e->tag);

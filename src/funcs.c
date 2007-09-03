@@ -2046,6 +2046,7 @@ static int FFiledatetime(void)
 /*  Canned PostScript code for shading a calendar square       */
 /*                                                             */
 /***************************************************************/
+static int psshade_warned = 0;
 static int FPsshade(void)
 {
     char psbuff[256];
@@ -2059,6 +2060,11 @@ static int FPsshade(void)
 	if (ARG(i).type != INT_TYPE) return E_BAD_TYPE;
 	if (ARG(i).v.val < 0) return E_2LOW;
 	if (ARG(i).v.val > 100) return E_2HIGH;
+    }
+
+    if (!psshade_warned) {
+	psshade_warned = 1;
+	Eprint("psshade() is deprecated; use SPECIAL SHADE instead.");
     }
 
     sprintf(s, "/_A LineWidth 2 div def ");
@@ -2082,6 +2088,8 @@ static int FPsshade(void)
 /*  Canned PostScript code for generating moon phases          */
 /*                                                             */
 /***************************************************************/
+static int psmoon_warned = 0;
+
 static int FPsmoon(void)
 {
     char psbuff[512];
@@ -2108,6 +2116,10 @@ static int FPsmoon(void)
 		fontsize = ARG(3).v.val;
 	    }
 	}
+    }
+    if (!psmoon_warned) {
+	psmoon_warned = 1;
+	Eprint("psmoon() is deprecated; use SPECIAL MOON instead.");
     }
     if (size > 0) {
 	sprintf(sizebuf, "%d", size);

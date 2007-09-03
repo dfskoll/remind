@@ -2317,12 +2317,13 @@ If three arguments are supplied, returns \fIstr1\fR if \fInum\fR is 1, and
 .RE
 .TP
 .B psmoon(i_phase [,i_size [,s_note [,i_notesize]]])
-Returns a \fBSTRING\fR consisting of PostScript code to draw a moon in
-the upper-left hand corner of the calendar box.  \fIPhase\fR specifies
-the phase of the moon, and is 0 (new moon), 1 (first quarter), 2 (full
-moon) or 3 (third quarter).  If \fIsize\fR is specified, it controls
-the radius of the moon in PostScript units (1/72 inch.)  If it is not
-specified or is negative, the size of the day-number font is used.
+[DEPRECATED] Returns a \fBSTRING\fR consisting of PostScript code to
+draw a moon in the upper-left hand corner of the calendar box.
+\fIPhase\fR specifies the phase of the moon, and is 0 (new moon), 1
+(first quarter), 2 (full moon) or 3 (third quarter).  If \fIsize\fR is
+specified, it controls the radius of the moon in PostScript units
+(1/72 inch.)  If it is not specified or is negative, the size of the
+day-number font is used.
 .PP
 .PP
 .RS
@@ -2353,7 +2354,7 @@ Note how the time is coerced to a string by concatenating the null string.
 .RE
 .TP
 \fBpsshade(i_gray)\fR or \fBpsshade(i_red, i_green, i_blue)\fR
-Returns a \fBSTRING\fR that consists of PostScript commands to
+[DEPRECATED] Returns a \fBSTRING\fR that consists of PostScript commands to
 shade a calendar box.  \fINum\fR can range from 0 (completely black)
 to 100 (completely white.)  If three arguments are given, they specify
 red, green and blue intensity from 0 to 100.

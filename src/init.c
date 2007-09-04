@@ -269,11 +269,11 @@ void InitRemind(int argc, char *argv[])
 		if (*arg == '0') {
 		    PARSENUM(Daemon, arg);
 		    if (Daemon == 0) Daemon = -1;
-		    else if (Daemon < 5) Daemon = 5;
+		    else if (Daemon < 1) Daemon = 1;
 		    else if (Daemon > 60) Daemon = 60;
 		} else {
 		    PARSENUM(Daemon, arg);
-		    if (Daemon<5) Daemon=5;
+		    if (Daemon<1) Daemon=1;
 		    else if (Daemon>60) Daemon=60;
 		}
 		break;

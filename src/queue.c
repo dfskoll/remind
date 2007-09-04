@@ -181,6 +181,14 @@ void HandleQueuedReminders(void)
 
 	    if (Daemon > 0 && SleepTime > 60*Daemon) SleepTime = 60*Daemon;
 
+	    /* Wake up once a minute to recalibrate sleep time in
+	       case of laptop hibernation */
+	    if (Daemon <= 0) {
+		if (SleepTime > 60) {
+		    SleepTime = 60;
+		}
+	    }
+
 	    if (Daemon >= 0) {
 		sleep(SleepTime);
 	    } else {

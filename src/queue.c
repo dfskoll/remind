@@ -210,33 +210,38 @@ void HandleQueuedReminders(void)
 
 	}
 
-	/* Trigger the reminder */
-	CreateParser(q->text, &p);
-	trig.typ = q->typ;
-	strcpy(trig.passthru, q->passthru);
-	RunDisabled = q->RunDisabled;
-	if (Daemon < 0) {
-	    printf("NOTE reminder %s ",
-		   SimpleTime(q->tt.ttime));
-	    printf("%s ", SimpleTime(SystemTime(0)/60));
-	    if (!*q->tag) {
-		printf("*");
-	    } else {
-		printf("%s", q->tag);
+	/* Do NOT trigger the reminder if tt.nexttime is more than a
+	   minute in the past.  This can happen if the clock is
+	   changed or a laptop awakes from hibernation */
+	if (SystemTime(0) - (q->tt.nexttime * 60) <= 60) {
+	    /* Trigger the reminder */
+	    CreateParser(q->text, &p);
+	    trig.typ = q->typ;
+	    strcpy(trig.passthru, q->passthru);
+	    RunDisabled = q->RunDisabled;
+	    if (Daemon < 0) {
+		printf("NOTE reminder %s ",
+		       SimpleTime(q->tt.ttime));
+		printf("%s ", SimpleTime(SystemTime(0)/60));
+		if (!*q->tag) {
+		    printf("*");
+		} else {
+		    printf("%s", q->tag);
+		}
+		printf("\n");
 	    }
-	    printf("\n");
-	}
 
-	/* Set up global variables so some functions like trigdate()
-	   and trigtime() work correctly                             */
-	LastTriggerDate = JulianToday;
-	LastTriggerTime = q->tt.ttime;
-	LastTrigValid = 1;
-	(void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
-	if (Daemon < 0) {
-	    printf("NOTE endreminder\n");
+	    /* Set up global variables so some functions like trigdate()
+	       and trigtime() work correctly                             */
+	    LastTriggerDate = JulianToday;
+	    LastTriggerTime = q->tt.ttime;
+	    LastTrigValid = 1;
+	    (void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
+	    if (Daemon < 0) {
+		printf("NOTE endreminder\n");
+	    }
+	    fflush(stdout);
 	}
-	fflush(stdout);
 
 	/* Calculate the next trigger time */
 	q->tt.nexttime = CalculateNextTime(q);

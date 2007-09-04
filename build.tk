@@ -41,6 +41,8 @@ proc SetConfigDefaults {} {
     set Config(NORTHERN_HEMISPHERE) 1
     set Config(WESTERN_HEMISPHERE) 1
     set Config(LANGUAGE) "English"
+    set Config(INST_DIR) "/usr/local/bin"
+    set Config(MAN_DIR) "/usr/local/man"
 }
 
 #***********************************************************************
@@ -97,7 +99,7 @@ proc CreateMainDialog {} {
     destroy .c
     update idletasks
 
-    SetConfigDefaults
+    SetConfigFromRemind
     tabnotebook_create .tn
 
     set Instdir [tabnotebook_page .tn "Installation Directories"]
@@ -128,13 +130,14 @@ proc CreateMainDialog {} {
 #  Creates the "installation directories" dialog.
 #***********************************************************************
 proc CreateInstallDirDialog { w } {
+    global Config
     label $w.binlabel -text "Location for programs: "
     entry $w.bin -width 30
-    $w.bin insert end "/usr/local/bin"
+    $w.bin insert end $Config(INST_DIR)
 
     label $w.manlabel -text "Location for man pages: "
     entry $w.man -width 30
-    $w.man insert end "/usr/local/man"
+    $w.man insert end $Config(MAN_DIR)
 
     text $w.blurb -width 1 -height 5 -wrap word -relief flat -takefocus 0
     $w.blurb insert end "\n(Tabbed-notebook Tcl code taken from \"Effective Tcl/Tk Programming\" by Mark Harrison and Michael McLennan, Addison-Wesley Professional Computing Series.)"
@@ -863,10 +866,121 @@ proc doLogo {} {
 
     .c create text 4 28 -anchor nw -text "http://www.roaringpenguin.com" \
 	    -fill red -font {-family courier -size -14 -weight bold}
+
+    set rem [FindRemind]
+    if {$rem != ""} {
+	.c create text 4 52 -anchor nw -text "Found existing Remind... reusing settings" -fill red -font  {-family courier -size -14 -weight bold}
+	.c create text 4 66 -anchor nw -text "from $rem" -fill red -font  {-family courier -size -14 -weight bold}
+    }
     update idletasks
     after 2500
 }
 
+#***********************************************************************
+# %PROCEDURE: FindRemind
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Full path to an existing "remind" if one is found.  Otherwise,
+#  empty string.
+#***********************************************************************
+proc FindRemind {} {
+    global env
+    set path [concat [split $env(PATH) ":"] "/bin" "/usr/bin" "/usr/local/bin"]
+    foreach thing $path {
+	if [file executable [file join $thing "remind"]] {
+	    return [file join $thing "remind"]
+	}
+    }
+    return {}
+}
+
+#***********************************************************************
+# %PROCEDURE: SetConfigFromRemind
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Sets config settings based on existing remind (if one found) or else
+#  sensible defaults.
+#***********************************************************************
+proc SetConfigFromRemind {} {
+    global Config
+    SetConfigDefaults
+    set rem [FindRemind]
+    if {"$rem" == ""} {
+	return
+    }
+    set dir [file dirname $rem]
+    set Config(INST_DIR) $dir
+    if {"$dir" == "/usr/local/bin"} {
+	set Config(MAN_DIR) "/usr/local/man"
+    } elseif {$dir == "/usr/bin"} {
+	set Config(MAN_DIR) "/usr/share/man"
+    }
+
+    # Check for existing man page
+    if {[file readable "/usr/share/man/man1/remind.1"]} {
+	set Config(MAN_DIR) "/usr/share/man"
+    } elseif {[file readable "/usr/man/man1/remind.1"]} {
+	set Config(MAN_DIR) "/usr/man"
+    } elseif {[file readable "/usr/local/man/man1/remind.1"]} {
+	set Config(MAN_DIR) "/usr/local/man"
+    }
+
+    # Query Remind for the rest
+    QueryRemind $rem LAT_DEG {$LatDeg}
+    QueryRemind $rem LAT_MIN {$LatMin}
+    QueryRemind $rem LON_DEG {$LongDeg}
+    QueryRemind $rem LON_MIN {$LongMin}
+    QueryRemind $rem LOCATION {$Location}
+    QueryRemind $rem DATESEP {$DateSep}
+    QueryRemind $rem TIMESEP {$TimeSep}
+    QueryRemind $rem LANGUAGE {language()}
+
+    set $Config(LAT_MIN) [expr abs($Config(LAT_MIN))]
+    if {$Config(LAT_DEG) >= 0} {
+	set Config(NORTHERN_HEMISPHERE) 1
+    } else {
+	set Config(NORTHERN_HEMISPHERE) 0
+	set Config(LAT_DEG) [expr abs($Config(LAT_DEG))]
+    }
+
+    set $Config(LON_MIN) [expr abs($Config(LON_MIN))]
+    if {$Config(LON_DEG) >= 0} {
+	set Config(WESTERN_HEMISPHERE) 1
+    } else {
+	set Config(WESTERN_HEMISPHERE) 0
+	set Config(LON_DEG) [expr abs($Config(LON_DEG))]
+    }
+
+    # Get default page from rem2ps
+    set rem2ps [file join $dir "rem2ps"]
+
+    catch {
+	exec $rem2ps -m help
+    } err
+    set errlist [split $err "\n"]
+    set err [lindex $errlist end]
+    if {[string match "Default media type is*" $err]} {
+	set Config(DEFAULT_PAGE) [lindex $err end]
+    }
+}
+
+
+proc QueryRemind { rem symbol rem_msg } {
+    global Config
+    catch {
+	set fp [open "| $rem -" "r+"]
+	puts $fp "banner %\nMSG \[$rem_msg\]%\nFLUSH\n"
+	flush $fp
+	gets $fp line
+	catch { close $fp }
+    }
+    if {"$line" == ""} {
+	return
+    }
+    set Config($symbol) $line
+}
 
 CheckSanity
 CreateMainDialog

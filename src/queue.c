@@ -241,11 +241,11 @@ void HandleQueuedReminders(void)
 		printf("NOTE endreminder\n");
 	    }
 	    fflush(stdout);
+	    DestroyParser(&p);
 	}
 
 	/* Calculate the next trigger time */
 	q->tt.nexttime = CalculateNextTime(q);
-	DestroyParser(&p);
     }
     exit(0);
 }

@@ -9,7 +9,10 @@ CHANGES TO REMIND
 
 - In queue mode, wake up once a minute and recalibrate sleep time.
   This should make Remind work better on laptops that suspend or
-  hibernate.
+  hibernate.  Note that "remind -q" does *not* handle date-rollover
+  well; it simply exits if it notices date rollover.  "remind -z0"
+  (as used by tkremind) handles date rollover properly; it rereads the
+  reminder file and rebuilds the queue if it notices date rollover.
 
 + BUG FIXES
 

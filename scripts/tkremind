@@ -2624,12 +2624,13 @@ proc DoMoonSpecial { n stuff } {
 	3 { set image last }
     }
     .cal.t$n configure -state normal
-    .cal.t$n image create end -image $image
+    .cal.t$n image create 1.0 -image $image
 
     if {$msg != ""} {
-	.cal.t$n insert end " $msg"
+	.cal.t$n insert 1.1 " $msg\n"
+    } else {
+	.cal.t$n insert 1.1 "\n"
     }
-    .cal.t$n insert end "\n"
     .cal.t$n configure -state disabled
 }
 #***********************************************************************

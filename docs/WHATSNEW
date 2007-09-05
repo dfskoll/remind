@@ -432,7 +432,7 @@ CHANGES TO REMIND
   library.  All three of these fixes are courtesy of Christopher
   J. Madsen <madsen@iglobal.net>.  Thanks, Christopher.
 
-* Version 3.0 Patch 16
+* Version 3.0 Patch 16 - 1997-02-11
 
 + MINOR ENHANCEMENTS
 
@@ -549,7 +549,7 @@ CHANGES TO REMIND
   _not_ support MS Windows, and in fact do not allow Remind to run
   under Windows (see COPYRIGHT).
 
-* Version 3.0 Patch 13
+* Version 3.0 Patch 13 - 1994-05-06
 
 + MINOR ENHANCEMENTS
 
@@ -584,7 +584,7 @@ CHANGES TO REMIND
 
 - Updated the copyright notices everywhere.
 
-* Version 3.0 Patch 12
+* Version 3.0 Patch 12 - 1994-02-01
 
 + MINOR ENHANCEMENTS
 
@@ -603,7 +603,7 @@ CHANGES TO REMIND
 - Fixed a problem with the '-k' option which resulted in a newline being
   placed after the message text.  This was giving sh(1) heartburn...
 
-* Version 3.0 Patch 11
+* Version 3.0 Patch 11 - 1993-11-26
 
 + MINOR ENHANCEMENTS
 
@@ -683,7 +683,7 @@ CHANGES TO REMIND
 
 - Fixed the Finnish language support which was missing a few newlines.
 
-* Version 3.0 Patch 9
+* Version 3.0 Patch 9 - 1993-10-04
 
 + NOTES
 
@@ -740,7 +740,7 @@ CHANGES TO REMIND
   so that newlines in the body start new paragraphs, rather than being
   swallowed as white-space.
 
-* Version 3.0 Patch 8
+* Version 3.0 Patch 8 - 1993-09-08
 
 + MAJOR ENHANCEMENTS
 
@@ -792,7 +792,7 @@ CHANGES TO REMIND
   range [-128, 255] (but not 0) so that char(asc(s)) works even
   on machines with signed char types.
 
-* Version 3.0 Patch 7
+* Version 3.0 Patch 7 - 1993-07-22
 
 + MAJOR ENHANCEMENTS
 
@@ -835,7 +835,7 @@ CHANGES TO REMIND
 - Changed kall so that "kall sh" doesn't commit suicide - patch courtesy
   of Michael Salmon.
 
-* Version 3.0 Patch 6
+* Version 3.0 Patch 6 - 1993-05-05
 
 + MINOR ENHANCEMENTS
 
@@ -858,7 +858,7 @@ CHANGES TO REMIND
 - Fixed a bug in the -u option which sometimes caused a core dump
   (embarrassed grin!)  The fix is due to Tina Hoeltig.  Thanks, Tina!
 
-* Version 3.0 Patch 5
+* Version 3.0 Patch 5 - 1993-04-27
 
 + MAJOR ENHANCEMENTS:
 
@@ -893,7 +893,7 @@ CHANGES TO REMIND
 
 - Fixed a bug in the man page - thanks to Ed Oskiewicz.
 
-* Version 3.0 Patch 4
+* Version 3.0 Patch 4 - 1993-03-08
 
 - Added the -g option - this sorts reminders by date/time before
   issuing them.  (You can see I'm running out of letters to
@@ -952,13 +952,13 @@ CHANGES TO REMIND
 
 - Put my new mailing address in the README files.
 
-* Version 3.0 Patch 3
+* Version 3.0 Patch 3 - 1993-02-21
 
 - Corrected bugs in Remind and Rem2PS.  No new features added.  You
   should NOT use patch level 2 - either stick to 3.0.1 or upgrade to
   3.0.3.
 
-* Version 3.0 Patch 2
+* Version 3.0 Patch 2 - 1993-02-04
 
 - Added the -u option to Remind so that root can run it as any user.
   This simplifies the remind-all scripts, and makes them more efficient.
@@ -998,7 +998,7 @@ CHANGES TO REMIND
 - Changed Remind so that supplying the -a option causes timed reminders
   not to be placed into the calendar in calendar mode.
 
-* Version 3.0 Patch 1
+* Version 3.0 Patch 1 - 1992-12-18
 
 - Wrote the Rem2ps program to produce PostScript calendars
 
@@ -1038,7 +1038,7 @@ CHANGES TO REMIND
 
 - Re-formatted the WHATSNEW.30 file.
 
-* Version 3.0
+* Version 3.0 - 1992-11-09
 
 - Total rewrite from previous versions
 
@@ -1059,23 +1059,23 @@ CHANGES TO REMIND
 - Fixed a lurking bug in trigger date calculation which, amazingly, had not
   been caught in the couple of years that Remind has been out!
 
-* Version 2.3 Patch 5 
+* Version 2.3 Patch 5 - 1992-04-11
 
 - Added the "c+n" option for printing a calendar by
   weeks instead of months, courtesy Dennis Cottel (dennis@peanuts.nosc.mil).
 
-* Version 2.3 Patch 4
+* Version 2.3 Patch 4 - 1991-11-06
 
 - Made the init.c file nicer.  Made the Makefile
   prettier.  Added "make test", "make tar" and "make shar" Makefile targets.
 
-* Version 2.3 Patch 3
+* Version 2.3 Patch 3 - 1991-09-11
 
 - Added a command-line option for Remind to process
   queued reminders in the foreground.  This makes automatic termination
   of Remind processes from within X-Windows and Sunview easier.
 
-* Version 2.3 Patch 2
+* Version 2.3 Patch 2 - 1991-07-19
 
 - Fixed up a problem with timed reminders which resulted
   in cursor not starting from left side of screen on some systems.
@@ -1092,7 +1092,7 @@ CHANGES TO REMIND
 
 - Made the Makefile more portable
 
-* Version 2.3 Patch 1
+* Version 2.3 Patch 1 - 1991-03-08
 
 - Added the "-t" command-line option to get Remind
   to trigger all non-expired reminders.
@@ -1106,7 +1106,7 @@ CHANGES TO REMIND
 
 - Added manual pages for "kall" and "rem".
 
-* Version 2.3
+* Version 2.3 - 1991-02-20
 
 - Added the UNTIL keyword for forcing reminders to expire.
 
@@ -1128,28 +1128,28 @@ CHANGES TO REMIND
 - Modified the calendar and SimpleCalendar formats so that the % escape
   substitutions ARE performed.
 
-* Version 2.2 - Patch 5
+* Version 2.2 - Patch 5 - 1990-12-03
 
 - Added the BEFORE, AFTER and SKIP tokens to make the
   handling of holidays more sensible.  Also corrected a few more bugs.
 
-* Version 2.2 - Patch 3
+* Version 2.2 - Patch 3 - 1990-11-28
 
 - Added the MSG or RUN tokens in an OMIT command; also
   allowed RUN-type reminders to be explicitly included in the calendar by
   using the %" escape sequence.
 
-* Version 2.2
+* Version 2.2 - 1990-11-16
 
 - Added the AT keyword, the timed reminders daemon, and the
   calendar facility.
 
-* Version 2.1
+* Version 2.1 - 1990-11-06
 
 - Added the "repeat" token for repeating reminders with a period
   other than 7 days.  Also fixed some bugs from version 2.0
 
-* Version 2.0
+* Version 2.0 - 1990-11-01
 
 - first public release.  Included advanced date specifications,
   character substitution, and the RUN keyword.

@@ -1,6 +1,22 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 2
+* Version 3.1 Patch 2 - BETA 2
+
++ MINOR ENHANCEMENTS
+
+- build.tk tries to set defaults for location, paper size, etc from an
+  existing "remind" installation if it detects one.
+
+- In queue mode, wake up once a minute and recalibrate sleep time.
+  This should make Remind work better on laptops that suspend or
+  hibernate.
+
++ BUG FIXES
+
+- Silence gcc warning on Ubuntu 7.04
+
+* Version 3.1 Patch 2 - BETA 1
+
 
 + MINOR ENHANCEMENTS
 

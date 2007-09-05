@@ -63,7 +63,7 @@ CHANGES TO REMIND
 - Using the psshade() or psmoon() functions emits a warning on stderr.  You
   should use SPECIAL SHADE or SPECIAL MOON instead.
 
-* Version 3.1 Patch 1 - 23 August 2007
+* Version 3.1 Patch 1 - 2007-08-23
 
 + MAJOR ENHANCEMENTS
 
@@ -93,7 +93,7 @@ CHANGES TO REMIND
 
 - Various man-page fixes.
 
-* Version 3.1 Patch 0 - 14 August 2007
+* Version 3.1 Patch 0 - 2007-07-14
 
 + MAJOR ENHANCEMENTS
 
@@ -156,7 +156,7 @@ CHANGES TO REMIND
 - rem2ps would produce invalid PostScript in some rare cases
   (eg, for February 2007).  This has been fixed.
 
-* Version 3.0 Patch 24
+* Version 3.0 Patch 24 - 2005-11-19
 
 + MINOR ENHANCEMENTS
 
@@ -179,7 +179,7 @@ CHANGES TO REMIND
 - Fixed a bug in the tokenizer that could make Remind segfault.  Fix courtesy
   of Stan Tobias.
 
-* Version 3.0 Patch 23
+* Version 3.0 Patch 23 - 2005-04-14
 
 + MINOR ENHANCEMENTS
 
@@ -203,7 +203,7 @@ CHANGES TO REMIND
 
 - Fixed parser error for unterminated date constant: '2005/01/01
 
-* Version 3.0 Patch 22
+* Version 3.0 Patch 22 - 2000-06-16
 
 + MINOR ENHANCEMENTS
 
@@ -225,7 +225,7 @@ CHANGES TO REMIND
 - Fixed serious bug in which background queued reminders were ignored and
   Remind simply exited.  Doh!  Sorry about that.
 
-* Version 3.0 Patch 21
+* Version 3.0 Patch 21 - 2000-03-15
 
 + MINOR ENHANCEMENTS
 
@@ -256,7 +256,7 @@ CHANGES TO REMIND
 
 - Fixed compilation problem on FreeBSD, IRIX, Tru64 and other UNIXes.
 
-* Version 3.0 Patch 20
+* Version 3.0 Patch 20 - 1999-04-12
 
 + NEWS
 
@@ -285,7 +285,7 @@ CHANGES TO REMIND
 
 - Fixed a typo in danish.h, courtesy of  Niels Kristian Bech Jensen.
 
-* Version 3.0 Patch 19
+* Version 3.0 Patch 19 - 1998-05-09
 
 + MAJOR ENHANCEMENTS
 
@@ -327,7 +327,7 @@ CHANGES TO REMIND
 - Lots more silly little bugs squashed -- too many to go into in
   detail.
 
-* Version 3.0 Patch 18
+* Version 3.0 Patch 18 - 1998-02-15
 
 + MAJOR ENHANCEMENTS
 
@@ -391,7 +391,7 @@ CHANGES TO REMIND
 - Getting rid of fixed-sized buffers meant lots of changes to code.
   No doubt, I missed a few regression tests.
 
-* Version 3.0 Patch 17
+* Version 3.0 Patch 17 - 1997-09-07
 
 + MINOR ENHANCEMENTS
 
@@ -460,7 +460,7 @@ CHANGES TO REMIND
 - Fixed a problem under Solaris 2.5 whereby rem2ps was skipping some
   latin1 characters which it interpreted as white space.
 
-* Version 3.0 Patch 15
+* Version 3.0 Patch 15 - 1996-10-27
 
 + IMPORTANT NOTES
 
@@ -490,7 +490,7 @@ CHANGES TO REMIND
 - Fixed bug in TkRemind which caused a crash if the "-m" option was used
   for a month beginning on Sunday.  Doh!!!
 
-* Version 3.0 Patch 14
+* Version 3.0 Patch 14 - 1996-05-25
 
 + CHANGE IN COPYING POLICY
 

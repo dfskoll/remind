@@ -195,7 +195,16 @@ void HandleQueuedReminders(void)
 		DaemonWait(SleepTime);
 	    }
 
-	    if (Daemon> 0 && SleepTime) CheckInitialFile();
+	    /* If not in daemon mode and day has rolled around,
+	       exit -- not much we can do. */
+	    if (!Daemon) {
+		int y, m, d;
+		if (RealToday != SystemDate(&y, &m, &d)) {
+			exit(0);
+		}
+	    }
+
+	    if (Daemon > 0 && SleepTime) CheckInitialFile();
 
 	    if (Daemon && !q) {
 		if (Daemon < 0) {

@@ -430,6 +430,8 @@ proc CreateCalWindow { dayNames } {
     bind . <Control-KeyPress-q> Quit
     bind . <KeyPress-Left> ".b.prev flash; .b.prev invoke"
     bind . <KeyPress-Right> ".b.next flash; .b.next invoke"
+    bind . <KeyPress-Prior> ".b.prev flash; .b.prev invoke"
+    bind . <KeyPress-Next> ".b.next flash; .b.next invoke"
     bind . <KeyPress-Home> ".b.this flash; .b.this invoke"
 
     if {$Option(StartIconified)} {

@@ -2285,6 +2285,8 @@ proc FireEditor { w } {
 	    return
 	}
     }
+    Status "Firing up editor..."
+    after 1500 DisplayTime
     set EditorPid [exec sh -c $editor &]
 }
 

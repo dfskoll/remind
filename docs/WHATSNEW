@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 2 - BETA 2
+* Version 3.1 Patch 2 - 2007-09-12
 
 + MINOR ENHANCEMENTS
 
@@ -13,15 +13,6 @@ CHANGES TO REMIND
   well; it simply exits if it notices date rollover.  "remind -z0"
   (as used by tkremind) handles date rollover properly; it rereads the
   reminder file and rebuilds the queue if it notices date rollover.
-
-+ BUG FIXES
-
-- Silence gcc warning on Ubuntu 7.04
-
-* Version 3.1 Patch 2 - BETA 1
-
-
-+ MINOR ENHANCEMENTS
 
 - tkremind: Added some key bindings to make navigation easier.
 

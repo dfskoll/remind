@@ -27,6 +27,15 @@ echo "" >> ../tests/test.out
 echo "Test 4" >> ../tests/test.out
 echo "" >> ../tests/test.out
 ../src/remind -sa ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+echo "Test 5" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p -b0 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+echo "Test 6" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p -b1 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+echo "Test 7" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
 
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then

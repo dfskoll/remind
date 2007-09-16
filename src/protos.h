@@ -22,6 +22,7 @@ int CallUserFunc (char *name, int nargs);
 int DoFset (ParsePtr p);
 void ProduceCalendar (void);
 char  *SimpleTime (int tim);
+char  *CalendarTime (int tim, int duration);
 int DoRem (ParsePtr p);
 int DoFlush (ParsePtr p);
 void DoExit (ParsePtr p);

@@ -682,7 +682,7 @@ static int DoCalRem(ParsePtr p, int col)
 		    return E_NO_MEM;
 		}
 	    } else {
-		if (DBufPuts(&obuf, SimpleTime(tim.ttime)) != OK) {
+		if (DBufPuts(&obuf, CalendarTime(tim.ttime, tim.duration)) != OK) {
 		    DBufFree(&obuf);
 		    DBufFree(&pre_buf);
 		    return E_NO_MEM;
@@ -880,6 +880,89 @@ static void WriteCalDays(void)
 
 /***************************************************************/
 /*                                                             */
+/*  CalendarTime                                               */
+/*                                                             */
+/*  Format the time according to simple time format.           */
+/*  Answer is returned in a static buffer.                     */
+/*  A trailing space is always added.                          */
+/*  This takes into account duration                           */
+/*                                                             */
+/***************************************************************/
+char *
+CalendarTime(int tim, int duration)
+{
+    static char buf[128];
+    int h, min, hh;
+    int h2, min2, hh2, newtim, days;
+    char *ampm1;
+    char *ampm2;
+    char daybuf[64];
+
+    buf[0] = 0;
+
+    if (duration == NO_TIME) {
+	/* No duration... just call into SimpleTime */
+	return SimpleTime(tim);
+    }
+    if (tim == NO_TIME) {
+	/* No time... nothing to return */
+	return buf;
+    }
+    h = tim/60;
+    min = tim % 60;
+    if (h == 0)      hh=12;
+    else if (h > 12) hh=h-12;
+    else             hh = h;
+
+    newtim = tim + duration;
+
+    /* How many days in duration? */
+    days = newtim / MINUTES_PER_DAY;
+    newtim = newtim % MINUTES_PER_DAY;
+    h2 = newtim/60;
+    min2 = newtim % 60;
+    if (h2 == 0)      hh2=12;
+    else if (h2 > 12) hh2=h2-12;
+    else              hh2 = h2;
+
+    if (days) {
+	sprintf(daybuf, "+%d", days);
+    } else {
+	daybuf[0] = 0;
+    }
+
+    if (h >= 12) {
+	ampm1 = L_PM;
+    } else {
+	ampm1 = L_AM;
+    }
+    if (h2 >= 12) {
+	ampm2 = L_PM;
+    } else {
+	ampm2 = L_AM;
+    }
+    if (!days) {
+	if (!strcmp(ampm1, ampm2)) {
+	    ampm1 = "";
+	}
+    }
+
+    switch(ScFormat) {
+    case SC_AMPM:
+	sprintf(buf, "%d%c%02d%s-%d%c%02d%s%s ",
+		hh, TimeSep, min, ampm1, hh2, TimeSep, min2, ampm2, daybuf);
+	break;
+
+    case SC_MIL:
+	sprintf(buf, "%02d%c%02d-%02d%c%02d%s ",
+		h, TimeSep, min, h2, TimeSep, min2, daybuf);
+	break;
+    }
+    return buf;
+}
+
+/***************************************************************/
+/*                                                             */
 /*  SimpleTime                                                 */
 /*                                                             */
 /*  Format the time according to simple time format.           */
@@ -903,7 +986,7 @@ char *SimpleTime(int tim)
 	    if (h == 0) hh=12;
 	    else if (h > 12) hh=h-12;
 	    else hh=h;
-	    sprintf(buf, "%2d%c%02d%s ", hh, TimeSep, min, (h>=12) ? L_PM : L_AM);
+	    sprintf(buf, "%d%c%02d%s ", hh, TimeSep, min, (h>=12) ? L_PM : L_AM);
 	}
 	break;
 

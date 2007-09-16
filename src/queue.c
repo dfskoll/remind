@@ -232,9 +232,9 @@ void HandleQueuedReminders(void)
 	    strcpy(trig.passthru, q->passthru);
 	    RunDisabled = q->RunDisabled;
 	    if (Daemon < 0) {
-		printf("NOTE reminder %s ",
+		printf("NOTE reminder %s",
 		       SimpleTime(q->tt.ttime));
-		printf("%s ", SimpleTime(SystemTime(0)/60));
+		printf("%s", SimpleTime(SystemTime(0)/60));
 		if (!*q->tag) {
 		    printf("*");
 		} else {

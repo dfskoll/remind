@@ -62,6 +62,7 @@ int DoRem(ParsePtr p)
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
+	if (!LastTrigValid) return OK;
 	r=ParseToken(p, &buf);
 	if (r) return r;
 	FindToken(DBufValue(&buf), &tok);
@@ -820,6 +821,9 @@ int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 	jul = ComputeTrigger(jul, trig, &r);
 	if (r) {
 	    if (r == E_CANT_TRIG) return OK; else return r;
+	}
+	if (jul == -1) {
+	    return OK;
 	}
 	s = p->pos;
 	r = EvaluateExpr(p, &v);

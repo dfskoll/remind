@@ -1,0 +1,64 @@
+th.rem-cal-hdr {
+  width: 14%;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+td.rem-empty {
+  width: 14%;
+  height: 5em;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+td.rem-cell {
+  width: 14%;
+  height: 5em;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+td.rem-small-calendar {
+  width: 14%;
+  height: 5em;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+table.rem-cal {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+div.rem-daynumber {
+  float: right;
+  text-align: right;
+  vertical-align: top;
+}
+
+div.rem-moon {
+  float: left;
+  text-align: left;
+  vertical-align: top;
+}
+
+th.rem-sc-hdr {
+  text-align: right;
+  font-size: x-small;
+}
+
+td.rem-sc-empty-cell {
+  text-align: right;
+  font-size: x-small;
+  width: 14%;
+}
+
+td.rem-sc-cell {
+  text-align: right;
+  font-size: x-small;
+  width: 14%;
+}
+
+caption.rem-sc-caption {
+  font-size: x-small;
+}

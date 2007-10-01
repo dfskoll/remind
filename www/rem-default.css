@@ -51,6 +51,7 @@ div.rem-daynumber {
   float: right;
   text-align: right;
   vertical-align: top;
+  font-size: 14pt;
 }
 
 div.rem-moon {

@@ -43,6 +43,7 @@ Options:
 --backurl url         Make the title on the previous month's small calendar
                       entry a link to <url>
 --forwurl url         Same as --backurl, but for the next month's small calendar
+--imgbase url         Base URL of images
 --tableonly           Output results as a <table> only, no <html>, <body>, etc.
 --title               What to put in <title>...</title> tags
 --prologue html_text  Text to insert at the top of the body
@@ -67,6 +68,7 @@ sub parse_options
 	       "title|ti:s",
 	       "prologue|pr:s",
 	       "epilogue|ep:s",
+	       "imgbase|ib:s",
 	       "tableonly|to");
     $Options{'title'} ||= 'HTML Calendar';
     $Options{'stylesheet'} ||= "rem-default.css";
@@ -163,17 +165,20 @@ sub parse_input
 			my ($phase, $moonsize, $fontsize, $msg) = ($1, $2, $3, $4);
 			$moons->[$d]->{'phase'} = $phase;
 			$moons->[$d]->{'msg'} = $msg;
+		} elsif ($body =~ /(\S+)/) {
+			$moons->[$d]->{'phase'} = $1;
+			$moons->[$d]->{'msg'} = '';
 		}
 	} elsif ($special eq 'SHADE') {
 		if ($body =~ /(\d+)\s+(\d+)\s+(\d+)/) {
 			$shades->[$d] = sprintf("#%02X%02X%02X",
-						$1 % 255, $2 % 255, $3 % 255);
+						($1 % 256), ($2 % 256), ($3 % 256));
 		}
 	} elsif ($special eq 'COLOR') {
 		if ($body =~ /(\d+)\s+(\d+)\s+(\d+)\s+(.*)$/) {
 			my($r, $g, $b, $text) = ($1, $2, $3, $4);
 			my $color = sprintf("style=\"color: #%02X%02X%02X;\"",
-					    $r % 255, $g % 255, $b % 255);
+					    $r % 256, $g % 256, $b % 256);
 			push(@{$days->[$d]}, '<p class="rem-entry" ' . $color . '>' . escape_html($text) . '</p>');
 		}
 	} elsif ($special eq '*') {
@@ -348,7 +353,7 @@ sub draw_day_cell
     } else {
 	    $shade = "";
     }
-    print "<td class=\"rem-cell\"$shade>\n";
+    print "<td class=\"rem-cell\"$shade>\n<p>";
     if ($moons->[$day]) {
 	    my $phase = $moons->[$day]->{'phase'};
 	    my $msg = $moons->[$day]->{'msg'};
@@ -366,10 +371,14 @@ sub draw_day_cell
 	    } else {
 		    $img = 'lastquarter.png';
 	    }
+	    if ($Options{'imgbase'}) {
+		    $img = $Options{'imgbase'} . '/' . $img;
+	    }
 	    print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$img\" src=\"$img\">$msg</div>");
     }
 
-    print "<div class=\"rem-daynumber\">$day</div>\n";
+    print "<div class=\"rem-daynumber\">$day</div></p>\n";
+    print "<p class=\"rem-entry\">&nbsp;</p>\n";
     if ($days->[$day]) {
 	    print(join("\n", @{$days->[$day]}));
     }

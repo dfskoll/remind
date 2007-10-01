@@ -1,3 +1,20 @@
+table.rem-cal {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 12pt;
+}
+
+table.rem-sc-table {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 10pt;
+  width: 95%;
+  float: left;
+}
+
+caption.rem-cal-caption {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
 th.rem-cal-hdr {
   width: 14%;
   border-style: solid;
@@ -6,21 +23,21 @@ th.rem-cal-hdr {
 }
 td.rem-empty {
   width: 14%;
-  height: 5em;
+  height: 7em;
   border-style: solid;
   border-width: 1px;
   vertical-align: top;
 }
 td.rem-cell {
   width: 14%;
-  height: 5em;
+  height: 7em;
   border-style: solid;
   border-width: 1px;
   vertical-align: top;
 }
 td.rem-small-calendar {
   width: 14%;
-  height: 5em;
+  height: 7em;
   border-style: solid;
   border-width: 1px;
   vertical-align: top;
@@ -44,21 +61,18 @@ div.rem-moon {
 
 th.rem-sc-hdr {
   text-align: right;
-  font-size: x-small;
 }
 
 td.rem-sc-empty-cell {
   text-align: right;
-  font-size: x-small;
   width: 14%;
 }
 
 td.rem-sc-cell {
   text-align: right;
-  font-size: x-small;
   width: 14%;
 }
 
 caption.rem-sc-caption {
-  font-size: x-small;
+  font-size: 12pt;
 }

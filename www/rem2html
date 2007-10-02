@@ -64,6 +64,7 @@ sub parse_options
     GetOptions(\%Options, "help|h",
 	       "version",
 	       "stylesheet|s:s",
+	       "nostyle|ns",
 	       "backurl|bu:s",
 	       "forwurl|fu:s",
 	       "title|ti:s",
@@ -86,9 +87,11 @@ sub start_output
     return if ($Options{'tableonly'});
 
     print("<html>\n<head>\n<title>" . $Options{'title'} . "</title>\n");
-    if ($Options{'stylesheet'}) {
-	print('<link rel="stylesheet" type="text/css" href="' .
-	      $Options{'stylesheet'} . '">' . "\n");
+    if (!$Options{'nostyle'}) {
+	if ($Options{'stylesheet'}) {
+	    print('<link rel="stylesheet" type="text/css" href="' .
+		  $Options{'stylesheet'} . '">' . "\n");
+	}
     }
     print("</head>\n<body>\n");
     if ($Options{'prologue'}) {
@@ -154,6 +157,12 @@ sub parse_input
     ($Nextmon, $Nextlen) = split(' ', $line);
 
     $found_data = 1;
+    my $class;
+    if ($Options{'nostyle'}) {
+	$class = '';
+    } else {
+	$class = ' class="rem-entry"';
+    }
     while(<STDIN>) {
 	chomp;
 	last if /^\# rem2ps end$/;
@@ -184,10 +193,10 @@ sub parse_input
 			my($r, $g, $b, $text) = ($1, $2, $3, $4);
 			my $color = sprintf("style=\"color: #%02X%02X%02X;\"",
 					    $r % 256, $g % 256, $b % 256);
-			push(@{$days->[$d]}, '<p class="rem-entry" ' . $color . '>' . escape_html($text) . '</p>');
+			push(@{$days->[$d]}, "<p$class $color>" . escape_html($text) . '</p>');
 		}
 	} elsif ($special eq '*') {
-	    push(@{$days->[$d]}, '<p class="rem-entry">' . escape_html($body) . '</p>');
+	    push(@{$days->[$d]}, "<p$class>" . escape_html($body) . '</p>');
 	}
     }
     return $found_data;
@@ -209,23 +218,36 @@ sub small_calendar
 		}
 	}
 
-	print "<td class=\"rem-small-calendar\">\n";
-	print "<table class=\"rem-sc-table\">\n";
-	print "<caption class=\"rem-sc-caption\">";
+	if ($Options{'nostyle'}) {
+	    print "<td width=\"14%\">\n";
+	    print "<table border=\"0\">\n";
+	    print "<caption>";
+	} else {
+	    print "<td class=\"rem-small-calendar\">\n";
+	    print "<table class=\"rem-sc-table\">\n";
+	    print "<caption class=\"rem-sc-caption\">";
+	}
 	print "<a href=\"$url\">" if ($url);
 	print $month;
 	print "</a>" if ($url);
 	print "</caption>\n";
 
-	print '<tr class="rem-sc-hdr-row">';
+	my $class;
+	if ($Options{'nostyle'}) {
+	    print '<tr>';
+	    $class = '';
+	} else {
+	    print '<tr class="rem-sc-hdr-row">';
+	    $class = ' class="rem-sc-hdr"';
+	}
 	if (!$Mondayfirst) {
-		print '<th class="rem-sc-hdr">' . substr($Daynames[0], 0, 1) . '</th>';
+		print "<th$class>" . substr($Daynames[0], 0, 1) . '</th>';
 	}
 	for (my $i=1; $i<7; $i++) {
-		print '<th class="rem-sc-hdr">' . substr($Daynames[$i], 0, 1) . '</th>';
+		print "<th$class>" . substr($Daynames[$i], 0, 1) . '</th>';
 	}
 	if ($Mondayfirst) {
-		print '<th class="rem-sc-hdr">' . substr($Daynames[0], 0, 1) . '</th>';
+		print "<th$class>" . substr($Daynames[0], 0, 1) . '</th>';
 	}
 	print("</tr>\n");
 	my $col = 0;
@@ -233,7 +255,11 @@ sub small_calendar
 		if ($col == 0) {
 			print("<tr>\n");
 		}
-		print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
+		if ($Options{'nostyle'}) {
+		    print("<td width=\"14%\">&nbsp;</td>");
+		} else {
+		    print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
+		}
 	}
 
 	for (my $day=1; $day <= $monlen; $day++) {
@@ -241,18 +267,26 @@ sub small_calendar
 			print("<tr>\n");
 		}
 		$col++;
-		print("<td class=\"rem-sc-cell\">$day</td>");
+		if ($Options{'nostyle'}) {
+		    print("<td width=\"14%\">$day</td>");
+		} else {
+		    print("<td class=\"rem-sc-cell\">$day</td>");
+		}
 		if ($col == 7) {
 			print("</tr>\n");
 			$col = 0;
 		}
 	}
 	if ($col) {
-		while ($col < 7) {
-			print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
-			$col++;
+	    while ($col < 7) {
+		if ($Options{'nostyle'}) {
+		    print("<td width=\"14%\">&nbsp;</td>");
+		} else {
+		    print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
 		}
-		print("</tr>\n");
+		$col++;
+	    }
+	    print("</tr>\n");
 	}
 	print("</table>\n");
 	print "</td>\n";
@@ -280,23 +314,36 @@ sub output_calendar
 
 
     # Start the table
-    print '<table class="rem-cal"><caption class="rem-cal-caption">' .
-	  $Month . ' ' . $Year . '</caption>' . "\n";
-    print '<tr class="rem-cal-hdr-row">';
+    my $class;
+    if ($Options{'nostyle'}) {
+	print '<table width="100%" border="1"><caption>' .
+	    $Month . ' ' . $Year . '</caption>' . "\n";
+	print '<tr>';
+	$class = ' width="14%"';
+    } else {
+	print '<table class="rem-cal"><caption class="rem-cal-caption">' .
+	    $Month . ' ' . $Year . '</caption>' . "\n";
+	print '<tr class="rem-cal-hdr-row">';
+	$class = ' class="rem-cal-hdr"';
+    }
     if (!$Mondayfirst) {
-	print '<th class="rem-cal-hdr">' . $Daynames[0] . '</th>';
+	print "<th$class>" . $Daynames[0] . '</th>';
     }
     for (my $i=1; $i<7; $i++) {
-	print '<th class="rem-cal-hdr">' . $Daynames[$i] . '</th>';
+	print "<th$class>" . $Daynames[$i] . '</th>';
     }
     if ($Mondayfirst) {
-	print '<th class="rem-cal-hdr">' . $Daynames[0] . '</th>';
+	print "<th$class>" . $Daynames[0] . '</th>';
     }
     print "</tr>\n";
 
     # Start the calendar rows
     my $col = 0;
-    print "<tr class=\"rem-cal-row\">\n";
+    if ($Options{'nostyle'}) {
+	print "<tr>\n";
+    } else {
+	print "<tr class=\"rem-cal-row\">\n";
+    }
     if ($first_col > 0) {
 	small_calendar($Prevmon, $Prevlen, $Options{'backurl'},
 		       ($Firstwkday - $Prevlen + 35) % 7);
@@ -308,8 +355,13 @@ sub output_calendar
 		       ($Firstwkday + $Numdays) % 7);
 	$col++;
     }
+    if ($Options{'nostyle'}) {
+	$class = ' width="14%"';
+    } else {
+	$class = ' class="rem-empty"';
+    }
     while ($col < $first_col) {
-	print("<td class=\"rem-empty\">&nbsp;</td>\n");
+	print("<td$class>&nbsp;</td>\n");
 	$col++;
     }
 
@@ -320,7 +372,11 @@ sub output_calendar
 	    $col = 0;
 	    print "</tr>\n";
 	    if ($day < $Numdays) {
-		print "<tr class=\"rem-cal-row\">\n";
+		if ($Options{'nostyle'}) {
+		    print "<tr>\n";
+		} else {
+		    print "<tr class=\"rem-cal-row\">\n";
+		}
 	    }
 	}
     }
@@ -332,13 +388,13 @@ sub output_calendar
 		    small_calendar($Prevmon, $Prevlen, $Options{'backurl'},
 				   ($Firstwkday - $Prevlen + 35) % 7);
 		} else {
-		    print("<td class=\"rem-empty\">&nbsp;</td>\n");
+		    print("<td$class>&nbsp;</td>\n");
 		}
 	    } elsif ($col == 6) {
 		small_calendar($Nextmon, $Nextlen, $Options{'forwurl'},
 			       ($Firstwkday + $Numdays) % 7);
 	    } else {
-		print("<td class=\"rem-empty\">&nbsp;</td>\n");
+		print("<td$class>&nbsp;</td>\n");
 	    }
 	    $col++;
 	}
@@ -353,13 +409,22 @@ sub draw_day_cell
 {
     my($day) = @_;
     my $shade = $shades->[$day];
-    my $class = $classes->[$day] || "rem-cell";
+    my $class;
+    if ($Options{'nostyle'}) {
+	$class = $classes->[$day] || '';
+    } else {
+	$class = $classes->[$day] || "rem-cell";
+    }
     if ($shade) {
 	    $shade = " style=\"background: $shade;\"";
     } else {
 	    $shade = "";
     }
-    print "<td class=\"$class\"$shade>\n<p>";
+    if ($class ne '') {
+	print "<td class=\"$class\"$shade>\n<p>";
+    } else {
+	print "<td valign=\"top\" $shade>\n<p>";
+    }
     if ($moons->[$day]) {
 	    my $phase = $moons->[$day]->{'phase'};
 	    my $msg = $moons->[$day]->{'msg'};
@@ -390,11 +455,20 @@ sub draw_day_cell
 	    if ($Options{'imgbase'}) {
 		    $img = $Options{'imgbase'} . '/' . $img;
 	    }
-	    print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
+	    if ($Options{'nostyle'}) {
+		print("<div style=\"float: left\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
+	    } else {
+		print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
+	    }
     }
 
-    print "<div class=\"rem-daynumber\">$day</div></p>\n";
-    print "<p class=\"rem-entry\">&nbsp;</p>\n";
+    if ($Options{'nostyle'}) {
+	print "<div style=\"float: right\">$day</div></p>\n";
+	print "<p>&nbsp;</p>\n";
+    } else {
+	print "<div class=\"rem-daynumber\">$day</div></p>\n";
+	print "<p class=\"rem-entry\">&nbsp;</p>\n";
+    }
     if ($days->[$day]) {
 	    print(join("\n", @{$days->[$day]}));
     }

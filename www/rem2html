@@ -9,7 +9,7 @@ my %Options;
 
 my $rem2html_version = '2.0';
 
-my($days, $shades, $moons, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst,
+my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst,
     @Daynames, $Nextmon, $Nextlen, $Prevmon, $Prevlen);
 
 # rem2html -- convert the output of "remind -p" to HTML
@@ -118,6 +118,7 @@ sub parse_input
     undef $days;
     undef $shades;
     undef $moons;
+    undef $classes;
 
     my $found_data = 0;
     while(<STDIN>) {
@@ -160,6 +161,8 @@ sub parse_input
 	    ($1, $2, $3, $4, $5, $6, $7, $8);
 	if ($special eq 'HTML') {
 	    push(@{$days->[$d]}, $body);
+	} elsif ($special eq 'HTMLCLASS') {
+	    $classes->[$d] = $body;
 	} elsif ($special eq 'MOON') {
 		if ($body =~ /(\S+)\s+(\S+)\s+(\S+)\s+(.*)$/) {
 			my ($phase, $moonsize, $fontsize, $msg) = ($1, $2, $3, $4);
@@ -348,12 +351,13 @@ sub draw_day_cell
 {
     my($day) = @_;
     my $shade = $shades->[$day];
+    my $class = $classes->[$day] || "rem-cell";
     if ($shade) {
 	    $shade = " style=\"background: $shade;\"";
     } else {
 	    $shade = "";
     }
-    print "<td class=\"rem-cell\"$shade>\n<p>";
+    print "<td class=\"$class\"$shade>\n<p>";
     if ($moons->[$day]) {
 	    my $phase = $moons->[$day]->{'phase'};
 	    my $msg = $moons->[$day]->{'msg'};

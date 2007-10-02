@@ -368,19 +368,29 @@ sub draw_day_cell
 		    $msg = '&nbsp;' . escape_html($msg);
 	    }
 	    my $img;
+	    my $alt;
+	    my $title;
 	    if ($phase == 0) {
 		    $img = 'newmoon.png';
+		    $title = 'New Moon';
+		    $alt = 'new';
 	    } elsif ($phase == 1) {
 		    $img = 'firstquarter.png';
+		    $title = 'First Quarter';
+		    $alt = '1st';
 	    } elsif ($phase == 2) {
 		    $img = 'fullmoon.png';
+		    $alt = 'full';
+		    $title = 'Full Moon';
 	    } else {
 		    $img = 'lastquarter.png';
+		    $alt = 'last';
+		    $title = 'Last Quarter';
 	    }
 	    if ($Options{'imgbase'}) {
 		    $img = $Options{'imgbase'} . '/' . $img;
 	    }
-	    print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$img\" src=\"$img\">$msg</div>");
+	    print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
     }
 
     print "<div class=\"rem-daynumber\">$day</div></p>\n";

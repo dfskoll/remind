@@ -21,7 +21,7 @@ CGIDIR = /cgi-bin
 # should be the path as seen by the UNIX operating system
 HTMLDIR = /var/www/html/remind
 
-# Where you stick images, as seen by UNIX
+# Where you stick images and CSS files, as seen by UNIX
 IMAGEDIR = /var/www/html/remind
 
 # Where images are, as seen by web browers

@@ -39,11 +39,12 @@ Options:
 
 --help, -h            Print usage information
 --version             Print version
---stylesheet file.css Specify CSS stylesheet
 --backurl url         Make the title on the previous month's small calendar
                       entry a link to <url>
 --forwurl url         Same as --backurl, but for the next month's small calendar
---imgbase url         Base URL of images
+--imgbase url         Base URL of images and stylesheet file
+--stylesheet url.css  URL of CSS stylesheet.  If specified, imgbase is NOT
+                      prepended to url.css
 --tableonly           Output results as a <table> only, no <html>, <body>, etc.
 --title               What to put in <title>...</title> tags
 --prologue html_text  Text to insert at the top of the body
@@ -71,7 +72,8 @@ sub parse_options
 	       "imgbase|ib:s",
 	       "tableonly|to");
     $Options{'title'} ||= 'HTML Calendar';
-    $Options{'stylesheet'} ||= "rem-default.css";
+    $Options{'imgbase'} ||= '%IMAGEBASE%';
+    $Options{'stylesheet'} ||= $Options{'imgbase'} . '/rem-default.css';
 }
 
 =head2 start_output

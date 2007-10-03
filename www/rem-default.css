@@ -21,7 +21,7 @@ th.rem-cal-hdr {
   border-width: 1px;
   vertical-align: top;
 }
-td.rem-empty {
+td.rem-empty, td.rem-cell, td.rem-small-calendar {
   width: 14%;
   height: 7em;
   border-style: solid;
@@ -36,20 +36,7 @@ td.rem-today {
   border-color: #EE3333;
   vertical-align: top;
 }
-td.rem-cell {
-  width: 14%;
-  height: 7em;
-  border-style: solid;
-  border-width: 1px;
-  vertical-align: top;
-}
-td.rem-small-calendar {
-  width: 14%;
-  height: 7em;
-  border-style: solid;
-  border-width: 1px;
-  vertical-align: top;
-}
+
 table.rem-cal {
   width: 100%;
   border-collapse: collapse;
@@ -72,12 +59,7 @@ th.rem-sc-hdr {
   text-align: right;
 }
 
-td.rem-sc-empty-cell {
-  text-align: right;
-  width: 14%;
-}
-
-td.rem-sc-cell {
+td.rem-sc-empty-cell, td.rem-sc-cell {
   text-align: right;
   width: 14%;
 }

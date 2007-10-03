@@ -73,8 +73,20 @@ sub parse_options
 	       "imgbase|ib:s",
 	       "tableonly|to");
     $Options{'title'} ||= 'HTML Calendar';
-    $Options{'imgbase'} ||= '%IMAGEBASE%';
-    $Options{'stylesheet'} ||= $Options{'imgbase'} . '/rem-default.css';
+
+    # Fix up imgbase
+    my $imgbase = '%IMAGEBASE%';
+    if ($imgbase ne '%' . 'IMAGEBASE' . '%') {
+	    $Options{'imgbase'} ||= $imgbase;
+    } else {
+	    $Options{'imgbase'} ||= '';
+    }
+
+    $Options{'imgbase'} =~ s|/+$||;
+    my $stylesheet = $Options{'imgbase'};
+    $stylesheet .= '/' if ($stylesheet ne '');
+    $stylesheet .= 'rem-default.css';
+    $Options{'stylesheet'} ||= $stylesheet;
 }
 
 =head2 start_output
@@ -316,7 +328,7 @@ sub output_calendar
     # Start the table
     my $class;
     if ($Options{'nostyle'}) {
-	print '<table width="100%" border="1"><caption>' .
+	print '<table width="100%" border="1" cellspacing=\"0\"><caption>' .
 	    $Month . ' ' . $Year . '</caption>' . "\n";
 	print '<tr>';
 	$class = ' width="14%"';

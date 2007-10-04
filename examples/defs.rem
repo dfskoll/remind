@@ -27,8 +27,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.00.19"
-   ERRMSG This file requires at least version 03.00.19 of Remind.%
+IF version() < "03.01.02"
+   ERRMSG This file requires at least version 03.01.02 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF
@@ -93,53 +93,13 @@ SET  Week_1		 1
 SET  Week_2		 8
 SET  Week_3		15
 SET  Week_4		22
-FSET _last(mo)		"1 " + MON((mo%12)+1)+" --7"
+FSET _last(mo)		"1 " + MON((mo%12)+1) + " --7"
 
 # Shorthand for commonly used expression...
 FSET _trig()		TRIGGER(TRIGDATE())
 
 # Handy function to provide SCANFROM dates...
 FSET _back(days)	TRIGGER(TODAY()-days)
-
-###########################################################
-# On MS-DOS systems, the standard C library functions are #
-# not reliable for computing offsets from local time to   #
-# UTC.  The following provides a work-around for the      #
-# sunrise() and sunset() functions.  Note, however, that  #
-# if Daylight Savings Time is in effect for today(), the  #
-# sun functions return times in DST even for dates on     #
-# which DST is not in effect; the converse can also occur.#
-#                                                         #
-# Change the timezone to your timezone - the default is   #
-# for EST which is 5 hours (300 minutes) behind UTC.      #
-# The code is correct for places in which Daylight Savings#
-# Time begins on the last Sunday in April and ends on the #
-# last Sunday in October.                                 #
-###########################################################
-
-IF OSTYPE() == "MSDOS"
-    # Eastern Standard Time
-    SET TimeZone -300
-
-    # Use --8 rather than --7 because we want the last day BEFORE
-    # the time switch occurs.
-    REM Sun 1 May --8 SATISFY 1
-    SET BegDst TRIGDATE()
-
-    REM Sun 1 Nov --8 SATISFY 1
-    SET EndDst TRIGDATE()
-
-    SET $CalcUTC 0
-
-    # Check out the following IF statement and figure out why it works!
-    IF EndDst < BegDst
-        # Daylight Savings Time
-        SET $MinsFromUTC TimeZone+60
-    ELSE
-        # Standard Time
-        SET $MinsFromUTC TimeZone
-    ENDIF
-ENDIF
 
 ###########################################################
 # Function which returns a string in "am/pm" format based #
@@ -347,7 +307,12 @@ REM      Feb 14		MSG %"Valentine's%" Day
 REM  Mon Feb [Week_3]	SCANFROM [_back(7)] SATISFY 1
 			OMIT [_trig()] MSG %"President's Day%"
 REM      Mar 17		MSG %"St. Patrick's%" Day
-REM  Sun Apr  1 ++2	MSG Daylight Savings Time - %"DST starts%" %b
+
+# The DST rules are accurate for most locations in
+# North America
+REM Sun Apr 1 ++2 UNTIL 1 Jan 2007 MSG Daylight Savings Time - %"DST starts%" %b
+REM Sun Mar 8 ++2 FROM 1 Jan 2007 MSG Daylight Savings Time - %"DST starts%" %b
+
 REM      Apr  1		MSG %"April Fool's%" Day
 REM  Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
 REM      May  5		MSG %"Cinco de Mayo%"
@@ -362,7 +327,12 @@ REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
 			OMIT [_trig()] MSG %"Labor Day%"
 REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
 REM      Nov 11		MSG %"Veterans Day%"
-REM  Sun [_last(Oct)]	MSG Daylight Savings Time - %"DST over%"
+
+# The DST rules are accurate for most locations in
+# North America
+REM Sun [_last(Oct)] UNTIL 1 Jan 2007 MSG Daylight Savings Time - %"DST over%"
+REM Sun 1 Nov FROM 1 Jan 2007 MSG Daylight Savings Time - %"DST over%"
+
 REM      Oct 30		MSG %"Mischief Night%"
 REM      Oct 31		MSG %"Halloween%"
 REM  Tue Nov  2		SCANFROM [_back(7)] \

@@ -248,7 +248,7 @@ sub small_calendar
 	my $class;
 	if ($Options{'nostyle'}) {
 	    print '<tr>';
-	    $class = '';
+	    $class = ' align="right"';
 	} else {
 	    print '<tr class="rem-sc-hdr-row">';
 	    $class = ' class="rem-sc-hdr"';
@@ -269,7 +269,7 @@ sub small_calendar
 			print("<tr>\n");
 		}
 		if ($Options{'nostyle'}) {
-		    print("<td width=\"14%\">&nbsp;</td>");
+		    print("<td align=\"right\" width=\"14%\">&nbsp;</td>");
 		} else {
 		    print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
 		}
@@ -281,7 +281,7 @@ sub small_calendar
 		}
 		$col++;
 		if ($Options{'nostyle'}) {
-		    print("<td width=\"14%\">$day</td>");
+		    print("<td align=\"right\" width=\"14%\">$day</td>");
 		} else {
 		    print("<td class=\"rem-sc-cell\">$day</td>");
 		}
@@ -293,7 +293,7 @@ sub small_calendar
 	if ($col) {
 	    while ($col < 7) {
 		if ($Options{'nostyle'}) {
-		    print("<td width=\"14%\">&nbsp;</td>");
+		    print("<td align=\"right\" width=\"14%\">&nbsp;</td>");
 		} else {
 		    print("<td class=\"rem-sc-empty-cell\">&nbsp;</td>");
 		}

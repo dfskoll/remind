@@ -65,7 +65,7 @@ IF !InIsrael
    [_h(16, "Tishrey")] MSG %"Sukkot 2%"
 ENDIF
 
-[_h(21, "Tishrey")] ++12 MSG %"Hashana Rabba%" is %b.
+[_h(21, "Tishrey")] ++12 MSG %"Hoshana Rabba%" is %b.
 [_h(22, "Tishrey")] ++12 MSG %"Shemini Atzeret%" is %b.
 
 IF InIsrael
@@ -158,8 +158,8 @@ IF ostart <= TODAY() && (TODAY() - ostart < 49)
 ENDIF
 
 IF !$PSCAL
-	REM 20 ++40 msg Also available: <a HREF="http://your.machine/your.dir/cal_dispatch?hebps">a PostScript calendar</a> (about 35KB) for %m %y, complete with Hebrew dates, Jewish holidays, and moon phases for Ottawa.  (This takes a few seconds to generate.)
-	REM 20 ++40 msg And: <a HREF="http://your.machine/your.dir/cal_dispatch?hebhtml">an HTML version</a> of the above.  (Your browser must handle tables.)
+	REM 20 ++40 msg Also available: <a HREF="%CGIDIR%/cal_dispatch?hebps">a PostScript calendar</a> (about 35KB) for %m %y, complete with Hebrew dates, Jewish holidays, and moon phases for [$Location].
+	REM 20 ++40 msg And: <a HREF="%CGIDIR%/cal_dispatch?hebhtml">an HTML version</a> of the above.
 ELSE
 	[trigger(moondate(0))] SPECIAL MOON 0
 	[trigger(moondate(1))] SPECIAL MOON 1

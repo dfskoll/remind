@@ -6,10 +6,6 @@
 
 # CAL_DISPATCH -- Shell script for CGI directory to dispatch calendar
 # commands.
-#
-# WARNING WARNING WARNING -- If your /bin/sh is really GNU's "bash",
-# make sure you don't have a buggy version which treats char 0xFF as
-# a command separator -- it is a security risk!
 
 #########################
 #

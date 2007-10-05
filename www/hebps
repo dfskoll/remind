@@ -12,7 +12,7 @@ echo ""
 
 $REMIND - <<EOR
 BANNER %
-REM 20 ++40 RUN $REMIND -iHTML=0 -p $DIR/hebdate.rem %m %y | $REM2PS -e -c3
+REM 20 ++40 RUN $REMIND -iHTML=0 -p $DIR/hebdate.rem %m %y | $REM2PS -e -c3 -l
 EOR
 
 exit 0

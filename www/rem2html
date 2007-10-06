@@ -12,6 +12,9 @@ my $rem2html_version = '2.0';
 my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst,
     @Daynames, $Nextmon, $Nextlen, $Prevmon, $Prevlen);
 
+my $TIDY_PROGNAME = $0;
+$TIDY_PROGNAME =~ s|^.*/||;
+
 # rem2html -- convert the output of "remind -p" to HTML
 
 =head1 NAME
@@ -30,8 +33,12 @@ Print usage to STDERR and exit.
 
 sub usage
 {
+    my ($exit_status) = @_;
+    if (!defined($exit_status)) {
+	    $exit_status = 1;
+    }
     print STDERR <<"EOM";
-$0: Produce an HTML calendar from the output of "remind -p"
+$TIDY_PROGNAME: Produce an HTML calendar from the output of "remind -p"
 
 Usage: remind -p ... | rem2html [options]
 
@@ -51,7 +58,7 @@ Options:
 --prologue html_text  Text to insert at the top of the body
 --epilogue html_text  Text to insert at the end of the body
 EOM
-    exit(0);
+    exit($exit_status);
 }
 
 =head2 parse_options
@@ -62,17 +69,20 @@ Parse command-line options
 
 sub parse_options
 {
-    GetOptions(\%Options, "help|h",
-	       "version",
-	       "stylesheet|s:s",
-	       "nostyle|ns",
-	       "backurl|bu:s",
-	       "forwurl|fu:s",
-	       "title|ti:s",
-	       "prologue|pr:s",
-	       "epilogue|ep:s",
-	       "imgbase|ib:s",
-	       "tableonly|to");
+    local $SIG{__WARN__} = sub { print STDERR "$TIDY_PROGNAME: $_[0]\n"; };
+    if (!GetOptions(\%Options, "help|h",
+		    "version",
+		    "stylesheet=s",
+		    "nostyles",
+		    "backurl=s",
+		    "forwurl=s",
+		    "title=s",
+		    "prologue=s",
+		    "epilogue=s",
+		    "imgbase=s",
+		    "tableonly")) {
+	usage(1);
+    }
     $Options{'title'} ||= 'HTML Calendar';
 
     # Fix up imgbase
@@ -500,15 +510,16 @@ sub escape_html
 
 parse_options();
 if ($Options{'help'}) {
-    usage();
+    usage(0);
+    exit(0);
 } elsif ($Options{'version'}) {
     print "rem2html version $rem2html_version.\n";
     exit(0);
 }
 
 if (-t STDIN) {
-    print STDERR "$0: Input should not come from a terminal.\n\n";
-    usage();
+    print STDERR "$TIDY_PROGNAME: Input should not come from a terminal.\n\n";
+    usage(1);
 }
 
 my $found_something = 0;
@@ -522,7 +533,7 @@ if ($found_something) {
     end_output();
     exit(1);
 } else {
-    print STDERR "$0: Could not find any calendar data on STDIN.\n";
+    print STDERR "$TIDY_PROGNAME: Could not find any calendar data on STDIN.\n";
     exit(1);
 }
 

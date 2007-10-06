@@ -73,7 +73,7 @@ sub parse_options
     if (!GetOptions(\%Options, "help|h",
 		    "version",
 		    "stylesheet=s",
-		    "nostyles",
+		    "nostyle",
 		    "backurl=s",
 		    "forwurl=s",
 		    "title=s",

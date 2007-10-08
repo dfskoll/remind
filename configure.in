@@ -45,4 +45,4 @@ if test "$GCC" = yes; then
 fi
 
 AC_CHECK_FUNCS(setenv unsetenv)
-AC_OUTPUT(src/Makefile)
+AC_OUTPUT(src/Makefile www/Makefile)

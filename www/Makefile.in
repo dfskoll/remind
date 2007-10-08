@@ -1,7 +1,7 @@
-# Makefile for installing WWW server calendar scripts
+# Makefile.in for installing WWW server calendar scripts
 # This file is part of REMIND.
 # Copyright (C) 1992-1997 by David F. Skoll
-# Copyright (C) 1999 by Roaring Penguin Software Inc.
+# Copyright (C) 1999-2007 by Roaring Penguin Software Inc.
 
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.
@@ -16,17 +16,14 @@ CGIDIR = /cgi-bin
 HTMLDIR = /var/www/remind
 
 # Where you stick images and CSS files, as seen by UNIX
-IMAGEDIR = /var/www/remind/images
+IMAGEDIR = /var/www/remind/resources
 
 # Where images are, as seen by web browers
-IMAGEBASE = /remind/images
-
-# Location.  Typically, the name of your city or town.  Example: Ottawa
-LOCATION = Ottawa
+IMAGEBASE = /remind/resources
 
 # Where do Remind and Rem2PS executables live?
-REMIND = /usr/local/bin/remind
-REM2PS = /usr/local/bin/rem2ps
+REMIND = @bindir@/remind
+REM2PS = @bindir@/rem2ps
 
 # If your Web server requires CGI programs to have a .cgi suffix, use
 # the next line.  Otherwise, comment it out
@@ -36,8 +33,7 @@ CGISUFFIX=.cgi
 # --------------------------------------------------------------------
 
 # Construct a rotten mean nasty sed script to do the dirty work
-SEDSCRIPT = -e 's/Ottawa/$(LOCATION)/g' \
-	    -e 's@%CGIDIR%@$(CGIDIR)@g' \
+SEDSCRIPT = -e 's@%CGIDIR%@$(CGIDIR)@g' \
 	    -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
 	    -e 's@%REMIND%@$(REMIND)@g' \
 	    -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
@@ -45,12 +41,11 @@ SEDSCRIPT = -e 's/Ottawa/$(LOCATION)/g' \
 	    -e 's@cal_dispatch@cal_dispatch$(CGISUFFIX)@g' \
 	    -e 's@rem2html@rem2html$(CGISUFFIX)@g'
 
-SEDSCRIPT2 = -e 's/Ottawa/$(LOCATION)/g' \
-	    -e 's@%CGIDIR%@$(CGIDIR)@g' \
-	    -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
-	    -e 's@%REMIND%@$(REMIND)@g' \
-	    -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
-	    -e 's@%REM2PS%@$(REM2PS)@g'
+SEDSCRIPT2 = -e 's@%CGIDIR%@$(CGIDIR)@g' \
+	     -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
+	     -e 's@%REMIND%@$(REMIND)@g' \
+	     -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
+	     -e 's@%REM2PS%@$(REM2PS)@g'
 
 all:
 	@echo "Edit the Makefile; then type 'make install' to install"

@@ -9,11 +9,11 @@ set now now()
 banner %
 
 MSG <HEAD>%
-MSG <TITLE>Moon over Ottawa</TITLE>%
+MSG <TITLE>Moon over [$Location]</TITLE>%
 MSG </HEAD>%
 
 MSG <BODY>
-MSG <H1>Moon over Ottawa</H1>
+MSG <H1>Moon over [$Location]</H1>
 
 set ndate moondate(0)
 set ntime moontime(0)
@@ -22,12 +22,12 @@ set ftime moontime(2)
 
 fset t(x) wkday(x)+", "+day(x)+" "+mon(x)+", "+year(x)
 msg Today is %w, %d %m, %y.<P>
-msg The local time in Ottawa is [now].<P>
+msg The local time in [$Location] is [now].<P>
 
 if ndate < fdate
-  msg The next new moon is on [t(ndate)] at [ntime], Ottawa time.<P>
-  msg The next full moon is on [t(fdate)] at [ftime], Ottawa time.<P>
+  msg The next new moon is on [t(ndate)] at [ntime], [$Location] time.<P>
+  msg The next full moon is on [t(fdate)] at [ftime], [$Location] time.<P>
 else
-  msg The next full moon is on [t(fdate)] at [ftime], Ottawa time.<P>
-  msg The next new moon is on [t(ndate)] at [ntime], Ottawa time.<P>
+  msg The next full moon is on [t(fdate)] at [ftime], [$Location] time.<P>
+  msg The next new moon is on [t(ndate)] at [ntime], [$Location] time.<P>
 endif

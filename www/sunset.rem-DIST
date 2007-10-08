@@ -9,11 +9,11 @@ set now now()
 banner %
 
 MSG <HEAD>%
-MSG <TITLE>Sunset in Ottawa</TITLE>%
+MSG <TITLE>Sunset in [$Location]</TITLE>%
 MSG </HEAD>%
 
 MSG <BODY>
-MSG <H1>Sunset in Ottawa</H1>
+MSG <H1>Sunset in [$Location]</H1>
 
 set tod sunset(today())
 set tom sunset(today()+1)
@@ -35,7 +35,7 @@ set fn iif(diff==0, "now", diff <0, "ago", "from now")
 set iw iif(diff<0, "was", "is")
 set aw iif(tod==tom, " as well.", ".")
 msg Today is %w, %d %m, %y.<P>
-msg The local time in Ottawa is [now].<P>
+msg The local time in [$Location] is [now].<P>
 msg Sunset today [iw] at [tod]; in other words, [hstr][astr][mstr] [fn].<P>
 msg Sunset tomorrow is at [tom][aw]<P>
 msg The daylight portion of tomorrow will be [slen] today.<P>

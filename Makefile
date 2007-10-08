@@ -28,7 +28,7 @@ test:
 	cd src && $(MAKE) test
 
 distclean: clean
-	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out
+	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out www/Makefile
 
 src/Makefile: src/Makefile.in
 	./configure

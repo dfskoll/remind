@@ -3,6 +3,7 @@ autom4te.cache
 config.log
 config.status
 src/Makefile
+www/Makefile
 *.o
 src/config.h
 src/remind

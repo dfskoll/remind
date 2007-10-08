@@ -21,9 +21,18 @@ IMAGEDIR = /var/www/remind/resources
 # Where images are, as seen by web browers
 IMAGEBASE = /remind/resources
 
+# Set by configure - don't touch.
+srcdir=@srcdir@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+mandir=@mandir@
+bindir=@bindir@
+datadir=@datadir@
+datarootdir=@datarootdir@
+
 # Where do Remind and Rem2PS executables live?
-REMIND = @bindir@/remind
-REM2PS = @bindir@/rem2ps
+REMIND = $(bindir)/remind
+REM2PS = $(bindir)/rem2ps
 
 # If your Web server requires CGI programs to have a .cgi suffix, use
 # the next line.  Otherwise, comment it out

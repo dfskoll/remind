@@ -25,9 +25,67 @@ rem2html - Convert the output of "remind -p" to HTML
 
 remind -p ... | rem2html [options]
 
-=head2 usage
+=head1 OPTIONS
 
-Print usage to STDERR and exit.
+=over 4
+
+=item --help, -h
+
+Print usage information
+
+=item --version
+
+Print version
+
+=item --backurl I<url>
+
+When producing the small calendar for the previous month, make the
+month name a link to I<url>.
+
+=item --forwurl I<url>
+
+When producing the small calendar for the next month, make the
+month name a link to I<url>.
+
+=item --imgbase I<url>
+
+When creating URLs for images and the stylesheet, use
+I<url> as the base URL.
+
+=item --stylesheet I<url.css>
+
+Use I<url.css> as the stylesheet.  If this option is used,
+I<url.css> is I<not> interpreted relative to B<imgbase>.
+
+=item --nostyle
+
+Produce basic HTML that does not use a CSS stylesheet.
+
+=item --tableonly
+
+Output results as a E<lt>tableE<gt> ... E<lt>/tableE<gt> sequence only
+without any E<lt>htmlE<gt> or E<lt>bodyE<gt> tags.
+
+=item --title I<title>
+
+Use I<title> as the content between E<lt>titleE<gt> and E<lt>/titleE<gt>
+tags.
+
+
+=item --prologue I<html_text>
+
+Insert I<html_text> right after the E<lt>bodyE<gt> tag.
+
+=item --epilogue I<html_text>
+
+Insert I<html_text> right before the E<lt>/bodyE<gt> tag.
+
+=back
+
+=head1 AUTHOR
+
+rem2html was written by David F. Skoll with much inspiration from an
+earlier version by Don Schwarz.
 
 =cut
 
@@ -45,6 +103,7 @@ Usage: remind -p ... | rem2html [options]
 Options:
 
 --help, -h            Print usage information
+--man                 Show man page (requires "perldoc")
 --version             Print version
 --backurl url         Make the title on the previous month's small calendar
                       entry a link to <url>
@@ -54,23 +113,18 @@ Options:
                       prepended to url.css
 --nostyle             Produce basic HTML that does not use a CSS stylesheet
 --tableonly           Output results as a <table> only, no <html>, <body>, etc.
---title               What to put in <title>...</title> tags
+--title string        What to put in <title>...</title> tags
 --prologue html_text  Text to insert at the top of the body
 --epilogue html_text  Text to insert at the end of the body
 EOM
     exit($exit_status);
 }
 
-=head2 parse_options
-
-Parse command-line options
-
-=cut
-
 sub parse_options
 {
     local $SIG{__WARN__} = sub { print STDERR "$TIDY_PROGNAME: $_[0]\n"; };
     if (!GetOptions(\%Options, "help|h",
+		    "man",
 		    "version",
 		    "stylesheet=s",
 		    "nostyle",
@@ -100,11 +154,6 @@ sub parse_options
     $Options{'stylesheet'} ||= $stylesheet;
 }
 
-=head2 start_output
-
-Start the HTML output
-
-=cut
 sub start_output
 {
     return if ($Options{'tableonly'});
@@ -122,11 +171,6 @@ sub start_output
     }
 }
 
-=head2 end_output
-
-Finish off the calendar
-
-=cut
 sub end_output
 {
     return if ($Options{'tableonly'});
@@ -136,11 +180,6 @@ sub end_output
     print("</body>\n</html>\n");
 }
 
-=head2 parse_input
-
-Parse off one month's worth of input
-
-=cut
 sub parse_input
 {
     undef $days;
@@ -225,12 +264,6 @@ sub parse_input
     return $found_data;
 }
 
-=head2 small_calendar MONTH, MONLEN, URL, FIRST_COL
-
-Draw a small calendar
-
-=cut
-
 sub small_calendar
 {
 	my($month, $monlen, $url, $first_col) = @_;
@@ -314,12 +347,6 @@ sub small_calendar
 	print("</table>\n");
 	print "</td>\n";
 }
-
-=head2 output_calendar
-
-Take the parsed input and output a calendar
-
-=cut
 
 sub output_calendar
 {
@@ -511,6 +538,9 @@ sub escape_html
 parse_options();
 if ($Options{'help'}) {
     usage(0);
+    exit(0);
+} elsif ($Options{'man'}) {
+    system("perldoc $0");
     exit(0);
 } elsif ($Options{'version'}) {
     print "rem2html version $rem2html_version.\n";

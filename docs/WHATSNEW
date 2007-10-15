@@ -1,5 +1,24 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 3 - 2007-10-15
+
++ MINOR ENHANCEMENTS
+
+- rem2html now uses CSS for a much better-looking calendar.
+  NOTE: rem2html was completely rewritten and some of the command-line
+  options have changed!
+
+- If a reminder has a DURATION clause, then the starting and ending times
+  are output in calendar mode.
+
++ BUG FIXES
+
+- DST rules in "defs.rem" were updated to reflect new US/Canadian DST rules.
+
+- If a REM command cannot compute a trigger date, the SATISFY expression
+  is not evaluated.  This helps avoid spurious error messages in some
+  reminders.
+
 * Version 3.1 Patch 2 - 2007-09-12
 
 + MINOR ENHANCEMENTS

@@ -858,6 +858,7 @@ September 30
 2007/08/05 * * * * 3 NonOmit-2
 2007/08/06 * * * * 5 NonOmit-1
 2007/08/06 * * * * 3 NonOmit-2
+2007/08/06 * * * * Blort
 2007/08/07 * * * * 6 NonOmit-1
 2007/08/07 * * * * 4 NonOmit-2
 2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
@@ -894,6 +895,7 @@ September 30
 2007/08/20 COLOR * * 825 6 7 8 1:45pm Mooo!
 2007/08/20 * * * * 18 NonOmit-1
 2007/08/20 * * * * 12 NonOmit-2
+2007/08/20 * * * * Blort
 2007/08/21 PostScript * * 115 (wookie) show
 2007/08/21 * * * * 19 NonOmit-1
 2007/08/21 * * * * 13 NonOmit-2
@@ -915,6 +917,7 @@ September 30
 2007/08/26 * * * * 17 NonOmit-2
 2007/08/27 * * * * 25 NonOmit-1
 2007/08/27 * * * * 17 NonOmit-2
+2007/08/27 * * * * Blort
 2007/08/28 * * * * 26 NonOmit-1
 2007/08/28 * * * * 18 NonOmit-2
 2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
@@ -944,6 +947,7 @@ Test 3
 2007/08/05 * * * * 3 NonOmit-2
 2007/08/06 * * * * 5 NonOmit-1
 2007/08/06 * * * * 3 NonOmit-2
+2007/08/06 * * * * Blort
 2007/08/07 * * * * 6 NonOmit-1
 2007/08/07 * * * * 4 NonOmit-2
 2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
@@ -977,6 +981,7 @@ Test 3
 2007/08/20 COLOR * * 825 6 7 8 1:45pm Mooo!
 2007/08/20 * * * * 18 NonOmit-1
 2007/08/20 * * * * 12 NonOmit-2
+2007/08/20 * * * * Blort
 2007/08/21 * * * * 19 NonOmit-1
 2007/08/21 * * * * 13 NonOmit-2
 2007/08/22 COLOR * * * 0 0 255 Blue Wednesday
@@ -993,6 +998,7 @@ Test 3
 2007/08/26 * * * * 17 NonOmit-2
 2007/08/27 * * * * 25 NonOmit-1
 2007/08/27 * * * * 17 NonOmit-2
+2007/08/27 * * * * Blort
 2007/08/28 * * * * 26 NonOmit-1
 2007/08/28 * * * * 18 NonOmit-2
 2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
@@ -1021,6 +1027,7 @@ Test 4
 2007/08/06 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
 2007/08/06 * * * * 5 NonOmit-1
 2007/08/06 * * * * 3 NonOmit-2
+2007/08/06 * * * * Blort
 2007/08/07 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
 2007/08/07 * * * * 6 NonOmit-1
 2007/08/07 * * * * 4 NonOmit-2
@@ -1059,6 +1066,7 @@ Test 4
 2007/08/20 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
 2007/08/20 * * * * 18 NonOmit-1
 2007/08/20 * * * * 12 NonOmit-2
+2007/08/20 * * * * Blort
 2007/08/21 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
 2007/08/21 * * * * 19 NonOmit-1
 2007/08/21 * * * * 13 NonOmit-2
@@ -1077,6 +1085,7 @@ Test 4
 2007/08/27 COLOR * * * 0 0 255 Blue Wednesday is in 2 days' time
 2007/08/27 * * * * 25 NonOmit-1
 2007/08/27 * * * * 17 NonOmit-2
+2007/08/27 * * * * Blort
 2007/08/28 COLOR * * * 0 0 255 Blue Wednesday is tomorrow
 2007/08/28 * * * * 26 NonOmit-1
 2007/08/28 * * * * 18 NonOmit-2

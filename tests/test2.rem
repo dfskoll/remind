@@ -38,3 +38,6 @@ REM 22 AUG SPECIAL PostScript (cabbage) show
 REM 23 AUG AT 16:44 SPECIAL blort snoo glup
 REM 24 AUG SPECIAL blort gulp wookie
 
+# Bug discovered by Paul Pelzl
+OMIT 13 August
+REM   6 August 2007 *7 SKIP SATISFY [1] MSG Blort

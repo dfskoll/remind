@@ -471,9 +471,9 @@ sub draw_day_cell
 	    $shade = "";
     }
     if ($class ne '') {
-	print "<td class=\"$class\"$shade>\n<p>";
+	print "<td class=\"$class\"$shade>\n";
     } else {
-	print "<td valign=\"top\" $shade>\n<p>";
+	print "<td valign=\"top\" $shade>\n";
     }
     if ($moons->[$day]) {
 	    my $phase = $moons->[$day]->{'phase'};
@@ -513,11 +513,10 @@ sub draw_day_cell
     }
 
     if ($Options{'nostyle'}) {
-	print "<div style=\"float: right\">$day</div></p>\n";
+	print "<div style=\"float: right\">$day</div>\n";
 	print "<p>&nbsp;</p>\n";
     } else {
-	print "<div class=\"rem-daynumber\">$day</div></p>\n";
-	print "<p class=\"rem-entry\">&nbsp;</p>\n";
+	print "<div class=\"rem-daynumber\">$day</div>\n";
     }
     if ($days->[$day]) {
 	    print(join("\n", @{$days->[$day]}));
@@ -561,7 +560,7 @@ while(1) {
 }
 if ($found_something) {
     end_output();
-    exit(1);
+    exit(0);
 } else {
     print STDERR "$TIDY_PROGNAME: Could not find any calendar data on STDIN.\n";
     exit(1);

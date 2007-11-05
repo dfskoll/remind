@@ -419,6 +419,13 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	    }
 	    return -1;
 	}
+
+	if (trig->skip == SKIP_SKIP &&
+	    IsOmitted(result, trig->localomit) &&
+	    result >= start) {
+	    nextstart = result + 1;
+	}
+
 	/* Keep scanning... unless there's no point in doing it.*/
 	if (nextstart <= start) {
 	    if (result != -1) {

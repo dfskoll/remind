@@ -329,9 +329,16 @@ proc CreateCalFrame { w dayNames } {
 #***********************************************************************
 proc ConfigureCalFrame { w firstDay numDays } {
     global CurMonth CurYear TodayMonth TodayYear TodayDay
+    global tk_version
     set offset [CalEntryOffset $firstDay]
     set first [expr $offset+1]
     set last [expr $offset+$numDays]
+
+    if {$tk_version >= 8.5} {
+	set bg "#d9d9d9"
+    } else {
+	set bg [lindex [$w.t0 configure -background] 3]
+    }
 
     for {set i 0} {$i < $first} {incr i} {
 	grid $w.l$i $w.t$i
@@ -344,8 +351,8 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
-	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
-	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+	$w.t$i configure -background $bg
+	$w.l$i configure -background $bg
     }
     for {set i $first} {$i <= $last} {incr i} {
 	grid $w.l$i $w.t$i
@@ -360,8 +367,8 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
-	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
-	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+	$w.t$i configure -background $bg
+	$w.l$i configure -background $bg
     }
     set forgetIt 0
     for {set i [expr $last+1]} {$i < 42} {incr i} {
@@ -385,8 +392,8 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
 	$w.t$i configure -state disabled
-	$w.t$i configure -background [lindex [$w.t$i configure -background] 3]
-	$w.l$i configure -background [lindex [$w.l$i configure -background] 3]
+	$w.t$i configure -background $bg
+	$w.l$i configure -background $bg
     }
     if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
 	set n [expr $TodayDay + $offset]

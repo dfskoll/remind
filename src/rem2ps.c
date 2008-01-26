@@ -10,6 +10,7 @@
 /*                                                             */
 /***************************************************************/
 
+#include "version.h"
 #include "config.h"
 #include "dynbuf.h"
 
@@ -20,7 +21,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "rem2ps.h"
-#include "version.h"
 
 #define NEW(type) ((type *) malloc(sizeof(type)))
 

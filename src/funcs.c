@@ -11,6 +11,7 @@
 /*                                                             */
 /***************************************************************/
 
+#include "version.h"
 #include "config.h"
 
 #include <stdio.h>
@@ -47,7 +48,6 @@
 #include "protos.h"
 #include "err.h"
 #include "expr.h"
-#include "version.h"
 
 /* Function prototypes */
 static int FCurrent (void);

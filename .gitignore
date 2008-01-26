@@ -12,3 +12,4 @@ tests/test.out
 .gitignore
 *~
 src/rem2ps
+src/version.h

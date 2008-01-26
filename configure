@@ -666,6 +666,7 @@ SET_MAKE
 CPP
 GREP
 EGREP
+VERSION
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -5281,7 +5282,9 @@ _ACEOF
 fi
 done
 
-ac_config_files="$ac_config_files src/Makefile www/Makefile"
+VERSION=03.01.04
+
+ac_config_files="$ac_config_files src/Makefile www/Makefile src/version.h"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5839,6 +5842,7 @@ do
     "src/config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/config.h" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "www/Makefile") CONFIG_FILES="$CONFIG_FILES www/Makefile" ;;
+    "src/version.h") CONFIG_FILES="$CONFIG_FILES src/version.h" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -5952,11 +5956,12 @@ SET_MAKE!$SET_MAKE$ac_delim
 CPP!$CPP$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
+VERSION!$VERSION$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 54; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 55; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

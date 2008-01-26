@@ -12,6 +12,7 @@
 /*                                                             */
 /***************************************************************/
 
+#include "version.h"
 #include "config.h"
 
 #define L_IN_INIT 1
@@ -28,7 +29,6 @@
 #include "protos.h"
 #include "expr.h"
 #include "err.h"
-#include "version.h"
 #include "globals.h"
 
 /***************************************************************

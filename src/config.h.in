@@ -1,5 +1,3 @@
-/* src/config.h.in.  Generated automatically from configure.in by autoheader.  */
-
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
 

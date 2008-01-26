@@ -1,7 +1,6 @@
 # Makefile.in for REMIND
 #
 
-VERSION=03.01.03
 SHELL= /bin/sh
 BETA = 1
 srcdir=@srcdir@
@@ -12,6 +11,7 @@ bindir=@bindir@
 datadir=@datadir@
 datarootdir=@datarootdir@
 VPATH=$(srcdir)
+VERSION=@VERSION@
 
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
@@ -91,4 +91,5 @@ beta-tgz:
 	rm -f ../remind-$(VERSION)-BETA-$(BETA)
 
 #---------------- Stuff after this added by "make depend" -----------------
+
 

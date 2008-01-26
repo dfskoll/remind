@@ -95,6 +95,9 @@ catch {set AppendFile $ReminderFile}
 
 #---------------- DON'T CHANGE STUFF BELOW HERE ------------------
 
+# 24-hour clock mode
+set TwentyFourHourMode 0
+
 # Is Monday in first column?
 set MondayFirst 0
 
@@ -153,7 +156,7 @@ set HighestTagSoFar 0
 proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
-    global MondayFirst
+    global MondayFirst TwentyFourHourMode
 
     set CommandLine "|$Remind -itkremind=1 -p -y -l"
     set PSCmd "$Remind -p -l"
@@ -164,6 +167,9 @@ proc Initialize {} {
 	    append PSCmd " [lindex $argv $i]"
 	    if {[regexp -- {m} [lindex $argv $i]]} {
 		set MondayFirst 1
+	    }
+	    if {"[lindex $argv $i]" == "-b1"} {
+		set TwentyFourHourMode 1
 	    }
 	} else {
 	    break
@@ -1074,7 +1080,7 @@ proc CreateModifyDialog {w day firstDay args} {
 
     # Set up: Year, Month, Day, WeekdayName
     global CurYear CurMonth EnglishDayNames MonthNames OptionType SkipType
-    global ModifyDialogResult
+    global ModifyDialogResult TwentyFourHourMode
 
     set OptionType 1
     set SkipType 1
@@ -1194,7 +1200,11 @@ proc CreateModifyDialog {w day firstDay args} {
     checkbutton $w.timebut -text "Timed reminder at"
     $w.timebut deselect
     menubutton $w.timehour -text "12" -menu $w.timehour.menu -relief raised
-    CreateDayMenu $w.timehour 1 12 0
+    if {$TwentyFourHourMode} {
+	CreateDayMenu $w.timehour 0 23 0
+    } else {
+	CreateDayMenu $w.timehour 1 12 0
+    }
     menubutton $w.timemin -text "00" -menu $w.timemin.menu -relief raised
     menu $w.timemin.menu -tearoff 0
     foreach i {00 05 10 15 20 25 30 35 40 45 50 55} {
@@ -1202,10 +1212,12 @@ proc CreateModifyDialog {w day firstDay args} {
 		-command "$w.timemin configure -text $i"
     }
 
-    menubutton $w.ampm -text "PM" -menu $w.ampm.menu -relief raised
-    menu $w.ampm.menu -tearoff 0
-    $w.ampm.menu add command -label "AM" -command "$w.ampm configure -text {AM}"
-    $w.ampm.menu add command -label "PM" -command "$w.ampm configure -text {PM}"
+    if {!$TwentyFourHourMode} {
+	menubutton $w.ampm -text "PM" -menu $w.ampm.menu -relief raised
+	menu $w.ampm.menu -tearoff 0
+	$w.ampm.menu add command -label "AM" -command "$w.ampm configure -text {AM}"
+	$w.ampm.menu add command -label "PM" -command "$w.ampm configure -text {PM}"
+    }
 
     checkbutton $w.timeadvbut -text "with"
     $w.timeadvbut deselect
@@ -1224,7 +1236,11 @@ proc CreateModifyDialog {w day firstDay args} {
 	$w.timerep.menu add command -label $i -command "$w.timerep configure -text $i"
     }
     label $w.timelab2 -text "minutes"
-    pack $w.timebut $w.timehour $w.timemin $w.ampm $w.timeadvbut $w.timeadv $w.timelab1 $w.timerepbut $w.timerep $w.timelab2 -side left -anchor w -in $w.time
+    if {$TwentyFourHourMode} {
+	pack $w.timebut $w.timehour $w.timemin $w.timeadvbut $w.timeadv $w.timelab1 $w.timerepbut $w.timerep $w.timelab2 -side left -anchor w -in $w.time
+    } else {
+	pack $w.timebut $w.timehour $w.timemin $w.ampm $w.timeadvbut $w.timeadv $w.timelab1 $w.timerepbut $w.timerep $w.timelab2 -side left -anchor w -in $w.time
+    }
 
     # SKIP TYPE
     label $w.labhol -text "On holidays or weekends:"
@@ -1302,13 +1318,20 @@ proc RemindDialogToOptions { w } {
 #***********************************************************************
 proc OptionsToRemindDialog { w opts } {
     global OptionType SkipType repbut expbut advbut advcount
-    global timebut timeadvbut timerepbut
+    global timebut timeadvbut timerepbut TwentyFourHourMode
     global dSaturday dSunday dMonday dTuesday dWednesday dThursday dFriday
+    set hour ""
+    set ampm ""
     foreach {flag value} $opts {
 	switch -glob -- $flag {
 	    "-text-*" {
 		set win [string range $flag 6 end]
-		$w.$win configure -text $value
+		catch { $w.$win configure -text $value }
+		if {"$flag" == "-text-ampm"} {
+		    set ampm $value
+		} elseif {"$flag" == "-text-timehour"} {
+		    set hour $value
+		}
 	    }
 	    "-global-*" {
 		set win [string range $flag 8 end]
@@ -1318,6 +1341,24 @@ proc OptionsToRemindDialog { w opts } {
 		set win [string range $flag 7 end]
 		$w.$win delete 0 end
 		$w.$win insert end $value
+	    }
+	}
+    }
+    if {"$hour" != ""} {
+	if {$TwentyFourHourMode} {
+	    if {"$ampm" != ""} {
+		if {"$ampm" == "PM" && $hour < 12} {
+		    incr hour 12;
+		    $w.timehour configure -text $hour
+		}
+	    }
+	} else {
+	    if {$hour > 12} {
+		incr hour -12
+		$w.timehour configure -text $hour
+		$w.ampm configure -text "PM"
+	    } else {
+		$w.ampm configure -text "AM"
 	    }
 	}
     }
@@ -1474,7 +1515,7 @@ proc CenterWindow {w} {
 #    The reminder as a string.
 #---------------------------------------------------------------------------
 proc CreateReminder {w} {
-    global DidOmit
+    global DidOmit TwentyFourHourMode
 
     set body [string trim [$w.entry get]]
 
@@ -1511,13 +1552,15 @@ proc CreateReminder {w} {
     if {$timebut} {
 	set hour [$w.timehour cget -text]
 	set min [$w.timemin cget -text]
-	if {[$w.ampm cget -text] == "PM"} {
-	    if {$hour < 12} {
-		incr hour 12
-	    }
-	} else {
-	    if {$hour == 12} {
-		set hour 0
+	if {!$TwentyFourHourMode} {
+	    if {[$w.ampm cget -text] == "PM"} {
+		if {$hour < 12} {
+		    incr hour 12
+		}
+	    } else {
+		if {$hour == 12} {
+		    set hour 0
+		}
 	    }
 	}
 	append rem " AT $hour:$min"
@@ -2654,7 +2697,12 @@ proc DoMoonSpecial { n stuff } {
 #  Displays current date and time in status window
 #***********************************************************************
 proc DisplayTime {} {
-    set msg [clock format [clock seconds] -format "%e %b %Y %I:%M%p"]
+    global TwentyFourHourMode
+    if {$TwentyFourHourMode} {
+	set msg [clock format [clock seconds] -format "%e %b %Y %H:%M"]
+    } else {
+	set msg [clock format [clock seconds] -format "%e %b %Y %I:%M%p"]
+    }
     Status $msg
 }
 

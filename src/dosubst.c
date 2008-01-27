@@ -649,7 +649,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 /*  default triggers and a mode of NORMAL_MODE.                */
 /*                                                             */
 /***************************************************************/
-int DoSubstFromString(char *source, DynamicBuffer *dbuf,
+int DoSubstFromString(char const *source, DynamicBuffer *dbuf,
 			     int jul, int tim)
 {
     Trigger tempTrig;

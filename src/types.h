@@ -73,12 +73,12 @@ typedef struct {
 typedef struct {
     char isnested;        /* Is it a nested expression? */
     char allownested;
-    char *text;           /* Start of text */
-    char *pos;            /* Current position */
-    char *etext;          /* Substituted text */
-    char *epos;           /* Position in substituted text */
+    char const *text;           /* Start of text */
+    char const *pos;            /* Current position */
+    char const *etext;          /* Substituted text */
+    char const *epos;           /* Position in substituted text */
     DynamicBuffer pushedToken;	/* Pushed-back token */
-    char *tokenPushed;	  /* NULL if no pushed-back token */
+    char const *tokenPushed;	/* NULL if no pushed-back token */
 } Parser;
 
 typedef Parser *ParsePtr;  /* Pointer to parser structure */

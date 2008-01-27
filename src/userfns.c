@@ -238,12 +238,12 @@ static void FSet(UserFunc *f)
 /*  Call a user-defined function.                              */
 /*                                                             */
 /***************************************************************/
-int CallUserFunc(char *name, int nargs)
+int CallUserFunc(char const *name, int nargs)
 {
     UserFunc *f;
     int h = HashVal(name) % FUNC_HASH_SIZE;
     int i;
-    char *s;
+    char const *s;
 
     /* Search for the function */
     f = FuncHash[h];

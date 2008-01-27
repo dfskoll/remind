@@ -555,7 +555,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     char tmpBuf[64];
     DynamicBuffer buf, calRow;
     DynamicBuffer pre_buf;
-    char *s;
+    char const *s;
     Value v;
 
     DBufInit(&buf);
@@ -812,7 +812,8 @@ int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 {
     int iter, jul, r;
     Value v;
-    char *s, *t;
+    char const *s;
+    char const *t;
 
     t = p->pos;
     iter = 0;
@@ -951,7 +952,7 @@ static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
 {
     char buffer[VAR_NAME_LEN+32];
     int i;
-    char *s;
+    char const *s;
     int r;
     Value v;
     int lastReturnVal = 0; /* Silence compiler warning */

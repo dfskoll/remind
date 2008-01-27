@@ -396,7 +396,7 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
     /* Use LineBuffer for temp. string storage. */
     int r;
     Value v;
-    char *s;
+    char const *s;
     int LastTime = -1;
     int ThisTime;
 

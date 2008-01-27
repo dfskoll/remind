@@ -330,7 +330,7 @@ int ParseChar(ParsePtr p, int *err, int peek)
 		    return *(p->epos++);
 		}
 	    }
-	    free(p->etext);  /* End of substituted expression */
+	    free((void *) p->etext);  /* End of substituted expression */
 	    p->etext = NULL;
 	    p->epos = NULL;
 	    p->isnested = 0;
@@ -554,7 +554,7 @@ void OutputLine(FILE *fp)
 /*  Create a parser given a string buffer                      */
 /*                                                             */
 /***************************************************************/
-void CreateParser(char *s, ParsePtr p)
+void CreateParser(char const *s, ParsePtr p)
 {
     p->text = s;
     p->pos = s;
@@ -576,7 +576,7 @@ void CreateParser(char *s, ParsePtr p)
 void DestroyParser(ParsePtr p)
 {
     if (p->isnested && p->etext) {
-	free(p->etext);
+	free((void *) p->etext);
 	p->etext = NULL;
 	p->isnested = 0;
     }

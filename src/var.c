@@ -383,7 +383,7 @@ void DestroyVars(int all)
 /*  Given the name of a variable, "preserve" it.               */
 /*                                                             */
 /***************************************************************/
-int PreserveVar(char *name)
+int PreserveVar(char const *name)
 {
     Var *v;
 

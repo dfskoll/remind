@@ -102,7 +102,7 @@ int DBufPutcFN(DynamicBuffer *dbuf, char c)
 %DESCRIPTION:
  Appends a string to the buffer.
 **********************************************************************/
-int DBufPuts(DynamicBuffer *dbuf, char *str)
+int DBufPuts(DynamicBuffer *dbuf, char const *str)
 {
     int l = strlen(str);
     if (!l) return OK;

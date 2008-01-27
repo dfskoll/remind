@@ -618,7 +618,8 @@ static void ChgUser(char *user)
 /***************************************************************/
 static void InitializeVar(char *str)
 {
-    char *varname, *expr;
+    char const *varname;
+    char const *expr;
 
     Value val;
 

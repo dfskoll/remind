@@ -41,8 +41,8 @@ static int Multiply(void), Divide(void), Mod(void), Add(void),
     UnMinus(void), LogNot(void),
     Compare(int);
 
-static int MakeValue (char *s, Value *v, Var *locals);
-static int ParseLiteralDate (char **s, int *jul, int *tim);
+static int MakeValue (char const *s, Value *v, Var *locals);
+static int ParseLiteralDate (char const **s, int *jul, int *tim);
 
 /* Binary operators - all left-associative */
 
@@ -132,9 +132,9 @@ static void CleanStack(void)
 /*  PeekChar - peek ahead to next char.                        */
 /*                                                             */
 /***************************************************************/
-static char PeekChar(char **s)
+static char PeekChar(char const **s)
 {
-    char *t = *s;
+    char const *t = *s;
     while (*t && isspace(*t)) t++;
     return *t;
 }
@@ -146,7 +146,7 @@ static char PeekChar(char **s)
 /*  Read a token.                                              */
 /*                                                             */
 /***************************************************************/
-static int ParseExprToken(DynamicBuffer *buf, char **in)
+static int ParseExprToken(DynamicBuffer *buf, char const **in)
 {
 
     char c;
@@ -266,7 +266,7 @@ static int ParseExprToken(DynamicBuffer *buf, char **in)
 /*  Put the result into value pointed to by v.                 */
 /*                                                             */
 /***************************************************************/
-int EvalExpr(char **e, Value *v)
+int EvalExpr(char const **e, Value *v)
 {
     int r;
 
@@ -289,7 +289,7 @@ int EvalExpr(char **e, Value *v)
 }
 
 /* Evaluate - do the actual work of evaluation. */
-int Evaluate(char **s, Var *locals)
+int Evaluate(char const **s, Var *locals)
 {
     int OpBase, ValBase;
     int r;
@@ -448,7 +448,7 @@ int Evaluate(char **s, Var *locals)
 /*  a date or the value of a symbol.                           */
 /*                                                             */
 /***************************************************************/
-static int MakeValue(char *s, Value *v, Var *locals)
+static int MakeValue(char const *s, Value *v, Var *locals)
 {
     int len;
     int h, m, r;
@@ -533,7 +533,7 @@ static int MakeValue(char *s, Value *v, Var *locals)
 int DoCoerce(char type, Value *v)
 {
     int h, d, m, y, i, k;
-    char *s;
+    char const *s;
 
     /* Do nothing if value is already the right type */
     if (type == v->type) return OK;
@@ -1154,7 +1154,7 @@ int CopyValue(Value *dest, const Value *src)
 /*  and tim; update s.                                         */
 /*                                                             */
 /***************************************************************/
-static int ParseLiteralDate(char **s, int *jul, int *tim)
+static int ParseLiteralDate(char const **s, int *jul, int *tim)
 {
     int y, m, d;
     int hour, min;

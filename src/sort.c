@@ -173,7 +173,7 @@ static void IssueSortBanner(int jul)
     char BanExpr[64];
     int y, m, d;
     Value v;
-    char *s = BanExpr;
+    char const *s = BanExpr;
     DynamicBuffer buf;
 
     if (UserFuncExists("sortbanner") != 1) return;

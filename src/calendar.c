@@ -588,7 +588,7 @@ static int DoCalRem(ParsePtr p, int col)
     int jul;
     CalEntry *CurCol = CalColumn[col];
     CalEntry *e;
-    char *s, *s2;
+    char const *s, *s2;
     DynamicBuffer buf, obuf, pre_buf;
     Token tok;
 

@@ -18,7 +18,7 @@
 
 #include "dynbuf.h"
 
-int CallUserFunc (char *name, int nargs);
+int CallUserFunc (char const *name, int nargs);
 int DoFset (ParsePtr p);
 void ProduceCalendar (void);
 char  *SimpleTime (int tim);
@@ -30,8 +30,8 @@ int ParseRem (ParsePtr s, Trigger *trig, TimeTrig *tim);
 int TriggerReminder (ParsePtr p, Trigger *t, TimeTrig *tim, int jul);
 int ShouldTriggerReminder (Trigger *t, TimeTrig *tim, int jul);
 int DoSubst (ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode);
-int DoSubstFromString (char *source, DynamicBuffer *dbuf, int jul, int tim);
-int EvalExpr (char **e, Value *v);
+int DoSubstFromString (char const *source, DynamicBuffer *dbuf, int jul, int tim);
+int EvalExpr (char const **e, Value *v);
 int DoCoerce (char type, Value *v);
 void PrintValue  (Value *v, FILE *fp);
 int CopyValue (Value *dest, const Value *src);
@@ -53,11 +53,11 @@ int ParseChar (ParsePtr p, int *err, int peek);
 int ParseToken (ParsePtr p, DynamicBuffer *dbuf);
 int ParseIdentifier (ParsePtr p, DynamicBuffer *dbuf);
 int EvaluateExpr (ParsePtr p, Value *v);
-int Evaluate (char **s, Var *locals);
+int Evaluate (char const **s, Var *locals);
 int FnPopValStack (Value *val);
 void Eprint (const char *fmt, ...);
 void OutputLine (FILE *fp);
-void CreateParser (char *s, ParsePtr p);
+void CreateParser (char const *s, ParsePtr p);
 void DestroyParser (ParsePtr p);
 int PushToken (const char *tok, ParsePtr p);
 long SystemTime (int realtime);
@@ -99,7 +99,7 @@ int DoUnset  (Parser *p);
 int DoDump (ParsePtr p);
 void DumpVarTable (void);
 void DestroyVars (int all);
-int PreserveVar (char *name);
+int PreserveVar (char const *name);
 int DoPreserve  (Parser *p);
 int DoSatRemind (Trigger *trig, TimeTrig *tim, ParsePtr p);
 int DoMsgCommand (char *cmd, char *msg);

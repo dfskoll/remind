@@ -73,7 +73,7 @@ static IncludeStruct IStack[INCLUDE_NEST];
 static int IStackPtr = 0;
 
 static int ReadLineFromFile (void);
-static int CacheFile (const char *fname);
+static int CacheFile (char const *fname);
 static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
 
@@ -171,7 +171,7 @@ static int ReadLineFromFile(void)
 /*  ShouldCache is 1, cache the file                           */
 /*                                                             */
 /***************************************************************/
-int OpenFile(const char *fname)
+int OpenFile(char const *fname)
 {
     CachedFile *h = CachedFiles;
     int r;
@@ -230,7 +230,7 @@ int OpenFile(const char *fname)
 /*  Returns an indication of success or failure.               */
 /*                                                             */
 /***************************************************************/
-static int CacheFile(const char *fname)
+static int CacheFile(char const *fname)
 {
     int r;
     CachedFile *cf;
@@ -387,7 +387,7 @@ int DoInclude(ParsePtr p)
 /*  inclusion.                                                 */
 /*                                                             */
 /***************************************************************/
-int IncludeFile(const char *fname)
+int IncludeFile(char const *fname)
 {
     IncludeStruct *i;
     int r;
@@ -432,7 +432,7 @@ int IncludeFile(const char *fname)
 /* GetAccessDate - get the access date of a file.              */
 /*                                                             */
 /***************************************************************/
-int GetAccessDate(char *file)
+int GetAccessDate(char const *file)
 {
     struct stat statbuf;
     struct tm *t1;

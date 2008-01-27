@@ -80,7 +80,7 @@ static int time_sep_func(int do_set, Value *val)
 /*  Given a string, compute the hash value.                    */
 /*                                                             */
 /***************************************************************/
-unsigned int HashVal(const char *str)
+unsigned int HashVal(char const *str)
 {
     register unsigned int i=0;
     register unsigned int j=1;
@@ -102,7 +102,7 @@ unsigned int HashVal(const char *str)
 /*  string.  If create is 1, create the variable.              */
 /*                                                             */
 /***************************************************************/
-Var *FindVar(const char *str, int create)
+Var *FindVar(char const *str, int create)
 {
     register int h;
     register Var *v;
@@ -139,7 +139,7 @@ Var *FindVar(const char *str, int create)
 /*  string and delete it.                                      */
 /*                                                             */
 /***************************************************************/
-int DeleteVar(const char *str)
+int DeleteVar(char const *str)
 {
     register int h;
     register Var *v;
@@ -168,7 +168,7 @@ int DeleteVar(const char *str)
 /*  Set the indicate variable to the specified value.          */
 /*                                                             */
 /***************************************************************/
-int SetVar(const char *str, Value *val)
+int SetVar(char const *str, Value *val)
 {
     Var *v = FindVar(str, 1);
 
@@ -186,7 +186,7 @@ int SetVar(const char *str, Value *val)
 /*  Get a copy of the value of the variable.                   */
 /*                                                             */
 /***************************************************************/
-int GetVarValue(const char *str, Value *val, Var *locals)
+int GetVarValue(char const *str, Value *val, Var *locals)
 {
     Var *v;
 
@@ -498,8 +498,8 @@ static SysVar SysVarArr[] = {
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
-static SysVar *FindSysVar (const char *name);
-static void DumpSysVar (const char *name, const SysVar *v);
+static SysVar *FindSysVar (char const *name);
+static void DumpSysVar (char const *name, const SysVar *v);
 /***************************************************************/
 /*                                                             */
 /*  SetSysVar                                                  */
@@ -507,7 +507,7 @@ static void DumpSysVar (const char *name, const SysVar *v);
 /*  Set a system variable to the indicated value.              */
 /*                                                             */
 /***************************************************************/
-int SetSysVar(const char *name, Value *value)
+int SetSysVar(char const *name, Value *value)
 {
     SysVar *v = FindSysVar(name);
     if (!v) return E_NOSUCH_VAR;
@@ -542,7 +542,7 @@ int SetSysVar(const char *name, Value *value)
 /*  Get the value of a system variable                         */
 /*                                                             */
 /***************************************************************/
-int GetSysVar(const char *name, Value *val)
+int GetSysVar(char const *name, Value *val)
 {
     SysVar *v = FindSysVar(name);
 
@@ -577,7 +577,7 @@ int GetSysVar(const char *name, Value *val)
 /* Find a system var with specified name.                      */
 /*                                                             */
 /***************************************************************/
-static SysVar *FindSysVar(const char *name)
+static SysVar *FindSysVar(char const *name)
 {
     int top=NUMSYSVARS-1, bottom=0;
     int mid=(top + bottom) / 2;
@@ -601,7 +601,7 @@ static SysVar *FindSysVar(const char *name)
 /*  If name is "", dump all system variables.                  */
 /*                                                             */
 /***************************************************************/
-void DumpSysVarByName(const char *name)
+void DumpSysVarByName(char const *name)
 {
     int i;
     SysVar *v;
@@ -623,7 +623,7 @@ void DumpSysVarByName(const char *name)
 /*  Dump the system variable.                                  */
 /*                                                             */
 /***************************************************************/
-static void DumpSysVar(const char *name, const SysVar *v)
+static void DumpSysVar(char const *name, const SysVar *v)
 {
     char buffer[VAR_NAME_LEN+10];
 

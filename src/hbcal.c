@@ -137,7 +137,7 @@ int DaysInHebYear(int y)
 /*  given the LENGTH of the Hebrew year.                       */
 /*                                                             */
 /***************************************************************/
-char *DaysInHebMonths(int ylen)
+char const *DaysInHebMonths(int ylen)
 {
     static char monlen[13] =
     {30, 29, 30, 29, 30, 0, 29, 30, 29, 30, 29, 30, 29};
@@ -166,7 +166,7 @@ char *DaysInHebMonths(int ylen)
 int HebToJul(int hy, int hm, int hd)
 {
     int ylen;
-    char *monlens;
+    char const *monlens;
     int rh;
     int m;
 
@@ -201,7 +201,7 @@ void JulToHeb(int jul, int *hy, int *hm, int *hd)
     int y, m, d;
     int rh;
     int ylen;
-    char *monlen;
+    char const *monlen;
     /* Get the common year */
     FromJulian(jul, &y, &m, &d);
     y += 3763; /* Over-estimate a bit to be on the safe side below... */
@@ -232,7 +232,7 @@ void JulToHeb(int jul, int *hy, int *hm, int *hd)
 /*  year.                                                      */
 /*                                                             */
 /***************************************************************/
-int HebNameToNum(const char *mname)
+int HebNameToNum(char const *mname)
 {
     int i;
     int m=-1;
@@ -254,7 +254,7 @@ int HebNameToNum(const char *mname)
 /*  year.                                                      */
 /*                                                             */
 /***************************************************************/
-char *HebMonthName(int m, int y)
+char const *HebMonthName(int m, int y)
 {
     if (m != ADARA && m != ADARB) return HebMonthNames[m];
 
@@ -293,7 +293,7 @@ char *HebMonthName(int m, int y)
 int GetValidHebDate(int yin, int min, int din, int adarbehave,
                            int *mout, int *dout, int jahr)
 {
-    char *monlen;
+    char const *monlen;
     int ylen;
 
     *mout = min;
@@ -448,7 +448,7 @@ int GetNextHebrewDate(int julstart, int hm, int hd,
 /***************************************************************/
 int ComputeJahr(int y, int m, int d, int *ans)
 {
-    char *monlen;
+    char const *monlen;
     int len;
 
     *ans = JAHR_NONE;

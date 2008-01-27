@@ -134,7 +134,7 @@ static void DoReminders(void)
 {
     int r;
     Token tok;
-    char *s;
+    char const *s;
     Parser p;
 
     if (!UseStdin) {
@@ -503,7 +503,7 @@ int EvaluateExpr(ParsePtr p, Value *v)
 /*  Eprint - print an error message.                           */
 /*                                                             */
 /***************************************************************/
-void Eprint(const char *fmt, ...)
+void Eprint(char const *fmt, ...)
 {
     va_list argptr;
 
@@ -589,7 +589,7 @@ void DestroyParser(ParsePtr p)
 /*  on a per-parser basis.                                     */
 /*                                                             */
 /***************************************************************/
-int PushToken(const char *tok, ParsePtr p)
+int PushToken(char const *tok, ParsePtr p)
 {
     DBufFree(&p->pushedToken);
     if (DBufPuts(&p->pushedToken, (char *) tok) != OK ||
@@ -1079,7 +1079,7 @@ int CalcMinsFromUTC(int jul, int tim, int *mins, int *isdst)
 /* A macro safe ONLY if used with arg with no side effects! */
 #define ISBLANK(c) (isspace(c) && (c) != '\n')
 
-void FillParagraph(char *s)
+void FillParagraph(char const *s)
 {
 
     int line = 0;
@@ -1087,7 +1087,7 @@ void FillParagraph(char *s)
     int doublespace = 1;
     int pendspace;
     int len;
-    char *t;
+    char const *t;
 
     int roomleft;
 

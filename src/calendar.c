@@ -440,7 +440,7 @@ static void GenerateCalEntries(int col)
 {
     int r;
     Token tok;
-    char *s;
+    char const *s;
     Parser p;
 
 /* Do some initialization first... */

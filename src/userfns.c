@@ -356,7 +356,7 @@ static void DestroyLocalVals(UserFunc *f)
 /*  it is defined, or -1 if it is not defined.                 */
 /*                                                             */
 /***************************************************************/
-int UserFuncExists(char *fn)
+int UserFuncExists(char const *fn)
 {
     UserFunc *f;
     int h = HashVal(fn) % FUNC_HASH_SIZE;

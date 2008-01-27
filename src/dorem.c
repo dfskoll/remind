@@ -887,14 +887,14 @@ static int ParsePriority(ParsePtr s, Trigger *t)
 /*  Execute the '-k' command, escaping shell chars in message. */
 /*                                                             */
 /***************************************************************/
-int DoMsgCommand(char *cmd, char *msg)
+int DoMsgCommand(char const *cmd, char const *msg)
 {
     int r;
     int i, l;
     DynamicBuffer execBuffer;
 
     DynamicBuffer buf;
-    char *s;
+    char const *s;
 
     DBufInit(&buf);
     DBufInit(&execBuffer);

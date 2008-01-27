@@ -128,7 +128,7 @@ Token NonEnglishToks[] = {
 };
 #endif
 
-static int TokStrCmp (const Token *t, const char *s);
+static int TokStrCmp (Token const *t, char const *s);
 
 /***************************************************************/
 /*                                                             */
@@ -138,7 +138,7 @@ static int TokStrCmp (const Token *t, const char *s);
 /*  left square bracket, return a T_Illegal type.              */
 /*                                                             */
 /***************************************************************/
-char *FindInitialToken(Token *tok, char *s)
+char const *FindInitialToken(Token *tok, char const *s)
 {
     DynamicBuffer buf;
     DBufInit(&buf);
@@ -165,7 +165,7 @@ char *FindInitialToken(Token *tok, char *s)
 /*  Given a string, which token is it?                         */
 /*                                                             */
 /***************************************************************/
-void FindToken(const char *s, Token *tok)
+void FindToken(char const *s, Token *tok)
 {
     int top, bot, mid, r, max;
     int l;
@@ -252,7 +252,7 @@ void FindToken(const char *s, Token *tok)
 /*  Rep - *n                                                   */
 /*                                                             */
 /***************************************************************/
-void FindNumericToken(const char *s, Token *t)
+void FindNumericToken(char const *s, Token *t)
 {
     int mult = 1, hour, min;
 
@@ -335,7 +335,7 @@ void FindNumericToken(const char *s, Token *t)
 /*  Compare a token to a string.                               */
 /*                                                             */
 /***************************************************************/
-static int TokStrCmp(const Token *t, const char *s)
+static int TokStrCmp(Token const *t, char const *s)
 {
     register int r;
     char *tk = t->name;

@@ -1078,7 +1078,7 @@ static int LogNot(void)
 /*  Find a function.                                           */
 /*                                                             */
 /***************************************************************/
-Operator *FindFunc(char *name, Operator where[], int num)
+Operator *FindFunc(char const *name, Operator where[], int num)
 {
     int top=num-1, bot=0;
     int mid, r;

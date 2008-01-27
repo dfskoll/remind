@@ -24,7 +24,7 @@ typedef struct {
 
 /* Define the type of operators */
 typedef struct {
-    char *name;
+    char const *name;
     char prec;
     char type;
     int (*func)(void);

@@ -69,7 +69,7 @@ static void reread (void);
 /*                                                             */
 /***************************************************************/
 int QueueReminder(ParsePtr p, Trigger *trig,
-			 TimeTrig *tim, const char *sched)
+			 TimeTrig *tim, char const *sched)
 {
     QueuedRem *qelem;
 

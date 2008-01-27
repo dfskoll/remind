@@ -30,7 +30,7 @@
 /*  Just like strncpy EXCEPT we ALWAYS copy the trailing 0.    */
 /*                                                             */
 /***************************************************************/
-char *StrnCpy(char *dest, const char *source, int n)
+char *StrnCpy(char *dest, char const *source, int n)
 {
     register char *odest = dest;
 
@@ -48,7 +48,7 @@ char *StrnCpy(char *dest, const char *source, int n)
 /*  of the first string, whichever is greater.                 */
 /*                                                             */
 /***************************************************************/
-int StrMatch(const char *s1, const char *s2, int n)
+int StrMatch(char const *s1, char const *s2, int n)
 {
     int l;
     if ((l = strlen(s1)) < n) return 0;
@@ -60,7 +60,7 @@ int StrMatch(const char *s1, const char *s2, int n)
 /*  StrinCmp - compare strings, case-insensitive               */
 /*                                                             */
 /***************************************************************/
-int StrinCmp(const char *s1, const char *s2, int n)
+int StrinCmp(char const *s1, char const *s2, int n)
 {
     register int r;
     while (n && *s1 && *s2) {
@@ -80,7 +80,7 @@ int StrinCmp(const char *s1, const char *s2, int n)
 /*  Like ANSI strdup                                           */
 /*                                                             */
 /***************************************************************/
-char *StrDup(const char *s)
+char *StrDup(char const *s)
 {
     char *ret = (char *) malloc(strlen(s)+1);
     if (!ret) return (char *) NULL;
@@ -95,7 +95,7 @@ char *StrDup(const char *s)
 /*  Compare strings, case insensitive.                         */
 /*                                                             */
 /***************************************************************/
-int StrCmpi(const char *s1, const char *s2)
+int StrCmpi(char const *s1, char const *s2)
 {
     int r;
     while (*s1 && *s2) {

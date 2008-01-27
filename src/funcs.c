@@ -358,7 +358,7 @@ static int CleanUpAfterFunc(void)
 /*  Return a string value from a function.                     */
 /*                                                             */
 /***************************************************************/
-static int RetStrVal(const char *s)
+static int RetStrVal(char const *s)
 {
     RetVal.type = STR_TYPE;
     if (!s) {

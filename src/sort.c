@@ -35,7 +35,7 @@ typedef struct sortrem {
 /* The sorted reminder queue */
 static Sortrem *SortedQueue = (Sortrem *) NULL;
 
-static Sortrem *MakeSortRem (int jul, int tim, char *body, int typ, int prio);
+static Sortrem *MakeSortRem (int jul, int tim, char const *body, int typ, int prio);
 static void IssueSortBanner (int jul);
 
 /***************************************************************/
@@ -45,7 +45,7 @@ static void IssueSortBanner (int jul);
 /*  Create a new Sortrem entry - return NULL on failure.       */
 /*                                                             */
 /***************************************************************/
-static Sortrem *MakeSortRem(int jul, int tim, char *body, int typ, int prio)
+static Sortrem *MakeSortRem(int jul, int tim, char const *body, int typ, int prio)
 {
     Sortrem *new = NEW(Sortrem);
     if (!new) return NULL;
@@ -71,7 +71,7 @@ static Sortrem *MakeSortRem(int jul, int tim, char *body, int typ, int prio)
 /*  Insert a reminder into the sort buffer                     */
 /*                                                             */
 /***************************************************************/
-int InsertIntoSortBuffer(int jul, int tim, char *body, int typ, int prio)
+int InsertIntoSortBuffer(int jul, int tim, char const *body, int typ, int prio)
 {
     Sortrem *new = MakeSortRem(jul, tim, body, typ, prio);
     Sortrem *cur = SortedQueue, *prev = NULL;

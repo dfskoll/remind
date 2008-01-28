@@ -517,6 +517,6 @@ static void DaemonWait(unsigned int sleeptime)
 /***************************************************************/
 static void reread(void)
 {
-    execvp(ArgV[0], ArgV);
+    execvp(ArgV[0], (char **) ArgV);
 }
 

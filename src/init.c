@@ -79,8 +79,8 @@ while (isdigit(*(s))) {    \
     s++;                   \
 }
 
-static void ChgUser(char *u);
-static void InitializeVar(char *str);
+static void ChgUser(char const *u);
+static void InitializeVar(char const *str);
 
 static char *BadDate = "Illegal date on command line\n";
 
@@ -94,7 +94,7 @@ static DynamicBuffer default_filename_buf;
 /*  default filename.  Use $DOTREMINDERS or $HOME/.reminders   */
 /*                                                             */
 /***************************************************************/
-static char *DefaultFilename(void)
+static char const *DefaultFilename(void)
 {
     char *s;
 
@@ -122,14 +122,14 @@ static char *DefaultFilename(void)
 /*  Initialize the system - called only once at beginning!     */
 /*                                                             */
 /***************************************************************/
-void InitRemind(int argc, char *argv[])
+void InitRemind(int argc, char const *argv[])
 {
-    char *arg;
+    char const *arg;
     int i;
     int y, m, d, rep;
     Token tok;
     int InvokedAsRem = 0;
-    char *s;
+    char const *s;
 
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
@@ -550,7 +550,7 @@ void Usage(void)
 /*  USER environment variables.                                */
 /*                                                             */
 /***************************************************************/
-static void ChgUser(char *user)
+static void ChgUser(char const *user)
 {
     uid_t myuid;
 
@@ -616,23 +616,29 @@ static void ChgUser(char *user)
 /*  Initialize and preserve a variable                         */
 /*                                                             */
 /***************************************************************/
-static void InitializeVar(char *str)
+static void InitializeVar(char const *str)
 {
-    char const *varname;
     char const *expr;
+
+    char varname[VAR_NAME_LEN+1];
 
     Value val;
 
     int r;
 
     /* Scan for an '=' sign */
-    varname = str;
-    while (*str && *str != '=') str++;
+    r = 0;
+    while (*str && *str != '=') {
+	if (r < VAR_NAME_LEN) {
+	    varname[r++] = *str;
+	}
+	str++;
+    }
+    varname[r] = 0;
     if (!*str) {
 	fprintf(ErrFp, ErrMsg[M_I_OPTION], ErrMsg[E_MISS_EQ]);
 	return;
     }
-    *str = 0;
     if (!*varname) {
 	fprintf(ErrFp, ErrMsg[M_I_OPTION], ErrMsg[E_MISS_VAR]);
 	return;

@@ -62,9 +62,9 @@ int main(int argc, char *argv[])
 
 /* Set up global vars */
     ArgC = argc;
-    ArgV = argv;
+    ArgV = (char const **) argv;
 
-    InitRemind(argc, argv);
+    InitRemind(argc, (char const **) argv);
     if (DoCalendar || (DoSimpleCalendar && (!NextMode || PsCal))) {
 	ProduceCalendar();
 	return 0;

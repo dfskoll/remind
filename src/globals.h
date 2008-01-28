@@ -37,7 +37,7 @@ EXTERN	int	CurMon;
 EXTERN	int	CurYear;
 EXTERN  int	LineNo;
 EXTERN  int     FreshLine;
-EXTERN  INIT(   char    *MsgCommand, NULL);
+EXTERN  INIT(   char    const *MsgCommand, NULL);
 EXTERN  INIT(	int     ShowAllErrors, 0);
 EXTERN  INIT(	int     DebugFlag, 0);
 EXTERN  INIT(   int	DoCalendar, 0);
@@ -61,7 +61,7 @@ EXTERN	INIT(	int	SortByPrio, 0);
 EXTERN	INIT(	int	DefaultPrio, NO_PRIORITY);
 EXTERN  INIT(   long    SysTime, -1L);
 
-EXTERN	char	*InitialFile;
+EXTERN	char	const *InitialFile;
 EXTERN	int	FileAccessDate;
 
 EXTERN  INIT(	int 	DontFork, 0);
@@ -86,7 +86,7 @@ EXTERN  INIT(   int     ShouldCache, 0);
 EXTERN  char    *CurLine;
 EXTERN  INIT(   int     NumTriggered, 0);
 EXTERN  int ArgC;
-EXTERN  char **ArgV;
+EXTERN  char const **ArgV;
 EXTERN  INIT(   int     CalLines, CAL_LINES);
 EXTERN  INIT(   int     CalPad, 1);
 

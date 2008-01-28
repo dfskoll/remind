@@ -44,7 +44,7 @@ int GetAccessDate (char const *file);
 int SetAccessDate (char const *fname, int jul);
 int TopLevel (void);
 int CallFunc (Operator *f, int nargs);
-void InitRemind (int argc, char *argv[]);
+void InitRemind (int argc, char const *argv[]);
 void Usage (void);
 int Julian (int year, int month, int day);
 void FromJulian (int jul, int *y, int *m, int *d);

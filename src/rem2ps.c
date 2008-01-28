@@ -38,13 +38,13 @@ typedef struct calentry {
 } CalEntry;
 
 typedef struct {
-    char *name;
+    char const *name;
     int xsize, ysize;
 } PageType;
 
 char DayName[7][33];
 
-char *SmallCalLoc[] = {
+char const *SmallCalLoc[] = {
     "",
     "bt",
     "tb",
@@ -52,7 +52,7 @@ char *SmallCalLoc[] = {
 };
 
 #define NUMSMALL (sizeof(SmallCalLoc)/sizeof(SmallCalLoc[0]))
-char *SmallLocation;
+char const *SmallLocation;
 int SmallCol1, SmallCol2;
 
 PageType Pages[] =
@@ -88,20 +88,20 @@ char PortraitMode;
 char NoSmallCal;
 char UseISO;
 
-char *HeadFont="Helvetica";
-char *TitleFont="Helvetica";
-char *DayFont="Helvetica-BoldOblique";
-char *EntryFont="Helvetica";
-char *SmallFont="Helvetica";
-char *LineWidth = "1";
+char const *HeadFont="Helvetica";
+char const *TitleFont="Helvetica";
+char const *DayFont="Helvetica-BoldOblique";
+char const *EntryFont="Helvetica";
+char const *SmallFont="Helvetica";
+char const *LineWidth = "1";
 
-char *HeadSize="14";
-char *TitleSize="14";
-char *DaySize="14";
-char *EntrySize="8";
-char *BorderSize = "6";
+char const *HeadSize="14";
+char const *TitleSize="14";
+char const *DaySize="14";
+char const *EntrySize="8";
+char const *BorderSize = "6";
 
-char *UserProlog = NULL;
+char const *UserProlog = NULL;
 
 int validfile = 0;
 
@@ -116,15 +116,15 @@ int FillPage;
 int Verbose = 0;
 
 void Init (int argc, char *argv[]);
-void Usage (char *s);
+void Usage (char const *s);
 void DoPsCal (void);
 int DoQueuedPs (void);
-void DoSmallCal (char *m, int days, int first, int col, int which);
+void DoSmallCal (char const *m, int days, int first, int col, int which);
 void WriteProlog (void);
 void WriteCalEntry (void);
 void WriteOneEntry (CalEntry *c);
 void GetSmallLocations (void);
-char *EatToken(char *in, char *out, int maxlen);
+char const *EatToken(char const *in, char *out, int maxlen);
 
 /***************************************************************/
 /*                                                             */
@@ -182,7 +182,7 @@ void DoPsCal(void)
     int i;
     int is_ps;
     int firstcol;
-    char *startOfBody;
+    char const *startOfBody;
     char passthru[PASSTHRU_LEN+1];
     DynamicBuffer buf;
     CalEntry *c, *d;
@@ -388,7 +388,7 @@ void WriteProlog(void)
     int i;
     int x = CurPage->xsize;
     int y = CurPage->ysize;
-    char *isostuff;
+    char const *isostuff;
     FILE *fp;
     int nread;
     char buffer[512];
@@ -574,7 +574,7 @@ void WriteCalEntry(void)
 void WriteOneEntry(CalEntry *c)
 {
     int ch, i;
-    char *s = c->entry;
+    char const *s = c->entry;
 
     printf("  [");
 
@@ -635,7 +635,8 @@ void WriteOneEntry(CalEntry *c)
 /***************************************************************/
 void Init(int argc, char *argv[])
 {
-    char *s, *t;
+    char const *s;
+    char const *t;
     int i=1;
     int j;
     int offset;
@@ -791,7 +792,7 @@ void Init(int argc, char *argv[])
 /*  Usage - print usage information                            */
 /*                                                             */
 /***************************************************************/
-void Usage(char *s)
+void Usage(char const *s)
 {
     if (s) fprintf(stderr, "Rem2PS: %s\n\n", s);
 
@@ -820,7 +821,7 @@ void Usage(char *s)
 /*  month.                                                     */
 /*                                                             */
 /***************************************************************/
-void DoSmallCal(char *m, int days, int first, int col, int which)
+void DoSmallCal(char const *m, int days, int first, int col, int which)
 {
     /* Do the small calendar */
     int i, j;
@@ -885,7 +886,7 @@ int DoQueuedPs(void)
     FILE *fp;
     int fnoff;
     char buffer[512];
-    char *size, *extra;
+    char const *size, *extra;
     int num, r, g, b, phase, fontsize, moonsize;
     unsigned char c;
 
@@ -1060,7 +1061,7 @@ int DoQueuedPs(void)
 void GetSmallLocations(void)
 {
     char c;
-    char *s = SmallLocation;
+    char const *s = SmallLocation;
     int colfirst, collast;
 
 /* Figure out the first and last columns */
@@ -1122,7 +1123,7 @@ void GetSmallLocations(void)
 /* Read a space-delimited token into an output buffer.         */
 /*                                                             */
 /***************************************************************/
-char  *EatToken(char *in, char *out, int maxlen)
+char const *EatToken(char const *in, char *out, int maxlen)
 {
     int i = 0;
 

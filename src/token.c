@@ -338,7 +338,7 @@ void FindNumericToken(char const *s, Token *t)
 static int TokStrCmp(Token const *t, char const *s)
 {
     register int r;
-    char *tk = t->name;
+    char const *tk = t->name;
     while(*tk && *s && !(*s == ',' && *(s+1) == 0)) {
 	r = *tk - tolower(*s);
 	tk++;

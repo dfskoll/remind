@@ -536,8 +536,8 @@ void Eprint(char const *fmt, ...)
 /***************************************************************/
 void OutputLine(FILE *fp)
 {
-    register char *s = CurLine;
-    register char c = 0;
+    char const *s = CurLine;
+    char c = 0;
 
     while (*s) {
 	if (*s == '\n') Putc('\\', fp);
@@ -592,7 +592,7 @@ void DestroyParser(ParsePtr p)
 int PushToken(char const *tok, ParsePtr p)
 {
     DBufFree(&p->pushedToken);
-    if (DBufPuts(&p->pushedToken, (char *) tok) != OK ||
+    if (DBufPuts(&p->pushedToken, tok) != OK ||
 	DBufPutc(&p->pushedToken, ' ') != OK) {
 	DBufFree(&p->pushedToken);
 	return E_NO_MEM;
@@ -977,7 +977,7 @@ int DoErrMsg(ParsePtr p)
     TimeTrig tt;
     Trigger t;
     int r;
-    char *s;
+    char const *s;
 
     DynamicBuffer buf;
 

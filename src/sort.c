@@ -25,7 +25,7 @@
 /* The structure of a sorted entry */
 typedef struct sortrem {
     struct sortrem *next;
-    char *text;
+    char const *text;
     int trigdate;
     int trigtime;
     int typ;
@@ -154,7 +154,7 @@ void IssueSortedReminders(void)
 	    break;
 	}
 
-	free(cur->text);
+	free((char *) cur->text);
 	free(cur);
 	cur = next;
     }

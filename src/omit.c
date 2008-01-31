@@ -113,12 +113,12 @@ int PushOmitContext(ParsePtr p)
 
     context->numfull = NumFullOmits;
     context->numpart = NumPartialOmits;
-    context->fullsave = (int *) malloc(NumFullOmits * sizeof(int));
+    context->fullsave = malloc(NumFullOmits * sizeof(int));
     if (NumFullOmits && !context->fullsave) {
 	free(context);
 	return E_NO_MEM;
     }
-    context->partsave = (int *) malloc(NumPartialOmits * sizeof(int));
+    context->partsave = malloc(NumPartialOmits * sizeof(int));
     if (NumPartialOmits && !context->partsave) {
 	free(context->fullsave);
 	free(context);

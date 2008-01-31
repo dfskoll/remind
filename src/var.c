@@ -440,7 +440,7 @@ int DoPreserve (Parser *p)
 
 /* The structure of a system variable */
 typedef struct {
-    char *name;
+    char const *name;
     char modifiable;
     int type;
     void *value;
@@ -643,7 +643,7 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	    }
 	    DestroyValue(val);
 	} else if (v->type == STR_TYPE) {
-	    char *s = *((char **)v->value);
+	    char const *s = *((char **)v->value);
 	    int y;
 	    Putc('"', ErrFp);
 	    for (y=0; y<MAX_PRT_LEN && *s; y++) {

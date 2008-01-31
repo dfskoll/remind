@@ -297,7 +297,7 @@ int Evaluate(char const **s, Var *locals)
     int args; /* Number of function arguments */
     Operator op, op2;
     Value va;
-    char *ufname = NULL; /* Stop GCC from complaining about use of uninit var */
+    char const *ufname = NULL; /* Stop GCC from complaining about use of uninit var */
 
     OpBase = OpStackPtr;
     ValBase = ValStackPtr;
@@ -339,7 +339,7 @@ int Evaluate(char const **s, Var *locals)
 		if (f) r = CallFunc(f, 0);
 		else {
 		    r = CallUserFunc(ufname, 0);
-		    free(ufname);
+		    free((char *) ufname);
 		}
 		if (r) return r;
 		r = ParseExprToken(&ExprBuf, s); /* Guaranteed to be right paren. */
@@ -349,12 +349,12 @@ int Evaluate(char const **s, Var *locals)
 		    args++;
 		    r = Evaluate(s, locals);
 		    if (r) {
-			if (!f) free(ufname);
+			if (!f) free((char *) ufname);
 			return r;
 		    }
 		    if (*DBufValue(&ExprBuf) == ')') break;
 		    else if (*DBufValue(&ExprBuf) != ',') {
-			if (!f) free(ufname);
+			if (!f) free((char *) ufname);
 			Eprint("%s: `%c'", ErrMsg[E_EXPECT_COMMA],
 			       *DBufValue(&ExprBuf));
 			DBufFree(&ExprBuf);
@@ -364,7 +364,7 @@ int Evaluate(char const **s, Var *locals)
 		if (f) r = CallFunc(f, args);
 		else {
 		    r = CallUserFunc(ufname, args);
-		    free(ufname);
+		    free((char *) ufname);
 		}
 		DBufFree(&ExprBuf);
 		if (r) return r;
@@ -456,7 +456,7 @@ static int MakeValue(char const *s, Value *v, Var *locals)
     if (*s == '\"') { /* It's a literal string "*/
 	len = strlen(s)-1;
 	v->type = STR_TYPE;
-	v->v.str = (char *) malloc(len);
+	v->v.str = malloc(len);
 	if (! v->v.str) {
 	    v->type = ERR_TYPE;
 	    return E_NO_MEM;
@@ -751,7 +751,7 @@ static int Add(void)
 	    return r;
 	}
 	v3.type = STR_TYPE;
-	v3.v.str = (char *) malloc(strlen(v1.v.str) + strlen(v2.v.str) + 1);
+	v3.v.str = malloc(strlen(v1.v.str) + strlen(v2.v.str) + 1);
 	if (!v3.v.str) {
 	    DestroyValue(v1); DestroyValue(v2);
 	    return E_NO_MEM;
@@ -1102,7 +1102,7 @@ Operator *FindFunc(char const *name, Operator where[], int num)
 void PrintValue (Value *v, FILE *fp)
 {
     int y, m, d;
-    char *s;
+    char const *s;
 
     if (v->type == STR_TYPE) {
 	s=v->v.str;

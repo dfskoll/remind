@@ -54,11 +54,12 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
     int d, m, y;
     int tim = tt->ttime;
     int h, min, hh, ch, cmin, chh;
-    char *pm, *cpm;
+    char const *pm, *cpm;
     int tdiff, adiff, mdiff, hdiff;
-    char *mplu, *hplu, *when, *plu;
+    char const *mplu, *hplu, *when, *plu;
     int has_quote = 0;
-    char *ss, *os;
+    char *ss;
+    char *os;
     char s[256];
     int origLen = DBufLen(dbuf);
 

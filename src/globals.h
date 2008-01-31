@@ -83,7 +83,7 @@ EXTERN  INIT(   int     LastTriggerDate, 0);
 EXTERN  INIT(   int     LastTrigValid, 0);
 EXTERN  INIT(   int     LastTriggerTime, 0);
 EXTERN  INIT(   int     ShouldCache, 0);
-EXTERN  char    *CurLine;
+EXTERN  char const   *CurLine;
 EXTERN  INIT(   int     NumTriggered, 0);
 EXTERN  int ArgC;
 EXTERN  char const **ArgV;

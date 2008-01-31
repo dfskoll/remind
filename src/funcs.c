@@ -362,7 +362,7 @@ static int RetStrVal(char const *s)
 {
     RetVal.type = STR_TYPE;
     if (!s) {
-	RetVal.v.str = (char *) malloc(1);
+	RetVal.v.str = malloc(1);
 	if (RetVal.v.str) *RetVal.v.str = 0;
     } else
 	RetVal.v.str = StrDup(s);
@@ -493,7 +493,7 @@ static int FDateTime(void)
 /***************************************************************/
 static int FCoerce(void)
 {
-    char *s;
+    char const *s;
 
     if (ARG(0).type != STR_TYPE) return E_BAD_TYPE;
     s = ARG(0).v.str;
@@ -591,7 +591,7 @@ static int FChar(void)
 	if (ARG(0).v.val < -128) return E_2LOW;
 	if (ARG(0).v.val > 255) return E_2HIGH;
 	len = ARG(0).v.val ? 2 : 1;
-	RetVal.v.str = (char *) malloc(len);
+	RetVal.v.str = malloc(len);
 	if (!RetVal.v.str) return E_NO_MEM;
 	RetVal.type = STR_TYPE;
 	*(RetVal.v.str) = ARG(0).v.val;
@@ -599,7 +599,7 @@ static int FChar(void)
 	return OK;
     }
 
-    RetVal.v.str = (char *) malloc(Nargs + 1);
+    RetVal.v.str = malloc(Nargs + 1);
     if (!RetVal.v.str) return E_NO_MEM;
     RetVal.type = STR_TYPE;
     for (i=0; i<Nargs; i++) {
@@ -710,7 +710,7 @@ static int FWkdaynum(void)
 
 static int FWkday(void)
 {
-    char *s;
+    char const *s;
 
     if (!HASDATE(ARG(0)) && ARG(0).type != INT_TYPE) return E_BAD_TYPE;
     if (ARG(0).type == INT_TYPE) {
@@ -726,7 +726,7 @@ static int FWkday(void)
 
 static int FMon(void)
 {
-    char *s;
+    char const *s;
     int y, m, d, v;
 
     if (!HASDATE(ARG(0)) && ARG(0).type != INT_TYPE) return E_BAD_TYPE;
@@ -833,7 +833,7 @@ static int FSgn(void)
 static int FOrd(void)
 {
     int t, u, v;
-    char *s;
+    char const *s;
 
     if (ARG(0).type != INT_TYPE) return E_BAD_TYPE;
 
@@ -874,7 +874,7 @@ static int FPlural(void)
 	    return OK;
 	}
 	RetVal.type = STR_TYPE;
-	RetVal.v.str = (char *) malloc(strlen(ARG(1).v.str)+2);
+	RetVal.v.str = malloc(strlen(ARG(1).v.str)+2);
 	if (!RetVal.v.str) {
 	    RetVal.type = ERR_TYPE;
 	    return E_NO_MEM;
@@ -1315,7 +1315,8 @@ static int FIsomitted(void)
 /***************************************************************/
 static int FSubstr(void)
 {
-    char *s, *t;
+    char *s;
+    char const *t;
     int start, end;
 
     if (ARG(0).type != STR_TYPE || ARG(1).type != INT_TYPE) return E_BAD_TYPE;
@@ -1349,7 +1350,7 @@ static int FSubstr(void)
 /***************************************************************/
 static int FIndex(void)
 {
-    char *s;
+    char const *s;
     int start;
 
     if (ARG(0).type != STR_TYPE || ARG(1).type != STR_TYPE ||
@@ -1463,7 +1464,7 @@ static int FFiledir(void)
 static int FAccess(void)
 {
     int amode;
-    char *s;
+    char const *s;
 
     if (ARG(0).type != STR_TYPE ||
 	(ARG(1).type != INT_TYPE && ARG(1).type != STR_TYPE)) return E_BAD_TYPE;
@@ -2096,7 +2097,7 @@ static int FPsmoon(void)
     char sizebuf[30];
     char fontsizebuf[30];
     char *s = psbuff;
-    char *extra = NULL;
+    char const *extra = NULL;
     int size = -1;
     int fontsize = -1;
 
@@ -2366,7 +2367,7 @@ static int tz_convert(int year, int month, int day,
     int r;
     time_t t;
     struct tm *res;
-    char *old_tz;
+    char const *old_tz;
 
     /* init tm struct */
     tm->tm_sec = 0;

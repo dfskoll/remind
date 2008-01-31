@@ -29,7 +29,7 @@
 typedef struct udf_struct {
     struct udf_struct *next;
     char name[VAR_NAME_LEN+1];
-    char *text;
+    char const *text;
     Var *locals;
     char IsActive;
     int nargs;
@@ -47,7 +47,7 @@ extern Value ValStack[];
 extern int ValStackPtr;
 
 static void DestroyUserFunc (UserFunc *f);
-static void FUnset (char *name);
+static void FUnset (char const *name);
 static void FSet (UserFunc *f);
 static int SetUpLocalVars (UserFunc *f);
 static void DestroyLocalVals (UserFunc *f);
@@ -184,7 +184,7 @@ static void DestroyUserFunc(UserFunc *f)
     }
 
     /* Free the function definition */
-    if (f->text) free(f->text);
+    if (f->text) free( (char *) f->text);
 
     /* Free the data structure itself */
     free(f);
@@ -198,7 +198,7 @@ static void DestroyUserFunc(UserFunc *f)
 /*  it exists.                                                 */
 /*                                                             */
 /***************************************************************/
-static void FUnset(char *name)
+static void FUnset(char const *name)
 {
     UserFunc *cur, *prev;
     int h;

@@ -14,15 +14,15 @@
 #define STRSET(x, str) { if (x) free(x); (x) = StrDup(str); }
 
 /* Define a general malloc routine for creating pointers to objects */
-#define NEW(type) ((type *) malloc(sizeof(type)))
+#define NEW(type) (malloc(sizeof(type)))
 
 #include "dynbuf.h"
 
 int CallUserFunc (char const *name, int nargs);
 int DoFset (ParsePtr p);
 void ProduceCalendar (void);
-char  *SimpleTime (int tim);
-char  *CalendarTime (int tim, int duration);
+char const *SimpleTime (int tim);
+char const *CalendarTime (int tim, int duration);
 int DoRem (ParsePtr p);
 int DoFlush (ParsePtr p);
 void DoExit (ParsePtr p);

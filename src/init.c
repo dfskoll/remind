@@ -82,7 +82,7 @@ while (isdigit(*(s))) {    \
 static void ChgUser(char const *u);
 static void InitializeVar(char const *str);
 
-static char *BadDate = "Illegal date on command line\n";
+static char const *BadDate = "Illegal date on command line\n";
 
 static DynamicBuffer default_filename_buf;
 
@@ -96,7 +96,7 @@ static DynamicBuffer default_filename_buf;
 /***************************************************************/
 static char const *DefaultFilename(void)
 {
-    char *s;
+    char const *s;
 
     DBufInit(&default_filename_buf);
 
@@ -555,7 +555,10 @@ static void ChgUser(char const *user)
     uid_t myuid;
 
     struct passwd *pwent;
-    static char *home, *shell, *username, *logname;
+    static char *home;
+    static char *shell;
+    static char *username;
+    static char *logname;
 
     myuid = getuid();
 

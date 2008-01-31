@@ -849,7 +849,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 static int ParsePriority(ParsePtr s, Trigger *t)
 {
     int p, r;
-    char *u;
+    char const *u;
     DynamicBuffer buf;
     DBufInit(&buf);
 

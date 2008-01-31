@@ -40,7 +40,7 @@ typedef struct queuedrem {
     int typ;
     int RunDisabled;
     int ntrig;
-    char *text;
+    char const *text;
     char passthru[PASSTHRU_LEN+1];
     char sched[VAR_NAME_LEN+1];
     char tag[TAG_LEN+1];

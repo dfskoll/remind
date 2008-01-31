@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include "rem2ps.h"
 
-#define NEW(type) ((type *) malloc(sizeof(type)))
+#define NEW(type) (malloc(sizeof(type)))
 
 #define SPECIAL_NORMAL     0
 #define SPECIAL_POSTSCRIPT 1

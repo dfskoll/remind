@@ -32,7 +32,7 @@
 /***************************************************************/
 char *StrnCpy(char *dest, char const *source, int n)
 {
-    register char *odest = dest;
+    char *odest = dest;
 
     while (n-- && (*dest++ = *source++)) ;
     if (*(dest-1)) *dest = 0;
@@ -82,8 +82,8 @@ int StrinCmp(char const *s1, char const *s2, int n)
 /***************************************************************/
 char *StrDup(char const *s)
 {
-    char *ret = (char *) malloc(strlen(s)+1);
-    if (!ret) return (char *) NULL;
+    char *ret = malloc(strlen(s)+1);
+    if (!ret) return NULL;
     strcpy(ret, s);
     return ret;
 }

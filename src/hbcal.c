@@ -55,7 +55,7 @@
 #define ADAR2ADARA 1
 #define ADAR2BOTH  2
 
-static char *HebMonthNames[] = {
+static char const *HebMonthNames[] = {
     "Tishrey", "Heshvan", "Kislev", "Tevet", "Shvat", "Adar A", "Adar B",
     "Nisan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Adar"};
 

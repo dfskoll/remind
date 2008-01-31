@@ -42,20 +42,20 @@
 /* Define the structures needed by the file caching system */
 typedef struct cache {
     struct cache *next;
-    char *text;
+    char const *text;
     int LineNo;
 } CachedLine;
 
 typedef struct cheader {
     struct cheader *next;
-    char *filename;
+    char const *filename;
     CachedLine *cache;
     int ownedByMe;
 } CachedFile;
 
 /* Define the structures needed by the INCLUDE file system */
 typedef struct {
-    char *filename;
+    char const *filename;
     int LineNo;
     unsigned int IfFlags;
     int NumIfs;
@@ -235,7 +235,7 @@ static int CacheFile(char const *fname)
     int r;
     CachedFile *cf;
     CachedLine *cl;
-    char *s;
+    char const *s;
 
     cl = NULL;
 /* Create a file header */
@@ -349,7 +349,7 @@ int PopFile(void)
 	if (fp != stdin)
 	    (void) fseek(fp, i->offset, 0);  /* Trust that it works... */
     }
-    free(i->filename);
+    free((char *) i->filename);
     return OK;
 }
 
@@ -457,10 +457,10 @@ static void DestroyCache(CachedFile *cf)
 {
     CachedLine *cl, *cnext;
     CachedFile *temp;
-    if (cf->filename) free(cf->filename);
+    if (cf->filename) free((char *) cf->filename);
     cl = cf->cache;
     while (cl) {
-	if (cl->text) free (cl->text);
+	if (cl->text) free ((char *) cl->text);
 	cnext = cl->next;
 	free(cl);
 	cl = cnext;

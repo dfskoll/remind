@@ -42,7 +42,7 @@ static int DBufMakeRoom(DynamicBuffer *dbuf, int n)
     }
 
     /* Allocate memory */
-    buf = (char *) malloc(size);
+    buf = malloc(size);
     if (!buf) return E_NO_MEM;
 
     /* Copy contents */

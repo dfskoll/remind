@@ -28,14 +28,14 @@
 /* Data structures used by the calendar */
 typedef struct cal_entry {
     struct cal_entry *next;
-    char *text;
-    char *pos;
+    char const *text;
+    char const *pos;
     int time;
     int priority;
     char tag[TAG_LEN+1];
     char passthru[PASSTHRU_LEN+1];
     int duration;
-    char *filename;
+    char const *filename;
     int lineno;
 } CalEntry;
 
@@ -48,8 +48,8 @@ static void SortCol (CalEntry **col);
 static void DoCalendarOneWeek (void);
 static void DoCalendarOneMonth (void);
 static int WriteCalendarRow (void);
-static void PrintLeft (char *s, int width, char pad);
-static void PrintCentered (char *s, int width, char pad);
+static void PrintLeft (char const *s, int width, char pad);
+static void PrintCentered (char const *s, int width, char pad);
 static int WriteOneCalLine (void);
 static int WriteOneColLine (int col);
 static void GenerateCalEntries (int col);
@@ -303,7 +303,7 @@ static int WriteCalendarRow(void)
 /*  Left-justify a piece of text.                              */
 /*                                                             */
 /***************************************************************/
-static void PrintLeft(char *s, int width, char pad)
+static void PrintLeft(char const *s, int width, char pad)
 {
     int len = strlen(s);
     printf("%s", s);
@@ -317,7 +317,7 @@ static void PrintLeft(char *s, int width, char pad)
 /*  Center a piec of text                                      */
 /*                                                             */
 /***************************************************************/
-static void PrintCentered(char *s, int width, char pad)
+static void PrintCentered(char const *s, int width, char pad)
 {
     int len = strlen(s);
     int d = (width - len) / 2;
@@ -367,8 +367,8 @@ static int WriteOneCalLine(void)
 static int WriteOneColLine(int col)
 {
     CalEntry *e = CalColumn[col];
-    char *s;
-    char *space;
+    char const *s;
+    char const *space;
     int numwritten = 0;
 
 /* Print as many characters as possible within the column */
@@ -380,8 +380,8 @@ static int WriteOneColLine(int col)
     if (!*s && e->next) {
 	PrintLeft("", ColSpaces, ' ');
 	CalColumn[col] = e->next;
-	free(e->text);
-	free(e->filename);
+	free((char *) e->text);
+	free((char *) e->filename);
 	free(e);
 	return 1;
     }
@@ -420,8 +420,8 @@ static int WriteOneColLine(int col)
 /* If done, free memory if no next entry. */
     if (!*s && !e->next) {
 	CalColumn[col] = e->next;
-	free(e->text);
-	free(e->filename);
+	free((char *) e->text);
+	free((char *) e->filename);
 	free(e);
     } else {
 	e->pos = s;
@@ -830,8 +830,8 @@ static void WriteSimpleEntries(int col, int jul)
 	    printf("* ");
 	}
 	printf("%s\n", e->text);
-	free(e->text);
-	free(e->filename);
+	free((char *) e->text);
+	free((char *) e->filename);
 	n = e->next;
 	free(e);
 	e = n;
@@ -888,14 +888,14 @@ static void WriteCalDays(void)
 /*  This takes into account duration                           */
 /*                                                             */
 /***************************************************************/
-char *
+char const *
 CalendarTime(int tim, int duration)
 {
     static char buf[128];
     int h, min, hh;
     int h2, min2, hh2, newtim, days;
-    char *ampm1;
-    char *ampm2;
+    char const *ampm1;
+    char const *ampm2;
     char daybuf[64];
 
     buf[0] = 0;
@@ -970,7 +970,7 @@ CalendarTime(int tim, int duration)
 /*  A trailing space is always added.                          */
 /*                                                             */
 /***************************************************************/
-char *SimpleTime(int tim)
+char const *SimpleTime(int tim)
 {
     static char buf[32];
     int h, min, hh;

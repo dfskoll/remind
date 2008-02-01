@@ -400,7 +400,7 @@ sub output_calendar
 	$col++;
     }
 
-    if ($last_col == 6) {
+    if ($last_col == 6 && $first_col > 0) {
 	small_calendar($Nextmon, $Nextlen, $Options{'forwurl'},
 		       ($Firstwkday + $Numdays) % 7);
 	$col++;
@@ -451,6 +451,22 @@ sub output_calendar
 	print "</tr>\n";
     }
 
+    # Add a row for small calendars if they were not yet done!
+    if ($first_col == 0 && $last_col == 6) {
+	    if ($Options{'nostyle'}) {
+		    print "<tr>\n";
+	    } else {
+		    print "<tr class=\"rem-cal-row\">\n";
+	    }
+	    small_calendar($Prevmon, $Prevlen, $Options{'backurl'},
+			   ($Firstwkday - $Prevlen + 35) % 7);
+	    for (my $i=0; $i<5; $i++) {
+		print("<td$class>&nbsp;</td>\n");
+	    }
+	    small_calendar($Nextmon, $Nextlen, $Options{'forwurl'},
+			   ($Firstwkday + $Numdays) % 7);
+	    print("</tr>\n");
+    }
     # End the table
     print "</table>\n";
 }

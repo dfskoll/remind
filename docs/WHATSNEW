@@ -19,6 +19,9 @@ CHANGES TO REMIND
 - BUG FIX: rem2html would output a horribly-wrong calendar for a 28-day
   February starting on Sunday (such as February 2009.)  This has been fixed.
 
+- BUG FIX: The "-ivar=value" command-line option failed if Remind re-execed
+  itself because we overwrote argv[].  This has been fixed.
+
 * Version 3.1 Patch 3 - 2007-10-15
 
 + MINOR ENHANCEMENTS

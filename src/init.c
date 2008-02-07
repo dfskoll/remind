@@ -629,7 +629,7 @@ DefineFunction(char const *str)
     r = DoFset(&p);
     DestroyParser(&p);
     if (r != OK) {
-	fprintf(ErrFp, ErrMsg[r]);
+	fprintf(ErrFp, "-i option: %s: %s\n", str, ErrMsg[r]);
     }
 }
 /***************************************************************/

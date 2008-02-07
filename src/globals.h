@@ -53,6 +53,7 @@ EXTERN  INIT(   int     CalMonths, 0);
 EXTERN  INIT(	int 	Hush, 0);
 EXTERN  INIT(	int 	NextMode, 0);
 EXTERN  INIT(	int 	InfiniteDelta, 0);
+EXTERN  INIT(   int     DeltaOffset, 0);
 EXTERN  INIT(   int     RunDisabled, 0);
 EXTERN  INIT(   int     IgnoreOnce, 0);
 EXTERN  INIT(   int     SortByTime, 0);

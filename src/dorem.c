@@ -781,6 +781,11 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 
     /* If there's a "warn" function, it overrides any deltas */
     if (t->warn[0] != 0) {
+	if (DeltaOffset) {
+	    if (jul <= JulianToday + DeltaOffset) {
+		return 1;
+	    }
+	}
 	return ShouldTriggerBasedOnWarn(t, jul);
     }
 
@@ -798,7 +803,7 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
     }
 
     /* Should we trigger the reminder? */
-    return (jul <= JulianToday);
+    return (jul <= JulianToday + DeltaOffset);
 }
 
 /***************************************************************/

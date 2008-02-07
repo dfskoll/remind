@@ -222,9 +222,15 @@ void InitRemind(int argc, char const *argv[])
 
 	    case 't':
 	    case 'T':
-		InfiniteDelta = 1;
+		if (!*arg) {
+		    InfiniteDelta = 1;
+		} else {
+		    PARSENUM(DeltaOffset, arg);
+		    if (DeltaOffset < 0) {
+			DeltaOffset = 0;
+		    }
+		}
 		break;
-
 	    case 'e':
 	    case 'E':
 		ErrFp = stdout;

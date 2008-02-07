@@ -618,6 +618,20 @@ static void ChgUser(char const *user)
 	putenv(logname);
     }
 }
+
+static void
+DefineFunction(char const *str)
+{
+    Parser p;
+    int r;
+
+    CreateParser(str, &p);
+    r = DoFset(&p);
+    DestroyParser(&p);
+    if (r != OK) {
+	fprintf(ErrFp, ErrMsg[r]);
+    }
+}
 /***************************************************************/
 /*                                                             */
 /*  InitializeVar                                              */
@@ -628,7 +642,7 @@ static void ChgUser(char const *user)
 static void InitializeVar(char const *str)
 {
     char const *expr;
-
+    char const *ostr = str;
     char varname[VAR_NAME_LEN+1];
 
     Value val;
@@ -640,6 +654,11 @@ static void InitializeVar(char const *str)
     while (*str && *str != '=') {
 	if (r < VAR_NAME_LEN) {
 	    varname[r++] = *str;
+	}
+	if (*str == '(') {
+	    /* Do a function definition if we see a paren */
+	    DefineFunction(ostr);
+	    return;
 	}
 	str++;
     }

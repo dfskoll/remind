@@ -142,6 +142,11 @@ int DoFset(ParsePtr p)
 	}
     }
 
+    /* Allow an optional = sign: FSET f(x) = x*x */
+    c = ParseNonSpaceChar(p, &r, 1);
+    if (c == '=') {
+	c = ParseNonSpaceChar(p, &r, 0);
+    }
     /* Copy the text over */
     if (p->isnested) {
 	Eprint("%s", ErrMsg[E_CANTNEST_FDEF]);

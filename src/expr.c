@@ -204,6 +204,46 @@ static int ParseExprToken(DynamicBuffer *buf, char const **in)
     if (c == '\"') {
 	if (!**in) return E_MISS_QUOTE;
 	while (**in) {
+	    /* Allow backslash-escapes */
+	    if (**in == '\\') {
+		int r;
+		(*in)++;
+		if (!**in) {
+		    DBufFree(buf);
+		    return E_MISS_QUOTE;
+		}
+		switch(**in) {
+		case 'a':
+		    r = DBufPutc(buf, '\a');
+		    break;
+		case 'b':
+		    r = DBufPutc(buf, '\b');
+		    break;
+		case 'f':
+		    r = DBufPutc(buf, '\f');
+		    break;
+		case 'n':
+		    r = DBufPutc(buf, '\n');
+		    break;
+		case 'r':
+		    r = DBufPutc(buf, '\r');
+		    break;
+		case 't':
+		    r = DBufPutc(buf, '\t');
+		    break;
+		case 'v':
+		    r = DBufPutc(buf, '\v');
+		    break;
+		default:
+		    r = DBufPutc(buf, **in);
+		}
+		(*in)++;
+		if (r != OK) {
+		    DBufFree(buf);
+		    return E_NO_MEM;
+		}
+		continue;
+	    }
 	    c = *(*in)++;
 	    if (DBufPutc(buf, c) != OK) {
 		DBufFree(buf);

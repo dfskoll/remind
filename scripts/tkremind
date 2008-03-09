@@ -1358,7 +1358,9 @@ proc OptionsToRemindDialog { w opts } {
 		$w.timehour configure -text $hour
 		$w.ampm configure -text "PM"
 	    } else {
-		$w.ampm configure -text "AM"
+		if {"$ampm" == ""} {
+		    $w.ampm configure -text "AM"
+		}
 	    }
 	}
     }

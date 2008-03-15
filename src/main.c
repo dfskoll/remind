@@ -345,6 +345,7 @@ int ParseChar(ParsePtr p, int *err, int peek)
 		return *(p->pos++);
 	    }
 	}
+	p->expr_happened = 1;
 	p->pos++;
 	r = EvalExpr(&(p->pos), &val);
 	if (r) {
@@ -563,6 +564,7 @@ void CreateParser(char const *s, ParsePtr p)
     p->etext = NULL;
     p->allownested = 1;
     p->tokenPushed = NULL;
+    p->expr_happened = 0;
     DBufInit(&p->pushedToken);
 }
 

@@ -71,7 +71,7 @@ typedef struct {
 
 /* The parse pointer */
 typedef struct {
-    char isnested;        /* Is it a nested expression? */
+    char isnested;              /* Is it a nested expression? */
     char allownested;
     char const *text;           /* Start of text */
     char const *pos;            /* Current position */
@@ -79,6 +79,7 @@ typedef struct {
     char const *epos;           /* Position in substituted text */
     DynamicBuffer pushedToken;	/* Pushed-back token */
     char const *tokenPushed;	/* NULL if no pushed-back token */
+    char expr_happened;         /* Did we encounter an [expression] ? */
 } Parser;
 
 typedef Parser *ParsePtr;  /* Pointer to parser structure */

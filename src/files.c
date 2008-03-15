@@ -140,7 +140,7 @@ static int ReadLineFromFile(void)
 	}
 	l = DBufLen(&buf);
 	if (l && (DBufValue(&buf)[l-1] == '\\')) {
-	    DBufValue(&buf)[l-1] = 0;
+	    DBufValue(&buf)[l-1] = '\n';
 	    if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
 		DBufFree(&buf);
 		DBufFree(&LineBuffer);

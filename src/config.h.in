@@ -10,6 +10,11 @@
 /* Define if you have the <sys/file.h> header file.  */
 #undef HAVE_SYS_FILE_H
 
+/* Define if you have the <glob.h> header file */
+#undef HAVE_GLOB_H
+
+#undef HAVE_GLOB
+
 #undef HAVE_SETENV
 
 #undef HAVE_UNSETENV

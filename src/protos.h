@@ -37,7 +37,6 @@ void PrintValue  (Value *v, FILE *fp);
 int CopyValue (Value *dest, const Value *src);
 int ReadLine (void);
 int OpenFile (char const *fname);
-int PopFile (void);
 int DoInclude (ParsePtr p);
 int IncludeFile (char const *fname);
 int GetAccessDate (char const *file);

@@ -31,7 +31,7 @@ AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(unsigned long)
 
 dnl Checks for header files.
-AC_CHECK_HEADERS(sys/file.h)
+AC_CHECK_HEADERS(sys/file.h glob.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM
@@ -44,7 +44,7 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wstrict-prototypes"
 fi
 
-AC_CHECK_FUNCS(setenv unsetenv)
+AC_CHECK_FUNCS(setenv unsetenv glob)
 VERSION=03.01.04
 AC_SUBST(VERSION)
 AC_OUTPUT(src/Makefile www/Makefile src/version.h)

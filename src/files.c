@@ -30,6 +30,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifdef HAVE_GLOB_H
+#include <glob.h>
+#endif
+
 #include "types.h"
 #include "protos.h"
 #include "globals.h"
@@ -53,9 +57,16 @@ typedef struct cheader {
     int ownedByMe;
 } CachedFile;
 
+/* A linked list of filenames if we INCLUDE /some/directory/  */
+typedef struct fname_chain {
+    struct fname_chain *next;
+    char const *filename;
+} FilenameChain;
+
 /* Define the structures needed by the INCLUDE file system */
 typedef struct {
     char const *filename;
+    FilenameChain *chain;
     int LineNo;
     unsigned int IfFlags;
     int NumIfs;
@@ -76,6 +87,7 @@ static int ReadLineFromFile (void);
 static int CacheFile (char const *fname);
 static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
+static int PopFile (void);
 
 /***************************************************************/
 /*                                                             */
@@ -313,11 +325,33 @@ static int CacheFile(char const *fname)
 
 /***************************************************************/
 /*                                                             */
+/*  NextChainedFile - move to the next chained file in a glob  */
+/*  list.                                                      */
+/*                                                             */
+/***************************************************************/
+static int NextChainedFile(IncludeStruct *i)
+{
+    while(i->chain) {
+	FilenameChain *cur = i->chain;
+	i->chain = i->chain->next;
+	if (OpenFile(cur->filename) == OK) {
+	    free((void *) cur->filename);
+	    free(cur);
+	    return OK;
+	}
+	free((void *) cur->filename);
+	free(cur);
+    }
+    return E_EOF;
+}
+
+/***************************************************************/
+/*                                                             */
 /*  PopFile - we've reached the end.  Pop up to the previous   */
 /*  file, or return E_EOF                                      */
 /*                                                             */
 /***************************************************************/
-int PopFile(void)
+static int PopFile(void)
 {
     IncludeStruct *i;
 
@@ -326,8 +360,17 @@ int PopFile(void)
 
     if (!Hush && NumIfs) Eprint("%s", ErrMsg[E_MISS_ENDIF]);
     if (!IStackPtr) return E_EOF;
+    i = &IStack[IStackPtr-1];
+
+    if (i->chain) {
+	int oldRunDisabled = RunDisabled;
+	if (NextChainedFile(i) == OK) {
+	    return OK;
+	}
+	RunDisabled = oldRunDisabled;
+    }
+
     IStackPtr--;
-    i = &IStack[IStackPtr];
 
     LineNo = i->LineNo;
     IfFlags = i->IfFlags;
@@ -361,13 +404,13 @@ int PopFile(void)
 /*                                                             */
 /***************************************************************/
 int DoInclude(ParsePtr p)
-{     
+{
     DynamicBuffer buf;
     int r, e;
 
     DBufInit(&buf);
     if ( (r=ParseToken(p, &buf)) ) return r;
-    e = VerifyEoln(p); 
+    e = VerifyEoln(p);
     if (e) Eprint("%s", ErrMsg[e]);
     if ( (r=IncludeFile(DBufValue(&buf))) ) {
 	DBufFree(&buf);
@@ -378,6 +421,39 @@ int DoInclude(ParsePtr p)
     IfFlags = 0;
     return OK;
 }
+
+#ifdef HAVE_GLOB
+static int SetupGlobChain(char const *dirname, IncludeStruct *i)
+{
+    DynamicBuffer pattern;
+    if (!*dirname) return E_CANT_OPEN;
+
+    char *dir = StrDup(dirname);
+    size_t l;
+
+    if (!dir) return E_NO_MEM;
+
+    /* Strip trailing slashes off directory */
+    l = strlen(dir);
+    while(l) {
+	if (*(dir+l-1) == '/') {
+	    l--;
+	    *(dir+l) = 0;
+	}
+    }
+
+    /* Repair root directory :-) */
+    if (!l) {
+	*dir = '/';
+    }
+
+    DBufInit(&pattern);
+    DBufPuts(&pattern, dir);
+    DBufPuts(&pattern, "/*.rem");
+
+    return 0;
+}
+#endif
 
 /***************************************************************/
 /*                                                             */
@@ -392,6 +468,7 @@ int IncludeFile(char const *fname)
     IncludeStruct *i;
     int r;
     int oldRunDisabled;
+    struct stat statbuf;
 
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
@@ -403,6 +480,7 @@ int IncludeFile(char const *fname)
     i->IfFlags = IfFlags;
     i->CLine = CLine;
     i->offset = -1L;
+    i->chain = NULL;
     if (RunDisabled & RUN_NOTOWNER) {
 	i->ownedByMe = 0;
     } else {
@@ -414,6 +492,38 @@ int IncludeFile(char const *fname)
     }
 
     IStackPtr++;
+
+#ifdef HAVE_GLOB
+    /* If it's a directory, set up the glob chain here. */
+    if (stat(fname, &statbuf) == 0) {
+	FilenameChain *fc;
+	if (S_ISDIR(statbuf.st_mode)) {
+	    if (SetupGlobChain(fname, i) == OK) { /* Glob succeeded */
+		if (!i->chain) { /* Oops... no matching files */
+		    return PopFile();
+		}
+		while(i->chain) {
+		    fc = i->chain;
+		    i->chain = i->chain->next;
+
+		    /* Munch first file */
+		    oldRunDisabled = RunDisabled;
+		    if (!OpenFile(fc->filename)) {
+			free((void *) fc->filename);
+			free(fc);
+			return OK;
+		    }
+		    Eprint("%s: %s", ErrMsg[E_CANT_OPEN], fc->filename);
+		    free((void *) fc->filename);
+		    free(fc);
+		    RunDisabled = oldRunDisabled;
+		}
+		/* Couldn't open anything... bail */
+		return PopFile();
+	    }
+	}
+    }
+#endif
 
     oldRunDisabled = RunDisabled;
     /* Try to open the new file */

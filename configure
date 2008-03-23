@@ -4690,7 +4690,8 @@ _ACEOF
 
 
 
-for ac_header in sys/file.h
+
+for ac_header in sys/file.h glob.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -5189,7 +5190,8 @@ fi
 
 
 
-for ac_func in setenv unsetenv
+
+for ac_func in setenv unsetenv glob
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $ac_func" >&5

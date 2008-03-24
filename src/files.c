@@ -63,6 +63,13 @@ typedef struct fname_chain {
     char const *filename;
 } FilenameChain;
 
+/* Cache filename chains for directories */
+typedef struct directory_fname_chain {
+    struct directory_fname_chain *next;
+    FilenameChain *chain;
+    char const *dirname;
+} DirectoryFilenameChain;
+
 /* Define the structures needed by the INCLUDE file system */
 typedef struct {
     char const *filename;
@@ -77,6 +84,7 @@ typedef struct {
 
 static CachedFile *CachedFiles = (CachedFile *) NULL;
 static CachedLine *CLine = (CachedLine *) NULL;
+static DirectoryFilenameChain *CachedDirectoryChains = NULL;
 
 static FILE *fp;
 
@@ -88,6 +96,22 @@ static int CacheFile (char const *fname);
 static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
 static int PopFile (void);
+
+static void FreeChainItem(FilenameChain *chain)
+{
+	if (chain->filename) free((void *) chain->filename);
+	free(chain);
+}
+
+static void FreeChain(FilenameChain *chain)
+{
+    FilenameChain *next;
+    while(chain) {
+	next = chain->next;
+	FreeChainItem(chain);
+	chain = next;
+    }
+}
 
 /***************************************************************/
 /*                                                             */
@@ -335,12 +359,10 @@ static int NextChainedFile(IncludeStruct *i)
 	FilenameChain *cur = i->chain;
 	i->chain = i->chain->next;
 	if (OpenFile(cur->filename) == OK) {
-	    free((void *) cur->filename);
-	    free(cur);
+	    FreeChainItem(cur);
 	    return OK;
 	}
-	free((void *) cur->filename);
-	free(cur);
+	FreeChainItem(cur);
     }
     return E_EOF;
 }
@@ -426,11 +448,14 @@ int DoInclude(ParsePtr p)
 static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 {
     DynamicBuffer pattern;
+    char *dir;
+    size_t l;
+    int r;
+    glob_t glob_buf;
+
     if (!*dirname) return E_CANT_OPEN;
 
-    char *dir = StrDup(dirname);
-    size_t l;
-
+    dir = StrDup(dirname);
     if (!dir) return E_NO_MEM;
 
     /* Strip trailing slashes off directory */
@@ -439,6 +464,8 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 	if (*(dir+l-1) == '/') {
 	    l--;
 	    *(dir+l) = 0;
+	} else {
+	    break;
 	}
     }
 
@@ -450,8 +477,41 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     DBufInit(&pattern);
     DBufPuts(&pattern, dir);
     DBufPuts(&pattern, "/*.rem");
+    free(dir);
 
-    return 0;
+    r = glob(DBufValue(&pattern), 0, NULL, &glob_buf);
+    DBufFree(&pattern);
+
+    if (r == GLOB_NOMATCH) {
+	return OK;
+    }
+
+    if (r != 0) {
+	return -1;
+    }
+
+    /* Add the files to the chain backwards to preserve sort order */
+    for (r=glob_buf.gl_pathc-1; r>=0; r--) {
+	FilenameChain *ch = malloc(sizeof(FilenameChain));
+	if (!ch) {
+	    FreeChain(i->chain);
+	    i->chain = NULL;
+	    return E_NO_MEM;
+	}
+
+	/* TODO: stat the file and only add if it's a plain file and
+	   readable by us */
+	ch->filename = StrDup(glob_buf.gl_pathv[r]);
+	if (!ch->filename) {
+	    FreeChain(i->chain);
+	    i->chain = NULL;
+	    free(ch);
+	    return E_NO_MEM;
+	}
+	ch->next = i->chain;
+	i->chain = ch;
+    }
+    return OK;
 }
 #endif
 

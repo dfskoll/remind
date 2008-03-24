@@ -524,7 +524,7 @@ sub draw_day_cell
 	    if ($Options{'nostyle'}) {
 		print("<div style=\"float: left\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
 	    } else {
-		print("<div class=\"rem-moon\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
+		print("<div class=\"rem-moon\"><img width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");
 	    }
     }
 

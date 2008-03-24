@@ -244,7 +244,8 @@ EXTERN char *ErrMsg[] =
     "%d rappel(s) en file pour aujourd'hui.\n",
     "Nombre attendu",
     "Fonction ill\351gale apr\350s WARN",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 #else /* ISOLATIN1 */
     "Ok",
     "']' manquant",
@@ -345,7 +346,8 @@ EXTERN char *ErrMsg[] =
     "%d rappel(s) en file pour aujourd'hui.\n",
     "Nombre attendu",
     "Fonction illegale apres WARN",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

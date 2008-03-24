@@ -117,6 +117,7 @@
 #define E_EXPECTING_NUMBER   97
 #define M_BAD_WARN_FUNC      98
 #define E_CANT_CONVERT_TZ    99
+#define E_NO_MATCHING_REMS  100
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -230,7 +231,8 @@ EXTERN char *ErrMsg[]
     "%d reminder(s) queued for later today.\n",
     "Expecting number",
     "Bad function in WARN clause",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 }
 #endif /* MK_GLOBALS */
 ;

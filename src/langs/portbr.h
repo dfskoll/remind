@@ -245,7 +245,8 @@ EXTERN char *ErrMsg[] =
     "%d compromisso(s) colocados na fila para mais tarde.\n",
     "Esperando numero",
     "Funcao ilegal na clausula WARN",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 };
 #endif /* MK_GLOBALS */
 

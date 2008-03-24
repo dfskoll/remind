@@ -148,7 +148,7 @@ static void DoReminders(void)
 	exit(1);
     }
 
-    r=OpenFile(InitialFile);
+    r=IncludeFile(InitialFile);
     if (r) {
 	fprintf(ErrFp, "%s %s: %s\n", ErrMsg[E_ERR_READING],
 		InitialFile, ErrMsg[r]);
@@ -511,14 +511,16 @@ void Eprint(char const *fmt, ...)
     /* Check if more than one error msg. from this line */
     if (!FreshLine && !ShowAllErrors) return;
 
-    if (FreshLine) {
+    if (FreshLine && FileName) {
 	FreshLine = 0;
 	if (strcmp(FileName, "-"))
 	    (void) fprintf(ErrFp, "%s(%d): ", FileName, LineNo);
 	else
 	    (void) fprintf(ErrFp, "-stdin-(%d): ", LineNo);
 	if (DebugFlag & DB_PRTLINE) OutputLine(ErrFp);
-    } else fprintf(ErrFp, "       ");
+    } else if (FileName) {
+	fprintf(ErrFp, "       ");
+    }
 
     va_start(argptr, fmt);
     (void) vfprintf(ErrFp, fmt, argptr);

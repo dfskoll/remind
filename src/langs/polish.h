@@ -279,7 +279,8 @@ EXTERN char *ErrMsg[] =
     "%d Przypomnienia zakolejkowane na p\363\274niej.\n",
     "Spodziewana liczba",
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 #else /* ISOLATIN1 */
     "OK",
     "Brakujacy ']'",
@@ -380,7 +381,8 @@ EXTERN char *ErrMsg[] =
     "%d Przypomnienia zakolejkowane na pozniej.\n",
     "Spodziewana liczba",
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

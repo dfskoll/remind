@@ -449,7 +449,7 @@ static void GenerateCalEntries(int col)
     DestroyVars(0);
     NumTriggered = 0;
 
-    r=OpenFile(InitialFile);
+    r=IncludeFile(InitialFile);
     if (r) {
 	fprintf(ErrFp, "%s %s: %s\n", ErrMsg[E_ERR_READING], InitialFile, ErrMsg[r]);
 	exit(1);

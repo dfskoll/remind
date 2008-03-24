@@ -307,7 +307,8 @@ EXTERN char *ErrMsg[] =
     "%d viesti(\xE4) t\xE4m\xE4n p\xE4iv\xE4n jonossa.\n",
     "Numero puuttuu",
     "Virheellinen funktio WARN-lausekkeessa",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 
 #elif IBMEXTENDED
     "Ok",
@@ -409,7 +410,8 @@ EXTERN char *ErrMsg[] =
     "%d viesti(\x84) t\x84m\x84n p\x84iv\x84n jonossa.\n",
     "Numero puuttuu"
     "Virheellinen funktio WARN-lausekkeessa",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 #else
     "Ok",
     "Puuttuva ']'",
@@ -510,7 +512,8 @@ EXTERN char *ErrMsg[] =
     "%d viesti({) t{m{n p{iv{n jonossa.\n",
     "Numero puuttuu",
     "Virheellinen funktio WARN-lausekkeessa",
-    "Can't convert between time zones"
+    "Can't convert between time zones",
+    "No files matching *.rem found in directory %s"
 
 #endif
 };

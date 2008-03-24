@@ -359,10 +359,8 @@ static int NextChainedFile(IncludeStruct *i)
 	FilenameChain *cur = i->chain;
 	i->chain = i->chain->next;
 	if (OpenFile(cur->filename) == OK) {
-	    FreeChainItem(cur);
 	    return OK;
 	}
-	FreeChainItem(cur);
     }
     return E_EOF;
 }
@@ -390,6 +388,10 @@ static int PopFile(void)
 	    return OK;
 	}
 	RunDisabled = oldRunDisabled;
+    }
+
+    if (IStackPtr <= 1) {
+	return E_EOF;
     }
 
     IStackPtr--;
@@ -452,7 +454,9 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     size_t l;
     int r;
     glob_t glob_buf;
+    DirectoryFilenameChain *dc = CachedDirectoryChains;
 
+    i->chain = NULL;
     if (!*dirname) return E_CANT_OPEN;
 
     dir = StrDup(dirname);
@@ -472,6 +476,32 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     /* Repair root directory :-) */
     if (!l) {
 	*dir = '/';
+    }
+
+    /* Check the cache */
+    while(dc) {
+	if (!strcmp(dc->dirname, dir)) {
+	    free(dir);
+	    i->chain = dc->chain;
+	    return OK;
+	}
+	dc = dc->next;
+    }
+
+    if (ShouldCache) {
+	dc = malloc(sizeof(DirectoryFilenameChain));
+	if (dc) {
+	    dc->dirname = StrDup(dir);
+	    if (!dc->dirname) {
+		free(dc);
+		dc = NULL;
+	    }
+	}
+	if (dc) {
+	    dc->chain = NULL;
+	    dc->next = CachedDirectoryChains;
+	    CachedDirectoryChains = dc;
+	}
     }
 
     DBufInit(&pattern);
@@ -511,6 +541,10 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 	ch->next = i->chain;
 	i->chain = ch;
     }
+    if (dc) {
+	dc->chain = i->chain;
+    }
+
     return OK;
 }
 #endif
@@ -530,11 +564,16 @@ int IncludeFile(char const *fname)
     int oldRunDisabled;
     struct stat statbuf;
 
+    FreshLine = 1;
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
 
-    i->filename = StrDup(FileName);
-    if (!i->filename) return E_NO_MEM;
+    if (FileName) {
+	i->filename = StrDup(FileName);
+	if (!i->filename) return E_NO_MEM;
+    } else {
+	i->filename = NULL;
+    }
     i->LineNo = LineNo;
     i->NumIfs = NumIfs;
     i->IfFlags = IfFlags;
@@ -560,6 +599,9 @@ int IncludeFile(char const *fname)
 	if (S_ISDIR(statbuf.st_mode)) {
 	    if (SetupGlobChain(fname, i) == OK) { /* Glob succeeded */
 		if (!i->chain) { /* Oops... no matching files */
+		    if (!Hush) {
+			Eprint(ErrMsg[E_NO_MATCHING_REMS], fname);
+		    }
 		    return PopFile();
 		}
 		while(i->chain) {
@@ -569,17 +611,17 @@ int IncludeFile(char const *fname)
 		    /* Munch first file */
 		    oldRunDisabled = RunDisabled;
 		    if (!OpenFile(fc->filename)) {
-			free((void *) fc->filename);
-			free(fc);
 			return OK;
 		    }
 		    Eprint("%s: %s", ErrMsg[E_CANT_OPEN], fc->filename);
-		    free((void *) fc->filename);
-		    free(fc);
 		    RunDisabled = oldRunDisabled;
 		}
 		/* Couldn't open anything... bail */
 		return PopFile();
+	    } else {
+		if (!Hush) {
+		    Eprint(ErrMsg[E_NO_MATCHING_REMS], fname);
+		}
 	    }
 	}
     }

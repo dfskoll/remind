@@ -1335,6 +1335,37 @@ September 30
 # rem2ps end
 Test 8
 
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
 # rem2ps begin
 August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
@@ -1361,66 +1392,97 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
 # rem2ps begin

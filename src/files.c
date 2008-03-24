@@ -360,6 +360,8 @@ static int NextChainedFile(IncludeStruct *i)
 	i->chain = i->chain->next;
 	if (OpenFile(cur->filename) == OK) {
 	    return OK;
+	} else {
+	    Eprint("%s: %s", ErrMsg[E_CANT_OPEN], cur->filename);
 	}
     }
     return E_EOF;

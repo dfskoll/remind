@@ -604,6 +604,7 @@ static int DoCalRem(ParsePtr p, int col)
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
+	if (!LastTrigValid) return OK;
 	r=ParseToken(p, &buf);
 	if (r) return r;
 	FindToken(DBufValue(&buf), &tok);

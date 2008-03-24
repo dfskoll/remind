@@ -12,7 +12,12 @@ a program to be executed.
 .PP
 If \fIfilename\fR is specified as a single dash '-', then \fBRemind\fR
 takes its input from standard input.  This also implicitly enables
-the \fB\-o\fR option, described below.
+the \fB\-o\fR option, described below.  If \fIfilename\fR happens to
+be a directory rather than a plain file, then \fBRemind\fR reads all of
+the files in that directory that match the pattern "*.rem".  The files
+are read in sorted order; the sort order may depend on your locale, but
+should match the sort order used by the shell to expand "*.rem".
+
 .SH OPTIONS
 \fBRemind\fR has a slew of options.  If you're new to the program,
 ignore them for now and skip to the section "Reminder Files".
@@ -1248,6 +1253,12 @@ administrator.)
 .PP
 If you specify a filename of "-" in the \fBINCLUDE\fR command, \fBRemind\fR
 will begin reading from standard input.
+.PP
+If you specify a \fIdirectory\fR as the argument to \fBINCLDUE\fR, then
+\fBRemind\fR will process all files in that directory that match the shell
+patterm "*.rem".  The files are processed in sorted order; the sort order
+matches that used by the shell when it expands "*.rem".
+
 .SH THE RUN COMMAND
 .PP
 If you include other files in your reminder script, you may not always

@@ -161,7 +161,7 @@
 /*---------------------------------------------------------------------*/
 /* INCLUDE_NEST: How many nested INCLUDES do we handle?                */
 /*---------------------------------------------------------------------*/
-#define INCLUDE_NEST 8
+#define INCLUDE_NEST 9
 
 /*---------------------------------------------------------------------*/
 /* IF_NEST: How many nested IFs do we handle?  Maximum is the number   */

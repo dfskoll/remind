@@ -1184,3 +1184,100 @@ September 30
 2007/08/01 * * 2205 780 Brown
 2007/08/01 * * 2925 780 Strange
 # rem2ps end
+Test 8
+
+# rem2ps begin
+August 2007 31 3 0
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday
+July 31
+September 30
+2007/08/15 * * * * 01
+2007/08/15 * * * * 02
+# rem2ps end
+Test 9
+
+Can't open file: ../tests/nonexistent_include_dir
+Error reading ../tests/nonexistent_include_dir: Can't open file
+# rem2ps begin
+August 2007 31 3 0
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday
+July 31
+September 30
+../tests/include_dir_no_rems: No files matching *.rem
+Error reading ../tests/include_dir_no_rems: No files matching *.rem
+# rem2ps begin
+August 2007 31 3 0
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday
+July 31
+September 30
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+# rem2ps begin
+August 2007 31 3 0
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday
+July 31
+September 30
+2007/08/15 * * * * 01
+2007/08/15 * * * * 02
+2007/08/15 * * * * Whee!!!!
+# rem2ps end

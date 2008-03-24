@@ -1,0 +1,5 @@
+INCLUDE include_dir
+INCLUDE include_dir_no_rems
+INCLUDE nonexistent_include_dir
+
+REM 15 MSG Whee!!!!

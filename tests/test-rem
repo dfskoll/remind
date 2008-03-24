@@ -11,6 +11,13 @@
 # Copyright (C) 1999-2000 Roaring Penguin Software Inc.
 # ---------------------------------------------------------------------------
 
+DIR=`dirname $0`
+cd $DIR
+if test $? != 0 ; then
+    echo "Unable to cd $DIR" >&2
+    exit 1
+fi
+
 TEST_GETENV="foo bar baz" ; export TEST_GETENV
 echo "Test 1" > ../tests/test.out
 echo "" >> ../tests/test.out
@@ -36,6 +43,16 @@ echo "" >> ../tests/test.out
 echo "Test 7" >> ../tests/test.out
 echo "" >> ../tests/test.out
 ../src/remind -p -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+
+echo "Test 8" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p -b2 ../tests/include_dir 1 aug 2007 >> ../tests/test.out
+
+echo "Test 9" >> ../tests/test.out
+echo "" >> ../tests/test.out
+../src/remind -p -b2 ../tests/nonexistent_include_dir 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -p -b2 ../tests/include_dir_no_rems 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -p -b2 ../tests/include_test.rem 1 aug 2007 >> ../tests/test.out 2>&1
 
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then

@@ -190,7 +190,7 @@ EXTERN char *ErrMsg[]
     "Too many partial OMITs",
     "Too many full OMITs",
     "Warning: PUSH-OMIT-CONTEXT without matching POP-OMIT-CONTEXT",
-    "Error reading file",
+    "Error reading",
     "Expecting end-of-line",
     "Invalid Hebrew date",
     "IIF needs odd number of arguments",
@@ -232,7 +232,7 @@ EXTERN char *ErrMsg[]
     "Expecting number",
     "Bad function in WARN clause",
     "Can't convert between time zones",
-    "No files matching *.rem found in directory %s"
+    "No files matching *.rem"
 }
 #endif /* MK_GLOBALS */
 ;

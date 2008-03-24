@@ -246,7 +246,7 @@ EXTERN char *ErrMsg[] =
     "Esperando numero",
     "Funcao ilegal na clausula WARN",
     "Can't convert between time zones",
-    "No files matching *.rem found in directory %s"
+    "No files matching *.rem"
 };
 #endif /* MK_GLOBALS */
 

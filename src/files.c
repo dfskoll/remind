@@ -599,9 +599,10 @@ int IncludeFile(char const *fname)
 	    if (SetupGlobChain(fname, i) == OK) { /* Glob succeeded */
 		if (!i->chain) { /* Oops... no matching files */
 		    if (!Hush) {
-			Eprint(ErrMsg[E_NO_MATCHING_REMS], fname);
+			Eprint("%s: %s", fname, ErrMsg[E_NO_MATCHING_REMS]);
 		    }
-		    return PopFile();
+		    PopFile();
+		    return E_NO_MATCHING_REMS;
 		}
 		while(i->chain) {
 		    fc = i->chain;
@@ -619,9 +620,10 @@ int IncludeFile(char const *fname)
 		return PopFile();
 	    } else {
 		if (!Hush) {
-		    Eprint(ErrMsg[E_NO_MATCHING_REMS], fname);
+		    Eprint("%s: %s", fname, ErrMsg[E_NO_MATCHING_REMS]);
 		}
 	    }
+	    return E_NO_MATCHING_REMS;
 	}
     }
 #endif

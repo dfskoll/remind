@@ -560,7 +560,6 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 int IncludeFile(char const *fname)
 {
     IncludeStruct *i;
-    int r;
     int oldRunDisabled;
     struct stat statbuf;
 
@@ -633,9 +632,9 @@ int IncludeFile(char const *fname)
 	return OK;
     }
     RunDisabled = oldRunDisabled;
-    /* Ugh!  We failed!  */
-    if ( (r=PopFile()) ) return r;
     Eprint("%s: %s", ErrMsg[E_CANT_OPEN], fname);
+    /* Ugh!  We failed!  */
+    PopFile();
     return E_CANT_OPEN;
 }
 

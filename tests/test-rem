@@ -25,7 +25,7 @@ echo "" >> ../tests/test.out
 echo "" >> ../tests/test.out
 echo "Test 2" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
 echo "" >> ../tests/test.out
 echo "Test 3" >> ../tests/test.out
 echo "" >> ../tests/test.out
@@ -36,23 +36,23 @@ echo "" >> ../tests/test.out
 ../src/remind -sa ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
 echo "Test 5" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -b0 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b0 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
 echo "Test 6" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -b1 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b1 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
 echo "Test 7" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
 
 echo "Test 8" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -b2 ../tests/include_dir 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b2 ../tests/include_dir 1 aug 2007 >> ../tests/test.out
 
 echo "Test 9" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -b2 ../tests/nonexistent_include_dir 1 aug 2007 >> ../tests/test.out 2>&1
-../src/remind -p -b2 ../tests/include_dir_no_rems 1 aug 2007 >> ../tests/test.out 2>&1
-../src/remind -p -b2 ../tests/include_test.rem 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -p -l -b2 ../tests/nonexistent_include_dir 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -p -l -b2 ../tests/include_dir_no_rems 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -p -l -b2 ../tests/include_test.rem 1 aug 2007 >> ../tests/test.out 2>&1
 
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then

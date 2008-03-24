@@ -843,91 +843,177 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 17 ../tests/test2.rem
 2007/08/01 COLOR * * * 0 0 255 Blue Wednesday
+# fileinfo 27 ../tests/test2.rem
 2007/08/01 * * * * 0 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/01 * * * * 0 NonOmit-2
+# fileinfo 18 ../tests/test2.rem
 2007/08/02 COLOR * * * 255 0 0 Red Thursday
+# fileinfo 27 ../tests/test2.rem
 2007/08/02 * * * * 1 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/02 * * * * 1 NonOmit-2
+# fileinfo 21 ../tests/test2.rem
 2007/08/03 SHADE * * * 0 255 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/03 * * * * 2 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/03 * * * * 2 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/04 * * * * 3 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/04 * * * * 3 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/05 * * * * 4 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/05 * * * * 3 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/06 * * * * 5 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/06 * * * * 3 NonOmit-2
+# fileinfo 43 ../tests/test2.rem
 2007/08/06 * * * * Blort
+# fileinfo 27 ../tests/test2.rem
 2007/08/07 * * * * 6 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/07 * * * * 4 NonOmit-2
+# fileinfo 17 ../tests/test2.rem
 2007/08/08 COLOR * * * 0 0 255 Blue Wednesday
+# fileinfo 27 ../tests/test2.rem
 2007/08/08 * * * * 7 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/08 * * * * 5 NonOmit-2
+# fileinfo 18 ../tests/test2.rem
 2007/08/09 COLOR * * * 255 0 0 Red Thursday
+# fileinfo 27 ../tests/test2.rem
 2007/08/09 * * * * 8 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/09 * * * * 6 NonOmit-2
+# fileinfo 21 ../tests/test2.rem
 2007/08/10 SHADE * * * 0 255 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/10 * * * * 9 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/10 * * * * 7 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/11 * * * * 10 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/11 * * * * 8 NonOmit-2
+# fileinfo 24 ../tests/test2.rem
 2007/08/12 MOON * * * 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/12 * * * * 11 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/12 * * * * 8 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/13 * * * * 12 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/13 * * * * 8 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/14 * * * * 13 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/14 * * * * 9 NonOmit-2
+# fileinfo 17 ../tests/test2.rem
 2007/08/15 COLOR * * * 0 0 255 Blue Wednesday
+# fileinfo 27 ../tests/test2.rem
 2007/08/15 * * * * 13 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/15 * * * * 9 NonOmit-2
+# fileinfo 18 ../tests/test2.rem
 2007/08/16 COLOR * * * 255 0 0 Red Thursday
+# fileinfo 27 ../tests/test2.rem
 2007/08/16 * * * * 14 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/16 * * * * 10 NonOmit-2
+# fileinfo 21 ../tests/test2.rem
 2007/08/17 SHADE * * * 0 255 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/17 * * * * 15 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/17 * * * * 11 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/18 * * * * 16 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/18 * * * * 12 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/19 * * * * 17 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/19 * * * * 12 NonOmit-2
+# fileinfo 31 ../tests/test2.rem
 2007/08/20 COLOR * * 825 6 7 8 1:45pm Mooo!
+# fileinfo 27 ../tests/test2.rem
 2007/08/20 * * * * 18 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/20 * * * * 12 NonOmit-2
+# fileinfo 43 ../tests/test2.rem
 2007/08/20 * * * * Blort
+# fileinfo 34 ../tests/test2.rem
 2007/08/21 PostScript * * 115 (wookie) show
+# fileinfo 27 ../tests/test2.rem
 2007/08/21 * * * * 19 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/21 * * * * 13 NonOmit-2
+# fileinfo 17 ../tests/test2.rem
 2007/08/22 COLOR * * * 0 0 255 Blue Wednesday
+# fileinfo 27 ../tests/test2.rem
 2007/08/22 * * * * 20 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/22 * * * * 14 NonOmit-2
+# fileinfo 35 ../tests/test2.rem
 2007/08/22 PostScript * * * (cabbage) show
+# fileinfo 38 ../tests/test2.rem
 2007/08/23 blort * * 1004 snoo glup
+# fileinfo 18 ../tests/test2.rem
 2007/08/23 COLOR * * * 255 0 0 Red Thursday
+# fileinfo 27 ../tests/test2.rem
 2007/08/23 * * * * 21 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/23 * * * * 15 NonOmit-2
+# fileinfo 21 ../tests/test2.rem
 2007/08/24 SHADE * * * 0 255 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/24 * * * * 22 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/24 * * * * 16 NonOmit-2
+# fileinfo 39 ../tests/test2.rem
 2007/08/24 blort * * * gulp wookie
+# fileinfo 27 ../tests/test2.rem
 2007/08/25 * * * * 23 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/25 * * * * 17 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/26 * * * * 24 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/26 * * * * 17 NonOmit-2
+# fileinfo 27 ../tests/test2.rem
 2007/08/27 * * * * 25 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/27 * * * * 17 NonOmit-2
+# fileinfo 43 ../tests/test2.rem
 2007/08/27 * * * * Blort
+# fileinfo 27 ../tests/test2.rem
 2007/08/28 * * * * 26 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/28 * * * * 18 NonOmit-2
+# fileinfo 17 ../tests/test2.rem
 2007/08/29 COLOR * * * 0 0 255 Blue Wednesday
+# fileinfo 27 ../tests/test2.rem
 2007/08/29 * * * * 27 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/29 * * * * 19 NonOmit-2
+# fileinfo 18 ../tests/test2.rem
 2007/08/30 COLOR * * * 255 0 0 Red Thursday
+# fileinfo 27 ../tests/test2.rem
 2007/08/30 * * * * 28 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/30 * * * * 20 NonOmit-2
+# fileinfo 21 ../tests/test2.rem
 2007/08/31 SHADE * * * 0 255 0
+# fileinfo 27 ../tests/test2.rem
 2007/08/31 * * * * 29 NonOmit-1
+# fileinfo 28 ../tests/test2.rem
 2007/08/31 * * * * 21 NonOmit-2
 # rem2ps end
 
@@ -1104,26 +1190,47 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 1 ../tests/test3.rem
 2007/08/01 * * * 660 11:00am Wookie
+# fileinfo 5 ../tests/test3.rem
 2007/08/01 * * 45 660 11:00-11:45am Lettuce
+# fileinfo 9 ../tests/test3.rem
 2007/08/01 * * 105 660 11:00am-12:45pm Apple
+# fileinfo 13 ../tests/test3.rem
 2007/08/01 * * 885 660 11:00am-1:45am+1 Green
+# fileinfo 17 ../tests/test3.rem
 2007/08/01 * * 1485 660 11:00am-11:45am+1 Yellow
+# fileinfo 21 ../tests/test3.rem
 2007/08/01 * * 2205 660 11:00am-11:45pm+1 Purple
+# fileinfo 25 ../tests/test3.rem
 2007/08/01 * * 2925 660 11:00am-11:45am+2 Sad
+# fileinfo 2 ../tests/test3.rem
 2007/08/01 * * * 720 12:00pm Cookie
+# fileinfo 6 ../tests/test3.rem
 2007/08/01 * * 45 720 12:00-12:45pm Cabbage
+# fileinfo 10 ../tests/test3.rem
 2007/08/01 * * 165 720 12:00-2:45pm Pear
+# fileinfo 14 ../tests/test3.rem
 2007/08/01 * * 885 720 12:00pm-2:45am+1 Blue
+# fileinfo 18 ../tests/test3.rem
 2007/08/01 * * 1485 720 12:00pm-12:45pm+1 Orange
+# fileinfo 22 ../tests/test3.rem
 2007/08/01 * * 2205 720 12:00pm-12:45am+2 Black
+# fileinfo 26 ../tests/test3.rem
 2007/08/01 * * 2925 720 12:00pm-12:45pm+2 Happy
+# fileinfo 3 ../tests/test3.rem
 2007/08/01 * * * 780 1:00pm Snookie
+# fileinfo 7 ../tests/test3.rem
 2007/08/01 * * 45 780 1:00-1:45pm Tomato
+# fileinfo 11 ../tests/test3.rem
 2007/08/01 * * 225 780 1:00-4:45pm Grape
+# fileinfo 15 ../tests/test3.rem
 2007/08/01 * * 885 780 1:00pm-3:45am+1 Red
+# fileinfo 19 ../tests/test3.rem
 2007/08/01 * * 1485 780 1:00pm-1:45pm+1 Magenta
+# fileinfo 23 ../tests/test3.rem
 2007/08/01 * * 2205 780 1:00pm-1:45am+2 Brown
+# fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 1:00pm-1:45pm+2 Strange
 # rem2ps end
 Test 6
@@ -1133,26 +1240,47 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 1 ../tests/test3.rem
 2007/08/01 * * * 660 11:00 Wookie
+# fileinfo 5 ../tests/test3.rem
 2007/08/01 * * 45 660 11:00-11:45 Lettuce
+# fileinfo 9 ../tests/test3.rem
 2007/08/01 * * 105 660 11:00-12:45 Apple
+# fileinfo 13 ../tests/test3.rem
 2007/08/01 * * 885 660 11:00-01:45+1 Green
+# fileinfo 17 ../tests/test3.rem
 2007/08/01 * * 1485 660 11:00-11:45+1 Yellow
+# fileinfo 21 ../tests/test3.rem
 2007/08/01 * * 2205 660 11:00-23:45+1 Purple
+# fileinfo 25 ../tests/test3.rem
 2007/08/01 * * 2925 660 11:00-11:45+2 Sad
+# fileinfo 2 ../tests/test3.rem
 2007/08/01 * * * 720 12:00 Cookie
+# fileinfo 6 ../tests/test3.rem
 2007/08/01 * * 45 720 12:00-12:45 Cabbage
+# fileinfo 10 ../tests/test3.rem
 2007/08/01 * * 165 720 12:00-14:45 Pear
+# fileinfo 14 ../tests/test3.rem
 2007/08/01 * * 885 720 12:00-02:45+1 Blue
+# fileinfo 18 ../tests/test3.rem
 2007/08/01 * * 1485 720 12:00-12:45+1 Orange
+# fileinfo 22 ../tests/test3.rem
 2007/08/01 * * 2205 720 12:00-00:45+2 Black
+# fileinfo 26 ../tests/test3.rem
 2007/08/01 * * 2925 720 12:00-12:45+2 Happy
+# fileinfo 3 ../tests/test3.rem
 2007/08/01 * * * 780 13:00 Snookie
+# fileinfo 7 ../tests/test3.rem
 2007/08/01 * * 45 780 13:00-13:45 Tomato
+# fileinfo 11 ../tests/test3.rem
 2007/08/01 * * 225 780 13:00-16:45 Grape
+# fileinfo 15 ../tests/test3.rem
 2007/08/01 * * 885 780 13:00-03:45+1 Red
+# fileinfo 19 ../tests/test3.rem
 2007/08/01 * * 1485 780 13:00-13:45+1 Magenta
+# fileinfo 23 ../tests/test3.rem
 2007/08/01 * * 2205 780 13:00-01:45+2 Brown
+# fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 13:00-13:45+2 Strange
 # rem2ps end
 Test 7
@@ -1162,26 +1290,47 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 1 ../tests/test3.rem
 2007/08/01 * * * 660 Wookie
+# fileinfo 5 ../tests/test3.rem
 2007/08/01 * * 45 660 Lettuce
+# fileinfo 9 ../tests/test3.rem
 2007/08/01 * * 105 660 Apple
+# fileinfo 13 ../tests/test3.rem
 2007/08/01 * * 885 660 Green
+# fileinfo 17 ../tests/test3.rem
 2007/08/01 * * 1485 660 Yellow
+# fileinfo 21 ../tests/test3.rem
 2007/08/01 * * 2205 660 Purple
+# fileinfo 25 ../tests/test3.rem
 2007/08/01 * * 2925 660 Sad
+# fileinfo 2 ../tests/test3.rem
 2007/08/01 * * * 720 Cookie
+# fileinfo 6 ../tests/test3.rem
 2007/08/01 * * 45 720 Cabbage
+# fileinfo 10 ../tests/test3.rem
 2007/08/01 * * 165 720 Pear
+# fileinfo 14 ../tests/test3.rem
 2007/08/01 * * 885 720 Blue
+# fileinfo 18 ../tests/test3.rem
 2007/08/01 * * 1485 720 Orange
+# fileinfo 22 ../tests/test3.rem
 2007/08/01 * * 2205 720 Black
+# fileinfo 26 ../tests/test3.rem
 2007/08/01 * * 2925 720 Happy
+# fileinfo 3 ../tests/test3.rem
 2007/08/01 * * * 780 Snookie
+# fileinfo 7 ../tests/test3.rem
 2007/08/01 * * 45 780 Tomato
+# fileinfo 11 ../tests/test3.rem
 2007/08/01 * * 225 780 Grape
+# fileinfo 15 ../tests/test3.rem
 2007/08/01 * * 885 780 Red
+# fileinfo 19 ../tests/test3.rem
 2007/08/01 * * 1485 780 Magenta
+# fileinfo 23 ../tests/test3.rem
 2007/08/01 * * 2205 780 Brown
+# fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 Strange
 # rem2ps end
 Test 8
@@ -1191,7 +1340,9 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 1 ../tests/include_dir/01.rem
 2007/08/15 * * * * 01
+# fileinfo 1 ../tests/include_dir/02.rem
 2007/08/15 * * * * 02
 # rem2ps end
 Test 9
@@ -1277,7 +1428,10 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+# fileinfo 1 include_dir/01.rem
 2007/08/15 * * * * 01
+# fileinfo 1 include_dir/02.rem
 2007/08/15 * * * * 02
+# fileinfo 5 ../tests/include_test.rem
 2007/08/15 * * * * Whee!!!!
 # rem2ps end

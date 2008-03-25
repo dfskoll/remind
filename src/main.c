@@ -863,6 +863,11 @@ int DoDebug(ParsePtr p)
 	    else     DebugFlag &= ~DB_PRTLINE;
 	    break;
 
+	case 'f':
+	case 'F':
+	    if (val) DebugFlag |= DB_TRACE_FILES;
+	    else     DebugFlag &= ~DB_TRACE_FILES;
+	    break;
 	}
     }
 }

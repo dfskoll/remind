@@ -117,11 +117,12 @@ typedef Parser *ParsePtr;  /* Pointer to parser structure */
 
 
 /* DEFINES for debugging flags */
-#define DB_PRTLINE   1
-#define DB_PRTEXPR   2
-#define DB_PRTTRIG   4
-#define DB_DUMP_VARS 8
-#define DB_ECHO_LINE 16
+#define DB_PRTLINE      1
+#define DB_PRTEXPR      2
+#define DB_PRTTRIG      4
+#define DB_DUMP_VARS    8
+#define DB_ECHO_LINE   16
+#define DB_TRACE_FILES 32
 
 /* Enumeration of the tokens */
 enum TokTypes

@@ -1335,36 +1335,162 @@ September 30
 # rem2ps end
 Test 8
 
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Opening file
+Caching file ../tests/include_dir/01.rem in memory
+OpenFile(../tests/include_dir/02.rem): Opening file
+Caching file ../tests/include_dir/02.rem in memory
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
+Scanning directory ../tests/include_dir for *.rem files
+OpenFile(../tests/include_dir/01.rem): Found in cache
+OpenFile(../tests/include_dir/02.rem): Found in cache
+OpenFile(../tests/include_dir/04cantread.rem): Opening file
 ../tests/include_dir/02.rem(1): Can't open file: ../tests/include_dir/04cantread.rem
 # rem2ps begin
 August 2007 31 3 0
@@ -1378,6 +1504,7 @@ September 30
 # rem2ps end
 Test 9
 
+OpenFile(../tests/nonexistent_include_dir): Opening file
 Can't open file: ../tests/nonexistent_include_dir
 Error reading ../tests/nonexistent_include_dir: Can't open file
 # rem2ps begin
@@ -1385,6 +1512,7 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+Scanning directory ../tests/include_dir_no_rems for *.rem files
 ../tests/include_dir_no_rems: No files matching *.rem
 Error reading ../tests/include_dir_no_rems: No files matching *.rem
 # rem2ps begin
@@ -1392,98 +1520,318 @@ August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 July 31
 September 30
+OpenFile(../tests/include_test.rem): Opening file
+Caching file ../tests/include_test.rem in memory
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Opening file
+Caching file include_dir/01.rem in memory
+OpenFile(include_dir/02.rem): Opening file
+Caching file include_dir/02.rem in memory
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+OpenFile(../tests/include_test.rem): Found in cache
+Scanning directory include_dir for *.rem files
+OpenFile(include_dir/01.rem): Found in cache
+OpenFile(include_dir/02.rem): Found in cache
+OpenFile(include_dir/04cantread.rem): Opening file
 include_dir/02.rem(1): Can't open file: include_dir/04cantread.rem
+Scanning directory include_dir_no_rems for *.rem files
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+OpenFile(nonexistent_include_dir): Opening file
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
 # rem2ps begin
 August 2007 31 3 0

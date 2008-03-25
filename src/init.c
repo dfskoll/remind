@@ -369,11 +369,12 @@ void InitRemind(int argc, char const *argv[])
 	    case 'D':
 		while (*arg) {
 		    switch(*arg++) {
-		    case 'e': case 'E': DebugFlag |= DB_ECHO_LINE; break;
-		    case 'x': case 'X': DebugFlag |= DB_PRTEXPR;   break;
-		    case 't': case 'T': DebugFlag |= DB_PRTTRIG;   break;
-		    case 'v': case 'V': DebugFlag |= DB_DUMP_VARS; break;
-		    case 'l': case 'L': DebugFlag |= DB_PRTLINE;   break;
+		    case 'e': case 'E': DebugFlag |= DB_ECHO_LINE;   break;
+		    case 'x': case 'X': DebugFlag |= DB_PRTEXPR;     break;
+		    case 't': case 'T': DebugFlag |= DB_PRTTRIG;     break;
+		    case 'v': case 'V': DebugFlag |= DB_DUMP_VARS;   break;
+		    case 'l': case 'L': DebugFlag |= DB_PRTLINE;     break;
+		    case 'f': case 'F': DebugFlag |= DB_TRACE_FILES; break;
 		    default:
 		        fprintf(ErrFp, ErrMsg[M_BAD_DB_FLAG], *(arg-1));
 		    }

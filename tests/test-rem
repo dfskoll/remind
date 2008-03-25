@@ -47,13 +47,13 @@ echo "" >> ../tests/test.out
 
 echo "Test 8" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l -b2 ../tests/include_dir 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -df -p -l -b2 ../tests/include_dir 1 aug 2007 >> ../tests/test.out 2>&1
 
 echo "Test 9" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l -b2 ../tests/nonexistent_include_dir 1 aug 2007 >> ../tests/test.out 2>&1
-../src/remind -p -l -b2 ../tests/include_dir_no_rems 1 aug 2007 >> ../tests/test.out 2>&1
-../src/remind -p -l -b2 ../tests/include_test.rem 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -df -p -l -b2 ../tests/nonexistent_include_dir 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -df -p -l -b2 ../tests/include_dir_no_rems 1 aug 2007 >> ../tests/test.out 2>&1
+../src/remind -df -p -l -b2 ../tests/include_test.rem 1 aug 2007 >> ../tests/test.out 2>&1
 
 chmod 644 include_dir/04cantread.rem
 

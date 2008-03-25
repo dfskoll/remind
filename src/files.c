@@ -220,7 +220,7 @@ int OpenFile(char const *fname)
     while (h) {
 	if (!strcmp(fname, h->filename)) {
 	    if (DebugFlag & DB_TRACE_FILES) {
-		fprintf(ErrFp, "OpenFile(%s): Found in cache\n", fname);
+		fprintf(ErrFp, "Reading `%s': Found in cache\n", fname);
 	    }
 	    CLine = h->cache;
 	    STRSET(FileName, fname);
@@ -237,12 +237,12 @@ int OpenFile(char const *fname)
     if (!strcmp(fname, "-")) {
 	fp = stdin;
 	if (DebugFlag & DB_TRACE_FILES) {
-	    fprintf(ErrFp, "OpenFile(-): Reading stdin\n");
+	    fprintf(ErrFp, "Reading `-': Reading stdin\n");
 	}
     } else {
 	fp = fopen(fname, "r");
 	if (DebugFlag & DB_TRACE_FILES) {
-	    fprintf(ErrFp, "OpenFile(%s): Opening file\n", fname);
+	    fprintf(ErrFp, "Reading `%s': Opening file on disk\n", fname);
 	}
     }
     if (!fp || !CheckSafety()) return E_CANT_OPEN;
@@ -283,7 +283,7 @@ static int CacheFile(char const *fname)
     char const *s;
 
     if (DebugFlag & DB_TRACE_FILES) {
-	fprintf(ErrFp, "Caching file %s in memory\n", fname);
+	fprintf(ErrFp, "Caching file `%s' in memory\n", fname);
     }
     cl = NULL;
 /* Create a file header */
@@ -611,7 +611,7 @@ int IncludeFile(char const *fname)
 	FilenameChain *fc;
 	if (S_ISDIR(statbuf.st_mode)) {
 	    if (DebugFlag & DB_TRACE_FILES) {
-		fprintf(ErrFp, "Scanning directory %s for *.rem files\n", fname);
+		fprintf(ErrFp, "Scanning directory `%s' for *.rem files\n", fname);
 	    }
 	    if (SetupGlobChain(fname, i) == OK) { /* Glob succeeded */
 		if (!i->chain) { /* Oops... no matching files */

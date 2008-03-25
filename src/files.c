@@ -527,10 +527,12 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     DBufFree(&pattern);
 
     if (r == GLOB_NOMATCH) {
+	globfree(&glob_buf);
 	return OK;
     }
 
     if (r != 0) {
+	globfree(&glob_buf);
 	return -1;
     }
 
@@ -538,6 +540,7 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     for (r=glob_buf.gl_pathc-1; r>=0; r--) {
 	FilenameChain *ch = malloc(sizeof(FilenameChain));
 	if (!ch) {
+	    globfree(&glob_buf);
 	    FreeChain(i->chain);
 	    i->chain = NULL;
 	    return E_NO_MEM;
@@ -547,6 +550,7 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 	   readable by us */
 	ch->filename = StrDup(glob_buf.gl_pathv[r]);
 	if (!ch->filename) {
+	    globfree(&glob_buf);
 	    FreeChain(i->chain);
 	    i->chain = NULL;
 	    free(ch);
@@ -559,6 +563,7 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 	dc->chain = i->chain;
     }
 
+    globfree(&glob_buf);
     return OK;
 }
 #endif

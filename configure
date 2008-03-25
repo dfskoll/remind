@@ -5284,7 +5284,7 @@ _ACEOF
 fi
 done
 
-VERSION=03.01.04
+VERSION=03.01.05
 
 ac_config_files="$ac_config_files src/Makefile www/Makefile src/version.h"
 

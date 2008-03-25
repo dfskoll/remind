@@ -52,6 +52,7 @@
  *  -h       = Hush mode
  *  -f       = Do not fork
  *  -dchars  = Debugging mode:  Chars are:
+ *             f = Trace file openings
  *             e = Echo input lines
  *             x = Display expression evaluation
  *             t = Display trigger dates
@@ -513,7 +514,7 @@ void InitRemind(int argc, char const *argv[])
 void Usage(void)
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 David F. Skoll\n", VERSION, L_LANGNAME);
-    fprintf(ErrFp, "Copyright 1999-2007 Roaring Penguin Software Inc.\n");
+    fprintf(ErrFp, "Copyright 1999-2008 Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif
@@ -535,7 +536,7 @@ void Usage(void)
     fprintf(ErrFp, " -q     Don't queue timed reminders\n");
     fprintf(ErrFp, " -f     Trigger timed reminders by staying in foreground\n");
     fprintf(ErrFp, " -z[n]  Enter daemon mode, waking every n (5) minutes.\n");
-    fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline\n");
+    fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline f=tracefiles\n");
     fprintf(ErrFp, " -e     Divert messages normally sent to stderr to stdout\n");
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");
     fprintf(ErrFp, " -x[n]  Iteration limit for SATISFY clause (def=150)\n");

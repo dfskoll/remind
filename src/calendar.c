@@ -667,8 +667,7 @@ static int DoCalRem(ParsePtr p, int col)
     /* If trigger date == today, add it to the current entry */
     DBufInit(&obuf);
     if ((jul == JulianToday) ||
-	(DoSimpleCalendar &&
-	 DoSimpleCalDelta &&
+	(DoSimpleCalDelta &&
 	 ShouldTriggerReminder(&trig, &tim, jul))) {
 	NumTriggered++;
 

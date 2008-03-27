@@ -33,12 +33,16 @@ date by piping the output through \fBsort(1)\fR.
 The \fB\-r\fR option disables \fBRUN\fR directives and the \fBshell()\fR
 function.  As of Remind 3.00.17, using \fB\-u\fR implies \fB\-r\fR.
 .TP
-.B \-c\fR\fIn\fR
-The \fB\-c\fR option causes \fBRemind\fR to produce a calendar that is sent to
-standard output.  If you supply a number \fIn\fR, then a calendar will
-be generated for \fIn\fR months, starting with the current month.  By
-default, a calendar for only the current month is produced.  If \fIn\fR
-starts with '+', then a calendar for \fIn\fR weeks is produced.
+.B \-c\fR[\fBa\fR]\fIn\fR
+The \fB\-c\fR option causes \fBRemind\fR to produce a calendar that is
+sent to standard output.  If you supply a number \fIn\fR, then a
+calendar will be generated for \fIn\fR months, starting with the
+current month.  By default, a calendar for only the current month is
+produced.  If \fIn\fR starts with '+', then a calendar for \fIn\fR
+weeks is produced.  If you immediately follow the \fBc\fR with an
+\fBa\fR, then \fBRemind\fR displays reminders on the calendar on the
+day they actually occur \fIas well as\fR on any preceding days
+specified by the reminder's \fIdelta\fR.
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]
 The \fB\-w\fR option specifies the output width, padding and spacing
@@ -103,6 +107,11 @@ The \fB\-o\fR option causes \fBRemind\fR to ignore all \fBONCE\fR directives.
 .B \-t
 The \fB\-t\fR option causes \fBRemind\fR to trigger all non-expired reminders,
 regardless of the \fIdelta\fR supplied for each reminder.
+.TP
+.B \-t\fR\fIn\fR
+If you supply a number \fIn\fR after the \fB\-t\fR option, then
+\fBRemind\fR pretends that each non-expired reminder has a \fIdelta\fR
+of \fIn\fR days and triggers reminders accordingly.
 .TP
 .B \-h
 The \fB\-h\fR option ("hush...") suppresses certain warning and information

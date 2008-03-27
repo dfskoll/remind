@@ -302,6 +302,11 @@ void InitRemind(int argc, char const *argv[])
 	    case 'c':
 	    case 'C':
 		DoCalendar = 1;
+		if (*arg == 'a' ||
+		    *arg == 'A') {
+		    DoSimpleCalDelta = 1;
+		    arg++;
+		}
 		if (*arg == '+') {
 		    arg++;
 		    PARSENUM(CalWeeks, arg);
@@ -522,15 +527,15 @@ void Usage(void)
     fprintf(ErrFp, "Options:\n");
     fprintf(ErrFp, " -n     Output next occurrence of reminders in simple format\n");
     fprintf(ErrFp, " -r     Disable RUN directives\n");
-    fprintf(ErrFp, " -c[n]  Produce a calendar for n (default 1) months\n");
-    fprintf(ErrFp, " -c+[n] Produce a calendar for n (default 1) weeks\n");
+    fprintf(ErrFp, " -c[a][n] Produce a calendar for n (default 1) months\n");
+    fprintf(ErrFp, " -c[a]+[n] Produce a calendar for n (default 1) weeks\n");
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");
     fprintf(ErrFp, " -s[a][+][n] Produce `simple calendar' for n (1) months (weeks)\n");
     fprintf(ErrFp, " -p[a][n] Same as -s, but input compatible with rem2ps\n");
     fprintf(ErrFp, " -l     Prefix each simple calendar line with line number and filename comment\n");
     fprintf(ErrFp, " -v     Verbose mode\n");
     fprintf(ErrFp, " -o     Ignore ONCE directives\n");
-    fprintf(ErrFp, " -t     Trigger all future reminders regardless of delta\n");
+    fprintf(ErrFp, " -t[n]  Trigger all future (or those within `n' days)\n");
     fprintf(ErrFp, " -h     `Hush' mode - be very quiet\n");
     fprintf(ErrFp, " -a     Don't trigger timed reminders immediately - just queue them\n");
     fprintf(ErrFp, " -q     Don't queue timed reminders\n");

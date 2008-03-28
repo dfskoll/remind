@@ -39,15 +39,37 @@ typedef struct cal_entry {
     int lineno;
 } CalEntry;
 
+/* Line-drawing sequences */
+struct line_drawing {
+  char const *graphics_on;
+  char const *graphics_off;
+  char tlr, bl, tbl, blr, tblr, tr, tb, br, tbr, tl, lr;
+};
+
+static struct line_drawing NormalDrawing = {
+  "", "", '+', '+', '+', '+', '+', '+', '|', '+', '+', '+', '-'
+};
+
+static struct line_drawing VT100Drawing = {
+  "\x1B(0", "\x1B(B",
+  '\x76', '\x6b', '\x75', '\x77', '\x6e', '\x6d', '\x78',
+  '\x6c', '\x74', '\x6a', '\x71'
+};
+
+static struct line_drawing *linestruct;
+#define DRAW(x) putchar(linestruct->x)
+
 /* Global variables */
 static CalEntry *CalColumn[7];
 
 static int ColSpaces;
 
 static void SortCol (CalEntry **col);
-static void DoCalendarOneWeek (void);
+static void DoCalendarOneWeek (int nleft);
 static void DoCalendarOneMonth (void);
 static int WriteCalendarRow (void);
+static void WriteWeekHeaderLine (void);
+static void WritePostHeaderLine (void);
 static void PrintLeft (char const *s, int width, char pad);
 static void PrintCentered (char const *s, int width, char pad);
 static int WriteOneCalLine (void);
@@ -57,9 +79,19 @@ static void WriteCalHeader (void);
 static void WriteCalTrailer (void);
 static int DoCalRem (ParsePtr p, int col);
 static void WriteSimpleEntries (int col, int jul);
-static void WriteSolidCalLine (void);
+static void WriteTopCalLine (void);
+static void WriteBottomCalLine (void);
 static void WriteIntermediateCalLine (void);
 static void WriteCalDays (void);
+
+static void gon(void)
+{
+  printf("%s", linestruct->graphics_on);
+}
+static void goff(void)
+{
+  printf("%s", linestruct->graphics_off);
+}
 
 /***************************************************************/
 /*                                                             */
@@ -72,6 +104,11 @@ void ProduceCalendar(void)
 {
     int y, m, d;
 
+    if (UseVTChars) {
+        linestruct = &VT100Drawing;
+    } else {
+        linestruct = &NormalDrawing;
+    }
     ShouldCache = 1;
 
     ColSpaces = (CalWidth - 9) / 7;
@@ -88,13 +125,13 @@ void ProduceCalendar(void)
 	else             JulianToday -= ((JulianToday+1)%7);
 
 	if (!DoSimpleCalendar) {
-	    WriteIntermediateCalLine();
+  	    WriteWeekHeaderLine();
 	    WriteCalDays();
 	    WriteIntermediateCalLine();
 	}
 
 	while (CalWeeks--)
-	    DoCalendarOneWeek();
+	    DoCalendarOneWeek(CalWeeks);
 	return;
     }
 }
@@ -106,7 +143,7 @@ void ProduceCalendar(void)
 /*  Write a calendar for a single week                         */
 /*                                                             */
 /***************************************************************/
-static void DoCalendarOneWeek(void)
+static void DoCalendarOneWeek(nleft)
 {
     int y, m, d, done, i, l, wd;
     char buf[81];
@@ -132,7 +169,9 @@ static void DoCalendarOneWeek(void)
     }
 
 /* Here come the first few lines... */
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     for (i=0; i<7; i++) {
 	FromJulian(OrigJul+i, &y, &m, &d);
 	sprintf(buf, "%d %c%c%c ", d, MonthName[m][0], MonthName[m][1],
@@ -141,14 +180,20 @@ static void DoCalendarOneWeek(void)
 	    PrintLeft(buf, ColSpaces, '*');
 	else
 	    PrintLeft(buf, ColSpaces, ' ');
-	PutChar('|');
+	gon();
+	DRAW(tb);
+	goff();
     }
     PutChar('\n');
     for (l=0; l<CalPad; l++) {
-	PutChar('|');
+	gon();
+	DRAW(tb);
+	goff();
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    PutChar('|');
+	    gon();
+	    DRAW(tb);
+	    goff();
 	}
 	PutChar('\n');
     }
@@ -162,16 +207,24 @@ static void DoCalendarOneWeek(void)
 
 /* Write any blank lines required */
     while (LinesWritten++ < CalLines) {
-	PutChar('|');
+        gon();
+        DRAW(tb);
+        goff();
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    PutChar('|');
+	    gon();
+	    DRAW(tb);
+	    goff();
 	}
 	PutChar('\n');
     }
 
 /* Write the final line */
-    WriteIntermediateCalLine();
+    if (nleft) {
+        WriteIntermediateCalLine();
+    } else {
+        WriteBottomCalLine();
+    }
 }
 
 /***************************************************************/
@@ -228,6 +281,7 @@ static int WriteCalendarRow(void)
     char buf[81];
     int OrigJul = JulianToday;
     int LinesWritten = 0;
+    int moreleft;
 
 /* Get the date of the first day */
     FromJulian(JulianToday, &y, &m, &d);
@@ -253,7 +307,9 @@ static int WriteCalendarRow(void)
 
 
 /* Here come the first few lines... */
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     for (i=0; i<7; i++) {
 	if (i < wd || d+i-wd>DaysInMonth(m, y))
 	    PrintLeft("", ColSpaces, ' ');
@@ -261,14 +317,20 @@ static int WriteCalendarRow(void)
 	    sprintf(buf, "%d", d+i-wd);
 	    PrintLeft(buf, ColSpaces, ' ');
 	}
-	PutChar('|');
+	gon();
+	DRAW(tb);
+	goff();
     }
     PutChar('\n');
     for (l=0; l<CalPad; l++) {
-	PutChar('|');
+        gon();
+	DRAW(tb);
+	goff();
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    PutChar('|');
+	    gon();
+	    DRAW(tb);
+	    goff();
 	}
 	PutChar('\n');
     }
@@ -282,18 +344,27 @@ static int WriteCalendarRow(void)
 
 /* Write any blank lines required */
     while (LinesWritten++ < CalLines) {
-	PutChar('|');
+        gon();
+	DRAW(tb);
+	goff();
 	for (i=0; i<7; i++) {
 	    PrintLeft("", ColSpaces, ' ');
-	    PutChar('|');
+	    gon();
+	    DRAW(tb);
+	    goff();
 	}
 	PutChar('\n');
     }
 
-    WriteIntermediateCalLine();
+    moreleft = (d+7-wd <= DaysInMonth(m, y));
+    if (moreleft) {
+        WriteIntermediateCalLine();
+    } else {
+        WriteBottomCalLine();
+    }
 
 /* Return non-zero if we have not yet finished */
-    return (d+7-wd <= DaysInMonth(m, y));
+    return moreleft;
 }
 
 /***************************************************************/
@@ -341,14 +412,18 @@ static int WriteOneCalLine(void)
 {
     int done = 1, i;
 
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     for (i=0; i<7; i++) {
 	if (CalColumn[i]) {
 	    if (WriteOneColLine(i)) done = 0;
 	} else {
 	    PrintCentered("", ColSpaces, ' ');
 	}
-	PutChar('|');
+	gon();
+	DRAW(tb);
+	goff();
     }
     PutChar('\n');
 
@@ -549,14 +624,18 @@ static void WriteCalHeader(void)
     FromJulian(JulianToday, &y, &m, &d);
     sprintf(buf, "%s %d", MonthName[m], y);
 
-    WriteSolidCalLine();
+    WriteTopCalLine();
 
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     PrintCentered(buf, CalWidth-2, ' ');
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     PutChar('\n');
 
-    WriteIntermediateCalLine();
+    WritePostHeaderLine();
     WriteCalDays();
     WriteIntermediateCalLine();
 }
@@ -844,11 +923,64 @@ static void WriteSimpleEntries(int col, int jul)
 /*  Various functions for writing different types of lines.    */
 /*                                                             */
 /***************************************************************/
-static void WriteSolidCalLine(void)
+static void WriteTopCalLine(void)
 {
-    PutChar('+');
-    PrintCentered("", CalWidth-2, '-');
-    PutChar('+');
+    gon();
+    DRAW(br);
+    PrintCentered("", CalWidth-2, linestruct->lr);
+    DRAW(bl);
+    goff();
+    PutChar('\n');
+}
+
+static void WriteBottomCalLine(void)
+{
+    int i;
+    gon();
+    DRAW(tr);
+    for (i=0; i<7; i++) {
+	PrintCentered("", ColSpaces, linestruct->lr);
+	if (i != 6) {
+	    DRAW(tlr);
+	} else {
+	    DRAW(tl);
+	}
+    }
+    goff();
+    PutChar('\n');
+}
+
+static void WritePostHeaderLine(void)
+{
+    int i;
+    gon();
+    DRAW(tbr);
+    for (i=0; i<7; i++) {
+	PrintCentered("", ColSpaces, linestruct->lr);
+	if (i != 6) {
+	    DRAW(blr);
+	} else {
+	    DRAW(tbl);
+	}
+    }
+    goff();
+    PutChar('\n');
+}
+
+static void WriteWeekHeaderLine(void)
+{
+    int i;
+    gon();
+    DRAW(br);
+    for (i=0; i<7; i++) {
+	PrintCentered("", ColSpaces, linestruct->lr);
+	if (i != 6) {
+	    DRAW(blr);
+	} else {
+	    DRAW(bl);
+	}
+    }
+    goff();
     PutChar('\n');
 }
 
@@ -856,24 +988,34 @@ static void WriteIntermediateCalLine(void)
 {
     int i;
 
-    PutChar('+');
+    gon();
+    DRAW(tbr);
     for (i=0; i<7; i++) {
-	PrintCentered("", ColSpaces, '-');
-	PutChar('+');
+	PrintCentered("", ColSpaces, linestruct->lr);
+	if (i != 6) {
+	    DRAW(tblr);
+	} else {
+	    DRAW(tbl);
+	}
     }
+    goff();
     PutChar('\n');
 }
 
 static void WriteCalDays(void)
 {
     int i;
-    PutChar('|');
+    gon();
+    DRAW(tb);
+    goff();
     for (i=0; i<7; i++) {
 	if (!MondayFirst)
 	    PrintCentered(DayName[(i+6)%7], ColSpaces, ' ');
 	else
 	    PrintCentered(DayName[i%7], ColSpaces, ' ');
-	PutChar('|');
+	gon();
+	DRAW(tb);
+	goff();
     }
     PutChar('\n');
 }

@@ -131,6 +131,7 @@ void InitRemind(int argc, char const *argv[])
     Token tok;
     int InvokedAsRem = 0;
     char const *s;
+    int weeks;
 
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
@@ -302,13 +303,28 @@ void InitRemind(int argc, char const *argv[])
 	    case 'c':
 	    case 'C':
 		DoCalendar = 1;
-		if (*arg == 'a' ||
-		    *arg == 'A') {
-		    DoSimpleCalDelta = 1;
-		    arg++;
+		weeks = 0;
+		/* Parse the flags */
+		while(*arg) {
+		    if (*arg == 'a' ||
+		        *arg == 'A') {
+		        DoSimpleCalDelta = 1;
+			arg++;
+			continue;
+		    }
+		    if (*arg == '+') {
+		        weeks = 1;
+			arg++;
+			continue;
+		    }
+		    if (*arg == 'l') {
+		        UseVTChars = 1;
+			arg++;
+			continue;
+		    }
+		    break;
 		}
-		if (*arg == '+') {
-		    arg++;
+		if (weeks) {
 		    PARSENUM(CalWeeks, arg);
 		    if (!CalWeeks) CalWeeks = 1;
 		} else {
@@ -320,12 +336,21 @@ void InitRemind(int argc, char const *argv[])
 	    case 's':
 	    case 'S':
 		DoSimpleCalendar = 1;
-		if (*arg == 'a' || *arg == 'A') {
+		weeks = 0;
+		while(*arg) {
+		    if (*arg == 'a' || *arg == 'A') {
 			DoSimpleCalDelta = 1;
 			arg++;
+			continue;
+		    }
+		    if (*arg == '+') {
+		        arg++;
+			weeks = 1;
+			continue;
+		    }
+		    break;
 		}
-		if (*arg == '+') {
-		    arg++;
+		if (weeks) {
 		    PARSENUM(CalWeeks, arg);
 		    if (!CalWeeks) CalWeeks = 1;
 		} else {

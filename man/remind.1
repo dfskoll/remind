@@ -33,16 +33,29 @@ date by piping the output through \fBsort(1)\fR.
 The \fB\-r\fR option disables \fBRUN\fR directives and the \fBshell()\fR
 function.  As of Remind 3.00.17, using \fB\-u\fR implies \fB\-r\fR.
 .TP
-.B \-c\fR[\fBa\fR]\fIn\fR
+.B \-c\fI[flags]\fIn\fR
 The \fB\-c\fR option causes \fBRemind\fR to produce a calendar that is
 sent to standard output.  If you supply a number \fIn\fR, then a
 calendar will be generated for \fIn\fR months, starting with the
 current month.  By default, a calendar for only the current month is
-produced.  If \fIn\fR starts with '+', then a calendar for \fIn\fR
-weeks is produced.  If you immediately follow the \fBc\fR with an
-\fBa\fR, then \fBRemind\fR displays reminders on the calendar on the
+produced. 
+.PP
+You can precede \fIn\fR (if any) with a set of flags.  The flags
+are as follows:
+.TP
+.B '+'
+causes a calendar for \fIn\fR
+weeks to be produced.
+.TP
+.B 'a'
+causes \fBRemind\fR to display reminders on the calendar on the
 day they actually occur \fIas well as\fR on any preceding days
 specified by the reminder's \fIdelta\fR.
+.TP
+.B 'l'
+causes \fBRemind\fR to use VT100 line-drawing characters to draw
+the calendar.  The characters are hard-coded and will only work
+on terminals that emulate the VT00 line-drawing character set.
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]
 The \fB\-w\fR option specifies the output width, padding and spacing

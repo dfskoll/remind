@@ -93,6 +93,7 @@ set EditorPid -1
 set AppendFile {NOSUCHFILE}
 catch {set AppendFile $ReminderFile}
 
+set SetFontsWorked 0
 #---------------- DON'T CHANGE STUFF BELOW HERE ------------------
 
 # 24-hour clock mode
@@ -277,9 +278,14 @@ proc CalEntryOffset { firstDay } {
 #***********************************************************************
 proc CreateCalFrame { w dayNames } {
     # Figure out reasonable height for text frames
+    global SetFontsWorked
     set h [winfo screenheight .]
     if {$h <= 480} {
-	set h 2
+	if {$SetFontsWorked} {
+	    set h 3
+	} else {
+	    set h 2
+	}
     } elseif {$h <= 600} {
 	set h 4
     } else {
@@ -2246,6 +2252,7 @@ proc main {} {
 	puts "\nTkRemind Copyright (C) 1996-1998 David F. Skoll"
 	puts "Copyright (C) 1999-2008 Roaring Penguin Software Inc."
     }
+    catch { SetFonts }
     LoadOptions
     CreateMoonImages
     Initialize
@@ -2839,6 +2846,18 @@ proc ClosePopup { w after_token mail_addr close_win ignore_or_kill tag reminder 
     if {"$ignore_or_kill" == "kill"} {
 	InteractiveDeleteReminder $tag
     }
+}
+
+# Adjust font defaults for screen size
+proc SetFonts {} {
+    global SetFontsWorked
+    set h [winfo screenheight .]
+    if {$h <= 480} {
+	# Small screen (maybe eeepc?)
+	font configure TkDefaultFont -size 6
+	font configure TkFixedFont -size 6
+    }
+    set SetFontsWorked 1
 }
 
 main

@@ -187,6 +187,14 @@ proc Initialize {} {
 	}
     }
 
+    # If reminder file is a directory and appendfile is the same as
+    # reminder file, choose append file to be $ReminderFile/100-tkremind.rem
+    if {[file isdirectory $ReminderFile]} {
+	if {"$ReminderFile" == "$AppendFile"} {
+	    set AppendFile [file join $ReminderFile "100-tkremind.rem"]
+	}
+    }
+
     # Check system sanity
     if {! [file readable $ReminderFile]} {
 	set ans [tk_dialog .error "TkRemind: Warning" "Can't read reminder file `$ReminderFile'" warning 0 "Create it and continue" "Exit"]

@@ -266,6 +266,9 @@ TAG clause.
 Sets the value of the specified \fIvar\fR to \fIexpr\fR, and \fBpreserves\fR
 \fIvar\fR.  \fIExpr\fR can be any valid \fBRemind\fR expression.  See the
 section "Initializing Variables on the Command Line" for more details.
+.TP
+\fB\-i\fR\fIfunc\fR(\fIargs\fR)=\fIdefinition\fR
+Allows you to define a function on the command line.
 .PP
 If you supply a \fIdate\fR on the command line, it must consist of
 \fIday month year\fR, where \fIday\fR is the day of the month,
@@ -3291,6 +3294,11 @@ You should not have any spaces between the \fB\-i\fR option and the equal
 sign; otherwise, strange variable names are created that can only be accessed
 with the \fBvalue()\fR or \fBdefined()\fR functions.
 .PP
+You can also define a function on the command line by using:
+.PP
+\fB\-i\fR\fIfunc\fR(\fIargs\fR)=\fIdefinition\fR
+.PP
+Be sure to protect special characters from shell interpretation.
 .SH MORE ABOUT POSTSCRIPT
 .PP
 The \fBPS\fR and \fBPSFILE\fR reminders pass PostScript code directly

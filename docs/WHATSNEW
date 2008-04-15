@@ -1,4 +1,33 @@
 CHANGES TO REMIND
+* Version 3.1 Patch 5
+
+- MAJOR ENHANCEMENT: If you supply a directory name on the command line
+  or for an INCLUDE command, then Remind reads all *.rem file in that
+  directory (in the order returned by "glob")
+
+- ENHANCEMENT: The plain-text calendar ("-c") can draw lines using VT-100
+  line-drawing characters if invoked as "-cl"
+
+- ENHANCEMENT: The plain-text calendar can approximate SPECIAL COLOR reminders
+  using VT-100 color escape sequences if invoked as "-cc".  (You can combine
+  the colors and line-drawing characters with -clc or -ccl.)
+
+- ENHANCEMENT: The "-t" option can take a numeric argument n.  In this case,
+  all reminders are assumed to have a delta of +n.  (Without the argument,
+  an infinite delta is assumed, as before.)  If a numeric argument is given,
+  the new system variable $DeltaOffset is set to the argument.
+
+- MINOR ENHANCEMENT: The "-i" command-line option can be used to define
+  a function as well as set a variable.  TODO: Update manpage.
+
+- MINOR ENHANCEMENT: String constants can have embedded quotes "Like \"this"
+
+- MINOR ENHANCEMENT: tkremind works better on small screens like that of
+  the Eee-PC.
+
+- BUG FIX: Minor fix to HTML output courtesy of Ian! Allen.
+
+- BUG FIX: Parse error in calendar mode was fixed.
 
 * Version 3.1 Patch 4 - 2008-02-03
 

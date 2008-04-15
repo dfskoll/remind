@@ -30,6 +30,8 @@ typedef struct cal_entry {
     struct cal_entry *next;
     char const *text;
     char const *pos;
+    int is_color;
+    int r, g, b;
     int time;
     int priority;
     char tag[TAG_LEN+1];
@@ -56,6 +58,55 @@ static struct line_drawing VT100Drawing = {
   '\x6c', '\x74', '\x6a', '\x71'
 };
 
+static char *VT100Colors[2][2][2][2] /* [Br][R][G][B] */ = {
+  {
+  /*** DIM COLORS ***/
+    {
+      {
+	/* 0, 0, 0 = Black   */ "\x1B[0;30m",
+	/* 0, 0, 1 = Blue    */ "\x1B[0;34m"
+      },
+      {
+	/* 0, 1, 0 = Green   */ "\x1B[0;32m",
+	/* 0, 1, 1 = Cyan    */ "\x1B[0;36m"
+      }
+    },
+    {
+      {
+	/* 1, 0, 0 = Red     */ "\x1B[0;31m",
+	/* 1, 0, 1 = Magenta */ "\x1B[0;35m"
+      },
+      {
+	/* 1, 1, 0 = Yellow  */ "\x1B[0;33m",
+	/* 1, 1, 1 = White   */ "\x1B[0;37m"
+      }
+    }
+  },
+  {
+  /*** BRIGHT COLORS ***/
+    {
+      {
+	/* 0, 0, 0 = Grey    */ "\x1B[30;1m",
+	/* 0, 0, 1 = Blue    */ "\x1B[34;1m"
+      },
+      {
+	/* 0, 1, 0 = Green   */ "\x1B[32;1m",
+	/* 0, 1, 1 = Cyan    */ "\x1B[36;1m"
+      }
+    },
+    {
+      {
+	/* 1, 0, 0 = Red     */ "\x1B[31;1m",
+	/* 1, 0, 1 = Magenta */ "\x1B[35;1m"
+      },
+      {
+	/* 1, 1, 0 = Yellow  */ "\x1B[33;1m",
+	/* 1, 1, 1 = White   */ "\x1B[37;1m"
+      }
+    }
+  }
+};
+
 static struct line_drawing *linestruct;
 #define DRAW(x) putchar(linestruct->x)
 
@@ -64,6 +115,8 @@ static CalEntry *CalColumn[7];
 
 static int ColSpaces;
 
+static void Colorize(CalEntry const *e);
+static void Decolorize(void);
 static void SortCol (CalEntry **col);
 static void DoCalendarOneWeek (int nleft);
 static void DoCalendarOneMonth (void);
@@ -91,6 +144,28 @@ static void gon(void)
 static void goff(void)
 {
   printf("%s", linestruct->graphics_off);
+}
+
+static void Decolorize(void)
+{
+  printf("%s", "\x1B[0m");
+}
+
+static void Colorize(CalEntry const *e)
+{
+  int bright = 0;
+  int r, g, b;
+  if (e->r > 128 || e->g > 128 || e->b > 128) {
+    bright = 1;
+  }
+  if (e->r > 64) r = 1;
+  else r = 0;
+  if (e->g > 64) g = 1;
+  else g = 0;
+  if (e->b > 64) b = 1;
+  else b = 0;
+
+  printf("%s", VT100Colors[bright][r][g][b]);
 }
 
 /***************************************************************/
@@ -468,6 +543,11 @@ static int WriteOneColLine(int col)
 	s++;
     }
 
+/* Colorize reminder if necessary */
+    if (UseVTColors && e->is_color) {
+        Colorize(e);
+    }
+
 /* If we couldn't find a space char, print what we have. */
     if (!space) {
 	for (s = e->pos; s - e->pos < ColSpaces; s++) {
@@ -484,6 +564,11 @@ static int WriteOneColLine(int col)
 	    numwritten++;
 	    PutChar(*s);
 	}
+    }
+
+/* Decolorize reminder if necessary */
+    if (UseVTColors && e->is_color) {
+        Decolorize();
     }
 
 /* Flesh out the rest of the column */
@@ -671,6 +756,9 @@ static int DoCalRem(ParsePtr p, int col)
     DynamicBuffer buf, obuf, pre_buf;
     Token tok;
 
+    int is_color, col_r, col_g, col_b;
+
+    is_color = 0;
     DBufInit(&buf);
     DBufInit(&pre_buf);
 
@@ -720,6 +808,7 @@ static int DoCalRem(ParsePtr p, int col)
     if (trig.typ == PASSTHRU_TYPE) {
       if (!PsCal && strcmp(trig.passthru, "COLOR")) return OK;
       if (!strcmp(trig.passthru, "COLOR")) {
+  	  is_color = 1;
 	  /* Strip off the three color numbers */
 	  DBufFree(&buf);
 	  r=ParseToken(p, &buf);
@@ -737,6 +826,15 @@ static int DoCalRem(ParsePtr p, int col)
 	  DBufPutc(&pre_buf, ' ');
 	  DBufFree(&buf);
 	  if (r) return r;
+	  (void) sscanf(DBufValue(&pre_buf), "%d %d %d",
+			&col_r, &col_g, &col_b);
+	  if (col_r < 0) col_r = 0;
+	  else if (col_r > 255) col_r = 255;
+	  if (col_g < 0) col_g = 0;
+	  else if (col_g > 255) col_g = 255;
+	  if (col_b < 0) col_b = 0;
+	  else if (col_b > 255) col_b = 255;
+
 	  if (!PsCal && !DoSimpleCalendar) {
 	      DBufFree(&pre_buf);
 	  }
@@ -828,6 +926,10 @@ static int DoCalRem(ParsePtr p, int col)
 	DBufPuts(&pre_buf, s);
 	s = DBufValue(&pre_buf);
 	e = NEW(CalEntry);
+	e->is_color = is_color;
+	e->r = col_r;
+	e->g = col_g;
+	e->b = col_b;
 	if (!e) {
 	    DBufFree(&obuf);
 	    DBufFree(&pre_buf);

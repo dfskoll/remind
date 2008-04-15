@@ -57,6 +57,15 @@ causes \fBRemind\fR to use VT100 line-drawing characters to draw
 the calendar.  The characters are hard-coded and will only work
 on terminals that emulate the VT00 line-drawing character set.
 .TP
+.B 'c'
+causes \fBRemind\fR to use VT100 escape sequences to approximate
+SPECIAL COLOR reminders.  The approximation is (of necessity) very
+coarse, because the VT100 only has eight different color sequences,
+each with one of two brightnesses.  A color component greater than
+64 is considered "on", and if any of the three color components is
+greater than 128, the color is considered "bright".
+
+.TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]
 The \fB\-w\fR option specifies the output width, padding and spacing
 of the formatted calendar output.  \fICol\fR specifies the number of
@@ -3804,6 +3813,9 @@ The rest of the line is the text to put in the calendar.
 .PP
 The COLOR special is "doubly special", because in its normal operating
 mode, \fBremind\fR treats a COLOR special just like a MSG-type reminder.
+Also, if you invoke \fBRemind\fR with \fB\-cc\fR..., then it approximates
+SPECIAL COLOR reminders on your terminal.
+
 .SH MISCELLANEOUS
 .PP
 .B COMMAND ABBREVIATIONS

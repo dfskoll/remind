@@ -57,6 +57,9 @@ echo "" >> ../tests/test.out
 
 chmod 644 include_dir/04cantread.rem
 
+echo "Color Test" >> ../tests/test.out
+../src/remind -ccl ../tests/colors.rem 1 aug 2007 >> ../tests/test.out
+
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

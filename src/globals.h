@@ -91,6 +91,7 @@ EXTERN  char const **ArgV;
 EXTERN  INIT(   int     CalLines, CAL_LINES);
 EXTERN  INIT(   int     CalPad, 1);
 EXTERN  INIT(   int     UseVTChars, 0);
+EXTERN  INIT(   int     UseVTColors, 0);
 
 /* Latitude and longitude */
 EXTERN  INIT(	int	  LatDeg, LAT_DEG);

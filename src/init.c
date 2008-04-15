@@ -317,10 +317,15 @@ void InitRemind(int argc, char const *argv[])
 			arg++;
 			continue;
 		    }
-		    if (*arg == 'l') {
+		    if (*arg == 'l' || *arg == 'L') {
 		        UseVTChars = 1;
 			arg++;
 			continue;
+		    }
+		    if (*arg == 'c' || *arg == 'C') {
+		        UseVTColors = 1;
+		        arg++;
+		        continue;
 		    }
 		    break;
 		}

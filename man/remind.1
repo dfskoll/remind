@@ -2644,8 +2644,16 @@ exceptions:
 .TP
 o
 If \fBRemind\fR is expecting an expression, as in the \fBSET\fR command,
-or the \fBIF\fR command, then no expression pasting takes place.  The
-expression is simply evaluated as if the square brackets were not there.
+or the \fBIF\fR command, you should \fBnot\fR include square brackets.
+FOr example, use:
+.PP
+.nf
+		SET a 4+5
+.fi
+and not:
+.nf
+		SET a [4+5]
+.fi
 .TP
 o
 You cannot use expression pasting for the first token on a line.

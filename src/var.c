@@ -223,7 +223,7 @@ int DoSet (Parser *p)
     r = ParseIdentifier(p, &buf);
     if (r) return r;
 
-    /* Allow option equals-sign:  SET var = value */
+    /* Allow optional equals-sign:  SET var = value */
     if (ParseNonSpaceChar(p, &r, 1) == '=') {
 	ParseNonSpaceChar(p, &r, 0);
     }

@@ -1,5 +1,6 @@
 CHANGES TO REMIND
-* Version 3.1 Patch 5
+
+* Version 3.1 Patch 5 - 2008-04-15
 
 - MAJOR ENHANCEMENT: If you supply a directory name on the command line
   or for an INCLUDE command, then Remind reads all *.rem file in that
@@ -18,7 +19,7 @@ CHANGES TO REMIND
   the new system variable $DeltaOffset is set to the argument.
 
 - MINOR ENHANCEMENT: The "-i" command-line option can be used to define
-  a function as well as set a variable.  TODO: Update manpage.
+  a function as well as set a variable.
 
 - MINOR ENHANCEMENT: String constants can have embedded quotes "Like \"this"
 

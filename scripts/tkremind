@@ -208,6 +208,12 @@ proc Initialize {} {
 	exit 1
     }
 
+    if {[file isdirectory $ReminderFile] && ! [file exists $AppendFile]} {
+	if {![catch {close [open "$AppendFile" "a"]}]} {
+	    tk_dialog .error "Created File" "Created blank file `$AppendFile'" info 0 "OK"
+	}
+    }
+
     if {! [file writable $AppendFile]} {
 	tk_dialog .error Error "Can't write reminder file `$AppendFile'" error 0 Ok
 	exit 1

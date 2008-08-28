@@ -2802,7 +2802,7 @@ proc ShowTodaysReminders {} {
     CenterWindow $w
 
     # Grab the reminders
-    set stuff [exec -keepnewline $Remind -g -q -a -r $ReminderFile 2>/dev/null]
+    set stuff [exec -keepnewline $Remind -g -q -r $ReminderFile 2>/dev/null]
     $w.text insert end $stuff
     $w.text configure -state disabled
 }

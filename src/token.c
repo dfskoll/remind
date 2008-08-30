@@ -74,6 +74,7 @@ Token TokArray[] = {
     { "november",	3,	T_Month,	10 },
     { "october",	3,	T_Month,	9 },
     { "omit",		3,	T_Omit,		0 },
+    { "omitfunc",       8,      T_OmitFunc,     0 },
     { "once",		3,	T_Once,		0 },
     { "pop-omit-context", 3,	T_Pop,		0 },
     { "preserve",       8,      T_Preserve,     0 },

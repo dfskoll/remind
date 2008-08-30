@@ -75,7 +75,7 @@ int DoClear (ParsePtr p);
 int DestroyOmitContexts (void);
 int PushOmitContext (ParsePtr p);
 int PopOmitContext (ParsePtr p);
-int IsOmitted (int jul, int localomit);
+int IsOmitted (int jul, int localomit, char const *omitfunc);
 int DoOmit (ParsePtr p);
 int QueueReminder (ParsePtr p, Trigger *trig, TimeTrig *tim, char const *sched);
 void HandleQueuedReminders (void);

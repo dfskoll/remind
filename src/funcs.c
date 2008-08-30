@@ -1302,7 +1302,7 @@ static int FIsomitted(void)
 {
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
-    RetVal.v.val = IsOmitted(DATEPART(ARG(0)), 0);
+    RetVal.v.val = IsOmitted(DATEPART(ARG(0)), 0, NULL);
     return OK;
 }
 
@@ -2478,7 +2478,7 @@ FNonomitted(void)
 
     ans = 0;
     while (d1 < d2) {
-	if (!IsOmitted(d1++, localomit)) {
+	if (!IsOmitted(d1++, localomit, NULL)) {
 	    ans++;
 	}
     }

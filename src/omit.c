@@ -20,6 +20,7 @@
 #include "protos.h"
 #include "globals.h"
 #include "err.h"
+#include "expr.h"
 
 static int BexistsIntArray (int array[], int num, int key);
 static void InsertIntoSortedArray (int *array, int num, int key);
@@ -180,7 +181,7 @@ int PopOmitContext(ParsePtr p)
 /*  Return non-zero if date is OMITted, zero if it is not.     */
 /*                                                             */
 /***************************************************************/
-int IsOmitted(int jul, int localomit)
+int IsOmitted(int jul, int localomit, char const *omitfunc)
 {
     int y, m, d;
 
@@ -194,6 +195,23 @@ int IsOmitted(int jul, int localomit)
     FromJulian(jul, &y, &m, &d);
     if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d))
 	return 1;
+
+    /* Is it omitted because of omitfunc? */
+    if (omitfunc && *omitfunc && UserFuncExists(omitfunc)) {
+	char expr[VAR_NAME_LEN + 32];
+	char const *s;
+	int r;
+	Value v;
+	sprintf(expr, "%s('%04d-%02d-%02d')",
+		omitfunc, y, m, d);
+	s = expr;
+	r = EvalExpr(&s, &v);
+	if (!r) {
+	    if (v.type == INT_TYPE && v.v.val != 0) {
+		return 1;
+	    }
+	}
+    }
 
     /* Not omitted */
     return 0;

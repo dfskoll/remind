@@ -294,8 +294,19 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 
 /* Next: If it's an "AFTER"-type skip, back up
    until we're at the start of a block of holidays */
-    if (trig->skip == AFTER_SKIP)
-	while (IsOmitted(start-1, trig->localomit)) start--;
+    if (trig->skip == AFTER_SKIP) {
+	int iter = 0;
+	while (iter++ <= MaxSatIter) {
+	    if (!IsOmitted(start-1, trig->localomit, trig->omitfunc)) {
+		break;
+	    }
+	    start--;
+	}
+	if (iter > MaxSatIter) {
+	    /* omitfunc must have returned "true" too often */
+	    return -2;
+	}
+    }
 
 /* Find the next simple trigger */
     simple = NextSimpleTrig(start, trig, err);
@@ -309,12 +320,23 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 /* If there's a BACK, back up... */
     if (trig->back != NO_BACK) {
 	mod = trig->back;
-	if (mod < 0) simple += mod;
-	else
-	    while(mod) {
-		simple--;
-		if (!IsOmitted(simple, trig->localomit)) mod--;
+	if (mod < 0) {
+	    simple += mod;
+	}
+	else {
+	    int iter = 0;
+	    int max = MaxSatIter;
+	    if (max < mod*2) {
+		max = mod*2;
 	    }
+	    while(iter++ <= max) {
+		if (!mod) {
+		    break;
+		}
+		simple--;
+		if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) mod--;
+	    }
+	}
     }
 
 /* If there's a REP, calculate the next occurrence */
@@ -327,12 +349,32 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
     }
 
 /* If it's a "BEFORE"-type skip, back up */
-    if (trig->skip == BEFORE_SKIP)
-	while(IsOmitted(simple, trig->localomit)) simple--;
+    if (trig->skip == BEFORE_SKIP) {
+	int iter = 0;
+	while(iter++ <= MaxSatIter) {
+	    if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) {
+		break;
+	    }
+	    simple--;
+	}
+	if (iter > MaxSatIter) {
+	    return -2;
+	}
+    }
 
 /* If it's an "AFTER"-type skip, jump ahead */
-    if (trig->skip == AFTER_SKIP)
-	while (IsOmitted(simple, trig->localomit)) simple++;
+    if (trig->skip == AFTER_SKIP) {
+	int iter = 0;
+	while (iter++ <= MaxSatIter) {
+	    if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) {
+		break;
+	    }
+	    simple++;
+	}
+	if (iter > MaxSatIter) {
+	    return -2;
+	}
+    }
 
 /* Return the date */
     return simple;
@@ -373,8 +415,8 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	*err = E_REP_FULSPEC;
 	return -1;
     }
-       
-   
+
+
     while (nattempts++ < TRIG_ATTEMPTS) {
 	result = GetNextTriggerDate(trig, start, err, &nextstart);
 
@@ -390,7 +432,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 
 	/* If result is >= today, great! */
 	if (result >= today &&
-	    (trig->skip != SKIP_SKIP || !IsOmitted(result, trig->localomit))) {
+	    (trig->skip != SKIP_SKIP || !IsOmitted(result, trig->localomit, trig->omitfunc))) {
 	    LastTriggerDate = result;  /* Save in global var */
 	    LastTrigValid = 1;
 	    if (DebugFlag & DB_PRTTRIG) {
@@ -421,7 +463,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	}
 
 	if (trig->skip == SKIP_SKIP &&
-	    IsOmitted(result, trig->localomit) &&
+	    IsOmitted(result, trig->localomit, trig->omitfunc) &&
 	    nextstart <= start &&
 	    result >= start) {
 	    nextstart = result + 1;

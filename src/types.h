@@ -56,6 +56,7 @@ typedef struct {
     int priority;
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
+    char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */
     char tag[TAG_LEN+1];
     char passthru[PASSTHRU_LEN+1];
 } Trigger;
@@ -148,7 +149,8 @@ enum TokTypes
   T_Warn,
   T_Tag,
   T_Duration,
-  T_LongTime
+  T_LongTime,
+  T_OmitFunc
 };
 
 /* The structure of a token */

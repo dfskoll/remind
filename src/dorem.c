@@ -145,6 +145,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
     trig->priority = DefaultPrio;
     trig->sched[0] = 0;
     trig->warn[0] = 0;
+    trig->omitfunc[0] = 0;
     trig->tag[0] = 0;
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
@@ -265,6 +266,13 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 	    DBufFree(&buf);
 	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
 	    return OK;
+
+	case T_OmitFunc:
+	    r=ParseToken(s, &buf);
+	    if (r) return r;
+	    StrnCpy(trig->omitfunc, DBufValue(&buf), VAR_NAME_LEN);
+	    DBufFree(&buf);
+	    break;
 
 	case T_Warn:
 	    r=ParseToken(s, &buf);
@@ -551,7 +559,7 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 {
     int r, y, m, d;
-    char PrioExpr[25];
+    char PrioExpr[VAR_NAME_LEN+25];
     char tmpBuf[64];
     DynamicBuffer buf, calRow;
     DynamicBuffer pre_buf;
@@ -795,9 +803,19 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 	    jul = jul + t->delta;
 	else {
 	    r = t->delta;
-	    while(r && jul > JulianToday) {
+	    int iter = 0;
+	    int max = MaxSatIter;
+	    if (max < r*2) max = r*2;
+	    while(iter++ < max) {
+		if (!r || (jul <= JulianToday)) {
+		    break;
+		}
 		jul--;
-		if (!IsOmitted(jul, t->localomit)) r--;
+		if (!IsOmitted(jul, t->localomit, t->omitfunc)) r--;
+	    }
+	    if (iter > max) {
+		/* TODO: Somehow communicate error back to caller!! */
+		return 0;
 	    }
 	}
     }
@@ -996,10 +1014,17 @@ static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
 	    if (JulianToday + v.v.val == jul) return 1;
 	} else {
 	    int j = jul;
-	    while (v.v.val) {
+	    int iter = 0;
+	    int max = MaxSatIter;
+	    if (max < v.v.val * 2) max = v.v.val*2;
+	    while(iter++ <= max) {
 		j--;
-		if (!IsOmitted(j, t->localomit)) v.v.val++;
+		if (!IsOmitted(j, t->localomit, t->omitfunc)) v.v.val++;
+		if (!v.v.val) {
+		    break;
+		}
 	    }
+	    if (iter > max) return 0;
 	    if (j == JulianToday) return 1;
 	}
     }

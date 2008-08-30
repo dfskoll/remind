@@ -826,6 +826,11 @@ The combination of omitted days and AFTER keyword causes the reminder to
 be issued on all days whose day-of-month number is divisible by three,
 but not on Saturday or Sunday.
 .PP
+As the previous example shows, you can combine \fBOMIT\fR and
+\fBOMITFUNC\fR and their list of "omitted" days accumulate.  In addition,
+any globally omitted days (specified by the \fBOMIT\fR command described
+later) are also included in the list of "omitted" days.
+.PP
 .B TIMED REMINDERS
 .PP
 Timed reminders are those that have an \fBAT\fR keyword followed
@@ -2202,7 +2207,8 @@ or \fBDATETIME\fR is supplied, then the year component is used in the test.
 .B isomitted(dq_date)
 Returns 1 if \fIdate\fR is omitted, given the current global \fBOMIT\fR
 context.  Returns 0 otherwise.  (If a datetime is supplied, only the
-date part is used.)
+date part is used.)  Note that any local \fBOMIT\fR or \fBOMITFUNC\fR
+clauses are \fInot\fR taken into account by this function.
 .TP
 .B hebdate(i_day, s_hebmon [,idq_yrstart [,i_jahr [,i_aflag]]])
 Support for Hebrew dates - see the section "The Hebrew Calendar"
@@ -2316,10 +2322,11 @@ This function returns the number of \fInon-\fRomitted days between
 counted.  \fIend\fR is never counted.
 .RS
 .PP
-Note that \fIend\fR must be greater than or
-equal to \fIstart\fR or an error is reported.  In addition to using
-the global OMIT context, you can supply additional arguments that are
-names of weekdays to be omitted.
+Note that \fIend\fR must be greater than or equal to \fIstart\fR or an
+error is reported.  In addition to using the global OMIT context, you
+can supply additional arguments that are names of weekdays to be
+omitted.  However, in a \fBREM\fR command, any local \fBOMITFUNC\fR
+clause is \fInot\fR taken into account by this function.
 .PP
 For example, the following line sets a to 11 (assuming no global OMITs):
 .PP

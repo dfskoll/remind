@@ -797,10 +797,11 @@ the last day of the month, regardless of the \fBOMIT\fR.
 .PP
 .B COMPUTED LOCAL OMITS
 .PP
-The \fBOMITFUNC\fR phrase of the \fBREM\fR command allows you to supply
-a function that determines whether or not a date is omitted.  The function
-is passed a single parameter of type \fBDATE\fR, and must return 1 if the
-date is considered "omitted" and 0 otherwise.  Here's an example:
+The \fBOMITFUNC\fR phrase of the \fBREM\fR command allows you to
+supply a function that determines whether or not a date is omitted.
+The function is passed a single parameter of type \fBDATE\fR, and must
+return a non-zero integer if the date is considered "omitted" and 0
+otherwise.  Here's an example:
 .PP
 .nf
 	FSET _third(x) (day(x) % 3)
@@ -830,6 +831,11 @@ As the previous example shows, you can combine \fBOMIT\fR and
 \fBOMITFUNC\fR and their list of "omitted" days accumulate.  In addition,
 any globally omitted days (specified by the \fBOMIT\fR command described
 later) are also included in the list of "omitted" days.
+.PP
+Note that an incorrect \fBOMITFUNC\fR might cause all days to be considered
+omitted.  For that reason, when \fBRemind\fR searches through omitted days,
+it terminates the search after the \fBSATISFY\fR iteration limit
+(command-line option \fB\-x\fR.)
 .PP
 .B TIMED REMINDERS
 .PP

@@ -492,167 +492,167 @@ CLEAR-OMIT-CONTEXT
 # Test omitfunc
 fset _ofunc(x) (day(x) < 7 || day(x) % 2)
 REM 1 March OMITFUNC _ofunc AFTER MSG OmitFunc Test
-Entering UserFN _ofunc(1991-01-15)
-x => 1991-01-15
-day(1991-01-15) => 15
+Entering UserFN _ofunc(1991-02-15)
+x => 1991-02-15
+day(1991-02-15) => 15
 15 < 7 => 0
-x => 1991-01-15
-day(1991-01-15) => 15
+x => 1991-02-15
+day(1991-02-15) => 15
 15 % 2 => 1
 0 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-01-14)
-x => 1991-01-14
-day(1991-01-14) => 14
+Entering UserFN _ofunc(1991-02-14)
+x => 1991-02-14
+day(1991-02-14) => 14
 14 < 7 => 0
-x => 1991-01-14
-day(1991-01-14) => 14
+x => 1991-02-14
+day(1991-02-14) => 14
 14 % 2 => 0
 0 || 0 => 0
 Leaving UserFN _ofunc() => 0
-Entering UserFN _ofunc(1991-02-01)
-x => 1991-02-01
-day(1991-02-01) => 1
+Entering UserFN _ofunc(1991-03-01)
+x => 1991-03-01
+day(1991-03-01) => 1
 1 < 7 => 1
-x => 1991-02-01
-day(1991-02-01) => 1
+x => 1991-03-01
+day(1991-03-01) => 1
 1 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-02)
-x => 1991-02-02
-day(1991-02-02) => 2
+Entering UserFN _ofunc(1991-03-02)
+x => 1991-03-02
+day(1991-03-02) => 2
 2 < 7 => 1
-x => 1991-02-02
-day(1991-02-02) => 2
+x => 1991-03-02
+day(1991-03-02) => 2
 2 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-03)
-x => 1991-02-03
-day(1991-02-03) => 3
+Entering UserFN _ofunc(1991-03-03)
+x => 1991-03-03
+day(1991-03-03) => 3
 3 < 7 => 1
-x => 1991-02-03
-day(1991-02-03) => 3
+x => 1991-03-03
+day(1991-03-03) => 3
 3 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-04)
-x => 1991-02-04
-day(1991-02-04) => 4
+Entering UserFN _ofunc(1991-03-04)
+x => 1991-03-04
+day(1991-03-04) => 4
 4 < 7 => 1
-x => 1991-02-04
-day(1991-02-04) => 4
+x => 1991-03-04
+day(1991-03-04) => 4
 4 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-05)
-x => 1991-02-05
-day(1991-02-05) => 5
+Entering UserFN _ofunc(1991-03-05)
+x => 1991-03-05
+day(1991-03-05) => 5
 5 < 7 => 1
-x => 1991-02-05
-day(1991-02-05) => 5
+x => 1991-03-05
+day(1991-03-05) => 5
 5 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-06)
-x => 1991-02-06
-day(1991-02-06) => 6
+Entering UserFN _ofunc(1991-03-06)
+x => 1991-03-06
+day(1991-03-06) => 6
 6 < 7 => 1
-x => 1991-02-06
-day(1991-02-06) => 6
+x => 1991-03-06
+day(1991-03-06) => 6
 6 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-07)
-x => 1991-02-07
-day(1991-02-07) => 7
+Entering UserFN _ofunc(1991-03-07)
+x => 1991-03-07
+day(1991-03-07) => 7
 7 < 7 => 0
-x => 1991-02-07
-day(1991-02-07) => 7
+x => 1991-03-07
+day(1991-03-07) => 7
 7 % 2 => 1
 0 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-08)
-x => 1991-02-08
-day(1991-02-08) => 8
+Entering UserFN _ofunc(1991-03-08)
+x => 1991-03-08
+day(1991-03-08) => 8
 8 < 7 => 0
-x => 1991-02-08
-day(1991-02-08) => 8
+x => 1991-03-08
+day(1991-03-08) => 8
 8 % 2 => 0
 0 || 0 => 0
 Leaving UserFN _ofunc() => 0
 ../tests/test.rem(169): Trig = Friday, 8 March, 1991
 REM 8 March OMITFUNC _ofunc -1 MSG OmitFunc Test 2
-Entering UserFN _ofunc(1991-02-07)
-x => 1991-02-07
-day(1991-02-07) => 7
+Entering UserFN _ofunc(1991-03-07)
+x => 1991-03-07
+day(1991-03-07) => 7
 7 < 7 => 0
-x => 1991-02-07
-day(1991-02-07) => 7
+x => 1991-03-07
+day(1991-03-07) => 7
 7 % 2 => 1
 0 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-06)
-x => 1991-02-06
-day(1991-02-06) => 6
+Entering UserFN _ofunc(1991-03-06)
+x => 1991-03-06
+day(1991-03-06) => 6
 6 < 7 => 1
-x => 1991-02-06
-day(1991-02-06) => 6
+x => 1991-03-06
+day(1991-03-06) => 6
 6 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-05)
-x => 1991-02-05
-day(1991-02-05) => 5
+Entering UserFN _ofunc(1991-03-05)
+x => 1991-03-05
+day(1991-03-05) => 5
 5 < 7 => 1
-x => 1991-02-05
-day(1991-02-05) => 5
+x => 1991-03-05
+day(1991-03-05) => 5
 5 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-04)
-x => 1991-02-04
-day(1991-02-04) => 4
+Entering UserFN _ofunc(1991-03-04)
+x => 1991-03-04
+day(1991-03-04) => 4
 4 < 7 => 1
-x => 1991-02-04
-day(1991-02-04) => 4
+x => 1991-03-04
+day(1991-03-04) => 4
 4 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-03)
-x => 1991-02-03
-day(1991-02-03) => 3
+Entering UserFN _ofunc(1991-03-03)
+x => 1991-03-03
+day(1991-03-03) => 3
 3 < 7 => 1
-x => 1991-02-03
-day(1991-02-03) => 3
+x => 1991-03-03
+day(1991-03-03) => 3
 3 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-02)
-x => 1991-02-02
-day(1991-02-02) => 2
+Entering UserFN _ofunc(1991-03-02)
+x => 1991-03-02
+day(1991-03-02) => 2
 2 < 7 => 1
-x => 1991-02-02
-day(1991-02-02) => 2
+x => 1991-03-02
+day(1991-03-02) => 2
 2 % 2 => 0
 1 || 0 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-02-01)
-x => 1991-02-01
-day(1991-02-01) => 1
+Entering UserFN _ofunc(1991-03-01)
+x => 1991-03-01
+day(1991-03-01) => 1
 1 < 7 => 1
-x => 1991-02-01
-day(1991-02-01) => 1
+x => 1991-03-01
+day(1991-03-01) => 1
 1 % 2 => 1
 1 || 1 => 1
 Leaving UserFN _ofunc() => 1
-Entering UserFN _ofunc(1991-01-28)
-x => 1991-01-28
-day(1991-01-28) => 28
+Entering UserFN _ofunc(1991-02-28)
+x => 1991-02-28
+day(1991-02-28) => 28
 28 < 7 => 0
-x => 1991-01-28
-day(1991-01-28) => 28
+x => 1991-02-28
+day(1991-02-28) => 28
 28 % 2 => 0
 0 || 0 => 0
 Leaving UserFN _ofunc() => 0

@@ -337,6 +337,7 @@ Its syntax is:
 [\fBPRIORITY\fR \fIprio\fR]
 [\fBSKIP\fR | \fBBEFORE\fR | \fBAFTER\fR]
 [\fBOMIT\fR \fIomit_list\fR]
+[\fBOMITFUNC\fR \fIomit_function\fR]
 [\fBAT\fR \fItime\fR [\fItdelta\fR] [\fItrepeat\fR]]
 [\fBSCHED\fR \fIsched_function\fR]
 [\fBWARN\fR \fIwarn_function\fR]
@@ -794,6 +795,37 @@ also.  See "The OMIT command" for more details.)
 By comparison, if we had used "\-\-1", the reminder would be triggered on
 the last day of the month, regardless of the \fBOMIT\fR.
 .PP
+.B COMPUTED LOCAL OMITS
+.PP
+The \fBOMITFUNC\fR phrase of the \fBREM\fR command allows you to supply
+a function that determines whether or not a date is omitted.  The function
+is passed a single parameter of type \fBDATE\fR, and must return 1 if the
+date is considered "omitted" and 0 otherwise.  Here's an example:
+.PP
+.nf
+	FSET _third(x) (day(x) % 3)
+	REM OMIT Sat Sun OMITFUNC _third AFTER MSG Working day divisible by 3
+.fi
+.PP
+In the example above, the reminder is triggered every Monday to Friday whose
+day-of-month number is divisible by three.  Here's how it works:
+.TP
+.B o
+The \fBOMIT Sat Sun\fR portion causes weekends to be considered "omitted"
+.TP
+.B o
+The \fBOMITFUNC _third\fR portion causes all days for which \fB_third(x)\fR
+returns non-zero to be considered "omitted".  This causes all days whose
+day-of-month number is \fInot\fR a multiple of three to be omitted.
+.TP
+.B o
+The \fBAFTER\fR keyword causes the reminder to be moved after a block of
+omitted days.
+.PP
+The combination of omitted days and AFTER keyword causes the reminder to
+be issued on all days whose day-of-month number is divisible by three,
+but not on Saturday or Sunday.
+.PP
 .B TIMED REMINDERS
 .PP
 Timed reminders are those that have an \fBAT\fR keyword followed
@@ -1226,11 +1258,11 @@ equivalent:
 .PP
 .B THE BEFORE, AFTER AND SKIP KEYWORDS
 .PP
-Normally, days that are omitted, whether by a global \fBOMIT\fR command
-or the local \fBOMIT\fR keyword in a \fBREM\fR statement, only affect the
-counting of the \-\fIback\fR or the +\fIdelta\fR.  For example, suppose
-you have a meeting every Wednesday.  Suppose, too, that you have indicated
-11 Nov as a holiday:
+Normally, days that are omitted, whether by a global \fBOMIT\fR
+command or the local \fBOMIT\fR or \fBOMITFUNC\fR keywords in a
+\fBREM\fR statement, only affect the counting of the \-\fIback\fR or
+the +\fIdelta\fR.  For example, suppose you have a meeting every
+Wednesday.  Suppose, too, that you have indicated 11 Nov as a holiday:
 .PP
 .nf
 	OMIT 11 Nov +4 MSG Remembrance Day

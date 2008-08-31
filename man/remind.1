@@ -1,4 +1,4 @@
-.TH REMIND 1 "1 July 2007"
+.TH REMIND 1 "31 August 2008"
 .UC 4
 .SH NAME
 remind \- a sophisticated reminder service
@@ -2387,6 +2387,27 @@ garbage day still only moves by one day.
 .PP
 Obviously, the answer you get from \fBnonomitted\fR depends on the global
 OMIT context.  If you use moveable OMITs, you may get inconsistent results.
+.PP
+Here's another real-world use for \fBnonomitted\fR.  My actual garbage
+collection follows two interleaved 14-day cycles: One Friday, garbage and paper
+recycling ("Black Box") are collected.  The next Friday, garbage and plastic
+recycling ("Blue Box") are collected.  If any of Monday-Friday is a holiday,
+collection is delayed until the Saturday.  Here's a way to encode these rules:
+.PP
+.nf
+   fset _garbhol(x) wkdaynum(x) == 5 && nonomitted(x-4, x+1) < 5)
+   REM 12 November 1999 *14 AFTER OMITFUNC _garbhol MSG Black Box
+   REM 19 November 1999 *14 AFTER OMITFUNC _garbhol MSG Blue Box
+.fi
+.PP
+Here's how it works:  The _garbhol(x) user-defined function returns 1
+if and only if (1) \fIx\fR is a Friday and (2) there is at least one
+OMITted day from the previous Monday up to and including the Friday.
+.PP
+The first REM statement sets up the 14-day black-box cycle.  The AFTER
+clause makes it move collection to the Saturday if _garbhol returns 1.
+The second REM statement sets up the 14-day blue-box cycle with a similar
+adjustment made by AFTER in conjunction with _garbhol.
 .RE
 .TP
 .B now()
@@ -3127,6 +3148,10 @@ occurring on odd-numbered days of the month with the following:
 	REM Mon Wed Thu SATISFY [day(trigdate())%2] \\
 		MSG Here it is!!!
 .fi
+.PP
+Note that \fBSATISFY\fR and \fBOMITFUNC\fR can often be used to solve the
+same problem, though in different ways.  Sometimes a \fBSATISFY\fR is cleaner
+and sometimes an \fBOMITFUNC\fR; experiment and use whichever seems clearer.
 .PP
 .SH DEBUGGING REMINDER SCRIPTS
 .PP

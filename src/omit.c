@@ -185,9 +185,6 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
 {
     int y, m, d;
 
-    /* Get the syndrome */
-    FromJulian(jul, &y, &m, &d);
-
     /* If we have an omitfunc, we *only* use it and ignore local/global
        OMITs */
     if (omitfunc && *omitfunc && UserFuncExists(omitfunc)) {
@@ -195,6 +192,8 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
 	char const *s;
 	int r;
 	Value v;
+
+	FromJulian(jul, &y, &m, &d);
 	sprintf(expr, "%s('%04d-%02d-%02d')",
 		omitfunc, y, m+1, d);
 	s = expr;
@@ -213,6 +212,7 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
     /* Is it omitted because of fully-specified omits? */
     if (BexistsIntArray(FullOmitArray, NumFullOmits, jul)) return 1;
 
+    FromJulian(jul, &y, &m, &d);
     if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d))
 	return 1;
 

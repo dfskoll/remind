@@ -258,6 +258,10 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 
 	case T_Omit:
 	    DBufFree(&buf);
+	    if (trig->omitfunc[0]) {
+		Eprint("Warning: OMIT is ignored if you use OMITFUNC");
+	    }
+
 	    r = ParseLocalOmit(s, trig);
 	    if (r) return r;
 	    break;
@@ -268,6 +272,9 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 	    return OK;
 
 	case T_OmitFunc:
+	    if (trig->localomit) {
+		Eprint("Warning: OMIT is ignored if you use OMITFUNC");
+	    }
 	    r=ParseToken(s, &buf);
 	    if (r) return r;
 	    StrnCpy(trig->omitfunc, DBufValue(&buf), VAR_NAME_LEN);

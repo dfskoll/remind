@@ -185,18 +185,11 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
 {
     int y, m, d;
 
-    /* Is it omitted because of local omits? */
-    if (localomit & (1 << (jul % 7))) return 1;
-
-    /* Is it omitted because of fully-specified omits? */
-    if (BexistsIntArray(FullOmitArray, NumFullOmits, jul)) return 1;
-
     /* Get the syndrome */
     FromJulian(jul, &y, &m, &d);
-    if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d))
-	return 1;
 
-    /* Is it omitted because of omitfunc? */
+    /* If we have an omitfunc, we *only* use it and ignore local/global
+       OMITs */
     if (omitfunc && *omitfunc && UserFuncExists(omitfunc)) {
 	char expr[VAR_NAME_LEN + 32];
 	char const *s;
@@ -211,7 +204,17 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
 		return 1;
 	    }
 	}
+	return 0;
     }
+
+    /* Is it omitted because of local omits? */
+    if (localomit & (1 << (jul % 7))) return 1;
+
+    /* Is it omitted because of fully-specified omits? */
+    if (BexistsIntArray(FullOmitArray, NumFullOmits, jul)) return 1;
+
+    if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d))
+	return 1;
 
     /* Not omitted */
     return 0;

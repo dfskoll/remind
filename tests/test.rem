@@ -169,6 +169,13 @@ fset _ofunc(x) (day(x) < 7 || day(x) % 2)
 REM 1 March OMITFUNC _ofunc AFTER MSG OmitFunc Test
 REM 8 March OMITFUNC _ofunc -1 MSG OmitFunc Test 2
 
+# omitfunc ignores local/global omits
+fset _ofunc(x) 0
+OMIT 1 March
+OMIT 2 March 1991
+REM 1 March OMIT Sun OMITFUNC _ofunc AFTER MSG Should trigger 1 March
+REM 1 March OMIT Sun AFTER MSG Should trigger 4 March
+
 set a000 abs(1)
 set a001 abs(-1)
 set a002 asc("foo")

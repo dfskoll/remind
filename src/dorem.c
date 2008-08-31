@@ -814,7 +814,7 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 		if (!IsOmitted(jul, t->localomit, t->omitfunc)) r--;
 	    }
 	    if (iter > max) {
-		/* TODO: Somehow communicate error back to caller!! */
+	        Eprint("Delta: Bad OMITFUNC? %s", ErrMsg[E_CANT_TRIG]);
 		return 0;
 	    }
 	}
@@ -1024,7 +1024,10 @@ static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
 		    break;
 		}
 	    }
-	    if (iter > max) return 0;
+	    if (iter > max) {
+	        Eprint("Delta: Bad OMITFUNC? %s", ErrMsg[E_CANT_TRIG]);
+	        return 0;
+	    }
 	    if (j == JulianToday) return 1;
 	}
     }

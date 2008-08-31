@@ -304,6 +304,7 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 	}
 	if (iter > MaxSatIter) {
 	    /* omitfunc must have returned "true" too often */
+	    *err = E_CANT_TRIG;
 	    return -2;
 	}
     }
@@ -336,6 +337,10 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 		simple--;
 		if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) mod--;
 	    }
+	    if (iter > max) {
+	        *err = E_CANT_TRIG;
+		return -2;
+	    }
 	}
     }
 
@@ -358,6 +363,7 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 	    simple--;
 	}
 	if (iter > MaxSatIter) {
+	    *err = E_CANT_TRIG;
 	    return -2;
 	}
     }
@@ -372,6 +378,7 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 	    simple++;
 	}
 	if (iter > MaxSatIter) {
+	    *err = E_CANT_TRIG;
 	    return -2;
 	}
     }

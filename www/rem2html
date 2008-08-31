@@ -362,7 +362,6 @@ sub output_calendar
     # Last column
     my $last_col = ($first_col + $Numdays - 1) % 7;
 
-
     # Start the table
     my $class;
     if ($Options{'nostyle'}) {

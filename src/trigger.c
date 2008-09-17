@@ -206,16 +206,27 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	    *err = E_BAD_DATE;
 	    return -1;
 	}
+	/* Back up a year in case we'll cross a year boundary*/
+	if (y > BASE) {
+	    y--;
+	}
+
 	/* Move up to the first valid year */
 	while (trig->d > DaysInMonth(trig->m, y)) y++;
 
+	/* Try last year */
+	j = Julian(y, trig->m, trig->d);
+	while(! (trig->wd & (1 << (j%7)))) j++;
+	if (j >= startdate) return j;
+
 	/* Try this year */
+	y++;
 	j = Julian(y, trig->m, trig->d);
 	while(! (trig->wd & (1 << (j%7)))) j++;
 	if (j >= startdate) return j;
 
 	/* Must be next year */
-	y = y + 1;
+	y++;
 	while (trig->d > DaysInMonth(trig->m, y)) y++;
 	j = Julian(y, trig->m, trig->d);
 	while(! (trig->wd & (1 << (j%7)))) j++;

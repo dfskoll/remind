@@ -2109,3 +2109,16 @@ Color Test
 MON WKDAY DAY across year test
 -(1): Trig = Monday, 3 January, 2000
 No reminders.
+Sort Test
+Reminders for Saturday, 1st January, 2000:
+
+Untimed
+
+Timed
+
+Reminders for Saturday, 1st January, 2000:
+
+Timed
+
+Untimed
+

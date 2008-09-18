@@ -1265,7 +1265,7 @@ static void SortCol(CalEntry **col)
     while (cur->next &&
 	   CompareRems(0, cur->time, cur->priority,
 		       0, cur->next->time, cur->next->priority,
-		       SortByDate, SortByTime, SortByPrio) <= 0) {
+		       SortByDate, SortByTime, SortByPrio, UntimedBeforeTimed) <= 0) {
 	next = cur->next;
 	/* Swap cur and next */
 	if (!prev) {

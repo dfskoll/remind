@@ -500,7 +500,8 @@ static SysVar SysVarArr[] = {
     {   "SortByPrio",	  0,	INT_TYPE,	&SortByPrio,	0,	0},
     {   "SortByTime",	  0,	INT_TYPE,	&SortByTime,	0,	0},
     {   "SubsIndent",	  1,	INT_TYPE,	&SubsIndent,	0,	132},
-    {   "TimeSep",        1,    SPECIAL_TYPE,   time_sep_func,  0,      0   }
+    {   "TimeSep",        1,    SPECIAL_TYPE,   time_sep_func,  0,      0   },
+    {   "UntimedFirst", 0, INT_TYPE,      &UntimedBeforeTimed, 0, 0 }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )

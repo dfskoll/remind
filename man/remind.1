@@ -182,13 +182,14 @@ Echo lines when displaying error messages
 Trace the reading of reminder files
 .RE
 .TP
-\fB\-g\fR[\fBa|d\fR[\fBa|d\fR[\fBa|d\fR]]]
-Normally, reminders are issued in the order in which they are encountered
-in the reminder script.  The \fB\-g\fR option cause \fBRemind\fR to
-sort reminders by date and time prior to issuing them.  The optional
-\fBa\fR and \fBd\fR characters specify the sort order (ascending or
-descending) for the date, time and priority fields.  See the section "Sorting
-Reminders" for more information.
+\fB\-g\fR[\fBa|d\fR[\fBa|d\fR[\fBa|d\fR[\fBa|d\fR]]]]
+Normally, reminders are issued in the order in which they are
+encountered in the reminder script.  The \fB\-g\fR option cause
+\fBRemind\fR to sort reminders by date and time prior to issuing them.
+The optional \fBa\fR and \fBd\fR characters specify the sort order
+(ascending or descending) for the date, time and priority fields.  See
+the section "Sorting Reminders" for more information.
+
 .TP
 \fB\-b\fR[\fIn\fR]
 Set the time format for the calendar and simple-calendar outputs.  \fIN\fR
@@ -1933,6 +1934,10 @@ $IgnoreOnce, $InfDelta, and $NextMode are not meaningful.
 This variable can be set only to ":" or ".".  It holds the character
 used to separate portions of a time when \fBRemind\fR prints a TIME or
 DATETIME value.
+.TP
+.B $UntimedFirst (read-only)
+Set to 1 if the \fB\-g\fR option is used with a fourth sort character
+of "d"; set to 0 otherwise.
 .PP
 .B BUILT-IN FUNCTIONS
 .PP
@@ -3492,24 +3497,26 @@ to ensure that the daemon is not killed when you log out.
 .PP
 .SH SORTING REMINDERS
 .PP
-The \fB\-g\fR option causes \fBRemind\fR to sort reminders by
-trigger date, time and priority before issuing them.  Note that reminders are
-still calculated in the order encountered in the script.  However, rather
-than being issued immediately, they are saved in an internal buffer.
-When \fBRemind\fR has finished processing the script, it issues the
-saved reminders in sorted order.  The \fB\-g\fR option can be followed
-by up to three characters that must all be "a" or "d".  The first character
-specifies the sort order by trigger date (ascending or descending),
-the second specifies the sort order by trigger time and the third
-specifies the sort order by priority.  The default is
-to sort all fields in ascending order.
+
+The \fB\-g\fR option causes \fBRemind\fR to sort reminders by trigger
+date, time and priority before issuing them.  Note that reminders are
+still calculated in the order encountered in the script.  However,
+rather than being issued immediately, they are saved in an internal
+buffer.  When \fBRemind\fR has finished processing the script, it
+issues the saved reminders in sorted order.  The \fB\-g\fR option can
+be followed by up to four characters that must all be "a" or "d".  The
+first character specifies the sort order by trigger date (ascending or
+descending), the second specifies the sort order by trigger time and
+the third specifies the sort order by priority.  If the fourth
+character is "d", the untimed reminders are sorted before timed
+reminders.  The default is to sort all fields in ascending order and
+to sort untimed reminders after timed reminders.
 .PP
 In ascending order, reminders are issued with the most imminent first.
 Descending order is the reverse.  Reminders are always sorted by
 trigger date, and reminders with the same trigger date are then sorted
-by trigger time.  Non-timed reminders are always issued after timed
-reminders in this mode.  If two reminders have the same date and time,
-then the priority is used to break ties.  Reminders with the same date,
+by trigger time.  If two reminders have the same date and time, then
+the priority is used to break ties.  Reminders with the same date,
 time and priority are issued in the order they were encountered.
 .PP
 You can define a user-defined function called SORTBANNER that takes one

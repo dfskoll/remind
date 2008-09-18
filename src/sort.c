@@ -83,6 +83,7 @@ int InsertIntoSortBuffer(int jul, int tim, char const *body, int typ, int prio)
 	SortByDate = 0;
 	SortByTime = 0;
 	SortByPrio = 0;
+	UntimedBeforeTimed = 0;
 	return E_NO_MEM;
     }
 
@@ -94,8 +95,8 @@ int InsertIntoSortBuffer(int jul, int tim, char const *body, int typ, int prio)
     while (cur) {
 	ShouldGoAfter = CompareRems(new->trigdate, new->trigtime, new->priority,
 				    cur->trigdate, cur->trigtime, cur->priority,
-				    SortByDate, SortByTime, SortByPrio);
-		      
+				    SortByDate, SortByTime, SortByPrio, UntimedBeforeTimed);
+
 	if (ShouldGoAfter <= 0) {
 	    prev = cur;
 	    cur = cur->next;
@@ -203,19 +204,27 @@ static void IssueSortBanner(int jul)
 /***************************************************************/
 int CompareRems(int dat1, int tim1, int prio1,
 		int dat2, int tim2, int prio2,
-		int bydate, int bytime, int byprio)
+		int bydate, int bytime, int byprio,
+		int untimed_first)
 {
-    int dafter, tafter, pafter;
+    int dafter, tafter, pafter, uafter;
 
     dafter = (bydate != SORT_DESCEND) ? 1 : -1;
     tafter = (bytime != SORT_DESCEND) ? 1 : -1;
     pafter = (byprio != SORT_DESCEND) ? 1 : -1;
+    uafter = (untimed_first) ? -1 : 1;
 
     if (dat1 < dat2) return dafter;
     if (dat1 > dat2) return -dafter;
 
-    if (tim1 == NO_TIME && tim2 != NO_TIME) return -1;
-    if (tim1 != NO_TIME && tim2 == NO_TIME) return 1;
+    if (tim1 == NO_TIME && tim2 != NO_TIME) {
+	return -uafter;
+    }
+
+    if (tim1 != NO_TIME && tim2 == NO_TIME) {
+	return uafter;
+    }
+
     if (tim1 < tim2) return tafter;
     if (tim1 > tim2) return -tafter;
 

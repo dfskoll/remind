@@ -248,6 +248,7 @@ void InitRemind(int argc, char const *argv[])
 		SortByDate = SORT_ASCEND;
 		SortByTime = SORT_ASCEND;
 		SortByPrio = SORT_ASCEND;
+		UntimedBeforeTimed = 0;
 		if (*arg) {
 		    if (*arg == 'D' || *arg == 'd')
 			SortByDate = SORT_DESCEND;
@@ -261,6 +262,11 @@ void InitRemind(int argc, char const *argv[])
 		if (*arg) {
 		    if (*arg == 'D' || *arg == 'd')
 			SortByPrio = SORT_DESCEND;
+		    arg++;
+		}
+		if (*arg) {
+		    if (*arg == 'D' || *arg == 'd')
+			UntimedBeforeTimed = 1;
 		    arg++;
 		}
 		break;
@@ -576,7 +582,7 @@ void Usage(void)
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");
     fprintf(ErrFp, " -x[n]  Iteration limit for SATISFY clause (def=150)\n");
     fprintf(ErrFp, " -kcmd  Run `cmd' for MSG-type reminders\n");
-    fprintf(ErrFp, " -g[ddd] Sort reminders by date, time and priority before issuing\n");
+    fprintf(ErrFp, " -g[dddd] Sort reminders by date, time, priority, and 'timedness'\n");
     fprintf(ErrFp, " -ivar=val Initialize var to val and preserve var\n");
     fprintf(ErrFp, " -m     Start calendar with Monday rather than Sunday\n");
     fprintf(ErrFp, " -y     Synthesize tags for tagless reminders\n");

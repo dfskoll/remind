@@ -59,6 +59,7 @@ EXTERN  INIT(   int     IgnoreOnce, 0);
 EXTERN  INIT(   int     SortByTime, 0);
 EXTERN  INIT(   int     SortByDate, 0);
 EXTERN	INIT(	int	SortByPrio, 0);
+EXTERN  INIT(   int     UntimedBeforeTimed, 0);
 EXTERN	INIT(	int	DefaultPrio, NO_PRIORITY);
 EXTERN  INIT(   long    SysTime, -1L);
 

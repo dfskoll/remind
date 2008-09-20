@@ -793,7 +793,7 @@ static int DoCalRem(ParsePtr p, int col)
 	if (!LastTrigValid) return OK;
     } else {
 	/* Calculate the trigger date */
-	jul = ComputeTrigger(trig.scanfrom, &trig, &r);
+	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) return r;
     }
 

@@ -736,7 +736,7 @@ int DoIfTrig(ParsePtr p)
     else {
 	if ( (r=ParseRem(p, &trig, &tim)) ) return r;
 	if (trig.typ != NO_TYPE) return E_PARSE_ERR;
-	jul = ComputeTrigger(trig.scanfrom, &trig, &r);
+	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) syndrome = IF_TRUE | BEFORE_ELSE;
 	else {
 	    if (ShouldTriggerReminder(&trig, &tim, jul))

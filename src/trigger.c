@@ -406,7 +406,7 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 /*  today's date.                                              */
 /*                                                             */
 /***************************************************************/
-int ComputeTrigger(int today, Trigger *trig, int *err)
+int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 {
     int nattempts = 0,
 	start = today,
@@ -414,7 +414,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	y, m, d,
 	result;
 
-    LastTrigValid = 0;
+    if (save_in_globals) LastTrigValid = 0;
 
 /* Assume everything works */
     *err = OK;
@@ -451,8 +451,10 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	/* If result is >= today, great! */
 	if (result >= today &&
 	    (trig->skip != SKIP_SKIP || !IsOmitted(result, trig->localomit, trig->omitfunc))) {
-	    LastTriggerDate = result;  /* Save in global var */
-	    LastTrigValid = 1;
+	    if (save_in_globals) {
+		LastTriggerDate = result;  /* Save in global var */
+		LastTrigValid = 1;
+	    }
 	    if (DebugFlag & DB_PRTTRIG) {
 		FromJulian(result, &y, &m, &d);
 		fprintf(ErrFp, "%s(%d): Trig = %s, %d %s, %d\n",
@@ -474,8 +476,10 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 			FileName, LineNo, ErrMsg[E_EXPIRED]);
 	    }
 	    if (result != -1) {
-	        LastTriggerDate = result;
-		LastTrigValid = 1;
+		if (save_in_globals) {
+		    LastTriggerDate = result;
+		    LastTrigValid = 1;
+		}
 	    }
 	    return -1;
 	}
@@ -490,8 +494,10 @@ int ComputeTrigger(int today, Trigger *trig, int *err)
 	/* Keep scanning... unless there's no point in doing it.*/
 	if (nextstart <= start) {
 	    if (result != -1) {
-		LastTriggerDate = result;
-		LastTrigValid = 1;
+		if (save_in_globals) {
+		    LastTriggerDate = result;
+		    LastTrigValid = 1;
+		}
 	    }
 	    if (DebugFlag & DB_PRTTRIG) {
 		fprintf(ErrFp, "%s(%d): %s\n",

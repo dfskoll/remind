@@ -90,7 +90,7 @@ int DoRem(ParsePtr p)
 	if (!LastTrigValid) return OK;
     } else {
 	/* Calculate the trigger date */
-	jul = ComputeTrigger(trig.scanfrom, &trig, &r);
+	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) return r;
     }
 
@@ -849,7 +849,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
     iter = 0;
     jul = trig->scanfrom;
     while (iter++ < MaxSatIter) {
-	jul = ComputeTrigger(jul, trig, &r);
+	jul = ComputeTrigger(jul, trig, &r, 1);
 	if (r) {
 	    if (r == E_CANT_TRIG) return OK; else return r;
 	}

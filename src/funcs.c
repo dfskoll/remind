@@ -70,6 +70,7 @@ static	int	FDaysinmon	(void);
 static	int	FDefined	(void);
 static	int	FDosubst	(void);
 static	int	FEasterdate	(void);
+static  int     FEvalTrig       (void);
 static int	FFiledate	(void);
 static int	FFiledatetime	(void);
 static	int	FFiledir	(void);
@@ -208,6 +209,7 @@ Operator Func[] = {
     {   "dosubst",	1,	3,	FDosubst },
     {   "dusk",		0,	1,	FDusk },
     {   "easterdate",	1,	1,	FEasterdate },
+    {   "evaltrig",     1,      1,      FEvalTrig },
     {	"filedate",	1,	1,	FFiledate },
     {	"filedatetime",	1,	1,	FFiledatetime },
     {	"filedir",	0,	0,	FFiledir },
@@ -2562,4 +2564,28 @@ FWeekno(void)
     return OK;
 }
 
+static int
+FEvalTrig(void)
+{
+    Parser p;
+    Trigger trig;
+    TimeTrig tim;
+    int jul;
+    int r;
 
+    ASSERT_TYPE(0, STR_TYPE);
+    CreateParser(ARGSTR(0), &p);
+    p.allownested = 0;
+    r = ParseRem(&p, &trig, &tim);
+    if (r) return r;
+    if (trig.typ != NO_TYPE) return E_PARSE_ERR;
+    jul = ComputeTrigger(trig.scanfrom, &trig, &r, 0);
+    if (r) return r;
+    if (jul < 0) {
+	RetVal.type = INT_TYPE;
+    } else {
+	RetVal.type = DATE_TYPE;
+    }
+    RetVal.v.val = jul;
+    return OK;
+}

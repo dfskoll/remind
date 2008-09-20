@@ -245,7 +245,9 @@ EXTERN char *ErrMsg[] =
     "Nombre attendu",
     "Fonction ill\351gale apr\350s WARN",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
+
 #else /* ISOLATIN1 */
     "Ok",
     "']' manquant",
@@ -347,7 +349,8 @@ EXTERN char *ErrMsg[] =
     "Nombre attendu",
     "Fonction illegale apres WARN",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

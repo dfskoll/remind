@@ -149,6 +149,12 @@
 #define MAX_PRT_LEN 40
 
 /*---------------------------------------------------------------------*/
+/* MAX_STR_LEN: If non-zero, Remind will limit the maximum length      */
+/* of string values to avoid eating up all of memory...                */
+/*---------------------------------------------------------------------*/
+#define MAX_STR_LEN 65535
+
+/*---------------------------------------------------------------------*/
 /* OP_STACK_SIZE: The size of the operator stack for expr. parsing     */
 /*---------------------------------------------------------------------*/
 #define OP_STACK_SIZE 100

@@ -308,7 +308,8 @@ EXTERN char *ErrMsg[] =
     "Numero puuttuu",
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
 
 #elif IBMEXTENDED
     "Ok",
@@ -411,7 +412,9 @@ EXTERN char *ErrMsg[] =
     "Numero puuttuu"
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
+
 #else
     "Ok",
     "Puuttuva ']'",
@@ -513,7 +516,9 @@ EXTERN char *ErrMsg[] =
     "Numero puuttuu",
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
+
 
 #endif
 };

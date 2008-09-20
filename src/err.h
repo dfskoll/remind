@@ -118,6 +118,7 @@
 #define M_BAD_WARN_FUNC      98
 #define E_CANT_CONVERT_TZ    99
 #define E_NO_MATCHING_REMS  100
+#define E_STRING_TOO_LONG   101
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -232,7 +233,8 @@ EXTERN char *ErrMsg[]
     "Expecting number",
     "Bad function in WARN clause",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
 }
 #endif /* MK_GLOBALS */
 ;

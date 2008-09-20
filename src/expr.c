@@ -737,6 +737,8 @@ static int Add(void)
     Value v1, v2, v3;
     int r;
 
+    size_t l1, l2;
+
     PopValStack(v2);
     if ( (r = FnPopValStack(&v1)) ) {
 	DestroyValue(v2);
@@ -791,7 +793,13 @@ static int Add(void)
 	    return r;
 	}
 	v3.type = STR_TYPE;
-	v3.v.str = malloc(strlen(v1.v.str) + strlen(v2.v.str) + 1);
+	l1 = strlen(v1.v.str);
+	l2 = strlen(v2.v.str);
+	if (MAX_STR_LEN && (l1 + l2 > MAX_STR_LEN)) {
+	    DestroyValue(v1); DestroyValue(v2);
+	    return E_STRING_TOO_LONG;
+	}
+	v3.v.str = malloc(l1 + l2 + 1);
 	if (!v3.v.str) {
 	    DestroyValue(v1); DestroyValue(v2);
 	    return E_NO_MEM;

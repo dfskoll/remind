@@ -280,7 +280,8 @@ EXTERN char *ErrMsg[] =
     "Spodziewana liczba",
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
 #else /* ISOLATIN1 */
     "OK",
     "Brakujacy ']'",
@@ -382,7 +383,8 @@ EXTERN char *ErrMsg[] =
     "Spodziewana liczba",
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
     "Can't convert between time zones",
-    "No files matching *.rem"
+    "No files matching *.rem",
+    "String too long"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

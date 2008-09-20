@@ -418,14 +418,33 @@ static int FBaseyr(void)
 static int FDate(void)
 {
     int y, m, d;
-    if (ARG(0).type != INT_TYPE ||
-	ARG(1).type != INT_TYPE ||
-	ARG(2).type != INT_TYPE) return E_BAD_TYPE;
-    y = ARGV(0);
-    m = ARGV(1) - 1;
-    d = ARGV(2);
+    int ytemp, mtemp, dtemp;
 
-    if (!DateOK(y, m, d)) return E_BAD_DATE;
+    /* Any arg can be a date (in which case we use the corresponding
+       component) or an integer */
+    if (HASDATE(ARG(0))) {
+	FromJulian(DATEPART(ARG(0)), &ytemp, &mtemp, &dtemp);
+	y = ytemp;
+    } else {
+	ASSERT_TYPE(0, INT_TYPE);
+	y = ARGV(0);
+    }
+
+    if (HASDATE(ARG(1))) {
+	FromJulian(DATEPART(ARG(1)), &ytemp, &mtemp, &dtemp);
+	m = mtemp;
+    } else {
+	ASSERT_TYPE(1, INT_TYPE);
+	m = ARGV(1) - 1;
+    }
+
+    if (HASDATE(ARG(2))) {
+	FromJulian(DATEPART(ARG(2)), &ytemp, &mtemp, &dtemp);
+	d = dtemp;
+    } else {
+	ASSERT_TYPE(2, INT_TYPE);
+	d = ARGV(2);
+    }
 
     RetVal.type = DATE_TYPE;
     RetVal.v.val = Julian(y, m, d);

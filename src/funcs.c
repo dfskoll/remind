@@ -2576,16 +2576,20 @@ FEvalTrig(void)
     ASSERT_TYPE(0, STR_TYPE);
     CreateParser(ARGSTR(0), &p);
     p.allownested = 0;
-    r = ParseRem(&p, &trig, &tim);
+    r = ParseRem(&p, &trig, &tim, 0);
     if (r) return r;
     if (trig.typ != NO_TYPE) return E_PARSE_ERR;
     jul = ComputeTrigger(trig.scanfrom, &trig, &r, 0);
     if (r) return r;
     if (jul < 0) {
 	RetVal.type = INT_TYPE;
-    } else {
+	RetVal.v.val = jul;
+    } else if (tim.ttime == NO_TIME) {
 	RetVal.type = DATE_TYPE;
+	RetVal.v.val = jul;
+    } else {
+	RetVal.type = DATETIME_TYPE;
+	RetVal.v.val = (MINUTES_PER_DAY * jul) + tim.ttime;
     }
-    RetVal.v.val = jul;
     return OK;
 }

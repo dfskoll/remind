@@ -734,7 +734,7 @@ int DoIfTrig(ParsePtr p)
     if (NumIfs >= IF_NEST) return E_NESTED_IF;
     if (ShouldIgnoreLine()) syndrome = IF_TRUE | BEFORE_ELSE;
     else {
-	if ( (r=ParseRem(p, &trig, &tim)) ) return r;
+	if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
 	if (trig.typ != NO_TYPE) return E_PARSE_ERR;
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) syndrome = IF_TRUE | BEFORE_ELSE;

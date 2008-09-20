@@ -763,7 +763,7 @@ static int DoCalRem(ParsePtr p, int col)
     DBufInit(&pre_buf);
 
     /* Parse the trigger date and time */
-    if ( (r=ParseRem(p, &trig, &tim)) ) return r;
+    if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
 
 /* Don't include timed reminders in calendar if -a option supplied. */
     if (DontIssueAts && tim.ttime != NO_TIME) return OK;

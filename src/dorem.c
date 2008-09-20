@@ -29,7 +29,7 @@
 static char const DontEscapeMe[] =
 "1234567890_-=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.,";
 
-static int ParseTimeTrig (ParsePtr s, TimeTrig *tim);
+static int ParseTimeTrig (ParsePtr s, TimeTrig *tim, int save_in_globals);
 static int ParseLocalOmit (ParsePtr s, Trigger *t);
 static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
 static int ParsePriority (ParsePtr s, Trigger *t);
@@ -56,7 +56,7 @@ int DoRem(ParsePtr p)
     DBufInit(&buf);
 
     /* Parse the trigger date and time */
-    if ( (r=ParseRem(p, &trig, &tim)) ) return r;
+    if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
 
     if (trig.typ == NO_TYPE) return E_EOLN;
     if (trig.typ == SAT_TYPE) {
@@ -121,7 +121,7 @@ int DoRem(ParsePtr p)
 /*  trigger structure.                                         */
 /*                                                             */
 /***************************************************************/
-int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
+int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 {
     register int r;
     DynamicBuffer buf;
@@ -152,7 +152,9 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
     tim->delta = NO_DELTA;
     tim->rep   = NO_REP;
     tim->duration = NO_TIME;
-    LastTriggerTime = NO_TIME;
+    if (save_in_globals) {
+	LastTriggerTime = NO_TIME;
+    }
 
     while(1) {
 	/* Read space-delimited string */
@@ -188,7 +190,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 
 	case T_At:
 	    DBufFree(&buf);
-	    r=ParseTimeTrig(s, tim);
+	    r=ParseTimeTrig(s, tim, save_in_globals);
 	    if (r) return r;
 	    break;
 
@@ -337,7 +339,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim)
 /*  ParseTimeTrig - parse the AT part of a timed reminder      */
 /*                                                             */
 /***************************************************************/
-static int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
+static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 {
     Token tok;
     int r;
@@ -369,7 +371,9 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim)
 	    if (tim->ttime == NO_TIME) return E_EXPECT_TIME;
 
 	    /* Save trigger time in global variable */
-	    LastTriggerTime = tim->ttime;
+	    if (save_in_globals) {
+		LastTriggerTime = tim->ttime;
+	    }
 	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);
 	    return OK;

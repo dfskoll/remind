@@ -26,7 +26,7 @@ char const *CalendarTime (int tim, int duration);
 int DoRem (ParsePtr p);
 int DoFlush (ParsePtr p);
 void DoExit (ParsePtr p);
-int ParseRem (ParsePtr s, Trigger *trig, TimeTrig *tim);
+int ParseRem (ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals);
 int TriggerReminder (ParsePtr p, Trigger *t, TimeTrig *tim, int jul);
 int ShouldTriggerReminder (Trigger *t, TimeTrig *tim, int jul);
 int DoSubst (ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode);

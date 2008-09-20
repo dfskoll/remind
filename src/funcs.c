@@ -167,7 +167,7 @@ extern int ValStackPtr;
 #define ARGV(x) ARG(x).v.val
 #define ARGSTR(x) ARG(x).v.str
 
-#define ASSERT_TYPE(x, t) if (ARG(x).type != t) return E_BAD_TYPE;
+#define ASSERT_TYPE(x, t) if (ARG(x).type != t) return E_BAD_TYPE
 
 /* Macro for getting date part of a date or datetime value */
 #define DATEPART(x) ((x).type == DATE_TYPE ? (x).v.val : ((x).v.val / MINUTES_PER_DAY))

@@ -34,7 +34,7 @@ static int ParseLocalOmit (ParsePtr s, Trigger *t);
 static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
 static int ParsePriority (ParsePtr s, Trigger *t);
 static int ParseUntil (ParsePtr s, Trigger *t);
-static int ShouldTriggerBasedOnWarn (Trigger *t, int jul);
+static int ShouldTriggerBasedOnWarn (Trigger *t, int jul, int *err);
 
 /***************************************************************/
 /*                                                             */
@@ -48,7 +48,7 @@ int DoRem(ParsePtr p)
 
     Trigger trig;
     TimeTrig tim;
-    int r;
+    int r, err;
     int jul;
     DynamicBuffer buf;
     Token tok;
@@ -103,7 +103,7 @@ int DoRem(ParsePtr p)
 /* If we're in daemon mode, do nothing over here */
     if (Daemon) return OK;
 
-    if (ShouldTriggerReminder(&trig, &tim, jul)) {
+    if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
 	if ( (r=TriggerReminder(p, &trig, &tim, jul)) )
 	    {
 		return r;
@@ -763,7 +763,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     DBufFree(&buf);
     NumTriggered++;
     return OK;
-}    
+}
 
 /***************************************************************/
 /*                                                             */
@@ -771,12 +771,13 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 /*                                                             */
 /*  Return 1 if we should trigger a reminder, based on today's */
 /*  date and the trigger.  Return 0 if reminder should not be  */
-/*  triggered.                                                 */
+/*  triggered.  Sets *err non-zero in event of an error.       */
 /*                                                             */
 /***************************************************************/
-int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
+int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 {
-    int r;
+    int r, omit;
+    *err = 0;
 
     /* Handle the ONCE modifier in the reminder. */
     if (!IgnoreOnce && t->once !=NO_ONCE && FileAccessDate == JulianToday)
@@ -805,7 +806,7 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 		return 1;
 	    }
 	}
-	return ShouldTriggerBasedOnWarn(t, jul);
+	return ShouldTriggerBasedOnWarn(t, jul, err);
     }
 
     /* Move back by delta days, if any */
@@ -822,9 +823,12 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul)
 		    break;
 		}
 		jul--;
-		if (!IsOmitted(jul, t->localomit, t->omitfunc)) r--;
+		*err = IsOmitted(jul, t->localomit, t->omitfunc, &omit);
+		if (*err) return 0;
+		if (!omit) r--;
 	    }
 	    if (iter > max) {
+		*err = E_CANT_TRIG;
 	        Eprint("Delta: Bad OMITFUNC? %s", ErrMsg[E_CANT_TRIG]);
 		return 0;
 	    }
@@ -982,12 +986,12 @@ finished:
 /*  function.                                                  */
 /*                                                             */
 /***************************************************************/
-static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
+static int ShouldTriggerBasedOnWarn(Trigger *t, int jul, int *err)
 {
     char buffer[VAR_NAME_LEN+32];
     int i;
     char const *s;
-    int r;
+    int r, omit;
     Value v;
     int lastReturnVal = 0; /* Silence compiler warning */
 
@@ -1030,7 +1034,9 @@ static int ShouldTriggerBasedOnWarn(Trigger *t, int jul)
 	    if (max < v.v.val * 2) max = v.v.val*2;
 	    while(iter++ <= max) {
 		j--;
-		if (!IsOmitted(j, t->localomit, t->omitfunc)) v.v.val++;
+		*err = IsOmitted(j, t->localomit, t->omitfunc, &omit);
+		if (*err) return 0;
+		if (!omit) v.v.val++;
 		if (!v.v.val) {
 		    break;
 		}

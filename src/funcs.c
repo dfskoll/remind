@@ -446,6 +446,9 @@ static int FDate(void)
 	d = ARGV(2);
     }
 
+    if (!DateOK(y, m, d)) {
+	return E_BAD_DATE;
+    }
     RetVal.type = DATE_TYPE;
     RetVal.v.val = Julian(y, m, d);
     return OK;
@@ -1329,9 +1332,10 @@ static int FShell(void)
 static int FIsomitted(void)
 {
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+
     RetVal.type = INT_TYPE;
-    RetVal.v.val = IsOmitted(DATEPART(ARG(0)), 0, NULL);
-    return OK;
+    int r = IsOmitted(DATEPART(ARG(0)), 0, NULL, &RetVal.v.val);
+    return r;
 }
 
 /***************************************************************/
@@ -2486,7 +2490,7 @@ static int
 FNonomitted(void)
 {
     int d1, d2, ans, localomit, i;
-
+    int omit, r;
     Token tok;
 
     if (!HASDATE(ARG(0)) ||
@@ -2506,7 +2510,9 @@ FNonomitted(void)
 
     ans = 0;
     while (d1 < d2) {
-	if (!IsOmitted(d1++, localomit, NULL)) {
+	r = IsOmitted(d1++, localomit, NULL, &omit);
+	if (r) return r;
+	if (!omit) {
 	    ans++;
 	}
     }

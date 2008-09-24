@@ -178,10 +178,11 @@ int PopOmitContext(ParsePtr p)
 /*                                                             */
 /*  IsOmitted                                                  */
 /*                                                             */
-/*  Return non-zero if date is OMITted, zero if it is not.     */
+/*  Set *omit to non-zero if date is omitted, else 0.  Returns */
+/*  OK or an error code.                                       */
 /*                                                             */
 /***************************************************************/
-int IsOmitted(int jul, int localomit, char const *omitfunc)
+int IsOmitted(int jul, int localomit, char const *omitfunc, int *omit)
 {
     int y, m, d;
 
@@ -198,26 +199,36 @@ int IsOmitted(int jul, int localomit, char const *omitfunc)
 		omitfunc, y, m+1, d);
 	s = expr;
 	r = EvalExpr(&s, &v);
-	if (!r) {
-	    if (v.type == INT_TYPE && v.v.val != 0) {
-		return 1;
-	    }
+	if (r) return r;
+	if (v.type == INT_TYPE && v.v.val != 0) {
+	    *omit = 1;
+	} else {
+	    *omit = 0;
 	}
-	return 0;
+	return OK;
     }
 
     /* Is it omitted because of local omits? */
-    if (localomit & (1 << (jul % 7))) return 1;
+    if (localomit & (1 << (jul % 7))) {
+	*omit = 1;
+	return OK;
+    }
 
     /* Is it omitted because of fully-specified omits? */
-    if (BexistsIntArray(FullOmitArray, NumFullOmits, jul)) return 1;
+    if (BexistsIntArray(FullOmitArray, NumFullOmits, jul)) {
+	*omit = 1;
+	return OK;
+    }
 
     FromJulian(jul, &y, &m, &d);
-    if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d))
-	return 1;
+    if (BexistsIntArray(PartialOmitArray, NumPartialOmits, (m << 5) + d)) {
+	*omit = 1;
+	return OK;
+    }
 
     /* Not omitted */
-    return 0;
+    *omit = 0;
+    return OK;
 }
 
 /***************************************************************/

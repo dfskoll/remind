@@ -724,7 +724,7 @@ int DoEndif(ParsePtr p)
 /***************************************************************/
 int DoIfTrig(ParsePtr p)
 {
-    int r;
+    int r, err;
     unsigned syndrome;
     Trigger trig;
     TimeTrig tim;
@@ -739,7 +739,7 @@ int DoIfTrig(ParsePtr p)
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) syndrome = IF_TRUE | BEFORE_ELSE;
 	else {
-	    if (ShouldTriggerReminder(&trig, &tim, jul))
+	    if (ShouldTriggerReminder(&trig, &tim, jul, &err))
 		syndrome = IF_TRUE | BEFORE_ELSE;
 	    else
 		syndrome = IF_FALSE | BEFORE_ELSE;

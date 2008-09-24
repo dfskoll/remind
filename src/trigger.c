@@ -297,7 +297,7 @@ static int JYear(int jul)
 /***************************************************************/
 static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart)
 {
-    int simple, mod;
+    int simple, mod, omit;
 
 /* First:  Have we passed the UNTIL date? */
     if (trig->until != NO_UNTIL &&
@@ -308,7 +308,9 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
     if (trig->skip == AFTER_SKIP) {
 	int iter = 0;
 	while (iter++ <= MaxSatIter) {
-	    if (!IsOmitted(start-1, trig->localomit, trig->omitfunc)) {
+	    *err = IsOmitted(start-1, trig->localomit, trig->omitfunc, &omit);
+	    if (*err) return -2;
+	    if (!omit) {
 		break;
 	    }
 	    start--;
@@ -346,7 +348,9 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 		    break;
 		}
 		simple--;
-		if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) mod--;
+		*err = IsOmitted(simple, trig->localomit, trig->omitfunc, &omit);
+		if (*err) return -2;
+		if (!omit) mod--;
 	    }
 	    if (iter > max) {
 	        *err = E_CANT_TRIG;
@@ -368,7 +372,9 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
     if (trig->skip == BEFORE_SKIP) {
 	int iter = 0;
 	while(iter++ <= MaxSatIter) {
-	    if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) {
+	    *err = IsOmitted(simple, trig->localomit, trig->omitfunc, &omit);
+	    if (*err) return -2;
+	    if (!omit) {
 		break;
 	    }
 	    simple--;
@@ -383,7 +389,9 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
     if (trig->skip == AFTER_SKIP) {
 	int iter = 0;
 	while (iter++ <= MaxSatIter) {
-	    if (!IsOmitted(simple, trig->localomit, trig->omitfunc)) {
+	    *err = IsOmitted(simple, trig->localomit, trig->omitfunc, &omit);
+	    if (*err) return -2;
+	    if (!omit) {
 		break;
 	    }
 	    simple++;
@@ -411,7 +419,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
     int nattempts = 0,
 	start = today,
 	nextstart = 0,
-	y, m, d,
+	y, m, d, omit,
 	result;
 
     if (save_in_globals) LastTrigValid = 0;
@@ -449,8 +457,14 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	}
 
 	/* If result is >= today, great! */
+	if (trig->skip == SKIP_SKIP) {
+	    *err = IsOmitted(result, trig->localomit, trig->omitfunc, &omit);
+	    if (*err) return -1;
+	} else {
+	    omit = 0;
+	}
 	if (result >= today &&
-	    (trig->skip != SKIP_SKIP || !IsOmitted(result, trig->localomit, trig->omitfunc))) {
+	    (trig->skip != SKIP_SKIP || !omit)) {
 	    if (save_in_globals) {
 		LastTriggerDate = result;  /* Save in global var */
 		LastTrigValid = 1;
@@ -485,7 +499,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	}
 
 	if (trig->skip == SKIP_SKIP &&
-	    IsOmitted(result, trig->localomit, trig->omitfunc) &&
+	    omit &&
 	    nextstart <= start &&
 	    result >= start) {
 	    nextstart = result + 1;

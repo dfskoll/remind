@@ -748,7 +748,7 @@ static int DoCalRem(ParsePtr p, int col)
     Trigger trig;
     TimeTrig tim;
     Value v;
-    int r;
+    int r, err;
     int jul;
     CalEntry *CurCol = CalColumn[col];
     CalEntry *e;
@@ -845,7 +845,7 @@ static int DoCalRem(ParsePtr p, int col)
     DBufInit(&obuf);
     if ((jul == JulianToday) ||
 	(DoSimpleCalDelta &&
-	 ShouldTriggerReminder(&trig, &tim, jul))) {
+	 ShouldTriggerReminder(&trig, &tim, jul, &err))) {
 	NumTriggered++;
 
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {

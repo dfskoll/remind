@@ -2522,11 +2522,13 @@ character in the output is converted to a space.  Note that if \fBRUN
 OFF\fR has been executed, or the \fB\-r\fR command-line option has
 been used, \fBshell()\fR will result in an error, and \fIcmd\fR will
 not be executed.
+.RS
 .PP
 If \fImaxlen\fR is specified, then \fBshell()\fR returns the first
 \fImaxlen\fR characters of output (rather than the first 511).  If
 \fImaxlen\fR is specified as a negative number, then \fIall\fR the
 output from \fIcmd\fR is returned.
+.RE
 .TP
 .B strlen(s_str)
 Returns the length of \fIstr\fR.

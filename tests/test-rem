@@ -67,6 +67,8 @@ echo "Sort Test" >> ../tests/test.out
 (echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaa - 1 Jan 2000 >> ../tests/test.out 2>&1
 (echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaad - 1 Jan 2000 >> ../tests/test.out 2>&1
 
+../src/remind ../tests/runtest.rem >> ../tests/test.out 2>&1
+
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

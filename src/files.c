@@ -723,7 +723,7 @@ static void DestroyCache(CachedFile *cf)
 /***************************************************************/
 int TopLevel(void)
 {
-    return !IStackPtr;
+    return IStackPtr <= 1;
 }
 
 /***************************************************************/

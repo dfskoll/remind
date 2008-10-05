@@ -1,0 +1,6 @@
+run off
+set a shell("echo 2")
+run on
+set a shell("echo 2")
+run off
+include ../tests/runinc.rem

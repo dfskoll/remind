@@ -1,0 +1,3 @@
+set s shell("echo 3")
+run on
+set s shell("echo 3")

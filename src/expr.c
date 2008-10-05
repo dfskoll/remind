@@ -795,7 +795,7 @@ static int Add(void)
 	v3.type = STR_TYPE;
 	l1 = strlen(v1.v.str);
 	l2 = strlen(v2.v.str);
-	if (MAX_STR_LEN && (l1 + l2 > MAX_STR_LEN)) {
+	if (MaxStringLen && (l1 + l2 > MaxStringLen)) {
 	    DestroyValue(v1); DestroyValue(v2);
 	    return E_STRING_TOO_LONG;
 	}

@@ -1316,6 +1316,8 @@ static int FShell(void)
 	DBufValue(&buf)[DBufLen(&buf)-1] = 0;
     }
 
+    /* XXX Should we consume remaining output from cmd? */
+
     pclose(fp);
     r = RetStrVal(DBufValue(&buf));
     DBufFree(&buf);

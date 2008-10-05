@@ -76,6 +76,7 @@ EXTERN  INIT(   char    TimeSep, TIMESEP);
 EXTERN  INIT(   int     SynthesizeTags, 0);
 EXTERN  INIT(   int     ScFormat, SC_AMPM);
 EXTERN  INIT(   int     MaxSatIter, 150);
+EXTERN  INIT(   int     MaxStringLen, MAX_STR_LEN);
 EXTERN  INIT(	char	*FileName, NULL);
 EXTERN	INIT(	int	UseStdin, 0);
 EXTERN  FILE *ErrFp;

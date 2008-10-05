@@ -488,6 +488,7 @@ static SysVar SysVarArr[] = {
     {   "LongMin",	  1,	INT_TYPE,	&LongMin,	-59,	59  },
     {   "LongSec",	  1,	INT_TYPE,	&LongSec,	-59,	59  },
     {   "MaxSatIter",	  1,	INT_TYPE,	&MaxSatIter,	10,	ANY },
+    {   "MaxStringLen",	  1,	INT_TYPE,	&MaxStringLen,	-1,	ANY },
     {   "MinsFromUTC",	  1,	INT_TYPE,	&MinsFromUTC,	-13*60,	13*60 },
     {   "NextMode",	  0,	INT_TYPE,	&NextMode,	0,	0   },
     {   "NumQueued",	  0,	INT_TYPE,	&NumQueued,	0,	0   },

@@ -2122,3 +2122,7 @@ Timed
 
 Untimed
 
+../tests/runtest.rem(2): shell(): RUN disabled
+../tests/runinc.rem(1): shell(): RUN disabled
+../tests/runinc.rem(3): shell(): RUN disabled
+No reminders.

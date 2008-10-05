@@ -2143,6 +2143,37 @@ for the specified year.  If \fIarg\fR is a \fBDATE\fR or
 \fBDATETIME\fR, then returns the date of the next Easter Sunday on or
 after \fIarg\fR.  (The time component of a datetime is ignored.)
 .TP
+.B evaltrig(s_trigger [,dq_start])
+Evaluates \fItrigger\fR as if it were a REM or IFTRIG trigger specification
+and returns the trigger date as a \fBDATE\fR (or as a \fBDATETIME\fR if
+there is an \fBAT\fR clause.)  Returns a negative \fBINT\fR if no trigger
+could be computed.
+.RS
+.PP
+Normally, \fBevaltrig\fR finds a trigger date on or after today.  If
+you supply the \fIstart\fR argument, then it scans starting from there.
+.PP
+For example, the expression:
+.PP
+.nf
+  evaltrig("Mon 1", '2008-10-07')
+.fi
+.PP
+returns '2008-11-03', since that is the first date on or after
+7 October 2008 that satisfies "Mon 1".
+.PP
+If you want to see how many days it is from the first Monday in October, 2008
+to the first Monday in November, 2008, use:
+.PP
+.nf
+  evaltrig("Mon 1", '2008-11-01') - evaltrig("Mon 1", '2008-10-01')
+.fi
+.PP
+and the answer is 28.  The trigger argument to \fBevaltrig\fR can have
+all the usual trigger clauses (\fBOMIT\fR, \fBAT\fR, \fBSKIP\fR, etc.) but
+\fIcannot\fR have a \fBSATISFY\fR, \fBMSG\fR, etc. reminder-type clause.
+.RE
+.TP
 .B filedate(s_filename)
 Returns the modification date of \fIfilename\fR.  If \fIfilename\fR
 does not exist, or its modification date is before the year

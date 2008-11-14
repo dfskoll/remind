@@ -2401,9 +2401,9 @@ the collection day moves to Friday.  Here's one way to solve it:
    FSET prev_monday(x) x - wkdaynum(x-1)
 
    REM Thu Fri SATISFY [wkdaynum(trigdate()) == 4 && \\
-            nonomitted(prev_monday(today()), today()+1) == 4 || \\
+            nonomitted(prev_monday(trigdate()), trigdate()+1) == 4 || \\
             wkdaynum(trigdate()) == 5 && \\
-            nonomitted(prev_monday(today()), today()+1) <= 4] \\
+            nonomitted(prev_monday(trigdate()), trigdate()+1) <= 4] \\
             MSG Garbage Day
 .fi
 .PP

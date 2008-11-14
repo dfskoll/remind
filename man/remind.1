@@ -2702,6 +2702,21 @@ Returns a string specifying the version of \fBRemind\fR.  For version
 \fBRemind\fR are released, the value returned by \fBversion()\fR will
 strictly increase, according to the rules for string ordering.
 .TP
+.B weekno([dq_date, [i_wkstart, [i_daystart]]])
+Returns the week number of the year.  If no arguments are supplied,
+returns the ISO 8601 week number for \fBtoday()\fR.  If one
+argument \fIdate\fR is supplied, then returns the ISO 8601 week
+number for that date.  If two arguments are supplied, then
+\fIwkstart\fR must range from 0 to 6, and represents the first
+day of the week (with 0 being Sunday and 6 being Saturday.).  If
+\fIwkstart\fR is not supplied, then it defaults to 1.  If the
+third argument \fIdaystart\fR is supplied, then it specifies
+when Week 1 starts.  If \fIdaystart\fR is less than or equal to 7,
+then Week 1 starts on the first \fIwkstart\fR on or after
+January \fIdaystart\fR.  Otherwise, Week 1 starts on the first
+\fIwkstart\fR on or after December \fIdaystart\fR.  If omitted,
+\fIdaystart\fR defaults to 29 (following the ISO 8601 definition.)
+.TP
 .B wkday(dqi_arg)
 If \fIarg\fR is a \fBDATE\fR or \fBDATETIME\fR, returns a string
 representing the day of the week of the date.  If \fIarg\fR is an

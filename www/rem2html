@@ -9,7 +9,7 @@ my %Options;
 
 my $rem2html_version = '2.0';
 
-my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst,
+my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst, $weeks,
     @Daynames, $Nextmon, $Nextlen, $Prevmon, $Prevlen);
 
 my $TIDY_PROGNAME = $0;
@@ -186,6 +186,7 @@ sub parse_input
     undef $shades;
     undef $moons;
     undef $classes;
+    undef $weeks;
 
     my $found_data = 0;
     while(<STDIN>) {
@@ -232,10 +233,16 @@ sub parse_input
 	next unless m/^(\d*).(\d*).(\d*)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$/;
 	my ($y, $m, $d, $special, $tag, $duration, $time, $body) =
 	    ($1, $2, $3, $4, $5, $6, $7, $8);
+	my $d1 = $d;
+	$d1 =~ s/^0+//;
 	if ($special eq 'HTML') {
 	    push(@{$days->[$d]}, $body);
 	} elsif ($special eq 'HTMLCLASS') {
 	    $classes->[$d] = $body;
+	} elsif ($special eq 'WEEK') {
+		$body =~ s/^\s+//;
+		$body =~ s/\s+$//;
+		$weeks->{$d1} = $body;
 	} elsif ($special eq 'MOON') {
 		if ($body =~ /(\S+)\s+(\S+)\s+(\S+)\s+(.*)$/) {
 			my ($phase, $moonsize, $fontsize, $msg) = ($1, $2, $3, $4);
@@ -474,6 +481,10 @@ sub draw_day_cell
 {
     my($day) = @_;
     my $shade = $shades->[$day];
+    my $week = '';
+    if (exists($weeks->{$day})) {
+	    $week = ' (W' . $weeks->{$day} . ')';
+    }
     my $class;
     if ($Options{'nostyle'}) {
 	$class = $classes->[$day] || '';
@@ -528,10 +539,10 @@ sub draw_day_cell
     }
 
     if ($Options{'nostyle'}) {
-	print "<div style=\"float: right\">$day</div>\n";
+	print "<div style=\"float: right\">$day$week</div>\n";
 	print "<p>&nbsp;</p>\n";
     } else {
-	print "<div class=\"rem-daynumber\">$day</div>\n";
+	print "<div class=\"rem-daynumber\">$day$week</div>\n";
     }
     if ($days->[$day]) {
 	    print(join("\n", @{$days->[$day]}));

@@ -753,6 +753,13 @@ proc FillCalWindow {} {
 	set month [string trimleft $month 0]
 	set extratags ""
 	switch -exact -- $type {
+	    "WEEK" {
+		set stuff [string trimleft $stuff]
+		set stuff [string trimright $stuff]
+		set label [expr $firstWkday + $day - 1]
+		.cal.l$label configure -text "$day (W$stuff)"
+		continue
+	    }
 	    "SHADE" {
 		DoShadeSpecial $n $stuff
 		continue

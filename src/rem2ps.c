@@ -30,6 +30,7 @@
 #define SPECIAL_MOON       3
 #define SPECIAL_SHADE      4
 #define SPECIAL_COLOR      5
+#define SPECIAL_WEEK       6
 
 typedef struct calentry {
     struct calentry *next;
@@ -306,6 +307,7 @@ void DoPsCal(void)
 	if (!strcmp(passthru, "PostScript") ||
 	    !strcmp(passthru, "PSFile") ||
 	    !strcmp(passthru, "MOON") ||
+	    !strcmp(passthru, "WEEK") ||
 	    !strcmp(passthru, "SHADE")) {
 	    is_ps = 1;
 	}
@@ -324,6 +326,8 @@ void DoPsCal(void)
 		c->special = SPECIAL_SHADE;
 	    } else if (!strcmp(passthru, "MOON")) {
 		c->special = SPECIAL_MOON;
+	    } else if (!strcmp(passthru, "WEEK")) {
+		c->special = SPECIAL_WEEK;
 	    } else {
 		c->special = SPECIAL_PSFILE;
 	    }
@@ -954,6 +958,13 @@ int DoQueuedPs(void)
 		       r/255.0, g/255.0, b/255.0);
 		break;
 
+	    case SPECIAL_WEEK:          /* Week number */
+		num = sscanf(e->entry+fnoff, "%d", &phase);
+		if (num == 1) {
+		    printf("gsave Border Border moveto /EntryFont findfont EntrySize 1.2 div scalefont setfont ( (W %d)) show grestore\n",
+			   phase);
+		}
+		break;
 	    case SPECIAL_MOON:		/* Moon phase */
 		num = sscanf(e->entry+fnoff, "%d %d %d", &phase, &moonsize,
 			     &fontsize);

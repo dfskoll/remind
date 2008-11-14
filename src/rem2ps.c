@@ -891,6 +891,7 @@ int DoQueuedPs(void)
     int fnoff;
     char buffer[512];
     char const *size, *extra;
+    char const *s;
     int num, r, g, b, phase, fontsize, moonsize;
     unsigned char c;
 
@@ -959,12 +960,21 @@ int DoQueuedPs(void)
 		break;
 
 	    case SPECIAL_WEEK:          /* Week number */
-		num = sscanf(e->entry+fnoff, "%d", &phase);
-		if (num == 1) {
-		    printf("gsave Border Border moveto /EntryFont findfont EntrySize 1.2 div scalefont setfont ( (W %d)) show grestore\n",
-			   phase);
+		printf("gsave Border Border moveto /EntryFont findfont EntrySize 1.2 div scalefont setfont (");
+		s = e->entry+fnoff;
+		while(*s && isspace(*s)) {
+		    s++;
 		}
+		while(*s) {
+		    if (*s == '\\' || *s == '(' || *s == ')') {
+			PutChar('\\');
+		    }
+		    PutChar(*s);
+		    s++;
+		}
+		printf(") show grestore\n");
 		break;
+
 	    case SPECIAL_MOON:		/* Moon phase */
 		num = sscanf(e->entry+fnoff, "%d %d %d", &phase, &moonsize,
 			     &fontsize);

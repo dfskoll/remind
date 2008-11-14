@@ -757,7 +757,7 @@ proc FillCalWindow {} {
 		set stuff [string trimleft $stuff]
 		set stuff [string trimright $stuff]
 		set label [expr $firstWkday + $day - 1]
-		.cal.l$label configure -text "$day (W$stuff)"
+		.cal.l$label configure -text "$day $stuff"
 		continue
 	    }
 	    "SHADE" {

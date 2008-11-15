@@ -3958,6 +3958,14 @@ The COLOR special is "doubly special", because in its normal operating
 mode, \fBremind\fR treats a COLOR special just like a MSG-type reminder.
 Also, if you invoke \fBRemind\fR with \fB\-cc\fR..., then it approximates
 SPECIAL COLOR reminders on your terminal.
+.PP
+The \fBWEEK\fR special lets you place annotations such as the week
+number in the calendar.  For example, this would number each Sunday
+with the ISO 8601 week number:
+
+.nf
+	REM Sunday SPECIAL WEEK (W[weekno()])
+.fi
 
 .SH MISCELLANEOUS
 .PP

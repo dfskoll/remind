@@ -960,7 +960,7 @@ int DoQueuedPs(void)
 		break;
 
 	    case SPECIAL_WEEK:          /* Week number */
-		printf("gsave Border Border moveto /EntryFont findfont EntrySize 1.2 div scalefont setfont (");
+		printf("gsave Border Border 2 div moveto /EntryFont findfont EntrySize 1.2 div scalefont setfont (");
 		s = e->entry+fnoff;
 		while(*s && isspace(*s)) {
 		    s++;

@@ -1,5 +1,33 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 6 - 2008-11-16
+
+- MAJOR ENHANCEMENT: A new OMITFUNC clause gives you additional
+  control and flexibility over "omitted days" calculations.  This is
+  useful when holidays influence the timing of events several days
+  later.  See "COMPUTED LOCAL OMITS" in the man page.
+
+- ENHANCEMENT: The new evaltrig() built-in function lets you evaluate triggers
+  from within an expression.
+
+- ENHANCEMENT: The new weekno() built-in function returns the ISO 8601
+  week number of a date.
+
+- ENHANCEMENT: The "WEEK" special lets you annotate calendar output with the
+  week number.  The TkRemind, rem2ps and rem2html back-ends support WEEK.
+
+- MINOR ENHANCEMENT: You can control whether timed reminders come before or
+  after non-timed reminders with the "-g" flag.
+
+- BUG FIX: TkRemind did not work correctly if ~/.reminders was a directory.
+
+- BUG FIX: TkRemind incorrectly invoked Remind with the "-a" flag when
+  showing today's reminders.
+
+- BUG FIX: In certain cases, a trigger containing a day, month and
+  weekday would fail if it needed to cross a year boundary.  This has
+  been fixed.
+
 * Version 3.1 Patch 5 - 2008-04-15
 
 - MAJOR ENHANCEMENT: If you supply a directory name on the command line

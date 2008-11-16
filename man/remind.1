@@ -2393,45 +2393,18 @@ reminder will label day numbers in a calendar:
    ENDIF
 .fi
 .PP
-Here's a more complex example:  Suppose your normal garbage-collection
-day is Thursday, but if any of Monday through Thursday of a week is a holiday,
-the collection day moves to Friday.  Here's one way to solve it:
-.PP
-.nf
-   FSET prev_monday(x) x - wkdaynum(x-1)
-
-   REM Thu Fri SATISFY [wkdaynum(trigdate()) == 4 && \\
-            nonomitted(prev_monday(trigdate()), trigdate()+1) == 4 || \\
-            wkdaynum(trigdate()) == 5 && \\
-            nonomitted(prev_monday(trigdate()), trigdate()+1) <= 4] \\
-            MSG Garbage Day
-.fi
-.PP
-Whew!  (You'll need to see "THE SATISFY CLAUSE" later on.)  We'd
-better explain that one: The prev_monday helper function takes a date
-and returns the date of the previous Monday.  The REM command will
-trigger on the first Thursday or Friday that satisfies one of the
-following conditions:
-.PP
-1) Either it's a Thursday and there are exactly four non-omitted days between
-the previous Monday and tomorrow, or
-.PP
-2) It's a Friday and there are four or fewer non-omitted days between the
-previous Monday and tomorrow.  We need the "or fewer" condition to handle
-the case of more than one holiday in a given week.  If that happens,
-garbage day still only moves by one day.
-.PP
 Obviously, the answer you get from \fBnonomitted\fR depends on the global
 OMIT context.  If you use moveable OMITs, you may get inconsistent results.
 .PP
-Here's another real-world use for \fBnonomitted\fR.  My actual garbage
-collection follows two interleaved 14-day cycles: One Friday, garbage and paper
-recycling ("Black Box") are collected.  The next Friday, garbage and plastic
-recycling ("Blue Box") are collected.  If any of Monday-Friday is a holiday,
-collection is delayed until the Saturday.  Here's a way to encode these rules:
+Here a more complex use for \fBnonomitted\fR.  My garbage collection
+follows two interleaved 14-day cycles: One Friday, garbage and paper
+recycling ("Black Box") are collected.  The next Friday, garbage and
+plastic recycling ("Blue Box") are collected.  If any of Monday-Friday
+is a holiday, collection is delayed until the Saturday.  Here's a way
+to encode these rules:
 .PP
 .nf
-   fset _garbhol(x) wkdaynum(x) == 5 && nonomitted(x-4, x+1) < 5)
+   fset _garbhol(x) wkdaynum(x) == 5 && nonomitted(x-4, x+1) < 5
    REM 12 November 1999 *14 AFTER OMITFUNC _garbhol MSG Black Box
    REM 19 November 1999 *14 AFTER OMITFUNC _garbhol MSG Blue Box
 .fi
@@ -2441,7 +2414,7 @@ if and only if (1) \fIx\fR is a Friday and (2) there is at least one
 OMITted day from the previous Monday up to and including the Friday.
 .PP
 The first REM statement sets up the 14-day black-box cycle.  The AFTER
-clause makes it move collection to the Saturday if _garbhol returns 1.
+keyword makes it move collection to the Saturday if _garbhol returns 1.
 The second REM statement sets up the 14-day blue-box cycle with a similar
 adjustment made by AFTER in conjunction with _garbhol.
 .RE

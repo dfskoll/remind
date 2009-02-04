@@ -133,6 +133,11 @@ void InitRemind(int argc, char const *argv[])
     char const *s;
     int weeks;
 
+    int jul, tim, r;
+
+    jul = NO_DATE;
+    tim = NO_TIME;
+
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
     DBufInit(&LineBuffer);
@@ -481,17 +486,17 @@ void InitRemind(int argc, char const *argv[])
 		break;
 
 	    case T_Month:
-		if (m != NO_MON) Usage();
+		if (m != NO_MON || jul != NO_DATE) Usage();
 		else m = tok.val;
 		break;
 
 	    case T_Day:
-		if (d != NO_DAY) Usage();
+		if (d != NO_DAY || jul != NO_DATE) Usage();
 		else d = tok.val;
 		break;
 
 	    case T_Year:
-		if (y != NO_YR) Usage();
+		if (y != NO_YR || jul != NO_DATE) Usage();
 		else y = tok.val;
 		break;
 
@@ -500,7 +505,17 @@ void InitRemind(int argc, char const *argv[])
 		else rep = tok.val;
 		break;
 
-	    default: Usage();
+	    default:
+		s = arg;
+		r = ParseLiteralDate(&s, &jul, &tim);
+		if (r != OK) {
+		    Usage();
+		}
+		if (tim != NO_TIME) {
+		    SysTime = tim * 60;
+		    DontQueue = 1;
+		    Daemon = 0;
+		}
 	    }
 	}
 
@@ -510,6 +525,9 @@ void InitRemind(int argc, char const *argv[])
 	    Daemon = 0;
 	}
 
+	if (jul != NO_DATE) {
+	    FromJulian(jul, &y, &m, &d);
+	}
 /* Must supply date in the form:  day, mon, yr OR mon, yr */
 	if (m != NO_MON || y != NO_YR || d != NO_DAY) {
 	    if (m == NO_MON || y == NO_YR) {

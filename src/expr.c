@@ -42,7 +42,6 @@ static int Multiply(void), Divide(void), Mod(void), Add(void),
     Compare(int);
 
 static int MakeValue (char const *s, Value *v, Var *locals);
-static int ParseLiteralDate (char const **s, int *jul, int *tim);
 
 /* Binary operators - all left-associative */
 
@@ -1202,7 +1201,7 @@ int CopyValue(Value *dest, const Value *src)
 /*  and tim; update s.                                         */
 /*                                                             */
 /***************************************************************/
-static int ParseLiteralDate(char const **s, int *jul, int *tim)
+int ParseLiteralDate(char const **s, int *jul, int *tim)
 {
     int y, m, d;
     int hour, min;

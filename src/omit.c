@@ -294,6 +294,14 @@ int DoOmit(ParsePtr p)
 	if ( (r=ParseToken(p, &buf)) ) return r;
 	FindToken(DBufValue(&buf), &tok);
 	switch (tok.type) {
+	case T_Date:
+	    DBufFree(&buf);
+	    if (y != NO_YR) return E_YR_TWICE;
+	    if (m != NO_MON) return E_MON_TWICE;
+	    if (d != NO_DAY) return E_DAY_TWICE;
+	    FromJulian(tok.val, &y, &m, &d);
+	    break;
+
 	case T_Year:
 	    DBufFree(&buf);
 	    if (y != NO_YR) return E_YR_TWICE;
@@ -311,7 +319,7 @@ int DoOmit(ParsePtr p)
 	    if (d != NO_DAY) return E_DAY_TWICE;
 	    d = tok.val;
 	    break;
-	 
+
 	case T_Delta:
 	    DBufFree(&buf);
 	    break;

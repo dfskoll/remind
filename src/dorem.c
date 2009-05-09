@@ -127,6 +127,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     DynamicBuffer buf;
     Token tok;
 
+    int y, m, d;
+
     DBufInit(&buf);
 
     trig->y = NO_YR;
@@ -164,6 +166,32 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	/* Figure out what we've got */
 	FindToken(DBufValue(&buf), &tok);
 	switch(tok.type) {
+	case T_Date:
+	    DBufFree(&buf);
+	    if (trig->d != NO_DAY) return E_DAY_TWICE;
+	    if (trig->m != NO_MON) return E_MON_TWICE;
+	    if (trig->y != NO_YR)  return E_YR_TWICE;
+	    FromJulian(tok.val, &y, &m, &d);
+	    trig->y = y;
+	    trig->m = m;
+	    trig->d = d;
+	    break;
+
+	case T_DateTime:
+	    DBufFree(&buf);
+	    if (trig->d != NO_DAY) return E_DAY_TWICE;
+	    if (trig->m != NO_MON) return E_MON_TWICE;
+	    if (trig->y != NO_YR)  return E_YR_TWICE;
+	    FromJulian(tok.val / MINUTES_PER_DAY, &y, &m, &d);
+	    trig->y = y;
+	    trig->m = m;
+	    trig->d = d;
+	    tim->ttime = (tok.val % MINUTES_PER_DAY);
+	    if (save_in_globals) {
+		LastTriggerTime = tim->ttime;
+	    }
+	    break;
+
 	case T_WkDay:
 	    DBufFree(&buf);
 	    if (trig->wd & (1 << tok.val)) return E_WD_TWICE;

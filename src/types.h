@@ -133,7 +133,7 @@ enum TokTypes
   T_IfTrig, T_ErrMsg,
   T_Set, T_UnSet, T_Fset, T_Omit, T_Banner, T_Exit,
   T_WkDay,
-  T_Month, T_Time,
+  T_Month, T_Time, T_Date, T_DateTime,
   T_Skip, T_At, T_RemType, T_Until, T_Year, T_Day, T_Rep, T_Delta, T_Back,
   T_Once,
   T_Empty,

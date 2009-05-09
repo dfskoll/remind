@@ -256,11 +256,29 @@ void FindToken(char const *s, Token *tok)
 void FindNumericToken(char const *s, Token *t)
 {
     int mult = 1, hour, min;
+    char const *s_orig = s;
 
     t->type = T_Illegal;
     t->val = 0;
     if (isdigit(*s)) {
 	PARSENUM(t->val, s);
+
+	/* If we hit a '-' or a '/', we may have a date or a datetime */
+	if (*s == '-' || *s == '/') {
+	    char const *p = s_orig;
+	    int jul, tim;
+	    if (ParseLiteralDate(&p, &jul, &tim) == OK) {
+		if (*p) return;
+		if (tim == NO_TIME) {
+		    t->type = T_Date;
+		    t->val = jul;
+		    return;
+		}
+		t->type = T_DateTime;
+		t->val = MINUTES_PER_DAY * jul + tim;
+	    }
+	    return;
+	}
 
 	/* If we hit a comma, swallow it.  This allows stuff
 	   like Jan 6, 1998 */

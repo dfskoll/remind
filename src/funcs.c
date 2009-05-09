@@ -2506,7 +2506,6 @@ FSlide(void)
     amt = ARGV(1);
     if (amt > 1000000) return E_2HIGH;
     if (amt < -1000000) return E_2LOW;
-    RetVal.type = DATE_TYPE;
 
     localomit = 0;
     for (i=2; i<Nargs; i++) {
@@ -2515,10 +2514,7 @@ FSlide(void)
 	if (tok.type != T_WkDay) return E_UNKNOWN_TOKEN;
 	localomit |= (1 << tok.val);
     }
-    if (amt == 0) {
-	RETVAL = d;
-	return OK;
-    }
+
     if (amt > 0) {
 	while(amt) {
 	    d++;
@@ -2534,6 +2530,7 @@ FSlide(void)
 	    if (!omit) amt++;
 	}
     }
+    RetVal.type = DATE_TYPE;
     RETVAL = d;
     return OK;
 }

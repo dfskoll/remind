@@ -85,6 +85,7 @@ static	int	FIif		(void);
 static	int	FIndex		(void);
 static	int	FIsdst		(void);
 static	int	FIsomitted	(void);
+static	int	FSlide  	(void);
 static	int	FLanguage	(void);
 static	int	FMax		(void);
 static	int	FMin		(void);
@@ -249,6 +250,7 @@ Operator Func[] = {
     {   "realtoday",    0,      0,      FRealtoday },
     {   "sgn",		1,	1,	FSgn	},
     {   "shell",	1,	2,	FShell	},
+    {   "slide",        2,      NO_MAX, FSlide  },
     {   "strlen",	1,	1,	FStrlen	},
     {   "substr",	2,	3,	FSubstr	},
     {   "sunrise",	0,	1,	FSunrise},
@@ -2489,6 +2491,51 @@ static int FTzconvert(void)
 }
 
 static int
+FSlide(void)
+{
+    int r, omit, d, i, localomit, amt;
+    Token tok;
+
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
+    ASSERT_TYPE(1, INT_TYPE);
+
+    d = DATEPART(ARG(0));
+    amt = ARGV(1);
+    if (amt > 1000000) return E_2HIGH;
+    if (amt < -1000000) return E_2LOW;
+    RetVal.type = DATE_TYPE;
+
+    localomit = 0;
+    for (i=2; i<Nargs; i++) {
+	if (ARG(i).type != STR_TYPE) return E_BAD_TYPE;
+	FindToken(ARG(i).v.str, &tok);
+	if (tok.type != T_WkDay) return E_UNKNOWN_TOKEN;
+	localomit |= (1 << tok.val);
+    }
+    if (amt == 0) {
+	RetVal.v.val = d;
+	return OK;
+    }
+    if (amt > 0) {
+	while(amt) {
+	    d++;
+	    r = IsOmitted(d, localomit, NULL,&omit);
+	    if (r) return r;
+	    if (!omit) amt--;
+	}
+    } else {
+	while(amt) {
+	    d--;
+	    r = IsOmitted(d, localomit, NULL,&omit);
+	    if (r) return r;
+	    if (!omit) amt++;
+	}
+    }
+    RetVal.v.val = d;
+    return OK;
+}
+
+static int
 FNonomitted(void)
 {
     int d1, d2, ans, localomit, i;
@@ -2497,6 +2544,7 @@ FNonomitted(void)
 
     if (!HASDATE(ARG(0)) ||
 	!HASDATE(ARG(1))) {
+	return E_BAD_TYPE;
     }
     d1 = DATEPART(ARG(0));
     d2 = DATEPART(ARG(1));

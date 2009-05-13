@@ -133,7 +133,7 @@ void InitRemind(int argc, char const *argv[])
     char const *s;
     int weeks;
 
-    int jul, tim, r;
+    int jul, tim;
 
     jul = NO_DATE;
     tim = NO_TIME;
@@ -485,6 +485,20 @@ void InitRemind(int argc, char const *argv[])
 		}
 		break;
 
+	    case T_DateTime:
+		if (SysTime != -1L) Usage();
+		if (m != NO_MON || d != NO_DAY || y != NO_YR || jul != NO_DATE) Usage();
+		SysTime = (tok.val % MINUTES_PER_DAY) * 60;
+		DontQueue = 1;
+		Daemon = 0;
+		jul = tok.val / MINUTES_PER_DAY;
+		break;
+
+	    case T_Date:
+		if (m != NO_MON || d != NO_DAY || y != NO_YR || jul != NO_DATE) Usage();
+		jul = tok.val;
+		break;
+
 	    case T_Month:
 		if (m != NO_MON || jul != NO_DATE) Usage();
 		else m = tok.val;
@@ -506,16 +520,7 @@ void InitRemind(int argc, char const *argv[])
 		break;
 
 	    default:
-		s = arg;
-		r = ParseLiteralDate(&s, &jul, &tim);
-		if (r != OK) {
-		    Usage();
-		}
-		if (tim != NO_TIME) {
-		    SysTime = tim * 60;
-		    DontQueue = 1;
-		    Daemon = 0;
-		}
+		Usage();
 	    }
 	}
 

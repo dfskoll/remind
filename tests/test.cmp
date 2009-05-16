@@ -947,7 +947,7 @@ easterdate(1992) => 1992-04-19
 set a080 easterdate(1995)
 easterdate(1995) => 1995-04-16
 set a081 ""
-OMIT 11 Mar
+OMIT 1991-03-11
 set a082 slide('1991-03-01', 7, "Sat", "Sun")
 slide(1991-03-01, 7, "Sat", "Sun") => 1991-03-13
 set a083 slide('1991-04-01', -7, "Sat")

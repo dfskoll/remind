@@ -273,7 +273,7 @@ set a078 easterdate(today())
 set a079 easterdate(1992)
 set a080 easterdate(1995)
 set a081 ""
-OMIT 11 Mar
+OMIT 1991-03-11
 set a082 slide('1991-03-01', 7, "Sat", "Sun")
 set a083 slide('1991-04-01', -7, "Sat")
 set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")

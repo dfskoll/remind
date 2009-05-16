@@ -176,6 +176,12 @@ OMIT 2 March 1991
 REM 1 March OMIT Sun OMITFUNC _ofunc AFTER MSG Should trigger 1 March
 REM 1 March OMIT Sun AFTER MSG Should trigger 4 March
 
+# Test shorthand reminders
+REM 1991-02-28 MSG Feb 28
+REM 1991/02/28@14:45 MSG Feb 28
+REM Wed UNTIL 1991-01-01 MSG Expired
+REM Wed SCANFROM 1991-02-26 MSG SCANFROM
+
 set a000 abs(1)
 set a001 abs(-1)
 set a002 asc("foo")
@@ -267,4 +273,9 @@ set a078 easterdate(today())
 set a079 easterdate(1992)
 set a080 easterdate(1995)
 set a081 ""
+OMIT 11 Mar
+set a082 slide('1991-03-01', 7, "Sat", "Sun")
+set a083 slide('1991-04-01', -7, "Sat")
+set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")
+set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
 dump

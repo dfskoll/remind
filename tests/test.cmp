@@ -672,6 +672,16 @@ Leaving UserFN _ofunc() => 0
 REM 1 March OMIT Sun AFTER MSG Should trigger 4 March
 ../tests/test.rem(177): Trig = Monday, 4 March, 1991
 
+# Test shorthand reminders
+REM 1991-02-28 MSG Feb 28
+../tests/test.rem(180): Trig = Thursday, 28 February, 1991
+REM 1991/02/28@14:45 MSG Feb 28
+../tests/test.rem(181): Trig = Thursday, 28 February, 1991
+REM Wed UNTIL 1991-01-01 MSG Expired
+../tests/test.rem(182): Expired
+REM Wed SCANFROM 1991-02-26 MSG SCANFROM
+../tests/test.rem(183): Trig = Wednesday, 27 February, 1991
+
 set a000 abs(1)
 abs(1) => 1
 set a001 abs(-1)
@@ -694,7 +704,7 @@ set a008 coerce("string", 11:44)
 coerce("string", 11:44) => "11:44"
 set a009 coerce("int", "badnews")
 coerce("int", "badnews") => Can't coerce
-../tests/test.rem(188): Can't coerce
+../tests/test.rem(194): Can't coerce
 set a010 coerce("int", "12")
 coerce("int", "12") => 12
 set a011 coerce("int", 11:44)
@@ -706,7 +716,7 @@ set a013 date(1992, 2, 2)
 date(1992, 2, 2) => 1992-02-02
 set a014 date(1993, 2, 29)
 date(1993, 2, 29) => Bad date specification
-../tests/test.rem(193): Bad date specification
+../tests/test.rem(199): Bad date specification
 set a015 day(today())
 today() => 1991-02-16
 day(1991-02-16) => 16
@@ -801,15 +811,15 @@ strlen("sadjflkhsldkfhsdlfjhk") => 21
 set a050 substr(a049, 2)
 a049 => 21
 substr(21, 2) => Type mismatch
-../tests/test.rem(231): Type mismatch
+../tests/test.rem(237): Type mismatch
 set a051 substr(a050, 2, 6)
-a050 => ../tests/test.rem(232): Undefined variable: a050
+a050 => ../tests/test.rem(238): Undefined variable: a050
 set a052 time(1+2, 3+4)
 1 + 2 => 3
 3 + 4 => 7
 time(3, 7) => 03:07
 rem 10 jan 1992 AT 11:22 CAL
-../tests/test.rem(234): Trig = Friday, 10 January, 1992
+../tests/test.rem(240): Trig = Friday, 10 January, 1992
 set a053 trigdate()
 trigdate() => 1992-01-10
 set a054 trigtime()
@@ -901,31 +911,31 @@ y => 11:33
 x => "foo"
 y => 11:33
 "foo" * 11:33 => Type mismatch
-../tests/test.rem(257): `*': Type mismatch
+../tests/test.rem(263): `*': Type mismatch
 Leaving UserFN h() => Type mismatch
 set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
 dosubst("%a %b %c %d %e %f %g %h", 1992-05-05) => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 msg [a074]%
-../tests/test.rem(259): Trig = Saturday, 16 February, 1991
+../tests/test.rem(265): Trig = Saturday, 16 February, 1991
 a074 => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 on Tuesday, 5 May, 1992 in 444 days' time on Tuesday 5 on 05-05-1992 on 05-05-1992 on Tuesday, 5 May on 05-05
 set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
 dosubst("%i %j %k %l %m %n %o %p", 1992-05-05) => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 msg [a075]%
-../tests/test.rem(261): Trig = Saturday, 16 February, 1991
+../tests/test.rem(267): Trig = Saturday, 16 February, 1991
 a075 => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 on 05-05 on Tuesday, May 5th, 1992 on Tuesday, May 5th on 1992-05-05 May 5  s
 set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
 dosubst("%q %r %s %t %u %v %w %x", 1992-05-05) => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 msg [a076]%
-../tests/test.rem(263): Trig = Saturday, 16 February, 1991
+../tests/test.rem(269): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 s' 05 th 05 on Tuesday, 5th May, 1992 on Tuesday, 5th May Tuesday 444
 set a077 dosubst("%y %z", '1992/5/5')
 dosubst("%y %z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(265): Trig = Saturday, 16 February, 1991
+../tests/test.rem(271): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
@@ -937,6 +947,16 @@ easterdate(1992) => 1992-04-19
 set a080 easterdate(1995)
 easterdate(1995) => 1995-04-16
 set a081 ""
+OMIT 11 Mar
+set a082 slide('1991-03-01', 7, "Sat", "Sun")
+slide(1991-03-01, 7, "Sat", "Sun") => 1991-03-13
+set a083 slide('1991-04-01', -7, "Sat")
+- 7 => -7
+slide(1991-04-01, -7, "Sat") => 1991-03-24
+set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")
+nonomitted(1991-03-01, 1991-03-13, "Sat", "Sun") => 7
+set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
+nonomitted(1991-03-24, 1991-04-01, "Sat") => 7
 dump
         Variable  Value
 
@@ -948,6 +968,7 @@ dump
             a027  0
             a046  "ies"
             a065  1
+            a084  7
             a018  1
             a037  1991-02-15
             a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
@@ -955,6 +976,7 @@ dump
             a028  1
             a047  -1
             a066  0
+            a085  7
             a019  0
             a038  33
             a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
@@ -1011,6 +1033,7 @@ dump
             a025  4
             a044  "s"
             a063  0
+            a082  1991-03-13
             a016  28
             a035  1
             a054  11:22
@@ -1018,6 +1041,7 @@ dump
             a026  7
             a045  "iess"
             a064  1
+            a083  1991-03-24
 
 
 Test 2

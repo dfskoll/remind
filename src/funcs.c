@@ -2515,6 +2515,8 @@ FSlide(void)
 	localomit |= (1 << tok.val);
     }
 
+    /* If ALL weekdays are omitted... barf! */
+    if (localomit == 127 && amt != 0) return E_2MANY_LOCALOMIT;
     if (amt > 0) {
 	while(amt) {
 	    d++;

@@ -656,6 +656,18 @@ statements are equivalent:
 	REM 2010-12-19@16:45 MSG Hi
 .fi
 .PP
+There's one subtlety with short-hand date specifications:  The following
+statements are \fInot\fR equivalent:
+.PP
+.nf
+	REM 19 Dec 2010 AT 16:45 +60 MSG Hi
+	REM 2010-12-19@16:45 +60 MSG Hi
+.fi
+.PP
+In the second statement, the "+60" is a \fIdelta\fR that applies to the
+date rather than a \fItdelta\fR that applies to the time.  We recommend
+explicitly using the AT keyword with timed reminders.
+.PP
 .B BACKWARD SCANNING
 .PP
 Sometimes, it is necessary to specify a date as being a set amount of
@@ -2555,6 +2567,31 @@ If \fImaxlen\fR is specified, then \fBshell()\fR returns the first
 \fImaxlen\fR characters of output (rather than the first 511).  If
 \fImaxlen\fR is specified as a negative number, then \fIall\fR the
 output from \fIcmd\fR is returned.
+.RE
+.TP
+.B slide(d_start, i_amt [,s_wkday...])
+This function is the inverse of \fBnonomitted\fR.  It adds \fIamt\fR
+days (which can be negative) to \fIstart\fR, \fInot counting omitted days\fR.
+The optional \fIwkday\fR arguments are additional weekday names to omit.
+.RS
+.PP
+Consider this example:
+.PP
+.nf
+	OMIT 14 May 2009
+	SET a slide('2009-05-13', 5, "Sat", "Sun")
+.fi
+.PP
+In this case, \fIa\fR is set to 2009-05-21.  That's because we slide forward
+by 5 days, not including Thursday, May 14 or Saturday and Sunday,
+May 16 and 17.  You can go backwards, too, so:
+.PP
+.nf
+	OMIT 14 May 2009
+	SET a slide('2009-05-21', -5, "Sat", "Sun")
+.fi
+.PP
+takes \fIa\fR back to 2009-05-13.
 .RE
 .TP
 .B strlen(s_str)

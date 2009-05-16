@@ -45,6 +45,6 @@ if test "$GCC" = yes; then
 fi
 
 AC_CHECK_FUNCS(setenv unsetenv glob)
-VERSION=03.01.06
+VERSION=03.01.07
 AC_SUBST(VERSION)
 AC_OUTPUT(src/Makefile www/Makefile src/version.h)

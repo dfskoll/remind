@@ -27,8 +27,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.01.02"
-   ERRMSG This file requires at least version 03.01.02 of Remind.%
+IF version() < "03.01.07"
+   ERRMSG This file requires at least version 03.01.07 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF
@@ -95,11 +95,8 @@ SET  Week_3		15
 SET  Week_4		22
 FSET _last(mo)		"1 " + MON((mo%12)+1) + " --7"
 
-# Shorthand for commonly used expression...
-FSET _trig()		TRIGGER(TRIGDATE())
-
 # Handy function to provide SCANFROM dates...
-FSET _back(days)	TRIGGER(TODAY()-days)
+FSET _back(days)	TODAY()-days
 
 ###########################################################
 # Function which returns a string in "am/pm" format based #
@@ -169,14 +166,14 @@ FSET _mail(from, subj)	"fastmail -f " + \
 REM 4 July SCANFROM [_back(7)] SATISFY 1
 
 IF WKDAYNUM(TRIGDATE()) == Sat
-	REM [TRIGGER(TRIGDATE())] MSG Independence day (actual)
-	OMIT [TRIGGER(TRIGDATE()-1)] MSG Independence day (observed)
+	REM [TRIGDATE()] MSG Independence day (actual)
+	OMIT [TRIGDATE()-1] MSG Independence day (observed)
 ELSE
 	IF WKDAYNUM(TRIGDATE()) == Sun
-		REM [TRIGGER(TRIGDATE())] MSG Independence day (actual)
-		OMIT [TRIGGER(TRIGDATE()+1)] MSG Independence day (observed)
+		REM [TRIGDATE()] MSG Independence day (actual)
+		OMIT [TRIGDATE()+1] MSG Independence day (observed)
 	ELSE
-		OMIT [TRIGGER(TRIGDATE())] MSG Independence day
+		OMIT [TRIGDATE()] MSG Independence day
 	ENDIF
 ENDIF
 
@@ -197,7 +194,7 @@ REM Mon 8 SATISFY 1
 # But only actually trigger the delayed meeting if the previous
 # Monday was a holiday
 IF ISOMITTED(TRIGDATE()-7)
-   REM [TRIGGER(TRIGDATE())] MSG Delayed meeting
+   REM [TRIGDATE()] MSG Delayed meeting
 ENDIF
 
 ############################################################################
@@ -288,12 +285,12 @@ REM Sat Sun SPECIAL SHADE 220
 
 SET SaveTrig $NumTrig
 SET easter EASTERDATE(YEAR(TODAY()))
-REM  [TRIGGER(easter-46)] MSG %"Ash Wednesday%"
-REM  [TRIGGER(easter-7)]  MSG %"Palm Sunday%"
-OMIT [TRIGGER(easter-2)]  MSG %"Good Friday%"
-OMIT [TRIGGER(easter)]    MSG %"Easter%" Sunday
-REM  [TRIGGER(easter+39)] MSG %"Ascension Day%"
-REM  [TRIGGER(easter+49)] MSG %"Pentecost%"
+REM  [easter-46] MSG %"Ash Wednesday%"
+REM  [easter-7]  MSG %"Palm Sunday%"
+OMIT [easter-2]  MSG %"Good Friday%"
+OMIT [easter]    MSG %"Easter%" Sunday
+REM  [easter+39] MSG %"Ascension Day%"
+REM  [easter+49] MSG %"Pentecost%"
 
 # Some holidays are omitted, some are not.  You may want to change
 # which ones are omitted - use the general forms shown below.
@@ -305,7 +302,7 @@ REM  Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
 REM      Feb  2		MSG %"Ground Hog Day%"
 REM      Feb 14		MSG %"Valentine's%" Day
 REM  Mon Feb [Week_3]	SCANFROM [_back(7)] SATISFY 1
-			OMIT [_trig()] MSG %"President's Day%"
+OMIT [trigdate()] MSG %"President's Day%"
 REM      Mar 17		MSG %"St. Patrick's%" Day
 
 # The DST rules are accurate for most locations in
@@ -320,11 +317,11 @@ REM  Sat May [Week_1]	MSG %"Kentucky Derby%"
 REM  Sun May [Week_2]	MSG %"Mother's Day%"
 REM  Sat May [Week_3]	MSG %"Armed Forces Day%"
 REM  Mon [_last(May)]	SCANFROM [_back(7)] SATISFY 1
-			OMIT [_trig()] MSG %"Memorial Day%"
+OMIT [trigdate()] MSG %"Memorial Day%"
 REM      Jun 14		MSG %"Flag Day%"
 REM  Sun Jun [Week_3]	MSG %"Father's Day%"
 REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
-			OMIT [_trig()] MSG %"Labor Day%"
+OMIT [trigdate()] MSG %"Labor Day%"
 REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
 REM      Nov 11		MSG %"Veterans Day%"
 
@@ -339,9 +336,9 @@ REM  Tue Nov  2		SCANFROM [_back(7)] \
 	SATISFY [(YEAR(TRIGDATE()) % 4) == 0] \
 	MSG %"Election%" Day
 REM  Thu Nov [Week_4]	SCANFROM [_back(7)] SATISFY 1
-			OMIT [_trig()] MSG %"Thanksgiving%" Day
+OMIT [trigdate()] MSG %"Thanksgiving%" Day
 REM  Fri Nov [Week_4+1]	SCANFROM [_back(7)] SATISFY 1
-			OMIT [_trig()] MSG %"Thanksgiving%" (cont.)
+OMIT [trigdate()] MSG %"Thanksgiving%" (cont.)
 OMIT     Dec 24		MSG %"Christmas Eve%"
 OMIT     Dec 25		MSG %"Christmas%" Day
 
@@ -379,10 +376,10 @@ REM PS Border Border moveto \
    ([hebday(today())] [hebmon(today())]) show
 
 # Fill in the phases of the moon on the PostScript calendar
-[trigger(moondate(0))] SPECIAL MOON 0
-[trigger(moondate(1))] SPECIAL MOON 1
-[trigger(moondate(2))] SPECIAL MOON 2
-[trigger(moondate(3))] SPECIAL MOON 3
+[moondate(0)] SPECIAL MOON 0
+[moondate(1)] SPECIAL MOON 1
+[moondate(2)] SPECIAL MOON 2
+[moondate(3)] SPECIAL MOON 3
 
 # The following example puts sunrise and sunset times in PostScript in the
 # calendar - the sizes are hard-coded, however, and work best in landscape.
@@ -435,11 +432,11 @@ SET InIsrael 0
 SET Reform 0
 
 # Convenient function definition to save typing
-FSET _h(x, y) TRIGGER(HEBDATE(x,y))
+FSET _h(x, y) HEBDATE(x,y)
 FSET _h2(x, y) HEBDATE(x, y, TODAY()-7)
-FSET _PastSat(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)+1))
-FSET _PastSun(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=0, _h2(x,y), _h2(x,y)+1))
-FSET _PastMon(x, y) TRIGGER(IIF(WKDAYNUM(_h2(x,y))!=1, _h2(x,y), _h2(x,y)+1))
+FSET _PastSat(x, y) IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)+1)
+FSET _PastSun(x, y) IIF(WKDAYNUM(_h2(x,y))!=0, _h2(x,y), _h2(x,y)+1)
+FSET _PastMon(x, y) IIF(WKDAYNUM(_h2(x,y))!=1, _h2(x,y), _h2(x,y)+1)
 
 # Default values in case InIsrael and Reform are not set
 SET InIsrael VALUE("InIsrael", 0)
@@ -470,7 +467,7 @@ ELSE
 ENDIF
 
 # Because Kislev can change length, we must be more careful about Chanukah
-FSET _chan(x) TRIGGER(HEBDATE(24, "Kislev", today()-9)+x)
+FSET _chan(x) HEBDATE(24, "Kislev", today()-9)+x
 [_chan(1)] ++4 MSG %"Chanukah 1%" is %b.
 [_chan(2)] MSG %"Chanukah 2%"
 [_chan(3)] MSG %"Chanukah 3%"
@@ -493,9 +490,9 @@ ENDIF
 
 # If Purim is on Sunday, then Fast of Esther is 11 Adar.
 IF WKDAYNUM(_h2(13, "Adar")) != 6
-   REM [TRIGGER(_h2(13, "Adar"))] ++4 MSG %"Fast of Esther%" is %b.
+   REM [_h2(13, "Adar")] ++4 MSG %"Fast of Esther%" is %b.
 ELSE
-   REM [TRIGGER(_h2(11, "Adar"))] ++4 MSG %"Fast of Esther%" is %b.
+   REM [_h2(11, "Adar")] ++4 MSG %"Fast of Esther%" is %b.
 ENDIF
 [_h(14, "Adar")] ++4 MSG %"Purim%" is %b.
 [_h(15, "Adar")] ++4 MSG %"Shushan Purim%" is %b.
@@ -521,7 +518,7 @@ IF WKDAYNUM(_h2(4, "Iyar")) == 5
 	[_h(2, "Iyar")] ++4 MSG %"Yom Hazikaron%" is %b.
 	[_h(3, "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
 ELSE
-IF WKDAYNUM(_h2, 4, "Iyar") == 0
+IF WKDAYNUM(_h2(4, "Iyar")) == 0
 	[_h(5, "Iyar")] ++4 MSG %"Yom Hazikaron%" is %b.
 	[_h(6, "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
 ELSE

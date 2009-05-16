@@ -310,7 +310,7 @@ very simple and almost immediately understandable:
 to the baroque and obscure:
 .PP
 .nf
-	REM [trigger(date(thisyear, 1, 1) + 180)] ++5 OMIT \\
+	REM [date(thisyear, 1, 1) + 180] ++5 OMIT \\
 	sat sun BEFORE MSG [ord(thisyear-1980)] payment due %b!
 .fi
 .PP
@@ -637,6 +637,25 @@ the
 .I weekday
 constraints.
 .PP
+.B SHORT-HAND DATE SPECIFICATIONS
+.PP
+In addition to spelling out the day, month and year separately, you
+can specify YYYY-MM-DD or YYYY/MM/DD.  For example, the following statements
+are equivalent:
+.PP
+.nf
+	REM 5 June 2010 MSG Cool!
+	REM 2010-06-05  MSG Cool!
+.fi
+.PP
+You can also specify a date and time as YYYY-MM-DD@HH:MM.  These
+statements are equivalent:
+.PP
+.nf
+	REM 19 Dec 2010 AT 16:45 MSG Hi
+	REM 2010-12-19@16:45 MSG Hi
+.fi
+.PP
 .B BACKWARD SCANNING
 .PP
 Sometimes, it is necessary to specify a date as being a set amount of
@@ -734,7 +753,7 @@ Another example:  Suppose you have jury duty from 30 November 1992 until
 of your jury duty, as well as 2 days ahead of time:
 .PP
 .nf
-	REM 30 Nov 1992 *1 +2 UNTIL 4 Dec 1992 MSG Jury duty
+	REM 1992-11-30 *1 +2 UNTIL 1992-12-04 MSG Jury duty
 .fi
 .PP
 Note that the \fIrepeat\fR of *1 is necessary; without it, the reminder
@@ -2462,10 +2481,10 @@ For example, the following four lines place moon symbols on the PostScript
 calendar:
 .PP
 .nf
-		REM [trigger(moondate(0))] PS [psmoon(0)]
-		REM [trigger(moondate(1))] PS [psmoon(1)]
-		REM [trigger(moondate(2))] PS [psmoon(2)]
-		REM [trigger(moondate(3))] PS [psmoon(3)]
+		REM [moondate(0)] PS [psmoon(0)]
+		REM [moondate(1)] PS [psmoon(1)]
+		REM [moondate(2)] PS [psmoon(2)]
+		REM [moondate(3)] PS [psmoon(3)]
 .fi
 .PP
 If \fInote\fR is specified, the text is used to annotate the moon
@@ -2478,7 +2497,7 @@ does not check for this.)  For example, if you want the time of each new
 moon displayed, you could use this in your reminder script:
 .PP
 .nf
-	REM [trigger(moondate(0))] PS [psmoon(0, -1, moontime(0)+"")]
+	REM [moondate(0)] PS [psmoon(0, -1, moontime(0)+"")]
 .fi
 .PP
 Note how the time is coerced to a string by concatenating the null string.
@@ -2594,15 +2613,18 @@ triggerable \fBREM\fR command had an \fBAT\fR clause.  If there was no
 returns the integer 0.
 .TP
 .B trigger(d_date [,t_time [,i_utcflag]]) \fRor\fB trigger(q_datetime [,i_utcflag])
-Returns a string suitable for use in a \fBREM\fR command, allowing you
-to calculate trigger dates in advance.  (See the section "Expression
-pasting" for more information.)  Note that \fBtrigger()\fR
-\fIalways\fR returns its result in English, even for foreign-language
-versions of \fBRemind\fR.  This is to avoid problems with certain C
-libraries that do not handle accented characters properly.  Normally,
-the \fIdate\fR and \fItime\fR are the local date and time; however, if
-\fIutcflag\fR is non-zero, the \fIdate\fR and \fItime\fR are
-interpreted as UTC times, and are converted to local time.  Examples:
+Returns a string suitable for use in a \fBREM\fR command or a SCANFROM
+or UNTIL clause, allowing you to calculate trigger dates in advance.
+Note that in earlier versions of \fBRemind\fR, \fBtrigger\fR was
+required to convert a date into something the \fBREM\fR command could
+consume.  However, in this version of \fBRemind\fR, you can omit it.
+Note that \fBtrigger()\fR \fIalways\fR returns its result in English,
+even for foreign-language versions of \fBRemind\fR.  This is to avoid
+problems with certain C libraries that do not handle accented
+characters properly.  Normally, the \fIdate\fR and \fItime\fR are the
+local date and time; however, if \fIutcflag\fR is non-zero, the
+\fIdate\fR and \fItime\fR are interpreted as UTC times, and are
+converted to local time.  Examples:
 .RS
 .PP
      trigger('1993/04/01')
@@ -2716,10 +2738,10 @@ you can "paste" an expression in.  To do this, surround the expression
 with square brackets.  For example:
 .PP
 .nf
-	REM [trigger(mydate)] MSG foo
+	REM [mydate] MSG foo
 .fi
 .PP
-This evaluates the expression "trigger(mydate)", where "mydate" is
+This evaluates the expression "mydate", where "mydate" is
 presumably some pre-computed variable, and then "pastes" the result
 into the command-line for the parser to process.
 .PP
@@ -3099,7 +3121,7 @@ more complicated sequence:
 .nf
 	REM 13 SATISFY wkdaynum(trigdate()) == 5
 	IF trigvalid()
-		REM [trigger(trigdate())] +2 MSG \\
+		REM [trigdate()] +2 MSG \\
 		Friday the 13th is %b.
 	ENDIF
 .fi
@@ -3107,8 +3129,7 @@ more complicated sequence:
 Let's see how this works.  The \fBSATISFY\fR clause iterates through
 all the 13ths of successive months, until a trigger date is found whose
 day-of-week is Friday (== 5).  If a valid date was found, we use the
-calculated trigger date (converted into a trigger format with the
-\fBtrigger()\fR function) to set up the next reminder.
+calculated trigger date to set up the next reminder.
 .PP
 We could also have written:
 .PP
@@ -3127,7 +3148,7 @@ could use:
 .nf
 	# Note: SATISFY 1 is an idiom for "do nothing"
 	REM Mon 1 Sept SATISFY 1
-	OMIT [trigger(trigdate())]
+	OMIT [trigdate()]
 .fi
 .PP
 \fBCAVEAT:\fR This \fIonly\fR omits the \fInext\fR Labour Day, not
@@ -3894,10 +3915,10 @@ in calendars produced by \fBRem2PS\fR, \fBtkremind\fR and \fBrem2html\fR.)
 The \fBMOON\fR special replaces the \fBpsmoon()\fR function.  Use it
 like this:
 .nf
-	REM [trigger(moondate(0))] SPECIAL MOON 0
-	REM [trigger(moondate(1))] SPECIAL MOON 1
-	REM [trigger(moondate(2))] SPECIAL MOON 2
-	REM [trigger(moondate(3))] SPECIAL MOON 3
+	REM [moondate(0)] SPECIAL MOON 0
+	REM [moondate(1)] SPECIAL MOON 1
+	REM [moondate(2)] SPECIAL MOON 2
+	REM [moondate(3)] SPECIAL MOON 3
 .fi
 These draw little moons on the various calendars.  The complete syntax
 of the \fBMOON\fR special is as follows:
@@ -4026,7 +4047,7 @@ This example puts an entry in each box of a calendar showing the number
 .nf
 	REM Tue 2 Nov SATISFY (year(trigdate())%4) == 0
 	IF trigvalid()
-		REM [trigger(trigdate())] ++5 MSG \\
+		REM [trigdate()] ++5 MSG \\
 		U.S. Presidential Election!!
 	ENDIF
 .fi
@@ -4077,8 +4098,8 @@ in September.  It can move over a range of 7 days.  Consider the
 following sequence:
 .PP
 .nf
-	REM Mon 1 Sept SCANFROM [trigger(today()-7)] SATISFY 1
-	OMIT [trigger(trigdate())]
+	REM Mon 1 Sept SCANFROM [today()-7] SATISFY 1
+	OMIT [trigdate()]
 
 	REM Mon AFTER MSG Hello
 .fi
@@ -4108,7 +4129,7 @@ will trigger on Mondays and Thursdays between 23 July 2007 and
 the reminder above as follows:
 .PP
 .nf
-	REM Mon Thu SCANFROM [trigger(max(today(), '2007-07-23'))] \\
+	REM Mon Thu SCANFROM [max(today(), '2007-07-23')] \\
             UNTIL 2 Aug 2007 MSG Test
 .fi
 .PP

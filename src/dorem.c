@@ -490,6 +490,23 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 	    d = tok.val;
 	    break;
 
+	case T_Date:
+	    DBufFree(&buf);
+	    if (y != NO_YR) {
+		Eprint("UNTIL: %s", ErrMsg[E_YR_TWICE]);
+		return E_YR_TWICE;
+	    }
+	    if (m != NO_MON) {
+		Eprint("UNTIL: %s", ErrMsg[E_MON_TWICE]);
+		return E_MON_TWICE;
+	    }
+	    if (d != NO_DAY) {
+		Eprint("UNTIL: %s", ErrMsg[E_DAY_TWICE]);
+		return E_DAY_TWICE;
+	    }
+	    FromJulian(tok.val, &y, &m, &d);
+	    break;
+
 	default:
 	    if (y == NO_YR || m == NO_MON || d == NO_DAY) {
 		Eprint("UNTIL: %s", ErrMsg[E_INCOMPLETE]);
@@ -563,6 +580,23 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 		return E_DAY_TWICE;
 	    }
 	    d = tok.val;
+	    break;
+
+	case T_Date:
+	    DBufFree(&buf);
+	    if (y != NO_YR) {
+		Eprint("%s: %s", word, ErrMsg[E_YR_TWICE]);
+		return E_YR_TWICE;
+	    }
+	    if (m != NO_MON) {
+		Eprint("%s: %s", word, ErrMsg[E_MON_TWICE]);
+		return E_MON_TWICE;
+	    }
+	    if (d != NO_DAY) {
+		Eprint("%s: %s", word, ErrMsg[E_DAY_TWICE]);
+		return E_DAY_TWICE;
+	    }
+	    FromJulian(tok.val, &y, &m, &d);
 	    break;
 
 	default:

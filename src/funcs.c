@@ -49,106 +49,98 @@
 #include "err.h"
 #include "expr.h"
 
+/* Defines that used to be static variables */
+#define Nargs (info->nargs)
+#define RetVal (info->retval)
+
 /* Function prototypes */
-static int FCurrent (void);
-static int FNonomitted (void);
-static int FTimepart(void);
-static int FDatepart(void);
-static int FRealCurrent(void);
-static	int	FAbs		(void);
-static	int	FAccess		(void);
-static int     FArgs		(void);
-static	int	FAsc		(void);
-static	int	FBaseyr		(void);
-static	int	FChar		(void);
-static	int	FChoose		(void);
-static	int	FCoerce		(void);
-static	int	FDate		(void);
-static	int	FDateTime	(void);
-static	int	FDay		(void);
-static	int	FDaysinmon	(void);
-static	int	FDefined	(void);
-static	int	FDosubst	(void);
-static	int	FEasterdate	(void);
-static  int     FEvalTrig       (void);
-static int	FFiledate	(void);
-static int	FFiledatetime	(void);
-static	int	FFiledir	(void);
-static	int	FFilename	(void);
-static	int	FGetenv		(void);
-static int     FHebdate	(void);
-static int     FHebday		(void);
-static int     FHebmon		(void);
-static int     FHebyear	(void);
-static	int	FHour		(void);
-static	int	FIif		(void);
-static	int	FIndex		(void);
-static	int	FIsdst		(void);
-static	int	FIsomitted	(void);
-static	int	FSlide  	(void);
-static	int	FLanguage	(void);
-static	int	FMax		(void);
-static	int	FMin		(void);
-static	int	FMinute		(void);
-static	int	FMinsfromutc	(void);
-static	int	FMoondate	(void);
-static	int	FMoondatetime	(void);
-static	int	FMoonphase	(void);
-static	int	FMoontime	(void);
-static	int	FMon		(void);
-static	int	FMonnum		(void);
-static	int	FOrd		(void);
-static	int	FOstype 	(void);
-static	int	FPlural		(void);
-static	int	FSgn		(void);
-static int	FPsmoon		(void);
-static int	FPsshade	(void);
-static	int	FShell		(void);
-static	int	FStrlen		(void);
-static	int	FSubstr		(void);
-static	int	FDawn		(void);
-static	int	FDusk	 	(void);
-static	int	FSunset		(void);
-static	int	FSunrise	(void);
-static	int	FTime		(void);
-static	int	FTrigdate	(void);
-static	int	FTrigdatetime	(void);
-static	int	FTrigtime	(void);
-static	int	FTrigvalid	(void);
-static	int	FTypeof		(void);
-static	int	FUpper		(void);
-static	int	FValue		(void);
-static	int	FVersion	(void);
-static	int	FWkday		(void);
-static	int	FWkdaynum	(void);
-static	int	FYear		(void);
-static int	FIsleap         (void);
-static int	FLower          (void);
-static int	FNow            (void);
-static int	FRealnow            (void);
-static int	FRealtoday      (void);
-static int	FToday          (void);
-static int	FTrigger        (void);
-static int      FTzconvert      (void);
-static int      FWeekno         (void);
-static int	CheckArgs       (Operator *f, int nargs);
-static int	CleanUpAfterFunc (void);
+static int FCurrent (func_info *);
+static int FNonomitted (func_info *);
+static int FTimepart(func_info *);
+static int FDatepart(func_info *);
+static int FRealCurrent(func_info *);
+static	int	FAbs		(func_info *);
+static	int	FAccess		(func_info *);
+static int     FArgs		(func_info *);
+static	int	FAsc		(func_info *);
+static	int	FBaseyr		(func_info *);
+static	int	FChar		(func_info *);
+static	int	FChoose		(func_info *);
+static	int	FCoerce		(func_info *);
+static	int	FDate		(func_info *);
+static	int	FDateTime	(func_info *);
+static	int	FDay		(func_info *);
+static	int	FDaysinmon	(func_info *);
+static	int	FDefined	(func_info *);
+static	int	FDosubst	(func_info *);
+static	int	FEasterdate	(func_info *);
+static  int     FEvalTrig       (func_info *);
+static int	FFiledate	(func_info *);
+static int	FFiledatetime	(func_info *);
+static	int	FFiledir	(func_info *);
+static	int	FFilename	(func_info *);
+static	int	FGetenv		(func_info *);
+static int     FHebdate	(func_info *);
+static int     FHebday		(func_info *);
+static int     FHebmon		(func_info *);
+static int     FHebyear	(func_info *);
+static	int	FHour		(func_info *);
+static	int	FIif		(func_info *);
+static	int	FIndex		(func_info *);
+static	int	FIsdst		(func_info *);
+static	int	FIsomitted	(func_info *);
+static	int	FSlide  	(func_info *);
+static	int	FLanguage	(func_info *);
+static	int	FMax		(func_info *);
+static	int	FMin		(func_info *);
+static	int	FMinute		(func_info *);
+static	int	FMinsfromutc	(func_info *);
+static	int	FMoondate	(func_info *);
+static	int	FMoondatetime	(func_info *);
+static	int	FMoonphase	(func_info *);
+static	int	FMoontime	(func_info *);
+static	int	FMon		(func_info *);
+static	int	FMonnum		(func_info *);
+static	int	FOrd		(func_info *);
+static	int	FOstype 	(func_info *);
+static	int	FPlural		(func_info *);
+static	int	FSgn		(func_info *);
+static int	FPsmoon		(func_info *);
+static int	FPsshade	(func_info *);
+static	int	FShell		(func_info *);
+static	int	FStrlen		(func_info *);
+static	int	FSubstr		(func_info *);
+static	int	FDawn		(func_info *);
+static	int	FDusk	 	(func_info *);
+static	int	FSunset		(func_info *);
+static	int	FSunrise	(func_info *);
+static	int	FTime		(func_info *);
+static	int	FTrigdate	(func_info *);
+static	int	FTrigdatetime	(func_info *);
+static	int	FTrigtime	(func_info *);
+static	int	FTrigvalid	(func_info *);
+static	int	FTypeof		(func_info *);
+static	int	FUpper		(func_info *);
+static	int	FValue		(func_info *);
+static	int	FVersion	(func_info *);
+static	int	FWkday		(func_info *);
+static	int	FWkdaynum	(func_info *);
+static	int	FYear		(func_info *);
+static int	FIsleap         (func_info *);
+static int	FLower          (func_info *);
+static int	FNow            (func_info *);
+static int	FRealnow            (func_info *);
+static int	FRealtoday      (func_info *);
+static int	FToday          (func_info *);
+static int	FTrigger        (func_info *);
+static int      FTzconvert      (func_info *);
+static int      FWeekno         (func_info *);
+static int	CheckArgs       (BuiltinFunc *f, int nargs);
+static int	CleanUpAfterFunc (func_info *);
 static int	SunStuff	(int rise, double cosz, int jul);
 
 /* "Overload" the struct Operator definition */
 #define NO_MAX 127
-#define MINARGS prec
-#define MAXARGS type
-
-/* Sigh - we use a global var. to hold the number of args supplied to
-   function being called */
-static int Nargs;
-
-/* Use a global var. to hold function return value */
-static Value RetVal;
-
-/* Temp string buffer */
-static char Buffer[32];
 
 /* Caches for extracting months, days, years from dates - may
    improve performance slightly. */
@@ -184,14 +176,14 @@ extern int ValStackPtr;
 #define DCOPYVAL(x, y) ( (x) = (y), (y).type = ERR_TYPE )
 
 /* Get at RetVal.v.val easily */
-#define RETVAL RetVal.v.val
+#define RETVAL info->retval.v.val
 
 /* Convenience macros */
 #define UPPER(c) (islower(c) ? toupper(c) : c)
 #define LOWER(c) (isupper(c) ? tolower(c) : c)
 
 /* The array holding the built-in functions. */
-Operator Func[] = {
+BuiltinFunc Func[] = {
 /*	Name		minargs maxargs	func   */
 
     {   "abs",		1,	1,	FAbs	},
@@ -288,14 +280,17 @@ int NumFuncs = sizeof(Func) / sizeof(Operator) ;
 /*  of arguments supplied.                                     */
 /*                                                             */
 /***************************************************************/
-int CallFunc(Operator *f, int nargs)
+int CallFunc(BuiltinFunc *f, int nargs)
 {
     register int r = CheckArgs(f, nargs);
     int i;
 
-    Nargs = nargs;
+    func_info info_obj;
+    func_info *info = &info_obj;
 
+    Nargs = nargs;
     RetVal.type = ERR_TYPE;
+
     if (DebugFlag & DB_PRTEXPR) {
 	fprintf(ErrFp, "%s(", f->name);
 	for (i=0; i<nargs; i++) {
@@ -313,7 +308,7 @@ int CallFunc(Operator *f, int nargs)
 	return r;
     }
 
-    r = (*(f->func))();
+    r = (*(f->func))(info);
     if (r) {
 	DestroyValue(RetVal);
 	if (DebugFlag & DB_PRTEXPR)
@@ -326,7 +321,7 @@ int CallFunc(Operator *f, int nargs)
 	PrintValue(&RetVal, ErrFp);
 	fprintf(ErrFp, "\n");
     }
-    r = CleanUpAfterFunc();
+    r = CleanUpAfterFunc(info);
     return r;
 }
 
@@ -338,10 +333,10 @@ int CallFunc(Operator *f, int nargs)
 /*  for a function.                                            */
 /*                                                             */
 /***************************************************************/
-static int CheckArgs(Operator *f, int nargs)
+static int CheckArgs(BuiltinFunc *f, int nargs)
 {
-    if (nargs < f->MINARGS) return E_2FEW_ARGS;
-    if (nargs > f->MAXARGS && f->MAXARGS != NO_MAX) return E_2MANY_ARGS;
+    if (nargs < f->minargs) return E_2FEW_ARGS;
+    if (nargs > f->maxargs && f->maxargs != NO_MAX) return E_2MANY_ARGS;
     return OK;
 }
 /***************************************************************/
@@ -352,7 +347,7 @@ static int CheckArgs(Operator *f, int nargs)
 /*  args and push the new value.                               */
 /*                                                             */
 /***************************************************************/
-static int CleanUpAfterFunc(void)
+static int CleanUpAfterFunc(func_info *info)
 {
     Value v;
     int i;
@@ -372,7 +367,7 @@ static int CleanUpAfterFunc(void)
 /*  Return a string value from a function.                     */
 /*                                                             */
 /***************************************************************/
-static int RetStrVal(char const *s)
+static int RetStrVal(char const *s, func_info *info)
 {
     RetVal.type = STR_TYPE;
     if (!s) {
@@ -394,7 +389,7 @@ static int RetStrVal(char const *s)
 /*  FStrlen - string length                                    */
 /*                                                             */
 /***************************************************************/
-static int FStrlen(void)
+static int FStrlen(func_info *info)
 {
     Value *v = &ARG(0);
     if (v->type != STR_TYPE) return E_BAD_TYPE;
@@ -408,7 +403,7 @@ static int FStrlen(void)
 /*  FBaseyr - system base year                                 */
 /*                                                             */
 /***************************************************************/
-static int FBaseyr(void)
+static int FBaseyr(func_info *info)
 {
     RetVal.type = INT_TYPE;
     RETVAL = BASE;
@@ -420,7 +415,7 @@ static int FBaseyr(void)
 /*  FDate - make a date from year, month, day.                 */
 /*                                                             */
 /***************************************************************/
-static int FDate(void)
+static int FDate(func_info *info)
 {
     int y, m, d;
     int ytemp, mtemp, dtemp;
@@ -468,7 +463,7 @@ static int FDate(void)
 /*  YEAR, MONTH, DAY, HOUR, MINUTE                             */
 /*                                                             */
 /***************************************************************/
-static int FDateTime(void)
+static int FDateTime(func_info *info)
 {
     int y, m, d;
 
@@ -527,7 +522,7 @@ static int FDateTime(void)
 /*  FCoerce - type coercion function.                          */
 /*                                                             */
 /***************************************************************/
-static int FCoerce(void)
+static int FCoerce(func_info *info)
 {
     char const *s;
 
@@ -551,7 +546,7 @@ static int FCoerce(void)
 /*  FMax - select maximum from a list of args.                 */
 /*                                                             */
 /***************************************************************/
-static int FMax(void)
+static int FMax(func_info *info)
 {
     Value *maxptr;
     int i;
@@ -577,7 +572,7 @@ static int FMax(void)
 /*  FMin - select minimum from a list of args.                 */
 /*                                                             */
 /***************************************************************/
-static int FMin(void)
+static int FMin(func_info *info)
 {
     Value *minptr;
     int i;
@@ -603,7 +598,7 @@ static int FMin(void)
 /*  FAsc - ASCII value of first char of string                 */
 /*                                                             */
 /***************************************************************/
-static int FAsc(void)
+static int FAsc(func_info *info)
 {
     ASSERT_TYPE(0, STR_TYPE);
     RetVal.type = INT_TYPE;
@@ -616,7 +611,7 @@ static int FAsc(void)
 /*  FChar - build a string from ASCII values                   */
 /*                                                             */
 /***************************************************************/
-static int FChar(void)
+static int FChar(func_info *info)
 {
 
     int i, len;
@@ -671,7 +666,7 @@ static int FChar(void)
 /*  FMon - get month (string)                                  */
 /*                                                             */
 /***************************************************************/
-static int FDay(void)
+static int FDay(func_info *info)
 {
     int y, m, d, v;
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
@@ -691,7 +686,7 @@ static int FDay(void)
     return OK;
 }
 
-static int FMonnum(void)
+static int FMonnum(func_info *info)
 {
     int y, m, d, v;
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
@@ -711,7 +706,7 @@ static int FMonnum(void)
     return OK;
 }
 
-static int FYear(void)
+static int FYear(func_info *info)
 {
     int y, m, d, v;
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
@@ -731,7 +726,7 @@ static int FYear(void)
     return OK;
 }
 
-static int FWkdaynum(void)
+static int FWkdaynum(func_info *info)
 {
     int v;
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
@@ -744,7 +739,7 @@ static int FWkdaynum(void)
     return OK;
 }
 
-static int FWkday(void)
+static int FWkday(func_info *info)
 {
     char const *s;
 
@@ -757,10 +752,10 @@ static int FWkday(void)
 	if (ARGV(0) < 0) ARGV(0) = 6;
 	s = DayName[ARGV(0)];
     } else s = DayName[DATEPART(ARG(0)) % 7];
-    return RetStrVal(s);
+    return RetStrVal(s, info);
 }
 
-static int FMon(void)
+static int FMon(func_info *info)
 {
     char const *s;
     int y, m, d, v;
@@ -784,7 +779,7 @@ static int FMon(void)
 	}
     }
     s = MonthName[m];
-    return RetStrVal(s);
+    return RetStrVal(s, info);
 }
 
 /***************************************************************/
@@ -794,7 +789,7 @@ static int FMon(void)
 /*  FTime - create a time from hour and minute                 */
 /*                                                             */
 /***************************************************************/
-static int FHour(void)
+static int FHour(func_info *info)
 {
     int v;
     if (!HASTIME(ARG(0))) return E_BAD_TYPE;
@@ -804,7 +799,7 @@ static int FHour(void)
     return OK;
 }
 
-static int FMinute(void)
+static int FMinute(func_info *info)
 {
     int v;
     if (!HASTIME(ARG(0))) return E_BAD_TYPE;
@@ -814,7 +809,7 @@ static int FMinute(void)
     return OK;
 }
 
-static int FTime(void)
+static int FTime(func_info *info)
 {
     int h, m;
 
@@ -835,7 +830,7 @@ static int FTime(void)
 /*  FSgn - signum function                                     */
 /*                                                             */
 /***************************************************************/
-static int FAbs(void)
+static int FAbs(func_info *info)
 {
     int v;
 
@@ -846,7 +841,7 @@ static int FAbs(void)
     return OK;
 }
 
-static int FSgn(void)
+static int FSgn(func_info *info)
 {
     int v;
 
@@ -866,10 +861,12 @@ static int FSgn(void)
 /*  EG - ord(2) == "2nd", etc.                                 */
 /*                                                             */
 /***************************************************************/
-static int FOrd(void)
+static int FOrd(func_info *info)
 {
     int t, u, v;
     char const *s;
+
+    char buf[32];
 
     ASSERT_TYPE(0, INT_TYPE);
 
@@ -881,8 +878,8 @@ static int FOrd(void)
     if (u == 1 && t != 11) s = "st";
     if (u == 2 && t != 12) s = "nd";
     if (u == 3 && t != 13) s = "rd";
-    sprintf(Buffer, "%d%s", v, s);
-    return RetStrVal(Buffer);
+    sprintf(buf, "%d%s", v, s);
+    return RetStrVal(buf, info);
 }
 
 /***************************************************************/
@@ -894,14 +891,14 @@ static int FOrd(void)
 /*  plural(n, str1, str2) --> "str1" or "str2"                 */
 /*                                                             */
 /***************************************************************/
-static int FPlural(void)
+static int FPlural(func_info *info)
 {
     ASSERT_TYPE(0, INT_TYPE);
 
     switch(Nargs) {
     case 1:
-	if (ARGV(0) == 1) return RetStrVal("");
-	else return RetStrVal("s");
+	if (ARGV(0) == 1) return RetStrVal("", info);
+	else return RetStrVal("s", info);
 
     case 2:
 	ASSERT_TYPE(1, STR_TYPE);
@@ -936,7 +933,7 @@ static int FPlural(void)
 /*  from 1.                                                    */
 /*                                                             */
 /***************************************************************/
-static int FChoose(void)
+static int FChoose(func_info *info)
 {
     int v;
 
@@ -953,9 +950,9 @@ static int FChoose(void)
 /*  FVersion - version of Remind                               */
 /*                                                             */
 /***************************************************************/
-static int FVersion(void)
+static int FVersion(func_info *info)
 {
-    return RetStrVal(VERSION);
+    return RetStrVal(VERSION, info);
 }
 
 /***************************************************************/
@@ -964,9 +961,9 @@ static int FVersion(void)
 /*  (UNIX, OS/2, or MSDOS)                                     */
 /*                                                             */
 /***************************************************************/
-static int FOstype(void)
+static int FOstype(func_info *info)
 {
-    return RetStrVal("UNIX");
+    return RetStrVal("UNIX", info);
 }
 
 /***************************************************************/
@@ -975,7 +972,7 @@ static int FOstype(void)
 /*  FLower - convert string to lower-case                      */
 /*                                                             */
 /***************************************************************/
-static int FUpper(void)
+static int FUpper(func_info *info)
 {
     char *s;
 
@@ -989,7 +986,7 @@ static int FUpper(void)
     return OK;
 }
 
-static int FLower(void)
+static int FLower(func_info *info)
 {
     char *s;
 
@@ -1011,42 +1008,42 @@ static int FLower(void)
 /*  FRealnow - return the true system time                     */
 /*                                                             */
 /***************************************************************/
-static int FToday(void)
+static int FToday(func_info *info)
 {
     RetVal.type = DATE_TYPE;
     RETVAL = JulianToday;
     return OK;
 }
 
-static int FRealtoday(void)
+static int FRealtoday(func_info *info)
 {
     RetVal.type = DATE_TYPE;
     RETVAL = RealToday;
     return OK;
 }
 
-static int FNow(void)
+static int FNow(func_info *info)
 {
     RetVal.type = TIME_TYPE;
     RETVAL = (int) ( SystemTime(0) / 60L );
     return OK;
 }
 
-static int FRealnow(void)
+static int FRealnow(func_info *info)
 {
     RetVal.type = TIME_TYPE;
     RETVAL = (int) ( SystemTime(1) / 60L );
     return OK;
 }
 
-static int FCurrent(void)
+static int FCurrent(func_info *info)
 {
     RetVal.type = DATETIME_TYPE;
     RETVAL = JulianToday * MINUTES_PER_DAY + (SystemTime(0) / 60);
     return OK;
 }
 
-static int FRealCurrent(void)
+static int FRealCurrent(func_info *info)
 {
     RetVal.type = DATETIME_TYPE;
     RETVAL = RealToday * MINUTES_PER_DAY + (SystemTime(1) / 60);
@@ -1058,10 +1055,10 @@ static int FRealCurrent(void)
 /*  FGetenv - get the value of an environment variable.        */
 /*                                                             */
 /***************************************************************/
-static int FGetenv(void)
+static int FGetenv(func_info *info)
 {
     ASSERT_TYPE(0, STR_TYPE);
-    return RetStrVal(getenv(ARGSTR(0)));
+    return RetStrVal(getenv(ARGSTR(0)), info);
 }
 
 /***************************************************************/
@@ -1072,7 +1069,7 @@ static int FGetenv(void)
 /*  it is returned if variable is undefined.                   */
 /*                                                             */
 /***************************************************************/
-static int FValue(void)
+static int FValue(func_info *info)
 {
     Var *v;
 
@@ -1100,7 +1097,7 @@ static int FValue(void)
 /*  Return 1 if a variable is defined, 0 if it is not.         */
 /*                                                             */
 /***************************************************************/
-static int FDefined(void)
+static int FDefined(func_info *info)
 {
     ASSERT_TYPE(0, STR_TYPE);
 
@@ -1121,7 +1118,7 @@ static int FDefined(void)
 /*  vars.                                                      */
 /*                                                             */
 /***************************************************************/
-static int FTrigdate(void)
+static int FTrigdate(func_info *info)
 {
     if (LastTrigValid) {
 	RetVal.type = DATE_TYPE;
@@ -1133,14 +1130,14 @@ static int FTrigdate(void)
     return OK;
 }
 
-static int FTrigvalid(void)
+static int FTrigvalid(func_info *info)
 {
     RetVal.type = INT_TYPE;
     RETVAL = LastTrigValid;
     return OK;
 }
 
-static int FTrigtime(void)
+static int FTrigtime(func_info *info)
 {
     if (LastTriggerTime != NO_TIME) {
 	RetVal.type = TIME_TYPE;
@@ -1152,7 +1149,7 @@ static int FTrigtime(void)
     return OK;
 }
 
-static int FTrigdatetime(void)
+static int FTrigdatetime(func_info *info)
 {
     if (!LastTrigValid) {
 	RetVal.type = INT_TYPE;
@@ -1174,7 +1171,7 @@ static int FTrigdatetime(void)
 /*  Returns the number of days in mon,yr                       */
 /*                                                             */
 /***************************************************************/
-static int FDaysinmon(void)
+static int FDaysinmon(func_info *info)
 {
     if (ARG(0).type != INT_TYPE || ARG(1).type != INT_TYPE) return E_BAD_TYPE;
 
@@ -1194,7 +1191,7 @@ static int FDaysinmon(void)
 /*  Return 1 if year is a leap year, zero otherwise.           */
 /*                                                             */
 /***************************************************************/
-static int FIsleap(void)
+static int FIsleap(func_info *info)
 {
     int y, m, d;
 
@@ -1218,7 +1215,7 @@ static int FIsleap(void)
 /*  Put out a date in a format suitable for triggering.        */
 /*                                                             */
 /***************************************************************/
-static int FTrigger(void)
+static int FTrigger(func_info *info)
 {
     int y, m, d;
     int date, tim;
@@ -1269,7 +1266,7 @@ static int FTrigger(void)
     } else {
 	sprintf(buf, "%d %s %d", d, EnglishMonthName[m], y);
     }
-    return RetStrVal(buf);
+    return RetStrVal(buf, info);
 }
 
 /***************************************************************/
@@ -1281,7 +1278,7 @@ static int FTrigger(void)
 /*  If run is disabled, will not be executed.                  */
 /*                                                             */
 /***************************************************************/
-static int FShell(void)
+static int FShell(func_info *info)
 {
     DynamicBuffer buf;
     int ch, r;
@@ -1324,7 +1321,7 @@ static int FShell(void)
     /* XXX Should we consume remaining output from cmd? */
 
     pclose(fp);
-    r = RetStrVal(DBufValue(&buf));
+    r = RetStrVal(DBufValue(&buf), info);
     DBufFree(&buf);
     return r;
 }
@@ -1336,7 +1333,7 @@ static int FShell(void)
 /*  Is a date omitted?                                         */
 /*                                                             */
 /***************************************************************/
-static int FIsomitted(void)
+static int FIsomitted(func_info *info)
 {
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
 
@@ -1352,7 +1349,7 @@ static int FIsomitted(void)
 /*  The substr function.  We destroy the value on the stack.   */
 /*                                                             */
 /***************************************************************/
-static int FSubstr(void)
+static int FSubstr(func_info *info)
 {
     char *s;
     char const *t;
@@ -1368,7 +1365,7 @@ static int FSubstr(void)
 	s++;
 	start++;
     }
-    if (Nargs == 2 || !*s) return RetStrVal(s);
+    if (Nargs == 2 || !*s) return RetStrVal(s, info);
     end = start;
     t = s;
     while (end <= ARGV(2)) {
@@ -1377,7 +1374,7 @@ static int FSubstr(void)
 	end++;
     }
     *s = 0;
-    return RetStrVal(t);
+    return RetStrVal(t, info);
 }
 
 /***************************************************************/
@@ -1387,7 +1384,7 @@ static int FSubstr(void)
 /*  The index of one string embedded in another.               */
 /*                                                             */
 /***************************************************************/
-static int FIndex(void)
+static int FIndex(func_info *info)
 {
     char const *s;
     int start;
@@ -1425,7 +1422,7 @@ static int FIndex(void)
 /*  The IIF function.                                          */
 /*                                                             */
 /***************************************************************/
-static int FIif(void)
+static int FIif(func_info *info)
 {
     int istrue;
     int arg;
@@ -1458,9 +1455,9 @@ static int FIif(void)
 /*  Return name of current file                                */
 /*                                                             */
 /***************************************************************/
-static int FFilename(void)
+static int FFilename(func_info *info)
 {
-    return RetStrVal(FileName);
+    return RetStrVal(FileName, info);
 }
 
 /***************************************************************/
@@ -1470,7 +1467,7 @@ static int FFilename(void)
 /*  Return directory of current file                           */
 /*                                                             */
 /***************************************************************/
-static int FFiledir(void)
+static int FFiledir(func_info *info)
 {
     char *s;
     DynamicBuffer buf;
@@ -1481,15 +1478,15 @@ static int FFiledir(void)
     if (DBufPuts(&buf, FileName) != OK) return E_NO_MEM;
     if (DBufLen(&buf) == 0) {
 	DBufFree(&buf);
-	return RetStrVal(".");
+	return RetStrVal(".", info);
     }
 
     s = DBufValue(&buf) + DBufLen(&buf) - 1;
     while (s > DBufValue(&buf) && *s != '/') s--;
     if (*s == '/') {
 	*s = 0;
-	r = RetStrVal(DBufValue(&buf));
-    } else r = RetStrVal(".");
+	r = RetStrVal(DBufValue(&buf), info);
+    } else r = RetStrVal(".", info);
     DBufFree(&buf);
     return r;
 }
@@ -1500,7 +1497,7 @@ static int FFiledir(void)
 /*  The UNIX access() system call.                             */
 /*                                                             */
 /***************************************************************/
-static int FAccess(void)
+static int FAccess(func_info *info)
 {
     int amode;
     char const *s;
@@ -1535,15 +1532,15 @@ static int FAccess(void)
 /*  Implement the typeof() function.                           */
 /*                                                             */
 /***************************************************************/
-static int FTypeof(void)
+static int FTypeof(func_info *info)
 {
     switch(ARG(0).type) {
-    case INT_TYPE:  return RetStrVal("INT");
-    case DATE_TYPE: return RetStrVal("DATE");
-    case TIME_TYPE:  return RetStrVal("TIME");
-    case STR_TYPE:  return RetStrVal("STRING");
-    case DATETIME_TYPE: return RetStrVal("DATETIME");
-    default:        return RetStrVal("ERR");
+    case INT_TYPE:  return RetStrVal("INT", info);
+    case DATE_TYPE: return RetStrVal("DATE", info);
+    case TIME_TYPE:  return RetStrVal("TIME", info);
+    case STR_TYPE:  return RetStrVal("STRING", info);
+    case DATETIME_TYPE: return RetStrVal("DATETIME", info);
+    default:        return RetStrVal("ERR", info);
     }
 }
 
@@ -1554,9 +1551,9 @@ static int FTypeof(void)
 /*  Implement the language() function.                         */
 /*                                                             */
 /***************************************************************/
-static int FLanguage(void)
+static int FLanguage(func_info *info)
 {
-    return RetStrVal(L_LANGNAME);
+    return RetStrVal(L_LANGNAME, info);
 }
 
 /***************************************************************/
@@ -1566,7 +1563,7 @@ static int FLanguage(void)
 /*  Implement the args() function.                             */
 /*                                                             */
 /***************************************************************/
-static int FArgs(void)
+static int FArgs(func_info *info)
 {
     ASSERT_TYPE(0, STR_TYPE);
     RetVal.type = INT_TYPE;
@@ -1581,7 +1578,7 @@ static int FArgs(void)
 /*  Implement the dosubst() function.                          */
 /*                                                             */
 /***************************************************************/
-static int FDosubst(void)
+static int FDosubst(func_info *info)
 {
     int jul, tim, r;
     DynamicBuffer buf;
@@ -1609,7 +1606,7 @@ static int FDosubst(void)
     }
 
     if ((r=DoSubstFromString(ARGSTR(0), &buf, jul, tim))) return r;
-    r = RetStrVal(DBufValue(&buf));
+    r = RetStrVal(DBufValue(&buf), info);
     DBufFree(&buf);
     return r;
 }
@@ -1624,7 +1621,7 @@ static int FDosubst(void)
 /*  Hebrew calendar support functions                          */
 /*                                                             */
 /***************************************************************/
-static int FHebdate(void)
+static int FHebdate(func_info *info)
 {
     int year, day, mon, jahr;
     int mout, dout;
@@ -1678,7 +1675,7 @@ static int FHebdate(void)
     } else return E_BAD_TYPE;
 }
 
-static int FHebday(void)
+static int FHebday(func_info *info)
 {
     int y, m, d, v;
 
@@ -1698,7 +1695,7 @@ static int FHebday(void)
     return OK;
 }
 
-static int FHebmon(void)
+static int FHebmon(func_info *info)
 {
     int y, m, d, v;
 
@@ -1715,10 +1712,10 @@ static int FHebmon(void)
 	CacheHebMon = m;
 	CacheHebDay = d;
     }
-    return RetStrVal(HebMonthName(m, y));
+    return RetStrVal(HebMonthName(m, y), info);
 }
 
-static int FHebyear(void)
+static int FHebyear(func_info *info)
 {
     int y, m, d, v;
 
@@ -1752,7 +1749,7 @@ static int FHebyear(void)
 /* arithmetic is fine, even on 16-bit machines.                 */
 /*                                                              */
 /****************************************************************/
-static int FEasterdate(void)
+static int FEasterdate(func_info *info)
 {
     int y, m, d;
     int g, c, x, z, e, n;
@@ -1797,18 +1794,18 @@ static int FEasterdate(void)
 /*  get minutes from UTC.                                      */
 /*                                                             */
 /***************************************************************/
-static int FTimeStuff (int wantmins);
-static int FIsdst(void)
+static int FTimeStuff (int wantmins, func_info *info);
+static int FIsdst(func_info *info)
 {
-    return FTimeStuff(0);
+    return FTimeStuff(0, info);
 }
 
-static int FMinsfromutc(void)
+static int FMinsfromutc(func_info *info)
 {
-    return FTimeStuff(1);
+    return FTimeStuff(1, info);
 }
 
-static int FTimeStuff(int wantmins)
+static int FTimeStuff(int wantmins, func_info *info)
 {
     int jul, tim;
     int mins, dst;
@@ -1974,7 +1971,7 @@ static int SunStuff(int rise, double cosz, int jul)
 /*  Sunrise and Sunset functions.                              */
 /*                                                             */
 /***************************************************************/
-static int FSun(int rise)
+static int FSun(int rise, func_info *info)
 {
     int jul = JulianToday;
     static double cosz = -0.014543897;  /* for sunrise and sunset */
@@ -1999,22 +1996,22 @@ static int FSun(int rise)
     return OK;
 }
 
-static int FSunrise(void)
+static int FSunrise(func_info *info)
 {
-    return FSun(1);
+    return FSun(1, info);
 }
-static int FSunset(void)
+static int FSunset(func_info *info)
 {
-    return FSun(0);
+    return FSun(0, info);
 }
 
-static int FDawn(void)
+static int FDawn(func_info *info)
 {
-    return FSun(3);
+    return FSun(3, info);
 }
-static int FDusk(void)
+static int FDusk(func_info *info)
 {
-    return FSun(2);
+    return FSun(2, info);
 }
 
 /***************************************************************/
@@ -2024,7 +2021,7 @@ static int FDusk(void)
 /*  Return modification date of a file                         */
 /*                                                             */
 /***************************************************************/
-static int FFiledate(void)
+static int FFiledate(func_info *info)
 {
     struct stat statbuf;
     struct tm *t1;
@@ -2055,7 +2052,7 @@ static int FFiledate(void)
 /*  Return modification datetime of a file                     */
 /*                                                             */
 /***************************************************************/
-static int FFiledatetime(void)
+static int FFiledatetime(func_info *info)
 {
     struct stat statbuf;
     struct tm *t1;
@@ -2087,7 +2084,7 @@ static int FFiledatetime(void)
 /*                                                             */
 /***************************************************************/
 static int psshade_warned = 0;
-static int FPsshade(void)
+static int FPsshade(func_info *info)
 {
     char psbuff[256];
     char *s = psbuff;
@@ -2118,7 +2115,7 @@ static int FPsshade(void)
     } else {
 	sprintf(s, "_A BoxHeight _A sub lineto closepath %d 100 div %d 100 div %d 100 div setrgbcolor fill 0.0 setgray", ARGV(0), ARGV(1), ARGV(2));
     }
-    return RetStrVal(psbuff);
+    return RetStrVal(psbuff, info);
 }
 
 /***************************************************************/
@@ -2130,7 +2127,7 @@ static int FPsshade(void)
 /***************************************************************/
 static int psmoon_warned = 0;
 
-static int FPsmoon(void)
+static int FPsmoon(func_info *info)
 {
     char psbuff[512];
     char sizebuf[30];
@@ -2216,7 +2213,7 @@ static int FPsmoon(void)
     }
 
     sprintf(s, " grestore");
-    return RetStrVal(psbuff);
+    return RetStrVal(psbuff, info);
 }
 
 /***************************************************************/
@@ -2226,7 +2223,7 @@ static int FPsmoon(void)
 /*  Phase of moon for specified date/time.                     */
 /*                                                             */
 /***************************************************************/
-static int FMoonphase(void)
+static int FMoonphase(func_info *info)
 {
     int date, time;
 
@@ -2266,23 +2263,23 @@ static int FMoonphase(void)
 /*  Hunt for next occurrence of specified moon phase           */
 /*                                                             */
 /***************************************************************/
-static int MoonStuff (int want_time);
-static int FMoondate(void)
+static int MoonStuff (int want_time, func_info *info);
+static int FMoondate(func_info *info)
 {
-    return MoonStuff(DATE_TYPE);
+    return MoonStuff(DATE_TYPE, info);
 }
 
-static int FMoontime(void)
+static int FMoontime(func_info *info)
 {
-    return MoonStuff(TIME_TYPE);
+    return MoonStuff(TIME_TYPE, info);
 }
 
-static int FMoondatetime(void)
+static int FMoondatetime(func_info *info)
 {
-    return MoonStuff(DATETIME_TYPE);
+    return MoonStuff(DATETIME_TYPE, info);
 }
 
-static int MoonStuff(int type_wanted)
+static int MoonStuff(int type_wanted, func_info *info)
 {
     int startdate, starttim;
     int d, t;
@@ -2325,7 +2322,7 @@ static int MoonStuff(int type_wanted)
     return OK;
 }
 
-static int FTimepart(void)
+static int FTimepart(func_info *info)
 {
     ASSERT_TYPE(0, DATETIME_TYPE);
     RetVal.type = TIME_TYPE;
@@ -2333,7 +2330,7 @@ static int FTimepart(void)
     return OK;
 }
 
-static int FDatepart(void)
+static int FDatepart(func_info *info)
 {
     ASSERT_TYPE(0, DATETIME_TYPE);
     RetVal.type = DATE_TYPE;
@@ -2460,7 +2457,7 @@ static int tz_convert(int year, int month, int day,
     }
 }
 
-static int FTzconvert(void)
+static int FTzconvert(func_info *info)
 {
     int year, month, day, hour, minute, r;
     int jul, tim;
@@ -2494,7 +2491,7 @@ static int FTzconvert(void)
 }
 
 static int
-FSlide(void)
+FSlide(func_info *info)
 {
     int r, omit, d, i, localomit, amt;
     Token tok;
@@ -2538,7 +2535,7 @@ FSlide(void)
 }
 
 static int
-FNonomitted(void)
+FNonomitted(func_info *info)
 {
     int d1, d2, ans, localomit, i;
     int omit, r;
@@ -2574,7 +2571,7 @@ FNonomitted(void)
 }
 
 static int
-FWeekno(void)
+FWeekno(func_info *info)
 {
     int jul = JulianToday;
     int wkstart = 0; /* Week start on Monday */
@@ -2642,7 +2639,7 @@ FWeekno(void)
 }
 
 static int
-FEvalTrig(void)
+FEvalTrig(func_info *info)
 {
     Parser p;
     Trigger trig;

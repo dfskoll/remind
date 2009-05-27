@@ -30,6 +30,20 @@ typedef struct {
     int (*func)(void);
 } Operator;
 
+/* Structure for passing in Nargs and out RetVal from functions */
+typedef struct {
+    int nargs;
+    Value retval;
+} func_info;
+
+/* Define the type of user-functions */
+typedef struct {
+    char const *name;
+    char minargs;
+    char maxargs;
+    int (*func)(func_info *);
+} BuiltinFunc;
+
 /* Define the structure of a variable */
 typedef struct var {
     struct var *next;

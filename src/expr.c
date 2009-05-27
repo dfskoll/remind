@@ -72,9 +72,7 @@ Operator UnOp[] = {
 };
 #define NUM_UN_OPS (sizeof(UnOp) / sizeof(Operator))
 
-/* Functions have the same definitions as operators, except the prec field
-   is used to indicate how many arguments are needed. */
-extern Operator Func[];
+extern BuiltinFunc Func[];
 
 Operator OpStack[OP_STACK_SIZE];
 Value    ValStack[VAL_STACK_SIZE];
@@ -332,7 +330,8 @@ int Evaluate(char const **s, Var *locals)
 {
     int OpBase, ValBase;
     int r;
-    Operator *f;
+    Operator *o;
+    BuiltinFunc *f;
     int args; /* Number of function arguments */
     Operator op, op2;
     Value va;
@@ -409,10 +408,10 @@ int Evaluate(char const **s, Var *locals)
 		if (r) return r;
 	    }
 	} else { /* Unary operator */
-	    f = FindFunc(DBufValue(&ExprBuf), UnOp, NUM_UN_OPS);
-	    if (f) {
+	    o = FindOperator(DBufValue(&ExprBuf), UnOp, NUM_UN_OPS);
+	    if (o) {
 		DBufFree(&ExprBuf);
-		PushOpStack(*f);
+		PushOpStack(*o);
 		continue;  /* Still looking for an atomic vlue */
 	    } else if (!ISID(*DBufValue(&ExprBuf)) &&
 		       *DBufValue(&ExprBuf) != '$' &&
@@ -458,13 +457,13 @@ int Evaluate(char const **s, Var *locals)
 	    return OK;
 	}
 	/* Must be a binary operator */
-	f = FindFunc(DBufValue(&ExprBuf), BinOp, NUM_BIN_OPS);
+	o = FindOperator(DBufValue(&ExprBuf), BinOp, NUM_BIN_OPS);
 	DBufFree(&ExprBuf);
-	if (!f) return E_EXPECTING_BINOP;
+	if (!o) return E_EXPECTING_BINOP;
 
 	/* While operators of higher or equal precedence are on the stack,
 	   pop them off and evaluate */
-	while (OpStackPtr > OpBase && OpStack[OpStackPtr-1].prec >= f->prec) {
+	while (OpStackPtr > OpBase && OpStack[OpStackPtr-1].prec >= o->prec) {
 	    PopOpStack(op2);
 	    if (r) return r;
 	    if (DebugFlag & DB_PRTEXPR)
@@ -476,7 +475,7 @@ int Evaluate(char const **s, Var *locals)
 		return r;
 	    }
 	}
-	PushOpStack(*f);
+	PushOpStack(*o);
     }
 }
 
@@ -1125,7 +1124,28 @@ static int LogNot(void)
 /*  Find a function.                                           */
 /*                                                             */
 /***************************************************************/
-Operator *FindFunc(char const *name, Operator where[], int num)
+Operator *FindOperator(char const *name, Operator where[], int num)
+{
+    int top=num-1, bot=0;
+    int mid, r;
+    while (top >= bot) {
+	mid = (top + bot) / 2;
+	r = StrCmpi(name, where[mid].name);
+	if (!r) return &where[mid];
+	else if (r > 0) bot = mid+1;
+	else top = mid-1;
+    }
+    return NULL;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FindFunc                                                   */
+/*                                                             */
+/*  Find a function.                                           */
+/*                                                             */
+/***************************************************************/
+BuiltinFunc *FindFunc(char const *name, BuiltinFunc where[], int num)
 {
     int top=num-1, bot=0;
     int mid, r;

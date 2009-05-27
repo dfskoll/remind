@@ -40,7 +40,7 @@ static UserFunc *FuncHash[FUNC_HASH_SIZE];
 
 /* Access to built-in functions */
 extern int NumFuncs;
-extern Operator Func[];
+extern BuiltinFunc Func[];
 
 /* We need access to the expression evaluation stack */
 extern Value ValStack[];

@@ -578,7 +578,7 @@ void InitRemind(int argc, char const *argv[])
 void Usage(void)
 {
     fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 David F. Skoll\n", VERSION, L_LANGNAME);
-    fprintf(ErrFp, "Copyright 1999-2008 Roaring Penguin Software Inc.\n");
+    fprintf(ErrFp, "Copyright 1999-2009 Roaring Penguin Software Inc.\n");
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

@@ -420,7 +420,11 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 	    ThisTime = v.v.val;
 	} else if (v.type == INT_TYPE) {
 	    if (v.v.val > 0)
-		ThisTime = q->tt.nexttime + v.v.val;
+		if (LastTime >= 0) {
+		    ThisTime = LastTime + v.v.val;
+		} else {
+		    ThisTime = q->tt.nexttime + v.v.val;
+		}
 	    else
 		ThisTime = q->tt.ttime + v.v.val;
 
@@ -431,6 +435,10 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 	}
 	if (ThisTime < 0) ThisTime = 0;        /* Can't be less than 00:00 */
 	if (ThisTime > (MINUTES_PER_DAY-1)) ThisTime = (MINUTES_PER_DAY-1);  /* or greater than 11:59 */
+	if (DebugFlag & DB_PRTEXPR) {
+	    fprintf(ErrFp, "SCHED: Considering %02d%c%02d\n",
+		    ThisTime / 60, TimeSep, ThisTime % 60);
+	}
 	if (ThisTime > q->tt.nexttime) return ThisTime;
 	if (ThisTime <= LastTime) {
 	    q->sched[0] = 0;

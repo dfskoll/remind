@@ -28,9 +28,9 @@
 #define SPECIAL_POSTSCRIPT 1
 #define SPECIAL_PSFILE     2
 #define SPECIAL_MOON       3
-#define SPECIAL_SHADE      4
-#define SPECIAL_COLOR      5
-#define SPECIAL_WEEK       6
+#define SPECIAL_COLOR      4
+#define SPECIAL_WEEK       5
+#define SPECIAL_SHADE      6
 
 typedef struct calentry {
     struct calentry *next;

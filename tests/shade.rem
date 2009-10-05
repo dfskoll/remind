@@ -1,0 +1,15 @@
+IF $PSCAL
+	[trigger(moondate(0))] SPECIAL MOON 0 -1 -1 [moontime(0)]
+	[trigger(moondate(1))] SPECIAL MOON 1 -1 -1 [moontime(1)]
+	[trigger(moondate(2))] SPECIAL MOON 2 -1 -1 [moontime(2)]
+	[trigger(moondate(3))] SPECIAL MOON 3 -1 -1 [moontime(3)]
+ENDIF
+
+REM Mon SPECIAL SHADE 255 255 255
+REM Tue SPECIAL SHADE 255 255 204
+REM Wed SPECIAL SHADE 255 204 255
+REM Thu SPECIAL SHADE 204 255 255
+REM Fri SPECIAL SHADE 255 204 204
+REM Sat SPECIAL SHADE 204 255 204
+REM Sun SPECIAL SHADE 204 204 255
+

@@ -186,7 +186,7 @@ void DoPsCal(void)
     char const *startOfBody;
     char passthru[PASSTHRU_LEN+1];
     DynamicBuffer buf;
-    CalEntry *c, *d;
+    CalEntry *c, *d, *p;
 
 /* Read the month and year name, followed by # days in month and 1st day of
    month */
@@ -336,8 +336,23 @@ void DoPsCal(void)
 		PsEntries[DayNum] = c;
 	    } else {
 		d = PsEntries[DayNum];
-		while(d->next) d = d->next;
-		d->next = c;
+		p = NULL;
+		/* Slot it into the right place */
+		while (d->next && (c->special <= d->special)) {
+		    p = d;
+		    d = d->next;
+		}
+		if (c->special <= d->special) {
+		    c->next = d->next;
+		    d->next = c;
+		} else {
+		    if (p) {
+			p->next = c;
+		    } else {
+			PsEntries[DayNum] = c;
+		    }
+		    c->next = d;
+		}
 	    }
 	} else if (!strcmp(passthru, "*") ||
 	           !strcmp(passthru, "COLOR")) {

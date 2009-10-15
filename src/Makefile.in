@@ -80,13 +80,13 @@ depend:
 # Build a tar file based on all files checked into git.
 distro:
 	ln -s . ../remind-$(VERSION)
-	(cd ..; git-ls-files -x .gitignore) | sed -e 's/^/remind-$(VERSION)\//' | xargs tar -C .. -cvf remind-$(VERSION).tar
+	(cd ..; git ls-files -x .gitignore) | sed -e 's/^/remind-$(VERSION)\//' | xargs tar -C .. -cvf remind-$(VERSION).tar
 	gzip -f -v -9 remind-$(VERSION).tar
 	rm -f ../remind-$(VERSION)
 
 beta-tgz:
 	ln -s . ../remind-$(VERSION)-BETA-$(BETA)
-	(cd ..; git-ls-files -x .gitignore) | sed -e 's/^/remind-$(VERSION)-BETA-$(BETA)\//' | xargs tar -C .. -cvf remind-$(VERSION)-BETA-$(BETA).tar
+	(cd ..; git ls-files -x .gitignore) | sed -e 's/^/remind-$(VERSION)-BETA-$(BETA)\//' | xargs tar -C .. -cvf remind-$(VERSION)-BETA-$(BETA).tar
 	gzip -f -v -9 remind-$(VERSION)-BETA-$(BETA).tar
 	rm -f ../remind-$(VERSION)-BETA-$(BETA)
 

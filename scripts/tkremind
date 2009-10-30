@@ -17,6 +17,34 @@ exec wish "$0" "$@"
 
 wm withdraw .
 
+# Our icon photo
+catch {
+    image create photo rpicon -data {
+	R0lGODdhFwAgAOejABUTERYTERYUERcVEhgWExkXFBkXFRoXFRsZFhwZFxwaGB0bGR4cGR4cGh8d
+	GiAeHCEfHCEfHSIgHSIgHiQiHyYkISknJCooJispJywqJy4sKTIwLjUzMDUzMTo4Njs5Nzs5ODw7
+	ODw7OT07OT48OkE/PUJAPkNBP0RCQEVDQUVEQkdFQ0lIRkpJR01LSU5MSlBPTVFQTlNSUFRSUFRS
+	UVVTUlVUUllYVltZV1xaWF1cWmBfXmJgX2RiYGZlY2dmZGppZ2tqaG1ram9tbHFwb3Jwb3RzcXV0
+	c3Z0c3Z1c3Z1dHd1dHh2dXh3dnt5eHx7eXx7en18en59e4B/foGAf4KBf4SDgYWEgoWEg4eGhIiH
+	houKiI2Mio6Ni46NjJCQj5KRkJSTkZeWlpiXlpmYl5qZmJybmp6dnKCfnqGgoKKhoKOioaSjoqin
+	p6qpqKurqq+urbCvrrCwr7Gwr7OysbW1tLi3tri3t7u6ur28vMTDw8TEw8XFxMbFxcfGxsfHxsrJ
+	ycrKyczMy83My83MzM3NzdDQz9LR0dPS0tPT09fX19jY19ra2dvb29zc29zc3Ojn5+jo6Orq6uzs
+	7O/v7/Dw8PHx8fTz8/T09PX19fb29fb29vf39/j4+Pr6+vv7+/z8/P39/f7+/v//////////////
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////ywAAAAAFwAgAAAI/gBHCRxI
+	sKBAT3qsxHgCyaBBSYYsIVpiIcAKQg4LhpJSIMABAQEQhAGVsWCXAAEg2AhAwU/JgnsOoNygJMCZ
+	TwJxlpykAaXPAAAcuLBy6GWPnz5PLHop0A5KA2Wc+CjyBpAmpp06oJxRMFMfpmN8TjFY5+WmDD6t
+	GITzEs1PEXM8EWxTUtQIpAE8NBq4pmQgvChTDEQj12ESwA0EUBJ4JpPDUBgAg6ig08wlh4J+AkBp
+	wQSRgWA2OeQCeIcED5gEZtFZUIbPBT6poHQjEIpDUBN8bkA54AtKPgKPOGT0UwVKFkICEFgsaojD
+	OD9voCRzIUAJgZGiONzyk0cEB3JQg2IRiEeNQyA/P+gw8iOAgEQCtQxy+OLnADF/EgRAMbDGVYMc
+	IJUGFCixIdAmLTgkygNIkcBAABdwIlAeTDiUyQCABeDFQE3E4RAkGU6w2CiibBCJQY4YARgAVQxU
+	SAgOgfEgXgo8osgdZMDgREaV0JFFEDnMQAMOPiBxRRlzBGKJQwEBADs=}
+
+    wm iconphoto . -default rpicon
+}
+
 proc missing_tcllib { pkg } {
     catch { puts stderr "Could not find the '$pkg' package -- you must install tcllib.\nPlease see http://tcllib.sourceforge.net/" }
     tk_dialog .err "Error: tcllib not installed" "Could not find the '$pkg' package -- you must install tcllib.  Please see http://tcllib.sourceforge.net/" error 0 OK

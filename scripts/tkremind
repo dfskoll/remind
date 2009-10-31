@@ -20,27 +20,31 @@ wm withdraw .
 # Our icon photo
 catch {
     image create photo rpicon -data {
-	R0lGODdhFwAgAOejABUTERYTERYUERcVEhgWExkXFBkXFRoXFRsZFhwZFxwaGB0bGR4cGR4cGh8d
-	GiAeHCEfHCEfHSIgHSIgHiQiHyYkISknJCooJispJywqJy4sKTIwLjUzMDUzMTo4Njs5Nzs5ODw7
-	ODw7OT07OT48OkE/PUJAPkNBP0RCQEVDQUVEQkdFQ0lIRkpJR01LSU5MSlBPTVFQTlNSUFRSUFRS
-	UVVTUlVUUllYVltZV1xaWF1cWmBfXmJgX2RiYGZlY2dmZGppZ2tqaG1ram9tbHFwb3Jwb3RzcXV0
-	c3Z0c3Z1c3Z1dHd1dHh2dXh3dnt5eHx7eXx7en18en59e4B/foGAf4KBf4SDgYWEgoWEg4eGhIiH
-	houKiI2Mio6Ni46NjJCQj5KRkJSTkZeWlpiXlpmYl5qZmJybmp6dnKCfnqGgoKKhoKOioaSjoqin
-	p6qpqKurqq+urbCvrrCwr7Gwr7OysbW1tLi3tri3t7u6ur28vMTDw8TEw8XFxMbFxcfGxsfHxsrJ
-	ycrKyczMy83My83MzM3NzdDQz9LR0dPS0tPT09fX19jY19ra2dvb29zc29zc3Ojn5+jo6Orq6uzs
-	7O/v7/Dw8PHx8fTz8/T09PX19fb29fb29vf39/j4+Pr6+vv7+/z8/P39/f7+/v//////////////
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////ywAAAAAFwAgAAAI/gBHCRxI
-	sKBAT3qsxHgCyaBBSYYsIVpiIcAKQg4LhpJSIMABAQEQhAGVsWCXAAEg2AhAwU/JgnsOoNygJMCZ
-	TwJxlpykAaXPAAAcuLBy6GWPnz5PLHop0A5KA2Wc+CjyBpAmpp06oJxRMFMfpmN8TjFY5+WmDD6t
-	GITzEs1PEXM8EWxTUtQIpAE8NBq4pmQgvChTDEQj12ESwA0EUBJ4JpPDUBgAg6ig08wlh4J+AkBp
-	wQSRgWA2OeQCeIcED5gEZtFZUIbPBT6poHQjEIpDUBN8bkA54AtKPgKPOGT0UwVKFkICEFgsaojD
-	OD9voCRzIUAJgZGiONzyk0cEB3JQg2IRiEeNQyA/P+gw8iOAgEQCtQxy+OLnADF/EgRAMbDGVYMc
-	IJUGFCixIdAmLTgkygNIkcBAABdwIlAeTDiUyQCABeDFQE3E4RAkGU6w2CiibBCJQY4YARgAVQxU
-	SAgOgfEgXgo8osgdZMDgREaV0JFFEDnMQAMOPiBxRRlzBGKJQwEBADs=}
+R0lGODlhFwAgAOecABUTERYTERYUERcVEhgWExkXFBkXFRoXFRsZFhwZFxwa
+GB0bGR4cGR4cGh8dGiAeHCEfHCEfHSIgHSIgHiQiHyYkISknJCooJispJywq
+Jy4sKTIwLjUzMDUzMTo4Njs5Nzs5ODw7ODw7OT07OT48OkE/PUJAPkNBP0RC
+QEVDQUVEQkdFQ0lIRkpJR01LSU5MSlBPTVFQTlNSUFRSUFRSUVVTUlVUUllY
+VltZV1xaWF1cWmBfXmJgX2RiYGZlY2dmZGppZ2tqaG1ram9tbHFwb3Jwb3Rz
+cXV0c3Z0c3Z1c3Z1dHd1dHh2dXh3dnt5eHx7eXx7en18en59e4B/foGAf4KB
+f4SDgYWEgoWEg4eGhIiHhouKiI2Mio6Ni46NjJCQj5KRkJSTkZeWlpiXlpmY
+l5qZmJybmp6dnKCfnqGgoKKhoKOioaSjoqinp6qpqKurqq+urbCvrrCwr7Gw
+r7OysbW1tLi3tri3t7u6ur28vMTDw8TEw8XFxMbFxcfGxsfHxsrJycrKyczM
+y83My83MzM3NzdDQz9LR0dPS0tPT09fX19jY19ra2dvb29zc29zc3Ojn5+jo
+6Orq6uzs7O/v7/T09PX19fb29vf39/r6+vv7+/7+/v//////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+/////////////////////yH5BAEKAP8ALAAAAAAXACAAAAj+AP8JHEiwoMGD
+CAcusRAAQEKDBQIcEBAAwUODAQJAsBGAwsWCBzJuUBLgI0ENGVM2dACg5UWV
+KU+Y/JfRQBknPoq8ATQz4wxOQIFa6vMx5ZSgQetczJDSClKgcF6mFDEnE9I2
+D0fADOChUdA1D7dmTBEUTditDQRQAnomIQaxICpoAmomoUoAGS2YIBIUDEIu
+YndI8FAJaBaEMlIuSEkloxugUBBOSLkh44AvGfkAPYJQpYqMLIQEILB205DO
+KW9kJHMhQAmgkaKgzsgjggM5GbEAxaNmdoAPOoz8CCAgEVAtg3wPEPMnQQAU
+QWsg5AAzDZSMbIBeaoHwAUwSDAI2XMAENA8ThAPEBvAStEkc3yonrOW0aUMk
++BkBVAlaKATC8Fsp8Igid5ABgxMHtaTgggy6ZFBAADs=    }
 
     wm iconphoto . -default rpicon
 }

@@ -668,6 +668,17 @@ In the second statement, the "+60" is a \fIdelta\fR that applies to the
 date rather than a \fItdelta\fR that applies to the time.  We recommend
 explicitly using the AT keyword with timed reminders.
 .PP
+.B THE REMIND ALGORITHM
+.PP
+\fBRemind\fR uses the following algorithm to compute a trigger date:
+Starting from the current date, it examines each day, one at a time, until
+it finds a date that satisfies the date specification, or proves to
+itself that no such date exists.  (Actually, \fBRemind\fR merely
+\fIbehaves\fR as if it used this algorithm; it would be much too slow
+in practice.  Internally, \fBRemind\fR uses much faster techniques to
+calculate a trigger date.)  See DETAILS ABOUT TRIGGER COMPUTATION for
+more information.
+.PP
 .B BACKWARD SCANNING
 .PP
 Sometimes, it is necessary to specify a date as being a set amount of

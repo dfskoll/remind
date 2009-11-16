@@ -495,11 +495,19 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     /* Check the cache */
     while(dc) {
 	if (!strcmp(dc->dirname, dir)) {
+	    if (DebugFlag & DB_TRACE_FILES) {
+		fprintf(ErrFp, "Found cached directory listing for `%s'\n",
+			dir);
+	    }
 	    free(dir);
 	    i->chain = dc->chain;
 	    return OK;
 	}
 	dc = dc->next;
+    }
+
+    if (DebugFlag & DB_TRACE_FILES) {
+	fprintf(ErrFp, "Scanning directory `%s' for *.rem files\n", dir);
     }
 
     if (ShouldCache) {
@@ -512,6 +520,10 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
 	    }
 	}
 	if (dc) {
+	    if (DebugFlag & DB_TRACE_FILES) {
+		fprintf(ErrFp, "Caching directory `%s' listing\n", dir);
+	    }
+
 	    dc->chain = NULL;
 	    dc->next = CachedDirectoryChains;
 	    CachedDirectoryChains = dc;
@@ -615,9 +627,6 @@ int IncludeFile(char const *fname)
     if (stat(fname, &statbuf) == 0) {
 	FilenameChain *fc;
 	if (S_ISDIR(statbuf.st_mode)) {
-	    if (DebugFlag & DB_TRACE_FILES) {
-		fprintf(ErrFp, "Scanning directory `%s' for *.rem files\n", fname);
-	    }
 	    if (SetupGlobChain(fname, i) == OK) { /* Glob succeeded */
 		if (!i->chain) { /* Oops... no matching files */
 		    if (!Hush) {

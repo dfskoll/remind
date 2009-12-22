@@ -501,6 +501,7 @@ static SysVar SysVarArr[] = {
     {   "SortByPrio",	  0,	INT_TYPE,	&SortByPrio,	0,	0},
     {   "SortByTime",	  0,	INT_TYPE,	&SortByTime,	0,	0},
     {   "SubsIndent",	  1,	INT_TYPE,	&SubsIndent,	0,	132},
+    {   "T",              0,    DATE_TYPE,      &LastTriggerDate, 0,    0   },
     {   "TimeSep",        1,    SPECIAL_TYPE,   time_sep_func,  0,      0   },
     {   "UntimedFirst", 0, INT_TYPE,      &UntimedBeforeTimed, 0, 0 }
 };
@@ -664,6 +665,12 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	    }
 	    Putc('"', ErrFp);
 	    if (*s) fprintf(ErrFp, "...");
+	    Putc('\n', ErrFp);
+	} else if (v->type == DATE_TYPE) {
+	    Value val;
+	    val.type = DATE_TYPE;
+	    val.v.val = * (int *) v->value;
+	    PrintValue(&val, ErrFp);
 	    Putc('\n', ErrFp);
 	} else {
 	    if (!v->modifiable) fprintf(ErrFp, "%d\n", *((int *)v->value));

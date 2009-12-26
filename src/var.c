@@ -36,6 +36,60 @@ static Var *VHashTbl[VAR_HASH_SIZE];
 
 typedef int (*SysVarFunc)(int, Value *);
 
+static int trig_day_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    if (!LastTrigValid) {
+	val->v.val = -1;
+	return OK;
+    }
+
+    FromJulian(LastTriggerDate, &y, &m, &d);
+    val->v.val = d;
+    return OK;
+}
+
+static int trig_mon_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    if (!LastTrigValid) {
+	val->v.val = -1;
+	return OK;
+    }
+
+    FromJulian(LastTriggerDate, &y, &m, &d);
+    val->v.val = m+1;
+    return OK;
+}
+
+static int trig_year_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    if (!LastTrigValid) {
+	val->v.val = -1;
+	return OK;
+    }
+
+    FromJulian(LastTriggerDate, &y, &m, &d);
+    val->v.val = y;
+    return OK;
+}
+
+static int trig_wday_func(int do_set, Value *val)
+{
+    val->type = INT_TYPE;
+    if (!LastTrigValid) {
+	val->v.val = -1;
+	return OK;
+    }
+
+    val->v.val = (LastTriggerDate + 1) % 7;
+    return OK;
+}
+
 static int date_sep_func(int do_set, Value *val)
 {
     if (!do_set) {
@@ -462,48 +516,52 @@ typedef struct {
 
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
-    /* name		  mod	type		value		min/mal	max */
-    {   "CalcUTC",	  1,	INT_TYPE,	&CalculateUTC,	0,	1   },
-    {   "CalMode",	  0,	INT_TYPE,	&DoCalendar,	0,	0   },
-    {   "Daemon",	  0,	INT_TYPE,	&Daemon,	0,	0   },
-    {   "DateSep",        1,    SPECIAL_TYPE,   date_sep_func,  0,      0   },
-    {   "DefaultPrio",	  1,	INT_TYPE,	&DefaultPrio,	0,	9999 },
-    {   "DeltaOffset",    0,    INT_TYPE,       &DeltaOffset,   0,      0   },
-    {   "DontFork",	  0,	INT_TYPE,	&DontFork,	0,	0   },
-    {   "DontQueue",	  0,	INT_TYPE,	&DontQueue,	0,	0   },
-    {   "DontTrigAts",	  0,	INT_TYPE,	&DontIssueAts,	0,	0   },
-    {   "EndSent",	  1,	STR_TYPE,	&EndSent,	0,	0   },
-    {   "EndSentIg",	  1,	STR_TYPE,	&EndSentIg,	0,	0   },
-    {   "FirstIndent",	  1,	INT_TYPE,	&FirstIndent,	0,	132 },
-    {   "FoldYear",	  1,	INT_TYPE,	&FoldYear,	0,	1   },
-    {   "FormWidth",	  1,	INT_TYPE,	&FormWidth,	20,	132 },
-    {   "HushMode",	  0,	INT_TYPE,	&Hush,		0,	0   },
-    {   "IgnoreOnce",	  0,	INT_TYPE,	&IgnoreOnce,	0,	0   },
-    {   "InfDelta",	  0,	INT_TYPE,	&InfiniteDelta,	0,	0   },
-    {   "LatDeg",	  1,	INT_TYPE,	&LatDeg,	-90,	90  },
-    {   "LatMin",	  1,	INT_TYPE,	&LatMin,	-59,	59  },
-    {   "LatSec",	  1,	INT_TYPE,	&LatSec,	-59,	59  },
-    {   "Location",	  1,	STR_TYPE,	&Location,	0,	0   },
-    {   "LongDeg",	  1,	INT_TYPE,	&LongDeg,	-180,	180  },
-    {   "LongMin",	  1,	INT_TYPE,	&LongMin,	-59,	59  },
-    {   "LongSec",	  1,	INT_TYPE,	&LongSec,	-59,	59  },
-    {   "MaxSatIter",	  1,	INT_TYPE,	&MaxSatIter,	10,	ANY },
-    {   "MaxStringLen",	  1,	INT_TYPE,	&MaxStringLen,	-1,	ANY },
-    {   "MinsFromUTC",	  1,	INT_TYPE,	&MinsFromUTC,	-13*60,	13*60 },
-    {   "NextMode",	  0,	INT_TYPE,	&NextMode,	0,	0   },
-    {   "NumQueued",	  0,	INT_TYPE,	&NumQueued,	0,	0   },
-    {   "NumTrig",	  0,	INT_TYPE,	&NumTriggered,	0,	0   },
-    {   "PrefixLineNo",	  0,	INT_TYPE,	&DoPrefixLineNo,0,	0   },
-    {   "PSCal",	  0,	INT_TYPE,	&PsCal,		0,	0   },
-    {   "RunOff",	  0,	INT_TYPE,	&RunDisabled,	0,	0   },
-    {   "SimpleCal",	  0,	INT_TYPE,	&DoSimpleCalendar,	0,  0 },
-    {   "SortByDate",	  0,	INT_TYPE,	&SortByDate,	0,	0},
-    {   "SortByPrio",	  0,	INT_TYPE,	&SortByPrio,	0,	0},
-    {   "SortByTime",	  0,	INT_TYPE,	&SortByTime,	0,	0},
-    {   "SubsIndent",	  1,	INT_TYPE,	&SubsIndent,	0,	132},
-    {   "T",              0,    DATE_TYPE,      &LastTriggerDate, 0,    0   },
-    {   "TimeSep",        1,    SPECIAL_TYPE,   time_sep_func,  0,      0   },
-    {   "UntimedFirst", 0, INT_TYPE,      &UntimedBeforeTimed, 0, 0 }
+    /*  name          mod  type              value         min/mal   max */
+    {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,       0,      1   },
+    {"CalMode",        0,  INT_TYPE,     &DoCalendar,         0,      0   },
+    {"Daemon",         0,  INT_TYPE,     &Daemon,             0,      0   },
+    {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,       0,      0   },
+    {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,        0,      9999},
+    {"DeltaOffset",    0,  INT_TYPE,     &DeltaOffset,        0,      0   },
+    {"DontFork",       0,  INT_TYPE,     &DontFork,           0,      0   },
+    {"DontQueue",      0,  INT_TYPE,     &DontQueue,          0,      0   },
+    {"DontTrigAts",    0,  INT_TYPE,     &DontIssueAts,       0,      0   },
+    {"EndSent",        1,  STR_TYPE,     &EndSent,            0,      0   },
+    {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,          0,      0   },
+    {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,        0,      132 },
+    {"FoldYear",       1,  INT_TYPE,     &FoldYear,           0,      1   },
+    {"FormWidth",      1,  INT_TYPE,     &FormWidth,          20,     132 },
+    {"HushMode",       0,  INT_TYPE,     &Hush,               0,      0   },
+    {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,         0,      0   },
+    {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },
+    {"LatDeg",         1,  INT_TYPE,     &LatDeg,             -90,    90  },
+    {"LatMin",         1,  INT_TYPE,     &LatMin,             -59,    59  },
+    {"LatSec",         1,  INT_TYPE,     &LatSec,             -59,    59  },
+    {"Location",       1,  STR_TYPE,     &Location,           0,      0   },
+    {"LongDeg",        1,  INT_TYPE,     &LongDeg,            -180,   180 },
+    {"LongMin",        1,  INT_TYPE,     &LongMin,            -59,    59  },
+    {"LongSec",        1,  INT_TYPE,     &LongSec,            -59,    59  },
+    {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,         10,     ANY },
+    {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,       -1,     ANY },
+    {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,        -780,   780 },
+    {"NextMode",       0,  INT_TYPE,     &NextMode,           0,      0   },
+    {"NumQueued",      0,  INT_TYPE,     &NumQueued,          0,      0   },
+    {"NumTrig",        0,  INT_TYPE,     &NumTriggered,       0,      0   },
+    {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,     0,      0   },
+    {"PSCal",          0,  INT_TYPE,     &PsCal,              0,      0   },
+    {"RunOff",         0,  INT_TYPE,     &RunDisabled,        0,      0   },
+    {"SimpleCal",      0,  INT_TYPE,     &DoSimpleCalendar,   0,      0   },
+    {"SortByDate",     0,  INT_TYPE,     &SortByDate,         0,      0   },
+    {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,         0,      0   },
+    {"SortByTime",     0,  INT_TYPE,     &SortByTime,         0,      0   },
+    {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,         0,      132 },
+    {"T",              0,  DATE_TYPE,    &LastTriggerDate,    0,      0   },
+    {"Td",             0,  SPECIAL_TYPE, trig_day_func,       0,      0   },
+    {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,       0,      0   },
+    {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
+    {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,      0,      0   },
+    {"Ty",             0,  SPECIAL_TYPE, trig_year_func,      0,      0   },
+    {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed, 0,      0   }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
@@ -647,7 +705,9 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	    Value val;
 	    SysVarFunc f = (SysVarFunc) v->value;
 	    f(0, &val);
-	    if (DoCoerce(STR_TYPE, &val) == OK) {
+	    if (val.type == INT_TYPE) {
+		fprintf(ErrFp, "%d\n", val.v.val);
+	    } else if (DoCoerce(STR_TYPE, &val) == OK) {
 		fprintf(ErrFp, "\"%s\"\n", val.v.str);
 	    }
 	    DestroyValue(val);

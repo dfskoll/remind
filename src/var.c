@@ -36,6 +36,16 @@ static Var *VHashTbl[VAR_HASH_SIZE];
 
 typedef int (*SysVarFunc)(int, Value *);
 
+static int trig_date_func(int do_set, Value *val)
+{
+    val->type = DATE_TYPE;
+    if (!LastTrigValid) {
+	val->v.val = 0;
+    } else {
+	val->v.val = LastTriggerDate;
+    }
+    return OK;
+}
 static int trig_day_func(int do_set, Value *val)
 {
     int y, m, d;
@@ -555,7 +565,7 @@ static SysVar SysVarArr[] = {
     {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,         0,      0   },
     {"SortByTime",     0,  INT_TYPE,     &SortByTime,         0,      0   },
     {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,         0,      132 },
-    {"T",              0,  DATE_TYPE,    &LastTriggerDate,    0,      0   },
+    {"T",              0,  SPECIAL_TYPE, trig_date_func,      0,      0   },
     {"Td",             0,  SPECIAL_TYPE, trig_day_func,       0,      0   },
     {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,       0,      0   },
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
@@ -705,11 +715,8 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	    Value val;
 	    SysVarFunc f = (SysVarFunc) v->value;
 	    f(0, &val);
-	    if (val.type == INT_TYPE) {
-		fprintf(ErrFp, "%d\n", val.v.val);
-	    } else if (DoCoerce(STR_TYPE, &val) == OK) {
-		fprintf(ErrFp, "\"%s\"\n", val.v.str);
-	    }
+	    PrintValue(&val, ErrFp);
+	    Putc('\n', ErrFp);
 	    DestroyValue(val);
 	} else if (v->type == STR_TYPE) {
 	    char const *s = *((char **)v->value);

@@ -27,8 +27,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.01.07"
-   ERRMSG This file requires at least version 03.01.07 of Remind.%
+IF version() < "03.01.08"
+   ERRMSG This file requires at least version 03.01.08 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF

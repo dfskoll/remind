@@ -100,6 +100,46 @@ static int trig_wday_func(int do_set, Value *val)
     return OK;
 }
 
+static int today_date_func(int do_set, Value *val)
+{
+    val->type = DATE_TYPE;
+    val->v.val = JulianToday;
+    return OK;
+}
+static int today_day_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    FromJulian(JulianToday, &y, &m, &d);
+    val->v.val = d;
+    return OK;
+}
+
+static int today_mon_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    FromJulian(JulianToday, &y, &m, &d);
+    val->v.val = m+1;
+    return OK;
+}
+
+static int today_year_func(int do_set, Value *val)
+{
+    int y, m, d;
+    val->type = INT_TYPE;
+    FromJulian(JulianToday, &y, &m, &d);
+    val->v.val = y;
+    return OK;
+}
+
+static int today_wday_func(int do_set, Value *val)
+{
+    val->type = INT_TYPE;
+    val->v.val = (JulianToday + 1) % 7;
+    return OK;
+}
+
 static int date_sep_func(int do_set, Value *val)
 {
     if (!do_set) {
@@ -571,7 +611,12 @@ static SysVar SysVarArr[] = {
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
     {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,      0,      0   },
     {"Ty",             0,  SPECIAL_TYPE, trig_year_func,      0,      0   },
-    {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed, 0,      0   }
+    {"U",              0,  SPECIAL_TYPE, today_date_func,     0,      0   },
+    {"Ud",             0,  SPECIAL_TYPE, today_day_func,      0,      0   },
+    {"Um",             0,  SPECIAL_TYPE, today_mon_func,      0,      0   },
+    {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed, 0,      0   },
+    {"Uw",             0,  SPECIAL_TYPE, today_wday_func,     0,      0   },
+    {"Uy",             0,  SPECIAL_TYPE, today_year_func,     0,      0   }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )

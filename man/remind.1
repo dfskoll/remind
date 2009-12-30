@@ -1979,10 +1979,21 @@ order, or 2 if sorting by time in descending order.
 .B $SubsIndent
 The number of spaces by which all lines (except the first) of an
 \fBMSF\fR-type reminder should be indented.  The default is 0.
-.PP
-Note:  If any of the calendar modes are in effect, then the
-values of $Daemon, $DontFork, $DontTrigAts, $DontQueue, $HushMode,
-$IgnoreOnce, $InfDelta, and $NextMode are not meaningful.
+.TP
+.B $T (read-only, DATE type)
+Exactly equivalent to \fBtrigdate()\fR.  (See BUILT-IN FUNCTIONS.)
+.TP
+.B $Td (read-only)
+Equivalent to \fBday(trigdate())\fR.
+.TP
+.B $Tm (read-only)
+Equivalent to \fBmonnum(trigdate())\fR.
+.TP
+.B $Tw (read-only)
+Equivalent to \fBwkdaynum(trigdate())\fR.
+.TP
+.B $Ty (read-only)
+Equivalent to \fByear(trigdate())\fR.
 .TP
 .B $TimeSep
 This variable can be set only to ":" or ".".  It holds the character
@@ -1992,6 +2003,25 @@ DATETIME value.
 .B $UntimedFirst (read-only)
 Set to 1 if the \fB\-g\fR option is used with a fourth sort character
 of "d"; set to 0 otherwise.
+.TP
+.B $U (read-only, DATE type)
+Exactly equivalent to \fBtoday()\fR.  (See BUILT-IN FUNCTIONS.)
+.TP
+.B $Ud (read-only)
+Equivalent to \fBday(today())\fR.
+.TP
+.B $Um (read-only)
+Equivalent to \fBmonnum(today())\fR.
+.TP
+.B $Uw (read-only)
+Equivalent to \fBwkdaynum(today())\fR.
+.TP
+.B $Uy (read-only)
+Equivalent to \fByear(today())\fR.
+.PP
+Note:  If any of the calendar modes are in effect, then the
+values of $Daemon, $DontFork, $DontTrigAts, $DontQueue, $HushMode,
+$IgnoreOnce, $InfDelta, and $NextMode are not meaningful.
 .PP
 .B BUILT-IN FUNCTIONS
 .PP

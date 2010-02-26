@@ -748,38 +748,46 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	return OK;
     }
 
-/* Put the substituted string into the substitution buffer */
-    if (UserFuncExists("msgprefix") == 1) {
-	sprintf(PrioExpr, "msgprefix(%d)", t->priority);
-	s = PrioExpr;
-	r = EvalExpr(&s, &v);
-	if (!r) {
-	    if (!DoCoerce(STR_TYPE, &v)) {
-		if (DBufPuts(&buf, v.v.str) != OK) {
-		    DBufFree(&buf);
-		    DestroyValue(v);
-		    return E_NO_MEM;
+    /* Put the substituted string into the substitution buffer */
+
+    /* Don't use msgprefix() on RUN-type reminders */
+    if (t->typ != RUN_TYPE) {
+	if (UserFuncExists("msgprefix") == 1) {
+	    sprintf(PrioExpr, "msgprefix(%d)", t->priority);
+	    s = PrioExpr;
+	    r = EvalExpr(&s, &v);
+	    if (!r) {
+		if (!DoCoerce(STR_TYPE, &v)) {
+		    if (DBufPuts(&buf, v.v.str) != OK) {
+			DBufFree(&buf);
+			DestroyValue(v);
+			return E_NO_MEM;
+		    }
 		}
+		DestroyValue(v);
 	    }
-	    DestroyValue(v);
 	}
     }
+
     if ( (r=DoSubst(p, &buf, t, tim, jul, NORMAL_MODE)) ) return r;
-    if (UserFuncExists("msgsuffix") == 1) {
-	sprintf(PrioExpr, "msgsuffix(%d)", t->priority);
-	s = PrioExpr;
-	r = EvalExpr(&s, &v);
-	if (!r) {
-	    if (!DoCoerce(STR_TYPE, &v)) {
-		if (DBufPuts(&buf, v.v.str) != OK) {
-		    DBufFree(&buf);
-		    DestroyValue(v);
-		    return E_NO_MEM;
+    if (t->typ != RUN_TYPE) {
+	if (UserFuncExists("msgsuffix") == 1) {
+	    sprintf(PrioExpr, "msgsuffix(%d)", t->priority);
+	    s = PrioExpr;
+	    r = EvalExpr(&s, &v);
+	    if (!r) {
+		if (!DoCoerce(STR_TYPE, &v)) {
+		    if (DBufPuts(&buf, v.v.str) != OK) {
+			DBufFree(&buf);
+			DestroyValue(v);
+			return E_NO_MEM;
+		    }
 		}
+		DestroyValue(v);
 	    }
-	    DestroyValue(v);
 	}
     }
+
     if ((!MsgCommand && t->typ == MSG_TYPE) || t->typ == MSF_TYPE) {
 	if (DBufPutc(&buf, '\n') != OK) {
 	    DBufFree(&buf);

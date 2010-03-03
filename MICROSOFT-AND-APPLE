@@ -1,0 +1,30 @@
+MICROSOFT WINDOWS
+=================
+
+I used to prohibit porting Remind to Microsoft Windows.  However, this
+may cause problems with the GPL, so I have removed that restriction.
+
+Although I cannot prevent you from porting Remind to Windows, I appeal
+to you not to do it.  I am trying to encourage the growth of free
+software, not proprietary software.
+
+If you port Remind to Windows, I will not provide support or answers to
+questions -- you're on your own.  On the other hand, I will feel no guilt
+in taking enhancements and merging them into the UNIX stream.
+
+APPLE
+=====
+
+I can't prevent you from using Remind on Apple's products, but I hope
+you don't.  Apple's corporate culture is the very antithesis of Free
+Software.  Rather than using Mac OS X, I encourage you to switch to
+Linux or FreeBSD, two Free Software operating systems that are every
+bit as capable as Mac OS X and which are unencumbered by Apple's
+arbitrary restrictions.
+
+And if you're looking to port Remind to other Apple products like the
+iPhone or iPad, please don't.  Those products enforce Apple's rigorous
+controls much more stringently than Mac OS X on an Apple PC.
+
+--
+David F. Skoll

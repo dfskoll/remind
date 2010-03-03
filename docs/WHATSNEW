@@ -1,5 +1,25 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 8 - 2010-03-03
+
+- ENHANCEMENT: Include some useful scripts in contrib/
+
+- ENHANCEMENT: Add the $T, $Td, $Tm, $Tw, $Ty, $U, $Ud, $Um, $Uw, $Uy
+  special variables to make reminder files less wordy.  See man page
+  for details.
+
+- MINOR ENHANCEMENT: Set an icon photo window manager resource on TkRemind.
+
+- POLICY CHANGE: Discourage use of Remind on MS Windows or Apple Mac OS X.
+
+- BUG FIX: Ignore msgprefix() and msgsuffix() on RUN-type reminders.
+
+- BUG FIX: Adjust Remind and Rem2PS so that SHADE specials don't obliterate
+  earlier MOON specials.
+
+- BUG FIX: Fix bug in SCHED calculations if Remind is started in the middle
+  of a SCHED interval.
+
 * Version 3.1 Patch 7 - 2009-05-31
 
 - ENHANCEMENT: Wherever you could write "day Mon year", the parser now

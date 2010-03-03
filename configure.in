@@ -14,6 +14,26 @@ EOF
 
 AC_CONFIG_HEADER(src/config.h)
 
+if test "`uname -s`" = "Darwin" ; then
+   cat <<'EOF'
+
+Please don't use Apple products.  You can get Remind to
+compile by hacking the ./configure script, but I'd rather you didn't.
+
+EOF
+   exit 1
+fi
+
+if uname -s | grep -i -q 'cygwin' ; then
+    cat <<'EOF'
+
+Please don't use Microsoft products.  You can get Remind to
+compile by hacking the ./configure script, but I'd rather you didn't.
+
+EOF
+   exit 1
+fi
+
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL

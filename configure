@@ -1691,6 +1691,26 @@ EOF
 ac_config_headers="$ac_config_headers src/config.h"
 
 
+if test "`uname -s`" = "Darwin" ; then
+   cat <<'EOF'
+
+Please don't use Apple products.  You can get Remind to
+compile by hacking the ./configure script, but I'd rather you didn't.
+
+EOF
+   exit 1
+fi
+
+if uname -s | grep -i -q 'cygwin' ; then
+    cat <<'EOF'
+
+Please don't use Microsoft products.  You can get Remind to
+compile by hacking the ./configure script, but I'd rather you didn't.
+
+EOF
+   exit 1
+fi
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'

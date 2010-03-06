@@ -15,23 +15,33 @@ EOF
 AC_CONFIG_HEADER(src/config.h)
 
 if test "`uname -s`" = "Darwin" ; then
+   trap 'echo Be patient...' INT TERM
    cat <<'EOF'
 
-Please don't use Apple products.  You can get Remind to
-compile by hacking the ./configure script, but I'd rather you didn't.
+Please don't use Apple products.  This script will continue in 30 seconds
+if you insist on compiling Remind on Mac OS X.
 
 EOF
-   exit 1
+    for i in 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 ; do
+        sleep 1
+    done
+    trap INT
+    trap TERM
 fi
 
 if uname -s | grep -i -q 'cygwin' ; then
-    cat <<'EOF'
+   trap 'echo Be patient...' INT TERM
+   cat <<'EOF'
 
-Please don't use Microsoft products.  You can get Remind to
-compile by hacking the ./configure script, but I'd rather you didn't.
+Please don't use Microsoft products.  This script will continue in 30
+seconds if you insist on compiling Remind on Cygwin.
 
 EOF
-   exit 1
+    for i in 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 ; do
+        sleep 1
+    done
+    trap INT
+    trap TERM
 fi
 
 dnl Checks for programs.

@@ -1,3 +1,13 @@
+set $MinsFromUTC -240
+set $CalcUTC 0
+set $Location "Ottawa"
+set $LongDeg 75
+set $LongMin 39
+set $LongSec 0
+set $LatDeg 45
+set $LatMin 24
+set $LatSec 0
+
 IF $PSCAL
 	[trigger(moondate(0))] SPECIAL MOON 0 -1 -1 [moontime(0)]
 	[trigger(moondate(1))] SPECIAL MOON 1 -1 -1 [moontime(1)]

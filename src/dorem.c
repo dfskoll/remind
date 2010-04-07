@@ -96,7 +96,12 @@ int DoRem(ParsePtr p)
 
     if (PurgeMode) {
 	if (trig.expired) {
-	    PurgeEchoLine("### EXPIRED: %s\n", CurLine);
+	    if (p->expr_happened) {
+		PurgeEchoLine("%s\n", "### Next line may have expired, but contains expression");
+	    PurgeEchoLine("%s\n", CurLine);
+	    } else {
+		PurgeEchoLine("### EXPIRED: %s\n", CurLine);
+	    }
 	} else {
 	    PurgeEchoLine("%s\n", CurLine);
 	}

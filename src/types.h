@@ -54,6 +54,7 @@ typedef struct var {
 
 /* A trigger */
 typedef struct {
+    int expired;
     int wd;
     int d;
     int m;

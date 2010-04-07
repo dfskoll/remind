@@ -94,6 +94,13 @@ int DoRem(ParsePtr p)
 	if (r) return r;
     }
 
+    if (PurgeMode) {
+	if (trig.expired) {
+	    PurgeEchoLine("### EXPIRED: %s\n", CurLine);
+	} else {
+	    PurgeEchoLine("%s\n", CurLine);
+	}
+    }
 /* Queue the reminder, if necessary */
     if (jul == JulianToday &&
 	!(!IgnoreOnce &&

@@ -79,6 +79,7 @@ EXTERN  INIT(   int     MaxSatIter, 150);
 EXTERN  INIT(   int     MaxStringLen, MAX_STR_LEN);
 EXTERN  INIT(	char	*FileName, NULL);
 EXTERN	INIT(	int	UseStdin, 0);
+EXTERN  INIT(   int     PurgeMode, 0);
 EXTERN  FILE *ErrFp;
 EXTERN  INIT(   int     NumIfs,    0);
 EXTERN  INIT(   unsigned int IfFlags,   0);

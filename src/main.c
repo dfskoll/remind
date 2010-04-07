@@ -70,6 +70,12 @@ int main(int argc, char *argv[])
 	return 0;
     }
 
+    /* Are we purging old reminders?  Then just run through the loop once! */
+    if (PurgeMode) {
+	DoReminders();
+	return 0;
+    }
+
     /* Not doing a calendar.  Do the regular remind loop */
     ShouldCache = (Iterations > 1);
 
@@ -123,6 +129,15 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+void PurgeEchoLine(char const *fmt, ...)
+{
+    va_list argptr;
+    va_start(argptr, fmt);
+    (void) vfprintf(stdout, fmt, argptr);
+    va_end(argptr);
+
+}
+
 /***************************************************************/
 /*                                                             */
 /*  DoReminders                                                */
@@ -136,6 +151,7 @@ static void DoReminders(void)
     Token tok;
     char const *s;
     Parser p;
+    int was_rem;
 
     if (!UseStdin) {
 	FileAccessDate = GetAccessDate(InitialFile);
@@ -173,8 +189,12 @@ static void DoReminders(void)
 	    ShouldIgnoreLine())
 	{
 	    /*** IGNORE THE LINE ***/
+	    if (PurgeMode) {
+		PurgeEchoLine("%s\n", CurLine);
+	    }
 	}
 	else {
+	    was_rem = 0;
 	    /* Create a parser to parse the line */
 	    CreateParser(s, &p);
 	    switch(tok.type) {
@@ -183,7 +203,7 @@ static void DoReminders(void)
 	    case T_Comment:
 		break;
 
-	    case T_Rem:     r=DoRem(&p);     break;
+	    case T_Rem:     r=DoRem(&p); was_rem = 1; break;
 	    case T_ErrMsg:  r=DoErrMsg(&p);  break;
 	    case T_If:      r=DoIf(&p);      break;
 	    case T_IfTrig:  r=DoIfTrig(&p);  break;
@@ -204,32 +224,42 @@ static void DoReminders(void)
 		    DestroyParser(&p);
 		    CreateParser(s, &p);
 		    r=DoRem(&p);
+		    was_rem = 1;
 		}
 		break;
 	    case T_Pop:     r=PopOmitContext(&p);     break;
 	    case T_Preserve: r=DoPreserve(&p);  break;
 	    case T_Push:    r=PushOmitContext(&p);    break;
 	    case T_RemType: if (tok.val == RUN_TYPE) {
-		r=DoRun(&p);
+		    r=DoRun(&p);
+		} else {
+		    CreateParser(CurLine, &p);
+		    r=DoRem(&p);
+		    was_rem = 1;
+		}
 		break;
-	    } else {
-		CreateParser(CurLine, &p);
-		r=DoRem(&p);
-		break;
-	    }
 
 
 	    /* If we don't recognize the command, do a REM by default */
 	    /* Note:  Since the parser hasn't been used yet, we don't */
 	    /* need to destroy it here. */
 
-	    default: CreateParser(CurLine, &p); r=DoRem(&p); break;
+	    default: CreateParser(CurLine, &p); was_rem = 1; r=DoRem(&p); break;
 
 	    }
 	    if (r && (!Hush || r != E_RUN_DISABLED)) {
 		Eprint("%s", ErrMsg[r]);
 	    }
-
+	    if (PurgeMode) {
+		if (!was_rem) {
+		    PurgeEchoLine("%s\n", CurLine);
+		} else {
+		    if (r) {
+			PurgeEchoLine("### Could not parse next line: %s\n", ErrMsg[r]);
+			PurgeEchoLine("%s\n", CurLine);
+		    }
+		}
+	    }
 	    /* Destroy the parser - free up resources it may be tying up */
 	    DestroyParser(&p);
 	}

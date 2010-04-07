@@ -67,6 +67,7 @@
  *  -kcmd    = Run 'cmd' for MSG-type reminders instead of printing to stdout
  *  -iVAR=EXPR = Initialize and preserve VAR.
  *  -m       = Start calendar with Monday instead of Sunday.
+ *  -j       = Purge all junk from reminder files
  *  A minus sign alone indicates to take input from stdin
  *
  **************************************************************/
@@ -194,6 +195,10 @@ void InitRemind(int argc, char const *argv[])
 	while (*arg) {
 	    switch(*arg++) {
 
+	    case 'j':
+	    case 'J':
+		PurgeMode = 1;
+	        break;
             case 'i':
 	    case 'I':
 		InitializeVar(arg);

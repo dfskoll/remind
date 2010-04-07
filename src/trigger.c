@@ -422,6 +422,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	y, m, d, omit,
 	result;
 
+    trig->expired = 0;
     if (save_in_globals) LastTrigValid = 0;
 
 /* Assume everything works */
@@ -449,6 +450,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	/* If there's an error, die immediately */
 	if (*err) return -1;
 	if (result == -1) {
+	    trig->expired = 1;
 	    if (DebugFlag & DB_PRTTRIG) {
 		fprintf(ErrFp, "%s(%d): %s\n",
 			FileName, LineNo, ErrMsg[E_EXPIRED]);
@@ -485,6 +487,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	if (trig->back == NO_BACK &&
 	    trig->skip == NO_SKIP &&
 	    trig->rep == NO_REP) {
+	    trig->expired = 1;
 	    if (DebugFlag & DB_PRTTRIG) {
 		fprintf(ErrFp, "%s(%d): %s\n",
 			FileName, LineNo, ErrMsg[E_EXPIRED]);
@@ -513,6 +516,7 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 		    LastTrigValid = 1;
 		}
 	    }
+	    trig->expired = 1;
 	    if (DebugFlag & DB_PRTTRIG) {
 		fprintf(ErrFp, "%s(%d): %s\n",
 			FileName, LineNo, ErrMsg[E_EXPIRED]);

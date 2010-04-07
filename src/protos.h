@@ -134,3 +134,4 @@ int CompareRems (int dat1, int tim1, int prio1, int dat2, int tim2, int prio2, i
 void SigIntHandler (int d);
 void GotSigInt (void);
 void SynthesizeTag(char *);
+void PurgeEchoLine(char const *fmt, ...);

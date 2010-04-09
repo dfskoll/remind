@@ -700,10 +700,15 @@ int DoIf(ParsePtr p)
 	    Eprint("%s", ErrMsg[r]);
 	} else
 	    if ( (v.type != STR_TYPE && v.v.val) ||
-		 (v.type == STR_TYPE && strcmp(v.v.str, "")) )
+		 (v.type == STR_TYPE && strcmp(v.v.str, "")) ) {
 		syndrome = IF_TRUE | BEFORE_ELSE;
-	    else
+	    } else {
 		syndrome = IF_FALSE | BEFORE_ELSE;
+		if (PurgeMode) {
+		    PurgeEchoLine("%s\n", "### The next IF evaluated false...");
+		    PurgeEchoLine("%s\n", "### REM statements in IF block not checked for purging.");
+		}
+	    }
     }
 
     NumIfs++;
@@ -723,6 +728,8 @@ int DoElse(ParsePtr p)
 {
     unsigned syndrome;
 
+    int was_ignoring = ShouldIgnoreLine();
+
     if (!NumIfs) return E_ELSE_NO_IF;
 
     syndrome = IfFlags >> (2 * NumIfs - 2);
@@ -730,6 +737,10 @@ int DoElse(ParsePtr p)
     if ((syndrome & IF_ELSE_MASK) == AFTER_ELSE) return E_ELSE_NO_IF;
 
     IfFlags |= AFTER_ELSE << (2 * NumIfs - 2);
+    if (PurgeMode && ShouldIgnoreLine() && !was_ignoring) {
+	PurgeEchoLine("%s\n", "### The previous IF evaluated true.");
+	PurgeEchoLine("%s\n", "### REM statements in ELSE block not checked for purging");
+    }
     return VerifyEoln(p);
 }
 
@@ -769,10 +780,13 @@ int DoIfTrig(ParsePtr p)
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) syndrome = IF_TRUE | BEFORE_ELSE;
 	else {
-	    if (ShouldTriggerReminder(&trig, &tim, jul, &err))
+	    if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
 		syndrome = IF_TRUE | BEFORE_ELSE;
-	    else
+	    } else {
 		syndrome = IF_FALSE | BEFORE_ELSE;
+		PurgeEchoLine("%s\n", "### The next IFTRIG did not trigger.");
+		PurgeEchoLine("%s\n", "### REM statements in IFTRIG block not checked for purging.");
+	    }
 	}
     }
     NumIfs++;

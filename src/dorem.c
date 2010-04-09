@@ -105,6 +105,7 @@ int DoRem(ParsePtr p)
 	} else {
 	    PurgeEchoLine("%s\n", CurLine);
 	}
+	return OK;
     }
 /* Queue the reminder, if necessary */
     if (jul == JulianToday &&

@@ -32,6 +32,17 @@
 #define SPECIAL_WEEK       5
 #define SPECIAL_SHADE      6
 
+/* Array holding how specials sort */
+static int SpecialSortOrder[] = {
+    0, /* NORMAL */
+    1, /* POSTSCRIPT */
+    1, /* PSFILE */
+    2, /* MOON */
+    0, /* COLOR */
+    4, /* WEEK */
+    5  /* SHADE */
+};
+
 typedef struct calentry {
     struct calentry *next;
     int special;
@@ -338,11 +349,11 @@ void DoPsCal(void)
 		d = PsEntries[DayNum];
 		p = NULL;
 		/* Slot it into the right place */
-		while (d->next && (c->special <= d->special)) {
+		while (d->next && (SpecialSortOrder[c->special] <= SpecialSortOrder[d->special])) {
 		    p = d;
 		    d = d->next;
 		}
-		if (c->special <= d->special) {
+		if (SpecialSortOrder[c->special] <= SpecialSortOrder[d->special]) {
 		    c->next = d->next;
 		    d->next = c;
 		} else {

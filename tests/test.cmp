@@ -2527,7 +2527,10 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 1 1 0.8 setrgbcolor fill 0.0 setgray
-
+(First-Bit-Of-PS)
+(Second-Bit-Of-PS)
+(Third-Bit-Of-PS)
+(Fourth-Bit-Of-PS)
  SAVESTATE restore
 /SAVESTATE save def
 3 xincr mul MinX add ytop translate

@@ -15,6 +15,11 @@ IF $PSCAL
 	[trigger(moondate(3))] SPECIAL MOON 3 -1 -1 [moontime(3)]
 ENDIF
 
+REM 4 PS (First-Bit-Of-PS)
+REM 4 PSFILE file.ps
+REM 4 PS (Third-Bit-Of-PS)
+REM 4 PSFILE file2.ps
+
 REM Mon SPECIAL SHADE 255 255 255
 REM Tue SPECIAL SHADE 255 255 204
 REM Wed SPECIAL SHADE 255 204 255

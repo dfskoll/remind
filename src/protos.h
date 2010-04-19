@@ -16,6 +16,9 @@
 /* Define a general malloc routine for creating pointers to objects */
 #define NEW(type) (malloc(sizeof(type)))
 
+/* Characters to ignore */
+#define isempty(c) (isspace(c) || ((c) == '\\'))
+
 #include "dynbuf.h"
 
 int CallUserFunc (char const *name, int nargs);

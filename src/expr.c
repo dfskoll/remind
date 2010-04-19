@@ -132,7 +132,7 @@ static void CleanStack(void)
 static char PeekChar(char const **s)
 {
     char const *t = *s;
-    while (*t && isspace(*t)) t++;
+    while (*t && isempty(*t)) t++;
     return *t;
 }
 
@@ -150,7 +150,7 @@ static int ParseExprToken(DynamicBuffer *buf, char const **in)
 
     DBufFree(buf);
 /* Skip white space */
-    while (**in && isspace(**in)) (*in)++;
+    while (**in && isempty(**in)) (*in)++;
 
     if (!**in) return OK;
 
@@ -283,7 +283,7 @@ static int ParseExprToken(DynamicBuffer *buf, char const **in)
 	(*in)++;
     }
     /* Chew up any remaining white space */
-    while (**in && isspace(**in)) (*in)++;
+    while (**in && isempty(**in)) (*in)++;
 
     /* Peek ahead - is it '('?  Then we have a function call */
     if (**in == '(') {

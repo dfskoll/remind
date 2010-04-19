@@ -299,7 +299,7 @@ int CallUserFunc(char const *name, int nargs)
     s = f->text;
 
     /* Skip the opening bracket, if there's one */
-    while (isspace(*s)) s++;
+    while (isempty(*s)) s++;
     if (*s == BEG_OF_EXPR) s++;
     h = Evaluate(&s, f->locals);
     f->IsActive = 0;

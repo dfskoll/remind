@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #include <string.h>
+#include <errno.h>
 #include <ctype.h>
 #include <sys/stat.h>
 
@@ -97,6 +98,19 @@ static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
 static int PopFile (void);
 
+static void OpenPurgeFile(char const *fname, char const *mode)
+{
+    DynamicBuffer fname_buf;
+    DBufInit(&fname_buf);
+    if (DBufPuts(&fname_buf, fname) != OK) return;
+    if (DBufPuts(&fname_buf, ".purged") != OK) return;
+    PurgeFP = fopen(DBufValue(&fname_buf), mode);
+    if (!PurgeFP) {
+	fprintf(ErrFp, "Cannot open `%s' for writing: %s\n", DBufValue(&fname_buf), strerror(errno));
+    }
+    DBufFree(&fname_buf);
+}
+
 static void FreeChainItem(FilenameChain *chain)
 {
 	if (chain->filename) free((void *) chain->filename);
@@ -173,11 +187,21 @@ static int ReadLineFromFile(void)
 	}
 	if (feof(fp)) {
 	    FCLOSE(fp);
+	    if (PurgeMode) {
+		if (PurgeFP != NULL && PurgeFP != stdout) {
+		    fclose(PurgeFP);
+		}
+		PurgeFP = NULL;
+	    }
 	}
 	l = DBufLen(&buf);
 	if (l && (DBufValue(&buf)[l-1] == '\\')) {
-	    DBufValue(&buf)[l-1] = '\n';
 	    if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
+		DBufFree(&buf);
+		DBufFree(&LineBuffer);
+		return E_NO_MEM;
+	    }
+	    if (DBufPutc(&LineBuffer, '\n') != OK) {
 		DBufFree(&buf);
 		DBufFree(&LineBuffer);
 		return E_NO_MEM;
@@ -236,6 +260,9 @@ int OpenFile(char const *fname)
 /* If it's a dash, then it's stdin */
     if (!strcmp(fname, "-")) {
 	fp = stdin;
+	if (PurgeMode) {
+	    PurgeFP = stdout;
+	}
 	if (DebugFlag & DB_TRACE_FILES) {
 	    fprintf(ErrFp, "Reading `-': Reading stdin\n");
 	}
@@ -243,6 +270,9 @@ int OpenFile(char const *fname)
 	fp = fopen(fname, "r");
 	if (DebugFlag & DB_TRACE_FILES) {
 	    fprintf(ErrFp, "Reading `%s': Opening file on disk\n", fname);
+	}
+	if (PurgeMode) {
+	    OpenPurgeFile(fname, "w");
 	}
     }
     if (!fp || !CheckSafety()) return E_CANT_OPEN;
@@ -257,8 +287,10 @@ int OpenFile(char const *fname)
 	    if (strcmp(fname, "-")) {
 		fp = fopen(fname, "r");
 		if (!fp || !CheckSafety()) return E_CANT_OPEN;
+		if (PurgeMode) OpenPurgeFile(fname, "w");
 	    } else {
 		fp = stdin;
+		if (PurgeMode) PurgeFP = stdout;
 	    }
 	}
     }
@@ -289,12 +321,28 @@ static int CacheFile(char const *fname)
 /* Create a file header */
     cf = NEW(CachedFile);
     cf->cache = NULL;
-    if (!cf) { ShouldCache = 0; FCLOSE(fp); return E_NO_MEM; }
+    if (!cf) {
+	ShouldCache = 0;
+	FCLOSE(fp);
+	if (PurgeMode) {
+	    if (PurgeFP != NULL && PurgeFP != stdout) {
+		fclose(PurgeFP);
+	    }
+	    PurgeFP = NULL;
+	}
+	return E_NO_MEM;
+    }
     cf->filename = StrDup(fname);
     if (!cf->filename) {
 	ShouldCache = 0;
 	FCLOSE(fp);
 	free(cf);
+	if (PurgeMode) {
+	    if (PurgeFP != NULL && PurgeFP != stdout) {
+		fclose(PurgeFP);
+	    }
+	    PurgeFP = NULL;
+	}
 	return E_NO_MEM;
     }
 
@@ -311,11 +359,17 @@ static int CacheFile(char const *fname)
 	    DestroyCache(cf);
 	    ShouldCache = 0;
 	    FCLOSE(fp);
+	    if (PurgeMode) {
+		if (PurgeFP != NULL && PurgeFP != stdout) {
+		    fclose(PurgeFP);
+		}
+		PurgeFP = NULL;
+	    }
 	    return r;
 	}
 /* Skip blank chars */
 	s = DBufValue(&LineBuffer);
-	while (isspace(*s)) s++;
+	while (isempty(*s)) s++;
 	if (*s && *s!=';' && *s!='#') {
 /* Add the line to the cache */
 	    if (!cl) {
@@ -325,6 +379,12 @@ static int CacheFile(char const *fname)
 		    DestroyCache(cf);
 		    ShouldCache = 0;
 		    FCLOSE(fp);
+		    if (PurgeMode) {
+			if (PurgeFP != NULL && PurgeFP != stdout) {
+			    fclose(PurgeFP);
+			}
+			PurgeFP = NULL;
+		    }
 		    return E_NO_MEM;
 		}
 		cl = cf->cache;
@@ -334,6 +394,12 @@ static int CacheFile(char const *fname)
 		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
+		    if (PurgeMode) {
+			if (PurgeFP != NULL && PurgeFP != stdout) {
+			    fclose(PurgeFP);
+			}
+			PurgeFP = NULL;
+		    }
 		    FCLOSE(fp);
 		    return E_NO_MEM;
 		}
@@ -346,6 +412,12 @@ static int CacheFile(char const *fname)
 	    if (!cl->text) {
 		DestroyCache(cf);
 		ShouldCache = 0;
+		if (PurgeMode) {
+		    if (PurgeFP != NULL && PurgeFP != stdout) {
+			fclose(PurgeFP);
+		    }
+		PurgeFP = NULL;
+		}
 		FCLOSE(fp);
 		return E_NO_MEM;
 	    }
@@ -424,8 +496,10 @@ static int PopFile(void)
 	if (strcmp(i->filename, "-")) {
 	    fp = fopen(i->filename, "r");
 	    if (!fp || !CheckSafety()) return E_CANT_OPEN;
+	    if (PurgeMode) OpenPurgeFile(i->filename, "a");
 	} else {
 	    fp = stdin;
+	    if (PurgeMode) PurgeFP = stdout;
 	}
 	if (fp != stdin)
 	    (void) fseek(fp, i->offset, 0);  /* Trust that it works... */
@@ -618,6 +692,12 @@ int IncludeFile(char const *fname)
     if (fp) {
 	i->offset = ftell(fp);
 	FCLOSE(fp);
+	if (PurgeMode) {
+	    if (PurgeFP != NULL && PurgeFP != stdout) {
+		fclose(PurgeFP);
+	    }
+	    PurgeFP = NULL;
+	}
     }
 
     IStackPtr++;

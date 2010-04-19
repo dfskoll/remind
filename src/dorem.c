@@ -60,6 +60,8 @@ int DoRem(ParsePtr p)
 
     if (trig.typ == NO_TYPE) return E_EOLN;
     if (trig.typ == SAT_TYPE) {
+	PurgeEchoLine("%s\n", "### Cannot purge SATISFY-type reminders");
+	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
 	if (!LastTrigValid) return OK;
@@ -88,6 +90,7 @@ int DoRem(ParsePtr p)
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
 	if (!LastTrigValid) return OK;
+	if (PurgeMode) return OK;
     } else {
 	/* Calculate the trigger date */
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);

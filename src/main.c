@@ -133,7 +133,9 @@ void PurgeEchoLine(char const *fmt, ...)
 {
     va_list argptr;
     va_start(argptr, fmt);
-    (void) vfprintf(stdout, fmt, argptr);
+    if (PurgeFP != NULL) {
+	(void) vfprintf(PurgeFP, fmt, argptr);
+    }
     va_end(argptr);
 
 }
@@ -151,7 +153,7 @@ static void DoReminders(void)
     Token tok;
     char const *s;
     Parser p;
-    int was_rem;
+    int purge_handled;
 
     if (!UseStdin) {
 	FileAccessDate = GetAccessDate(InitialFile);
@@ -194,7 +196,7 @@ static void DoReminders(void)
 	    }
 	}
 	else {
-	    was_rem = 0;
+	    purge_handled = 0;
 	    /* Create a parser to parse the line */
 	    CreateParser(s, &p);
 	    switch(tok.type) {
@@ -203,13 +205,21 @@ static void DoReminders(void)
 	    case T_Comment:
 		break;
 
-	    case T_Rem:     r=DoRem(&p); was_rem = 1; break;
+	    case T_Rem:     r=DoRem(&p); purge_handled = 1; break;
 	    case T_ErrMsg:  r=DoErrMsg(&p);  break;
 	    case T_If:      r=DoIf(&p);      break;
 	    case T_IfTrig:  r=DoIfTrig(&p);  break;
 	    case T_Else:    r=DoElse(&p);    break;
 	    case T_EndIf:   r=DoEndif(&p);   break;
-	    case T_Include: r=DoInclude(&p); break;
+	    case T_Include:
+		/* In purge mode, include closes file, so we
+		   need to echo it here! */
+		if (PurgeMode) {
+		    PurgeEchoLine("%s\n", CurLine);
+		}
+		r=DoInclude(&p);
+		purge_handled = 1;
+		break;
 	    case T_Exit:    DoExit(&p);      break;
 	    case T_Flush:   r=DoFlush(&p);   break;
 	    case T_Set:     r=DoSet(&p);     break;
@@ -224,7 +234,7 @@ static void DoReminders(void)
 		    DestroyParser(&p);
 		    CreateParser(s, &p);
 		    r=DoRem(&p);
-		    was_rem = 1;
+		    purge_handled = 1;
 		}
 		break;
 	    case T_Pop:     r=PopOmitContext(&p);     break;
@@ -235,7 +245,7 @@ static void DoReminders(void)
 		} else {
 		    CreateParser(CurLine, &p);
 		    r=DoRem(&p);
-		    was_rem = 1;
+		    purge_handled = 1;
 		}
 		break;
 
@@ -244,14 +254,14 @@ static void DoReminders(void)
 	    /* Note:  Since the parser hasn't been used yet, we don't */
 	    /* need to destroy it here. */
 
-	    default: CreateParser(CurLine, &p); was_rem = 1; r=DoRem(&p); break;
+	    default: CreateParser(CurLine, &p); purge_handled = 1; r=DoRem(&p); break;
 
 	    }
 	    if (r && (!Hush || r != E_RUN_DISABLED)) {
 		Eprint("%s", ErrMsg[r]);
 	    }
 	    if (PurgeMode) {
-		if (!was_rem) {
+		if (!purge_handled) {
 		    PurgeEchoLine("%s\n", CurLine);
 		} else {
 		    if (r) {
@@ -413,7 +423,7 @@ int ParseNonSpaceChar(ParsePtr p, int *err, int peek)
     ch = ParseChar(p, err, 1);
     if (*err) return 0;
 
-    while (isspace(ch)) {
+    while (isempty(ch)) {
 	ParseChar(p, err, 0);   /* Guaranteed to work */
 	ch = ParseChar(p, err, 1);
 	if (*err) return 0;
@@ -437,12 +447,12 @@ int ParseToken(ParsePtr p, DynamicBuffer *dbuf)
 
     c = ParseChar(p, &err, 0);
     if (err) return err;
-    while (c && isspace(c)) {
+    while (c && isempty(c)) {
 	c = ParseChar(p, &err, 0);
 	if (err) return err;
     }
     if (!c) return OK;
-    while (c && !isspace(c)) {
+    while (c && !isempty(c)) {
 	if (DBufPutc(dbuf, c) != OK) {
 	    DBufFree(dbuf);
 	    return E_NO_MEM;
@@ -473,7 +483,7 @@ int ParseIdentifier(ParsePtr p, DynamicBuffer *dbuf)
 
     c = ParseChar(p, &err, 0);
     if (err) return err;
-    while (c && isspace(c)) {
+    while (c && isempty(c)) {
 	c = ParseChar(p, &err, 0);
 	if (err) return err;
     }
@@ -514,7 +524,7 @@ int EvaluateExpr(ParsePtr p, Value *v)
     int r;
 
     if (p->isnested) return E_PARSE_ERR;  /* Can't nest expressions */
-    while (isspace(*p->pos)) (p->pos)++;
+    while (isempty(*p->pos)) (p->pos)++;
     if (!p->pos) return E_PARSE_ERR;      /* Missing expression */
     if (*p->pos == BEG_OF_EXPR) {
 	(p->pos)++;
@@ -933,7 +943,7 @@ int DoBanner(ParsePtr p)
     DBufInit(&buf);
     c = ParseChar(p, &err, 0);
     if (err) return err;
-    while (isspace(c)) {
+    while (isempty(c)) {
 	c = ParseChar(p, &err, 0);
 	if (err) return err;
     }
@@ -1041,7 +1051,7 @@ int DoErrMsg(ParsePtr p)
 	return r;
     }
     s = DBufValue(&buf);
-    while (isspace(*s)) s++;
+    while (isempty(*s)) s++;
     fprintf(ErrFp, "%s\n", s);
     DBufFree(&buf);
     return OK;

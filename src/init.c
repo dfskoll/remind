@@ -146,6 +146,8 @@ void InitRemind(int argc, char const *argv[])
 
     DBufPuts(&Banner, L_BANNER);
 
+    PurgeFP = NULL;
+
     /* Make sure remind is not installed set-uid or set-gid */
     if (getgid() != getegid() ||
 	getuid() != geteuid()) {

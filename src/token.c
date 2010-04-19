@@ -146,9 +146,9 @@ char const *FindInitialToken(Token *tok, char const *s)
 
     tok->type = T_Illegal;
 
-    while (isspace(*s)) s++;
+    while (isempty(*s)) s++;
 
-    while (*s && !isspace(*s)) {
+    while (*s && !isempty(*s)) {
 	if (DBufPutc(&buf, *s++) != OK) return s;
     }
 

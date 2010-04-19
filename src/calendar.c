@@ -922,7 +922,7 @@ static int DoCalRem(ParsePtr p, int col)
 	    }
 	}
 	s = DBufValue(&obuf);
-	if (!DoSimpleCalendar) while (isspace(*s)) s++;
+	if (!DoSimpleCalendar) while (isempty(*s)) s++;
 	DBufPuts(&pre_buf, s);
 	s = DBufValue(&pre_buf);
 	e = NEW(CalEntry);

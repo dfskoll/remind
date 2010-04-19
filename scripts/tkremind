@@ -1155,12 +1155,13 @@ proc CreateModifyDialog {w day firstDay args} {
     frame $w.exp -border 4
     frame $w.adv -border 4
     frame $w.weekend -border 4
+    frame $w.durationbox -border 4
     frame $w.time -border 4
     frame $w.hol -border 4
     frame $w.msg
     frame $w.buttons
     pack $w.o1 $w.o2 $w.o3  -side top -anchor w -in $w.o
-    pack $w.o $w.exp $w.adv $w.weekend $w.time $w.hol $w.msg -side top -anchor w -pady 4 -expand 1 -fill both
+    pack $w.o $w.exp $w.adv $w.weekend $w.time $w.durationbox $w.hol $w.msg -side top -anchor w -pady 4 -expand 1 -fill both
     pack $w.buttons -side top -anchor w -pady 4 -expand 1 -fill x
 
     # TYPE 1 REMINDER
@@ -1301,6 +1302,22 @@ proc CreateModifyDialog {w day firstDay args} {
 	pack $w.timebut $w.timehour $w.timemin $w.ampm $w.timeadvbut $w.timeadv $w.timelab1 $w.timerepbut $w.timerep $w.timelab2 -side left -anchor w -in $w.time
     }
 
+    # DURATION
+    checkbutton $w.durationbut -text "Duration"
+    $w.durationbut deselect
+    menubutton $w.durationh -text "1" -menu $w.durationh.menu -relief raised
+    menu $w.durationh.menu -tearoff 0
+    foreach i {0 1 2 3 4 5 6 7 8 9 10 11 12} {
+	$w.durationh.menu add command -label $i -command "$w.durationh configure -text $i"
+    }
+    label $w.durationcolon -text ":"
+    menubutton $w.durationm -text "00" -menu $w.durationm.menu -relief raised
+    menu $w.durationm.menu -tearoff 0
+    foreach i {00 15 30 45} {
+	$w.durationm.menu add command -label $i -command "$w.durationm configure -text $i"
+    }
+    pack $w.durationbut $w.durationh $w.durationcolon $w.durationm -side left -anchor w -in $w.durationbox
+
     # SKIP TYPE
     label $w.labhol -text "On holidays or weekends:"
     radiobutton $w.issue -variable SkipType -value 1 -text "Issue reminder as usual"
@@ -1343,7 +1360,7 @@ proc CreateModifyDialog {w day firstDay args} {
 #***********************************************************************
 proc RemindDialogToOptions { w } {
     global OptionType SkipType repbut expbut advbut advcount
-    global timebut timeadvbut timerepbut
+    global timebut timeadvbut timerepbut durationbut
     global dSaturday dSunday dMonday dTuesday dWednesday dThursday dFriday
     set ans {}
     lappend ans "-global-OptionType" $OptionType
@@ -1377,7 +1394,7 @@ proc RemindDialogToOptions { w } {
 #***********************************************************************
 proc OptionsToRemindDialog { w opts } {
     global OptionType SkipType repbut expbut advbut advcount
-    global timebut timeadvbut timerepbut TwentyFourHourMode
+    global timebut timeadvbut timerepbut TwentyFourHourMode durationbut
     global dSaturday dSunday dMonday dTuesday dWednesday dThursday dFriday
     set hour ""
     set ampm ""
@@ -1589,7 +1606,7 @@ proc CreateReminder {w} {
     # Delegate the first part to CreateReminder1, CreateReminder2, or
     # CreateReminder3
     global OptionType SkipType repbut expbut advbut advcount
-    global timebut timeadvbut timerepbut
+    global timebut timeadvbut timerepbut durationbut
 
     set rem [CreateReminder$OptionType $w]
 
@@ -1630,6 +1647,9 @@ proc CreateReminder {w} {
 	}
 	if {$timerepbut} {
 	    append rem " *[$w.timerep cget -text]"
+	}
+	if {$durationbut} {
+	    append rem " DURATION [$w.durationh cget -text]:[$w.durationm cget -text]"
 	}
     }
 

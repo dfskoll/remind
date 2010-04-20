@@ -794,8 +794,10 @@ int DoIfTrig(ParsePtr p)
 		syndrome = IF_TRUE | BEFORE_ELSE;
 	    } else {
 		syndrome = IF_FALSE | BEFORE_ELSE;
-		PurgeEchoLine("%s\n", "#!PURGE The next IFTRIG did not trigger.");
-		PurgeEchoLine("%s\n", "#!PURGE REM statements in IFTRIG block not checked for purging.");
+		if (PurgeMode) {
+		    PurgeEchoLine("%s\n", "#!PURGE The next IFTRIG did not trigger.");
+		    PurgeEchoLine("%s\n", "#!PURGE REM statements in IFTRIG block not checked for purging.");
+		}
 	    }
 	}
     }

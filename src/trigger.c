@@ -301,7 +301,10 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 
 /* First:  Have we passed the UNTIL date? */
     if (trig->until != NO_UNTIL &&
-	trig->until < start) return -1; /* expired */
+	trig->until < start) {
+	trig->expired = 1;
+	return -1; /* expired */
+    }
 
 /* Next: If it's an "AFTER"-type skip, back up
    until we're at the start of a block of holidays */

@@ -1,0 +1,7 @@
+# This is f1.rem
+INCLUDE f2.rem
+INCLUDE f2.rem
+
+REM 1 Oct 1991 MSG old1.
+
+REM Monday UNTIL 1 Oct 1991 MSG old2.

@@ -1,0 +1,18 @@
+# This is f3.rem
+
+REM Mon MSG repeat
+
+REM Mon SATISFY [1] MSG repeat
+
+IF 0
+REM 1991 MSG wookie
+ENDIF
+
+IF 1
+REM 1991 MSG wookie
+ENDIF
+
+IFTRIG 1991
+REM MSG wookie
+ENDIF
+

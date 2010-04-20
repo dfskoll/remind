@@ -102,6 +102,11 @@ static void OpenPurgeFile(char const *fname, char const *mode)
 {
     DynamicBuffer fname_buf;
 
+    if (PurgeFP != NULL && PurgeFP != stdout) {
+	fclose(PurgeFP);
+    }
+    PurgeFP = NULL;
+
     /* Do not open a purge file if we're below purge
        include depth */
     if (IStackPtr-2 >= PurgeIncludeDepth) {
@@ -195,12 +200,6 @@ static int ReadLineFromFile(void)
 	}
 	if (feof(fp)) {
 	    FCLOSE(fp);
-	    if (PurgeMode) {
-		if (PurgeFP != NULL && PurgeFP != stdout) {
-		    fclose(PurgeFP);
-		}
-		PurgeFP = NULL;
-	    }
 	}
 	l = DBufLen(&buf);
 	if (l && (DBufValue(&buf)[l-1] == '\\')) {
@@ -243,6 +242,13 @@ int OpenFile(char const *fname)
 {
     CachedFile *h = CachedFiles;
     int r;
+
+    if (PurgeMode) {
+	if (PurgeFP != NULL && PurgeFP != stdout) {
+	    fclose(PurgeFP);
+	}
+	PurgeFP = NULL;
+    }
 
 /* Assume we own the file for now */
     RunDisabled &= ~RUN_NOTOWNER;
@@ -332,12 +338,6 @@ static int CacheFile(char const *fname)
     if (!cf) {
 	ShouldCache = 0;
 	FCLOSE(fp);
-	if (PurgeMode) {
-	    if (PurgeFP != NULL && PurgeFP != stdout) {
-		fclose(PurgeFP);
-	    }
-	    PurgeFP = NULL;
-	}
 	return E_NO_MEM;
     }
     cf->filename = StrDup(fname);
@@ -345,12 +345,6 @@ static int CacheFile(char const *fname)
 	ShouldCache = 0;
 	FCLOSE(fp);
 	free(cf);
-	if (PurgeMode) {
-	    if (PurgeFP != NULL && PurgeFP != stdout) {
-		fclose(PurgeFP);
-	    }
-	    PurgeFP = NULL;
-	}
 	return E_NO_MEM;
     }
 
@@ -367,12 +361,6 @@ static int CacheFile(char const *fname)
 	    DestroyCache(cf);
 	    ShouldCache = 0;
 	    FCLOSE(fp);
-	    if (PurgeMode) {
-		if (PurgeFP != NULL && PurgeFP != stdout) {
-		    fclose(PurgeFP);
-		}
-		PurgeFP = NULL;
-	    }
 	    return r;
 	}
 /* Skip blank chars */
@@ -387,12 +375,6 @@ static int CacheFile(char const *fname)
 		    DestroyCache(cf);
 		    ShouldCache = 0;
 		    FCLOSE(fp);
-		    if (PurgeMode) {
-			if (PurgeFP != NULL && PurgeFP != stdout) {
-			    fclose(PurgeFP);
-			}
-			PurgeFP = NULL;
-		    }
 		    return E_NO_MEM;
 		}
 		cl = cf->cache;
@@ -402,12 +384,6 @@ static int CacheFile(char const *fname)
 		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
-		    if (PurgeMode) {
-			if (PurgeFP != NULL && PurgeFP != stdout) {
-			    fclose(PurgeFP);
-			}
-			PurgeFP = NULL;
-		    }
 		    FCLOSE(fp);
 		    return E_NO_MEM;
 		}
@@ -420,12 +396,6 @@ static int CacheFile(char const *fname)
 	    if (!cl->text) {
 		DestroyCache(cf);
 		ShouldCache = 0;
-		if (PurgeMode) {
-		    if (PurgeFP != NULL && PurgeFP != stdout) {
-			fclose(PurgeFP);
-		    }
-		PurgeFP = NULL;
-		}
 		FCLOSE(fp);
 		return E_NO_MEM;
 	    }
@@ -700,12 +670,6 @@ int IncludeFile(char const *fname)
     if (fp) {
 	i->offset = ftell(fp);
 	FCLOSE(fp);
-	if (PurgeMode) {
-	    if (PurgeFP != NULL && PurgeFP != stdout) {
-		fclose(PurgeFP);
-	    }
-	    PurgeFP = NULL;
-	}
     }
 
     IStackPtr++;

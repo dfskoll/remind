@@ -265,7 +265,7 @@ static void DoReminders(void)
 		    PurgeEchoLine("%s\n", CurLine);
 		} else {
 		    if (r) {
-			PurgeEchoLine("### Could not parse next line: %s\n", ErrMsg[r]);
+			PurgeEchoLine("#!PURGE Could not parse next line: %s\n", ErrMsg[r]);
 			PurgeEchoLine("%s\n", CurLine);
 		    }
 		}
@@ -715,8 +715,8 @@ int DoIf(ParsePtr p)
 	    } else {
 		syndrome = IF_FALSE | BEFORE_ELSE;
 		if (PurgeMode) {
-		    PurgeEchoLine("%s\n", "### The next IF evaluated false...");
-		    PurgeEchoLine("%s\n", "### REM statements in IF block not checked for purging.");
+		    PurgeEchoLine("%s\n", "#!PURGE The next IF evaluated false...");
+		    PurgeEchoLine("%s\n", "#!PURGE REM statements in IF block not checked for purging.");
 		}
 	    }
     }
@@ -748,8 +748,8 @@ int DoElse(ParsePtr p)
 
     IfFlags |= AFTER_ELSE << (2 * NumIfs - 2);
     if (PurgeMode && ShouldIgnoreLine() && !was_ignoring) {
-	PurgeEchoLine("%s\n", "### The previous IF evaluated true.");
-	PurgeEchoLine("%s\n", "### REM statements in ELSE block not checked for purging");
+	PurgeEchoLine("%s\n", "#!PURGE The previous IF evaluated true.");
+	PurgeEchoLine("%s\n", "#!PURGE REM statements in ELSE block not checked for purging");
     }
     return VerifyEoln(p);
 }
@@ -794,8 +794,8 @@ int DoIfTrig(ParsePtr p)
 		syndrome = IF_TRUE | BEFORE_ELSE;
 	    } else {
 		syndrome = IF_FALSE | BEFORE_ELSE;
-		PurgeEchoLine("%s\n", "### The next IFTRIG did not trigger.");
-		PurgeEchoLine("%s\n", "### REM statements in IFTRIG block not checked for purging.");
+		PurgeEchoLine("%s\n", "#!PURGE The next IFTRIG did not trigger.");
+		PurgeEchoLine("%s\n", "#!PURGE REM statements in IFTRIG block not checked for purging.");
 	    }
 	}
     }

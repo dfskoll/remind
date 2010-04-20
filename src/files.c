@@ -101,6 +101,14 @@ static int PopFile (void);
 static void OpenPurgeFile(char const *fname, char const *mode)
 {
     DynamicBuffer fname_buf;
+
+    /* Do not open a purge file if we're below purge
+       include depth */
+    if (IStackPtr-2 >= PurgeIncludeDepth) {
+	PurgeFP = NULL;
+	return;
+    }
+
     DBufInit(&fname_buf);
     if (DBufPuts(&fname_buf, fname) != OK) return;
     if (DBufPuts(&fname_buf, ".purged") != OK) return;

@@ -80,6 +80,7 @@ EXTERN  INIT(   int     MaxStringLen, MAX_STR_LEN);
 EXTERN  INIT(	char	*FileName, NULL);
 EXTERN	INIT(	int	UseStdin, 0);
 EXTERN  INIT(   int     PurgeMode, 0);
+EXTERN  INIT(   int     PurgeIncludeDepth, 99999);
 EXTERN  FILE *ErrFp;
 EXTERN  INIT(   FILE    *PurgeFP,  NULL);
 EXTERN  INIT(   int     NumIfs,    0);

@@ -67,7 +67,7 @@
  *  -kcmd    = Run 'cmd' for MSG-type reminders instead of printing to stdout
  *  -iVAR=EXPR = Initialize and preserve VAR.
  *  -m       = Start calendar with Monday instead of Sunday.
- *  -j       = Purge all junk from reminder files
+ *  -j[n]    = Purge all junk from reminder files (n = INCLUDE depth)
  *  A minus sign alone indicates to take input from stdin
  *
  **************************************************************/
@@ -200,6 +200,9 @@ void InitRemind(int argc, char const *argv[])
 	    case 'j':
 	    case 'J':
 		PurgeMode = 1;
+	        if (*arg) {
+		    PARSENUM(PurgeIncludeDepth, arg);
+                }
 	        break;
             case 'i':
 	    case 'I':
@@ -616,6 +619,7 @@ void Usage(void)
     fprintf(ErrFp, " -ivar=val Initialize var to val and preserve var\n");
     fprintf(ErrFp, " -m     Start calendar with Monday rather than Sunday\n");
     fprintf(ErrFp, " -y     Synthesize tags for tagless reminders\n");
+    fprintf(ErrFp, " -j[n]  Run in 'purge' mode.  [n = INCLUDE depth]\n");
     exit(1);
 }
 #endif /* L_USAGE_OVERRIDE */

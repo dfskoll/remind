@@ -60,7 +60,7 @@ int DoRem(ParsePtr p)
 
     if (trig.typ == NO_TYPE) return E_EOLN;
     if (trig.typ == SAT_TYPE) {
-	PurgeEchoLine("%s\n", "### Cannot purge SATISFY-type reminders");
+	PurgeEchoLine("%s\n", "#!PURGE Cannot purge SATISFY-type reminders");
 	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
@@ -100,10 +100,10 @@ int DoRem(ParsePtr p)
     if (PurgeMode) {
 	if (trig.expired) {
 	    if (p->expr_happened) {
-		PurgeEchoLine("%s\n", "### Next line may have expired, but contains expression");
+		PurgeEchoLine("%s\n", "#!PURGE Next line may have expired, but contains expression");
 	    PurgeEchoLine("%s\n", CurLine);
 	    } else {
-		PurgeEchoLine("### EXPIRED: %s\n", CurLine);
+		PurgeEchoLine("#!PURGE EXPIRED: %s\n", CurLine);
 	    }
 	} else {
 	    PurgeEchoLine("%s\n", CurLine);

@@ -67,6 +67,16 @@ echo "Sort Test" >> ../tests/test.out
 (echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaa - 1 Jan 2000 >> ../tests/test.out 2>&1
 (echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaad - 1 Jan 2000 >> ../tests/test.out 2>&1
 
+echo "Purge Test" >> ../tests/test.out
+../src/remind -j ../tests/purge_dir/f1.rem >> ../tests/test.out 2>&1
+echo "F1" >> ../tests/test.out
+cat ../tests/purge_dir/f1.rem.purged >> ../tests/test.out
+echo "F2" >> ../tests/test.out
+cat ../tests/purge_dir/f2.rem.purged >> ../tests/test.out
+echo "F3" >> ../tests/test.out
+cat ../tests/purge_dir/f3.rem.purged >> ../tests/test.out
+
+rm -f ../tests/purge_dir/*.rem.purged >> ../tests/test.out 2>&1
 ../src/remind ../tests/runtest.rem >> ../tests/test.out 2>&1
 
 ../src/remind -p ../tests/shade.rem 1 August 2009 | ../src/rem2ps -e -l -c3 >> ../tests/test.out 2>&1

@@ -1,6 +1,6 @@
 # This is f1.rem
-INCLUDE f2.rem
-INCLUDE f2.rem
+INCLUDE [filedir()]/f2.rem
+INCLUDE [filedir()]/f2.rem
 
 REM 1 Oct 1991 MSG old1.
 

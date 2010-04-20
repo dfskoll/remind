@@ -23,3 +23,25 @@ REM [1990+1] \
 
 REM 1990 \
   MSG expired-continued-line
+
+OMIT 25 Dec MSG woaaahh!
+OMIT 24 Dec
+
+OMIT 1 Jan 1992 MSG woaaahah... expired
+OMIT 2 Jan 1992
+
+ERRMSG blorky
+FLUSH
+SET a 1
+FSET a(x) x*x
+UNSET a
+CLEAR-OMIT-CONTEXT
+PUSH-OMIT-CONTEXT
+POP-OMIT-CONTEXT
+BANNER wow
+DEBUG +x
+DEBUG -x
+DUMP $
+EXIT 0
+PRESERVE i
+

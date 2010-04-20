@@ -390,6 +390,8 @@ int DoDump(ParsePtr p)
     Var *v;
     DynamicBuffer buf;
 
+    if (PurgeMode) return OK;
+
     DBufInit(&buf);
     r = ParseToken(p, &buf);
     if (r) return r;

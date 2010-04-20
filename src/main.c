@@ -1025,6 +1025,8 @@ void DoExit(ParsePtr p)
     int r;
     Value v;
 
+    if (PurgeMode) return;
+
     r = EvaluateExpr(p, &v);
     if (r || v.type != INT_TYPE) exit(99);
     exit(v.v.val);
@@ -1045,6 +1047,8 @@ int DoErrMsg(ParsePtr p)
     char const *s;
 
     DynamicBuffer buf;
+
+    if (PurgeMode) return OK;
 
     DBufInit(&buf);
     t.typ = MSG_TYPE;

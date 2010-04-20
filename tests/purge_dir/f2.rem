@@ -3,4 +3,4 @@
 REM 3 feb 2012 MSG new
 REM 3 1998 MSG old
 
-INCLUDE f3.rem
+INCLUDE [filedir()]/f3.rem

@@ -2150,6 +2150,79 @@ Timed
 
 Untimed
 
+Purge Test
+F1
+# This is f1.rem
+INCLUDE [filedir()]/f2.rem
+INCLUDE [filedir()]/f2.rem
+
+#!P: Expired: REM 1 Oct 1991 MSG old1.
+
+#!P: Expired: REM Monday UNTIL 1 Oct 1991 MSG old2.
+F2
+# This is f2.rem
+
+REM 3 feb 2012 MSG new
+#!P: Expired: REM 3 1998 MSG old
+
+INCLUDE [filedir()]/f3.rem
+
+F3
+# This is f3.rem
+
+REM Mon MSG repeat
+
+#!P: Cannot purge SATISFY-type reminders
+REM Mon SATISFY [1] MSG repeat
+
+#!P: The next IF evaluated false...
+#!P: REM statements in IF block not checked for purging.
+IF 0
+REM 1991 MSG wookie
+ENDIF
+
+IF 1
+#!P: Expired: REM 1991 MSG wookie
+ENDIF
+
+#!P: The next IFTRIG did not trigger.
+#!P: REM statements in IFTRIG block not checked for purging.
+IFTRIG 1991
+REM MSG wookie
+ENDIF
+
+#!P: Next line may have expired, but contains expression
+REM [1990+1] MSG old-with-expression
+
+#!P: Next line may have expired, but contains expression
+REM [1990+1] \
+  MSG Continued line
+
+#!P: Expired: REM 1990 \
+  MSG expired-continued-line
+
+OMIT 25 Dec MSG woaaahh!
+OMIT 24 Dec
+
+#!P: Expired: OMIT 1 Jan 1992 MSG woaaahah... expired
+OMIT 2 Jan 1992
+
+ERRMSG blorky
+FLUSH
+SET a 1
+FSET a(x) x*x
+UNSET a
+CLEAR-OMIT-CONTEXT
+PUSH-OMIT-CONTEXT
+POP-OMIT-CONTEXT
+BANNER wow
+DEBUG +x
+DEBUG -x
+DUMP $
+EXIT 0
+PRESERVE i
+
+
 ../tests/runtest.rem(2): shell(): RUN disabled
 ../tests/runinc.rem(1): shell(): RUN disabled
 ../tests/runinc.rem(3): shell(): RUN disabled

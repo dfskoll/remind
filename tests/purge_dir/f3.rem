@@ -16,3 +16,10 @@ IFTRIG 1991
 REM MSG wookie
 ENDIF
 
+REM [1990+1] MSG old-with-expression
+
+REM [1990+1] \
+  MSG Continued line
+
+REM 1990 \
+  MSG expired-continued-line

@@ -59,11 +59,11 @@ int DoRem(ParsePtr p)
     if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
 
     if (trig.typ == NO_TYPE) {
-	PurgeEchoLine("%s\n%s\n", "#!PURGE Cannot parse next line", CurLine);
+	PurgeEchoLine("%s\n%s\n", "#!P! Cannot parse next line", CurLine);
 	return E_EOLN;
     }
     if (trig.typ == SAT_TYPE) {
-	PurgeEchoLine("%s\n", "#!PURGE Cannot purge SATISFY-type reminders");
+	PurgeEchoLine("%s\n", "#!P: Cannot purge SATISFY-type reminders");
 	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) return r;
@@ -99,7 +99,7 @@ int DoRem(ParsePtr p)
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
 	if (r) {
 	    if (PurgeMode) {
-		PurgeEchoLine("%s: %s\n", "#!PURGE Problem calculating trigger date", ErrMsg[r]);
+		PurgeEchoLine("%s: %s\n", "#!P! Problem calculating trigger date", ErrMsg[r]);
 		PurgeEchoLine("%s\n", CurLine);
 	    }
 	    return r;
@@ -109,10 +109,10 @@ int DoRem(ParsePtr p)
     if (PurgeMode) {
 	if (trig.expired || jul < JulianToday) {
 	    if (p->expr_happened) {
-		PurgeEchoLine("%s\n", "#!PURGE Next line may have expired, but contains expression");
+		PurgeEchoLine("%s\n", "#!P: Next line may have expired, but contains expression");
 		PurgeEchoLine("%s\n", CurLine);
 	    } else {
-		PurgeEchoLine("#!PURGE EXPIRED: %s\n", CurLine);
+		PurgeEchoLine("#!P: Expired: %s\n", CurLine);
 	    }
 	} else {
 	    PurgeEchoLine("%s\n", CurLine);

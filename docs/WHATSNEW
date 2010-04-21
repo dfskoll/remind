@@ -1,5 +1,21 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 9 - as yet unreleased.
+
+- MAJOR ENHANCEMENT: New "purge mode" to delete expired reminders.  See
+  the PURGE MODE section of the remind man page.
+
+- ENHANCEMENT: Support DURATION in TkRemind.  Thanks to Marek Marczykowski.
+
+- BUG FIX: Don't change the order of PS and PSFILE reminders.  Bug found
+  by John McGowan.
+
+- BUG FIX: "REM 1990-01-01 SATISFY 1" would yield a spurious parse error
+  in earlier versions of Remind.
+
+- BUG FIX: Yom HaShoah is moved to Thursday if it would normally fall on
+  a Friday.  Thanks to Jonathan Kamens for pointing this out.
+
 * Version 3.1 Patch 8 - 2010-03-09
 
 - ENHANCEMENT: Include some useful scripts in contrib/

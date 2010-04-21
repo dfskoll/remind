@@ -181,7 +181,7 @@ static void IssueSortBanner(int jul)
 
     FromJulian(jul, &y, &m, &d);
     sprintf(BanExpr, "sortbanner('%04d/%02d/%02d')", y, m+1, d);   
-    y = EvalExpr(&s, &v);
+    y = EvalExpr(&s, &v, NULL);
     if (y) return;
     if (DoCoerce(STR_TYPE, &v)) return;
     DBufInit(&buf);

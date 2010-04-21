@@ -16,13 +16,25 @@ IFTRIG 1991
 REM MSG wookie
 ENDIF
 
-REM [1990+1] MSG old-with-expression
+REM [1990+1] MSG old-with-constant-expression
 
 REM [1990+1] \
-  MSG Continued line
+  MSG Continued line-old-with-constant-expression
 
 REM 1990 \
   MSG expired-continued-line
+
+set y 1990
+
+REM [y+1] MSG old-with-nonconstant-expression
+
+# A comment that should be preserved
+
+#!P A comment that should be nuked because it \
+starts with #!P
+
+REM [y+1] \
+  MSG Continued-line-old-with-nonconstant-expression
 
 OMIT 25 Dec MSG woaaahh!
 OMIT 24 Dec

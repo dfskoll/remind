@@ -192,7 +192,9 @@ static void DoReminders(void)
 	{
 	    /*** IGNORE THE LINE ***/
 	    if (PurgeMode) {
-		PurgeEchoLine("%s\n", CurLine);
+		if (strncmp(CurLine, "#!P", 3)) {
+		    PurgeEchoLine("%s\n", CurLine);
+		}
 	    }
 	}
 	else {
@@ -203,6 +205,9 @@ static void DoReminders(void)
 
             case T_Empty:
 	    case T_Comment:
+		if (!strncmp(CurLine, "#!P", 3)) {
+		    purge_handled = 1;
+		}
 		break;
 
 	    case T_Rem:     r=DoRem(&p); purge_handled = 1; break;
@@ -387,7 +392,7 @@ int ParseChar(ParsePtr p, int *err, int peek)
 	}
 	p->expr_happened = 1;
 	p->pos++;
-	r = EvalExpr(&(p->pos), &val);
+	r = EvalExpr(&(p->pos), &val, p);
 	if (r) {
 	    *err = r;
 	    DestroyParser(p);
@@ -530,7 +535,7 @@ int EvaluateExpr(ParsePtr p, Value *v)
 	(p->pos)++;
 	bracketed = 1;
     }
-    r = EvalExpr(&(p->pos), v);
+    r = EvalExpr(&(p->pos), v, p);
     if (r) return r;
     if (bracketed) {
 	if (*p->pos != END_OF_EXPR) return E_MISS_END;
@@ -607,6 +612,7 @@ void CreateParser(char const *s, ParsePtr p)
     p->allownested = 1;
     p->tokenPushed = NULL;
     p->expr_happened = 0;
+    p->nonconst_expr = 0;
     DBufInit(&p->pushedToken);
 }
 

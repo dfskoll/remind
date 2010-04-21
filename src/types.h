@@ -96,6 +96,7 @@ typedef struct {
     DynamicBuffer pushedToken;	/* Pushed-back token */
     char const *tokenPushed;	/* NULL if no pushed-back token */
     char expr_happened;         /* Did we encounter an [expression] ? */
+    char nonconst_expr;         /* Did we encounter a non-constant [expression] ? */
 } Parser;
 
 typedef Parser *ParsePtr;  /* Pointer to parser structure */

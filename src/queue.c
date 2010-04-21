@@ -411,7 +411,7 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 	char exprBuf[VAR_NAME_LEN+32];
 	sprintf(exprBuf, "%s(%d)", q->sched, q->ntrig);
 	s = exprBuf;
-	r = EvalExpr(&s, &v);
+	r = EvalExpr(&s, &v, NULL);
 	if (r) {
 	    q->sched[0] = 0;
 	    return NO_TIME;

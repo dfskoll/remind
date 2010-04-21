@@ -871,7 +871,7 @@ static int DoCalRem(ParsePtr p, int col)
 	    char evalBuf[64];
 	    sprintf(evalBuf, "calprefix(%d)", trig.priority);
 	    s2 = evalBuf;
-	    r = EvalExpr(&s2, &v);
+	    r = EvalExpr(&s2, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&obuf, v.v.str) != OK) {
@@ -908,7 +908,7 @@ static int DoCalRem(ParsePtr p, int col)
 	    char evalBuf[64];
 	    sprintf(evalBuf, "calsuffix(%d)", trig.priority);
 	    s2 = evalBuf;
-	    r = EvalExpr(&s2, &v);
+	    r = EvalExpr(&s2, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&obuf, v.v.str) != OK) {

@@ -2166,7 +2166,6 @@ REM 3 feb 2012 MSG new
 #!P: Expired: REM 3 1998 MSG old
 
 INCLUDE [filedir()]/f3.rem
-
 F3
 # This is f3.rem
 
@@ -2191,15 +2190,27 @@ IFTRIG 1991
 REM MSG wookie
 ENDIF
 
-#!P: Next line may have expired, but contains expression
-REM [1990+1] MSG old-with-expression
+#!P: Next line has expired, but contains expression...  please verify
+#!P: Expired: REM [1990+1] MSG old-with-constant-expression
 
-#!P: Next line may have expired, but contains expression
-REM [1990+1] \
-  MSG Continued line
+#!P: Next line has expired, but contains expression...  please verify
+#!P: Expired: REM [1990+1] \
+  MSG Continued line-old-with-constant-expression
 
 #!P: Expired: REM 1990 \
   MSG expired-continued-line
+
+set y 1990
+
+#!P: Next line may have expired, but contains non-constant expression
+REM [y+1] MSG old-with-nonconstant-expression
+
+# A comment that should be preserved
+
+
+#!P: Next line may have expired, but contains non-constant expression
+REM [y+1] \
+  MSG Continued-line-old-with-nonconstant-expression
 
 OMIT 25 Dec MSG woaaahh!
 OMIT 24 Dec
@@ -2221,7 +2232,6 @@ DEBUG -x
 DUMP $
 EXIT 0
 PRESERVE i
-
 
 ../tests/runtest.rem(2): shell(): RUN disabled
 ../tests/runinc.rem(1): shell(): RUN disabled

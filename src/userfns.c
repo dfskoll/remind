@@ -243,7 +243,7 @@ static void FSet(UserFunc *f)
 /*  Call a user-defined function.                              */
 /*                                                             */
 /***************************************************************/
-int CallUserFunc(char const *name, int nargs)
+int CallUserFunc(char const *name, int nargs, ParsePtr p)
 {
     UserFunc *f;
     int h = HashVal(name) % FUNC_HASH_SIZE;
@@ -301,7 +301,7 @@ int CallUserFunc(char const *name, int nargs)
     /* Skip the opening bracket, if there's one */
     while (isempty(*s)) s++;
     if (*s == BEG_OF_EXPR) s++;
-    h = Evaluate(&s, f->locals);
+    h = Evaluate(&s, f->locals, p);
     f->IsActive = 0;
     DestroyLocalVals(f);
     if (DebugFlag &DB_PRTEXPR) {

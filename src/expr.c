@@ -41,7 +41,7 @@ static int Multiply(void), Divide(void), Mod(void), Add(void),
     UnMinus(void), LogNot(void),
     Compare(int);
 
-static int MakeValue (char const *s, Value *v, Var *locals);
+static int MakeValue (char const *s, Value *v, Var *locals, ParsePtr p);
 
 /* Binary operators - all left-associative */
 
@@ -303,14 +303,14 @@ static int ParseExprToken(DynamicBuffer *buf, char const **in)
 /*  Put the result into value pointed to by v.                 */
 /*                                                             */
 /***************************************************************/
-int EvalExpr(char const **e, Value *v)
+int EvalExpr(char const **e, Value *v, ParsePtr p)
 {
     int r;
 
     OpStackPtr = 0;
     ValStackPtr = 0;
 
-    r = Evaluate(e, NULL);
+    r = Evaluate(e, NULL, p);
 
     /* Put last character parsed back onto input stream */
     if (DBufLen(&ExprBuf)) (*e)--;
@@ -326,7 +326,7 @@ int EvalExpr(char const **e, Value *v)
 }
 
 /* Evaluate - do the actual work of evaluation. */
-int Evaluate(char const **s, Var *locals)
+int Evaluate(char const **s, Var *locals, ParsePtr p)
 {
     int OpBase, ValBase;
     int r;
@@ -351,7 +351,7 @@ int Evaluate(char const **s, Var *locals)
 
 	if (*DBufValue(&ExprBuf) == '(') { /* Parenthesized expression */
 	    DBufFree(&ExprBuf);
-	    r = Evaluate(s, locals);  /* Leaves the last parsed token in ExprBuf */
+	    r = Evaluate(s, locals, p);  /* Leaves the last parsed token in ExprBuf */
 	    if (r) return r;
 	    r = OK;
 	    if (*DBufValue(&ExprBuf) != ')') {
@@ -376,7 +376,7 @@ int Evaluate(char const **s, Var *locals)
 	    if (PeekChar(s) == ')') { /* Function has no arguments */
 		if (f) r = CallFunc(f, 0);
 		else {
-		    r = CallUserFunc(ufname, 0);
+		    r = CallUserFunc(ufname, 0, p);
 		    free((char *) ufname);
 		}
 		if (r) return r;
@@ -385,7 +385,7 @@ int Evaluate(char const **s, Var *locals)
 	    } else { /* Function has some arguments */
 		while(1) {
 		    args++;
-		    r = Evaluate(s, locals);
+		    r = Evaluate(s, locals, p);
 		    if (r) {
 			if (!f) free((char *) ufname);
 			return r;
@@ -401,7 +401,7 @@ int Evaluate(char const **s, Var *locals)
 		}
 		if (f) r = CallFunc(f, args);
 		else {
-		    r = CallUserFunc(ufname, args);
+		    r = CallUserFunc(ufname, args, p);
 		    free((char *) ufname);
 		}
 		DBufFree(&ExprBuf);
@@ -422,7 +422,7 @@ int Evaluate(char const **s, Var *locals)
 		DBufFree(&ExprBuf);
 		return E_ILLEGAL_CHAR;
 	    } else { /* Must be a literal value */
-		r = MakeValue(DBufValue(&ExprBuf), &va, locals);
+		r = MakeValue(DBufValue(&ExprBuf), &va, locals, p);
 		DBufFree(&ExprBuf);
 		if (r) return r;
 		PushValStack(va);
@@ -486,7 +486,7 @@ int Evaluate(char const **s, Var *locals)
 /*  a date or the value of a symbol.                           */
 /*                                                             */
 /***************************************************************/
-static int MakeValue(char const *s, Value *v, Var *locals)
+static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 {
     int len;
     int h, m, r;
@@ -541,6 +541,7 @@ static int MakeValue(char const *s, Value *v, Var *locals)
 	v->v.val = len;
 	return OK;
     } else if (*s == '$') { /* A system variable */
+	if (p) p->nonconst_expr = 1;
 	if (DebugFlag & DB_PRTEXPR)
 	    fprintf(ErrFp, "%s => ", s);
 	r = GetSysVar(s+1, v);
@@ -551,9 +552,11 @@ static int MakeValue(char const *s, Value *v, Var *locals)
 	    Putc('\n', ErrFp);
 	}
 	return r;
-    } else /* Must be a symbol */
+    } else { /* Must be a symbol */
+	if (p) p->nonconst_expr = 1;
 	if (DebugFlag & DB_PRTEXPR)
 	    fprintf(ErrFp, "%s => ", s);
+    }
     r = GetVarValue(s, v, locals);
     if (! (DebugFlag & DB_PRTEXPR)) return r;
     if (r == OK) {

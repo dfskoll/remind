@@ -198,7 +198,7 @@ int IsOmitted(int jul, int localomit, char const *omitfunc, int *omit)
 	sprintf(expr, "%s('%04d-%02d-%02d')",
 		omitfunc, y, m+1, d);
 	s = expr;
-	r = EvalExpr(&s, &v);
+	r = EvalExpr(&s, &v, NULL);
 	if (r) return r;
 	if (v.type == INT_TYPE && v.v.val != 0) {
 	    *omit = 1;

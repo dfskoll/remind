@@ -109,8 +109,13 @@ int DoRem(ParsePtr p)
     if (PurgeMode) {
 	if (trig.expired || jul < JulianToday) {
 	    if (p->expr_happened) {
-		PurgeEchoLine("%s\n", "#!P: Next line may have expired, but contains expression");
-		PurgeEchoLine("%s\n", CurLine);
+		if (p->nonconst_expr) {
+		    PurgeEchoLine("%s\n", "#!P: Next line may have expired, but contains non-constant expression");
+		    PurgeEchoLine("%s\n", CurLine);
+		} else {
+		    PurgeEchoLine("%s\n", "#!P: Next line has expired, but contains expression...  please verify");
+		    PurgeEchoLine("#!P: Expired: %s\n", CurLine);
+		}
 	    } else {
 		PurgeEchoLine("#!P: Expired: %s\n", CurLine);
 	    }
@@ -780,7 +785,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	if (UserFuncExists("msgprefix") == 1) {
 	    sprintf(PrioExpr, "msgprefix(%d)", t->priority);
 	    s = PrioExpr;
-	    r = EvalExpr(&s, &v);
+	    r = EvalExpr(&s, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&buf, v.v.str) != OK) {
@@ -799,7 +804,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	if (UserFuncExists("msgsuffix") == 1) {
 	    sprintf(PrioExpr, "msgsuffix(%d)", t->priority);
 	    s = PrioExpr;
-	    r = EvalExpr(&s, &v);
+	    r = EvalExpr(&s, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&buf, v.v.str) != OK) {
@@ -1098,7 +1103,7 @@ static int ShouldTriggerBasedOnWarn(Trigger *t, int jul, int *err)
     for (i=1; ; i++) {
 	sprintf(buffer, "%s(%d)", t->warn, i);
 	s = buffer;
-	r = EvalExpr(&s, &v);
+	r = EvalExpr(&s, &v, NULL);
 	if (r) {
 	    Eprint("%s: `%s': %s", ErrMsg[M_BAD_WARN_FUNC],
 		   t->warn, ErrMsg[r]);

@@ -754,7 +754,7 @@ static void InitializeVar(char const *str)
 	return;
     }
 
-    r=EvalExpr(&expr, &val);
+    r=EvalExpr(&expr, &val, NULL);
     if (r) {
 	fprintf(ErrFp, ErrMsg[M_I_OPTION], ErrMsg[r]);
 	return;

@@ -200,6 +200,11 @@ static int ReadLineFromFile(void)
 	}
 	if (feof(fp)) {
 	    FCLOSE(fp);
+	    if ((DBufLen(&buf) == 0) &&
+		(DBufLen(&LineBuffer) == 0) && PurgeMode) {
+		if (PurgeFP != NULL && PurgeFP != stdout) fclose(PurgeFP);
+		PurgeFP = NULL;
+	    }
 	}
 	l = DBufLen(&buf);
 	if (l && (DBufValue(&buf)[l-1] == '\\')) {

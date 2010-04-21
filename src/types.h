@@ -41,6 +41,7 @@ typedef struct {
     char const *name;
     char minargs;
     char maxargs;
+    char is_constant;
     int (*func)(func_info *);
 } BuiltinFunc;
 

@@ -45,6 +45,9 @@ fset _i(x,y,z,a) trigger(hebdate(x,y,z,a))
 [_i(29, "Adar A", today(), 5755)] MSG Leap
 [_i(29, "Adar A", today(), 5756)] MSG Illegal
 
+# This causes a parse error on version 03.01.01
+REM 1990-01-01 SATISFY 1
+
 # Test each possible case of the basic reminders.
 
 REM MSG Every Day

@@ -374,8 +374,10 @@ int Evaluate(char const **s, Var *locals, ParsePtr p)
 	    }
 	    args = 0;
 	    if (PeekChar(s) == ')') { /* Function has no arguments */
-		if (f) r = CallFunc(f, 0);
-		else {
+		if (f) {
+		    if (!f->is_constant && (p != NULL)) p->nonconst_expr = 1;
+		    r = CallFunc(f, 0);
+		} else {
 		    r = CallUserFunc(ufname, 0, p);
 		    free((char *) ufname);
 		}
@@ -399,8 +401,10 @@ int Evaluate(char const **s, Var *locals, ParsePtr p)
 			return E_EXPECT_COMMA;
 		    }
 		}
-		if (f) r = CallFunc(f, args);
-		else {
+		if (f) {
+		    if (!f->is_constant && (p != NULL)) p->nonconst_expr = 1;
+		    r = CallFunc(f, args);
+		} else {
 		    r = CallUserFunc(ufname, args, p);
 		    free((char *) ufname);
 		}
@@ -553,11 +557,10 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 	}
 	return r;
     } else { /* Must be a symbol */
-	if (p) p->nonconst_expr = 1;
 	if (DebugFlag & DB_PRTEXPR)
 	    fprintf(ErrFp, "%s => ", s);
     }
-    r = GetVarValue(s, v, locals);
+    r = GetVarValue(s, v, locals, p);
     if (! (DebugFlag & DB_PRTEXPR)) return r;
     if (r == OK) {
 	PrintValue(v, ErrFp);

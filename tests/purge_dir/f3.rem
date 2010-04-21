@@ -16,6 +16,21 @@ IFTRIG 1991
 REM MSG wookie
 ENDIF
 
+# More complex conditional statements
+IF 1
+  IF 0
+    REM 1991 MSG wookie
+  ELSE
+    REM 1991 MSG wookie
+  ENDIF
+ELSE
+  IF 1
+    REM 1991 MSG wookie
+  ELSE
+    REM 1991 MSG wookie
+  ENDIF
+ENDIF
+
 REM [1990+1] MSG old-with-constant-expression
 
 REM [1990+1] \
@@ -41,6 +56,16 @@ OMIT 24 Dec
 
 OMIT 1 Jan 1992 MSG woaaahah... expired
 OMIT 2 Jan 1992
+
+# Complicated expressions
+SET a 3
+FSET const(x) x+3
+FSET nonconst(x) x+a
+
+REM [const(5)] Jan 1992 MSG expired... should be commented out
+REM [const(a)] Jan 1992 MSG nonconstant expression
+REM [nonconst(5)] Jan 1992 MSG nonconstant expression
+REM [value("a")] Jan 1992 MSG nonconstant expression
 
 IF 0
 # A comment in a false IF block

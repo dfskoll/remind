@@ -290,7 +290,7 @@ int SetVar(char const *str, Value *val)
 /*  Get a copy of the value of the variable.                   */
 /*                                                             */
 /***************************************************************/
-int GetVarValue(char const *str, Value *val, Var *locals)
+int GetVarValue(char const *str, Value *val, Var *locals, ParsePtr p)
 {
     Var *v;
 
@@ -302,6 +302,8 @@ int GetVarValue(char const *str, Value *val, Var *locals)
 	v = v->next;
     }
 
+    /* Global variable... mark expression as non-constant */
+    if (p) p->nonconst_expr = 1;
     v=FindVar(str, 0);
 
     if (!v) {

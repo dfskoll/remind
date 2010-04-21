@@ -95,7 +95,7 @@ int StrCmpi (char const *s1, char const *s2);
 Var *FindVar (char const *str, int create);
 int DeleteVar (char const *str);
 int SetVar (char const *str, Value *val);
-int GetVarValue (char const *str, Value *val, Var *locals);
+int GetVarValue (char const *str, Value *val, Var *locals, ParsePtr p);
 int DoSet  (Parser *p);
 int DoUnset  (Parser *p);
 int DoDump (ParsePtr p);

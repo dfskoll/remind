@@ -29,6 +29,10 @@ The \fB\-n\fR option causes \fBRemind\fR to print the \fBnext\fR occurrence
 of each reminder in a simple calendar format.  You can sort this by
 date by piping the output through \fBsort(1)\fR.
 .TP
+.B \-j\fR[\fIn\fR]
+Runs \fBRemind\fR in "purge" mode to get rid of expired reminders.
+See the section PURGE MODE for details.
+.TP
 .B \-r
 The \fB\-r\fR option disables \fBRUN\fR directives and the \fBshell()\fR
 function.  As of Remind 3.00.17, using \fB\-u\fR implies \fB\-r\fR.
@@ -3626,7 +3630,68 @@ so to run in the daemon mode in the background, use:
 .PP
 If you use \fBsh\fR or \fBbash\fR, you may have to use the "nohup" command
 to ensure that the daemon is not killed when you log out.
+
 .PP
+.SH PURGE MODE
+.PP
+
+If you supply the \fB\-j\fR command-line option, \fBRemind\fR runs
+in \fIpurge mode\fR.  In this mode, it tries to purge expired reminders
+from your reminder files.
+.PP
+In purge mode, \fBRemind\fR reads your reminder file and creates a new
+file by appending ".purged" to the original file name.  Note that
+\fBRemind\fR \fInever\fR edits your original file; it always creates
+a new .purged file.
+.PP
+If you invoke \fBRemind\fR against a directory instead of a file, then
+a .purged file is created for each *.rem file in the directory.
+.PP
+Normally, \fBRemind\fR does not create .purged files for INCLUDed files.
+However, if you supply a numeric argument after \fB\-j\fR, then \fBRemind\fR
+will create .purged files for the specified level of INCLUDE.  For example,
+if you invoke \fBRemind\fR with the argument \fB\-j2\fR, then .purged
+files will be created for the file (or directory) specified on the command
+line, any files included by them, and any files included by those files.
+However, .purged files will not be created for third-or-higher level
+INCLUDE files.
+.PP
+Determining which reminders have expired is extremely tricky.  \fBRemind\fR
+does its best, but you should always compare the .purged file to the
+original file and hand-merge the changes back in.
+.PP
+Remind annotates the .purged file as follows:
+.PP
+An expired reminder is prefixed with:  #!P: Expired:
+.PP
+In situations where \fBRemind\fR cannot reliably determine that
+something was expired, you may see the following comments inserted
+before the problematic line:
+.PP
+.nf
+   #!P: Cannot purge SATISFY-type reminders
+
+   #!P: The next IF evaluated false...
+   #!P: REM statements in IF block not checked for purging.
+
+   #!P: The previous IF evaluated true.
+   #!P: REM statements in ELSE block not checked for purging
+
+   #!P: The next IFTRIG did not trigger.
+   #!P: REM statements in IFTRIG block not checked for purging.
+
+   #!P: Next line has expired, but contains expression...  please verify
+
+   #!P: Next line may have expired, but contains non-constant expression
+
+   #!P! Could not parse next line: Some-Error-Message-Here
+.fi
+.PP
+\fBRemind\fR always annotates .purged files with lines beginning with
+"#!P".  If such lines are encountered in the \fIoriginal\fR file,
+they are not copied to the .purged file.
+.PP
+
 .SH SORTING REMINDERS
 .PP
 

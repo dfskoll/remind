@@ -38,7 +38,7 @@ REMINDOBJS= $(REMINDSRCS:.c=.o)
 all: remind rem2ps
 
 test: remind
-	sh ../tests/test-rem
+	@sh ../tests/test-rem
 
 .c.o:
 	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<

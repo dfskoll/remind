@@ -2155,6 +2155,8 @@ Timed
 Untimed
 
 Purge Test
+../tests/purge_dir/f3.rem(76): `/': Division by zero
+../tests/purge_dir/f3.rem(76): `/': Division by zero
 F1
 # This is f1.rem
 INCLUDE [filedir()]/f2.rem
@@ -2260,6 +2262,10 @@ REM [value("a")] Jan 1992 MSG nonconstant expression
 IF 0
 # A comment in a false IF block
 ENDIF
+
+# Busted line
+#!P! Could not parse next line: Division by zero
+REM [0/0] Jan 1992 MSG ouch
 
 ERRMSG blorky
 FLUSH

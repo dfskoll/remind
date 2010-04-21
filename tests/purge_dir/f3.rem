@@ -72,6 +72,9 @@ IF 0
 #!P This should be nuked
 ENDIF
 
+# Busted line
+REM [0/0] Jan 1992 MSG ouch
+
 ERRMSG blorky
 FLUSH
 SET a 1

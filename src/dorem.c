@@ -66,7 +66,10 @@ int DoRem(ParsePtr p)
 	PurgeEchoLine("%s\n", "#!P: Cannot purge SATISFY-type reminders");
 	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
-	if (r) return r;
+	if (r) {
+	    if (r == E_EXPIRED) return OK;
+	    return r;
+	}
 	if (!LastTrigValid) return OK;
 	r=ParseToken(p, &buf);
 	if (r) return r;
@@ -962,7 +965,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
 	    if (r == E_CANT_TRIG) return OK; else return r;
 	}
 	if (jul == -1) {
-	    return OK;
+	    return E_EXPIRED;
 	}
 	s = p->pos;
 	r = EvaluateExpr(p, &v);

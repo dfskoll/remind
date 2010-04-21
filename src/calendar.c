@@ -770,7 +770,10 @@ static int DoCalRem(ParsePtr p, int col)
     if (trig.typ == NO_TYPE) return E_EOLN;
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
-	if (r) return r;
+	if (r) {
+	    if (r == E_EXPIRED) return OK;
+	    return r;
+	}
 	if (!LastTrigValid) return OK;
 	r=ParseToken(p, &buf);
 	if (r) return r;

@@ -508,7 +508,13 @@ IF !InIsrael && !Reform
    [_h(22, "Nisan")] MSG %"Pesach 8%"
 ENDIF
 
-[_PastSun(27, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
+REM [_PastSun(27, "Nisan")] SATISFY 1
+
+IF $Tw == 5
+   REM [_PastSun(26, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
+ELSE
+   REM [_PastSun(27, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
+ENDIF
 
 # If 4 Iyar is a Friday, then Yom Hazikaron is
 # the Wednesday before and Yom Ha'atzmaut is on

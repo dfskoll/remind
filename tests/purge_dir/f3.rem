@@ -42,6 +42,11 @@ OMIT 24 Dec
 OMIT 1 Jan 1992 MSG woaaahah... expired
 OMIT 2 Jan 1992
 
+IF 0
+# A comment in a false IF block
+#!P This should be nuked
+ENDIF
+
 ERRMSG blorky
 FLUSH
 SET a 1

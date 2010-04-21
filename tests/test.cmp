@@ -2218,6 +2218,12 @@ OMIT 24 Dec
 #!P: Expired: OMIT 1 Jan 1992 MSG woaaahah... expired
 OMIT 2 Jan 1992
 
+#!P: The next IF evaluated false...
+#!P: REM statements in IF block not checked for purging.
+IF 0
+# A comment in a false IF block
+ENDIF
+
 ERRMSG blorky
 FLUSH
 SET a 1

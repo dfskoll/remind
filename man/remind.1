@@ -2152,7 +2152,7 @@ actual date and time, or may be the date and time supplied on the command line.
 The \fBdate()\fR function returns a \fBDATE\fR object with the year,
 month and day components specified by \fIy\fR, \fIm\fR and \fId\fR.
 .TP
-.B datepart(q_datetime)
+.B datepart(dq_datetime)
 Returns a \fBDATE\fR object representing the date portion of
 \fIdatetime\fR.
 .TP
@@ -2688,8 +2688,8 @@ than 60 degrees.  The functions are available starting from version
 Creates a \fBTIME\fR with the hour and minute components specified by
 \fIhr\fR and \fImin\fR.
 .TP
-.B timepart(q_datetime)
-Returns a \fBTIME\fR object representing the time components of
+.B timepart(tq_datetime)
+Returns a \fBTIME\fR object representing the time portion of
 \fIdatetime\fR.
 .TP
 .B today()

@@ -2324,7 +2324,7 @@ static int MoonStuff(int type_wanted, func_info *info)
 
 static int FTimepart(func_info *info)
 {
-    ASSERT_TYPE(0, DATETIME_TYPE);
+    if (!HASTIME(ARG(0))) return E_BAD_TYPE;
     RetVal.type = TIME_TYPE;
     RETVAL = TIMEPART(ARG(0));
     return OK;
@@ -2332,7 +2332,7 @@ static int FTimepart(func_info *info)
 
 static int FDatepart(func_info *info)
 {
-    ASSERT_TYPE(0, DATETIME_TYPE);
+    if (!HASDATE(ARG(0))) return E_BAD_TYPE;
     RetVal.type = DATE_TYPE;
     RETVAL = DATEPART(ARG(0));
     return OK;

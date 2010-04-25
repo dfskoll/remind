@@ -208,15 +208,25 @@ static int ReadLineFromFile(void)
 	}
 	l = DBufLen(&buf);
 	if (l && (DBufValue(&buf)[l-1] == '\\')) {
-	    if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
-		DBufFree(&buf);
-		DBufFree(&LineBuffer);
-		return E_NO_MEM;
-	    }
-	    if (DBufPutc(&LineBuffer, '\n') != OK) {
-		DBufFree(&buf);
-		DBufFree(&LineBuffer);
-		return E_NO_MEM;
+	    if (PurgeMode) {
+		if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
+		    DBufFree(&buf);
+		    DBufFree(&LineBuffer);
+		    return E_NO_MEM;
+		}
+		if (DBufPutc(&LineBuffer, '\n') != OK) {
+		    DBufFree(&buf);
+		    DBufFree(&LineBuffer);
+		    return E_NO_MEM;
+		}
+	    } else {
+		DBufValue(&buf)[l-1] = '\0';
+		(DBufLen(&buf))--;
+		if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
+		    DBufFree(&buf);
+		    DBufFree(&LineBuffer);
+		    return E_NO_MEM;
+		}
 	    }
 	    continue;
 	}

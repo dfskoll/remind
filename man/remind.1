@@ -2152,6 +2152,10 @@ actual date and time, or may be the date and time supplied on the command line.
 The \fBdate()\fR function returns a \fBDATE\fR object with the year,
 month and day components specified by \fIy\fR, \fIm\fR and \fId\fR.
 .TP
+.B datepart(q_datetime)
+Returns a \fBDATE\fR object representing the date portion of
+\fIdatetime\fR.
+.TP
 .B datetime(args)
 The \fBdatetime()\fR function can take anywhere from two to five arguments.
 It always returns a DATETIME generated from its arguments.
@@ -2299,6 +2303,18 @@ environment variable is not defined.  Note that the names of environment
 variables are generally case-sensitive; thus, getenv("HOME") is not
 the same as getenv("home").
 .TP
+.B hebdate(i_day, s_hebmon [,idq_yrstart [,i_jahr [,i_aflag]]])
+Support for Hebrew dates - see the section "The Hebrew Calendar"
+.TP
+.B hebday(dq_date)
+Support for Hebrew dates - see the section "The Hebrew Calendar"
+.TP
+.B hebmon(dq_date)
+Support for Hebrew dates - see the section "The Hebrew Calendar"
+.TP
+.B hebyear(dq_date)
+Support for Hebrew dates - see the section "The Hebrew Calendar"
+.TP
 .B hour(tq_time)
 Returns the hour component of \fItime\fR.
 .TP
@@ -2341,18 +2357,6 @@ Returns 1 if \fIdate\fR is omitted, given the current global \fBOMIT\fR
 context.  Returns 0 otherwise.  (If a datetime is supplied, only the
 date part is used.)  Note that any local \fBOMIT\fR or \fBOMITFUNC\fR
 clauses are \fInot\fR taken into account by this function.
-.TP
-.B hebdate(i_day, s_hebmon [,idq_yrstart [,i_jahr [,i_aflag]]])
-Support for Hebrew dates - see the section "The Hebrew Calendar"
-.TP
-.B hebday(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
-.TP
-.B hebmon(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
-.TP
-.B hebyear(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
 .TP
 .B language()
 Returns a \fBSTRING\fR naming the language supported by \fBRemind\fR.
@@ -2683,6 +2687,10 @@ than 60 degrees.  The functions are available starting from version
 .B time(i_hr, i_min)
 Creates a \fBTIME\fR with the hour and minute components specified by
 \fIhr\fR and \fImin\fR.
+.TP
+.B timepart(q_datetime)
+Returns a \fBTIME\fR object representing the time components of
+\fIdatetime\fR.
 .TP
 .B today()
 Returns \fBRemind\fR's notion of "today."  This may be the actual system

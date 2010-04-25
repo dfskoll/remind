@@ -220,8 +220,7 @@ static int ReadLineFromFile(void)
 		    return E_NO_MEM;
 		}
 	    } else {
-		DBufValue(&buf)[l-1] = '\0';
-		(DBufLen(&buf))--;
+		DBufValue(&buf)[l-1] = '\n';
 		if (DBufPuts(&LineBuffer, DBufValue(&buf)) != OK) {
 		    DBufFree(&buf);
 		    DBufFree(&LineBuffer);

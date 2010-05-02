@@ -686,18 +686,24 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     if (t->typ == PASSTHRU_TYPE && !strcmp(t->passthru, "COLOR")) {
 	/* Strip off three tokens */
 	r = ParseToken(p, &buf);
-	DBufPuts(&pre_buf, DBufValue(&buf));
-	DBufPutc(&pre_buf, ' ');
+	if (!NextMode) {
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	}
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
-	DBufPuts(&pre_buf, DBufValue(&buf));
-	DBufPutc(&pre_buf, ' ');
+	if (!NextMode) {
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	}
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
-	DBufPuts(&pre_buf, DBufValue(&buf));
-	DBufPutc(&pre_buf, ' ');
+	if (!NextMode) {
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	}
 	DBufFree(&buf);
 	if (r) return r;
 	t->typ = MSG_TYPE;

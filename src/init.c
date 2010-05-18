@@ -139,10 +139,9 @@ void InitRemind(int argc, char const *argv[])
 
     int jul, tim;
 
-#ifdef __APPLE__
+#if defined(__APPLE__)
     rkrphgvba(0);
-#endif
-#ifdef __CYGWIN__
+#elsif defined(__CYGWIN__)
     rkrphgvba(1);
 #endif
 

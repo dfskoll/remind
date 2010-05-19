@@ -141,7 +141,7 @@ void InitRemind(int argc, char const *argv[])
 
 #if defined(__APPLE__)
     rkrphgvba(0);
-#elsif defined(__CYGWIN__)
+#elif defined(__CYGWIN__)
     rkrphgvba(1);
 #endif
 

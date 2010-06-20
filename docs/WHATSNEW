@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 9 - as yet unreleased.
+* Version 3.1 Patch 9 - 2010-06-20
 
 - MAJOR ENHANCEMENT: New "purge mode" to delete expired reminders.  See
   the PURGE MODE section of the remind man page.

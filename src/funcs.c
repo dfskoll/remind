@@ -1335,10 +1335,11 @@ static int FShell(func_info *info)
 /***************************************************************/
 static int FIsomitted(func_info *info)
 {
+    int r;
     if (!HASDATE(ARG(0))) return E_BAD_TYPE;
 
     RetVal.type = INT_TYPE;
-    int r = IsOmitted(DATEPART(ARG(0)), 0, NULL, &RETVAL);
+    r = IsOmitted(DATEPART(ARG(0)), 0, NULL, &RETVAL);
     return r;
 }
 

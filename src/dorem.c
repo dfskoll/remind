@@ -923,9 +923,9 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 	if (t->delta < 0)
 	    jul = jul + t->delta;
 	else {
-	    r = t->delta;
 	    int iter = 0;
 	    int max = MaxSatIter;
+	    r = t->delta;
 	    if (max < r*2) max = r*2;
 	    while(iter++ < max) {
 		if (!r || (jul <= JulianToday)) {

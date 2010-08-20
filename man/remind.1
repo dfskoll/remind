@@ -330,6 +330,16 @@ wish to pass a \fBRemind\fR script through the C pre-processor, which
 interprets the '#' character as the start of a pre-processing
 directive.
 .PP
+Note that \fBRemind\fR processes line continuations before anything else.
+For example:
+.PP
+.nf
+	# This is a comment \\
+	This line is part of the comment because of line continuation \\
+	and so on.
+	REM MSG This line is not ignored (no \\ above)
+.fi
+.PP
 \fBRemind\fR is not case sensitive; you can generally use any mixture of upper-
 or lower-case for commands, parameters, invocation options, etc.
 .SH THE REM COMMAND

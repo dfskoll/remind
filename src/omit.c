@@ -125,7 +125,7 @@ int PushOmitContext(ParsePtr p)
 	free(context);
 	return E_NO_MEM;
     }
-      
+
 /* Copy the context over */
     for (i=0; i<NumFullOmits; i++)
 	*(context->fullsave + i) = FullOmitArray[i];
@@ -450,8 +450,11 @@ DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
 	end = tmp;
     }
 
+    tmp = end - start + 1;
+
+    /* Don't create any OMITs if there would be too many. */
+    if (NumFullOmits + tmp >= MAX_FULL_OMITS) return E_2MANY_FULL;
     for (tmp = start; tmp <= end; tmp++) {
-	if (NumFullOmits == MAX_FULL_OMITS) return E_2MANY_FULL;
 	if (!BexistsIntArray(FullOmitArray, NumFullOmits, tmp)) {
 	    InsertIntoSortedArray(FullOmitArray, NumFullOmits, tmp);
 	    NumFullOmits++;

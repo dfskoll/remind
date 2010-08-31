@@ -471,24 +471,24 @@ DumpOmits(void)
 {
     int i;
     int y, m, d;
-    fprintf(stderr, "Global Full OMITs (%d of maximum allowed %d):\n", NumFullOmits, MAX_FULL_OMITS);
+    printf("Global Full OMITs (%d of maximum allowed %d):\n", NumFullOmits, MAX_FULL_OMITS);
     if (!NumFullOmits) {
-	fprintf(stderr, "\tNone.\n");
+	printf("\tNone.\n");
     } else {
 	for (i=0; i<NumFullOmits; i++) {
 	    FromJulian(FullOmitArray[i], &y, &m, &d);
-	    fprintf(stderr, "\t%04d%c%02d%c%02d\n",
+	    printf("\t%04d%c%02d%c%02d\n",
 		    y, DateSep, m+1, DateSep, d);
 	}
     }
-    fprintf(stderr, "Global Partial OMITs (%d of maximum allowed %d):\n", NumPartialOmits, MAX_PARTIAL_OMITS);
+    printf("Global Partial OMITs (%d of maximum allowed %d):\n", NumPartialOmits, MAX_PARTIAL_OMITS);
     if (!NumPartialOmits) {
-	fprintf(stderr, "\tNone.\n");
+	printf("\tNone.\n");
     } else {
 	for (i=0; i<NumPartialOmits; i++) {
 	    m = PartialOmitArray[i] >> 5 & 0xf;
 	    d = PartialOmitArray[i] & 0x1f;
-	    fprintf(stderr, "\t%02d%c%02d\n", m+1, DateSep, d);
+	    printf("\t%02d%c%02d\n", m+1, DateSep, d);
 	}
     }
 }

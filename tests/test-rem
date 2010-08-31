@@ -22,28 +22,28 @@ chmod 000 include_dir/04cantread.rem
 TEST_GETENV="foo bar baz" ; export TEST_GETENV
 echo "Test 1" > ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -e -dxte ../tests/test.rem 16 feb 1991 >> ../tests/test.out
+../src/remind -e -dxte ../tests/test.rem 16 feb 1991 >> ../tests/test.out 2>&1
 echo "" >> ../tests/test.out
 echo "Test 2" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l ../tests/test2.rem 1 aug 2007 >> ../tests/test.out 2>&1
 echo "" >> ../tests/test.out
 echo "Test 3" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -s ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -s ../tests/test2.rem 1 aug 2007 >> ../tests/test.out 2>&1
 echo "" >> ../tests/test.out
 echo "Test 4" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -sa ../tests/test2.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -sa ../tests/test2.rem 1 aug 2007 >> ../tests/test.out 2>&1
 echo "Test 5" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l -b0 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b0 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out 2>&1
 echo "Test 6" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l -b1 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b1 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out 2>&1
 echo "Test 7" >> ../tests/test.out
 echo "" >> ../tests/test.out
-../src/remind -p -l -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -p -l -b2 ../tests/test3.rem 1 aug 2007 >> ../tests/test.out 2>&1
 
 echo "Test 8" >> ../tests/test.out
 echo "" >> ../tests/test.out
@@ -58,7 +58,7 @@ echo "" >> ../tests/test.out
 chmod 644 include_dir/04cantread.rem
 
 echo "Color Test" >> ../tests/test.out
-../src/remind -ccl ../tests/colors.rem 1 aug 2007 >> ../tests/test.out
+../src/remind -ccl ../tests/colors.rem 1 aug 2007 >> ../tests/test.out 2>&1
 
 echo "MON WKDAY DAY across year test" >> ../tests/test.out
 echo 'REM Mon 29 Dec MSG x' | ../src/remind -dt - 1 Jan 2000 >> ../tests/test.out 2>&1

@@ -1046,6 +1046,30 @@ dump
             a045  "iess"
             a064  1
             a083  1991-03-24
+OMIT 2010-09-03 THROUGH 2010-09-15
+OMIT December 25 MSG X
+../tests/test.rem(286): Trig = Wednesday, 25 December, 1991
+# Next should give a parse error
+OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
+../tests/test.rem(288): Unknown token: `MSG' (OMIT)
+OMIT DUMP
+Global Full OMITs (14 of maximum allowed 500):
+	1991-03-11
+	2010-09-03
+	2010-09-04
+	2010-09-05
+	2010-09-06
+	2010-09-07
+	2010-09-08
+	2010-09-09
+	2010-09-10
+	2010-09-11
+	2010-09-12
+	2010-09-13
+	2010-09-14
+	2010-09-15
+Global Partial OMITs (1 of maximum allowed 366):
+	12-25
 
 
 Test 2

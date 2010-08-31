@@ -360,7 +360,7 @@ Its syntax is:
 [\fBAT\fR \fItime\fR [\fItdelta\fR] [\fItrepeat\fR]]
 [\fBSCHED\fR \fIsched_function\fR]
 [\fBWARN\fR \fIwarn_function\fR]
-[\fBUNTIL\fR \fIexpiry_date\fR]
+[\fBUNTIL\fR \fIexpiry_date\fR | \fBTHROUGH\fR \fIlast_date\fR]
 [\fBSCANFROM\fR \fIscan_date\fR | \fBFROM\fR \fIstart_date\fR]
 [\fBDURATION\fR \fIduration\fR]
 [\fBTAG\fR \fItag\fR]
@@ -795,6 +795,15 @@ of your jury duty, as well as 2 days ahead of time:
 .PP
 Note that the \fIrepeat\fR of *1 is necessary; without it, the reminder
 would be issued only on 30 November (and the two days preceding.)
+.PP
+As a special case, you can use the \fBTHROUGH\fR keyword instead of
+*1 and \fBUNTIL\fR.  The following two \fBREM\fR commands are equivalent:
+.PP
+.nf
+	REM 1992-11-30 *1 +2 UNTIL 1992-12-04 MSG Jury duty
+
+	REM 1992-11-30 +2 THROUGH 1992-12-04 MSG Jury duty
+.fi
 .PP
 .B THE ONCE KEYWORD
 .PP
@@ -1299,6 +1308,10 @@ In addition to being a keyword in the \fBREM\fR command,
 .PP
 .RS
 \fBOMIT\fR \fIday\fR \fImonth\fR [\fIyear\fR]
+.PP
+or:
+.PP
+\fBOMIT\fR \fIday1\fR \fImonth1\fR \fIyear1\fR \fBTHROUGH\fR \fIday2\fR \fImonth2\fR \fIyear2\fR
 .RE
 .PP
 The \fBOMIT\fR command is used to "globally" omit certain days
@@ -1326,7 +1339,7 @@ the following are equivalent:
 .fi
 .PP
 For convenience, you can use a \fIdelta\fR and \fBMSG\fR or \fBRUN\fR
-keyword in the \fBOMIT\fR command.  The following sequences are exactly
+keyword in the \fBOMIT\fR command.  The following sequences are
 equivalent:
 .PP
 .nf
@@ -1337,6 +1350,33 @@ equivalent:
 
 	OMIT 1 Jan +4 MSG New year's day is %b!
 .fi
+.PP
+The \fBTHROUGH\fR keyword lets you conveniently OMIT a range of days.
+The starting and ending points must be fully-specified (ie, they must
+include day, month and year.).  For example, the following sequences
+are equivalent:
+.PP
+.nf
+	OMIT 3 Jan 2011
+	OMIT 4 Jan 2011
+	OMIT 5 Jan 2011
+
+	and
+
+	OMIT 3 Jan 2011 THROUGH 5 Jan 2011
+.fi
+.PP
+Note that if you use the \fBTHROUGH\fR keyword, then you can't add a
+\fBMSG\fR keyword to make the \fBOMIT\fR command do double-duty as a
+\fBREM\fR command.
+.PP
+You can debug your global OMITs with the following command:
+.PP
+.nf
+	OMIT DUMP
+.fi
+.PP
+The OMIT DUMP commands prints the current global omits to standard error.
 .PP
 .B THE BEFORE, AFTER AND SKIP KEYWORDS
 .PP

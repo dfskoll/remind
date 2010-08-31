@@ -167,7 +167,8 @@ enum TokTypes
   T_Tag,
   T_Duration,
   T_LongTime,
-  T_OmitFunc
+  T_OmitFunc,
+  T_Through
 };
 
 /* The structure of a token */

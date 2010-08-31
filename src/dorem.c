@@ -277,6 +277,14 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    }
 	    return OK;
 
+	case T_Through:
+	    DBufFree(&buf);
+	    if (trig->rep != NO_REP) return E_REP_TWICE;
+	    trig->rep = 1;
+	    r = ParseUntil(s, trig);
+	    if (r) return r;
+	    break;
+
 	case T_Until:
 	    DBufFree(&buf);
 	    r=ParseUntil(s, trig);

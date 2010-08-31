@@ -94,6 +94,7 @@ Token TokArray[] = {
     { "special",        7,      T_RemType,      PASSTHRU_TYPE },
     { "sunday",		3,	T_WkDay,	6 },
     { "tag",            3,      T_Tag,          0 },
+    { "through",        7,      T_Through,      0 },
     { "thursday",	3,	T_WkDay,	3 },
     { "tuesday",	3,	T_WkDay,	1 },
     { "unset",		5,	T_UnSet,	0 },

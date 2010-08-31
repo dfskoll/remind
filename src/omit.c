@@ -272,6 +272,9 @@ static void InsertIntoSortedArray(int *array, int num, int key)
     *cur = key;
 }
 
+static int DoThroughOmit(ParsePtr p, int y, int m, int d);
+static void DumpOmits(void);
+
 /***************************************************************/
 /*                                                             */
 /*  DoOmit                                                     */
@@ -294,6 +297,11 @@ int DoOmit(ParsePtr p)
 	if ( (r=ParseToken(p, &buf)) ) return r;
 	FindToken(DBufValue(&buf), &tok);
 	switch (tok.type) {
+	case T_Debug:
+	    DBufFree(&buf);
+	    DumpOmits();
+	    return OK;
+
 	case T_Date:
 	    DBufFree(&buf);
 	    if (y != NO_YR) return E_YR_TWICE;
@@ -323,6 +331,11 @@ int DoOmit(ParsePtr p)
 	case T_Delta:
 	    DBufFree(&buf);
 	    break;
+
+	case T_Through:
+	    DBufFree(&buf);
+	    if (y == NO_YR || m == NO_MON || d == NO_DAY) return E_INCOMPLETE;
+	    return DoThroughOmit(p, y, m, d);
 
 	case T_Empty:
 	case T_Comment:
@@ -366,3 +379,111 @@ int DoOmit(ParsePtr p)
     return OK;
 
 }
+
+static int
+DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
+{
+    int yend = NO_YR, mend = NO_MON, dend = NO_DAY, r;
+    int start, end, tmp;
+
+    Token tok;
+
+    DynamicBuffer buf;
+    DBufInit(&buf);
+    int parsing = 1;
+
+    while(parsing) {
+	if ( (r=ParseToken(p, &buf)) ) return r;
+	FindToken(DBufValue(&buf), &tok);
+
+	switch(tok.type) {
+	case T_Date:
+	    DBufFree(&buf);
+	    if (yend != NO_YR) return E_YR_TWICE;
+	    if (mend != NO_MON) return E_MON_TWICE;
+	    if (dend != NO_DAY) return E_DAY_TWICE;
+	    FromJulian(tok.val, &yend, &mend, &dend);
+	    break;
+
+	case T_Year:
+	    DBufFree(&buf);
+	    if (yend != NO_YR) return E_YR_TWICE;
+	    yend = tok.val;
+	    break;
+
+	case T_Month:
+	    DBufFree(&buf);
+	    if (mend != NO_MON) return E_MON_TWICE;
+	    mend = tok.val;
+	    break;
+
+	case T_Day:
+	    DBufFree(&buf);
+	    if (dend != NO_DAY) return E_DAY_TWICE;
+	    dend = tok.val;
+	    break;
+
+	case T_Empty:
+	case T_Comment:
+	    DBufFree(&buf);
+	    parsing = 0;
+	    break;
+
+	default:
+	    Eprint("%s: `%s' (OMIT)", ErrMsg[E_UNKNOWN_TOKEN],
+		   DBufValue(&buf));
+	    DBufFree(&buf);
+	    return E_UNKNOWN_TOKEN;
+
+	}
+    }
+    if (yend == NO_YR || mend == NO_MON || dend == NO_DAY) return E_INCOMPLETE;
+    if (dend > DaysInMonth(mend, yend)) return E_BAD_DATE;
+    if (dstart > DaysInMonth(mstart, ystart)) return E_BAD_DATE;
+
+    start = Julian(ystart, mstart, dstart);
+    end   = Julian(yend,   mend,   dend);
+
+    if (end < start) {
+	tmp = start;
+	start = end;
+	end = tmp;
+    }
+
+    for (tmp = start; tmp <= end; tmp++) {
+	if (NumFullOmits == MAX_FULL_OMITS) return E_2MANY_FULL;
+	if (!BexistsIntArray(FullOmitArray, NumFullOmits, tmp)) {
+	    InsertIntoSortedArray(FullOmitArray, NumFullOmits, tmp);
+	    NumFullOmits++;
+	}
+    }
+    return OK;
+}
+
+void
+DumpOmits(void)
+{
+    int i;
+    int y, m, d;
+    fprintf(stderr, "Global Full OMITs:\n");
+    if (!NumFullOmits) {
+	fprintf(stderr, "\tNone.\n");
+    } else {
+	for (i=0; i<NumFullOmits; i++) {
+	    FromJulian(FullOmitArray[i], &y, &m, &d);
+	    fprintf(stderr, "\t%04d%c%02d%c%02d\n",
+		    y, DateSep, m+1, DateSep, d);
+	}
+    }
+    fprintf(stderr, "Global Partial OMITs:\n");
+    if (!NumPartialOmits) {
+	fprintf(stderr, "\tNone.\n");
+    } else {
+	for (i=0; i<NumPartialOmits; i++) {
+	    m = PartialOmitArray[i] >> 5 & 0xf;
+	    d = PartialOmitArray[i] & 0x1f;
+	    fprintf(stderr, "\t%02d%c%02d\n", m+1, DateSep, d);
+	}
+    }
+}
+

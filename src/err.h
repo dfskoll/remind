@@ -205,7 +205,7 @@ EXTERN char *ErrMsg[]
     "Back value specified twice",
     "ONCE keyword used twice. (Hah.)",
     "Expecting time after AT",
-    "UNTIL keyword used twice",
+    "THROUGH/UNTIL keyword used twice",
     "Incomplete date specification",
     "FROM/SCANFROM keyword used twice",
     "Variable",

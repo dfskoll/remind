@@ -218,7 +218,7 @@ EXTERN char *ErrMsg[] =
     "Valor de Back especificado duas vezes",
     "ONCE usado duas vezes (Eheheh)",
     "Esperando hora apos AT",
-    "Keyword UNTIL usada duas vezes",
+    "Keyword THROUGH/UNTIL usada duas vezes",
     "Especificacao de data incompleta",
     "Keyword FROM/SCANFROM usada duas vezes",
     "Variavel",

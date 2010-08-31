@@ -15,7 +15,7 @@ syn clear
 syn case ignore
 
 syn keyword remindCommands	REM OMIT SET FSET UNSET
-syn keyword remindExpiry	UNTIL SCANFROM SCAN WARN SCHED
+syn keyword remindExpiry	UNTIL THROUGH SCANFROM SCAN WARN SCHED
 syn keyword remindTag		PRIORITY TAG
 syn keyword remindTimed		AT DURATION
 syn keyword remindMove		ONCE SKIP BEFORE AFTER

@@ -288,16 +288,19 @@ int DoOmit(ParsePtr p)
     Token tok;
     int parsing=1;
     int syndrome;
+    int not_first_token = -1;
 
     DynamicBuffer buf;
     DBufInit(&buf);
 
 /* Parse the OMIT.  We need a month and day; year is optional. */
     while(parsing) {
+	not_first_token++;
 	if ( (r=ParseToken(p, &buf)) ) return r;
 	FindToken(DBufValue(&buf), &tok);
 	switch (tok.type) {
-	case T_Debug:
+	case T_Dumpvars:
+	    if (not_first_token) return E_PARSE_ERR;
 	    DBufFree(&buf);
 	    DumpOmits();
 	    return OK;
@@ -468,7 +471,7 @@ DumpOmits(void)
 {
     int i;
     int y, m, d;
-    fprintf(stderr, "Global Full OMITs:\n");
+    fprintf(stderr, "Global Full OMITs (%d of maximum allowed %d):\n", NumFullOmits, MAX_FULL_OMITS);
     if (!NumFullOmits) {
 	fprintf(stderr, "\tNone.\n");
     } else {
@@ -478,7 +481,7 @@ DumpOmits(void)
 		    y, DateSep, m+1, DateSep, d);
 	}
     }
-    fprintf(stderr, "Global Partial OMITs:\n");
+    fprintf(stderr, "Global Partial OMITs (%d of maximum allowed %d):\n", NumPartialOmits, MAX_PARTIAL_OMITS);
     if (!NumPartialOmits) {
 	fprintf(stderr, "\tNone.\n");
     } else {

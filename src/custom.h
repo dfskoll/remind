@@ -183,12 +183,12 @@
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form YYYY MM DD do we handle?          */
 /*---------------------------------------------------------------------*/
-#define MAX_FULL_OMITS 250
+#define MAX_FULL_OMITS 500
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form MM DD do we handle?               */
 /*---------------------------------------------------------------------*/
-#define MAX_PARTIAL_OMITS 250
+#define MAX_PARTIAL_OMITS 366
 
 /*---------------------------------------------------------------------*/
 /* A newline - some systems need "\n\r"                                */

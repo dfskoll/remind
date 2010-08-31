@@ -378,7 +378,7 @@ int DoOmit(ParsePtr p)
 	    NumFullOmits++;
 	}
     }
-    if (tok.type == T_RemType || tok.type == T_Priority) return E_PARSE_AS_REM;
+    if (tok.type == T_Tag || tok.type == T_Duration || tok.type == T_RemType || tok.type == T_Priority) return E_PARSE_AS_REM;
     return OK;
 
 }
@@ -428,6 +428,10 @@ DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
 
 	case T_Empty:
 	case T_Comment:
+	case T_RemType:
+	case T_Priority:
+	case T_Tag:
+	case T_Duration:
 	    DBufFree(&buf);
 	    parsing = 0;
 	    break;
@@ -463,6 +467,7 @@ DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
 	    NumFullOmits++;
 	}
     }
+    if (tok.type == T_Tag || tok.type == T_Duration || tok.type == T_RemType || tok.type == T_Priority) return E_PARSE_AS_REM;
     return OK;
 }
 

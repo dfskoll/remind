@@ -1366,9 +1366,12 @@ are equivalent:
 	OMIT 3 Jan 2011 THROUGH 5 Jan 2011
 .fi
 .PP
-Note that if you use the \fBTHROUGH\fR keyword, then you can't add a
-\fBMSG\fR keyword to make the \fBOMIT\fR command do double-duty as a
-\fBREM\fR command.
+You can make a THROUGH \fBOMIT\fR do double-duty as a \fBREM\fR command:
+.PP
+.nf
+	OMIT 6 Sep 2010 THROUGH 10 Sep 2010 MSG Vacation
+.fi
+
 .PP
 You can debug your global OMITs with the following command:
 .PP

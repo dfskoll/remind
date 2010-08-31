@@ -1051,9 +1051,9 @@ OMIT December 25 MSG X
 ../tests/test.rem(286): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(288): Unknown token: `MSG' (OMIT)
+../tests/test.rem(288): Trig = Sunday, 26 December, 2010
 OMIT DUMP
-Global Full OMITs (14 of maximum allowed 500):
+Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
 	2010-09-03
 	2010-09-04
@@ -1068,6 +1068,8 @@ Global Full OMITs (14 of maximum allowed 500):
 	2010-09-13
 	2010-09-14
 	2010-09-15
+	2010-12-26
+	2010-12-27
 Global Partial OMITs (1 of maximum allowed 366):
 	12-25
 

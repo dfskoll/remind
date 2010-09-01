@@ -392,11 +392,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
     set first [expr $offset+1]
     set last [expr $offset+$numDays]
 
-    if {$tk_version >= 8.5} {
-	set bg "#d9d9d9"
-    } else {
-	set bg [lindex [$w.t0 configure -background] 3]
-    }
+    set bg [lindex [. configure -background] 3]
 
     for {set i 0} {$i < $first} {incr i} {
 	grid $w.l$i $w.t$i

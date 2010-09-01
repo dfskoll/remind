@@ -302,6 +302,8 @@ int DoOmit(ParsePtr p)
 	case T_Dumpvars:
 	    if (not_first_token) return E_PARSE_ERR;
 	    DBufFree(&buf);
+	    r = VerifyEoln(p);
+	    if (r != OK) return r;
 	    DumpOmits();
 	    return OK;
 

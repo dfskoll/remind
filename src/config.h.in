@@ -13,11 +13,19 @@
 /* Define if you have the <glob.h> header file */
 #undef HAVE_GLOB_H
 
+#undef HAVE_WCTYPE_H
+
+#undef HAVE_LOCALE_H
+
 #undef HAVE_GLOB
 
 #undef HAVE_SETENV
 
 #undef HAVE_UNSETENV
+
+#undef HAVE_MBSTOWCS
+
+#undef HAVE_SETLOCALE
 
 /* The number of bytes in a unsigned int.  */
 #undef SIZEOF_UNSIGNED_INT

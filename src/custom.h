@@ -221,3 +221,9 @@
 #define Putc putc
 #define PutChar putchar
 #endif
+
+#if defined(HAVE_MBSTOWCS) && defined(HAVE_WCTYPE_H)
+#define REM_USE_WCHAR 1
+#else
+#undef REM_USE_WCHAR
+#endif

@@ -19,6 +19,9 @@
 #include <signal.h>
 #include <string.h>
 #include <stdarg.h>
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 
 #include <ctype.h>
 #ifdef TIME_WITH_SYS_TIME
@@ -56,6 +59,10 @@ static void DoReminders(void);
 int main(int argc, char *argv[])
 {
     int pid;
+
+#ifdef HAVE_SETLOCALE
+    setlocale(LC_ALL, "");
+#endif
 
 /* The very first thing to do is to set up ErrFp to be stderr */
     ErrFp = stderr;

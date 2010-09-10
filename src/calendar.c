@@ -53,17 +53,32 @@ typedef struct cal_entry {
 struct line_drawing {
   char const *graphics_on;
   char const *graphics_off;
-  char tlr, bl, tbl, blr, tblr, tr, tb, br, tbr, tl, lr;
+  char *tlr, *bl, *tbl, *blr, *tblr, *tr, *tb, *br, *tbr, *tl, *lr;
 };
 
 static struct line_drawing NormalDrawing = {
-  "", "", '+', '+', '+', '+', '+', '+', '|', '+', '+', '+', '-'
+  "", "", "+", "+", "+", "+", "+", "+", "|", "+", "+", "+", "-"
 };
 
 static struct line_drawing VT100Drawing = {
   "\x1B(0", "\x1B(B",
-  '\x76', '\x6b', '\x75', '\x77', '\x6e', '\x6d', '\x78',
-  '\x6c', '\x74', '\x6a', '\x71'
+  "\x76", "\x6b", "\x75", "\x77", "\x6e", "\x6d", "\x78",
+  "\x6c", "\x74", "\x6a", "\x71"
+};
+
+static struct line_drawing UTF8Drawing = {
+    "", "",
+    "\xe2\x94\xb4",
+    "\xe2\x94\x8c",
+    "\xe2\x94\xa4",
+    "\xe2\x94\xac",
+    "\xe2\x94\xbc",
+    "\xe2\x94\x94",
+    "\xe2\x94\x82",
+    "\xe2\x94\x8c",
+    "\xe2\x94\x9c",
+    "\xe2\x94\x98",
+    "\xe2\x94\x80"
 };
 
 static char *VT100Colors[2][2][2][2] /* [Br][R][G][B] */ = {
@@ -116,7 +131,7 @@ static char *VT100Colors[2][2][2][2] /* [Br][R][G][B] */ = {
 };
 
 static struct line_drawing *linestruct;
-#define DRAW(x) putchar(linestruct->x)
+#define DRAW(x) fputs(linestruct->x, stdout)
 
 /* Global variables */
 static CalEntry *CalColumn[7];
@@ -132,7 +147,7 @@ static int WriteCalendarRow (void);
 static void WriteWeekHeaderLine (void);
 static void WritePostHeaderLine (void);
 static void PrintLeft (char const *s, int width, char pad);
-static void PrintCentered (char const *s, int width, char pad);
+static void PrintCentered (char const *s, int width, char *pad);
 static int WriteOneCalLine (void);
 static int WriteOneColLine (int col);
 static void GenerateCalEntries (int col);
@@ -221,7 +236,9 @@ void ProduceCalendar(void)
 {
     int y, m, d;
 
-    if (UseVTChars) {
+    if (UseUTF8Chars) {
+	linestruct = &UTF8Drawing;
+    } else if (UseVTChars) {
         linestruct = &VT100Drawing;
     } else {
         linestruct = &NormalDrawing;
@@ -502,20 +519,20 @@ static void PrintLeft(char const *s, int width, char pad)
 /*                                                             */
 /*  PrintCentered                                              */
 /*                                                             */
-/*  Center a piec of text                                      */
+/*  Center a piece of text                                      */
 /*                                                             */
 /***************************************************************/
-static void PrintCentered(char const *s, int width, char pad)
+static void PrintCentered(char const *s, int width, char *pad)
 {
     int len = strlen(s);
     int d = (width - len) / 2;
     int i;
 
-    for (i=0; i<d; i++) PutChar(pad);
+    for (i=0; i<d; i++) fputs(pad, stdout);
     for (i=0; i<width; i++) {
 	if (*s) PutChar(*s++); else break;
     }
-    for (i=d+len; i<width; i++) PutChar(pad);
+    for (i=d+len; i<width; i++) fputs(pad, stdout);
 }
 
 /***************************************************************/
@@ -536,7 +553,7 @@ static int WriteOneCalLine(void)
 	if (CalColumn[i]) {
 	    if (WriteOneColLine(i)) done = 0;
 	} else {
-	    PrintCentered("", ColSpaces, ' ');
+	    PrintCentered("", ColSpaces, " ");
 	}
 	gon();
 	DRAW(tb);
@@ -840,7 +857,7 @@ static void WriteCalHeader(void)
     gon();
     DRAW(tb);
     goff();
-    PrintCentered(buf, CalWidth-2, ' ');
+    PrintCentered(buf, CalWidth-2, " ");
     gon();
     DRAW(tb);
     goff();
@@ -1249,9 +1266,9 @@ static void WriteCalDays(void)
     goff();
     for (i=0; i<7; i++) {
 	if (!MondayFirst)
-	    PrintCentered(DayName[(i+6)%7], ColSpaces, ' ');
+	    PrintCentered(DayName[(i+6)%7], ColSpaces, " ");
 	else
-	    PrintCentered(DayName[i%7], ColSpaces, ' ');
+	    PrintCentered(DayName[i%7], ColSpaces, " ");
 	gon();
 	DRAW(tb);
 	goff();

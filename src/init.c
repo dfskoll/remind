@@ -352,6 +352,11 @@ void InitRemind(int argc, char const *argv[])
 			arg++;
 			continue;
 		    }
+		    if (*arg == 'u' || *arg == 'U') {
+			UseUTF8Chars = 1;
+			arg++;
+			continue;
+		    }
 		    if (*arg == 'c' || *arg == 'C') {
 		        UseVTColors = 1;
 		        arg++;

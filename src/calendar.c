@@ -69,7 +69,7 @@ static struct line_drawing VT100Drawing = {
 static struct line_drawing UTF8Drawing = {
     "", "",
     "\xe2\x94\xb4",
-    "\xe2\x94\x8c",
+    "\xe2\x94\x90",
     "\xe2\x94\xa4",
     "\xe2\x94\xac",
     "\xe2\x94\xbc",

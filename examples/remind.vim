@@ -1,53 +1,79 @@
 " Vim syntax file
 " Language:	Remind
-" Maintainer:	Davide Alberani <alberanid@bigfoot.com>
-" Last change:	03 Dec 1999
-" Version:	0.1
-" URL:		http://members.xoom.com/alberanid/vim/syntax/remind.vim
+" Maintainer:	Davide Alberani <alberanid@libero.it>
+" Last Change:	18 Sep 2009
+" Version:	0.5
+" URL:		http://erlug.linux.it/~da/vim/syntax/remind.vim
 "
 " remind is a sophisticated reminder service
-" you can download remind from ftp://ftp.doe.carleton.ca/pub/remind-3.0/
+" you can download remind from:
+"   http://www.roaringpenguin.com/penguin/open_source_remind.php
 
-" clear any unwanted syntax defs
-syn clear
+if version < 600
+  syntax clear
+elseif exists("b:current_syntax")
+  finish
+endif
 
-" shut case off
+" shut case off.
 syn case ignore
 
 syn keyword remindCommands	REM OMIT SET FSET UNSET
-syn keyword remindExpiry	UNTIL THROUGH SCANFROM SCAN WARN SCHED
+syn keyword remindExpiry	UNTIL FROM SCANFROM SCAN WARN SCHED
 syn keyword remindTag		PRIORITY TAG
 syn keyword remindTimed		AT DURATION
 syn keyword remindMove		ONCE SKIP BEFORE AFTER
-syn keyword remindSpecial	INCLUDE INC BANNER PUSH-OMIT-CONTEXT PUSH CLEAR-OMIT-CONTEXT CLEAR POP-OMIT-CONTEXT POP
+syn keyword remindSpecial	INCLUDE INC BANNER PUSH-OMIT-CONTEXT PUSH CLEAR-OMIT-CONTEXT CLEAR POP-OMIT-CONTEXT POP COLOR
 syn keyword remindRun		MSG MSF RUN CAL SATISFY SPECIAL PS PSFILE SHADE MOON
 syn keyword remindConditional	IF ELSE ENDIF IFTRIG
+syn keyword remindDebug		DEBUG DUMPVARS DUMP ERRMSG FLUSH PRESERVE
 syn match remindComment		"#.*$"
 syn region remindString		start=+'+ end=+'+ skip=+\\\\\|\\'+ oneline
 syn region remindString		start=+"+ end=+"+ skip=+\\\\\|\\"+ oneline
-syn keyword remindDebug		DEBUG DUMPVARS DUMP ERRMSG FLUSH PRESERVE
 syn match remindVar		"\$[_a-zA-Z][_a-zA-Z0-9]*"
 syn match remindSubst		"%[^ ]"
 syn match remindAdvanceNumber	"\(\*\|+\|-\|++\|--\)[0-9]\+"
+" XXX: use different separators for dates and times?
+syn match remindDateSeparators	"[/:@\.-]" contained
+syn match remindTimes		"[0-9]\{1,2}[:\.][0-9]\{1,2}" contains=remindDateSeparators
+" XXX: why not match only valid dates?  Ok, checking for 'Feb the 30' would
+"       be impossible, but at least check for valid months and times.
+syn match remindDates		"'[0-9]\{4}[/-][0-9]\{1,2}[/-][0-9]\{1,2}\(@[0-9]\{1,2}[:\.][0-9]\{1,2}\)\?'" contains=remindDateSeparators
+" This will match trailing whitespaces that seem to break rem2ps.
+" Courtesy of Michael Dunn.
+syn match remindWarning		display excludenl "\S\s\+$"ms=s+1
 
-if !exists("did_remind_syntax_inits")
-  let did_remind_syntax_inits = 1
-  hi link remindCommands	Function
-  hi link remindExpiry		Repeat
-  hi link remindTag		Label
-  hi link remindTimed		Statement
-  hi link remindMove		Statement
-  hi link remindSpecial		Include
-  hi link remindRun		Function
-  hi link remindConditional	Conditional
-  hi link remindComment		Comment
-  hi link remindString		String
-  hi link remindDebug		Debug
-  hi link remindVar		Identifier
-  hi link remindSubst		Constant
-  hi link remindAdvanceNumber	Number
+
+if version >= 508 || !exists("did_remind_syn_inits")
+  if version < 508
+    let did_remind_syn_inits = 1
+    command -nargs=+ HiLink hi link <args>
+  else
+    command -nargs=+ HiLink hi def link <args>
+  endif
+
+  HiLink remindCommands		Function
+  HiLink remindExpiry		Repeat
+  HiLink remindTag		Label
+  HiLink remindTimed		Statement
+  HiLink remindMove		Statement
+  HiLink remindSpecial		Include
+  HiLink remindRun		Function
+  HiLink remindConditional	Conditional
+  HiLink remindComment		Comment
+  HiLink remindTimes		String
+  HiLink remindString		String
+  HiLink remindDebug		Debug
+  HiLink remindVar		Identifier
+  HiLink remindSubst		Constant
+  HiLink remindAdvanceNumber	Number
+  HiLink remindDateSeparators	Comment
+  HiLink remindDates		String
+  HiLink remindWarning		Error
+
+  delcommand HiLink
 endif
 
 let b:current_syntax = "remind"
 
-"EOF	vim: ts=8 noet tw=100 sw=8 sts=0
+" vim: ts=8 sw=2

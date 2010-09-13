@@ -524,6 +524,7 @@ static void PrintLeft(char const *s, int width, char pad)
 /***************************************************************/
 static void PrintCentered(char const *s, int width, char *pad)
 {
+#ifndef REM_USE_WCHAR
     int len = strlen(s);
     int d = (width - len) / 2;
     int i;
@@ -533,6 +534,40 @@ static void PrintCentered(char const *s, int width, char *pad)
 	if (*s) PutChar(*s++); else break;
     }
     for (i=d+len; i<width; i++) fputs(pad, stdout);
+#else
+    size_t len = mbstowcs(NULL, s, 0);
+    int i;
+    wchar_t static_buf[128];
+    wchar_t *buf;
+    wchar_t *ws;
+    int d;
+
+    if (!len) {
+	for (i=0; i<width; i++) {
+	    fputs(pad, stdout);
+	}
+	return;
+    }
+    if (len + 1 <= 128) {
+	buf = static_buf;
+    } else {
+	buf = calloc(len+1, sizeof(wchar_t));
+	if (!buf) {
+	    /* Uh-oh... cannot recover */
+	    fprintf(stderr, "%s\n", ErrMsg[E_NO_MEM]);
+	    exit(1);
+	}
+    }
+    (void) mbstowcs(buf, s, len+1);
+    d = (width - len) / 2;
+    ws = buf;
+    for (i=0; i<d; i++) fputs(pad, stdout);
+    for (i=0; i<width; i++) {
+	if (*ws) PutWideChar(*ws++); else break;
+    }
+    for (i=d+len; i<width; i++) fputs(pad, stdout);
+    if (buf != static_buf) free(buf);
+#endif
 }
 
 /***************************************************************/

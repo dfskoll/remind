@@ -360,7 +360,7 @@ static int TokStrCmp(Token const *t, char const *s)
     register int r;
     char const *tk = t->name;
     while(*tk && *s && !(*s == ',' && *(s+1) == 0)) {
-	r = *tk - tolower(*s);
+	r = tolower(*tk) - tolower(*s);
 	tk++;
 	s++;
 	if (r) return r;
@@ -368,5 +368,5 @@ static int TokStrCmp(Token const *t, char const *s)
     /* Ignore trailing commas on s */
 
     if (!*s || (*s == ',' && !*(s+1))) return 0;
-    return (*tk - *s);
+    return (tolower(*tk) - tolower(*s));
 }

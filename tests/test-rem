@@ -64,8 +64,8 @@ echo "MON WKDAY DAY across year test" >> ../tests/test.out
 echo 'REM Mon 29 Dec MSG x' | ../src/remind -dt - 1 Jan 2000 >> ../tests/test.out 2>&1
 
 echo "Sort Test" >> ../tests/test.out
-(echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaa - 1 Jan 2000 >> ../tests/test.out 2>&1
-(echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -gaaad - 1 Jan 2000 >> ../tests/test.out 2>&1
+(echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -q -gaaa - 1 Jan 2000 >> ../tests/test.out 2>&1
+(echo "REM AT 12:00 MSG Untimed"; echo "REM MSG Timed") | ../src/remind -q -gaaad - 1 Jan 2000 >> ../tests/test.out 2>&1
 
 echo "Purge Test" >> ../tests/test.out
 ../src/remind -j999 ../tests/purge_dir/f1.rem >> ../tests/test.out 2>&1

@@ -2660,7 +2660,10 @@ FEvalTrig(func_info *info)
     p.allownested = 0;
     r = ParseRem(&p, &trig, &tim, 0);
     if (r) return r;
-    if (trig.typ != NO_TYPE) return E_PARSE_ERR;
+    if (trig.typ != NO_TYPE) {
+	FreeTrig(&trig);
+	return E_PARSE_ERR;
+    }
     if (scanfrom == NO_DATE) {
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 0);
     } else {
@@ -2670,6 +2673,7 @@ FEvalTrig(func_info *info)
 	}
 	jul = ComputeTrigger(scanfrom, &trig, &r, 0);
     }
+    FreeTrig(&trig);
     if (r) return r;
     if (jul < 0) {
 	RetVal.type = INT_TYPE;

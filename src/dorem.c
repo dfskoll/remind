@@ -56,10 +56,14 @@ int DoRem(ParsePtr p)
     DBufInit(&buf);
 
     /* Parse the trigger date and time */
-    if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
+    if ( (r=ParseRem(p, &trig, &tim, 1)) ) {
+	FreeTrig(&trig);
+	return r;
+    }
 
     if (trig.typ == NO_TYPE) {
 	PurgeEchoLine("%s\n%s\n", "#!P! Cannot parse next line", CurLine);
+	FreeTrig(&trig);
 	return E_EOLN;
     }
     if (trig.typ == SAT_TYPE) {
@@ -67,26 +71,39 @@ int DoRem(ParsePtr p)
 	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) {
+	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
 	    return r;
 	}
-	if (!LastTrigValid) return OK;
+	if (!LastTrigValid) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
 	r=ParseToken(p, &buf);
-	if (r) return r;
+	if (r) {
+	    FreeTrig(&trig);
+	    return r;
+	}
 	FindToken(DBufValue(&buf), &tok);
 	DBufFree(&buf);
 	if (tok.type == T_Empty || tok.type == T_Comment) {
 	    DBufFree(&buf);
+	    FreeTrig(&trig);
 	    return OK;
 	}
 	if (tok.type != T_RemType || tok.val == SAT_TYPE) {
 	    DBufFree(&buf);
+	    FreeTrig(&trig);
 	    return E_PARSE_ERR;
 	}
 	if (tok.val == PASSTHRU_TYPE) {
 	    r=ParseToken(p, &buf);
-	    if (r) return r;
+	    if (r) {
+		FreeTrig(&trig);
+		return r;
+	    }
 	    if (!DBufLen(&buf)) {
+		FreeTrig(&trig);
 		DBufFree(&buf);
 		return E_EOLN;
 	    }
@@ -95,8 +112,10 @@ int DoRem(ParsePtr p)
 	}
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
-	if (!LastTrigValid) return OK;
-	if (PurgeMode) return OK;
+	if (!LastTrigValid || PurgeMode) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
     } else {
 	/* Calculate the trigger date */
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
@@ -105,6 +124,7 @@ int DoRem(ParsePtr p)
 		PurgeEchoLine("%s: %s\n", "#!P! Problem calculating trigger date", ErrMsg[r]);
 		PurgeEchoLine("%s\n", CurLine);
 	    }
+	    FreeTrig(&trig);
 	    return r;
 	}
     }
@@ -125,6 +145,7 @@ int DoRem(ParsePtr p)
 	} else {
 	    PurgeEchoLine("%s\n", CurLine);
 	}
+	FreeTrig(&trig);
 	return OK;
     }
 /* Queue the reminder, if necessary */
@@ -134,17 +155,21 @@ int DoRem(ParsePtr p)
 	  FileAccessDate == JulianToday))
 	QueueReminder(p, &trig, &tim, trig.sched);
 /* If we're in daemon mode, do nothing over here */
-    if (Daemon) return OK;
-
-    if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
-	if ( (r=TriggerReminder(p, &trig, &tim, jul)) )
-	    {
-		return r;
-	    }
+    if (Daemon) {
+	FreeTrig(&trig);
+	return OK;
     }
 
+    if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
+	if ( (r=TriggerReminder(p, &trig, &tim, jul)) ) {
+	    FreeTrig(&trig);
+	    return r;
+	}
+    }
+
+    FreeTrig(&trig);
     return OK;
-}   
+}
 
 /***************************************************************/
 /*                                                             */
@@ -159,7 +184,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     register int r;
     DynamicBuffer buf;
     Token tok;
-
+    Tag *newtag;
     int y, m, d;
 
     DBufInit(&buf);
@@ -181,7 +206,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->sched[0] = 0;
     trig->warn[0] = 0;
     trig->omitfunc[0] = 0;
-    trig->tag[0] = 0;
+    trig->tags = NULL;
+    trig->last_tag = NULL;
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
     tim->delta = NO_DELTA;
@@ -362,7 +388,17 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	case T_Tag:
 	    r = ParseToken(s, &buf);
 	    if (r) return r;
-	    StrnCpy(trig->tag, DBufValue(&buf), TAG_LEN);
+	    newtag = MakeTag(DBufValue(&buf));
+	    if (newtag) {
+		if (trig->last_tag) {
+		    trig->last_tag->next = newtag;
+		    trig->last_tag = newtag;
+		} else {
+		    trig->tags = newtag;
+		    trig->last_tag = newtag;
+		}
+		newtag->next = NULL;
+	    }
 	    break;
 
 	case T_Duration:
@@ -751,16 +787,12 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
- 	    if (t->tag[0]) {
- 		sprintf(tmpBuf, "%s ", t->tag);
- 	    } else {
- 		sprintf(tmpBuf, "* ");
- 	    }
- 	    if (DBufPuts(&calRow, tmpBuf) != OK) {
- 		DBufFree(&calRow);
-		DBufFree(&pre_buf);
- 		return E_NO_MEM;
- 	    }
+	    if (t->tags) {
+		AppendTagChain(&calRow, t->tags);
+		DBufPuts(&calRow, " ");
+	    } else {
+		DBufPuts(&calRow, "* ");
+	    }
  	    if (tim->duration != NO_TIME) {
  		sprintf(tmpBuf, "%d ", tim->duration);
  	    } else {

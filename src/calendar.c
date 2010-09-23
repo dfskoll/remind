@@ -42,7 +42,7 @@ typedef struct cal_entry {
     int r, g, b;
     int time;
     int priority;
-    char tag[TAG_LEN+1];
+    Tag *tags;
     char passthru[PASSTHRU_LEN+1];
     int duration;
     char const *filename;
@@ -941,29 +941,52 @@ static int DoCalRem(ParsePtr p, int col)
     DBufInit(&pre_buf);
 
     /* Parse the trigger date and time */
-    if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
+    if ( (r=ParseRem(p, &trig, &tim, 1)) ) {
+	FreeTrig(&trig);
+	return r;
+    }
 
 /* Don't include timed reminders in calendar if -a option supplied. */
-    if (DontIssueAts && tim.ttime != NO_TIME) return OK;
-    if (trig.typ == NO_TYPE) return E_EOLN;
+    if (DontIssueAts && tim.ttime != NO_TIME) {
+	FreeTrig(&trig);
+	return OK;
+    }
+    if (trig.typ == NO_TYPE) {
+	FreeTrig(&trig);
+	return E_EOLN;
+    }
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) {
+	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
 	    return r;
 	}
-	if (!LastTrigValid) return OK;
+	if (!LastTrigValid) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
 	r=ParseToken(p, &buf);
-	if (r) return r;
+	if (r) {
+	    FreeTrig(&trig);
+	    return r;
+	}
 	FindToken(DBufValue(&buf), &tok);
 	DBufFree(&buf);
-	if (tok.type == T_Empty || tok.type == T_Comment) return OK;
-	if (tok.type != T_RemType || tok.val == SAT_TYPE) return E_PARSE_ERR;
+	if (tok.type == T_Empty || tok.type == T_Comment) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
+	if (tok.type != T_RemType || tok.val == SAT_TYPE) {
+	    FreeTrig(&trig);
+	    return E_PARSE_ERR;
+	}
 	if (tok.val == PASSTHRU_TYPE) {
 	    r=ParseToken(p, &buf);
 	    if (r) return r;
 	    if (!DBufLen(&buf)) {
 		DBufFree(&buf);
+		FreeTrig(&trig);
 		return E_EOLN;
 	    }
 	    StrnCpy(trig.passthru, DBufValue(&buf), PASSTHRU_LEN);
@@ -971,11 +994,17 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	trig.typ = tok.val;
 	jul = LastTriggerDate;
-	if (!LastTrigValid) return OK;
+	if (!LastTrigValid) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
     } else {
 	/* Calculate the trigger date */
 	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
-	if (r) return r;
+	if (r) {
+	    FreeTrig(&trig);
+	    return r;
+	}
     }
 
     /* Convert PS and PSF to PASSTHRU */
@@ -987,39 +1016,50 @@ static int DoCalRem(ParsePtr p, int col)
 	trig.typ = PASSTHRU_TYPE;
     }
     if (trig.typ == PASSTHRU_TYPE) {
-      if (!PsCal && strcmp(trig.passthru, "COLOR")) return OK;
-      if (!strcmp(trig.passthru, "COLOR")) {
-  	  is_color = 1;
-	  /* Strip off the three color numbers */
-	  DBufFree(&buf);
-	  r=ParseToken(p, &buf);
-	  DBufPuts(&pre_buf, DBufValue(&buf));
-	  DBufPutc(&pre_buf, ' ');
-	  DBufFree(&buf);
-	  if (r) return r;
-	  r=ParseToken(p, &buf);
-	  DBufPuts(&pre_buf, DBufValue(&buf));
-	  DBufPutc(&pre_buf, ' ');
-	  DBufFree(&buf);
-	  if (r) return r;
-	  r=ParseToken(p, &buf);
-	  DBufPuts(&pre_buf, DBufValue(&buf));
-	  DBufPutc(&pre_buf, ' ');
-	  DBufFree(&buf);
-	  if (r) return r;
-	  (void) sscanf(DBufValue(&pre_buf), "%d %d %d",
-			&col_r, &col_g, &col_b);
-	  if (col_r < 0) col_r = 0;
-	  else if (col_r > 255) col_r = 255;
-	  if (col_g < 0) col_g = 0;
-	  else if (col_g > 255) col_g = 255;
-	  if (col_b < 0) col_b = 0;
-	  else if (col_b > 255) col_b = 255;
-
-	  if (!PsCal && !DoSimpleCalendar) {
-	      DBufFree(&pre_buf);
-	  }
-      }
+	if (!PsCal && strcmp(trig.passthru, "COLOR")) {
+	    FreeTrig(&trig);
+	    return OK;
+	}
+	if (!strcmp(trig.passthru, "COLOR")) {
+	    is_color = 1;
+	    /* Strip off the three color numbers */
+	    DBufFree(&buf);
+	    r=ParseToken(p, &buf);
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	    DBufFree(&buf);
+	    if (r) {
+		FreeTrig(&trig);
+		return r;
+	    }
+	    r=ParseToken(p, &buf);
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	    DBufFree(&buf);
+	    if (r) {
+		FreeTrig(&trig);
+		return r;
+	    }
+	    r=ParseToken(p, &buf);
+	    DBufPuts(&pre_buf, DBufValue(&buf));
+	    DBufPutc(&pre_buf, ' ');
+	    DBufFree(&buf);
+	    if (r) {
+		FreeTrig(&trig);
+		return r;
+	    }
+	    (void) sscanf(DBufValue(&pre_buf), "%d %d %d",
+			  &col_r, &col_g, &col_b);
+	    if (col_r < 0) col_r = 0;
+	    else if (col_r > 255) col_r = 255;
+	    if (col_g < 0) col_g = 0;
+	    else if (col_g > 255) col_g = 255;
+	    if (col_b < 0) col_b = 0;
+	    else if (col_b > 255) col_b = 255;
+	    if (!PsCal && !DoSimpleCalendar) {
+		DBufFree(&pre_buf);
+	    }
+	}
     }
 
     /* If trigger date == today, add it to the current entry */
@@ -1037,12 +1077,14 @@ static int DoCalRem(ParsePtr p, int col)
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);
 		    DBufFree(&pre_buf);
+		    FreeTrig(&trig);
 		    return E_NO_MEM;
 		}
 	    } else {
 		if (DBufPuts(&obuf, CalendarTime(tim.ttime, tim.duration)) != OK) {
 		    DBufFree(&obuf);
 		    DBufFree(&pre_buf);
+		    FreeTrig(&trig);
 		    return E_NO_MEM;
 		}
 	    }
@@ -1059,6 +1101,7 @@ static int DoCalRem(ParsePtr p, int col)
 			DestroyValue(v);
 			DBufFree(&obuf);
 			DBufFree(&pre_buf);
+			FreeTrig(&trig);
 			return E_NO_MEM;
 		    }
 		}
@@ -1077,11 +1120,13 @@ static int DoCalRem(ParsePtr p, int col)
 	if (r) {
 	    DBufFree(&pre_buf);
 	    DBufFree(&obuf);
+	    FreeTrig(&trig);
 	    return r;
 	}
 	if (DBufLen(&obuf) <= oldLen) {
 	    DBufFree(&obuf);
 	    DBufFree(&pre_buf);
+	    FreeTrig(&trig);
 	    return OK;
 	}
 	if (trig.typ != PASSTHRU_TYPE &&
@@ -1096,6 +1141,7 @@ static int DoCalRem(ParsePtr p, int col)
 			DestroyValue(v);
 			DBufFree(&obuf);
 			DBufFree(&pre_buf);
+			FreeTrig(&trig);
 			return E_NO_MEM;
 		    }
 		}
@@ -1110,6 +1156,7 @@ static int DoCalRem(ParsePtr p, int col)
 	if (!e) {
 	    DBufFree(&obuf);
 	    DBufFree(&pre_buf);
+	    FreeTrig(&trig);
 	    return E_NO_MEM;
 	}
 #ifdef REM_USE_WCHAR
@@ -1125,17 +1172,18 @@ static int DoCalRem(ParsePtr p, int col)
 	DBufFree(&pre_buf);
 	if (!e->text) {
 	    free(e);
+	    FreeTrig(&trig);
 	    return E_NO_MEM;
 	}
 	make_wchar_versions(e);
-	StrnCpy(e->tag, trig.tag, TAG_LEN);
-	if (!e->tag[0]) {
+	e->tags = CloneTags(trig.tags);
+	if (!e->tags) {
 	    if (SynthesizeTags) {
-		SynthesizeTag(e->tag);
-	    } else {
-		strcpy(e->tag, "*");
+		e->tags = SynthesizeTag();
 	    }
 	}
+	/* Don't need tags any more */
+	FreeTrig(&trig);
 	e->duration = tim.duration;
 	e->priority = trig.priority;
 	e->filename = StrDup(FileName);
@@ -1185,7 +1233,13 @@ static void WriteSimpleEntries(int col, int jul)
 	} else {
 	    printf(" *");
 	}
-	printf(" %s ", e->tag);
+	if (e->tags) {
+	    printf(" ");
+	    PrintTagChain(stdout, e->tags);
+	    printf(" ");
+	} else {
+	    printf(" * ");
+	}
 	if (e->duration != NO_TIME) {
 	    printf("%d ", e->duration);
 	} else {
@@ -1471,10 +1525,11 @@ static void SortCol(CalEntry **col)
     }
 }
 
-void SynthesizeTag(char *out)
+Tag *SynthesizeTag(void)
 {
     struct MD5Context ctx;
     unsigned char buf[16];
+    char out[128];
     MD5Init(&ctx);
     MD5Update(&ctx, (unsigned char *) CurLine, strlen(CurLine));
     MD5Final(buf, &ctx);
@@ -1487,5 +1542,6 @@ void SynthesizeTag(char *out)
 	    (unsigned int) buf[10], (unsigned int) buf[11],
 	    (unsigned int) buf[12], (unsigned int) buf[13],
 	    (unsigned int) buf[14], (unsigned int) buf[15]);
+    return MakeTag(out);
 }
 

@@ -43,7 +43,7 @@ typedef struct queuedrem {
     char const *text;
     char passthru[PASSTHRU_LEN+1];
     char sched[VAR_NAME_LEN+1];
-    char tag[TAG_LEN+1];
+    Tag *tags;
     TimeTrig tt;
 } QueuedRem;
 
@@ -96,9 +96,9 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     qelem->RunDisabled = RunDisabled;
     qelem->ntrig = 0;
     strcpy(qelem->sched, sched);
-    strcpy(qelem->tag, trig->tag);
-    if (! *qelem->tag && SynthesizeTags) {
-	SynthesizeTag(qelem->tag);
+    qelem->tags = CloneTags(trig->tags);
+    if (!qelem->tags && SynthesizeTags) {
+	qelem->tags = SynthesizeTag();
     }
     QueueHead = qelem;
     return OK;
@@ -235,11 +235,7 @@ void HandleQueuedReminders(void)
 		printf("NOTE reminder %s",
 		       SimpleTime(q->tt.ttime));
 		printf("%s", SimpleTime(SystemTime(0)/60));
-		if (!*q->tag) {
-		    printf("*");
-		} else {
-		    printf("%s", q->tag);
-		}
+		PrintTagChain(stdout, q->tags);
 		printf("\n");
 	    }
 

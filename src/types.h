@@ -53,6 +53,12 @@ typedef struct var {
     Value v;
 } Var;
 
+/* A tag */
+typedef struct tag_t {
+    struct tag_t *next;
+    char tag[TAG_LEN+1];
+} Tag;
+
 /* A trigger */
 typedef struct {
     int expired;
@@ -73,7 +79,8 @@ typedef struct {
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
     char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */
-    char tag[TAG_LEN+1];
+    Tag *tags;
+    Tag *last_tag;
     char passthru[PASSTHRU_LEN+1];
 } Trigger;
 

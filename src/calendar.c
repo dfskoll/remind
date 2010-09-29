@@ -42,7 +42,7 @@ typedef struct cal_entry {
     int r, g, b;
     int time;
     int priority;
-    Tag *tags;
+    DynamicBuffer tags;
     char passthru[PASSTHRU_LEN+1];
     int duration;
     char const *filename;
@@ -1176,12 +1176,12 @@ static int DoCalRem(ParsePtr p, int col)
 	    return E_NO_MEM;
 	}
 	make_wchar_versions(e);
-	e->tags = CloneTags(trig.tags);
-	if (!e->tags) {
-	    if (SynthesizeTags) {
-		e->tags = SynthesizeTag();
-	    }
+	DBufInit(&(e->tags));
+	DBufPuts(&(e->tags), DBufValue(&(trig.tags)));
+	if (SynthesizeTags) {
+	    AppendTag(&(e->tags), SynthesizeTag());
 	}
+
 	/* Don't need tags any more */
 	FreeTrig(&trig);
 	e->duration = tim.duration;
@@ -1233,10 +1233,8 @@ static void WriteSimpleEntries(int col, int jul)
 	} else {
 	    printf(" *");
 	}
-	if (e->tags) {
-	    printf(" ");
-	    PrintTagChain(stdout, e->tags);
-	    printf(" ");
+	if (*DBufValue(&(e->tags))) {
+	    printf(" %s ", DBufValue(&(e->tags)));
 	} else {
 	    printf(" * ");
 	}
@@ -1525,11 +1523,11 @@ static void SortCol(CalEntry **col)
     }
 }
 
-Tag *SynthesizeTag(void)
+char const *SynthesizeTag(void)
 {
     struct MD5Context ctx;
     unsigned char buf[16];
-    char out[128];
+    static char out[128];
     MD5Init(&ctx);
     MD5Update(&ctx, (unsigned char *) CurLine, strlen(CurLine));
     MD5Final(buf, &ctx);
@@ -1542,6 +1540,6 @@ Tag *SynthesizeTag(void)
 	    (unsigned int) buf[10], (unsigned int) buf[11],
 	    (unsigned int) buf[12], (unsigned int) buf[13],
 	    (unsigned int) buf[14], (unsigned int) buf[15]);
-    return MakeTag(out);
+    return out;
 }
 

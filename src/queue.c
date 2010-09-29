@@ -43,7 +43,7 @@ typedef struct queuedrem {
     char const *text;
     char passthru[PASSTHRU_LEN+1];
     char sched[VAR_NAME_LEN+1];
-    Tag *tags;
+    DynamicBuffer tags;
     TimeTrig tt;
 } QueuedRem;
 
@@ -96,9 +96,10 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     qelem->RunDisabled = RunDisabled;
     qelem->ntrig = 0;
     strcpy(qelem->sched, sched);
-    qelem->tags = CloneTags(trig->tags);
-    if (!qelem->tags && SynthesizeTags) {
-	qelem->tags = SynthesizeTag();
+    DBufInit(&(qelem->tags));
+    DBufPuts(&(qelem->tags), DBufValue(&(trig->tags)));
+    if (SynthesizeTags) {
+	AppendTag(&(qelem->tags), SynthesizeTag());
     }
     QueueHead = qelem;
     return OK;
@@ -235,8 +236,7 @@ void HandleQueuedReminders(void)
 		printf("NOTE reminder %s",
 		       SimpleTime(q->tt.ttime));
 		printf("%s", SimpleTime(SystemTime(0)/60));
-		PrintTagChain(stdout, q->tags);
-		printf("\n");
+		printf("%s\n", DBufValue(&(q->tags)));
 	    }
 
 	    /* Set up global variables so some functions like trigdate()

@@ -184,7 +184,6 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     register int r;
     DynamicBuffer buf;
     Token tok;
-    Tag *newtag;
     int y, m, d;
 
     DBufInit(&buf);
@@ -206,8 +205,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->sched[0] = 0;
     trig->warn[0] = 0;
     trig->omitfunc[0] = 0;
-    trig->tags = NULL;
-    trig->last_tag = NULL;
+    DBufInit(&(trig->tags));
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
     tim->delta = NO_DELTA;
@@ -388,17 +386,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	case T_Tag:
 	    r = ParseToken(s, &buf);
 	    if (r) return r;
-	    newtag = MakeTag(DBufValue(&buf));
-	    if (newtag) {
-		if (trig->last_tag) {
-		    trig->last_tag->next = newtag;
-		    trig->last_tag = newtag;
-		} else {
-		    trig->tags = newtag;
-		    trig->last_tag = newtag;
-		}
-		newtag->next = NULL;
-	    }
+	    AppendTag(&(trig->tags), DBufValue(&buf));
 	    break;
 
 	case T_Duration:
@@ -787,9 +775,9 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 		DBufFree(&pre_buf);
  		return E_NO_MEM;
  	    }
-	    if (t->tags) {
-		AppendTagChain(&calRow, t->tags);
-		DBufPuts(&calRow, " ");
+	    if (*DBufValue(&(t->tags))) {
+		DBufPuts(&calRow, DBufValue(&(t->tags)));
+		DBufPutc(&calRow, ' ');
 	    } else {
 		DBufPuts(&calRow, "* ");
 	    }

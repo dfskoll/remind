@@ -1308,98 +1308,17 @@ void SigIntHandler(int d)
     exit(0);
 }
 
-Tag *
-CloneTag(Tag const *t)
-{
-    return MakeTag(t->tag);
-}
-
-Tag *
-MakeTag(char const *s)
-{
-    Tag *u = malloc(sizeof(Tag));
-    if (!u) return NULL;
-    StrnCpy(u->tag, s, TAG_LEN);
-    u->next = NULL;
-    return u;
-}
-
 void
-FreeTags (Tag *chain)
+AppendTag(DynamicBuffer *buf, char const *s)
 {
-    Tag *next;
-
-    if (!chain) return;
-    while(chain) {
-	next = chain->next;
-	free(chain);
-	chain = next;
+    if (*(DBufValue(buf))) {
+	DBufPutc(buf, ',');
     }
-}
-
-Tag *
-CloneTags(Tag const *chain)
-{
-    Tag *head, *tail, *t;
-
-    if (!chain) return NULL;
-
-    head = NULL;
-    tail = NULL;
-
-    while(chain) {
-	t = CloneTag(chain);
-	if (!t) {
-	    FreeTags(head);
-	    return NULL;
-	}
-	if (!head) {
-	    head = t;
-	    tail = t;
-	} else {
-	    tail->next = t;
-	    tail = t;
-	}
-	t->next = NULL;
-	chain = chain->next;
-    }
-    return head;
-}
-
-void
-PrintTagChain(FILE *fp, Tag *chain)
-{
-    if (!chain) return;
-    int done_one = 0;
-    while(chain) {
-	if (done_one) {
-	    fprintf(fp, ",");
-	}
-	done_one = 1;
-	fprintf(fp, "%s", chain->tag);
-	chain = chain->next;
-    }
-}
-
-void
-AppendTagChain(DynamicBuffer *buf, Tag *chain)
-{
-    if (!chain) return;
-    int done_one = 0;
-    while(chain) {
-	if (done_one) {
-	    DBufPuts(buf, ",");
-	}
-	done_one = 1;
-	DBufPuts(buf, chain->tag);
-	chain = chain->next;
-    }
+    DBufPuts(buf, s);
 }
 
 void
 FreeTrig(Trigger *t)
 {
-    FreeTags(t->tags);
-    t->tags = NULL;
-    t->last_tag = NULL;
+    DBufFree(&(t->tags));
 }

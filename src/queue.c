@@ -236,7 +236,11 @@ void HandleQueuedReminders(void)
 		printf("NOTE reminder %s",
 		       SimpleTime(q->tt.ttime));
 		printf("%s", SimpleTime(SystemTime(0)/60));
-		printf("%s\n", DBufValue(&(q->tags)));
+		if (!*DBufValue(&q->tags)) {
+		    printf("*\n");
+		} else {
+		    printf("%s\n", DBufValue(&(q->tags)));
+		}
 	    }
 
 	    /* Set up global variables so some functions like trigdate()

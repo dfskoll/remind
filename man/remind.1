@@ -1013,11 +1013,11 @@ expressions and user-defined functions are explained.  See the subsection
 The \fBTAG\fR keyword lets you "tag" certain reminders.  This facility
 is used by certain back-ends or systems built around \fBRemind\fR,
 such as \fBTkRemind\fR.  These back-ends have specific rules about
-tags; you should \fInot\fR use the \fBTAG\fR keyword yourself, or
-your script will interact badly with back-ends.
+tags; see their documentation for details.
 .PP
 The \fBTAG\fR keyword is followed by a tag consisting of up to
-48 characters.
+48 characters.  You can have as many TAG clauses as you like in
+a given REM statement.
 .PP
 If you supply the \fB\-y\fR option to \fBRemind\fR, then any
 reminder that lacks a \fBTAG\fR will have one synthesized.  The

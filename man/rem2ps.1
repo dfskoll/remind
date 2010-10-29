@@ -362,7 +362,10 @@ Other back-ends may understand other specials.  A back end should
 \fIsilently ignore\fR a reminder with a special it doesn't understand.
 .PP
 \fItag\fR is whatever tag the user provided with the \fBTAG\fR clause,
-or "*" if no tag was provided.
+or "*" if no tag was provided.  If there is more than one \fBTAG\fR clause,
+the tags appear in a comma-separated list.  For example, the command
+\fBREM TAG foo TAG bar TAG quux\fR would result in \fBfoo,bar,quux\fR
+in the \fItag\fR field.
 .PP
 \fIdur\fR is the \fBDURATION\fR value in minutes, or "*" if no duration
 was provided.

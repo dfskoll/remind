@@ -1,5 +1,29 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 10 - 2010-11-01
+
+- NOTE: This is the 20th anniversary of Remind's first public release.
+
+- ENHANCEMENT: Add the THROUGH keyword.  You can omit blocks of dates with:
+
+  OMIT start THROUGH end
+
+  and the syntax REM start THROUGH end is equivalent to REM start *1 UNTIL end
+
+- ENHANCEMENT: Add support for multibyte characters (eg, UTF-8) in calendar
+  output.  Note that UTF-8 strings are still not supported in PostScript
+  output.
+
+- ENHANCEMENT: Add support for UTF-8 line-drawing characters in calendar
+  output.
+
+- ENHANCEMENT: You can have multiple TAG clauses in a REM statement.
+
+- BUG FIX: Avoid spawning long-running background processes in "make test".
+
+- BUG FIX: Don't declare variables in the middle of statements (old C
+  compilers choke.)
+
 * Version 3.1 Patch 9 - 2010-06-20
 
 - MAJOR ENHANCEMENT: New "purge mode" to delete expired reminders.  See

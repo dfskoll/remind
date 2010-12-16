@@ -1897,7 +1897,7 @@ static int SunStuff(int rise, double cosz, int jul)
     if (dusk_or_dawn == 2) {/* dusk */
 	L += 6;
     } else if (dusk_or_dawn == 3) {/* dawn */
-	L -= 14;
+	L -= 6;
     }
     if (L > 360.0) L -= 360.0;
 

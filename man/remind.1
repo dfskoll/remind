@@ -1966,7 +1966,9 @@ the latitude and longitude system variables.
 .B $LongDeg, $LongMin, $LongSec
 These specify the longitude of your location.  \fB$LongDeg\fR can
 range from -180 to 180.  Western longitudes are positive; eastern
-ones are negative.
+ones are negative.  Note that all three components should have the
+same sign: All positive for Western longitudes and all negative
+for Eastern longitudes.
 .RS
 .PP
 The latitude and longitude information is required for the functions

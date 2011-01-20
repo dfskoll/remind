@@ -85,7 +85,10 @@ function parse_remind_output ($fp) {
 	    $entry['file'] = $lineinfo['file'];
 	    $lineinfo = 0;
 	}
-	$entries[] = $entry;
+	if (!is_array($entries[$d])) {
+	    $entries[$d] = array();
+	}
+	$entries[$d][] = $entry;
     }
     $retval['entries'] = $entries;
     return array('success' => 1, 'results' => $retval);

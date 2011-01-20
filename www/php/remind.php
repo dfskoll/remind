@@ -69,7 +69,12 @@ function parse_remind_output ($fp) {
 	    continue;
 	}
 	list($date, $special, $tags, $duration, $time, $body) = explode(' ', $line, 6);
-	$entry = array('date' => $date,
+	list($y, $m, $d) = explode('/', $date);
+	$d = preg_replace('/^0(.)/', '$1', $d);
+	$m = preg_replace('/^0(.)/', '$1', $m);
+	$entry = array('day' => $d,
+		       'month' => $m,
+		       'year' => $y,
 		       'special' => $special,
 		       'tags' => $tags,
 		       'duration' => $duration,

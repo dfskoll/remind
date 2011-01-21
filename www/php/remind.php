@@ -111,7 +111,9 @@ class Remind
 		    $title = 'Last Quarter';
 		}
 		$base = rtrim($this->get_el($options, 'imgbase'), '/');
-		if ($base !=== null) $img = $base . '/' . $img;
+		if ($base !== null) {
+		    $img = $base . '/' . $img;
+		}
 		$moon_html = '<div class="rem-moon">' . "<img width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">" . htmlspecialchars($msg) . '</div>';
 	    }
 	}
@@ -126,7 +128,7 @@ class Remind
 	    $html .= $this->format_entries($day, $results, $specials, $options, $entries);
 	    $html .= '</div>';
 	}
-	$html .= "</td>";
+	$html .= "</td>\n";
 	return $html;
     }
 

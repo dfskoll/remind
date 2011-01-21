@@ -59,6 +59,8 @@ class Remind
     function do_one_day($day, &$results, &$specials, &$options) {
 	$class = $this->get_elem($specials, array('HTMLCLASS', $day, 0, 'body'));
 	$shade = $this->get_elem($specials, array('SHADE', $day, 0, 'body'));
+	$moon  = $this->get_elem($specials, array('MOON', $day, 0, 'body'));
+
 	if ($class === null) $class = 'rem-cell';
 	$bg = '';
 	if ($shade !== null) {
@@ -78,8 +80,44 @@ class Remind
 	    $week = ' ' . $week;
 	}
 
+	$moon_html = '';
+	if ($moon !== null) {
+	    $phase = -1;
+	    if (preg_match('/(\d+)\s+(\S+)\s+(\S+)\s+(.*)$/', $moon, $matches)) {
+		$phase = $matches[1];
+		$moonsize = $matches[2];
+		$fontsize = $matches[3];
+		$msg = $matches[4];
+	    } elseif (preg_match('/(\d+)/', $moon, $matches)) {
+		$phase = $matches[1];
+		$msg = '';
+	    }
+	    if ($phase >= 0) {
+		if ($phase == 0) {
+		    $img = 'newmoon.png';
+		    $title = 'New Moon';
+		    $alt = 'new';
+		} elseif ($phase == 1) {
+		    $img = 'firstquarter.png';
+		    $title = 'First Quarter';
+		    $alt = '1st';
+		} elseif ($phase == 2) {
+		    $img = 'fullmoon.png';
+		    $alt = 'full';
+		    $title = 'Full Moon';
+		} else {
+		    $img = 'lastquarter.png';
+		    $alt = 'last';
+		    $title = 'Last Quarter';
+		}
+		$base = rtrim($this->get_el($options, 'imgbase'), '/');
+		if ($base !=== null) $img = $base . '/' . $img;
+		$moon_html = '<div class="rem-moon">' . "<img width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">" . htmlspecialchars($msg) . '</div>';
+	    }
+	}
+
 	# Day number
-	$html .= '<div class="rem-daynumber">' . $day . $week . '</div>';
+	$html .= $moon_html . '<div class="rem-daynumber">' . $day . $week . '</div>';
 
 	# And the entries
 	$entries = $this->get_elem($results, array('entries', $day));

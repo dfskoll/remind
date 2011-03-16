@@ -19,7 +19,7 @@ endif
 syn case ignore
 
 syn keyword remindCommands	REM OMIT SET FSET UNSET
-syn keyword remindExpiry	UNTIL FROM SCANFROM SCAN WARN SCHED
+syn keyword remindExpiry	UNTIL FROM SCANFROM SCAN WARN SCHED THROUGH
 syn keyword remindTag		PRIORITY TAG
 syn keyword remindTimed		AT DURATION
 syn keyword remindMove		ONCE SKIP BEFORE AFTER

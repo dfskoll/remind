@@ -2,6 +2,34 @@
 
 class Remind
 {
+    # For validating commands we send to popen
+    function is_valid_day($d) {
+	return (preg_match('/^\d+$/', $d) &&
+	       $d >= 1 && $d <= 31;
+    }
+
+    function is_valid_month($m) {
+	return
+	    ($m == 'January') ||
+	    ($m == 'February') ||
+	    ($m == 'March') ||
+	    ($m == 'April') ||
+	    ($m == 'May') ||
+	    ($m == 'June') ||
+	    ($m == 'July') ||
+	    ($m == 'August') ||
+	    ($m == 'September') ||
+	    ($m == 'October') ||
+	    ($m == 'November') ||
+	    ($m == 'December');
+    }
+
+    function is_valid_year($y) {
+	return preg_match('/^\d\d\d\d$/', $y) &&
+	    $y >= 1900;
+    }
+
+
     function get_el(&$array, $i)
     {
 	if (!array_key_exists($i, $array)) return null;

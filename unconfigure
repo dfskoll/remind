@@ -1,6 +1,6 @@
 #!/bin/sh
 
 echo "Unconfiguring Remind..."
-echo rm -f config.cache config.log config.status src/Makefile src/config.h src/version.h
-rm -f config.cache config.log config.status src/Makefile src/config.h src/version.h
+echo rm -f config.cache config.log config.status src/Makefile src/config.h src/version.h www/Makefile
+rm -f config.cache config.log config.status src/Makefile src/config.h src/version.h www/Makefile
 exit 0

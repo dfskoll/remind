@@ -225,7 +225,7 @@ As an example, suppose you have an X Window program called \fBxmessage\fR that
 pops up a window and displays its invocation arguments.  You could use:
 .PP
 .nf
-		remind '-kxmessage %s &' ...
+		remind '\-kxmessage %s &' ...
 .fi
 .PP
 to have all of your \fBMSG\fR-type reminders processed using xmessage.
@@ -706,7 +706,7 @@ month is computed as the first Monday in the next month, minus 7 days.
 The \fIback\fR specification in the reminder is used in this case:
 .PP
 .nf
-	REM Mon 1 -7 MSG Last Monday of every month.
+	REM Mon 1 \-7 MSG Last Monday of every month.
 .fi
 .PP
 A \fIback\fR is specified with one or two dashes followed by an integer.
@@ -857,7 +857,7 @@ the reminder is triggered on the first of each month, as well as the day
 preceding it.  The omitted days are counted.
 .PP
 .nf
-	REM 1 -1 OMIT Sat Sun MSG Last working day of month
+	REM 1 \-1 OMIT Sat Sun MSG Last working day of month
 .fi
 .PP
 Again, in the above example, the \fIback\fR of \-1 normally causes the
@@ -985,7 +985,7 @@ command-line option.  This is useful, for example, in .xinitrc
 scripts, where you can use the command:
 .PP
 .nf
-	remind -fa myreminders &
+	remind \-fa myreminders &
 .fi
 .PP
 This ensures that when you exit X-Windows, the \fBRemind\fR process is killed.
@@ -1953,7 +1953,7 @@ If non-zero, then the \fB\-t\fR option was supplied on the command line.
 .TP
 .B $LatDeg, $LatMin, $LatSec
 These specify the latitude of your location.  \fB$LatDeg\fR can
-range from -90 to 90, and the others from -59 to 59.  Northern latitudes
+range from \-90 to 90, and the others from \-59 to 59.  Northern latitudes
 are positive; southern ones are negative.  For southern latitudes, all
 three components should be negative.
 .TP
@@ -1965,7 +1965,7 @@ the latitude and longitude system variables.
 .TP
 .B $LongDeg, $LongMin, $LongSec
 These specify the longitude of your location.  \fB$LongDeg\fR can
-range from -180 to 180.  Western longitudes are positive; eastern
+range from \-180 to 180.  Western longitudes are positive; eastern
 ones are negative.  Note that all three components should have the
 same sign: All positive for Western longitudes and all negative
 for Eastern longitudes.
@@ -2116,11 +2116,11 @@ be a string, containing a mix of the characters "rwx" for read,
 write and execute permission testing.  Alternatively, \fImode\fR can
 be a number as described in the UNIX \fBaccess\fR(2) system call.  The
 function returns 0 if the file can be accessed with the specified \fImode\fR,
-and -1 otherwise.
+and \-1 otherwise.
 .TP
 .B args(s_fname)
 Returns the number of arguments expected by the user-defined function
-\fIfname\fR, or -1 if no such user-defined function exists.  Note that
+\fIfname\fR, or \-1 if no such user-defined function exists.  Note that
 this function examines only user-defined functions, not built-in functions.
 Its main use is to determine whether or not a particular user-defined
 function has been defined previously.  The \fBargs()\fR function is
@@ -2626,7 +2626,7 @@ does not check for this.)  For example, if you want the time of each new
 moon displayed, you could use this in your reminder script:
 .PP
 .nf
-	REM [moondate(0)] PS [psmoon(0, -1, moontime(0)+"")]
+	REM [moondate(0)] PS [psmoon(0, \-1, moontime(0)+"")]
 .fi
 .PP
 Note how the time is coerced to a string by concatenating the null string.
@@ -2668,7 +2668,7 @@ Returns the date as provided by the operating system.  This is in contrast to
 in calendar mode, or if a date has been supplied on the command line.
 .TP
 .B sgn(i_num)
-Returns -1 if \fInum\fR is negative, 1 if \fInum\fR is positive,
+Returns \-1 if \fInum\fR is negative, 1 if \fInum\fR is positive,
 and 0 if \fInum\fR is zero.
 .TP
 .B shell(s_cmd [,i_maxlen])
@@ -2705,7 +2705,7 @@ May 16 and 17.  You can go backwards, too, so:
 .PP
 .nf
 	OMIT 14 May 2009
-	SET a slide('2009-05-21', -5, "Sat", "Sun")
+	SET a slide('2009-05-21', \-5, "Sat", "Sun")
 .fi
 .PP
 takes \fIa\fR back to 2009-05-13.
@@ -3047,7 +3047,7 @@ to true if a corresponding \fBREM\fR command would trigger.  Examples:
 		; Executed except on 1 Nov
 	ENDIF
 
-	IFTRIG 1 -1 OMIT Sat Sun +4
+	IFTRIG 1 \-1 OMIT Sat Sun +4
 		; Executed on last working day of month,
 		; and the 4 working days preceding it
 	ELSE
@@ -3075,7 +3075,7 @@ you define a function taking no parameters.  Here are some examples:
 .nf
 	FSET double(x) 2*x
 	FSET yeardiff(date1, date2) year(date1) - year(date2)
-	FSET since(x) ord(year(trigdate())-x)
+	FSET since(x) ord(year(trigdate())\-x)
 .fi
 .PP
 The last function is useful in birthday reminders.  For example:
@@ -3199,7 +3199,7 @@ clause to do anything.
 Here's an example:
 .PP
 .nf
-	FSET _sfun(x) choose(x, -60, 30, 15, 10, 3, 1, 1, 1, 1, 0)
+	FSET _sfun(x) choose(x, \-60, 30, 15, 10, 3, 1, 1, 1, 1, 0)
 	REM AT 13:00 SCHED _sfun MSG foo
 .fi
 .PP
@@ -3451,7 +3451,7 @@ program to produce a calendar in PostScript format.  For example, the
 following command will send PostScript code to standard output:
 .PP
 .nf
-	remind -p .reminders | rem2ps
+	remind \-p .reminders | rem2ps
 .fi
 .PP
 You can print a PostScript calendar by piping this to the \fBlpr\fR command.
@@ -3460,7 +3460,7 @@ If you have a reminder script called ".reminders", and you
 execute this command:
 .PP
 .nf
-	remind -c .reminders jan 1993
+	remind \-c .reminders jan 1993
 .fi
 .PP
 then \fBRemind\fR executes the script 31 times, once for each day in
@@ -3693,7 +3693,7 @@ In daemon mode, \fBRemind\fR acts as if the \fB\-f\fR option had been used,
 so to run in the daemon mode in the background, use:
 .PP
 .nf
-	remind -z .reminders &
+	remind \-z .reminders &
 .fi
 .PP
 If you use \fBsh\fR or \fBbash\fR, you may have to use the "nohup" command
@@ -4108,7 +4108,7 @@ Calculations" by E. M. Reingold and Nachum Dershowitz.
 .PP
 The \fBSPECIAL\fR keyword is used to transmit "out-of-band" information
 to \fBRemind\fR backends, such as \fBtkremind\fR or \fBRem2PS\fR.
-They are used only when piping data from a \fBremind -p\fR line.
+They are used only when piping data from a \fBremind \-p\fR line.
 (Note that the COLOR special is an exception; it downgrades to the
 equivalent of MSG in \fBremind's\fR normal mode of operation.)
 .PP
@@ -4149,7 +4149,7 @@ of the \fBMOON\fR special is as follows:
 1 the first quarter, 2 a full moon and 3 the last quarter.
 .PP
 \fImoonsize\fR is the diameter in PostScript units of the moon to
-draw.  If omitted or supplied as -1, the backend chooses an appropriate
+draw.  If omitted or supplied as \-1, the backend chooses an appropriate
 size.
 .PP
 \fIfontsize\fR is the font size in PostScript units of the \fImsg\fR
@@ -4223,7 +4223,7 @@ This section is a sampling of what you can do with \fBRemind\fR.
 .PP
 .nf
 	REM 5 Feb 1991 AT 14:00 +45 *30 \\
-	RUN mail -s "Meeting at %2" $LOGNAME </dev/null &
+	RUN mail \-s "Meeting at %2" $LOGNAME </dev/null &
 .fi
 .PP
 On 5 February, 1991, this reminder will mail
@@ -4232,14 +4232,14 @@ you reminders of a 2:00pm meeting at 1:15,
 and the body of the message will be blank.
 .PP
 .nf
-	REM AT 17:00 RUN echo "5:00pm - GO HOME!" | xless -g +0+0 &
+	REM AT 17:00 RUN echo "5:00pm - GO HOME!" | xless \-g +0+0 &
 .fi
 .PP
 This reminder will pop up an xless window at 5:00pm every day.  The xless
 window will contain the line "5:00pm - GO HOME!"
 .PP
 .nf
-	REM AT 23:59 RUN (sleep 120; remind -a [filename()]) &
+	REM AT 23:59 RUN (sleep 120; remind \-a [filename()]) &
 .fi
 .PP
 This reminder will run at one minute to midnight.  It will cause a new
@@ -4257,7 +4257,7 @@ This invocation of \fBRemind\fR will cause it to print a calendar for
 1993, with all entries left blank.
 .PP
 .nf
-	REM CAL [trigdate()-date(year(trigdate()), 1, 1)+1]
+	REM CAL [trigdate()\-date(year(trigdate()), 1, 1)+1]
 .fi
 .PP
 This example puts an entry in each box of a calendar showing the number
@@ -4317,7 +4317,7 @@ in September.  It can move over a range of 7 days.  Consider the
 following sequence:
 .PP
 .nf
-	REM Mon 1 Sept SCANFROM [today()-7] SATISFY 1
+	REM Mon 1 Sept SCANFROM [today()\-7] SATISFY 1
 	OMIT [trigdate()]
 
 	REM Mon AFTER MSG Hello

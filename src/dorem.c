@@ -715,7 +715,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	return OK;
 
     /* Handle COLOR types */
-    if (t->typ == PASSTHRU_TYPE && (!strcmp(t->passthru, "COLOR") || !strcmp(t->passthru, "COLOUR")) {
+    if (t->typ == PASSTHRU_TYPE && (!strcmp(t->passthru, "COLOR") || !strcmp(t->passthru, "COLOUR"))) {
 	/* Strip off three tokens */
 	r = ParseToken(p, &buf);
 	if (!NextMode) {

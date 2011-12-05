@@ -1016,11 +1016,12 @@ static int DoCalRem(ParsePtr p, int col)
 	trig.typ = PASSTHRU_TYPE;
     }
     if (trig.typ == PASSTHRU_TYPE) {
-	if (!PsCal && strcmp(trig.passthru, "COLOR")) {
+	if (!PsCal && strcmp(trig.passthru, "COLOR") && strcmp(trig.passthru, "COLOUR")) {
 	    FreeTrig(&trig);
 	    return OK;
 	}
-	if (!strcmp(trig.passthru, "COLOR")) {
+	if (!strcmp(trig.passthru, "COLOR") ||
+	    !strcmp(trig.passthru, "COLOUR")) {
 	    is_color = 1;
 	    /* Strip off the three color numbers */
 	    DBufFree(&buf);
@@ -1073,6 +1074,7 @@ static int DoCalRem(ParsePtr p, int col)
 	    /* Suppress time if it's not today or if it's a non-COLOR special */
 	    if (jul != JulianToday ||
 		(trig.typ == PASSTHRU_TYPE &&
+		 strcmp(trig.passthru, "COLOUR") &&
 		 strcmp(trig.passthru, "COLOR"))) {
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);

@@ -796,6 +796,7 @@ proc FillCalWindow {} {
 		DoMoonSpecial $n $stuff
 		continue
 	    }
+	    "COLOUR" -
 	    "COLOR" {
 		if {[regexp {^ *([0-9]+) +([0-9]+) +([0-9]+) +(.*)$} $stuff all r g b rest]} {
 		    if {$r > 255} {
@@ -822,7 +823,7 @@ proc FillCalWindow {} {
 		}
 	    }
 	}
-	if { $type != "*" && $type != "COLOR"} {
+	if { $type != "*" && $type != "COLOR" && $type != "COLOUR"} {
 	    continue
 	}
 	.cal.t$n configure -state normal

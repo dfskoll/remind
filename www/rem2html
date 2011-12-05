@@ -257,7 +257,7 @@ sub parse_input
 			$shades->[$d] = sprintf("#%02X%02X%02X",
 						($1 % 256), ($2 % 256), ($3 % 256));
 		}
-	} elsif ($special eq 'COLOR') {
+	} elsif ($special eq 'COLOR' || $special eq 'COLOUR') {
 		if ($body =~ /(\d+)\s+(\d+)\s+(\d+)\s+(.*)$/) {
 			my($r, $g, $b, $text) = ($1, $2, $3, $4);
 			my $color = sprintf("style=\"color: #%02X%02X%02X;\"",

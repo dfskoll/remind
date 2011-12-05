@@ -112,7 +112,7 @@
 	 "WARN" "UNTIL" "THROUGH" "SCANFROM" "DURATION" "TAG" "MSG" "MSF" "CAL" "SPECIAL" "IFTRIG"
 	 "PS" "PSFILE" "BANNER" "INCLUDE" "PUSH-OMIT-CONTEXT" "DEBUG" "DUMPVARS"
 	 "CLEAR-OMIT-CONTEXT" "POP-OMIT-CONTEXT"  "SET" "ERRMSG" "FSET"
-	 "EXIT" "FLUSH" "PRESERVE" "MOON" "COLOR")
+	 "EXIT" "FLUSH" "PRESERVE" "MOON" "COLOR" "COLOUR")
    #'(lambda (a b) (> (length a) (length b)))))
 
 (defconst remind-type-keywords

@@ -366,6 +366,7 @@ void DoPsCal(void)
 		}
 	    }
 	} else if (!strcmp(passthru, "*") ||
+		   !strcmp(passthru, "COLOUR") ||
 	           !strcmp(passthru, "COLOR")) {
 	    /* Put on linked list */
 	    if (!CurEntries) {
@@ -375,7 +376,8 @@ void DoPsCal(void)
 		while(d->next) d = d->next;
 		d->next = c;
 	    }
-	    if (!strcmp(passthru, "COLOR")) {
+	    if (!strcmp(passthru, "COLOR") ||
+		!strcmp(passthru, "COLOUR")) {
 		c->special = SPECIAL_COLOR;
 	    }
 	}

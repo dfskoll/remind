@@ -58,7 +58,7 @@ class Remind
 	if ($special === null || $special == '*') {
 	    return $this->munge_entry($day, $results, $specials, $options, $body, $e);
 	}
-	if ($special == 'COLOR') {
+	if ($special == 'COLOR' || $special == 'COLOUR') {
 	    if (preg_match('/^(\d+)\s+(\d+)\s+(\d+)\s+(.*)/', $body, $matches)) {
 		return sprintf('<span style="color: #%02x%02x%02x">%s</span>',
 			       $matches[1] % 255,
@@ -293,7 +293,7 @@ class Remind
 		$entry['file'] = $lineinfo['file'];
 		$lineinfo = 0;
 	    }
-	    if ($special != '*' && $special != 'COLOR' && $special != 'HTML') {
+	    if ($special != '*' && $special != 'COLOR' && $special != 'COLOUR' && $special != 'HTML') {
 		if (!array_key_exists($special, $specials)) {
 		    $specials[$special] = array();
 		}

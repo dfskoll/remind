@@ -74,7 +74,7 @@ The next control specifies an expiry date for the reminder.  Select
 the check button to enable an expiry date, and fill in the values
 using pull-down menus.
 
-The third control specifes how much advance notice you want (if any),
+The third control specifies how much advance notice you want (if any),
 and whether or not weekends and holidays are counted when computing advance
 notice.
 
@@ -179,7 +179,7 @@ it starts up in a normal window.
 .TP
 .B Show Today's Reminders on Startup
 If this is selected, \fBTkRemind\fR shows a text window containing reminders
-which would be issued by "remind -q -a -r" on startup, and when the date
+which would be issued by "remind \-q \-a \-r" on startup, and when the date
 changes at midnight.
 
 .TP
@@ -268,7 +268,7 @@ the body.  Furthermore, if you use expression-pasting in the body,
 When \fBTkRemind\fR invokes \fBRemind\fR, it supplies the option:
 .PP
 .nf
-	-itkremind=1
+	\-itkremind=1
 .fi
 .PP
 on the command line.  So, in your \fBRemind\fR file, you can include:

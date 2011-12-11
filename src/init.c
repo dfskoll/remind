@@ -137,7 +137,7 @@ void InitRemind(int argc, char const *argv[])
     char const *s;
     int weeks;
 
-    int jul, tim;
+    int jul;
 
 #if defined(__APPLE__)
     rkrphgvba(0);
@@ -146,7 +146,6 @@ void InitRemind(int argc, char const *argv[])
 #endif
 
     jul = NO_DATE;
-    tim = NO_TIME;
 
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
@@ -570,12 +569,12 @@ void InitRemind(int argc, char const *argv[])
 	    }
 	    if (d == NO_DAY) d=1;
 	    if (d > DaysInMonth(m, y)) {
-		fprintf(ErrFp, BadDate);
+		fprintf(ErrFp, "%s", BadDate);
 		Usage();
 	    }
 	    JulianToday = Julian(y, m, d);
 	    if (JulianToday == -1) {
-		fprintf(ErrFp, BadDate);
+		fprintf(ErrFp, "%s", BadDate);
 		Usage();
 	    }
 	    CurYear = y;
@@ -678,7 +677,7 @@ static void ChgUser(char const *user)
 
     home = malloc(strlen(pwent->pw_dir) + 6);
     if (!home) {
-	fprintf(ErrFp, ErrMsg[M_NOMEM_ENV]);
+	fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
 	exit(1);
     }
     sprintf(home, "HOME=%s", pwent->pw_dir);
@@ -686,7 +685,7 @@ static void ChgUser(char const *user)
 
     shell = malloc(strlen(pwent->pw_shell) + 7);
     if (!shell) {
-	fprintf(ErrFp, ErrMsg[M_NOMEM_ENV]);
+	fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
 	exit(1);
     }
     sprintf(shell, "SHELL=%s", pwent->pw_shell);
@@ -695,14 +694,14 @@ static void ChgUser(char const *user)
     if (pwent->pw_uid) {
 	username = malloc(strlen(pwent->pw_name) + 6);
 	if (!username) {
-	    fprintf(ErrFp, ErrMsg[M_NOMEM_ENV]);
+	    fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
 	    exit(1);
 	}
 	sprintf(username, "USER=%s", pwent->pw_name);
 	putenv(username);
 	logname= malloc(strlen(pwent->pw_name) + 9);
 	if (!logname) {
-	    fprintf(ErrFp, ErrMsg[M_NOMEM_ENV]);
+	    fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
 	    exit(1);
 	}
 	sprintf(logname, "LOGNAME=%s", pwent->pw_name);

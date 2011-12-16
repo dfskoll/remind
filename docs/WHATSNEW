@@ -1,5 +1,19 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 11 - 2011-12-16
+
+- BUG FIX: For some inexplicable reason, dawn was considered to happen when
+  the sun was 14 degrees below the horizon instead of the standard 6
+  degrees for Civil Dawn.  This has been fixed.
+
+- BUG FIXES: Clarified the man pages and fixed some typos.
+
+- BUG FIX: Add THROUGH to the remind.vim syntax highlighting file.
+
+- ENHANCEMENT (?): Allow SPECIAL COLOR to be spelled SPECIAL COLOUR.
+
+- BUG FIX: Apply minor Debian cleanups reported by Kurt B. Kaiser.
+
 * Version 3.1 Patch 10 - 2010-11-01
 
 - NOTE: This is the 20th anniversary of Remind's first public release.

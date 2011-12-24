@@ -667,7 +667,9 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	if (isupper(c)) {
 	    os = DBufValue(dbuf);
 	    os += strlen(os) - strlen(s);
-	    *os = UPPER(*os);
+	    if (os >= DBufValue(dbuf)) {
+		*os = UPPER(*os);
+	    }
 	}
     }
 

@@ -62,6 +62,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
     char *os;
     char s[256];
     int origLen = DBufLen(dbuf);
+    int altmode;
 
     FromJulian(jul, &y, &m, &d);
 
@@ -141,6 +142,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
 	    continue;
 	}
+	altmode = 0;
 	s[0] = 0;
 	c = ParseChar(p, &err, 0);
 	if (err) {
@@ -149,6 +151,17 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	}
 	if (!c) {
 	    break;
+	}
+	if (c == '*') {
+	    altmode = c;
+	    c = ParseChar(p, &err, 0);
+	    if (err) {
+		DBufFree(dbuf);
+		return err;
+	    }
+	    if (!c) {
+		break;
+	    }
 	}
 	done = 0;
 	if (diff <= 1) {
@@ -206,8 +219,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_A_OVER
 	    L_A_OVER
 #else
-	    sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
-		    MonthName[m], y);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %d %s, %d", DayName[jul%7], d,
+			MonthName[m], y);
+	    } else {
+		sprintf(s, "%s %s, %d %s, %d", L_ON, DayName[jul%7], d,
+			MonthName[m], y);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -225,7 +243,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_C_OVER
 	    L_C_OVER
 #else
-	    sprintf(s, "%s %s", L_ON, DayName[jul%7]);
+	    if (altmode == '*') {
+		sprintf(s, "%s", DayName[jul%7]);
+	    } else {
+		sprintf(s, "%s %s", L_ON, DayName[jul%7]);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -243,8 +265,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_E_OVER
 	    L_E_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DateSep,
-		    m+1, DateSep, y);
+	    if (altmode == '*') {
+		sprintf(s, "%02d%c%02d%c%04d", d, DateSep,
+			m+1, DateSep, y);
+	    } else {
+		sprintf(s, "%s %02d%c%02d%c%04d", L_ON, d, DateSep,
+			m+1, DateSep, y);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -253,7 +280,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_F_OVER
 	    L_F_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DateSep, d, DateSep, y);
+	    if (altmode == '*') {
+		sprintf(s, "%02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
+	    } else {
+		sprintf(s, "%s %02d%c%02d%c%04d", L_ON, m+1, DateSep, d, DateSep, y);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -262,7 +293,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_G_OVER
 	    L_G_OVER
 #else
-	    sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %d %s", DayName[jul%7], d, MonthName[m]);
+	    } else {
+		sprintf(s, "%s %s, %d %s", L_ON, DayName[jul%7], d, MonthName[m]);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -271,7 +306,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_H_OVER
 	    L_H_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d", L_ON, d, DateSep, m+1);
+	    if (altmode == '*') {
+		sprintf(s, "%02d%c%02d", d, DateSep, m+1);
+	    } else {
+		sprintf(s, "%s %02d%c%02d", L_ON, d, DateSep, m+1);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -280,7 +319,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_I_OVER
 	    L_I_OVER
 #else
-	    sprintf(s, "%s %02d%c%02d", L_ON, m+1, DateSep, d);
+	    if (altmode == '*') {
+		sprintf(s, "%02d%c%02d", m+1, DateSep, d);
+	    } else {
+		sprintf(s, "%s %02d%c%02d", L_ON, m+1, DateSep, d);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -289,8 +332,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_J_OVER
 	    L_J_OVER
 #else
-	    sprintf(s, "%s %s, %s %d%s, %d", L_ON, DayName[jul%7],
-		    MonthName[m], d, plu, y);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %s %d%s, %d", DayName[jul%7],
+			MonthName[m], d, plu, y);
+	    } else {
+		sprintf(s, "%s %s, %s %d%s, %d", L_ON, DayName[jul%7],
+			MonthName[m], d, plu, y);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -299,8 +347,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_K_OVER
 	    L_K_OVER
 #else
-	    sprintf(s, "%s %s, %s %d%s", L_ON, DayName[jul%7],
-		    MonthName[m], d, plu);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %s %d%s", DayName[jul%7],
+			MonthName[m], d, plu);
+	    } else {
+		sprintf(s, "%s %s, %s %d%s", L_ON, DayName[jul%7],
+			MonthName[m], d, plu);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -309,7 +362,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_L_OVER
 	    L_L_OVER
 #else
-	    sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DateSep, m+1, DateSep, d);
+	    if (altmode == '*') {
+		sprintf(s, "%04d%c%02d%c%02d", y, DateSep, m+1, DateSep, d);
+	    } else {
+		sprintf(s, "%s %04d%c%02d%c%02d", L_ON, y, DateSep, m+1, DateSep, d);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -391,8 +448,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_U_OVER
 	    L_U_OVER
 #else
-	    sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d,
-		    plu, MonthName[m], y);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %d%s %s, %d", DayName[jul%7], d,
+			plu, MonthName[m], y);
+	    } else {
+		sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d,
+			plu, MonthName[m], y);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -401,8 +463,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_V_OVER
 	    L_V_OVER
 #else
-	    sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu,
-		    MonthName[m]);
+	    if (altmode == '*') {
+		sprintf(s, "%s, %d%s %s", DayName[jul%7], d, plu,
+			MonthName[m]);
+	    } else {
+		sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu,
+			MonthName[m]);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -464,7 +531,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_2_OVER
 	    L_2_OVER
 #else
-	    sprintf(s, "%s %d%c%02d%s", L_AT, hh, TimeSep, min, pm);
+	    if (altmode == '*') {
+		sprintf(s, "%d%c%02d%s", hh, TimeSep, min, pm);
+	    } else {
+		sprintf(s, "%s %d%c%02d%s", L_AT, hh, TimeSep, min, pm);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;
@@ -474,7 +545,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    L_3_OVER
 #else
 
-	    sprintf(s, "%s %02d%c%02d", L_AT, h, TimeSep, min);
+	    if (altmode == '*') {
+		sprintf(s, "%02d%c%02d", h, TimeSep, min);
+	    } else {
+		sprintf(s, "%s %02d%c%02d", L_AT, h, TimeSep, min);
+	    }
 #endif
 	    SHIP_OUT(s);
 	    break;

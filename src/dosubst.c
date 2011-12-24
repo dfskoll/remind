@@ -665,7 +665,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
 	}
 	if (isupper(c)) {
-	    os = DBufValue(dbuf) - strlen(s);
+	    os = DBufValue(dbuf);
+	    os += strlen(os) - strlen(s);
 	    *os = UPPER(*os);
 	}
     }

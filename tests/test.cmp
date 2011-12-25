@@ -935,11 +935,81 @@ msg [a076]%
 ../tests/test.rem(272): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 s' 05 th 05 on Tuesday, 5th May, 1992 on Tuesday, 5th May Tuesday 444
-set a077 dosubst("%y %z", '1992/5/5')
-dosubst("%y %z", 1992-05-05) => "1992 92
+set a074 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", '1992/5/5')
+dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", 1992-05-05) => "Tuesday, 5 May, 1992 in 444 days' time T"...
+msg [a074]%
+../tests/test.rem(274): Trig = Saturday, 16 February, 1991
+a074 => "Tuesday, 5 May, 1992 in 444 days' time T"...
+Tuesday, 5 May, 1992 in 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
+set a075 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", '1992/5/5')
+dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+msg [a075]%
+../tests/test.rem(276): Trig = Saturday, 16 February, 1991
+a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  s
+set a076 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", '1992/5/5')
+dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", 1992-05-05) => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
+msg [a076]%
+../tests/test.rem(278): Trig = Saturday, 16 February, 1991
+a076 => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
+s' 05 th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
+set a077 dosubst("%*y %*z", '1992/5/5')
+dosubst("%*y %*z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(274): Trig = Saturday, 16 February, 1991
+../tests/test.rem(280): Trig = Saturday, 16 February, 1991
+a077 => "1992 92
+"
+1992 92
+set a074 dosubst("%A %B %C %D %E %F %G %H", '1992/5/5')
+dosubst("%A %B %C %D %E %F %G %H", 1992-05-05) => "On Tuesday, 5 May, 1992 In 444 days' tim"...
+msg [a074]%
+../tests/test.rem(282): Trig = Saturday, 16 February, 1991
+a074 => "On Tuesday, 5 May, 1992 In 444 days' tim"...
+On Tuesday, 5 May, 1992 In 444 days' time On Tuesday 5 On 05-05-1992 On 05-05-1992 On Tuesday, 5 May On 05-05
+set a075 dosubst("%I %J %K %L %M %N %O %P", '1992/5/5')
+dosubst("%I %J %K %L %M %N %O %P", 1992-05-05) => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
+msg [a075]%
+../tests/test.rem(284): Trig = Saturday, 16 February, 1991
+a075 => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
+On 05-05 On Tuesday, May 5th, 1992 On Tuesday, May 5th On 1992-05-05 May 5  S
+set a076 dosubst("%Q %R %S %T %U %V %W %X", '1992/5/5')
+dosubst("%Q %R %S %T %U %V %W %X", 1992-05-05) => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
+msg [a076]%
+../tests/test.rem(286): Trig = Saturday, 16 February, 1991
+a076 => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
+S' 05 Th 05 On Tuesday, 5th May, 1992 On Tuesday, 5th May Tuesday 444
+set a077 dosubst("%Y %Z", '1992/5/5')
+dosubst("%Y %Z", 1992-05-05) => "1992 92
+"
+msg [a077]%
+../tests/test.rem(288): Trig = Saturday, 16 February, 1991
+a077 => "1992 92
+"
+1992 92
+set a074 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", '1992/5/5')
+dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", 1992-05-05) => "Tuesday, 5 May, 1992 In 444 days' time T"...
+msg [a074]%
+../tests/test.rem(290): Trig = Saturday, 16 February, 1991
+a074 => "Tuesday, 5 May, 1992 In 444 days' time T"...
+Tuesday, 5 May, 1992 In 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
+set a075 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", '1992/5/5')
+dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+msg [a075]%
+../tests/test.rem(292): Trig = Saturday, 16 February, 1991
+a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  S
+set a076 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", '1992/5/5')
+dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", 1992-05-05) => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
+msg [a076]%
+../tests/test.rem(294): Trig = Saturday, 16 February, 1991
+a076 => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
+S' 05 Th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
+set a077 dosubst("%*Y %*Z", '1992/5/5')
+dosubst("%*Y %*Z", 1992-05-05) => "1992 92
+"
+msg [a077]%
+../tests/test.rem(296): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
@@ -967,7 +1037,7 @@ dump
             a017  29
             a036  "bar"
             a055  1
-            a074  "on Tuesday, 5 May, 1992 in 444 days' tim"...
+            a074  "Tuesday, 5 May, 1992 In 444 days' time T"...
             a008  "11:44"
             a027  0
             a046  "ies"
@@ -976,7 +1046,7 @@ dump
             a018  1
             a037  1991-02-15
             a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-            a075  "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
+            a075  "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
             a028  1
             a047  -1
             a066  0
@@ -984,7 +1054,7 @@ dump
             a019  0
             a038  33
             a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-            a076  "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
+            a076  "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
             a029  0
             a048  "foo"
             a067  "INT"
@@ -1048,10 +1118,10 @@ dump
             a083  1991-03-24
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(286): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(308): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(288): Trig = Sunday, 26 December, 2010
+../tests/test.rem(310): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11

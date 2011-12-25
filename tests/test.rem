@@ -270,7 +270,29 @@ set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
 msg [a075]%
 set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
 msg [a076]%
-set a077 dosubst("%y %z", '1992/5/5')
+set a074 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", '1992/5/5')
+msg [a074]%
+set a075 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", '1992/5/5')
+msg [a075]%
+set a076 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", '1992/5/5')
+msg [a076]%
+set a077 dosubst("%*y %*z", '1992/5/5')
+msg [a077]%
+set a074 dosubst("%A %B %C %D %E %F %G %H", '1992/5/5')
+msg [a074]%
+set a075 dosubst("%I %J %K %L %M %N %O %P", '1992/5/5')
+msg [a075]%
+set a076 dosubst("%Q %R %S %T %U %V %W %X", '1992/5/5')
+msg [a076]%
+set a077 dosubst("%Y %Z", '1992/5/5')
+msg [a077]%
+set a074 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", '1992/5/5')
+msg [a074]%
+set a075 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", '1992/5/5')
+msg [a075]%
+set a076 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", '1992/5/5')
+msg [a076]%
+set a077 dosubst("%*Y %*Z", '1992/5/5')
 msg [a077]%
 set a078 easterdate(today())
 set a079 easterdate(1992)

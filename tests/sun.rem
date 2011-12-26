@@ -1,0 +1,13 @@
+SET $LatDeg 45
+SET $LatMin 24
+SET $LatSec 0
+SET $LongDeg 75
+SET $LongMin 39
+SET $LongSec 0
+SET $MinsFromUTC -300
+SET $CalcUTC 0
+
+MSG Dawn: [dawn()]
+MSG Sunrise: [sunrise()]
+MSG Sunset: [sunset()]
+MSG Dusk: [dusk()]

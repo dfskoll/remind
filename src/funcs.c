@@ -1894,11 +1894,6 @@ static int SunStuff(int rise, double cosz, int jul)
 
 /* Sun's true longitude */
     L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 282.565;
-    if (dusk_or_dawn == 2) {/* dusk */
-	L += 6;
-    } else if (dusk_or_dawn == 3) {/* dawn */
-	L -= 6;
-    }
     if (L > 360.0) L -= 360.0;
 
 /* Tan of sun's right ascension */
@@ -1975,9 +1970,13 @@ static int SunStuff(int rise, double cosz, int jul)
 static int FSun(int rise, func_info *info)
 {
     int jul = JulianToday;
-    static double cosz = -0.014543897;  /* for sunrise and sunset */
+    double cosz = -0.014543897;  /* for sunrise and sunset */
     int r;
 
+    /* Civil twilight: 6 degrees */
+    if (rise == 2 || rise == 3) {
+	cosz = -0.1047197551;
+    }
     if (Nargs >= 1) {
 	if (!HASDATE(ARG(0))) return E_BAD_TYPE;
 	jul = DATEPART(ARG(0));

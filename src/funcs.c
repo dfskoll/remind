@@ -1854,10 +1854,11 @@ static int FTimeStuff(int wantmins, func_info *info)
 
 static int SunStuff(int rise, double cosz, int jul)
 {
-    int year, mon, day;
-    int jan0;
     int mins, hours;
     int dusk_or_dawn;
+    int year, mon, day;
+    int jan0;
+    double jan0d;
 
     double M, L, tanA, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
@@ -1880,17 +1881,31 @@ static int SunStuff(int rise, double cosz, int jul)
 
     FromJulian(jul, &year, &mon, &day);
     jan0 = jul - Julian(year, 0, 1);
+    jan0d = (double) jan0;
 
     dusk_or_dawn = rise;
     if (rise > 1)
 	rise -= 2;
-/* Following formula on page B6 exactly... */
-    t = (double) jan0;
-    if (rise) t += (6.0 + longdeg/15.0) / 24.0;
-    else      t += (18.0 + longdeg/15.0) / 24.0;
 
-/* Mean anomaly of sun for 1978 ... how accurate for other years??? */
-    M = 0.985600 * t - 3.251;  /* In degrees */
+/* Following formula on page B6 exactly... */
+    t = (double) jul;
+    if (rise) {
+	t += (6.0 + longdeg/15.0) / 24.0;
+	jan0d += (6.0 + longdeg/15.0) / 24.0;
+    } else {
+	t += (18.0 + longdeg/15.0) / 24.0;
+	jan0d += (18.0 + longdeg/15.0) / 24.0;
+    }
+
+/* Mean anomaly of sun starting from 1 Jan 1990 */
+/* NOTE: This assumes that BASE = 1990!!! */
+#if BASE != 1990
+#error Sun calculations assume a BASE of 1990!
+#endif
+    M = (0.985600 * t) + 356.6349;  /* In degrees */
+
+    /* Make sure M is in the range [0, 360) */
+    M -= (floor(M/360.0) * 360.0);
 
 /* Sun's true longitude */
     L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 282.565;
@@ -1936,7 +1951,7 @@ static int SunStuff(int rise, double cosz, int jul)
     H = RADDEG * acos(cosH);
     if (rise) H = 360.0 - H;
 
-    T = H / 15.0 + a_hr - 0.065710*t - 6.620;
+    T = H / 15.0 + a_hr - 0.065710 * jan0d - 6.620;
     if (T >= 24.0) T -= 24.0;
     else if (T < 0.0) T+= 24.0;
     

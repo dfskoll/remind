@@ -1902,7 +1902,7 @@ static int SunStuff(int rise, double cosz, int jul)
 #if BASE != 1990
 #error Sun calculations assume a BASE of 1990!
 #endif
-    M = (0.985600 * t) + 356.6349;  /* In degrees */
+    M = (0.9856002585 * t) + 356.634856;  /* In degrees */
 
     /* Make sure M is in the range [0, 360) */
     M -= (floor(M/360.0) * 360.0);
@@ -1961,6 +1961,9 @@ static int SunStuff(int rise, double cosz, int jul)
     local = UT + (double) mins / 60.0;
     if (local < 0.0) local += 24.0;
     else if (local >= 24.0) local -= 24.0;
+
+    /* Round off local time to nearest minute */
+    local = floor(local * 60.0 + 0.5) / 60.0;
 
     hours = (int) local;
     mins = (int) ((local - hours) * 60.0);

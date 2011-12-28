@@ -1902,7 +1902,7 @@ static int SunStuff(int rise, double cosz, int jul)
 #if BASE != 1990
 #error Sun calculations assume a BASE of 1990!
 #endif
-    M = (0.9856002585 * t) + 356.634856;  /* In degrees */
+    M = (0.9856002585 * t) + 357.828757;  /* In degrees */
 
     /* Make sure M is in the range [0, 360) */
     M -= (floor(M/360.0) * 360.0);

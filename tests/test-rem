@@ -83,6 +83,22 @@ rm -f ../tests/purge_dir/*.rem.purged >> ../tests/test.out 2>&1
 
 ../src/remind -p12 ../tests/sun.rem 1 Jan 2011 >> ../tests/test.out 2>&1
 
+# Test -a vs -aa
+../src/remind -q -a - 1 Jan 2012 9:00 <<'EOF' >> ../tests/test.out 2>&1
+REM 1 Jan 2012 AT 8:00 MSG 8am: Should not show up
+REM 1 Jan 2012 AT 9:00 MSG 9am: Should not show up
+REM 1 Jan 2012 AT 10:00 MSG 10am: Should not show up
+MSG [$DontTrigAts]
+EOF
+
+../src/remind -q -a -a - 1 Jan 2012 9:00 <<'EOF' >> ../tests/test.out 2>&1
+REM 1 Jan 2012 AT 8:00 MSG 8am: Should not show up
+REM 1 Jan 2012 AT 9:00 MSG 9am: Should show up
+REM 1 Jan 2012 AT 10:00 MSG 10am: Should show up
+MSG [$DontTrigAts]
+EOF
+
+
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

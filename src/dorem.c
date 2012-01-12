@@ -924,7 +924,17 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 
     /* Don't trigger timed reminders if DontIssueAts is true, and if the
        reminder is for today */
-    if (jul == JulianToday && DontIssueAts && tim->ttime != NO_TIME) return 0;
+    if (jul == JulianToday && DontIssueAts && tim->ttime != NO_TIME) {
+	if (DontIssueAts > 1) {
+	    /* If two or more -a options, then *DO* issue ats that are in the
+	       future */
+	    if (tim->ttime < SystemTime(0) / 60) {
+		return 0;
+	    }
+	} else {
+	    return 0;
+	}
+    }
 
     /* Don't trigger "old" timed reminders */
 /*** REMOVED...

@@ -4,8 +4,8 @@ class Remind
 {
     # For validating commands we send to popen
     function is_valid_day($d) {
-	return (preg_match('/^\d+$/', $d) &&
-	       $d >= 1 && $d <= 31;
+	return (preg_match('/^\d+$/', $d)) &&
+		$d >= 1 && $d <= 31;
     }
 
     function is_valid_month($m) {
@@ -158,6 +158,22 @@ class Remind
 	}
 	$html .= "</td>\n";
 	return $html;
+    }
+
+    function small_calendar($results, $month, $monlen, $first_col, $which, &$options)
+    {
+	$monday_first = $results['monday_flag'];
+	if ($monday_first) {
+	    $first_col--;
+	    if ($first_col < 0) {
+		$first_col = 6;
+	    }
+	}
+
+	$html = "<td class=\"rem-small-calendar\">\n<table class=\"rem-sc-table\">\n<caption class=\"rem-sc-caption\">";
+	# TODO: URL for small calendar
+	$html .= $month;
+	$html .= "</caption>\n";
     }
 
     function generate_html(&$results, &$specials, &$options)
@@ -318,8 +334,8 @@ $fp = popen('rem -p -l', 'r');
 $r = new Remind;
 $ans = $r->parse_remind_output($fp);
 pclose($fp);
-#print_r($ans);
+print_r($ans);
 $options = array();
-print $r->generate_html($ans['results'], $ans['specials'], $options);
+#print $r->generate_html($ans['results'], $ans['specials'], $options);
 
 ?>

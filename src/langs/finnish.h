@@ -161,26 +161,19 @@
        } \
 }
 #endif
-#define L_A_OVER sprintf(s, "%s%s %d. %s%s %d", DayName[jul%7], L_ON, d, \
-			 MonthName[m], L_PARTIT, y);
-#define L_C_OVER sprintf(s, "%s%s", DayName[jul%7], L_ON);
-#define L_E_OVER sprintf(s, "%02d%c%02d%c%04d", d, DateSep, m+1, DateSep, \
-			 y);
+#define L_A_OVER if (altmode == '*') { sprintf(s, "%s %d. %s %d", DayName[jul%7], d, MonthName[m], y); } else { sprintf(s, "%s%s %d. %s%s %d", DayName[jul%7], L_ON, d, MonthName[m], L_PARTIT, y); }
+#define L_C_OVER if (altmode == '*') { sprintf(s, "%s", DayName[jul%7]); } else { sprintf(s, "%s%s", DayName[jul%7], L_ON); }
+#define L_E_OVER sprintf(s, "%02d%c%02d%c%04d", d, DateSep, m+1, DateSep, y);
 #define L_F_OVER sprintf(s, "%02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
-#define L_G_OVER sprintf(s, "%s%s %d. %s%s", DayName[jul%7], L_ON, d, \
-			 MonthName[m], L_PARTIT);
+#define L_G_OVER if (altmode == '*') { sprintf(s, "%s %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s%s %d. %s%s", DayName[jul%7], L_ON, d, MonthName[m], L_PARTIT); }
 #define L_H_OVER sprintf(s, "%02d%c%02d", d, DateSep, m+1);
 #define L_I_OVER sprintf(s, "%02d%c%02d", m+1, DateSep, d);
-#define L_J_OVER sprintf(s, "%s%s %sn %d%s %d", DayName[jul%7], L_ON, \
-			 MonthName[m], d, plu, y);
-#define L_K_OVER sprintf(s, "%s%s %sn %d%s", DayName[jul%7], L_ON, \
-			 MonthName[m], d, plu);
+#define L_J_OVER if (altmode == '*') { sprintf(s, "%s %sn %d%s %d", DayName[jul%7], MonthName[m], d, plu, y); } else { sprintf(s, "%s%s %sn %d%s %d", DayName[jul%7], L_ON, MonthName[m], d, plu, y); }
+#define L_K_OVER if (altmode == '*') { sprintf(s, "%s %sn %d%s", DayName[jul%7], MonthName[m], d, plu); } else { sprintf(s, "%s%s %sn %d%s", DayName[jul%7], L_ON, MonthName[m], d, plu); }
 #define L_L_OVER sprintf(s, "%04d%c%02d%c%02d", y, DateSep, m+1, DateSep, d);
 #define L_Q_OVER sprintf(s, "n");
-#define L_U_OVER sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, \
-			 d, plu, MonthName[m], L_PARTIT, y);
-#define L_V_OVER sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, \
-			 plu, MonthName[m], L_PARTIT);
+#define L_U_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s %d", DayName[jul%7], d, plu, MonthName[m], y); } else { sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT, y); }
+#define L_V_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s", DayName[jul%7], d, plu, MonthName[m]); } else { sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT); }
 #define L_1_OVER \
 if (tdiff == 0) \
   sprintf(s, "%s", L_NOW); \

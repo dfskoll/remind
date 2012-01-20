@@ -1991,7 +1991,7 @@ static int FSun(int rise, func_info *info)
     double cosz = -0.014543897;  /* for sunrise and sunset */
     int r;
 
-    /* Civil twilight: cos(6 degrees) */
+    /* Civil twilight: cos(96 degrees) */
     if (rise == 2 || rise == 3) {
 	cosz = -0.104528463268;
     }

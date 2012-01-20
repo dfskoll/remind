@@ -149,10 +149,16 @@ The \fB\-h\fR option ("hush...") suppresses certain warning and information
 messages.  In particular, if no reminders are triggered, this mode
 produces no output.
 .TP
-\fB\-a\fR
-The \fB\-a\fR option causes \fBRemind\fR not to immediately trigger timed
-reminders that would also be queued.  It also causes \fBRemind\fR not to
-place timed reminders in a calendar.
+.B \-a
+The \fB\-a\fR option causes \fBRemind\fR not to immediately trigger
+timed reminders that trigger on the current day.  It also causes
+\fBRemind\fR not to place timed reminders in a calendar.  If you
+supply two or more \fB\-a\fR options, then \fBRemind\fR \fIwill\fR
+trigger timed reminders that are in the future, but will not trigger
+timed reminders whose time has passed.  (Regardless of how many
+\fB\-a\fR options you supply, \fBRemind\fR will not include timed
+reminders in the calendar if at least one \fB\-a\fR option is used.)
+
 .TP
 \fB\-q\fR
 The \fB\-q\fR option causes \fBRemind\fR not to queue timed reminders
@@ -1869,7 +1875,7 @@ If non-zero, then the \fB\-c\fR option was supplied on the command line.
 .B $Daemon (read-only)
 If the daemon mode \fB\-z\fR was invoked, contains the number of
 minutes between wakeups.  If not running in daemon mode, contains
-0.  For the MS-DOS version, always contains 0.
+0.
 .TP
 .B $DateSep
 This variable can be set only to "/" or "-".  It holds the character
@@ -1885,15 +1891,13 @@ from 0 to 9999.
 .TP
 .B $DontFork (read-only)
 If non-zero, then the \fB\-c\fR option was supplied on the command line.
-For the MS-DOS version, always contains 1.
 .TP
 .B $DontTrigAts (read-only)
-If non-zero, then the \fB\-a\fR option was supplied on the command line.
-For the MS-DOS version, always contains 0.
+The number of times that the \fB\-a\fR option was supplied on the
+command line.
 .TP
 .B $DontQueue (read-only)
 If non-zero, then the \fB\-q\fR option was supplied on the command line.
-For the MS-DOS version, always contains 1.
 .TP
 .B $EndSent (STRING type)
 Contains a list of characters that end a sentence.  The \fBMSF\fR
@@ -1996,7 +2000,7 @@ If non-zero, then the \fB\-n\fR option was supplied on the command line.
 .TP
 .B $NumQueued (read-only)
 Contains the number of reminders queued so far for background
-timed triggering.  For MS-DOS, always returns 0.
+timed triggering.
 .TP
 .B $NumTrig (read-only)
 Contains the number of reminders triggered for the current date.  One

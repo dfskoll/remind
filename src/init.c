@@ -317,7 +317,7 @@ void InitRemind(int argc, char const *argv[])
 
 	    case 'a':
 	    case 'A':
-		DontIssueAts = 1;
+		DontIssueAts++;
 		break;
 
 	    case 'q':

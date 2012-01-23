@@ -1,5 +1,17 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 12 - 2012-01-23
+
+- NEW FEATURE: Many substitution sequences "%x" have an alternate mode
+  denoted by "%*x".  This alternate mode leaves out prepositions.  For
+  example, in English "%i" might yield "on 01-25" while "%*i" yields only
+  "01-25".
+
+- BUG FIX: The "dusk" and "dawn" calculations were completely wrong.  They
+  have been fixed.  Also, sunrise/sunset calculations have been tweaked,
+  so the results may be off by a minute or two compared to previous versions
+  of Remind.
+
 * Version 3.1 Patch 11 - 2011-12-16
 
 - BUG FIX: For some inexplicable reason, dawn was considered to happen when

@@ -30,7 +30,7 @@ if !$RunOff || !$DontQueue || $DontTrigAts
 endif
 
 # Set up a few useful definitions
-fset show(x) "%%" + x + " yields: " + char(34) + "%" + x + char(34) + "%"
+fset show(x) "%%" + x + " yields: " + char(34) + "%" + x + char(34) + "% and %%*" + x + " yields: " + char(34) + "%*" + x + char(34) + "%"
 set a trigger(today()+2) + " ++2"
 set l language()
 set tt now()+134

@@ -141,8 +141,8 @@ ampm = (hour<12) ? \
 : " w nocy";
 #endif
 #define L_ORDINAL_OVERRIDE		plu = "";
-#define L_A_OVER			sprintf(s, "%s %s, %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y);
-#define	L_G_OVER			sprintf(s, "%s %s, %d. %s", L_ON, DayName[jul%7], d, MonthName[m]);
+#define L_A_OVER			if (altmode == '*') { sprintf(s, "%s, %d. %s %d", DayName[jul%7], d, MonthName[m], y); } else { sprintf(s, "%s %s, %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y); }
+#define	L_G_OVER			if (altmode == '*') { sprintf(s, "%s, %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s %s, %d. %s", L_ON, DayName[jul%7], d, MonthName[m]); }
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
 

@@ -93,8 +93,8 @@
    See the file dosubst.c for more info. */
 #define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<5) ? " nachts" : " vormittags" : (hour > 17) ? " abends" : " nachmittags";
 #define L_ORDINAL_OVERRIDE		plu = ".";
-#define L_A_OVER			sprintf(s, "%s %s, den %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y);
-#define	L_G_OVER			sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]);
+#define L_A_OVER			if (altmode == '*') { sprintf(s, "%s, den %d. %s %d", DayName[jul%7], d, MonthName[m], y); } else { sprintf(s, "%s %s, den %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y); }
+#define	L_G_OVER			if (altmode == '*') { sprintf(s, "%s, den %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]); }
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
 

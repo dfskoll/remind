@@ -129,13 +129,9 @@ else if (tdiff < 0) { \
       sprintf(s, "dans %d heure%s et %d minute%s", hdiff, hplu, mdiff, mplu); \
 }
 
-#define L_J_OVER \
-sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], \
-	d, plu, MonthName[m], y);
+#define L_J_OVER if (altmode == '*') { sprintf(s, "%s, %d%s %s, %d", DayName[jul%7], d, plu, MonthName[m], y); } else { sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d, plu, MonthName[m], y); }
 
-#define L_K_OVER \
-sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], \
-	d, plu, MonthName[m]);
+#define L_K_OVER if (altmode == '*') { sprintf(s, "%s, %d%s %s", DayName[jul%7], d, plu, MonthName[m]); } else { sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu, MonthName[m]); }
 
 #endif /* L_IN_DOSUBST */
 

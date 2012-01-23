@@ -100,10 +100,10 @@
 
 #define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<5) ? " om natten" : " om formiddagen" : (hour > 17) ? " om aftenen" : " om eftermiddagen";
 #define L_ORDINAL_OVERRIDE		plu = ".";
-#define L_A_OVER                        sprintf(s, "%s %s, den %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y);
+#define L_A_OVER                        if (altmode == '*') { sprintf(s, "%s, den %d. %s %d", DayName[jul%7], d, MonthName[m], y); } else { sprintf(s, "%s %s, den %d. %s %d", L_ON, DayName[jul%7], d, MonthName[m], y); }
 #define L_E_OVER                        sprintf(s, "den %02d%c%02d%c%04d", d, DateSep, m+1, DateSep, y);
 #define L_F_OVER                        sprintf(s, "den %02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
-#define	L_G_OVER			sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]);
+#define	L_G_OVER			if (altmode == '*') { sprintf(s, "%s, den %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]); }
 #define L_H_OVER                        sprintf(s, "den %02d%c%02d", d, DateSep, m+1);
 #define L_I_OVER                        sprintf(s, "den %02d%c%02d", m+1, DateSep, d);
 #define L_U_OVER			L_A_OVER

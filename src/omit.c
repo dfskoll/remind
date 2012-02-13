@@ -390,12 +390,12 @@ DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
 {
     int yend = NO_YR, mend = NO_MON, dend = NO_DAY, r;
     int start, end, tmp;
+    int parsing = 1;
 
     Token tok;
 
     DynamicBuffer buf;
     DBufInit(&buf);
-    int parsing = 1;
 
     while(parsing) {
 	if ( (r=ParseToken(p, &buf)) ) return r;

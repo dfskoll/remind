@@ -1930,10 +1930,10 @@ reminder.  The default is 0.
 The standard Unix library functions may have difficulty dealing with dates
 later than 2037.  If this variable is set to 1, then the UTC calculations
 "fold back" years later than 2037 before using the Unix library functions.
-For example, to find out whether or not daylight savings time is in
+For example, to find out whether or not daylight saving time is in
 effect in June, 2077, the year is "folded back" to 2010, because both
 years begin on a Monday, and both are non-leapyears.  The rules for
-daylight savings time are thus presumed to be identical for both
+daylight saving time are thus presumed to be identical for both
 years, and the Unix library functions can handle 2010.  By default,
 this variable is 0.  Set it to 1 if the sun or UTC functions misbehave
 for years greater than 2037.
@@ -1990,7 +1990,7 @@ The number of minutes between Universal Time Coordinated and local time.  If
 \fB$CalcUTC\fR is non-zero, this is calculated upon startup of \fBRemind\fR.
 Otherwise, you must set it explicitly.  If \fB$CalcUTC\fR is zero,
 then \fB$MinsFromUTC\fR is used in the astronomical calculations.  You
-must adjust it for daylight savings time yourself.  Also, if you
+must adjust it for daylight saving time yourself.  Also, if you
 want to initialize \fB$MinsFromUTC\fR
 using the \fB\-i\fR command-line option, you
 must also set \fB$CalcUTC\fR to 0 with the \fB\-i\fR option.
@@ -2402,7 +2402,7 @@ The optional parameter \fIstart\fR specifies the position in
 .RE
 .TP
 .B isdst([d_date [,t_time]]) \fRor\fB isdst(q_datetime)
-Returns a positive number if daylight savings time is in
+Returns a positive number if daylight saving time is in
 effect on the specified date and time.  \fIDate\fR
 defaults to \fBtoday()\fR and \fItime\fR defaults to midnight.
 .RS

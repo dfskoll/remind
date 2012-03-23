@@ -1791,7 +1791,7 @@ static int FEasterdate(func_info *info)
 /*                                                             */
 /*  FIsdst and FMinsfromutc                                    */
 /*                                                             */
-/*  Check whether daylight savings time is in effect, and      */
+/*  Check whether daylight saving time is in effect, and      */
 /*  get minutes from UTC.                                      */
 /*                                                             */
 /***************************************************************/

@@ -772,7 +772,7 @@ void Init(int argc, char *argv[])
 	case 'o':
 	    if (i == argc) Usage("Offset must be supplied");
 	    offset = atoi(argv[i++]);
-	    if (offset < 36) offset = 36;
+	    if (offset < 0) offset = 0;
 	    if (!*s) Usage("Offset must specify l, r, t or b");
 	    while(*s) {
 		switch(*s++) {

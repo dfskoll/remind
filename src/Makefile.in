@@ -41,7 +41,7 @@ test: remind
 	@sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
+	@CC@ -c @CPPFLAGS@ @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
 
 rem2ps: rem2ps.o dynbuf.o
 	@CC@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o

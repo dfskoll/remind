@@ -59,7 +59,7 @@
  *             v = Dump variables at end
  *             l = Display entire line in error messages
  *  -e       = Send messages normally sent to stderr to stdout instead
- *  -z[n]    = Daemon mode waking up every n (def 5) minutes.
+ *  -z[n]    = Daemon mode waking up every n (def 1) minutes.
  *  -bn      = Time format for cal (0, 1, or 2)
  *  -xn      = Max. number of iterations for SATISFY
  *  -uname   = Run as user 'name' - only valid when run by root.  If run
@@ -622,7 +622,7 @@ void Usage(void)
     fprintf(ErrFp, " -a     Don't trigger timed reminders immediately - just queue them\n");
     fprintf(ErrFp, " -q     Don't queue timed reminders\n");
     fprintf(ErrFp, " -f     Trigger timed reminders by staying in foreground\n");
-    fprintf(ErrFp, " -z[n]  Enter daemon mode, waking every n (5) minutes.\n");
+    fprintf(ErrFp, " -z[n]  Enter daemon mode, waking every n (1) minutes.\n");
     fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline f=tracefiles\n");
     fprintf(ErrFp, " -e     Divert messages normally sent to stderr to stdout\n");
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");

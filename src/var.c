@@ -612,6 +612,7 @@ static SysVar SysVarArr[] = {
     {"T",              0,  SPECIAL_TYPE, trig_date_func,      0,      0   },
     {"Td",             0,  SPECIAL_TYPE, trig_day_func,       0,      0   },
     {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,       0,      0   },
+    {"TrigAttempts",   0,  INT_TYPE,     &TrigAttempts,       0,      0   },
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
     {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,      0,      0   },
     {"Ty",             0,  SPECIAL_TYPE, trig_year_func,      0,      0   },

@@ -178,7 +178,7 @@
 /*---------------------------------------------------------------------*/
 /* How many attempts to resolve a weird date spec?                     */
 /*---------------------------------------------------------------------*/
-#define TRIG_ATTEMPTS 50
+#define TRIG_ATTEMPTS 500
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form YYYY MM DD do we handle?          */

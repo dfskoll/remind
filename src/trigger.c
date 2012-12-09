@@ -426,7 +426,10 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	result;
 
     trig->expired = 0;
-    if (save_in_globals) LastTrigValid = 0;
+    if (save_in_globals) {
+	LastTrigValid = 0;
+	TrigAttempts = 0;
+    }
 
 /* Assume everything works */
     *err = OK;
@@ -448,6 +451,9 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 
 
     while (nattempts++ < TRIG_ATTEMPTS) {
+	if (save_in_globals) {
+	    TrigAttempts = nattempts;
+	}
 	result = GetNextTriggerDate(trig, start, err, &nextstart);
 
 	/* If there's an error, die immediately */

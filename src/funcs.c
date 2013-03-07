@@ -1908,7 +1908,7 @@ static int SunStuff(int rise, double cosz, int jul)
     M -= (floor(M/360.0) * 360.0);
 
 /* Sun's true longitude */
-    L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 282.565;
+    L = M + 1.916*sin(DEGRAD*M) + 0.02*sin(2*DEGRAD*M) + 283.07080214;
     if (L > 360.0) L -= 360.0;
 
 /* Tan of sun's right ascension */
@@ -1951,7 +1951,7 @@ static int SunStuff(int rise, double cosz, int jul)
     H = RADDEG * acos(cosH);
     if (rise) H = 360.0 - H;
 
-    T = H / 15.0 + a_hr - 0.065710 * jan0d - 6.620;
+    T = H / 15.0 + a_hr - 0.065710 * jan0d - 6.726637276;
     if (T >= 24.0) T -= 24.0;
     else if (T < 0.0) T+= 24.0;
     

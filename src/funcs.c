@@ -1858,7 +1858,6 @@ static int SunStuff(int rise, double cosz, int jul)
     int dusk_or_dawn;
     int year, mon, day;
     int jan0;
-    double jan0d;
 
     double M, L, tanA, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
@@ -1881,7 +1880,6 @@ static int SunStuff(int rise, double cosz, int jul)
 
     FromJulian(jul, &year, &mon, &day);
     jan0 = jul - Julian(year, 0, 1);
-    jan0d = (double) jan0;
 
     dusk_or_dawn = rise;
     if (rise > 1)
@@ -1891,10 +1889,8 @@ static int SunStuff(int rise, double cosz, int jul)
     t = (double) jul;
     if (rise) {
 	t += (6.0 + longdeg/15.0) / 24.0;
-	jan0d += (6.0 + longdeg/15.0) / 24.0;
     } else {
 	t += (18.0 + longdeg/15.0) / 24.0;
-	jan0d += (18.0 + longdeg/15.0) / 24.0;
     }
 
 /* Mean anomaly of sun starting from 1 Jan 1990 */

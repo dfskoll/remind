@@ -1902,7 +1902,8 @@ static int SunStuff(int rise, double cosz, int jul)
 #if BASE != 1990
 #error Sun calculations assume a BASE of 1990!
 #endif
-    M = (0.9856002585 * t) + 357.828757;  /* In degrees */
+    t = 0.9856002585 * t;
+    M = t + 357.828757; /* In degrees */
 
     /* Make sure M is in the range [0, 360) */
     M -= (floor(M/360.0) * 360.0);
@@ -1951,7 +1952,9 @@ static int SunStuff(int rise, double cosz, int jul)
     H = RADDEG * acos(cosH);
     if (rise) H = 360.0 - H;
 
-    T = H / 15.0 + a_hr - 0.065710 * jan0d - 6.726637276;
+    t -= 360.0*floor(t/360.0);
+    T = (H-t) / 15.0 + a_hr - 6.726637276;
+
     if (T >= 24.0) T -= 24.0;
     else if (T < 0.0) T+= 24.0;
     

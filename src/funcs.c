@@ -1859,7 +1859,7 @@ static int SunStuff(int rise, double cosz, int jul)
     int year, mon, day;
     int jan0;
 
-    double M, L, tanA, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
+    double M, L, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
 
 /* Get offset from UTC */
@@ -1909,24 +1909,11 @@ static int SunStuff(int rise, double cosz, int jul)
     if (L > 360.0) L -= 360.0;
 
 /* Tan of sun's right ascension */
-    tanA = 0.91746 * tan(DEGRAD*L);
-    a = RADDEG * atan(tanA);
-
-/* Move a into same quadrant as L */
-    if (0.0 <= L && L < 90.0) {
-	if (a < 0.0) a += 180.0;
-    } else if (90.0 <= L && L < 180.0) {
-	a += 180.0;
-    } else if (180.0 <= L && L < 270.0) {
-	a += 180.0;
-    } else {
-	if (a > 0.0) a += 180.0;
+    a = RADDEG * atan2(0.91746*sin(DEGRAD*L), cos(DEGRAD*L));
+    if (a<0) {
+	a += 360.0;
     }
-/*   if (fabs(a - L) > 90.0)
-     a += 180.0; */
-    
-    if (a > 360.0)
-	a -= 360.0;
+
     a_hr = a / 15.0;
 
 /* Sine of sun's declination */

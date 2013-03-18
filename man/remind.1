@@ -236,20 +236,17 @@ pops up a window and displays its invocation arguments.  You could use:
 .PP
 to have all of your \fBMSG\fR-type reminders processed using xmessage.
 .PP
-A word of warning:  It is very easy to spawn dozens of xmessage processes
-with the above technique.  So be very careful.  Also, the \fIcmd\fR is passed
-as an argument to \fBsprintf()\fR.  If you use formatting directives other
-than %s, or use more than one %s directive, there's a good chance that
-you'll crash \fBRemind\fR.  Finally, because all shell and whitespace
-characters are escaped, the program you execute with the \fB\-k\fR
-option must be prepared to handle the entire message as a single argument.
+A word of warning: It is very easy to spawn dozens of xmessage
+processes with the above technique.  So be very careful.  Because all
+shell and whitespace characters are escaped, the program you execute
+with the \fB\-k\fR option must be prepared to handle the entire
+message as a single argument.
 .RE
 .TP
-\fB\-z\fR[\fIn\fR]
-Runs \fBRemind\fR in the daemon mode.  If \fIn\fR is supplied, it
-specifies how often (in minutes) \fBRemind\fR should wake up to
-check if the reminder script has been changed.  \fIN\fR defaults
-to 1, and can range from 1 to 60.  Note that the use of the
+\fB\-z\fR[\fIn\fR] Runs \fBRemind\fR in the daemon mode.  If \fIn\fR
+is supplied, it specifies how often (in minutes) \fBRemind\fR should
+wake up to check if the reminder script has been changed.  \fIN\fR
+defaults to 1, and can range from 1 to 60.  Note that the use of the
 \fB\-z\fR option also enables the \fB\-f\fR option.
 .PP
 .RS

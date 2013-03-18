@@ -1855,9 +1855,7 @@ static int FTimeStuff(int wantmins, func_info *info)
 static int SunStuff(int rise, double cosz, int jul)
 {
     int mins, hours;
-    int dusk_or_dawn;
     int year, mon, day;
-    int jan0;
 
     double M, L, sinDelta, cosDelta, a, a_hr, cosH, t, H, T;
     double latitude, longdeg, UT, local;
@@ -1879,9 +1877,7 @@ static int SunStuff(int rise, double cosz, int jul)
 
 
     FromJulian(jul, &year, &mon, &day);
-    jan0 = jul - Julian(year, 0, 1);
 
-    dusk_or_dawn = rise;
     if (rise > 1)
 	rise -= 2;
 

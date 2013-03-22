@@ -1,5 +1,22 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 13 - 2013-03-22
+
+- BUG FIX: Sunrise/Sunset calculations greatly improved thanks to John
+  McGowan.  Accuracy should now be within a couple of minutes in most
+  places.
+
+- BUG FIX: Allow specification of margins as low as 0 points in rem2ps,
+  courtesy of Jonathan Kamens.
+
+- BUG FIX: Permit compilation with gcc 2.95 (which doesn't allow variable
+  declarations after non-declaration statements in a block.)
+
+- BUG FIX: Several minor documentation errors corrected courtesy of
+  Simon Ruderich.
+
+- BUG FIX: Spurious test harness failure was fixed.
+
 * Version 3.1 Patch 12 - 2012-01-23
 
 - NEW FEATURE: Many substitution sequences "%x" have an alternate mode

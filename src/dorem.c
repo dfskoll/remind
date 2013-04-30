@@ -751,10 +751,10 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	DBufFree(&buf);
     }
 
-/* If it's NextMode, process as a CAL-type entry, and issue simple-calendar
-   format. */
+/* If it's NextMode, process as a ADVANCE_MODE-type entry, and issue
+   simple-calendar format. */
     if (NextMode) {
-	if ( (r=DoSubst(p, &buf, t, tim, jul, CAL_MODE)) ) return r;
+	if ( (r=DoSubst(p, &buf, t, tim, jul, ADVANCE_MODE)) ) return r;
 	if (!DBufLen(&buf)) {
 	    DBufFree(&buf);
 	    DBufFree(&pre_buf);

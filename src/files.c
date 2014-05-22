@@ -181,6 +181,8 @@ int ReadLine(void)
 static int ReadLineFromFile(void)
 {
     int l;
+    char copy_buffer[4096];
+    size_t n;
 
     DynamicBuffer buf;
 
@@ -234,8 +236,25 @@ static int ReadLineFromFile(void)
 	    DBufFree(&LineBuffer);
 	    return E_NO_MEM;
 	}
-	FreshLine = 1;
+	DBufFree(&buf);
+
+	/* If the line is: __EOF__ treat it as end-of-file */
 	CurLine = DBufValue(&LineBuffer);
+	if (!strcmp(CurLine, "__EOF__")) {
+	    if (PurgeMode && PurgeFP) {
+		PurgeEchoLine("%s\n", "__EOF__");
+		while ((n = fread(copy_buffer, 1, sizeof(copy_buffer), fp)) != 0) {
+		    fwrite(copy_buffer, 1, n, PurgeFP);
+		}
+		if (PurgeFP != stdout) fclose(PurgeFP);
+		PurgeFP = NULL;
+	    }
+	    FCLOSE(fp);
+	    DBufFree(&LineBuffer);
+	    CurLine = DBufValue(&LineBuffer);
+	}
+
+	FreshLine = 1;
 	if (DebugFlag & DB_ECHO_LINE) OutputLine(ErrFp);
 	return OK;
     }

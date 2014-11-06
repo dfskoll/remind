@@ -42,7 +42,7 @@
 #define L_JUL "Julio"
 #define L_AUG "Agosto"
 #define L_SEP "Septiembre"
-#define L_OCT "Octuber"
+#define L_OCT "Octubre"
 #define L_NOV "Noviembre"
 #define L_DEC "Diciembre"
 

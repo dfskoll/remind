@@ -5,14 +5,14 @@
 /*  Header file for language support for various languages.    */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
 /*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
 
 /* I'm chauvinistic and name each language with its English name... */
 
-#define ENGLISH    0 /* original   by David F. Skoll                   */
+#define ENGLISH    0 /* original   by Dianne Skoll                   */
 #define GERMAN     1 /* translated by Wolfgang Thronicke               */
 #define DUTCH      2 /* translated by Willem Kasdorp and Erik-Jan Vens */
 #define FINNISH    3 /* translated by Mikko Silvonen                   */

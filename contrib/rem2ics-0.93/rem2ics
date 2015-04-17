@@ -251,7 +251,7 @@ Please report bugs (with patches, if possible).
 Inspired by Anthony J. Chivetta E<lt>achivetta@gmail.comE<gt>'s
 rem2ics in awk.
 
-Thank you to David Skoll E<lt>dfs@roaringpengiun.com<gt> for Remind,
+Thank you to Dianne Skoll E<lt>dfs@roaringpengiun.com<gt> for Remind,
 and to the IETF calsch wg for the iCalendar specification.
 
 =cut

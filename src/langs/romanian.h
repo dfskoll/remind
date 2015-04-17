@@ -1,4 +1,4 @@
-/***************************************************************/
+!/***************************************************************/
 /*                                                             */
 /*  ROMANIAN.H                                                 */
 /*                                                             */
@@ -8,7 +8,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-1998 by David F. Skoll        */
+/*  REMIND is Copyright (C) 1992-1998 by Dianne Skoll          */
 /*       Copyright 1999-2000 by Roaring Penguin Software Inc.  */
 /*  This file is Copyright (C) 1996-1998 by Liviu Daia         */
 /*                                                             */

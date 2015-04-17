@@ -5,7 +5,7 @@
 /*  Print a PostScript calendar.                               */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
 /*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 	if (!strcmp(DBufValue(&buf), PSBEGIN)) {
 	    if (!validfile) {
 		if (Verbose) {
-		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1998 by David F. Skoll\n\n", VERSION);
+		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-1998 by Dianne Skoll\n\n", VERSION);
 		    fprintf(stderr, "Generating PostScript calendar\n");
 		}
 	    }

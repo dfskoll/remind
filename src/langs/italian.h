@@ -7,7 +7,7 @@
 /*  This file is part of REMIND.                               */
 /*  It is Copyright (C) 1996 by Valerio Aimale                 */
 /*                                                             */
-/*  Remind is copyright (C) 1992-1998 by David F. Skoll        */
+/*  Remind is copyright (C) 1992-1998 by Dianne Skoll          */
 /*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*                                                             */
 /***************************************************************/

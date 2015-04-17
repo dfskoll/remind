@@ -84,7 +84,7 @@ Insert I<html_text> right before the E<lt>/bodyE<gt> tag.
 
 =head1 AUTHOR
 
-rem2html was written by David F. Skoll with much inspiration from an
+rem2html was written by Dianne Skoll with much inspiration from an
 earlier version by Don Schwarz.
 
 =cut

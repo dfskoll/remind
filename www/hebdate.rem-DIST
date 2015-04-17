@@ -1,7 +1,7 @@
 # Hebrew date reminder file
 #
 # This file is part of REMIND.
-# Copyright (C) 1992-1997 by David F. Skoll
+# Copyright (C) 1992-1997 by Dianne Skoll
 # Copyright (C) 1999-2000 by Roaring Penguin Software Inc.
 
 BANNER %
@@ -24,7 +24,7 @@ ENDIF
 # dates were obtained from "The First Jewish Catalog" by Richard Siegel	 #
 # and Michael and Sharon Strassfeld, published by the Jewish Publication #
 # Society of America.  The Reform version of the calendar was guessed	 #
-# at by David Skoll based on experience.  Additional corrections were    #
+# at by Dianne Skoll based on experience.  Additional corrections were    #
 # made from the paper "Calendrical Calculations" by Nachum Dershowitz    #
 # and Edward M. Reingold.  Any further corrections are welcome.          #
 #									 #

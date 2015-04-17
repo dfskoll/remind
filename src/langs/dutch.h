@@ -6,12 +6,12 @@
 /*                                                             */
 /*  Author: Willem Kasdorp                                     */
 /*                                                             */
-/*  Modified slightly by David Skoll                           */
+/*  Modified slightly by Dianne Skoll                          */
 /*                                                             */
 /*  Further corrections by Erik-Jan Vens                       */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
 /*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
 /*                                                             */
 /***************************************************************/

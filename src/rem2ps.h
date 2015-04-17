@@ -5,7 +5,7 @@
 /*  Define the PostScript prologue                             */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by David F. Skoll                  */
+/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
 /*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/
@@ -13,8 +13,8 @@
 char *PSProlog1[] =
 {
     "% This file was produced by Remind and Rem2PS, written by",
-    "% David F. Skoll.",
-    "% Remind and Rem2PS are Copyright 1992-1997 David F. Skoll.",
+    "% Dianne Skoll.",
+    "% Remind and Rem2PS are Copyright 1992-1997 Dianne Skoll.",
     "/ISOLatin1Encoding where { pop save true }{ false } ifelse",
     "  /ISOLatin1Encoding [ StandardEncoding 0 45 getinterval aload pop /minus",
     "    StandardEncoding 46 98 getinterval aload pop /dotlessi /grave /acute",

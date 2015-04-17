@@ -5,7 +5,7 @@
 /*  This file contains routines to parse and evaluate          */
 /*  expressions.                                               */
 /*                                                             */
-/*  Copyright 1992-1998 by David F. Skoll                      */
+/*  Copyright 1992-1998 by Dianne Skoll                        */
 /*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
 /*                                                             */
 /***************************************************************/

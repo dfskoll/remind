@@ -309,3 +309,7 @@ OMIT December 25 MSG X
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
 OMIT DUMP
+__EOF__
+REM This line should not even be seen
+And you can put whatever you like here.
+[+f=asdfasdasde3ir0a]

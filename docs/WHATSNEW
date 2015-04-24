@@ -1,5 +1,22 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 14 - 2014-04-24
+
+- NEW FEATURE: Putting the line __EOF__ in a .rem file causes Remind
+  to treat it as end-of-file.
+
+- IMPROVEMENT: Use better PNG images for moons in the HTML display
+
+- CHANGE: Author name updated from "David" to "Dianne"
+
+- BUG FIX: The "-n" command-line option should really run in "ADVANCE_MODE"
+  rather than "CAL_MODE" internally; otherwise, the substitution sequences
+  may be misinterpreted.
+
+- BUG FIX: A typo in clearing out MD5 sum context has been fixed.
+
+- BUG FIX: Typo in Spanish translation was fixed.
+
 * Version 3.1 Patch 13 - 2013-03-22
 
 - BUG FIX: Sunrise/Sunset calculations greatly improved thanks to John

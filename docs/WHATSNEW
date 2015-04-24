@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 14 - 2014-04-24
+* Version 3.1 Patch 14 - 2015-04-24
 
 - NEW FEATURE: Putting the line __EOF__ in a .rem file causes Remind
   to treat it as end-of-file.

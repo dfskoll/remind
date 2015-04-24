@@ -19,6 +19,10 @@ be a directory rather than a plain file, then \fBRemind\fR reads all of
 the files in that directory that match the pattern "*.rem".  The files
 are read in sorted order; the sort order may depend on your locale, but
 should match the sort order used by the shell to expand "*.rem".
+.PP
+\fBRemind\fR reads its files starting from the beginning to the end, or
+until it encounters a line whose sole content is "__EOF__" (without the quotes.)
+Anything after the __EOF__ marker is completely ignored.
 
 .SH OPTIONS
 \fBRemind\fR has a slew of options.  If you're new to the program,

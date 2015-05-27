@@ -447,6 +447,7 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 	switch(tok.type) {
 	case T_Time:
 	    DBufFree(&buf);
+	    if (tim->ttime != NO_TIME) return E_TIME_TWICE;
 	    tim->ttime = tok.val;
 	    break;
 

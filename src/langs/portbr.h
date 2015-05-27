@@ -247,7 +247,8 @@ EXTERN char *ErrMsg[] =
     "Funcao ilegal na clausula WARN",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 };
 #endif /* MK_GLOBALS */
 

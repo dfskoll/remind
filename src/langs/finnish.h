@@ -302,7 +302,8 @@ EXTERN char *ErrMsg[] =
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 
 #elif IBMEXTENDED
     "Ok",
@@ -406,7 +407,8 @@ EXTERN char *ErrMsg[] =
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 
 #else
     "Ok",
@@ -510,7 +512,8 @@ EXTERN char *ErrMsg[] =
     "Virheellinen funktio WARN-lausekkeessa",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 
 
 #endif

@@ -242,7 +242,8 @@ EXTERN char *ErrMsg[] =
     "Fonction ill\351gale apr\350s WARN",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 
 #else /* ISOLATIN1 */
     "Ok",
@@ -346,7 +347,8 @@ EXTERN char *ErrMsg[] =
     "Fonction illegale apres WARN",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

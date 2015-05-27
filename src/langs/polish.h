@@ -281,7 +281,8 @@ EXTERN char *ErrMsg[] =
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 #else /* ISOLATIN1 */
     "OK",
     "Brakujacy ']'",
@@ -384,7 +385,8 @@ EXTERN char *ErrMsg[] =
     "Illegal function in WARN clause (NEEDS TRANSLATION TO POLISH)",
     "Can't convert between time zones",
     "No files matching *.rem",
-    "String too long"
+    "String too long",
+    "Time specified twice"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

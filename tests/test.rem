@@ -9,6 +9,9 @@
 
 REM Wed UNTIL 15 Feb 1991 SATISFY [trigdate() > '1990-01-01'] MSG wookie
 
+# bad AT
+REM AT 0:00 0:01 0:02 MSG foo
+
 REM MSG Today is [hebday(today())] [hebmon(today())] [hebyear(today())]
 fset _h(x, y) trigger(hebdate(x,y))
 

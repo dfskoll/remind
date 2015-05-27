@@ -453,11 +453,13 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 
 	case T_Delta:
 	    DBufFree(&buf);
+	    if (tim->delta != NO_DELTA) return E_DELTA_TWICE;
 	    tim->delta = (tok.val > 0) ? tok.val : -tok.val;
 	    break;
 
 	case T_Rep:
 	    DBufFree(&buf);
+	    if (tim->rep != NO_REP) return E_REP_TWICE;
 	    tim->rep = tok.val;
 	    break;
 

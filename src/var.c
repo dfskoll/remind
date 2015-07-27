@@ -757,7 +757,7 @@ static void DumpSysVar(char const *name, const SysVar *v)
     if (!v && !name) return;  /* Shouldn't happen... */
 
     buffer[0]='$'; buffer[1] = 0;
-    if (strlen(name) > VAR_NAME_LEN) {
+    if (name && strlen(name) > VAR_NAME_LEN) {
 	fprintf(ErrFp, "$%s: Name too long\n", name);
 	return;
     }

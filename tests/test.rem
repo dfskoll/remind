@@ -307,6 +307,7 @@ set a083 slide('1991-04-01', -7, "Sat")
 set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")
 set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
 dump
+dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
 # Next should give a parse error

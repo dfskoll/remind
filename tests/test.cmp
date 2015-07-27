@@ -840,7 +840,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "03.01.14"
+version() => "03.01.15"
 set a059 wkday(today())
 today() => 1991-02-16
 wkday(1991-02-16) => "Saturday"
@@ -1063,7 +1063,7 @@ dump
             a048  "foo"
             a067  "INT"
             a039  "February"
-            a058  "03.01.14"
+            a058  "03.01.15"
             a077  "1992 92
 "
             a049  21
@@ -1120,12 +1120,16 @@ dump
             a045  "iess"
             a064  1
             a083  1991-03-24
+dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        Variable  Value
+
+$aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(311): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(312): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(313): Trig = Sunday, 26 December, 2010
+../tests/test.rem(314): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11

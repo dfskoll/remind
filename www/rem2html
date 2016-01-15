@@ -256,6 +256,9 @@ sub parse_input
 		if ($body =~ /(\d+)\s+(\d+)\s+(\d+)/) {
 			$shades->[$d] = sprintf("#%02X%02X%02X",
 						($1 % 256), ($2 % 256), ($3 % 256));
+		} elsif ($body =~ /(\d+)/) {
+			$shades->[$d] = sprintf("#%02X%02X%02X",
+						($1 % 256), ($1 % 256), ($1 % 256));
 		}
 	} elsif ($special eq 'COLOR' || $special eq 'COLOUR') {
 		if ($body =~ /(\d+)\s+(\d+)\s+(\d+)\s+(.*)$/) {

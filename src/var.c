@@ -140,6 +140,25 @@ static int today_wday_func(int do_set, Value *val)
     return OK;
 }
 
+static int datetime_sep_func(int do_set, Value *val)
+{
+    if (!do_set) {
+	val->v.str = malloc(2);
+	if (!val->v.str) return E_NO_MEM;
+	val->v.str[0] = DateTimeSep;
+	val->v.str[1] = 0;
+	val->type = STR_TYPE;
+	return OK;
+    }
+    if (val->type != STR_TYPE) return E_BAD_TYPE;
+    if (strcmp(val->v.str, "T") &&
+	strcmp(val->v.str, "@")) {
+	return E_BAD_TYPE;
+    }
+    DateTimeSep = val->v.str[0];
+    return OK;
+}
+
 static int date_sep_func(int do_set, Value *val)
 {
     if (!do_set) {
@@ -575,6 +594,7 @@ static SysVar SysVarArr[] = {
     {"CalMode",        0,  INT_TYPE,     &DoCalendar,         0,      0   },
     {"Daemon",         0,  INT_TYPE,     &Daemon,             0,      0   },
     {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,       0,      0   },
+    {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,   0,      0   },
     {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,        0,      9999},
     {"DeltaOffset",    0,  INT_TYPE,     &DeltaOffset,        0,      0   },
     {"DontFork",       0,  INT_TYPE,     &DontFork,           0,      0   },

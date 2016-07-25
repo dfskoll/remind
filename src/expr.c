@@ -620,8 +620,8 @@ int DoCoerce(char type, Value *v)
 	    k = v->v.val % MINUTES_PER_DAY;
 	    h = k / 60;
 	    i = k % 60;
-	    sprintf(CoerceBuf, "%04d%c%02d%c%02d@%02d%c%02d",
-		    y, DateSep, m+1, DateSep, d, h, TimeSep, i);
+	    sprintf(CoerceBuf, "%04d%c%02d%c%02d%c%02d%c%02d",
+		    y, DateSep, m+1, DateSep, d, DateTimeSep, h, TimeSep, i);
 	    break;
 	default: return E_CANT_COERCE;
 	}
@@ -1193,7 +1193,7 @@ void PrintValue (Value *v, FILE *fp)
     }
     else if (v->type == DATETIME_TYPE) {
 	FromJulian(v->v.val / MINUTES_PER_DAY, &y, &m, &d);
-	fprintf(fp, "%04d%c%02d%c%02d@%02d%c%02d", y, DateSep, m+1, DateSep, d,
+	fprintf(fp, "%04d%c%02d%c%02d%c%02d%c%02d", y, DateSep, m+1, DateSep, d, DateTimeSep,
 		(v->v.val % MINUTES_PER_DAY) / 60, TimeSep, (v->v.val % MINUTES_PER_DAY) % 60);
     }
     else fprintf(fp, "ERR");
@@ -1261,7 +1261,7 @@ int ParseLiteralDate(char const **s, int *jul, int *tim)
     *jul = Julian(y, m, d);
 
     /* Do we have a time part as well? */
-    if (**s == ' ' || **s == '@') {
+    if (**s == ' ' || **s == '@' || **s == 'T' || **s == 't') {
 	(*s)++;
 	while(isdigit(**s)) {
 	    hour *= 10;

@@ -53,6 +53,13 @@
 /* #define TIMESEP '.' */
 
 /*---------------------------------------------------------------------*/
+/* DATETIMESEP:  The default datetime separator.  Default is '@';      */
+/* others may prefer 'T'.                                              */
+/*---------------------------------------------------------------------*/
+#define DATETIMESEP '@'
+/* #define DATETIMESEP '/' */
+
+/*---------------------------------------------------------------------*/
 /* ISOLATIN1: define it to 1 if you use the                            */
 /* ISO 8859-1 character set instead of ASCII.                          */
 /*---------------------------------------------------------------------*/

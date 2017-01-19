@@ -1,5 +1,10 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 16 - 2017-XX-XX
+
+- IMPROVEMENT: Add patch from Stephen Morgan to calculate astronomical and
+  nautical twilight in addition to civil twilight.
+
 * Version 3.1 Patch 15 - 2015-07-27
 
 - BUG FIX: Fix a buffer overflow found by Alexander Keller

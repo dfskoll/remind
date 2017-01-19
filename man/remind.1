@@ -2123,6 +2123,15 @@ be a number as described in the UNIX \fBaccess\fR(2) system call.  The
 function returns 0 if the file can be accessed with the specified \fImode\fR,
 and \-1 otherwise.
 .TP
+.B adawn([dq_date])
+Returns the time of "astronomical dawn" on the specified \fIdate\fR.  If
+\fIdate\fR is omitted, defaults to \fBtoday()\fR.  If a \fIdatetime\fR object
+is supplied, only the date component is used.
+.TP
+.B adusk([dq_date])
+Returns the time of "astronomical twilight" on the specified \fIdate\fR.  If
+\fIdate\fR is omitted, defaults to \fBtoday()\fR.
+.TP
 .B args(s_fname)
 Returns the number of arguments expected by the user-defined function
 \fIfname\fR, or \-1 if no such user-defined function exists.  Note that
@@ -2516,6 +2525,15 @@ This function returns the phase of the moon on \fIdate\fR and \fItime\fR,
 which default to \fBtoday()\fR and midnight, respectively.  The returned
 value is an integer from 0 to 359, representing the phase of the moon
 in degrees.  0 is a new moon, 180 is a full moon, 90 is first-quarter, etc.
+.TP
+.B ndawn([dq_date])
+Returns the time of "nautical dawn" on the specified \fIdate\fR.  If
+\fIdate\fR is omitted, defaults to \fBtoday()\fR.  If a \fIdatetime\fR object
+is supplied, only the date component is used.
+.TP
+.B ndusk([dq_date])
+Returns the time of "nautical twilight" on the specified \fIdate\fR.  If
+\fIdate\fR is omitted, defaults to \fBtoday()\fR.
 .TP
 .B nonomitted(dq_start, dq_end [,s_wkday...])
 This function returns the number of \fInon-\fRomitted days between

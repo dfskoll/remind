@@ -110,6 +110,10 @@ static int	FPsshade	(func_info *);
 static	int	FShell		(func_info *);
 static	int	FStrlen		(func_info *);
 static	int	FSubstr		(func_info *);
+static	int	FADawn		(func_info *);
+static	int	FADusk	 	(func_info *);
+static	int	FNDawn		(func_info *);
+static	int	FNDusk	 	(func_info *);
 static	int	FDawn		(func_info *);
 static	int	FDusk	 	(func_info *);
 static	int	FSunset		(func_info *);
@@ -188,6 +192,8 @@ BuiltinFunc Func[] = {
 
     {   "abs",          1,      1,      1,          FAbs },
     {   "access",       2,      2,      0,          FAccess },
+    {   "adawn",        0,      1,      0,          FADawn},
+    {   "adusk",        0,      1,      0,          FADusk},
     {   "args",         1,      1,      0,          FArgs   },
     {   "asc",          1,      1,      1,          FAsc    },
     {   "baseyr",       0,      0,      1,          FBaseyr },
@@ -233,6 +239,8 @@ BuiltinFunc Func[] = {
     {   "moondatetime", 1,      3,      0,          FMoondatetime },
     {   "moonphase",    0,      2,      0,          FMoonphase },
     {   "moontime",     1,      3,      0,          FMoontime },
+    {   "ndawn",        0,      1,      0,          FNDawn},
+    {   "ndusk",        0,      1,      0,          FNDusk},
     {   "nonomitted",   2,      NO_MAX, 0,          FNonomitted },
     {   "now",          0,      0,      0,          FNow    },
     {   "ord",          1,      1,      1,          FOrd    },
@@ -1878,9 +1886,6 @@ static int SunStuff(int rise, double cosz, int jul)
 
     FromJulian(jul, &year, &mon, &day);
 
-    if (rise > 1)
-	rise -= 2;
-
 /* Following formula on page B6 exactly... */
     t = (double) jul;
     if (rise) {
@@ -1970,19 +1975,28 @@ static int SunStuff(int rise, double cosz, int jul)
 static int FSun(int rise, func_info *info)
 {
     int jul = JulianToday;
-    double cosz = -0.014543897;  /* for sunrise and sunset */
+    double cosz;
     int r;
 
+    if (rise == 0 || rise == 1) {
+    /* Sunrise and sunset : cos(90 degrees + 50 arcminutes) */
+    cosz = -0.01454389765158243;
+    } else if (rise == 2 || rise == 3) {
     /* Civil twilight: cos(96 degrees) */
-    if (rise == 2 || rise == 3) {
-	cosz = -0.104528463268;
+	cosz = -0.10452846326765333;
+    } else if (rise == 4 || rise == 5) {
+    /* Nautical twilight: cos(102 degrees) */
+	cosz = -0.20791169081775912;
+    } else if (rise == 6 || rise == 7) {
+    /* Astronomical twilight: cos(108 degrees) */
+	cosz = -0.30901699437494734;
     }
     if (Nargs >= 1) {
 	if (!HASDATE(ARG(0))) return E_BAD_TYPE;
 	jul = DATEPART(ARG(0));
     }
 
-    r = SunStuff(rise, cosz, jul);
+    r = SunStuff(rise % 2, cosz, jul);
     if (r == NO_TIME) {
 	RETVAL = 0;
 	RetVal.type = INT_TYPE;
@@ -2012,6 +2026,24 @@ static int FDawn(func_info *info)
 static int FDusk(func_info *info)
 {
     return FSun(2, info);
+}
+
+static int FNDawn(func_info *info)
+{
+    return FSun(5, info);
+}
+static int FNDusk(func_info *info)
+{
+    return FSun(4, info);
+}
+
+static int FADawn(func_info *info)
+{
+    return FSun(7, info);
+}
+static int FADusk(func_info *info)
+{
+    return FSun(6, info);
 }
 
 /***************************************************************/

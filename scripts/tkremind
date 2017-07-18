@@ -17,6 +17,8 @@ exec wish "$0" "$@"
 
 wm withdraw .
 
+set Hostname [exec hostname]
+
 # Our icon photo
 catch {
     image create photo rpicon -data {
@@ -722,8 +724,9 @@ proc LoadOptions {} {
 #  Any side effects
 #***********************************************************************
 proc ConfigureCalWindow { month year firstDay numDays } {
+    global Hostname
     .h.title configure -text "$month $year"
-    wm title . "$month $year - TkRemind"
+    wm title . "$month $year - TkRemind on $Hostname"
     wm iconname . "$month $year"
     ConfigureCalFrame .cal $firstDay $numDays
 }

@@ -1975,7 +1975,9 @@ static int SunStuff(int rise, double cosz, int jul)
 static int FSun(int rise, func_info *info)
 {
     int jul = JulianToday;
-    double cosz;
+    /* Assignment below is not necessary, but it silences
+       a GCC warning about a possibly-uninitialized variable */
+    double cosz = 0.0;
     int r;
 
     if (rise == 0 || rise == 1) {

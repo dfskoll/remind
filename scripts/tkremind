@@ -191,7 +191,7 @@ set HighestTagSoFar 0
 proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
-    global MondayFirst TwentyFourHourMode
+    global MondayFirst TwentyFourHourMode ReminderFileModTime
 
     set CommandLine "|$Remind -itkremind=1 -p -y -l"
     set PSCmd "$Remind -p -l"
@@ -256,9 +256,48 @@ proc Initialize {} {
     append CommandLine " $ReminderFile"
     append PSCmd " $ReminderFile"
     set DayNames [GetWeekdayNames]
+
+    # Get modification time of ReminderFile
+    set ReminderFileModTime -1
+    catch {
+	set ReminderFileModTime [file mtime $ReminderFile]
+    }
+
+    MonitorReminderFile
+
 #   puts "CommandLine: $CommandLine"
 }
 
+#---------------------------------------------------------------------------
+# MonitorReminderFile
+# If Reminder File modtime changes, restart daemon
+#---------------------------------------------------------------------------
+proc MonitorReminderFile {} {
+    global ReminderFileModTime ReminderFile
+
+    if {$ReminderFileModTime < 0} {
+	# Could not stat file
+	return
+    }
+
+    set mtime -1
+    catch {
+	set mtime [file mtime $ReminderFile]
+    }
+    if {$mtime < 0} {
+	# Doh!
+	return
+    }
+
+    # Run ourselves again
+    after 60000 MonitorReminderFile
+
+    # Restart daemon if needed
+    if {$ReminderFileModTime < $mtime} {
+	set ReminderFileModTime $mtime
+	RestartBackgroundRemindDaemon
+    }
+}
 #---------------------------------------------------------------------------
 # GetWeekdayNames - Spawn a remind process and get the names of the weekdays
 # Also sets CurMonth and CurYear.
@@ -2135,7 +2174,14 @@ proc StopBackgroundRemindDaemon {} {
 #    Restarts the background Remind daemon
 #---------------------------------------------------------------------------
 proc RestartBackgroundRemindDaemon {} {
-    global DaemonFile
+    global DaemonFile ReminderFile ReminderFileModTime
+
+    # Don't let the background handler trigger another reread
+    catch {
+	set mtime [file mtime $ReminderFile]
+	set ReminderFileModTime $mtime
+    }
+
     catch {
 	puts $DaemonFile "REREAD"
 	flush $DaemonFile

@@ -292,9 +292,10 @@ proc MonitorReminderFile {} {
     # Run ourselves again
     after 60000 MonitorReminderFile
 
-    # Restart daemon if needed
+    # Redraw calendar and restart daemon if needed
     if {$ReminderFileModTime < $mtime} {
 	set ReminderFileModTime $mtime
+	FillCalWindow
 	RestartBackgroundRemindDaemon
     }
 }

@@ -277,7 +277,7 @@ void ProduceCalendar(void)
 /*  Write a calendar for a single week                         */
 /*                                                             */
 /***************************************************************/
-static void DoCalendarOneWeek(nleft)
+static void DoCalendarOneWeek(int nleft)
 {
     int y, m, d, done, i, l, wd;
     char buf[81];

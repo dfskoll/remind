@@ -506,6 +506,31 @@ static void DaemonWait(unsigned int sleeptime)
 	}
 	printf("NOTE queued %d\n", nqueued);
 	fflush(stdout);
+    } else if (!strcmp(cmdLine, "QUEUE\n")) {
+	printf("NOTE queue\n");
+	QueuedRem *q = QueueHead;
+	while (q) {
+	    switch (q->typ) {
+	    case NO_TYPE: printf("NO_TYPE "); break;
+	    case MSG_TYPE: printf("MSG_TYPE "); break;
+	    case RUN_TYPE: printf("RUN_TYPE "); break;
+	    case CAL_TYPE: printf("CAL_TYPE "); break;
+	    case SAT_TYPE: printf("SAT_TYPE "); break;
+	    case PS_TYPE: printf("PS_TYPE "); break;
+	    case PSF_TYPE: printf("PSF_TYPE "); break;
+	    case MSF_TYPE: printf("MSF_TYPE "); break;
+	    case PASSTHRU_TYPE: printf("PASSTHRU_TYPE "); break;
+	    default: printf("? "); break;
+	    }
+	    printf("%d %d %d %d %d %d %d ", q->RunDisabled, q->ntrig, q->tt.ttime, q->tt.nexttime, q->tt.delta, q->tt.rep, q->tt.duration);
+	    printf("%s %s %s\n",
+		   (q->passthru[0] ? q->passthru : "*"),
+		   (q->sched[0] ? q->sched : "*"),
+		   q->text ? q->text : "NULL");
+
+	    q = q->next;
+	}
+	printf("NOTE endqueue\n");
     } else if (!strcmp(cmdLine, "REREAD\n")) {
 	printf("NOTE reread\n");
 	fflush(stdout);

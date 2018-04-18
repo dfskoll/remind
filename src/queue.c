@@ -531,6 +531,7 @@ static void DaemonWait(unsigned int sleeptime)
 	    q = q->next;
 	}
 	printf("NOTE endqueue\n");
+	fflush(stdout);
     } else if (!strcmp(cmdLine, "REREAD\n")) {
 	printf("NOTE reread\n");
 	fflush(stdout);

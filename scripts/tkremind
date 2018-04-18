@@ -497,6 +497,12 @@ proc ConfigureCalFrame { w firstDay numDays } {
     }
 }
 
+proc DoQueue {} {
+    global DaemonFile
+    puts $DaemonFile "QUEUE"
+    flush $DaemonFile
+}
+
 #---------------------------------------------------------------------------
 # CreateCalWindow -- create the calendar window.
 # Arguments:
@@ -517,11 +523,12 @@ proc CreateCalWindow { dayNames } {
     button .b.next -text {->} -command {MoveMonth 1} -border 1
     button .b.goto -text {Go To Date...} -command {GotoDialog} -border 1
     button .b.print -text {Print...} -command {DoPrint} -border 1
+    button .b.queue -text {Queue...} -command {DoQueue} -border 1
     button .b.quit -text {Quit} -command {Quit} -border 1
     button .b.options -text {Options...} -command EditOptions -border 1
     label .b.status -text "" -width 25 -relief sunken -border 1
     label .b.nqueued -text "" -width 20 -relief sunken -border 1
-    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.quit -side left -fill x
+    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill x
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x
     pack .b -side bottom -fill x -expand 0
@@ -2190,6 +2197,44 @@ proc RestartBackgroundRemindDaemon {} {
 }
 
 #---------------------------------------------------------------------------
+# ShowQueue
+# Arguments:
+#    file -- file channel that is readable
+# Returns:
+#    nothing
+# Description:
+#    Dumps the debugging queue listing
+#---------------------------------------------------------------------------
+proc ShowQueue { file } {
+    set w .queuedbg
+    catch { destroy $w }
+    toplevel $w
+    wm title $w "Queue (Debugging Output)"
+    wm iconname $w "Queue Dbg"
+    text $w.t -width 80 -height 30 -wrap word -yscrollcommand "$w.sb set"
+    scrollbar $w.sb -orient vertical -command "$w.text yview"
+    button $w.ok -text "OK" -command "destroy $w"
+    grid $w.t -row 0 -column 0 -sticky nsew
+    grid $w.sb -row 0 -column 1 -sticky ns
+    grid $w.ok -row 1 -column 0 -sticky w
+
+    set did 0
+    CenterWindow $w
+    while (1) {
+	gets $file line
+	if {$line == "NOTE endqueue"} {
+	    break
+	}
+	set did 1
+	$w.t insert end "$line\n"
+    }
+    if {!$did} {
+	$w.t insert end "*** Queue is empty ***\n"
+    }
+    $w.t configure -state disabled
+}
+
+#---------------------------------------------------------------------------
 # DaemonReadable
 # Arguments:
 #    file -- file channel that is readable
@@ -2210,6 +2255,9 @@ proc DaemonReadable { file } {
 	"NOTE reminder*" {
 	    scan $line "NOTE reminder %s %s %s" time now tag
 	    IssueBackgroundReminder $file $time $now $tag
+	}
+	"NOTE queue" {
+	    ShowQueue $file
 	}
 	"NOTE newdate" {
 	    # Date has rolled over -- clear "ignore" list

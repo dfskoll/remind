@@ -522,7 +522,7 @@ static void DaemonWait(unsigned int sleeptime)
 	    case PASSTHRU_TYPE: printf("PASSTHRU_TYPE "); break;
 	    default: printf("? "); break;
 	    }
-	    printf("%d %d %d %d %d %d %d ", q->RunDisabled, q->ntrig, q->tt.ttime, q->tt.nexttime, q->tt.delta, q->tt.rep, q->tt.duration);
+	    printf("RunDisabled=%d ntrig=%d ttime=%02d:%02d nexttime=%02d:%02d delta=%d rep=%d duration=%d ", q->RunDisabled, q->ntrig, q->tt.ttime/60, q->tt.ttime % 60, q->tt.nexttime / 60, q->tt.nexttime % 60, q->tt.delta, (q->tt.rep != NO_TIME ? q->tt.rep : -1), (q->tt.duration != NO_TIME ? q->tt.duration : -1));
 	    printf("%s %s %s\n",
 		   (q->passthru[0] ? q->passthru : "*"),
 		   (q->sched[0] ? q->sched : "*"),

@@ -516,11 +516,11 @@ ELSE
    REM [_PastSun(27, "Nisan")] ++4 MSG %"Yom HaShoah%" is %b.
 ENDIF
 
-# If 4 Iyar is a Friday, then Yom Hazikaron is
+# If 4 Iyar is a Thursday or Friday, then Yom Hazikaron is
 # the Wednesday before and Yom Ha'atzmaut is on
 # Thursday.  If 4 Iyar is a Sunday, then Yom Hazikaron
 # moves to 5 Iyar and Yom Ha'atzmaut to 6 Iyar.
-IF WKDAYNUM(_h2(4, "Iyar")) == 5
+IF WKDAYNUM(_h2(4, "Iyar")) == 4 || WKDAYNUM(_h2(4, "Iyar")) == 5
 	[_h(2, "Iyar")] ++4 MSG %"Yom Hazikaron%" is %b.
 	[_h(3, "Iyar")] ++4 MSG %"Yom Ha'atzmaut%" is %b.
 ELSE

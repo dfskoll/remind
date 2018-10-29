@@ -664,7 +664,7 @@ proc EditOptions {} {
     button $w.cancel -text "Cancel" -command "destroy $w"
 
     pack $w.apply $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
-    CenterWindow $w
+    CenterWindow $w .
 }
 
 #***********************************************************************
@@ -1005,7 +1005,7 @@ proc DoPrint {} {
     bind .p <KeyPress-Escape> ".p.cancel flash; .p.cancel invoke"
     bind .p <KeyPress-Return> ".p.print flash; .p.print invoke"
     set PrintStatus 2
-    CenterWindow .p
+    CenterWindow .p .
     tkwait visibility .p
     set oldFocus [focus]
     focus .p.filename
@@ -1127,7 +1127,7 @@ proc GotoDialog {} {
     pack .g.y -expand 1 -fill x
     pack .g.b -expand 1 -fill x
     bind .g <KeyPress-Escape> ".g.b.cancel flash; .g.b.cancel invoke"
-    CenterWindow .g
+    CenterWindow .g .
     set oldFocus [focus]
     grab .g
     focus .g.y.e
@@ -1394,7 +1394,7 @@ proc CreateModifyDialog {w day firstDay args} {
     set ModifyDialogResult 0
 
     # Center the window on the root
-    CenterWindow $w
+    CenterWindow $w .
 }
 
 #***********************************************************************
@@ -1617,17 +1617,24 @@ proc ModifyDay {d firstDay} {
 }
 
 #---------------------------------------------------------------------------
-# CenterWindow -- center a window on the screen.  Stolen from tk_dialog code
+# CenterWindow -- center a window on the screen or over a parent.
+#                 Stolen from tk_dialog code
 # Arguments:
 #    w -- window to center
+#    parent -- window over which to center.  Defaults to screen if not supplied.
 #---------------------------------------------------------------------------
-proc CenterWindow {w} {
+proc CenterWindow {w {parent {}}} {
     wm withdraw $w
     update idletasks
-    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2 \
-	    - [winfo vrootx [winfo parent $w]]]
-    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2 \
-	    - [winfo vrooty [winfo parent $w]]]
+    if {"$parent" == ""} {
+	set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2 \
+		   - [winfo vrootx [winfo parent $w]]]
+	set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2 \
+		   - [winfo vrooty [winfo parent $w]]]
+    } else {
+	set x [expr [winfo rootx $parent] + [winfo width $parent]/2 - [winfo reqwidth $w]/2]
+	set y [expr [winfo rooty $parent] + [winfo height $parent]/2 - [winfo reqheight $w]/2]
+    }
     wm geom $w +$x+$y
     wm deiconify $w
 }
@@ -1910,7 +1917,7 @@ proc EditReminder {rem args} {
     pack .edit.f -side top -fill x -expand 1
     bind .edit <KeyPress-Escape> ".edit.but1 flash; .edit.but1 invoke"
     set ModifyDialogResult 0
-    CenterWindow .edit
+    CenterWindow .edit .
     tkwait visibility .edit
     set oldFocus [focus]
     focus .edit.t
@@ -2020,7 +2027,7 @@ proc BrowseForFile {w title {oktext "OK"} {showdots 0} {filter "*"}} {
     bindtags $w.entry "Entry $w.entry $w all"
 
     bindtags $w.list "Listbox $w.list $w all"
-    CenterWindow $w
+    CenterWindow $w .
     set oldFocus [focus]
     tkwait visibility $w
     focus $w.entry
@@ -2222,7 +2229,7 @@ proc ShowQueue { file } {
     grid rowconfigure $w 0 -weight 1
     grid rowconfigure $w 1 -weight 0
     set did 0
-    CenterWindow $w
+    CenterWindow $w .
     while (1) {
 	gets $file line
 	if {$line == "NOTE endqueue"} {
@@ -2353,7 +2360,7 @@ proc IssueBackgroundReminder { file time now tag } {
 	pack $w.nomore $w.kill -in $w.b -side left
     }
 
-    CenterWindow $w
+    CenterWindow $w .
 
     update
     if {$Option(RingBell)} {
@@ -2956,7 +2963,7 @@ proc ShowTodaysReminders {} {
     grid $w.sb -row 0 -column 1 -sticky ns
     grid $w.ok -row 1 -column 0 -sticky w
 
-    CenterWindow $w
+    CenterWindow $w .
 
     # Grab the reminders
     set stuff [exec -keepnewline $Remind -g -q -r $ReminderFile 2>/dev/null]

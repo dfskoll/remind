@@ -310,6 +310,9 @@ REM      Mar 17		MSG %"St. Patrick's%" Day
 REM Sun Apr 1 ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST starts%" %b
 REM Sun Mar 8 ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST starts%" %b
 
+REM Sun [_last(Oct)] ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
+REM Sun 1 Nov ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
+
 REM      Apr  1		MSG %"April Fool's%" Day
 REM  Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
 REM      May  5		MSG %"Cinco de Mayo%"
@@ -324,11 +327,6 @@ REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
 OMIT [trigdate()] MSG %"Labor Day%"
 REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
 REM      Nov 11		MSG %"Veterans Day%"
-
-# The DST rules are accurate for most locations in
-# North America
-REM Sun [_last(Oct)] UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST over%"
-REM Sun 1 Nov FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST over%"
 
 REM      Oct 30		MSG %"Mischief Night%"
 REM      Oct 31		MSG %"Halloween%"

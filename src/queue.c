@@ -75,7 +75,7 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     if (DontQueue ||
 	tim->ttime == NO_TIME ||
 	trig->typ == CAL_TYPE ||
-	tim->ttime < SystemTime(1) / 60 ||
+	tim->ttime < SystemTime(0) / 60 ||
 	((trig->typ == RUN_TYPE) && RunDisabled)) return OK;
 
     qelem = NEW(QueuedRem);

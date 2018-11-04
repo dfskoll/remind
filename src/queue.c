@@ -75,7 +75,7 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     if (DontQueue ||
 	tim->ttime == NO_TIME ||
 	trig->typ == CAL_TYPE ||
-	tim->ttime < SystemTime(0) / 60 ||
+	tim->ttime < SystemTime(1) / 60 ||
 	((trig->typ == RUN_TYPE) && RunDisabled)) return OK;
 
     qelem = NEW(QueuedRem);
@@ -151,7 +151,7 @@ void HandleQueuedReminders(void)
     /* Initialize the queue - initialize all the entries time of issue */
 
     while (q) {
-	q->tt.nexttime = (int) (SystemTime(0)/60 - 1);
+	q->tt.nexttime = (int) (SystemTime(1)/60 - 1);
 	q->tt.nexttime = CalculateNextTime(q);
 	q = q->next;
     }
@@ -168,12 +168,12 @@ void HandleQueuedReminders(void)
 	if (Daemon && !q) {
 	    if (Daemon < 0) {
 		/* Sleep until midnight */
-		TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(0);
+		TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(1);
 	    } else {
 		TimeToSleep = 60*Daemon;
 	    }
 	} else {
-	    TimeToSleep = q->tt.nexttime * 60L - SystemTime(0);
+	    TimeToSleep = q->tt.nexttime * 60L - SystemTime(1);
 	}
 
 	while (TimeToSleep > 0L) {
@@ -208,12 +208,12 @@ void HandleQueuedReminders(void)
 	    if (Daemon && !q) {
 		if (Daemon < 0) {
 		    /* Sleep until midnight */
-		    TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(0);
+		    TimeToSleep = MINUTES_PER_DAY*60 - SystemTime(1);
 		} else {
 		    TimeToSleep = 60*Daemon;
 		}
 	    } else {
-		TimeToSleep = q->tt.nexttime * 60L - SystemTime(0);
+		TimeToSleep = q->tt.nexttime * 60L - SystemTime(1);
 	    }
 
 	}
@@ -223,7 +223,7 @@ void HandleQueuedReminders(void)
 	   changed or a laptop awakes from hibernation.
 	   However, DO triger if tt.nexttime == tt.ttime so all
 	   queued reminders are triggered at least once. */
-	if ((SystemTime(0) - (q->tt.nexttime * 60) <= 60) ||
+	if ((SystemTime(1) - (q->tt.nexttime * 60) <= 60) ||
 	    (q->tt.nexttime == q->tt.ttime)) {
 	    /* Trigger the reminder */
 	    CreateParser(q->text, &p);
@@ -233,7 +233,7 @@ void HandleQueuedReminders(void)
 	    if (Daemon < 0) {
 		printf("NOTE reminder %s",
 		       SimpleTime(q->tt.ttime));
-		printf("%s", SimpleTime(SystemTime(0)/60));
+		printf("%s", SimpleTime(SystemTime(1)/60));
 		if (!*DBufValue(&q->tags)) {
 		    printf("*\n");
 		} else {

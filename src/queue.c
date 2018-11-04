@@ -184,9 +184,8 @@ void HandleQueuedReminders(void)
 	    /* Wake up once a minute to recalibrate sleep time in
 	       case of laptop hibernation */
 	    if (Daemon <= 0) {
-		if (SleepTime > 60) {
-		    SleepTime = 60;
-		}
+		/* Wake up on the next exact minute */
+		SleepTime = 60 - (SystemTime(1)%60);
 	    }
 
 	    if (Daemon >= 0) {

@@ -5,8 +5,7 @@
 /*  Header file for language support for various languages.    */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
-/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
+/*  Copyright (C) 1992-2018 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 
@@ -26,7 +25,7 @@
 #define SPANISH   11 /* translated by Rafa Couto                       */
 #define ICELANDIC 12 /* translated by Björn Davíðsson                  */
 
-/* Add more languages here - but please e-mail dfs@roaringpenguin.com
+/* Add more languages here - but please e-mail dianne@skoll.ca
    to have your favorite language assigned a number.  If you add a
    language, please send me the header file, and permission to include
    it in future releases of Remind.  Note that you'll get no remuneration

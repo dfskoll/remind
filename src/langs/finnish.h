@@ -11,8 +11,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  This file is Copyright (C) 1993-1998 by Mikko Silvonen.    */
-/*  REMIND is Copyright (C) 1992-1998 by Dianne Skoll          */
-/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
+/*  REMIND is Copyright (C) 1992-2018 by Dianne Skoll          */
 /*                                                             */
 /***************************************************************/
 
@@ -525,8 +524,7 @@ EXTERN char *ErrMsg[] =
 #define L_USAGE_OVERRIDE 1
 void Usage(void)
 {
-    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-1998 Dianne Skoll\n", VERSION, L_LANGNAME);
-    fprintf(ErrFp, "Copyright 1999-2000 Roaring Penguin Software Inc.\n");
+    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-2018 Dianne Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETAVERSIO <<<<\n");
 #endif

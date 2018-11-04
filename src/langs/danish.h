@@ -6,8 +6,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-1998 by Dianne Skoll          */
-/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
+/*  REMIND is Copyright (C) 1992-2018 by Dianne Skoll          */
 /*  This file is Copyright (C) 1993 by Mogens Lynnerup.        */
 /*                                                             */
 /***************************************************************/

@@ -6,8 +6,7 @@
 /*  classifying the tokens parsed.                             */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
-/*  Copyright (C) 1999-2000 by Roaring Penguin Software Inc.   */
+/*  Copyright (C) 1992-2018 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 

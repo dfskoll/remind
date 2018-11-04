@@ -7,8 +7,7 @@
 # in the build directory.
 #
 # This file is part of REMIND.
-# Copyright (C) 1992-1997 Dianne Skoll        
-# Copyright (C) 1999-2000 Roaring Penguin Software Inc.
+# Copyright (C) 1992-2018 Dianne Skoll
 # ---------------------------------------------------------------------------
 
 DIR=`dirname $0`

@@ -1,7 +1,6 @@
 # Makefile.in for installing WWW server calendar scripts
 # This file is part of REMIND.
-# Copyright (C) 1992-1997 by Dianne Skoll
-# Copyright (C) 1999-2007 by Roaring Penguin Software Inc.
+# Copyright (C) 1992-2018 by Dianne Skoll
 
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.

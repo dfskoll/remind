@@ -6,8 +6,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  This file is Copyright (C) 1993 by Trygve Randen.          */
-/*  Remind is Copyright (C) 1992-1998 by Dianne Skoll          */
-/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
+/*  Remind is Copyright (C) 1992-2018 by Dianne Skoll          */
 /*                                                             */
 /***************************************************************/
 

@@ -8,8 +8,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-1998 by Dianne Skoll          */
-/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
+/*  REMIND is Copyright (C) 1992-2018 by Dianne Skoll          */
 /*  This file is Copyright (C) 1996 by Marco Paganini and      */
 /*  Dianne Skoll.                                              */
 /*                                                             */
@@ -257,8 +256,7 @@ EXTERN char *ErrMsg[] =
 #define L_USAGE_OVERRIDE 1
 void Usage(void)
 {
-    fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-1998 Dianne Skoll\n", VERSION, L_LANGNAME);
-    fprintf(ErrFp, "(C) 1999-2000 Roaring Penguin Software Inc.\n");
+    fprintf(ErrFp, "\nREMIND %s (versao %s) (C) 1992-2018 Dianne Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> VERSAO BETA <<<<\n");
 #endif

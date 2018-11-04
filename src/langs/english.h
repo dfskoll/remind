@@ -5,8 +5,7 @@
 /*  Support for the English language.                          */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-1998 by Dianne Skoll                    */
-/*  Copyright 1999-2000 by Roaring Penguin Software Inc.       */
+/*  Copyright (C) 1992-2018 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 

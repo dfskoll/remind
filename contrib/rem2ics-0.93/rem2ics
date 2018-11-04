@@ -238,7 +238,7 @@ L<http://en.wikipedia.org/wiki/ICalendar>
 
 L<http://tools.ietf.org/html/rfc2445>
 
-L<http://www.roaringpenguin.com/en/penguin/openSourceProducts/remind>
+L<https://dianne.skoll.ca/projects/remind/>
 
 L<remind(1)>
 
@@ -251,7 +251,7 @@ Please report bugs (with patches, if possible).
 Inspired by Anthony J. Chivetta E<lt>achivetta@gmail.comE<gt>'s
 rem2ics in awk.
 
-Thank you to Dianne Skoll E<lt>dfs@roaringpengiun.com<gt> for Remind,
+Thank you to Dianne Skoll E<lt>dianne@skoll.ca<gt> for Remind,
 and to the IETF calsch wg for the iCalendar specification.
 
 =cut

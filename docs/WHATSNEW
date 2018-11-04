@@ -271,7 +271,7 @@ CHANGES TO REMIND
 
   *** THIS MAY AFFECT BACKENDS ***
 
-  Backends supplied by Roaring Penguin (rem2ps, rem2html and tkremind)
+  Backends supplied with Remind (rem2ps, rem2html and tkremind)
   are known to work properly.
 
 - "remind -p" no longer suppresses any AT-time associated with SPECIAL
@@ -279,7 +279,7 @@ CHANGES TO REMIND
 
   *** THIS MAY AFFECT BACKENDS ***
 
-  Backends supplied by Roaring Penguin (rem2ps, rem2html and tkremind)
+  Backends supplied with Remind (rem2ps, rem2html and tkremind)
   are known to work properly.
 
 + BUG FIXES
@@ -492,11 +492,6 @@ CHANGES TO REMIND
 
 * Version 3.0 Patch 20 - 1999-04-12
 
-+ NEWS
-
-- I have started a company, Roaring Penguin Software
-  Inc. (http://www.roaringpenguin.com) and it now holds the Remind copyright.
-
 + LICENSE CHANGE
 
 - Remind is now distributed under the pure GPL.  See the file WINDOWS for my
@@ -511,8 +506,6 @@ CHANGES TO REMIND
 - Added Spanish language support, courtesy of Rafa Couto.
 
 + BUG FIXES
-
-- Changed copyright notices to Roaring Penguin Software Inc.
 
 - Rem2PS was passing specials like HTML, etc. in PostScript output.
   YECH!  Fix courtesty of Derek J. Decker.

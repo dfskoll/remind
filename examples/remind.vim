@@ -7,7 +7,7 @@
 "
 " remind is a sophisticated reminder service
 " you can download remind from:
-"   http://www.roaringpenguin.com/penguin/open_source_remind.php
+"   https://dianne.skoll.ca/projects/remind/
 
 if version < 600
   syntax clear

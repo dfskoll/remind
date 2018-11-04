@@ -36,7 +36,7 @@
 /*---------------------------------------------------------------------*/
 #define DEFAULT_PAGE {"Letter", 612, 792}
 /* #define DEFAULT_PAGE {"A4", 595, 842} */
-  
+
 /*---------------------------------------------------------------------*/
 /* DATESEP:  The default date separator.  Standard usage is '-';       */
 /* others may prefer '/'.                                              */

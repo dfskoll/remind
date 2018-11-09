@@ -1,9 +1,34 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 16 - 2017-XX-XX
+* Version 3.1 Patch 16 - 2018-11-09
 
 - IMPROVEMENT: Add patch from Stephen Morgan to calculate astronomical and
   nautical twilight in addition to civil twilight.
+
+- BUG FIX: The rem2html script correctly handles a SHADE special with only
+  one number (a grey level).
+
+- IMPROVEMENT: Remind accepts DATETIME constants in ISO-8601 format and can
+  optionally be configured to output them that way too.
+
+- MINOR IMPROVEMENT: TkRemind puts its hostname in the window title bar.
+
+- MINOR IMPROVEMENT: TkRemind restarts the background remind daemon if
+  the .reminders file changes
+
+- MINOR IMPROVEMENT: TkRemind has a "Queue" button that lets you see details
+  of upcoming queued reminders.  This is mostly for debugging and the output
+  is not particularly readable.
+
+- BUG FIX: The definitions form Yom Hazikaron and Yom Ha'atzmaut were not
+  quite right; they have been fixed.
+
+- MINOR IMPROVEMENT: TkRemind centers popups over the main calendar
+  window rather than over the desktop background.  This is better
+  behavior in multi-monitor setups.
+
+- BUG FIX: In "remind -z0" mode, remind wakes up exactly on the minute instead
+  of sleeping for 60 seconds each time, which could cause it to fall behind.
 
 * Version 3.1 Patch 15 - 2015-07-27
 

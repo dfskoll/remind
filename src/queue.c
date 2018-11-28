@@ -508,24 +508,25 @@ static void DaemonWait(unsigned int sleeptime)
 	printf("NOTE queue\n");
 	QueuedRem *q = QueueHead;
 	while (q) {
-	    switch (q->typ) {
-	    case NO_TYPE: printf("NO_TYPE "); break;
-	    case MSG_TYPE: printf("MSG_TYPE "); break;
-	    case RUN_TYPE: printf("RUN_TYPE "); break;
-	    case CAL_TYPE: printf("CAL_TYPE "); break;
-	    case SAT_TYPE: printf("SAT_TYPE "); break;
-	    case PS_TYPE: printf("PS_TYPE "); break;
-	    case PSF_TYPE: printf("PSF_TYPE "); break;
-	    case MSF_TYPE: printf("MSF_TYPE "); break;
-	    case PASSTHRU_TYPE: printf("PASSTHRU_TYPE "); break;
-	    default: printf("? "); break;
+	    if (q->tt.nexttime != NO_TIME) {
+		switch (q->typ) {
+		case NO_TYPE: printf("NO_TYPE "); break;
+		case MSG_TYPE: printf("MSG_TYPE "); break;
+		case RUN_TYPE: printf("RUN_TYPE "); break;
+		case CAL_TYPE: printf("CAL_TYPE "); break;
+		case SAT_TYPE: printf("SAT_TYPE "); break;
+		case PS_TYPE: printf("PS_TYPE "); break;
+		case PSF_TYPE: printf("PSF_TYPE "); break;
+		case MSF_TYPE: printf("MSF_TYPE "); break;
+		case PASSTHRU_TYPE: printf("PASSTHRU_TYPE "); break;
+		default: printf("? "); break;
+		}
+		printf("RunDisabled=%d ntrig=%d ttime=%02d:%02d nexttime=%02d:%02d delta=%d rep=%d duration=%d ", q->RunDisabled, q->ntrig, q->tt.ttime/60, q->tt.ttime % 60, q->tt.nexttime / 60, q->tt.nexttime % 60, q->tt.delta, (q->tt.rep != NO_TIME ? q->tt.rep : -1), (q->tt.duration != NO_TIME ? q->tt.duration : -1));
+		printf("%s %s %s\n",
+		       (q->passthru[0] ? q->passthru : "*"),
+		       (q->sched[0] ? q->sched : "*"),
+		       q->text ? q->text : "NULL");
 	    }
-	    printf("RunDisabled=%d ntrig=%d ttime=%02d:%02d nexttime=%02d:%02d delta=%d rep=%d duration=%d ", q->RunDisabled, q->ntrig, q->tt.ttime/60, q->tt.ttime % 60, q->tt.nexttime / 60, q->tt.nexttime % 60, q->tt.delta, (q->tt.rep != NO_TIME ? q->tt.rep : -1), (q->tt.duration != NO_TIME ? q->tt.duration : -1));
-	    printf("%s %s %s\n",
-		   (q->passthru[0] ? q->passthru : "*"),
-		   (q->sched[0] ? q->sched : "*"),
-		   q->text ? q->text : "NULL");
-
 	    q = q->next;
 	}
 	printf("NOTE endqueue\n");

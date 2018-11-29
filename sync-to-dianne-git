@@ -1,0 +1,6 @@
+#!/bin/sh
+cd /home/dfs/Software/Remind.git || exit 1
+
+git update-server-info && cd .git && rsync --archive --verbose --progress --delete ./ dianne.skoll.ca:web/projects/remind/git/Remind.git/
+exit $?
+

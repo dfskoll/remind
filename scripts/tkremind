@@ -696,9 +696,18 @@ proc ApplyOptions { w } {
     set tmpOpt(MailAddr) [$w.email_address get]
     set tmpOpt(SMTPServer) [$w.smtp get]
 
+    set need_restart 0
+    if {"$tmpOpt(ExtraRemindArgs)" != "$Option(ExtraRemindArgs)"} {
+	set need_restart 1
+    }
     # Copy working copy to real option set
     foreach name [array names tmpOpt] {
 	set Option($name) $tmpOpt($name)
+    }
+    if {$need_restart != 0} {
+	FillCalWindow
+	StopBackgroundRemindDaemon
+	StartBackgroundRemindDaemon
     }
 }
 

@@ -109,6 +109,9 @@ set OptDescr(MailAddr) "(String) Specify an e-mail address to which reminders sh
 set Option(SMTPServer) "127.0.0.1"
 set OptDescr(SMTPServer) "(String) IP address or host name of SMTP server to use for sending e-mail"
 
+set Option(ExtraRemindArgs) ""
+set OptDescr(ExtraRemindArgs) "(String) Extra arguments when invoking remind"
+
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
 #set Remind "/home/dfs/Remind/src/remind"
@@ -191,9 +194,9 @@ proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst TwentyFourHourMode ReminderFileModTime
-
-    set CommandLine "|$Remind -itkremind=1 -p -y -l"
-    set PSCmd "$Remind -p -l"
+    global Option
+    set CommandLine "|$Remind -itkremind=1 -p -y -l EXTRA"
+    set PSCmd "$Remind -p -l EXTRA"
     set i 0
     while {$i < $argc} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
@@ -636,6 +639,14 @@ proc EditOptions {} {
     pack $w.editor -in $w.ef -side left -expand 1 -fill x
     $w.editor insert 0 $tmpOpt(Editor)
 
+    # extra args
+    frame $w.eaf
+    label $w.eal -text "Extra Arguments for Remind:" -anchor w -justify left
+    entry $w.extraargs -width 30
+    pack $w.eal -in $w.eaf -side left -expand 0 -fill none
+    pack $w.extraargs -in $w.eaf -side left -expand 1 -fill x
+    $w.extraargs insert 0 $tmpOpt(ExtraRemindArgs)
+
     frame $w.sep1 -border 1 -relief sunken
     frame $w.sep2 -border 1 -relief sunken
 
@@ -656,6 +667,7 @@ proc EditOptions {} {
     pack $w.eml -in $w.f -side top -expand 0 -fill x
     pack $w.fsmtp -in $w.f -side top -expand 0 -fill x
     pack $w.ef -in $w.f -side top -expand 0 -fill x
+    pack $w.eaf -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
     button $w.apply -text "Apply Options" -command "ApplyOptions $w; destroy $w"
@@ -677,8 +689,10 @@ proc EditOptions {} {
 #***********************************************************************
 proc ApplyOptions { w } {
     global Option tmpOpt
+
     set tmpOpt(RunCmd) [$w.cmd get]
     set tmpOpt(Editor) [$w.editor get]
+    set tmpOpt(ExtraRemindArgs) [$w.extraargs get]
     set tmpOpt(MailAddr) [$w.email_address get]
     set tmpOpt(SMTPServer) [$w.smtp get]
 
@@ -783,12 +797,13 @@ proc ConfigureCalWindow { month year firstDay numDays } {
 proc FillCalWindow {} {
     set FileName ""
     set LineNo 0
-    global DayNames CurYear CurMonth MonthNames CommandLine
+    global DayNames CurYear CurMonth MonthNames CommandLine Option
 
     Status "Firing off Remind..."
     set month [lindex $MonthNames $CurMonth]
 
-    set file [open "$CommandLine $month $CurYear" r]
+    set cmd [regsub EXTRA $CommandLine $Option(ExtraRemindArgs)]
+    set file [open "$cmd $month $CurYear" r]
     # Look for # rem2ps begin line
     while { [gets $file line] >= 0 } {
 	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
@@ -946,7 +961,7 @@ proc Status { stuff } {
 #   None
 #---------------------------------------------------------------------------
 proc DoPrint {} {
-    global PrintDest PrintSize PrintMargins PrintOrient PrintFill PrintEncoding PrintSmallCalendars PrintStatus Rem2PS PSCmd
+    global PrintDest PrintSize PrintMargins PrintOrient PrintFill PrintEncoding PrintSmallCalendars PrintStatus Rem2PS PSCmd Option
     global CurMonth CurYear MonthNames
     catch {destroy .p}
     toplevel .p
@@ -1038,7 +1053,8 @@ proc DoPrint {} {
     }
 
     # Build the command line
-    set cmd "$PSCmd 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
+    set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
+    set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
     if {$PrintSize == "letter"} {
 	append cmd " -m Letter"
     } else {
@@ -2149,8 +2165,8 @@ proc BrowseForFileRead {w {dir ""}} {
 #    Starts a background Remind daemon to handle timed reminders
 #---------------------------------------------------------------------------
 proc StartBackgroundRemindDaemon {} {
-    global Remind DaemonFile ReminderFile
-    set problem [catch { set DaemonFile [open "|$Remind -z0 $ReminderFile" "r+"] } err]
+    global Remind DaemonFile ReminderFile Option
+    set problem [catch { set DaemonFile [open "|$Remind -z0 $Option(ExtraRemindArgs) $ReminderFile" "r+"] } err]
     if {$problem} {
 	tk_dialog .error Error "Can't start Remind daemon in background: $err" error 0 OK
     } else {
@@ -2964,7 +2980,7 @@ proc ShowTodaysReminders {} {
     CenterWindow $w .
 
     # Grab the reminders
-    set stuff [exec -keepnewline $Remind -g -q -r $ReminderFile 2>/dev/null]
+    set stuff [exec -keepnewline $Remind -g -q -r $Option(ExtraRemindArgs) $ReminderFile 2>/dev/null]
     $w.text insert end $stuff
     $w.text configure -state disabled
 }

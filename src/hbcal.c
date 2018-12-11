@@ -138,8 +138,8 @@ int DaysInHebYear(int y)
 /***************************************************************/
 char const *DaysInHebMonths(int ylen)
 {
-    static char monlen[13] =
-    {30, 29, 30, 29, 30, 0, 29, 30, 29, 30, 29, 30, 29};
+    static char monlen[14] =
+	{30, 29, 30, 29, 30, 0, 29, 30, 29, 30, 29, 30, 29, 29};
 
 
     if (ylen > 355) {

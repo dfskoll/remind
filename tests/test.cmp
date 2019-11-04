@@ -496,6 +496,16 @@ REM Fri after MSG 16 Feb 1991
 16 Feb 1991
 
 CLEAR-OMIT-CONTEXT
+REM Fri SCANFROM -7 SATISFY 1
+../tests/test.rem(172): Trig = Friday, 15 February, 1991
+OMIT [trigger(trigdate())]
+trigdate() => 1991-02-15
+trigger(1991-02-15) => "15 February 1991"
+REM Fri after MSG 16 Feb 1991
+../tests/test.rem(174): Trig = Saturday, 16 February, 1991
+16 Feb 1991
+
+CLEAR-OMIT-CONTEXT
 
 # Test omitfunc
 fset _ofunc(x) (day(x) < 7 || day(x) % 2)
@@ -590,7 +600,7 @@ day(1991-03-08) => 8
 8 % 2 => 0
 0 || 0 => 0
 Leaving UserFN _ofunc() => 0
-../tests/test.rem(175): Trig = Friday, 8 March, 1991
+../tests/test.rem(179): Trig = Friday, 8 March, 1991
 REM 8 March OMITFUNC _ofunc -1 MSG OmitFunc Test 2
 Entering UserFN _ofunc(1991-03-07)
 x => 1991-03-07
@@ -664,31 +674,31 @@ day(1991-02-28) => 28
 28 % 2 => 0
 0 || 0 => 0
 Leaving UserFN _ofunc() => 0
-../tests/test.rem(176): Trig = Thursday, 28 February, 1991
+../tests/test.rem(180): Trig = Thursday, 28 February, 1991
 
 # omitfunc ignores local/global omits
 fset _ofunc(x) 0
 OMIT 1 March
 OMIT 2 March 1991
 REM 1 March OMIT Sun OMITFUNC _ofunc AFTER MSG Should trigger 1 March
-../tests/test.rem(182): Warning: OMIT is ignored if you use OMITFUNC
+../tests/test.rem(186): Warning: OMIT is ignored if you use OMITFUNC
 Entering UserFN _ofunc(1991-02-15)
 Leaving UserFN _ofunc() => 0
 Entering UserFN _ofunc(1991-03-01)
 Leaving UserFN _ofunc() => 0
-../tests/test.rem(182): Trig = Friday, 1 March, 1991
+../tests/test.rem(186): Trig = Friday, 1 March, 1991
 REM 1 March OMIT Sun AFTER MSG Should trigger 4 March
-../tests/test.rem(183): Trig = Monday, 4 March, 1991
+../tests/test.rem(187): Trig = Monday, 4 March, 1991
 
 # Test shorthand reminders
 REM 1991-02-28 MSG Feb 28
-../tests/test.rem(186): Trig = Thursday, 28 February, 1991
+../tests/test.rem(190): Trig = Thursday, 28 February, 1991
 REM 1991/02/28@14:45 MSG Feb 28
-../tests/test.rem(187): Trig = Thursday, 28 February, 1991
+../tests/test.rem(191): Trig = Thursday, 28 February, 1991
 REM Wed UNTIL 1991-01-01 MSG Expired
-../tests/test.rem(188): Expired
+../tests/test.rem(192): Expired
 REM Wed SCANFROM 1991-02-26 MSG SCANFROM
-../tests/test.rem(189): Trig = Wednesday, 27 February, 1991
+../tests/test.rem(193): Trig = Wednesday, 27 February, 1991
 
 set a000 abs(1)
 abs(1) => 1
@@ -712,7 +722,7 @@ set a008 coerce("string", 11:44)
 coerce("string", 11:44) => "11:44"
 set a009 coerce("int", "badnews")
 coerce("int", "badnews") => Can't coerce
-../tests/test.rem(200): Can't coerce
+../tests/test.rem(204): Can't coerce
 set a010 coerce("int", "12")
 coerce("int", "12") => 12
 set a011 coerce("int", 11:44)
@@ -724,7 +734,7 @@ set a013 date(1992, 2, 2)
 date(1992, 2, 2) => 1992-02-02
 set a014 date(1993, 2, 29)
 date(1993, 2, 29) => Bad date specification
-../tests/test.rem(205): Bad date specification
+../tests/test.rem(209): Bad date specification
 set a015 day(today())
 today() => 1991-02-16
 day(1991-02-16) => 16
@@ -819,15 +829,15 @@ strlen("sadjflkhsldkfhsdlfjhk") => 21
 set a050 substr(a049, 2)
 a049 => 21
 substr(21, 2) => Type mismatch
-../tests/test.rem(243): Type mismatch
+../tests/test.rem(247): Type mismatch
 set a051 substr(a050, 2, 6)
-a050 => ../tests/test.rem(244): Undefined variable: a050
+a050 => ../tests/test.rem(248): Undefined variable: a050
 set a052 time(1+2, 3+4)
 1 + 2 => 3
 3 + 4 => 7
 time(3, 7) => 03:07
 rem 10 jan 1992 AT 11:22 CAL
-../tests/test.rem(246): Trig = Friday, 10 January, 1992
+../tests/test.rem(250): Trig = Friday, 10 January, 1992
 set a053 trigdate()
 trigdate() => 1992-01-10
 set a054 trigtime()
@@ -919,101 +929,101 @@ y => 11:33
 x => "foo"
 y => 11:33
 "foo" * 11:33 => Type mismatch
-../tests/test.rem(269): `*': Type mismatch
+../tests/test.rem(273): `*': Type mismatch
 Leaving UserFN h() => Type mismatch
 set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
 dosubst("%a %b %c %d %e %f %g %h", 1992-05-05) => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 msg [a074]%
-../tests/test.rem(271): Trig = Saturday, 16 February, 1991
+../tests/test.rem(275): Trig = Saturday, 16 February, 1991
 a074 => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 on Tuesday, 5 May, 1992 in 444 days' time on Tuesday 5 on 05-05-1992 on 05-05-1992 on Tuesday, 5 May on 05-05
 set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
 dosubst("%i %j %k %l %m %n %o %p", 1992-05-05) => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 msg [a075]%
-../tests/test.rem(273): Trig = Saturday, 16 February, 1991
+../tests/test.rem(277): Trig = Saturday, 16 February, 1991
 a075 => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 on 05-05 on Tuesday, May 5th, 1992 on Tuesday, May 5th on 1992-05-05 May 5  s
 set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
 dosubst("%q %r %s %t %u %v %w %x", 1992-05-05) => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 msg [a076]%
-../tests/test.rem(275): Trig = Saturday, 16 February, 1991
+../tests/test.rem(279): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 s' 05 th 05 on Tuesday, 5th May, 1992 on Tuesday, 5th May Tuesday 444
 set a074 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", '1992/5/5')
 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", 1992-05-05) => "Tuesday, 5 May, 1992 in 444 days' time T"...
 msg [a074]%
-../tests/test.rem(277): Trig = Saturday, 16 February, 1991
+../tests/test.rem(281): Trig = Saturday, 16 February, 1991
 a074 => "Tuesday, 5 May, 1992 in 444 days' time T"...
 Tuesday, 5 May, 1992 in 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
 set a075 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", '1992/5/5')
 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 msg [a075]%
-../tests/test.rem(279): Trig = Saturday, 16 February, 1991
+../tests/test.rem(283): Trig = Saturday, 16 February, 1991
 a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  s
 set a076 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", '1992/5/5')
 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", 1992-05-05) => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
 msg [a076]%
-../tests/test.rem(281): Trig = Saturday, 16 February, 1991
+../tests/test.rem(285): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
 s' 05 th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
 set a077 dosubst("%*y %*z", '1992/5/5')
 dosubst("%*y %*z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(283): Trig = Saturday, 16 February, 1991
+../tests/test.rem(287): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
 set a074 dosubst("%A %B %C %D %E %F %G %H", '1992/5/5')
 dosubst("%A %B %C %D %E %F %G %H", 1992-05-05) => "On Tuesday, 5 May, 1992 In 444 days' tim"...
 msg [a074]%
-../tests/test.rem(285): Trig = Saturday, 16 February, 1991
+../tests/test.rem(289): Trig = Saturday, 16 February, 1991
 a074 => "On Tuesday, 5 May, 1992 In 444 days' tim"...
 On Tuesday, 5 May, 1992 In 444 days' time On Tuesday 5 On 05-05-1992 On 05-05-1992 On Tuesday, 5 May On 05-05
 set a075 dosubst("%I %J %K %L %M %N %O %P", '1992/5/5')
 dosubst("%I %J %K %L %M %N %O %P", 1992-05-05) => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
 msg [a075]%
-../tests/test.rem(287): Trig = Saturday, 16 February, 1991
+../tests/test.rem(291): Trig = Saturday, 16 February, 1991
 a075 => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
 On 05-05 On Tuesday, May 5th, 1992 On Tuesday, May 5th On 1992-05-05 May 5  S
 set a076 dosubst("%Q %R %S %T %U %V %W %X", '1992/5/5')
 dosubst("%Q %R %S %T %U %V %W %X", 1992-05-05) => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
 msg [a076]%
-../tests/test.rem(289): Trig = Saturday, 16 February, 1991
+../tests/test.rem(293): Trig = Saturday, 16 February, 1991
 a076 => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
 S' 05 Th 05 On Tuesday, 5th May, 1992 On Tuesday, 5th May Tuesday 444
 set a077 dosubst("%Y %Z", '1992/5/5')
 dosubst("%Y %Z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(291): Trig = Saturday, 16 February, 1991
+../tests/test.rem(295): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
 set a074 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", '1992/5/5')
 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", 1992-05-05) => "Tuesday, 5 May, 1992 In 444 days' time T"...
 msg [a074]%
-../tests/test.rem(293): Trig = Saturday, 16 February, 1991
+../tests/test.rem(297): Trig = Saturday, 16 February, 1991
 a074 => "Tuesday, 5 May, 1992 In 444 days' time T"...
 Tuesday, 5 May, 1992 In 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
 set a075 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", '1992/5/5')
 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 msg [a075]%
-../tests/test.rem(295): Trig = Saturday, 16 February, 1991
+../tests/test.rem(299): Trig = Saturday, 16 February, 1991
 a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  S
 set a076 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", '1992/5/5')
 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", 1992-05-05) => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
 msg [a076]%
-../tests/test.rem(297): Trig = Saturday, 16 February, 1991
+../tests/test.rem(301): Trig = Saturday, 16 February, 1991
 a076 => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
 S' 05 Th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
 set a077 dosubst("%*Y %*Z", '1992/5/5')
 dosubst("%*Y %*Z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(299): Trig = Saturday, 16 February, 1991
+../tests/test.rem(303): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
@@ -1126,10 +1136,10 @@ dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(312): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(316): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(314): Trig = Sunday, 26 December, 2010
+../tests/test.rem(318): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
@@ -1161,7 +1171,7 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(317): Trig = Thursday, 28 February, 1991
+../tests/test.rem(321): Trig = Thursday, 28 February, 1991
 
 
 Test 2

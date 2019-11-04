@@ -169,6 +169,10 @@ REM Fri SCANFROM [trigger(today()-7)] SATISFY 1
 OMIT [trigger(trigdate())]
 REM Fri after MSG 16 Feb 1991
 CLEAR-OMIT-CONTEXT
+REM Fri SCANFROM -7 SATISFY 1
+OMIT [trigger(trigdate())]
+REM Fri after MSG 16 Feb 1991
+CLEAR-OMIT-CONTEXT
 
 # Test omitfunc
 fset _ofunc(x) (day(x) < 7 || day(x) % 2)

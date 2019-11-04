@@ -666,6 +666,30 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 	    FromJulian(tok.val, &y, &m, &d);
 	    break;
 
+	case T_Back:
+	    DBufFree(&buf);
+	    if (type != SCANFROM_TYPE) {
+		Eprint("%s: %s", word, ErrMsg[E_INCOMPLETE]);
+		return E_INCOMPLETE;
+	    }
+	    if (y != NO_YR) {
+		Eprint("%s: %s", word, ErrMsg[E_YR_TWICE]);
+		return E_YR_TWICE;
+	    }
+	    if (m != NO_MON) {
+		Eprint("%s: %s", word, ErrMsg[E_MON_TWICE]);
+		return E_MON_TWICE;
+	    }
+	    if (d != NO_DAY) {
+		Eprint("%s: %s", word, ErrMsg[E_DAY_TWICE]);
+		return E_DAY_TWICE;
+	    }
+	    if (tok.val < 0) {
+		tok.val = -tok.val;
+	    }
+	    FromJulian(JulianToday - tok.val, &y, &m, &d);
+	    break;
+
 	default:
 	    if (y == NO_YR || m == NO_MON || d == NO_DAY) {
 		Eprint("%s: %s", word, ErrMsg[E_INCOMPLETE]);

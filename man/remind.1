@@ -4354,6 +4354,18 @@ from 7 days before the current date.  This ensures that Labour Day for
 the current year will continue to be triggered until 7 days after it has
 occurred.  This allows you to safely use the AFTER keyword as shown.
 .PP
+As a special case, you can simply use a negative number after SCANFROM;
+a negative numbner \-N is interpreted as N days before today.  Thus,
+the previous example could also be written like this:
+.PP
+.nf
+	# This form of SCANFROM requires Remind 03.01.17 or later.
+	REM Mon 1 Sept SCANFROM \-7 SATISFY 1
+	OMIT [trigdate()]
+
+	REM Mon AFTER MSG Hello
+.fi
+.PP
 In general, use \fBSCANFROM\fR as shown for safe movable \fBOMITs\fR.  The
 amount you should scan back by (7 days in the example above) depends on
 the number of possible consecutive \fBOMITted\fR days that may occur, and

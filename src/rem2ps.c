@@ -62,7 +62,7 @@ char const *SmallCalLoc[] = {
     "sbt",
 };
 
-#define NUMSMALL (sizeof(SmallCalLoc)/sizeof(SmallCalLoc[0]))
+#define NUMSMALL ((int) (sizeof(SmallCalLoc)/sizeof(SmallCalLoc[0])))
 char const *SmallLocation;
 int SmallCol1, SmallCol2;
 
@@ -669,7 +669,8 @@ void Init(int argc, char *argv[])
     char const *s;
     char const *t;
     int i=1;
-    int j;
+    size_t j;
+    int k;
     int offset;
 
     PortraitMode = 1;
@@ -798,13 +799,13 @@ void Init(int argc, char *argv[])
 
 	case 'i': UseISO = 1; break;
 
-	case 'c': j=(*s);
-	    if (!j) {
+	case 'c': k=(*s);
+	    if (!k) {
 		SmallLocation = SmallCalLoc[0];
 	    } else {
-		j -= '0';
-		if (j>=0 && j<NUMSMALL) {
-		    SmallLocation = SmallCalLoc[j];
+		k -= '0';
+		if (k>=0 && k<NUMSMALL) {
+		    SmallLocation = SmallCalLoc[k];
 		} else {
 		    SmallLocation = SmallCalLoc[0];
 		}

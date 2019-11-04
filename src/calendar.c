@@ -955,7 +955,7 @@ static int DoCalRem(ParsePtr p, int col)
 	return E_EOLN;
     }
     if (trig.typ == SAT_TYPE) {
-	r=DoSatRemind(&trig, &tim, p);
+	r=DoSatRemind(&trig, p);
 	if (r) {
 	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;

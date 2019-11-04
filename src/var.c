@@ -37,6 +37,7 @@ typedef int (*SysVarFunc)(int, Value *);
 
 static int trig_date_func(int do_set, Value *val)
 {
+    UNUSED(do_set);
     val->type = DATE_TYPE;
     if (!LastTrigValid) {
 	val->v.val = 0;
@@ -48,6 +49,7 @@ static int trig_date_func(int do_set, Value *val)
 static int trig_day_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     if (!LastTrigValid) {
 	val->v.val = -1;
@@ -62,6 +64,7 @@ static int trig_day_func(int do_set, Value *val)
 static int trig_mon_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     if (!LastTrigValid) {
 	val->v.val = -1;
@@ -76,6 +79,7 @@ static int trig_mon_func(int do_set, Value *val)
 static int trig_year_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     if (!LastTrigValid) {
 	val->v.val = -1;
@@ -90,6 +94,7 @@ static int trig_year_func(int do_set, Value *val)
 static int trig_wday_func(int do_set, Value *val)
 {
     val->type = INT_TYPE;
+    UNUSED(do_set);
     if (!LastTrigValid) {
 	val->v.val = -1;
 	return OK;
@@ -101,6 +106,7 @@ static int trig_wday_func(int do_set, Value *val)
 
 static int today_date_func(int do_set, Value *val)
 {
+    UNUSED(do_set);
     val->type = DATE_TYPE;
     val->v.val = JulianToday;
     return OK;
@@ -108,6 +114,7 @@ static int today_date_func(int do_set, Value *val)
 static int today_day_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     FromJulian(JulianToday, &y, &m, &d);
     val->v.val = d;
@@ -117,6 +124,7 @@ static int today_day_func(int do_set, Value *val)
 static int today_mon_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     FromJulian(JulianToday, &y, &m, &d);
     val->v.val = m+1;
@@ -126,6 +134,7 @@ static int today_mon_func(int do_set, Value *val)
 static int today_year_func(int do_set, Value *val)
 {
     int y, m, d;
+    UNUSED(do_set);
     val->type = INT_TYPE;
     FromJulian(JulianToday, &y, &m, &d);
     val->v.val = y;
@@ -134,6 +143,7 @@ static int today_year_func(int do_set, Value *val)
 
 static int today_wday_func(int do_set, Value *val)
 {
+    UNUSED(do_set);
     val->type = INT_TYPE;
     val->v.val = (JulianToday + 1) % 7;
     return OK;
@@ -748,7 +758,7 @@ static SysVar *FindSysVar(char const *name)
 /***************************************************************/
 void DumpSysVarByName(char const *name)
 {
-    int i;
+    size_t i;
     SysVar *v;
 
     if (!name || !*name) {

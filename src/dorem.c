@@ -68,7 +68,7 @@ int DoRem(ParsePtr p)
     if (trig.typ == SAT_TYPE) {
 	PurgeEchoLine("%s\n", "#!P: Cannot purge SATISFY-type reminders");
 	PurgeEchoLine("%s\n", CurLine);
-	r=DoSatRemind(&trig, &tim, p);
+	r=DoSatRemind(&trig, p);
 	if (r) {
 	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
@@ -1019,7 +1019,7 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 /*  Do the "satisfying..." remind calculation.                 */
 /*                                                             */
 /***************************************************************/
-int DoSatRemind(Trigger *trig, TimeTrig *tim, ParsePtr p)
+int DoSatRemind(Trigger *trig, ParsePtr p)
 {
     int iter, jul, r;
     Value v;

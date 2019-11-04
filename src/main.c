@@ -713,7 +713,7 @@ int DoIf(ParsePtr p)
     int r;
     unsigned syndrome;
 
-    if (NumIfs >= IF_NEST) return E_NESTED_IF;
+    if ((size_t) NumIfs >= IF_NEST) return E_NESTED_IF;
 
     if (ShouldIgnoreLine()) syndrome = IF_TRUE | BEFORE_ELSE;
     else {
@@ -794,7 +794,7 @@ int DoIfTrig(ParsePtr p)
     int jul;
 
 
-    if (NumIfs >= IF_NEST) return E_NESTED_IF;
+    if ((size_t) NumIfs >= IF_NEST) return E_NESTED_IF;
     if (ShouldIgnoreLine()) syndrome = IF_TRUE | BEFORE_ELSE;
     else {
 	if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
@@ -1302,6 +1302,7 @@ void UTCToLocal(int utcdate, int utctime, int *locdate, int *loctime)
 
 void SigIntHandler(int d)
 {
+    UNUSED(d);
     signal(SIGINT, SigIntHandler);
     GotSigInt();
     exit(0);

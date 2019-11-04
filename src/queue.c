@@ -179,7 +179,7 @@ void HandleQueuedReminders(void)
 	while (TimeToSleep > 0L) {
 	    SleepTime = TimeToSleep;
 
-	    if (Daemon > 0 && SleepTime > 60*Daemon) SleepTime = 60*Daemon;
+	    if (Daemon > 0 && SleepTime > (unsigned int) 60*Daemon) SleepTime = 60*Daemon;
 
 	    /* Wake up once a minute to recalibrate sleep time in
 	       case of laptop hibernation */

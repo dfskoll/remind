@@ -71,7 +71,7 @@ AC_FUNC_UTIME_NULL
 AC_HEADER_TIME
 
 if test "$GCC" = yes; then
-	CFLAGS="$CFLAGS -Wall -Wstrict-prototypes"
+	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
 fi
 
 AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale)

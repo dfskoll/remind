@@ -3976,7 +3976,7 @@ fi
 
 
 if test "$GCC" = yes; then
-	CFLAGS="$CFLAGS -Wall -Wstrict-prototypes"
+	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
 fi
 
 for ac_func in setenv unsetenv glob mbstowcs setlocale

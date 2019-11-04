@@ -9,6 +9,9 @@
 /*                                                             */
 /***************************************************************/
 
+/* Suppress unused variable warnings */
+#define UNUSED(x) (void) x
+
 /* Define a string assignment macro - be careful!!! */
 #define STRSET(x, str) { if (x) free(x); (x) = StrDup(str); }
 
@@ -102,7 +105,7 @@ void DumpVarTable (void);
 void DestroyVars (int all);
 int PreserveVar (char const *name);
 int DoPreserve  (Parser *p);
-int DoSatRemind (Trigger *trig, TimeTrig *tim, ParsePtr p);
+int DoSatRemind (Trigger *trig, ParsePtr p);
 int DoMsgCommand (char const *cmd, char const *msg);
 int ParseNonSpaceChar (ParsePtr p, int *err, int peek);
 unsigned int HashVal (char const *str);

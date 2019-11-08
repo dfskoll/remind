@@ -94,9 +94,8 @@ int DoFset(ParsePtr p)
     StrnCpy(func->name, DBufValue(&buf), VAR_NAME_LEN);
     DBufFree(&buf);
     if (!Hush) {
-	if (FindFunc(DBufValue(&buf), Func, NumFuncs)) {
-	    Eprint("%s: `%s'", ErrMsg[E_REDEF_FUNC],
-		   DBufValue(&buf));
+	if (FindFunc(func->name, Func, NumFuncs)) {
+	    Eprint("%s: `%s'", ErrMsg[E_REDEF_FUNC], func->name);
 	}
     }
     func->locals = NULL;
@@ -118,6 +117,7 @@ int DoFset(ParsePtr p)
 	    if ( (r=ParseIdentifier(p, &buf)) ) return r;
 	    if (*DBufValue(&buf) == '$') {
 		DBufFree(&buf);
+		DestroyUserFunc(func);
 		return E_BAD_ID;
 	    }
 	    v = NEW(Var);

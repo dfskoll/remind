@@ -5,6 +5,9 @@
 #
 # 	./test-rem  # From WITHIN Remind source directory!
 
+# Should issue a warning
+fset year(x) 1
+
 # Don't evaluate SATISFY expressions if reminder has expired
 
 REM Wed UNTIL 15 Feb 1991 SATISFY [trigdate() > '1990-01-01'] MSG wookie
@@ -323,3 +326,4 @@ __EOF__
 REM This line should not even be seen
 And you can put whatever you like here.
 [+f=asdfasdasde3ir0a]
+

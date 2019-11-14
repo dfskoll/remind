@@ -453,6 +453,7 @@ DoThroughOmit(ParsePtr p, int ystart, int mstart, int dstart)
     end   = Julian(yend,   mend,   dend);
 
     if (end < start) {
+	Eprint("Warning: Swapping dates on OMIT ... THROUGH ... line");
 	tmp = start;
 	start = end;
 	end = tmp;

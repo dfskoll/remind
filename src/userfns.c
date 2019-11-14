@@ -273,7 +273,7 @@ int CallUserFunc(char const *name, int nargs, ParsePtr p)
 	}
 	return E_RECURSIVE;
     }
-   
+
     /* Check number of args */
     if (nargs != f->nargs) {
 	if (DebugFlag &DB_PRTEXPR) {

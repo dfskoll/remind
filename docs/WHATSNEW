@@ -1,5 +1,22 @@
 CHANGES TO REMIND
 
+* Version 3.1 Patch 17 - 2019-11-15
+
+- IMPROVEMENT: Add "Extra Remind Options" setting to TkRemind.
+
+- IMPROVEMENT: Enable warning-free compilation even with gcc -Wextra flag.
+
+- IMPROVEMENT: Warn if "OMIT a THROUGH b" has a > b.
+
+- SYNTACTIC SUGAR: Make "SCANFROM -n" the same as "SCANFROM [today() - n]"
+
+- BUG FIX: Don't dump expired reminders when dumping queue.
+
+- BUG FIX: Fix failure when specifying a Jahrzeit in Adar.  Fix
+  courtesy of Dov Feldstern
+
+- BUG FIX: Fix various documentation errors and update man page.
+
 * Version 3.1 Patch 16 - 2018-11-09
 
 - IMPROVEMENT: Add patch from Stephen Morgan to calculate astronomical and

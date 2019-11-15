@@ -79,12 +79,12 @@ depend:
 
 # Build a tar file based on all files checked into git.
 distro:
-	git archive --worktree-attributes --format=tar --prefix=remind-$(VERSION)/ HEAD > remind-$(VERSION).tar
+	cd .. && git archive --worktree-attributes --format=tar --prefix=remind-$(VERSION)/ HEAD > src/remind-$(VERSION).tar
 	gzip -f -v -9 remind-$(VERSION).tar
 	gpg --detach-sign -u dianne@skoll.ca remind-$(VERSION).tar.gz
 
 beta-tgz:
-	git archive --worktree-attributes --format=tar --prefix=remind-$(VERSION)/ HEAD > remind-$(VERSION)-BETA-$(BETA).tar
+	cd .. && git archive --worktree-attributes --format=tar --prefix=remind-$(VERSION)/ HEAD > src/remind-$(VERSION)-BETA-$(BETA).tar
 	gzip -f -v -9 remind-$(VERSION)-BETA-$(BETA).tar
 
 #---------------- Stuff after this added by "make depend" -----------------

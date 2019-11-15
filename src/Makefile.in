@@ -82,6 +82,7 @@ distro:
 	ln -s . ../remind-$(VERSION)
 	(cd ..; git ls-files | fgrep -v .gitignore | fgrep -v remind.php | fgrep -v sync-to-dianne-git) | sed -e 's/^/remind-$(VERSION)\//' | xargs tar -C .. -cvf remind-$(VERSION).tar
 	gzip -f -v -9 remind-$(VERSION).tar
+	gpg --detach-sign -u dianne@skoll.ca remind-$(VERSION).tar.gz
 	rm -f ../remind-$(VERSION)
 
 beta-tgz:

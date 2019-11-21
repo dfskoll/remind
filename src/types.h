@@ -87,16 +87,16 @@ typedef struct {
 
 /* The parse pointer */
 typedef struct {
-    char isnested;              /* Is it a nested expression? */
-    char allownested;
+    DynamicBuffer pushedToken;	/* Pushed-back token */
     char const *text;           /* Start of text */
     char const *pos;            /* Current position */
     char const *etext;          /* Substituted text */
     char const *epos;           /* Position in substituted text */
-    DynamicBuffer pushedToken;	/* Pushed-back token */
     char const *tokenPushed;	/* NULL if no pushed-back token */
-    char expr_happened;         /* Did we encounter an [expression] ? */
-    char nonconst_expr;         /* Did we encounter a non-constant [expression] ? */
+    unsigned char isnested;      /* Is it a nested expression? */
+    unsigned char allownested;
+    unsigned char expr_happened; /* Did we encounter an [expression] ? */
+    unsigned char nonconst_expr; /* Did we encounter a non-constant [expression] ? */
 } Parser;
 
 typedef Parser *ParsePtr;  /* Pointer to parser structure */

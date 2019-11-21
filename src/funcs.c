@@ -2557,6 +2557,7 @@ FSlide(func_info *info)
     } else {
 	while(amt) {
 	    d--;
+	    if (d < 0) return E_DATE_OVER;
 	    r = IsOmitted(d, localomit, NULL,&omit);
 	    if (r) return r;
 	    if (!omit) amt++;

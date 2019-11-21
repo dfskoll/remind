@@ -1986,6 +1986,10 @@ start of your reminder scripts.
 The maximum number of iterations for the \fBSATISFY\fR clause
 (described later.)  Must be at least 10.
 .TP
+.B $MaxStringLen
+A limit on the longest string that \fBRemind\fR will allow you
+to create.  The default is 65535.
+.TP
 .B $MinsFromUTC
 The number of minutes between Universal Time Coordinated and local time.  If
 \fB$CalcUTC\fR is non-zero, this is calculated upon startup of \fBRemind\fR.

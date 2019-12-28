@@ -27,9 +27,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "types.h"
 #include "globals.h"
 #include "err.h"
-#include "types.h"
 #include "protos.h"
 #include "expr.h"
 

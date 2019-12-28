@@ -1322,3 +1322,45 @@ FreeTrig(Trigger *t)
 {
     DBufFree(&(t->tags));
 }
+
+void
+ClearLastTriggers(void)
+{
+    LastTrigger.expired = 0;
+    LastTrigger.wd = NO_WD;
+    LastTrigger.d = NO_DAY;
+    LastTrigger.m = NO_MON;
+    LastTrigger.y = NO_YR;
+    LastTrigger.back = NO_BACK;
+    LastTrigger.delta = NO_DELTA;
+    LastTrigger.rep  = NO_REP;
+    LastTrigger.localomit = NO_WD;
+    LastTrigger.skip = NO_SKIP;
+    LastTrigger.until = NO_UNTIL;
+    LastTrigger.typ = NO_TYPE;
+    LastTrigger.once = NO_ONCE;
+    LastTrigger.scanfrom = NO_DATE;
+    LastTrigger.priority = DefaultPrio;
+    LastTrigger.sched[0] = 0;
+    LastTrigger.warn[0] = 0;
+    LastTrigger.omitfunc[0] = 0;
+    LastTrigger.passthru[0] = 0;
+
+    LastTimeTrig.ttime = NO_TIME;
+    LastTimeTrig.delta = NO_DELTA;
+    LastTimeTrig.rep   = NO_REP;
+    LastTimeTrig.duration = NO_TIME;
+}
+
+void
+SaveLastTrigger(Trigger const *t)
+{
+    memcpy(&LastTrigger, t, sizeof(LastTrigger));
+    DBufInit(&(LastTrigger.tags));
+}
+
+void
+SaveLastTimeTrig(TimeTrig const *t)
+{
+    memcpy(&LastTimeTrig, t, sizeof(LastTimeTrig));
+}

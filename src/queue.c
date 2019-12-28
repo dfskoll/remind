@@ -43,6 +43,7 @@ typedef struct queuedrem {
     char passthru[PASSTHRU_LEN+1];
     char sched[VAR_NAME_LEN+1];
     DynamicBuffer tags;
+    Trigger t;
     TimeTrig tt;
 } QueuedRem;
 
@@ -91,6 +92,8 @@ int QueueReminder(ParsePtr p, Trigger *trig,
     qelem->typ = trig->typ;
     strcpy(qelem->passthru, trig->passthru);
     qelem->tt = *tim;
+    qelem->t = *trig;
+    DBufInit(&(qelem->t.tags));
     qelem->next = QueueHead;
     qelem->RunDisabled = RunDisabled;
     qelem->ntrig = 0;
@@ -246,6 +249,8 @@ void HandleQueuedReminders(void)
 	    LastTriggerDate = JulianToday;
 	    LastTriggerTime = q->tt.ttime;
 	    LastTrigValid = 1;
+	    SaveLastTrigger(&(q->t));
+	    SaveLastTimeTrig(&(q->tt));
 	    (void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
 	    if (Daemon < 0) {
 		printf("NOTE endreminder\n");

@@ -429,10 +429,10 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	LastTrigValid = 0;
     }
 
-/* Assume everything works */
+    /* Assume everything works */
     *err = OK;
 
-/* But check for obvious problems... */
+    /* But check for obvious problems... */
     if (trig->localomit == 1 + 2 + 4 + 8 + 16 + 32 + 64) {
 	*err = E_2MANY_LOCALOMIT;
 	return -1;
@@ -447,6 +447,11 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	return -1;
     }
 
+
+    /* Save the trigger */
+    if (save_in_globals) {
+	SaveLastTrigger(trig);
+    }
 
     while (nattempts++ < TRIG_ATTEMPTS) {
 	result = GetNextTriggerDate(trig, start, err, &nextstart);

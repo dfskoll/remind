@@ -245,6 +245,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    tim->ttime = (tok.val % MINUTES_PER_DAY);
 	    if (save_in_globals) {
 		LastTriggerTime = tim->ttime;
+		SaveLastTimeTrig(tim);
 	    }
 	    break;
 
@@ -468,6 +469,7 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 	    /* Save trigger time in global variable */
 	    if (save_in_globals) {
 		LastTriggerTime = tim->ttime;
+		SaveLastTimeTrig(tim);
 	    }
 	    PushToken(DBufValue(&buf), s);
 	    DBufFree(&buf);

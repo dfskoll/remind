@@ -142,3 +142,6 @@ void PurgeEchoLine(char const *fmt, ...);
 void FreeTrig(Trigger *t);
 void AppendTag(DynamicBuffer *buf, char const *s);
 char const *SynthesizeTag(void);
+void ClearLastTriggers(void);
+void SaveLastTrigger(Trigger const *t);
+void SaveLastTimeTrig(TimeTrig const *t);

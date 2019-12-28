@@ -785,6 +785,7 @@ static void GenerateCalEntries(int col)
     DestroyOmitContexts();
     DestroyVars(0);
     NumTriggered = 0;
+    ClearLastTriggers();
 
     r=IncludeFile(InitialFile);
     if (r) {

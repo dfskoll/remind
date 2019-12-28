@@ -63,14 +63,16 @@ int main(int argc, char *argv[])
     setlocale(LC_ALL, "");
 #endif
 
-/* The very first thing to do is to set up ErrFp to be stderr */
+    /* The very first thing to do is to set up ErrFp to be stderr */
     ErrFp = stderr;
 
-/* Set up global vars */
+    /* Set up global vars */
     ArgC = argc;
     ArgV = (char const **) argv;
 
     InitRemind(argc, (char const **) argv);
+    ClearLastTriggers();
+
     if (DoCalendar || (DoSimpleCalendar && (!NextMode || PsCal))) {
 	ProduceCalendar();
 	return 0;
@@ -129,6 +131,7 @@ int main(int argc, char *argv[])
 	    DestroyOmitContexts();
 	    DestroyVars(0);
 	    NumTriggered = 0;
+	    ClearLastTriggers();
 	    JulianToday++;
 	}
     }

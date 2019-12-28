@@ -1049,6 +1049,98 @@ set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")
 nonomitted(1991-03-01, 1991-03-13, "Sat", "Sun") => 7
 set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
 nonomitted(1991-03-24, 1991-04-01, "Sat") => 7
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 MSG foo
+../tests/test.rem(316): Trig = Monday, 30 August, 2010
+set a086 trigback()
+trigback() => 4
+set a087 trigdelta()
+trigdelta() => 3
+set a088 trigrep()
+trigrep() => 14
+set a089 triguntil()
+triguntil() => 2012-01-01
+set a090 trigscanfrom()
+trigscanfrom() => 1991-02-16
+set a091 trigfrom()
+trigfrom() => -1
+set a092 trigpriority()
+trigpriority() => 7
+set a093 trigtimedelta()
+trigtimedelta() => 0
+set a094 trigtimerep()
+trigtimerep() => 0
+set a095 trigduration()
+trigduration() => -1
+
+REM Mon Wed FROM 2010-09-03 ++3 --4 MSG foo
+../tests/test.rem(328): Trig = Saturday, 4 September, 2010
+set a096 trigback()
+trigback() => -4
+set a097 trigdelta()
+trigdelta() => -3
+set a098 trigrep()
+trigrep() => 0
+set a099 triguntil()
+triguntil() => -1
+set a100 trigscanfrom()
+trigscanfrom() => 2010-09-03
+set a101 trigfrom()
+trigfrom() => 2010-09-03
+set a102 trigpriority()
+trigpriority() => 5000
+set a103 trigtimedelta()
+trigtimedelta() => 0
+set a104 trigtimerep()
+trigtimerep() => 0
+set a105 trigduration()
+trigduration() => -1
+
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 3:33 MSG foo
+../tests/test.rem(340): Trig = Monday, 30 August, 2010
+set a106 trigback()
+trigback() => 4
+set a107 trigdelta()
+trigdelta() => 3
+set a108 trigrep()
+trigrep() => 14
+set a109 triguntil()
+triguntil() => 2012-01-01
+set a110 trigscanfrom()
+trigscanfrom() => 1991-02-16
+set a111 trigfrom()
+trigfrom() => -1
+set a112 trigpriority()
+trigpriority() => 7
+set a113 trigtimedelta()
+trigtimedelta() => 15
+set a114 trigtimerep()
+trigtimerep() => 2
+set a115 trigduration()
+trigduration() => 03:33
+
+REM Mon Wed FROM 2010-09-03 ++3 --4 AT 14:44 MSG foo
+../tests/test.rem(352): Trig = Saturday, 4 September, 2010
+set a116 trigback()
+trigback() => -4
+set a117 trigdelta()
+trigdelta() => -3
+set a118 trigrep()
+trigrep() => 0
+set a119 triguntil()
+triguntil() => -1
+set a120 trigscanfrom()
+trigscanfrom() => 2010-09-03
+set a121 trigfrom()
+trigfrom() => 2010-09-03
+set a122 trigpriority()
+trigpriority() => 5000
+set a123 trigtimedelta()
+trigtimedelta() => 0
+set a124 trigtimerep()
+trigtimerep() => 0
+set a125 trigduration()
+trigduration() => -1
+
 dump
         Variable  Value
 
@@ -1056,94 +1148,134 @@ dump
             a036  "bar"
             a055  1
             a074  "Tuesday, 5 May, 1992 In 444 days' time T"...
+            a093  0
+            a116  -4
             a008  "11:44"
             a027  0
             a046  "ies"
             a065  1
             a084  7
+            a107  3
             a018  1
             a037  1991-02-15
             a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
             a075  "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+            a094  0
+            a117  -3
             a028  1
             a047  -1
             a066  0
             a085  7
+            a108  14
             a019  0
             a038  33
             a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
             a076  "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
+            a095  -1
+            a118  0
             a029  0
             a048  "foo"
             a067  "INT"
+            a086  4
+            a109  2012-01-01
             a039  "February"
             a058  "03.01.17"
             a077  "1992 92
 "
+            a096  -4
+            a119  -1
             a049  21
             a068  "STRING"
+            a087  3
             a059  "Saturday"
             a078  1991-03-31
+            a097  -3
             a069  "TIME"
+            a088  14
             a079  1992-04-19
+            a098  0
+            a089  2012-01-01
+            a099  -1
             a000  1
             a010  12
             a001  1
             a020  "../tests/test.rem"
+            a100  2010-09-03
             a011  704
             a030  1
+            a110  1991-02-16
             a002  102
             a021  "foo bar baz"
             a040  2
+            a101  2010-09-03
+            a120  2010-09-03
             a012  411
             a031  "foobarbaz"
+            a111  -1
             a003  1990
             a022  11
             a041  "3rd"
             a060  6
+            a102  5000
+            a121  2010-09-03
             a013  1992-02-02
             a032  34
             a070  "DATE"
+            a112  7
             a004  "B7BMB"
             a023  1
             a042  "4th"
             a061  1991
             a080  1995-04-16
+            a103  0
+            a122  5000
             a033  "foo"
             a052  03:07
             a071  2
+            a090  1991-02-16
+            a113  15
             a005  "baz"
             a024  0
             a043  "UNIX"
             a062  -19
             a081  ""
+            a104  0
+            a123  0
             a015  16
             a034  1991-02-17
             a053  1992-01-10
             a072  0
+            a091  -1
+            a114  2
             a006  "1"
             a025  4
             a044  "s"
             a063  0
             a082  1991-03-13
+            a105  -1
+            a124  0
             a016  28
             a035  1
             a054  11:22
+            a092  7
+            a115  03:33
             a007  "1991-02-16"
             a026  7
             a045  "iess"
             a064  1
             a083  1991-03-24
+            a106  4
+            a125  -1
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         Variable  Value
 
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(319): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(367): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(321): Trig = Sunday, 26 December, 2010
+../tests/test.rem(369): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
@@ -1175,7 +1307,7 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(324): Trig = Thursday, 28 February, 1991
+../tests/test.rem(372): Trig = Thursday, 28 February, 1991
 
 
 Test 2

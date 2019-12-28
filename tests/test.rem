@@ -313,6 +313,54 @@ set a082 slide('1991-03-01', 7, "Sat", "Sun")
 set a083 slide('1991-04-01', -7, "Sat")
 set a084 nonomitted('1991-03-01', '1991-03-13', "Sat", "Sun")
 set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 MSG foo
+set a086 trigback()
+set a087 trigdelta()
+set a088 trigrep()
+set a089 triguntil()
+set a090 trigscanfrom()
+set a091 trigfrom()
+set a092 trigpriority()
+set a093 trigtimedelta()
+set a094 trigtimerep()
+set a095 trigduration()
+
+REM Mon Wed FROM 2010-09-03 ++3 --4 MSG foo
+set a096 trigback()
+set a097 trigdelta()
+set a098 trigrep()
+set a099 triguntil()
+set a100 trigscanfrom()
+set a101 trigfrom()
+set a102 trigpriority()
+set a103 trigtimedelta()
+set a104 trigtimerep()
+set a105 trigduration()
+
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 3:33 MSG foo
+set a106 trigback()
+set a107 trigdelta()
+set a108 trigrep()
+set a109 triguntil()
+set a110 trigscanfrom()
+set a111 trigfrom()
+set a112 trigpriority()
+set a113 trigtimedelta()
+set a114 trigtimerep()
+set a115 trigduration()
+
+REM Mon Wed FROM 2010-09-03 ++3 --4 AT 14:44 MSG foo
+set a116 trigback()
+set a117 trigdelta()
+set a118 trigrep()
+set a119 triguntil()
+set a120 trigscanfrom()
+set a121 trigfrom()
+set a122 trigpriority()
+set a123 trigtimedelta()
+set a124 trigtimerep()
+set a125 trigduration()
+
 dump
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15

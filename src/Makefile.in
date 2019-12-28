@@ -43,6 +43,8 @@ test: remind
 .c.o:
 	@CC@ -c @CPPFLAGS@ @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
 
+$(REMINDOBJS): $(REMINDHDRS)
+
 rem2ps: rem2ps.o dynbuf.o
 	@CC@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o
 

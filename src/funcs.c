@@ -53,104 +53,105 @@
 #define RetVal (info->retval)
 
 /* Function prototypes */
-static int FCurrent (func_info *);
-static int FNonomitted (func_info *);
-static int FTimepart(func_info *);
-static int FDatepart(func_info *);
-static int FRealCurrent(func_info *);
-static	int	FAbs		(func_info *);
-static	int	FAccess		(func_info *);
-static int     FArgs		(func_info *);
-static	int	FAsc		(func_info *);
-static	int	FBaseyr		(func_info *);
-static	int	FChar		(func_info *);
-static	int	FChoose		(func_info *);
-static	int	FCoerce		(func_info *);
-static	int	FDate		(func_info *);
-static	int	FDateTime	(func_info *);
-static	int	FDay		(func_info *);
-static	int	FDaysinmon	(func_info *);
-static	int	FDefined	(func_info *);
-static	int	FDosubst	(func_info *);
-static	int	FEasterdate	(func_info *);
-static  int     FEvalTrig       (func_info *);
-static int	FFiledate	(func_info *);
-static int	FFiledatetime	(func_info *);
-static	int	FFiledir	(func_info *);
-static	int	FFilename	(func_info *);
-static	int	FGetenv		(func_info *);
-static int     FHebdate	(func_info *);
-static int     FHebday		(func_info *);
-static int     FHebmon		(func_info *);
-static int     FHebyear	(func_info *);
-static	int	FHour		(func_info *);
-static	int	FIif		(func_info *);
-static	int	FIndex		(func_info *);
-static	int	FIsdst		(func_info *);
-static	int	FIsomitted	(func_info *);
-static	int	FSlide  	(func_info *);
-static	int	FLanguage	(func_info *);
-static	int	FMax		(func_info *);
-static	int	FMin		(func_info *);
-static	int	FMinute		(func_info *);
-static	int	FMinsfromutc	(func_info *);
-static	int	FMoondate	(func_info *);
-static	int	FMoondatetime	(func_info *);
-static	int	FMoonphase	(func_info *);
-static	int	FMoontime	(func_info *);
-static	int	FMon		(func_info *);
-static	int	FMonnum		(func_info *);
-static	int	FOrd		(func_info *);
-static	int	FOstype 	(func_info *);
-static	int	FPlural		(func_info *);
-static	int	FSgn		(func_info *);
-static int	FPsmoon		(func_info *);
-static int	FPsshade	(func_info *);
-static	int	FShell		(func_info *);
-static	int	FStrlen		(func_info *);
-static	int	FSubstr		(func_info *);
-static	int	FADawn		(func_info *);
-static	int	FADusk	 	(func_info *);
-static	int	FNDawn		(func_info *);
-static	int	FNDusk	 	(func_info *);
-static	int	FDawn		(func_info *);
-static	int	FDusk	 	(func_info *);
-static	int	FSunset		(func_info *);
-static	int	FSunrise	(func_info *);
-static	int	FTime		(func_info *);
-static	int	FTrigdate	(func_info *);
-static	int	FTrigdatetime	(func_info *);
-static	int	FTrigtime	(func_info *);
-static	int	FTrigtimedelta	(func_info *);
-static	int	FTrigtimerep	(func_info *);
-static	int	FTrigduration	(func_info *);
-static	int	FTrigvalid	(func_info *);
-static  int     FTrigback       (func_info *);
-static  int     FTrigdelta      (func_info *);
-static  int     FTrigrep        (func_info *);
-static  int     FTriguntil      (func_info *);
-static  int     FTrigscanfrom   (func_info *);
-static  int     FTrigfrom       (func_info *);
-static  int     FTrigpriority   (func_info *);
-static	int	FTypeof		(func_info *);
-static	int	FUpper		(func_info *);
-static	int	FValue		(func_info *);
-static	int	FVersion	(func_info *);
-static	int	FWkday		(func_info *);
-static	int	FWkdaynum	(func_info *);
-static	int	FYear		(func_info *);
-static int	FIsleap         (func_info *);
-static int	FLower          (func_info *);
-static int	FNow            (func_info *);
-static int	FRealnow            (func_info *);
-static int	FRealtoday      (func_info *);
-static int	FToday          (func_info *);
-static int	FTrigger        (func_info *);
-static int      FTzconvert      (func_info *);
-static int      FWeekno         (func_info *);
-static int	CheckArgs       (BuiltinFunc *f, int nargs);
-static int	CleanUpAfterFunc (func_info *);
-static int	SunStuff	(int rise, double cosz, int jul);
+static int FADawn          (func_info *);
+static int FADusk          (func_info *);
+static int FAbs            (func_info *);
+static int FAccess         (func_info *);
+static int FArgs           (func_info *);
+static int FAsc            (func_info *);
+static int FBaseyr         (func_info *);
+static int FChar           (func_info *);
+static int FChoose         (func_info *);
+static int FCoerce         (func_info *);
+static int FCurrent        (func_info *);
+static int FDate           (func_info *);
+static int FDateTime       (func_info *);
+static int FDatepart       (func_info *);
+static int FDawn           (func_info *);
+static int FDay            (func_info *);
+static int FDaysinmon      (func_info *);
+static int FDefined        (func_info *);
+static int FDosubst        (func_info *);
+static int FDusk           (func_info *);
+static int FEasterdate     (func_info *);
+static int FEvalTrig       (func_info *);
+static int FFiledate       (func_info *);
+static int FFiledatetime   (func_info *);
+static int FFiledir        (func_info *);
+static int FFilename       (func_info *);
+static int FGetenv         (func_info *);
+static int FHebdate        (func_info *);
+static int FHebday         (func_info *);
+static int FHebmon         (func_info *);
+static int FHebyear        (func_info *);
+static int FHour           (func_info *);
+static int FIif            (func_info *);
+static int FIndex          (func_info *);
+static int FIsdst          (func_info *);
+static int FIsleap         (func_info *);
+static int FIsomitted      (func_info *);
+static int FLanguage       (func_info *);
+static int FLower          (func_info *);
+static int FMax            (func_info *);
+static int FMin            (func_info *);
+static int FMinsfromutc    (func_info *);
+static int FMinute         (func_info *);
+static int FMon            (func_info *);
+static int FMonnum         (func_info *);
+static int FMoondate       (func_info *);
+static int FMoondatetime   (func_info *);
+static int FMoonphase      (func_info *);
+static int FMoontime       (func_info *);
+static int FNDawn          (func_info *);
+static int FNDusk          (func_info *);
+static int FNonomitted     (func_info *);
+static int FNow            (func_info *);
+static int FOrd            (func_info *);
+static int FOstype         (func_info *);
+static int FPlural         (func_info *);
+static int FPsmoon         (func_info *);
+static int FPsshade        (func_info *);
+static int FRealCurrent    (func_info *);
+static int FRealnow        (func_info *);
+static int FRealtoday      (func_info *);
+static int FSgn            (func_info *);
+static int FShell          (func_info *);
+static int FSlide          (func_info *);
+static int FStrlen         (func_info *);
+static int FSubstr         (func_info *);
+static int FSunrise        (func_info *);
+static int FSunset         (func_info *);
+static int FTime           (func_info *);
+static int FTimepart       (func_info *);
+static int FToday          (func_info *);
+static int FTrigback       (func_info *);
+static int FTrigdate       (func_info *);
+static int FTrigdatetime   (func_info *);
+static int FTrigdelta      (func_info *);
+static int FTrigduration   (func_info *);
+static int FTrigfrom       (func_info *);
+static int FTrigger        (func_info *);
+static int FTrigpriority   (func_info *);
+static int FTrigrep        (func_info *);
+static int FTrigscanfrom   (func_info *);
+static int FTrigtime       (func_info *);
+static int FTrigtimedelta  (func_info *);
+static int FTrigtimerep    (func_info *);
+static int FTriguntil      (func_info *);
+static int FTrigvalid      (func_info *);
+static int FTypeof         (func_info *);
+static int FTzconvert      (func_info *);
+static int FUpper          (func_info *);
+static int FValue          (func_info *);
+static int FVersion        (func_info *);
+static int FWeekno         (func_info *);
+static int FWkday          (func_info *);
+static int FWkdaynum       (func_info *);
+static int FYear           (func_info *);
+
+static int CleanUpAfterFunc (func_info *);
+static int CheckArgs       (BuiltinFunc *f, int nargs);
+static int SunStuff        (int rise, double cosz, int jul);
 
 /* "Overload" the struct Operator definition */
 #define NO_MAX 127
@@ -1990,7 +1991,7 @@ static int SunStuff(int rise, double cosz, int jul)
 	+ (double) LongSec / 3600.0;
 
     latitude = DEGRAD * ((double) LatDeg + (double) LatMin / 60.0
-		         + (double) LatSec / 3600.0);
+			 + (double) LatSec / 3600.0);
 
 
     FromJulian(jul, &year, &mon, &day);
@@ -2029,10 +2030,10 @@ static int SunStuff(int rise, double cosz, int jul)
 /* Sine of sun's declination */
     sinDelta = 0.39782 * sin(DEGRAD*L);
     cosDelta = sqrt(1 - sinDelta*sinDelta);
-    
+
 /* Cosine of sun's local hour angle */
     cosH = (cosz - sinDelta * sin(latitude)) / (cosDelta * cos(latitude));
-    
+
     if (cosH < -1.0) { /* Summer -- permanent daylight */
 	if (rise) return NO_TIME;
 	else      return -NO_TIME;
@@ -2050,9 +2051,9 @@ static int SunStuff(int rise, double cosz, int jul)
 
     if (T >= 24.0) T -= 24.0;
     else if (T < 0.0) T+= 24.0;
-    
+
     UT = T + longdeg / 15.0;
-    
+
 
     local = UT + (double) mins / 60.0;
     if (local < 0.0) local += 24.0;
@@ -2063,7 +2064,7 @@ static int SunStuff(int rise, double cosz, int jul)
 
     hours = (int) local;
     mins = (int) ((local - hours) * 60.0);
-    
+
     /* Sometimes, we get roundoff error.  Check for "reasonableness" of
        answer. */
     if (rise) {
@@ -2532,16 +2533,16 @@ static int tz_set_tz(char const *tz)
        unsetenv("TZ");
        r = 0;
     } else {
-        r = setenv("TZ", tz, 1);
+	r = setenv("TZ", tz, 1);
     }
     tzset();
     return r;
 }
 
 static int tz_convert(int year, int month, int day,
-                      int hour, int minute,
-                      char const *src_tz, char const *tgt_tz,
-                      struct tm *tm)
+		      int hour, int minute,
+		      char const *src_tz, char const *tgt_tz,
+		      struct tm *tm)
 {
     int r;
     time_t t;
@@ -2562,28 +2563,28 @@ static int tz_convert(int year, int month, int day,
     /* backup old TZ env var */
     old_tz = getenv("TZ");
     if (tgt_tz == NULL) {
-        tgt_tz = old_tz;
+	tgt_tz = old_tz;
     }
 
     /* set source TZ */
     r = tz_set_tz(src_tz);
     if (r == -1) {
-        return -1;
+	return -1;
     }
 
     /* create timestamp in UTC */
     t = mktime(tm);
 
     if (t == (time_t) -1) {
-        tz_set_tz(old_tz);
-        return -1;
+	tz_set_tz(old_tz);
+	return -1;
     }
 
     /* set target TZ */
     r = tz_set_tz(tgt_tz);
     if (r == -1) {
-        tz_set_tz(old_tz);
-        return -1;
+	tz_set_tz(old_tz);
+	return -1;
     }
 
     /* convert to target TZ */
@@ -2594,9 +2595,9 @@ static int tz_convert(int year, int month, int day,
 
     /* return result */
     if (res == NULL) {
-        return -1;
+	return -1;
     } else {
-        return 1;
+	return 1;
     }
 }
 

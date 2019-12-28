@@ -68,6 +68,7 @@ typedef struct {
     int typ;
     int once;
     int scanfrom;
+    int from;
     int priority;
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */

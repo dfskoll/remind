@@ -1343,6 +1343,7 @@ ClearLastTriggers(void)
     LastTrigger.typ = NO_TYPE;
     LastTrigger.once = NO_ONCE;
     LastTrigger.scanfrom = NO_DATE;
+    LastTrigger.from = NO_DATE;
     LastTrigger.priority = DefaultPrio;
     LastTrigger.sched[0] = 0;
     LastTrigger.warn[0] = 0;

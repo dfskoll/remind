@@ -200,6 +200,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->once = NO_ONCE;
     trig->typ = NO_TYPE;
     trig->scanfrom = NO_DATE;
+    trig->from = NO_DATE;
     trig->priority = DefaultPrio;
     trig->sched[0] = 0;
     trig->warn[0] = 0;
@@ -398,6 +399,9 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    case T_Time:
 	    case T_LongTime:
 		tim->duration = tok.val;
+		if (save_in_globals) {
+		    SaveLastTimeTrig(tim);
+		}
 		break;
 	    default:
 		return E_BAD_TIME;
@@ -704,9 +708,12 @@ static int ParseScanFrom(ParsePtr s, Trigger *t, int type)
 	    }
 	    t->scanfrom = Julian(y, m, d);
 	    if (type == FROM_TYPE) {
+		t->from = t->scanfrom;
 		if (t->scanfrom < JulianToday) {
 		    t->scanfrom = JulianToday;
 		}
+	    } else {
+		t->from = NO_DATE;
 	    }
 
 	    PushToken(DBufValue(&buf), s);

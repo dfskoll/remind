@@ -121,7 +121,17 @@ static	int	FTime		(func_info *);
 static	int	FTrigdate	(func_info *);
 static	int	FTrigdatetime	(func_info *);
 static	int	FTrigtime	(func_info *);
+static	int	FTrigtimedelta	(func_info *);
+static	int	FTrigtimerep	(func_info *);
+static	int	FTrigduration	(func_info *);
 static	int	FTrigvalid	(func_info *);
+static  int     FTrigback       (func_info *);
+static  int     FTrigdelta      (func_info *);
+static  int     FTrigrep        (func_info *);
+static  int     FTriguntil      (func_info *);
+static  int     FTrigscanfrom   (func_info *);
+static  int     FTrigfrom       (func_info *);
+static  int     FTrigpriority   (func_info *);
 static	int	FTypeof		(func_info *);
 static	int	FUpper		(func_info *);
 static	int	FValue		(func_info *);
@@ -260,10 +270,20 @@ BuiltinFunc Func[] = {
     {   "time",         2,      2,      1,          FTime   },
     {   "timepart",     1,      1,      1,          FTimepart },
     {   "today",        0,      0,      0,          FToday  },
+    {   "trigback",     0,      0,      0,          FTrigback },
     {   "trigdate",     0,      0,      0,          FTrigdate },
     {   "trigdatetime", 0,      0,      0,          FTrigdatetime },
+    {   "trigdelta",    0,      0,      0,          FTrigdelta },
+    {   "trigduration", 0,      0,      0,          FTrigduration },
+    {   "trigfrom",     0,      0,      0,          FTrigfrom },
     {   "trigger",      1,      3,      0,          FTrigger },
+    {   "trigpriority", 0,      0,      0,          FTrigpriority },
+    {   "trigrep",      0,      0,      0,          FTrigrep },
+    {   "trigscanfrom", 0,      0,      0,          FTrigscanfrom },
     {   "trigtime",     0,      0,      0,          FTrigtime },
+    {   "trigtimedelta",0,      0,      0,          FTrigtimedelta },
+    {   "trigtimerep",  0,      0,      0,          FTrigtimerep },
+    {   "triguntil",    0,      0,      0,          FTriguntil },
     {   "trigvalid",    0,      0,      0,          FTrigvalid },
     {   "typeof",       1,      1,      1,          FTypeof },
     {   "tzconvert",    2,      3,      0,          FTzconvert },
@@ -1133,6 +1153,96 @@ static int FTrigdate(func_info *info)
     } else {
 	RetVal.type = INT_TYPE;
 	RETVAL = 0;
+    }
+    return OK;
+}
+
+static int FTrigback(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTrigger.back;
+    return OK;
+}
+
+static int FTrigdelta(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTrigger.delta;
+    return OK;
+}
+
+static int FTrigtimedelta(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTimeTrig.delta;
+    return OK;
+}
+
+static int FTrigtimerep(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTimeTrig.rep;
+    return OK;
+}
+
+static int FTrigduration(func_info *info)
+{
+    if (LastTimeTrig.duration == NO_TIME) {
+	RetVal.type = INT_TYPE;
+	RETVAL = -1;
+    } else {
+	RetVal.type = TIME_TYPE;
+	RETVAL = LastTimeTrig.duration;
+    }
+    return OK;
+}
+
+static int FTrigrep(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTrigger.rep;
+    return OK;
+}
+
+static int FTrigpriority(func_info *info)
+{
+    RetVal.type = INT_TYPE;
+    RETVAL = LastTrigger.priority;
+    return OK;
+}
+
+static int FTriguntil(func_info *info)
+{
+    if (LastTrigger.until == NO_UNTIL) {
+	RetVal.type = INT_TYPE;
+	RETVAL = -1;
+    } else {
+	RetVal.type = DATE_TYPE;
+	RETVAL = LastTrigger.until;
+    }
+    return OK;
+}
+
+static int FTrigscanfrom(func_info *info)
+{
+    if (LastTrigger.scanfrom == NO_DATE) {
+	RetVal.type = INT_TYPE;
+	RETVAL = -1;
+    } else {
+	RetVal.type = DATE_TYPE;
+	RETVAL = LastTrigger.scanfrom;
+    }
+    return OK;
+}
+
+static int FTrigfrom(func_info *info)
+{
+    if (LastTrigger.from == NO_DATE) {
+	RetVal.type = INT_TYPE;
+	RETVAL = -1;
+    } else {
+	RetVal.type = DATE_TYPE;
+	RETVAL = LastTrigger.from;
     }
     return OK;
 }

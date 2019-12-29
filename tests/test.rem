@@ -361,6 +361,12 @@ set a123 trigtimedelta()
 set a124 trigtimerep()
 set a125 trigduration()
 
+# Test adding TIME+TIME and DATETIME+TIME
+set a126 11:00 + 3:00
+set a127 23:00 + 5:30
+set a128 '2018-02-03@10:00' + 6:45
+set a129 23:30 + '2019-02-02@16:44'
+
 dump
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15

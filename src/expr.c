@@ -765,9 +765,9 @@ static int Add(void)
 	return OK;
     }
 
-/* If it's a datetime plus an int, add 'em */
-    if ((v1.type == DATETIME_TYPE && v2.type == INT_TYPE) ||
-	(v1.type == INT_TYPE && v2.type == DATETIME_TYPE)) {
+/* If it's a datetime plus an int or a time, add 'em */
+    if ((v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) ||
+	((v1.type == INT_TYPE || v1.type == TIME_TYPE) && v2.type == DATETIME_TYPE)) {
 	v1.v.val += v2.v.val;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	v1.type = DATETIME_TYPE;
@@ -775,9 +775,11 @@ static int Add(void)
 	return OK;
     }
 
-/* If it's a time plus an int, add 'em mod MINUTES_PER_DAY */
+/* If it's a time plus an int or a time plus a time,
+   add 'em mod MINUTES_PER_DAY */
     if ((v1.type == TIME_TYPE && v2.type == INT_TYPE) ||
-	(v1.type == INT_TYPE && v2.type == TIME_TYPE)) {
+	(v1.type == INT_TYPE && v2.type == TIME_TYPE) ||
+	(v1.type == TIME_TYPE && v2.type == TIME_TYPE)) {
 	v1.v.val = (v1.v.val + v2.v.val) % MINUTES_PER_DAY;
 	if (v1.v.val < 0) v1.v.val += MINUTES_PER_DAY;
 	v1.type = TIME_TYPE;

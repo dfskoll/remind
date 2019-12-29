@@ -1709,7 +1709,12 @@ Has several uses.  These are:
 .PP
 \fBINT\fR + \fBTIME\fR or \fBTIME\fR + \fBINT\fR - returns a \fBTIME\fR
 obtained by adding
-\fBINT\fR minutes to the original \fBTIME\fR.
+\fBINT\fR minutes to the original \fBTIME\fR.  The result will always
+range from 00:00 through 23:59.
+.PP
+\fBTIME\fR + \fBTIME\fR treats the second \fBTIME\fR parameter as a
+duration, converting it to an integer number of minutes past midnight,
+and then performs addition as with \fBTIME\fR + \fBINT\fR.
 .PP
 \fBINT\fR + \fBDATE\fR or \fBDATE\fR + \fBINT\fR - returns a \fBDATE\fR
 obtained by adding \fBINT\fR days to the original \fBDATE\fR.
@@ -1717,6 +1722,11 @@ obtained by adding \fBINT\fR days to the original \fBDATE\fR.
 \fBINT\fR + \fBDATETIME\fR or \fBDATETIME\fR + \fBINT\fR - returns a
 \fBDATETIME\fR obtained by adding \fBINT\fR minutes to the original
 \fBDATETIME\fR.
+.PP
+\fBDATETIME\fR + \fBTIME\fR or \fBTIME\fR + \fBDATETIME\fR
+treats the \fBTIME\fR parameter as a
+duration, converting it to an integer number of minutes past midnight,
+and then performs addition as with \fBDATETIME\fR + \fBINT\fR.
 .PP
 \fBSTRING\fR + \fBSTRING\fR - returns a \fBSTRING\fR that is the
 concatenation of the two original
@@ -2796,6 +2806,52 @@ Similar to trigdate(), but returns a \fBDATETIME\fR if the most recent
 triggerable \fBREM\fR command had an \fBAT\fR clause.  If there was no
 \fBAT\fR clause, returns a \fBDATE\fR.  If no trigger could be computed,
 returns the integer 0.
+.TP
+.B trigback()
+Returns the "back" amount of the last \fBREM\fR or \fBIFTRIG\fR command.
+Returns a positive integer N if the "back" is of the form -N, or a negative
+integer if it is of the form --N.  If there is no "back", then returns 0.
+.TP
+.B trigdelta()
+Returns the "delta" amount of the last \fBREM\fR or \fBIFTRIG\fR command.
+Returns a positive integer N if the "delta" is of the form +N, or a negative
+integer if it is of the form ++N.  If there is no "delta", then returns 0.
+.TP
+.B trigtimedelta()
+Similar to \fBtrigdelta()\fR, but returns the delta used in the
+"AT..." clause of a timed reminder.
+.TP
+.B trigrep()
+Returns the "repeat" amount of the last \fBREM\fR or \fBIFTRIG\fR
+command.  Returns a positive integer N if the "repeat" is of the form
+*N.  If there is no "repeat", then returns 0.
+.TP
+.B trigtimerep()
+Similar to \fBtrigrep()\fR, but returns the repeat used in the "AT..." clause
+of a timed reminder.
+.TP
+.B trigduration()
+Returns (as a TIME type) the DURATION parameter of a timed reminder.  If there
+is no DURATION parameter, returns the integer -1.
+.TP
+.B trigpriority()
+Returns the PRIORITY of the last \fBREM\fR or \fBIFTRIG\fR command.
+.TP
+.B triguntil()
+Returns (as a DATE type) the UNTIL parameter of the last \fBREM\fR or
+\fBIFTRIG\fR command.  If there was no UNTIL parameter, returns the integer -1.
+.TP
+.B trigscanfrom()
+Returns (as a DATE type) the SCANFROM parameter of the last \fBREM\fR
+or \fBIFTRIG\fR command.  If there was no SCANFROM parameter, returns
+the integer -1.  Note that FROM and SCANFROM interact; a reminder that
+has a "FROM yyyy-mm-dd" parameter will act as if it has a SCANFROM parameter
+whose value is the maximum of "yyyy-mm-dd" and today.
+.TP
+.B trigfrom()
+Returns (as a DATE type) the FROM parameter of the last \fBREM\fR or
+\fBIFTRIG\fR command.  If there was no FROM parameter, returns the integer -1.
+
 .TP
 .B trigger(d_date [,t_time [,i_utcflag]]) \fRor\fB trigger(q_datetime [,i_utcflag])
 Returns a string suitable for use in a \fBREM\fR command or a SCANFROM

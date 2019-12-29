@@ -1141,6 +1141,16 @@ trigtimerep() => 0
 set a125 trigduration()
 trigduration() => -1
 
+# Test adding TIME+TIME and DATETIME+TIME
+set a126 11:00 + 3:00
+11:00 + 03:00 => 14:00
+set a127 23:00 + 5:30
+23:00 + 05:30 => 04:30
+set a128 '2018-02-03@10:00' + 6:45
+2018-02-03@10:00 + 06:45 => 2018-02-03@16:45
+set a129 23:30 + '2019-02-02@16:44'
+23:30 + 2019-02-02@16:44 => 2019-02-03@16:14
+
 dump
         Variable  Value
 
@@ -1156,6 +1166,7 @@ dump
             a065  1
             a084  7
             a107  3
+            a126  14:00
             a018  1
             a037  1991-02-15
             a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
@@ -1167,6 +1178,7 @@ dump
             a066  0
             a085  7
             a108  14
+            a127  04:30
             a019  0
             a038  33
             a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
@@ -1178,6 +1190,7 @@ dump
             a067  "INT"
             a086  4
             a109  2012-01-01
+            a128  2018-02-03@16:45
             a039  "February"
             a058  "03.01.17"
             a077  "1992 92
@@ -1187,6 +1200,7 @@ dump
             a049  21
             a068  "STRING"
             a087  3
+            a129  2019-02-03@16:14
             a059  "Saturday"
             a078  1991-03-31
             a097  -3
@@ -1272,10 +1286,10 @@ dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(367): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(373): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(369): Trig = Sunday, 26 December, 2010
+../tests/test.rem(375): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
@@ -1307,7 +1321,7 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(372): Trig = Thursday, 28 February, 1991
+../tests/test.rem(378): Trig = Thursday, 28 February, 1991
 
 
 Test 2

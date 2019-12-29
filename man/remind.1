@@ -2819,7 +2819,7 @@ integer if it is of the form ++N.  If there is no "delta", then returns 0.
 .TP
 .B trigtimedelta()
 Similar to \fBtrigdelta()\fR, but returns the delta used in the
-"AT..." clause of a timed reminder.
+\fBAT\fR clause of a timed reminder.
 .TP
 .B trigrep()
 Returns the "repeat" amount of the last \fBREM\fR or \fBIFTRIG\fR
@@ -2827,34 +2827,37 @@ command.  Returns a positive integer N if the "repeat" is of the form
 *N.  If there is no "repeat", then returns 0.
 .TP
 .B trigtimerep()
-Similar to \fBtrigrep()\fR, but returns the repeat used in the "AT..." clause
+Similar to \fBtrigrep()\fR, but returns the repeat used in the \fBAT\fR clause
 of a timed reminder.
 .TP
 .B trigduration()
-Returns (as a TIME type) the DURATION parameter of a timed reminder.  If there
-is no DURATION parameter, returns the integer -1.
+Returns (as a TIME type) the \fBDURATION\fR parameter of a timed reminder.  If there
+is no \fBDURATION\fR parameter, returns the integer -1.
 .TP
 .B trigpriority()
-Returns the PRIORITY of the last \fBREM\fR or \fBIFTRIG\fR command.
+Returns the \fBPRIORITY\fR of the last \fBREM\fR or \fBIFTRIG\fR command.
 .TP
 .B triguntil()
-Returns (as a DATE type) the UNTIL parameter of the last \fBREM\fR or
-\fBIFTRIG\fR command.  If there was no UNTIL parameter, returns the integer -1.
+Returns (as a \fBDATE\fR type) the \fBUNTIL\fR parameter of the last
+\fBREM\fR or \fBIFTRIG\fR command.  If there was no \fBUNTIL\fR
+parameter, returns the integer -1.  If there is a \fBTHROUGH\fR parameter,
+that will be returned by \fBtriguntil()\fR since "THROUGH yyyy-mm-dd" is simply
+syntactic sugar for "*1 UNTIL yyyy-mm-dd".
 .TP
 .B trigscanfrom()
-Returns (as a DATE type) the SCANFROM parameter of the last \fBREM\fR
-or \fBIFTRIG\fR command.  If there was no SCANFROM parameter, returns
-the integer -1.  Note that FROM and SCANFROM interact; a reminder that
-has a "FROM yyyy-mm-dd" parameter will act as if it has a SCANFROM parameter
+Returns (as a \fBDATE\fR type) the \fBSCANFROM\fR parameter of the last \fBREM\fR
+or \fBIFTRIG\fR command.  If there was no \fBSCANFROM\fR parameter, returns
+the integer -1.  Note that \fBFROM\fR and \fBSCANFROM\fR interact; a reminder that
+has a "FROM yyyy-mm-dd" parameter will act as if it has a \fBSCANFROM\fR parameter
 whose value is the maximum of "yyyy-mm-dd" and today.
 .TP
 .B trigfrom()
-Returns (as a DATE type) the FROM parameter of the last \fBREM\fR or
-\fBIFTRIG\fR command.  If there was no FROM parameter, returns the integer -1.
+Returns (as a \fBDATE\fR type) the \fBFROM\fR parameter of the last \fBREM\fR or
+\fBIFTRIG\fR command.  If there was no \fBFROM\fR parameter, returns the integer -1.
 
 .TP
 .B trigger(d_date [,t_time [,i_utcflag]]) \fRor\fB trigger(q_datetime [,i_utcflag])
-Returns a string suitable for use in a \fBREM\fR command or a SCANFROM
+Returns a string suitable for use in a \fBREM\fR command or a \fBSCANFROM\fR
 or UNTIL clause, allowing you to calculate trigger dates in advance.
 Note that in earlier versions of \fBRemind\fR, \fBtrigger\fR was
 required to convert a date into something the \fBREM\fR command could
@@ -2887,9 +2890,11 @@ The value for your time zone may differ.
 .RE
 .TP
 .B trigtime()
-Returns the time of the last \fBREM\fR command with an \fBAT\fR clause.
-If the last \fBREM\fR did not have an \fBAT\fR clause, returns the integer
-0.
+Returns the time of the last \fBREM\fR command with an \fBAT\fR
+clause.  If the last \fBREM\fR did not have an \fBAT\fR clause,
+returns the integer 0.  If a \fBREM\fR command has an \fBAT\fR clause
+with a \fBDURATION\fR, then you can compute the end time as
+\fBtrigtime() + trigduration()\fR.
 .TP
 .B trigvalid()
 Returns 1 if the value returned by \fBtrigdate()\fR is valid for the most

@@ -25,6 +25,8 @@ CHANGES TO REMIND
 - BUG FIX: Fix compile error when compiling Romanian version; eliminate
   compiler warning when compiling non-English versions.
 
+- BUG FIX: Fix startup failure of TkRemind if options are at default. :(
+
 * Version 3.1 Patch 17 - 2019-11-15
 
 - IMPROVEMENT: Add "Extra Remind Options" setting to TkRemind.

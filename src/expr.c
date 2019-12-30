@@ -30,7 +30,6 @@
 #define LE 4
 #define NE 5
 
-static char CoerceBuf[512];
 extern int NumFuncs;
 
 static int Multiply(void), Divide(void), Mod(void), Add(void),
@@ -578,6 +577,8 @@ int DoCoerce(char type, Value *v)
     int h, d, m, y, i, k;
     char const *s;
 
+    char coerce_buf[128];
+
     /* Do nothing if value is already the right type */
     if (type == v->type) return OK;
 
@@ -605,12 +606,12 @@ int DoCoerce(char type, Value *v)
 	}
     case STR_TYPE:
 	switch(v->type) {
-	case INT_TYPE: sprintf(CoerceBuf, "%d", v->v.val); break;
-	case TIME_TYPE: sprintf(CoerceBuf, "%02d%c%02d", v->v.val / 60,
+	case INT_TYPE: sprintf(coerce_buf, "%d", v->v.val); break;
+	case TIME_TYPE: sprintf(coerce_buf, "%02d%c%02d", v->v.val / 60,
 			       TimeSep, v->v.val % 60);
 	break;
 	case DATE_TYPE: FromJulian(v->v.val, &y, &m, &d);
-	    sprintf(CoerceBuf, "%04d%c%02d%c%02d",
+	    sprintf(coerce_buf, "%04d%c%02d%c%02d",
 		    y, DateSep, m+1, DateSep, d);
 	    break;
 	case DATETIME_TYPE:
@@ -619,13 +620,13 @@ int DoCoerce(char type, Value *v)
 	    k = v->v.val % MINUTES_PER_DAY;
 	    h = k / 60;
 	    i = k % 60;
-	    sprintf(CoerceBuf, "%04d%c%02d%c%02d%c%02d%c%02d",
+	    sprintf(coerce_buf, "%04d%c%02d%c%02d%c%02d%c%02d",
 		    y, DateSep, m+1, DateSep, d, DateTimeSep, h, TimeSep, i);
 	    break;
 	default: return E_CANT_COERCE;
 	}
 	v->type = STR_TYPE;
-	v->v.str = StrDup(CoerceBuf);
+	v->v.str = StrDup(coerce_buf);
 	if (!v->v.str) {
 	    v->type = ERR_TYPE;
 	    return E_NO_MEM;

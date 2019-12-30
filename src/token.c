@@ -228,11 +228,11 @@ void FindToken(char const *s, Token *tok)
 /* If language is other than English, search the DayNames[] and MonthNames[]
    array. */
 #if LANG != ENGLISH
-    for (r=0; r<(sizeof(NonEnglishToks) / sizeof(Token)); r++) {
-	if (l >= NonEnglishToks[r].MinLen &&
-	    !TokStrCmp(&NonEnglishToks[r], s)) {
-	    tok->type = NonEnglishToks[r].type;
-	    tok->val = NonEnglishToks[r].val;
+    for (size_t x=0; x<(sizeof(NonEnglishToks) / sizeof(Token)); x++) {
+	if (l >= NonEnglishToks[x].MinLen &&
+	    !TokStrCmp(&NonEnglishToks[x], s)) {
+	    tok->type = NonEnglishToks[x].type;
+	    tok->val = NonEnglishToks[x].val;
 	    return;
 	}
     }

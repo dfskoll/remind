@@ -810,7 +810,7 @@ static int Add(void)
 	    return E_NO_MEM;
 	}
 	strcpy(v3.v.str, v1.v.str);
-	strcat(v3.v.str, v2.v.str);
+	strcpy(v3.v.str+l1, v2.v.str);
 	DestroyValue(v1); DestroyValue(v2);
 	PushValStack(v3);
 	return OK;

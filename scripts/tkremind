@@ -2989,7 +2989,14 @@ proc ShowTodaysReminders {} {
     CenterWindow $w .
 
     # Grab the reminders
-    set stuff [exec -keepnewline $Remind -g -q -r $Option(ExtraRemindArgs) $ReminderFile 2>/dev/null]
+    set stuff ""
+    catch {
+	if {"$Option(ExtraRemindArgs)" != ""} {
+	    set stuff [exec -keepnewline $Remind -g -q -r $Option(ExtraRemindArgs) $ReminderFile 2>/dev/null]
+	} else {
+	    set stuff [exec -keepnewline $Remind -g -q -r $Option(ExtraRemindArgs) $ReminderFile 2>/dev/null]
+	}
+    }
     $w.text insert end $stuff
     $w.text configure -state disabled
 }

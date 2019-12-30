@@ -5,7 +5,7 @@
 /*  Support for the Hebrew calendar                            */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2018 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2020 by Dianne Skoll                    */
 /*                                                             */
 /*  Derived from code written by Amos Shapir in 1978; revised  */
 /*  1985.                                                      */

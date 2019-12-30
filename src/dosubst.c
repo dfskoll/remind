@@ -6,7 +6,7 @@
 /*  reminders are triggered.                                   */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2018 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2020 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 

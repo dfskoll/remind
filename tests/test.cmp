@@ -854,7 +854,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "03.01.17"
+version() => "03.01.18"
 set a059 wkday(today())
 today() => 1991-02-16
 wkday(1991-02-16) => "Saturday"
@@ -1192,7 +1192,7 @@ dump
             a109  2012-01-01
             a128  2018-02-03@16:45
             a039  "February"
-            a058  "03.01.17"
+            a058  "03.01.18"
             a077  "1992 92
 "
             a096  -4
@@ -2570,7 +2570,7 @@ No reminders.
 %%EndComments
 % This file was produced by Remind and Rem2PS, written by
 % Dianne Skoll.
-% Remind and Rem2PS are Copyright 1992-1997 Dianne Skoll.
+% Remind and Rem2PS are Copyright 1992-2020 Dianne Skoll.
 /ISOLatin1Encoding where { pop save true }{ false } ifelse
   /ISOLatin1Encoding [ StandardEncoding 0 45 getinterval aload pop /minus
     StandardEncoding 46 98 getinterval aload pop /dotlessi /grave /acute

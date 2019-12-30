@@ -7,7 +7,7 @@
 /*  This file is part of REMIND.                               */
 /*  It is Copyright (C) 1996 by Valerio Aimale                 */
 /*                                                             */
-/*  Remind is copyright (C) 1992-2018 by Dianne Skoll          */
+/*  Remind is copyright (C) 1992-2020 by Dianne Skoll          */
 /*                                                             */
 /***************************************************************/
 

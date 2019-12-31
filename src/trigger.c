@@ -475,6 +475,8 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 	} else {
 	    omit = 0;
 	}
+
+	/** FIXME: Fix bad interaction with SATISFY... need to rethink!!! */
 	if (result+trig->duration_days >= today &&
 	    (trig->skip != SKIP_SKIP || !omit)) {
 	    /* Adust for non-zero duration */

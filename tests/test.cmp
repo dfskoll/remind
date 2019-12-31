@@ -481,6 +481,7 @@ CLEAR-OMIT-CONTEXT
 # Test the scanfrom clause
 REM Fri SATISFY 1
 ../tests/test.rem(167): Trig = Friday, 22 February, 1991
+../tests/test.rem(167): Trig(satisfied) = Friday, 22 February, 1991
 OMIT [trigger(trigdate())]
 trigdate() => 1991-02-22
 trigger(1991-02-22) => "22 February 1991"
@@ -492,6 +493,7 @@ today() => 1991-02-16
 1991-02-16 - 7 => 1991-02-09
 trigger(1991-02-09) => "9 February 1991"
 ../tests/test.rem(171): Trig = Friday, 15 February, 1991
+../tests/test.rem(171): Trig(satisfied) = Friday, 15 February, 1991
 OMIT [trigger(trigdate())]
 trigdate() => 1991-02-15
 trigger(1991-02-15) => "15 February 1991"
@@ -502,6 +504,7 @@ REM Fri after MSG 16 Feb 1991
 CLEAR-OMIT-CONTEXT
 REM Fri SCANFROM -7 SATISFY 1
 ../tests/test.rem(175): Trig = Friday, 15 February, 1991
+../tests/test.rem(175): Trig(satisfied) = Friday, 15 February, 1991
 OMIT [trigger(trigdate())]
 trigdate() => 1991-02-15
 trigger(1991-02-15) => "15 February 1991"

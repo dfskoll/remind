@@ -2990,13 +2990,14 @@ proc ShowTodaysReminders {} {
 
     # Grab the reminders
     set stuff ""
-    catch {
-	if {"$Option(ExtraRemindArgs)" != ""} {
-	    set stuff [exec -keepnewline $Remind -g -q -r $Option(ExtraRemindArgs) $ReminderFile 2>/dev/null]
-	} else {
-	    set stuff [exec -keepnewline $Remind -g -q -r $ReminderFile 2>/dev/null]
-	}
+    set cmdline "|$Remind -g -q -r "
+    append cmdline $Option(ExtraRemindArgs);
+    append cmdline " $ReminderFile 2>/dev/null"
+    set f [open $cmdline r]
+    while {[gets $f line] >= 0} {
+	append stuff "$line\n"
     }
+    close $f
     $w.text insert end $stuff
     $w.text configure -state disabled
 }

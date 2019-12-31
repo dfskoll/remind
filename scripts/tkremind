@@ -50,6 +50,46 @@ QWsg5AAzDZSMbIBeaoHwAUwSDAI2XMAENA8ThAPEBvAStEkc3yonrOW0aUMk
     wm iconphoto . -default rpicon
 }
 
+# Left and right arrows
+image create photo leftarrow -data {
+iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAC3XpUWHRSYXcgcHJvZmlsZSB0eXBl
+IGV4aWYAAHja7ZdRkuMoDIbfOcUeAUkIieNgA1Vzgz3+/mDa6aR7pmpn52EfYioGK+IX6BNOd+h/
+/xjhL1xUJIak5rnkHHGlkgpXDDxe19VTTOt+Xefu6dke7i8YJkEv12Pu27/Cro8Jlrb9eLYH20Ls
+W+gj8haUGZkfK/EtJHzZaT+HsufV9Gk7+3O0bdOre31OhmQ0hZ5w4C4kEXefUQQrkCIVd8ZdZDnB
+WiUtC4l+n7twD1+Sd49echfrtstzKkLM2yG/5GjbSb/P3crQ5xXRI/LTFyZ3iC+5G6P5GP3aXU0Z
+mcphb+pjK2sExwOplDUtoxk+irGtVtAcWzxBrIHmgXYGKsTI9qBEjSoN6qs/6cQSE3c29Mwny7K5
+GBc+F5Q0Gw024GlBHDROUJPJ5V4LrbhlxTvJEbkRPJkgNol+aeE74++0W2iMWbpE0e9cYV08axrL
+mOTmHV4AQmPnVFd+Vwuf6iZ+AisgqCvNjg3WeFwSh9KjtmRxFvhpTCFeR4OsbQGkCLEViyEBgZhR
+zJQpGrMRIY8OPhUrZ0l8gACpcqMwwEYkA47zjI05RsuXlS8zXi0AoZLFgAYHCLBSUtSPJUcNVRVN
+QVWzmroWrVlyyppztjzfUdXEkqllM3MrVl08uXp2c/fitXARvMK05GKheCmlVgStkK6YXeFR68GH
+HOnQIx92+FGOeqJ8znTqmU87/Sxnbdyk4fi33Cw0b6XVTh2l1FPXnrt176XXgVobMtLQkYcNH2XU
+m9qm+kyNXsj9mhptapNYWn72oAaz2YcEzdeJTmYgxolA3CYBFDRPZtEpJZ7kJrNYGIdCGdRIJ5xG
+kxgIpk6sg252D3K/5BY0/Stu/DNyYaL7E+TCRLfJfeX2DbVW1y+KLEDzFM6cRhl4scGhe2Wv8zfp
+t/vwXwXeQm+ht9Bb6C30FnoL/X+EBv54wL+a4R9jg5HlHbplXQAAAAZiS0dEAP8A/wD/oL2nkwAA
+AAlwSFlzAAAOxAAADsQBlSsOGwAAAAd0SU1FB+MMHwEqD2+Y0soAAABKSURBVCjPY2DADuoZSAC1
+DAwM/0lVjFMDI5riJiR+Gz71yCYTwgx1JCj+z8TAwPCRgQyQT6wNjGiaJqDx8QUShk0kO48kUIhL
+AgCfBSz4satMtQAAAABJRU5ErkJggg==
+}
+
+image create photo rightarrow -data {
+iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAC3HpUWHRSYXcgcHJvZmlsZSB0eXBl
+IGV4aWYAAHja7ZdRkuMoDIbfOcUeAUkIieNgA1Vzgz3+/mDa6aR7pmpn52EfYipgK7IE/ydId+h/
+/xjhL1xUJIak5rnkHHGlkgpX3Hi8rmukmFZ/Xece6dke7i8YJsEo12Pu27/Cro8XLG378WwPtgOx
+70AfmXdAmZn5MRPfgYQvO+3nUPZ7NX1azv4cbdv0Gl6fk0GMpognHLgLSUTvM4tgBlKkomf0IssJ
+1ippW+R77cJ9+yLeffeiXazbLs9ShJi3Q37RaNtJv9duKfR5RvTI/PSFyZ3ii3ZjNB+jX6urKUOp
+HPaiPpay7uB4QMpLjYxm+CjubbWC5ljiCWINNA+0M1AhhtqDEjWqNKiv8aQTU0zc2TAynyzL5mJc
++FxQ0mw02ICnBXHQOEFNJpd7LrTylpXvJEfmRvBkQrBJ9EsL3xl/p92BxpilSxT91grz4lnTmMYk
+N3t4AQiNrakufVcLn+omfgIrIKhLZscCazyuEIfSo7ZkcRb4aUwhXluDrO0AkAi5FZMhAYGYSZQy
+RWM2Iujo4FMxc5bEBwiQKjcKA2xEMuA4z9x4x2j5svJlxtECECpZDGiwgQArJUX9WHLUUFXRFFQ1
+q6lr0Zolp6w5Z8vzjKomlkwtm5lbseriydWzm7sXr4WL4AjTkouF4qWUWpG0InTF2xUetR58yJEO
+PfJhhx/lqCfK50ynnvm0089y1sZNGrZ/y81C81Za7dRRSj117blb9156Hai1ISMNHXnY8FFGvalt
+qs/U6IXcr6nRpjaJpeVnD2owm32EoHmc6GQGYpwIxG0SQEHzZBadUuJJbjKLhbEplEGNdMJpNImB
+YOrEOuhm9yD3S25B07/ixj8jFya6P0EuTHSb3Fdu31Brdf2iyAI0d+HUNMrAwQaH7pW9zt+k3x7D
+fw3wDvQO9A70DvQO9A70DvT/CTTwxwP+1Qz/AGOHkeWpKJljAAAABmJLR0QA/wD/AP+gvaeTAAAA
+CXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wwfASohs07fBQAAAFhJREFUKM9jYMAN6hlIBP8Z
+GBhqSdWAoYmFgYGhDSqBCzRB6WZ0kwjhWpgNxIImBgYGRiYSA+IjKU7KZ2BgYGCEMrB5eiISuwCN
+jzdY80mJh3xSPFiITRAA3qskpC7RIkIAAAAASUVORK5CYII=
+}
 proc missing_tcllib { pkg } {
     catch { puts stderr "Could not find the '$pkg' package -- you must install tcllib.\nPlease see http://tcllib.sourceforge.net/" }
     tk_dialog .err "Error: tcllib not installed" "Could not find the '$pkg' package -- you must install tcllib.  Please see http://tcllib.sourceforge.net/" error 0 OK
@@ -520,9 +560,9 @@ proc CreateCalWindow { dayNames } {
     CreateCalFrame .cal $dayNames
 
     frame .b
-    button .b.prev -text {<-} -command {MoveMonth -1} -border 1
+    button .b.prev -image leftarrow -width 24 -command {MoveMonth -1} -border 1
     button .b.this -text {Today} -command {ThisMonth} -border 1
-    button .b.next -text {->} -command {MoveMonth 1} -border 1
+    button .b.next -image rightarrow -width 24 -command {MoveMonth 1} -border 1
     button .b.goto -text {Go To Date...} -command {GotoDialog} -border 1
     button .b.print -text {Print...} -command {DoPrint} -border 1
     button .b.queue -text {Queue...} -command {DoQueue} -border 1
@@ -530,7 +570,7 @@ proc CreateCalWindow { dayNames } {
     button .b.options -text {Options...} -command EditOptions -border 1
     label .b.status -text "" -width 25 -relief sunken -border 1
     label .b.nqueued -text "" -width 20 -relief sunken -border 1
-    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill x
+    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x
     pack .b -side bottom -fill x -expand 0

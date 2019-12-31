@@ -1092,10 +1092,10 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 	    return OK;
 	}
 	p->pos = s;
-	if (jul < start) {
+	if (jul+trig->duration_days < start) {
 	    start++;
 	} else {
-	    start = jul+1;
+	    start = jul+trig->duration_days+1;
 	}
     }
     p->pos = t;

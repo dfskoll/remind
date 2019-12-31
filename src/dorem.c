@@ -1044,16 +1044,16 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 /***************************************************************/
 int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 {
-    int iter, jul, r;
+    int iter, jul, r, start;
     Value v;
     char const *s;
     char const *t;
 
     t = p->pos;
     iter = 0;
-    jul = trig->scanfrom;
+    start = trig->scanfrom;
     while (iter++ < MaxSatIter) {
-	jul = ComputeTrigger(jul, trig, tt, &r, 1);
+	jul = ComputeTriggerNoAdjustDuration(start, trig, tt, &r, 1);
 	if (r) {
 	    if (r == E_CANT_TRIG) return OK; else return r;
 	}
@@ -1065,10 +1065,38 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 	t = p->pos;
 	if (r) return r;
 	if (v.type != INT_TYPE && v.type != STR_TYPE) return E_BAD_TYPE;
-	if (v.type == INT_TYPE && v.v.val) return OK;
-	if (v.type == STR_TYPE && *v.v.str) return OK;
+	if ((v.type == INT_TYPE && v.v.val) ||
+	    (v.type == STR_TYPE && *v.v.str)) {
+	    AdjustTriggerForDuration(trig->scanfrom, jul, trig, tt, 1);
+	    if (DebugFlag & DB_PRTTRIG) {
+		int y, m, d;
+		FromJulian(LastTriggerDate, &y, &m, &d);
+		fprintf(ErrFp, "%s(%d): Trig(satisfied) = %s, %d %s, %d",
+			FileName, LineNo,
+			DayName[LastTriggerDate % 7],
+			d,
+			MonthName[m],
+			y);
+		if (tt->ttime != NO_TIME) {
+		    fprintf(ErrFp, " AT %02d:%02d",
+			    (tt->ttime / 60),
+			    (tt->ttime % 60));
+		    if (tt->duration != NO_TIME) {
+			fprintf(ErrFp, " DURATION %02d:%02d",
+				(tt->duration / 60),
+				(tt->duration % 60));
+		    }
+		}
+		fprintf(ErrFp, "\n");
+	    }
+	    return OK;
+	}
 	p->pos = s;
-	jul++;
+	if (jul < start) {
+	    start++;
+	} else {
+	    start = jul+1;
+	}
     }
     p->pos = t;
     LastTrigValid = 0;

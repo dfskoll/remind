@@ -408,6 +408,51 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
     return simple;
 }
 
+int
+AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int save_in_globals)
+{
+    int y, m, d;
+    if (r < today && r + trig->duration_days >= today) {
+	/* Adjust duration down */
+	tim->duration -= (today - r) * 1440;
+	tim->duration += tim->ttime;
+
+	/* Start at midnight */
+	tim->ttime = 0;
+
+	/* Change trigger date to today */
+	r = today;
+	if (DebugFlag & DB_PRTTRIG) {
+	    FromJulian(r, &y, &m, &d);
+	    fprintf(ErrFp, "%s(%d): Trig(adj) = %s, %d %s, %d",
+		    FileName, LineNo,
+		    DayName[r % 7],
+		    d,
+		    MonthName[m],
+		    y);
+	    if (tim->ttime != NO_TIME) {
+		fprintf(ErrFp, " AT %02d:%02d",
+			(tim->ttime / 60),
+			(tim->ttime % 60));
+		if (tim->duration != NO_TIME) {
+		    fprintf(ErrFp, " DURATION %02d:%02d",
+			    (tim->duration / 60),
+			    (tim->duration % 60));
+		}
+	    }
+	    fprintf(ErrFp, "\n");
+	}
+
+	if (save_in_globals) {
+	    LastTriggerTime = tim->ttime;
+	    SaveLastTimeTrig(tim);
+	    LastTriggerDate = r;
+	    LastTrigValid = 1;
+	}
+   }
+   return r;
+}
+
 /***************************************************************/
 /*                                                             */
 /*  ComputeTrigger                                             */
@@ -418,6 +463,27 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 /***************************************************************/
 int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 		   int *err, int save_in_globals)
+{
+    int r = ComputeTriggerNoAdjustDuration(today, trig, tim, err, save_in_globals);
+    if (*err != OK) {
+	return r;
+    }
+    if (r < today && r + trig->duration_days >= today) {
+	r = AdjustTriggerForDuration(today, r, trig, tim, save_in_globals);
+    }
+    return r;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  ComputeTriggerNoAdjustDuration                             */
+/*                                                             */
+/*  Compute a trigger, but do NOT adjust the time trigger      */
+/*  duration.                                                  */
+/*                                                             */
+/***************************************************************/
+int ComputeTriggerNoAdjustDuration(int today, Trigger *trig, TimeTrig *tim,
+				   int *err, int save_in_globals)
 {
     int nattempts = 0,
 	start = today - trig->duration_days,
@@ -479,23 +545,6 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 	/** FIXME: Fix bad interaction with SATISFY... need to rethink!!! */
 	if (result+trig->duration_days >= today &&
 	    (trig->skip != SKIP_SKIP || !omit)) {
-	    /* Adust for non-zero duration */
-	    if (result < today) {
-
-		/* Adjust duration down */
-		tim->duration -= (today - result) * 1440;
-		tim->duration += tim->ttime;
-
-		/* Start at midnight */
-		tim->ttime = 0;
-
-		if (save_in_globals) {
-		    LastTriggerTime = tim->ttime;
-		    SaveLastTimeTrig(tim);
-		}
-		/* Trigger time is today */
-		result = today;
-	    }
 	    if (save_in_globals) {
 		LastTriggerDate = result;  /* Save in global var */
 		LastTrigValid = 1;

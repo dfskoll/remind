@@ -698,7 +698,7 @@ REM 1 March OMIT Sun AFTER MSG Should trigger 4 March
 REM 1991-02-28 MSG Feb 28
 ../tests/test.rem(193): Trig = Thursday, 28 February, 1991
 REM 1991/02/28@14:45 MSG Feb 28
-../tests/test.rem(194): Trig = Thursday, 28 February, 1991
+../tests/test.rem(194): Trig = Thursday, 28 February, 1991 AT 14:45
 REM Wed UNTIL 1991-01-01 MSG Expired
 ../tests/test.rem(195): Expired
 REM Wed SCANFROM 1991-02-26 MSG SCANFROM
@@ -841,7 +841,7 @@ set a052 time(1+2, 3+4)
 3 + 4 => 7
 time(3, 7) => 03:07
 rem 10 jan 1992 AT 11:22 CAL
-../tests/test.rem(253): Trig = Friday, 10 January, 1992
+../tests/test.rem(253): Trig = Friday, 10 January, 1992 AT 11:22
 set a053 trigdate()
 trigdate() => 1992-01-10
 set a054 trigtime()
@@ -1096,7 +1096,7 @@ set a105 trigduration()
 trigduration() => -1
 
 REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 3:33 MSG foo
-../tests/test.rem(340): Trig = Monday, 30 August, 2010
+../tests/test.rem(340): Trig = Monday, 30 August, 2010 AT 14:41 DURATION 03:33
 set a106 trigback()
 trigback() => 4
 set a107 trigdelta()
@@ -1119,7 +1119,7 @@ set a115 trigduration()
 trigduration() => 03:33
 
 REM Mon Wed FROM 2010-09-03 ++3 --4 AT 14:44 MSG foo
-../tests/test.rem(352): Trig = Saturday, 4 September, 2010
+../tests/test.rem(352): Trig = Saturday, 4 September, 2010 AT 14:44
 set a116 trigback()
 trigback() => -4
 set a117 trigdelta()
@@ -1720,6 +1720,40 @@ September 30
 2007/08/01 * * 2205 780 1:00pm-1:45am+2 Brown
 # fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 1:00pm-1:45pm+2 Strange
+# fileinfo 13 ../tests/test3.rem
+2007/08/02 * * 105 0 12:00-1:45am Green
+# fileinfo 14 ../tests/test3.rem
+2007/08/02 * * 165 0 12:00-2:45am Blue
+# fileinfo 15 ../tests/test3.rem
+2007/08/02 * * 225 0 12:00-3:45am Red
+# fileinfo 17 ../tests/test3.rem
+2007/08/02 * * 705 0 12:00-11:45am Yellow
+# fileinfo 18 ../tests/test3.rem
+2007/08/02 * * 765 0 12:00am-12:45pm Orange
+# fileinfo 19 ../tests/test3.rem
+2007/08/02 * * 825 0 12:00am-1:45pm Magenta
+# fileinfo 21 ../tests/test3.rem
+2007/08/02 * * 1425 0 12:00am-11:45pm Purple
+# fileinfo 22 ../tests/test3.rem
+2007/08/02 * * 1485 0 12:00am-12:45am+1 Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/02 * * 1545 0 12:00am-1:45am+1 Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/02 * * 2145 0 12:00am-11:45am+1 Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/02 * * 2205 0 12:00am-12:45pm+1 Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/02 * * 2265 0 12:00am-1:45pm+1 Strange
+# fileinfo 22 ../tests/test3.rem
+2007/08/03 * * 45 0 12:00-12:45am Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/03 * * 105 0 12:00-1:45am Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/03 * * 705 0 12:00-11:45am Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/03 * * 765 0 12:00am-12:45pm Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/03 * * 825 0 12:00am-1:45pm Strange
 # rem2ps end
 Test 6
 
@@ -1770,6 +1804,40 @@ September 30
 2007/08/01 * * 2205 780 13:00-01:45+2 Brown
 # fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 13:00-13:45+2 Strange
+# fileinfo 13 ../tests/test3.rem
+2007/08/02 * * 105 0 00:00-01:45 Green
+# fileinfo 14 ../tests/test3.rem
+2007/08/02 * * 165 0 00:00-02:45 Blue
+# fileinfo 15 ../tests/test3.rem
+2007/08/02 * * 225 0 00:00-03:45 Red
+# fileinfo 17 ../tests/test3.rem
+2007/08/02 * * 705 0 00:00-11:45 Yellow
+# fileinfo 18 ../tests/test3.rem
+2007/08/02 * * 765 0 00:00-12:45 Orange
+# fileinfo 19 ../tests/test3.rem
+2007/08/02 * * 825 0 00:00-13:45 Magenta
+# fileinfo 21 ../tests/test3.rem
+2007/08/02 * * 1425 0 00:00-23:45 Purple
+# fileinfo 22 ../tests/test3.rem
+2007/08/02 * * 1485 0 00:00-00:45+1 Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/02 * * 1545 0 00:00-01:45+1 Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/02 * * 2145 0 00:00-11:45+1 Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/02 * * 2205 0 00:00-12:45+1 Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/02 * * 2265 0 00:00-13:45+1 Strange
+# fileinfo 22 ../tests/test3.rem
+2007/08/03 * * 45 0 00:00-00:45 Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/03 * * 105 0 00:00-01:45 Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/03 * * 705 0 00:00-11:45 Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/03 * * 765 0 00:00-12:45 Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/03 * * 825 0 00:00-13:45 Strange
 # rem2ps end
 Test 7
 
@@ -1820,6 +1888,40 @@ September 30
 2007/08/01 * * 2205 780 Brown
 # fileinfo 27 ../tests/test3.rem
 2007/08/01 * * 2925 780 Strange
+# fileinfo 13 ../tests/test3.rem
+2007/08/02 * * 105 0 Green
+# fileinfo 14 ../tests/test3.rem
+2007/08/02 * * 165 0 Blue
+# fileinfo 15 ../tests/test3.rem
+2007/08/02 * * 225 0 Red
+# fileinfo 17 ../tests/test3.rem
+2007/08/02 * * 705 0 Yellow
+# fileinfo 18 ../tests/test3.rem
+2007/08/02 * * 765 0 Orange
+# fileinfo 19 ../tests/test3.rem
+2007/08/02 * * 825 0 Magenta
+# fileinfo 21 ../tests/test3.rem
+2007/08/02 * * 1425 0 Purple
+# fileinfo 22 ../tests/test3.rem
+2007/08/02 * * 1485 0 Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/02 * * 1545 0 Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/02 * * 2145 0 Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/02 * * 2205 0 Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/02 * * 2265 0 Strange
+# fileinfo 22 ../tests/test3.rem
+2007/08/03 * * 45 0 Black
+# fileinfo 23 ../tests/test3.rem
+2007/08/03 * * 105 0 Brown
+# fileinfo 25 ../tests/test3.rem
+2007/08/03 * * 705 0 Sad
+# fileinfo 26 ../tests/test3.rem
+2007/08/03 * * 765 0 Happy
+# fileinfo 27 ../tests/test3.rem
+2007/08/03 * * 825 0 Strange
 # rem2ps end
 Test 8
 

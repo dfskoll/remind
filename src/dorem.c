@@ -34,6 +34,17 @@ static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
 static int ParsePriority (ParsePtr s, Trigger *t);
 static int ParseUntil (ParsePtr s, Trigger *t);
 static int ShouldTriggerBasedOnWarn (Trigger *t, int jul, int *err);
+static int ComputeTrigDuration(TimeTrig *t);
+
+static int
+ComputeTrigDuration(TimeTrig *t)
+{
+    if (t->ttime == NO_TIME ||
+	t->duration == NO_TIME) {
+	return 0;
+    }
+    return (t->ttime + t->duration) / 1440;
+}
 
 /***************************************************************/
 /*                                                             */
@@ -68,7 +79,7 @@ int DoRem(ParsePtr p)
     if (trig.typ == SAT_TYPE) {
 	PurgeEchoLine("%s\n", "#!P: Cannot purge SATISFY-type reminders");
 	PurgeEchoLine("%s\n", CurLine);
-	r=DoSatRemind(&trig, p);
+	r=DoSatRemind(&trig, &tim, p);
 	if (r) {
 	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
@@ -117,7 +128,7 @@ int DoRem(ParsePtr p)
 	}
     } else {
 	/* Calculate the trigger date */
-	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 1);
+	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 1);
 	if (r) {
 	    if (PurgeMode) {
 		PurgeEchoLine("%s: %s\n", "#!P! Problem calculating trigger date", ErrMsg[r]);
@@ -205,6 +216,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->sched[0] = 0;
     trig->warn[0] = 0;
     trig->omitfunc[0] = 0;
+    trig->duration_days = 0;
     DBufInit(&(trig->tags));
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
@@ -278,6 +290,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    DBufFree(&buf);
 	    r=ParseTimeTrig(s, tim, save_in_globals);
 	    if (r) return r;
+	    trig->duration_days = ComputeTrigDuration(tim);
 	    break;
 
 	case T_Scanfrom:
@@ -402,6 +415,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 		if (save_in_globals) {
 		    SaveLastTimeTrig(tim);
 		}
+		trig->duration_days = ComputeTrigDuration(tim);
 		break;
 	    default:
 		return E_BAD_TIME;
@@ -1028,7 +1042,7 @@ int ShouldTriggerReminder(Trigger *t, TimeTrig *tim, int jul, int *err)
 /*  Do the "satisfying..." remind calculation.                 */
 /*                                                             */
 /***************************************************************/
-int DoSatRemind(Trigger *trig, ParsePtr p)
+int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 {
     int iter, jul, r;
     Value v;
@@ -1039,7 +1053,7 @@ int DoSatRemind(Trigger *trig, ParsePtr p)
     iter = 0;
     jul = trig->scanfrom;
     while (iter++ < MaxSatIter) {
-	jul = ComputeTrigger(jul, trig, &r, 1);
+	jul = ComputeTrigger(jul, trig, tt, &r, 1);
 	if (r) {
 	    if (r == E_CANT_TRIG) return OK; else return r;
 	}

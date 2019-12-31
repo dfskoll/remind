@@ -70,6 +70,7 @@ typedef struct {
     int scanfrom;
     int from;
     int priority;
+    int duration_days;           /* Duration converted to days to search */
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
     char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */

@@ -416,10 +416,11 @@ static int GetNextTriggerDate(Trigger *trig, int start, int *err, int *nextstart
 /*  today's date.                                              */
 /*                                                             */
 /***************************************************************/
-int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
+int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
+		   int *err, int save_in_globals)
 {
     int nattempts = 0,
-	start = today,
+	start = today - trig->duration_days,
 	nextstart = 0,
 	y, m, d, omit,
 	result;
@@ -474,20 +475,48 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
 	} else {
 	    omit = 0;
 	}
-	if (result >= today &&
+	if (result+trig->duration_days >= today &&
 	    (trig->skip != SKIP_SKIP || !omit)) {
+	    /* Adust for non-zero duration */
+	    if (result < today) {
+
+		/* Adjust duration down */
+		tim->duration -= (today - result) * 1440;
+		tim->duration += tim->ttime;
+
+		/* Start at midnight */
+		tim->ttime = 0;
+
+		if (save_in_globals) {
+		    LastTriggerTime = tim->ttime;
+		    SaveLastTimeTrig(tim);
+		}
+		/* Trigger time is today */
+		result = today;
+	    }
 	    if (save_in_globals) {
 		LastTriggerDate = result;  /* Save in global var */
 		LastTrigValid = 1;
 	    }
 	    if (DebugFlag & DB_PRTTRIG) {
 		FromJulian(result, &y, &m, &d);
-		fprintf(ErrFp, "%s(%d): Trig = %s, %d %s, %d\n",
+		fprintf(ErrFp, "%s(%d): Trig = %s, %d %s, %d",
 			FileName, LineNo,
 			DayName[result % 7],
 			d,
 			MonthName[m],
 			y);
+		if (tim->ttime != NO_TIME) {
+		    fprintf(ErrFp, " AT %02d:%02d",
+			    (tim->ttime / 60),
+			    (tim->ttime % 60));
+		    if (tim->duration != NO_TIME) {
+			fprintf(ErrFp, " DURATION %02d:%02d",
+			    (tim->duration / 60),
+			    (tim->duration % 60));
+		    }
+		}
+		fprintf(ErrFp, "\n");
 	    }
 	    return result;
 	}
@@ -539,4 +568,42 @@ int ComputeTrigger(int today, Trigger *trig, int *err, int save_in_globals)
     /* We failed - too many attempts or trigger has expired*/
     *err = E_CANT_TRIG;
     return -1;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  ComputeScanStart                                            */
+/*                                                             */
+/*  Figure out where to start scan from by examining SCANFROM  */
+/*  and DURATION                                               */
+/*                                                             */
+/***************************************************************/
+int
+ComputeScanStart(int today, Trigger *trig, TimeTrig *tt)
+{
+    int minutes, days;
+
+    /* If we don't have a time/duration, just use scanfrom */
+    if (tt->ttime == NO_TIME ||
+	tt->duration == NO_TIME) {
+	if (trig->scanfrom == NO_DATE) {
+	    return today;
+	}
+	return trig->scanfrom;
+    }
+
+    /* Calculate time-based SCANFROM */
+    minutes = tt->ttime + tt->duration;
+
+    /* Figure out how many days to scan backwards from */
+    days = minutes / 1440;
+
+    if (trig->scanfrom != NO_DATE) {
+	if (trig->scanfrom <= today - days) {
+	    return trig->scanfrom;
+	} else {
+	    return today - days;
+	}
+    }
+    return today - days;
 }

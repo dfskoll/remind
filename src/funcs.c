@@ -2809,13 +2809,13 @@ FEvalTrig(func_info *info)
 	return E_PARSE_ERR;
     }
     if (scanfrom == NO_DATE) {
-	jul = ComputeTrigger(trig.scanfrom, &trig, &r, 0);
+	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 0);
     } else {
 	/* Hokey... */
 	if (trig.scanfrom != JulianToday) {
 	    Eprint("Warning: SCANFROM is ignored in two-argument form of evaltrig()");
 	}
-	jul = ComputeTrigger(scanfrom, &trig, &r, 0);
+	jul = ComputeTrigger(scanfrom, &trig, &tim, &r, 0);
     }
     FreeTrig(&trig);
     if (r) return r;

@@ -64,6 +64,7 @@ int DoFset(ParsePtr p)
     int c;
     UserFunc *func;
     Var *v;
+    int orig_namelen;
 
     DynamicBuffer buf;
     DBufInit(&buf);
@@ -74,6 +75,7 @@ int DoFset(ParsePtr p)
 	DBufFree(&buf);
 	return E_BAD_ID;
     }
+    orig_namelen = buf.len;
 
     /* Should be followed by '(' */
     c = ParseNonSpaceChar(p, &r, 0);
@@ -164,6 +166,10 @@ int DoFset(ParsePtr p)
 
     /* Add the function definition */
     FSet(func);
+    if (orig_namelen > VAR_NAME_LEN) {
+	Eprint("Warning: Function name `%s...' truncated to `%s'",
+	       func->name, func->name);
+    }
     return OK;
 }
 

@@ -412,9 +412,18 @@ int
 AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int save_in_globals)
 {
     int y, m, d;
+    /* If we have an AT, save the original event start */
+    if (tim->ttime != NO_TIME) {
+	trig->eventstart = MINUTES_PER_DAY * r + tim->ttime;
+	if (tim->duration != NO_TIME) {
+	    trig->eventduration = tim->duration;
+	}
+    }
+
+    /* Now potentially adjust */
     if (r < today && r + trig->duration_days >= today) {
 	/* Adjust duration down */
-	tim->duration -= (today - r) * 1440;
+	tim->duration -= (today - r) * MINUTES_PER_DAY;
 	tim->duration += tim->ttime;
 
 	/* Start at midnight */
@@ -443,14 +452,15 @@ AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int sav
 	    fprintf(ErrFp, "\n");
 	}
 
-	if (save_in_globals) {
-	    LastTriggerTime = tim->ttime;
-	    SaveLastTimeTrig(tim);
-	    LastTriggerDate = r;
-	    LastTrigValid = 1;
-	}
-   }
-   return r;
+    }
+    if (save_in_globals) {
+	LastTriggerTime = tim->ttime;
+	SaveLastTimeTrig(tim);
+	SaveLastTrigger(trig);
+	LastTriggerDate = r;
+	LastTrigValid = 1;
+    }
+    return r;
 }
 
 /***************************************************************/
@@ -468,9 +478,7 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
     if (*err != OK) {
 	return r;
     }
-    if (r < today && r + trig->duration_days >= today) {
-	r = AdjustTriggerForDuration(today, r, trig, tim, save_in_globals);
-    }
+    r = AdjustTriggerForDuration(today, r, trig, tim, save_in_globals);
     return r;
 }
 
@@ -647,7 +655,7 @@ ComputeScanStart(int today, Trigger *trig, TimeTrig *tt)
     minutes = tt->ttime + tt->duration;
 
     /* Figure out how many days to scan backwards from */
-    days = minutes / 1440;
+    days = minutes / MINUTES_PER_DAY;
 
     if (trig->scanfrom != NO_DATE) {
 	if (trig->scanfrom <= today - days) {

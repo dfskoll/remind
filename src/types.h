@@ -71,6 +71,8 @@ typedef struct {
     int from;
     int priority;
     int duration_days;           /* Duration converted to days to search */
+    int eventstart;              /* Original event start (datetime) */
+    int eventduration;           /* Original event duration (minutes) */
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
     char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */

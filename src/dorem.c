@@ -217,6 +217,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->warn[0] = 0;
     trig->omitfunc[0] = 0;
     trig->duration_days = 0;
+    trig->eventstart = NO_TIME;
+    trig->eventduration = NO_TIME;
     DBufInit(&(trig->tags));
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;

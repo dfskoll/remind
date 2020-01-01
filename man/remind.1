@@ -3459,12 +3459,12 @@ ends.  Otherwise, \fBRemind\fR computes the next trigger date, and re-tests
 or non-null, or until the iteration limit specified with the \fB\-x\fR
 command-line option is reached.
 .PP
-If \fIexpr\fR is not satisfied, then \fBtrigvalid()\fR is set to 0.
-Otherwise, \fBtrigvalid()\fR is set to 1.  In any event, no error message
-is issued.
+If \fIexpr\fR is not satisfied, then \fBtrigvalid()\fR is set to 0 and
+the error message "Can't compute trigger" is issued.  Otherwise,
+\fBtrigvalid()\fR is set to 1.
 .PP
 This is really useful only if \fIexpr\fR involves a call to the
-\fBtrigdate()\fR function; otherwise, \fIexpr\fR will not change as
+\fBtrigdate()\fR or related functions; otherwise, \fIexpr\fR will not change as
 \fBRemind\fR iterates.
 .PP
 An example of the usefulness of \fBSATISFY\fR:  Suppose you wish to
@@ -3485,6 +3485,12 @@ more complicated sequence:
 		REM [trigdate()] +2 MSG \\
 		Friday the 13th is %b.
 	ENDIF
+.fi
+.PP
+You can write the REM statement a little more concisely:
+.PP
+.nf
+	REM 13 SATISFY $Tw == 5
 .fi
 .PP
 Let's see how this works.  The \fBSATISFY\fR clause iterates through
@@ -3549,16 +3555,14 @@ the reminder is not triggered.
 Thus, the "Friday the 13th" example can be expressed more compactly as:
 .PP
 .nf
-	REM 13 +2 SATISFY [wkdaynum(trigdate()) == 5] \\
-		MSG Friday the 13th is %b.
+	REM 13 +2 SATISFY [$Tw == 5] MSG Friday the 13th is %b.
 .fi
 .PP
 And you can trigger a reminder on Mondays, Wednesdays and Thursdays
 occurring on odd-numbered days of the month with the following:
 .PP
 .nf
-	REM Mon Wed Thu SATISFY [day(trigdate())%2] \\
-		MSG Here it is!!!
+	REM Mon Wed Thu SATISFY [$Td %2 ] MSG Here it is!!!
 .fi
 .PP
 Note that \fBSATISFY\fR and \fBOMITFUNC\fR can often be used to solve the

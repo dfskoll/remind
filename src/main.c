@@ -803,7 +803,12 @@ int DoIfTrig(ParsePtr p)
 	if ( (r=ParseRem(p, &trig, &tim, 1)) ) return r;
 	if (trig.typ != NO_TYPE) return E_PARSE_ERR;
 	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 1);
-	if (r) syndrome = IF_TRUE | BEFORE_ELSE;
+	if (r) {
+	    if (!Hush || r != E_RUN_DISABLED) {
+		Eprint("%s", ErrMsg[r]);
+	    }
+	    syndrome = IF_TRUE | BEFORE_ELSE;
+	}
 	else {
 	    if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
 		syndrome = IF_TRUE | BEFORE_ELSE;

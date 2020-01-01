@@ -370,6 +370,10 @@ int DoSet (Parser *p)
 
     if (*DBufValue(&buf) == '$') r = SetSysVar(DBufValue(&buf)+1, &v);
     else r = SetVar(DBufValue(&buf), &v);
+    if (buf.len > VAR_NAME_LEN) {
+	Eprint("Warning: Variable name `%.*s...' truncated to `%.*s'",
+	       VAR_NAME_LEN, DBufValue(&buf), VAR_NAME_LEN, DBufValue(&buf));
+    }
     DBufFree(&buf);
     return r;
 }

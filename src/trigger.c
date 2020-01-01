@@ -657,7 +657,7 @@ ComputeScanStart(int today, Trigger *trig, TimeTrig *tt)
     }
 
     /* Calculate time-based SCANFROM */
-    minutes = tt->ttime + tt->duration;
+    minutes = tt->ttime + tt->duration - 1;
 
     /* Figure out how many days to scan backwards from */
     days = minutes / MINUTES_PER_DAY;

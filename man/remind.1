@@ -3050,6 +3050,39 @@ that the return value for expired reminders is not reliable; the fact
 that \fBtrigeventstart\fR and \fBtrigeventduration\fR return -1 in that case
 is an implementation artifact.
 .PP
+.B SELF-OVERLAPPING EVENTS
+.PP
+A multi-day event has the possibility of "overlapping itself".  When this
+happens, \fBRemind\fR prefers the \fIearlier\fR event (only one copy of
+an event is ever triggered for a given date.)  Consider this example:
+.PP
+.nf
+   #!/bin/sh
+   remind - '*4' 11 Feb 1991 <<'EOF'
+
+   BANNER %
+   REM MON at 0:00 DURATION 192:0 MSG [today()] [trigeventstart()] [trigduration()]%
+
+   EOF
+.fi
+.PP
+The output is:
+.PP
+.nf
+   1991-02-11 1991-02-04@00:00 24:00
+   1991-02-12 1991-02-11@00:00 168:00
+   1991-02-13 1991-02-11@00:00 144:00
+   1991-02-14 1991-02-11@00:00 120:00
+.fi
+.PP
+Although 1991-02-11 is a Monday (which should cause the event to be
+triggered, the 8-day-long event that started on 1991-02-04 \fIhas not
+finished yet\fR, so that is the one that is triggered.  The next day,
+the event starting on 1991-02-04 \fIhas\fR finished, so the 1991-02-11
+event triggers, with a remaining duration of 168:00, or 7 days.
+.PP
+I do not recommend constructing self-overlapping multi-day events.
+.PP
 .SH EXPRESSION PASTING
 .PP
 An extremely powerful feature of \fBRemind\fR is its macro capability,

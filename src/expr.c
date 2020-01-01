@@ -854,8 +854,9 @@ static int Subtract(void)
 	return OK;
     }
 
-    /* If it's a datetime minus an int, do subtraction, checking for underflow */
-    if (v1.type == DATETIME_TYPE && v2.type == INT_TYPE) {
+    /* If it's a datetime minus an int or a time, do subtraction,
+     * checking for underflow */
+    if (v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) {
 	v1.v.val -= v2.v.val;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);

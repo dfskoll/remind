@@ -367,6 +367,15 @@ set a127 23:00 + 5:30
 set a128 '2018-02-03@10:00' + 6:45
 set a129 23:30 + '2019-02-02@16:44'
 
+# Multi-day reminder
+REM 13 AT 16:00 DURATION 72:00 MSG 72-hour event
+set a130 trigdate()
+set a131 trigtime()
+set a132 trigdatetime()
+set a133 trigduration()
+set a134 trigeventstart()
+set a135 trigeventduration()
+
 dump
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
@@ -382,6 +391,7 @@ REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
 REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+
 
 __EOF__
 REM This line should not even be seen

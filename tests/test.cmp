@@ -1154,6 +1154,25 @@ set a128 '2018-02-03@10:00' + 6:45
 set a129 23:30 + '2019-02-02@16:44'
 23:30 + 2019-02-02@16:44 => 2019-02-03@16:14
 
+# Multi-day reminder
+REM 13 AT 16:00 DURATION 72:00 MSG 72-hour event
+../tests/test.rem(371): Trig = Wednesday, 13 February, 1991 AT 16:00 DURATION 72:00
+../tests/test.rem(371): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 16:00
+72-hour event
+
+set a130 trigdate()
+trigdate() => 1991-02-16
+set a131 trigtime()
+trigtime() => 00:00
+set a132 trigdatetime()
+trigdatetime() => 1991-02-16@00:00
+set a133 trigduration()
+trigduration() => 16:00
+set a134 trigeventstart()
+trigeventstart() => 1991-02-13@16:00
+set a135 trigeventduration()
+trigeventduration() => 72:00
+
 dump
         Variable  Value
 
@@ -1163,6 +1182,7 @@ dump
             a074  "Tuesday, 5 May, 1992 In 444 days' time T"...
             a093  0
             a116  -4
+            a135  72:00
             a008  "11:44"
             a027  0
             a046  "ies"
@@ -1229,6 +1249,7 @@ dump
             a012  411
             a031  "foobarbaz"
             a111  -1
+            a130  1991-02-16
             a003  1990
             a022  11
             a041  "3rd"
@@ -1239,6 +1260,7 @@ dump
             a032  34
             a070  "DATE"
             a112  7
+            a131  00:00
             a004  "B7BMB"
             a023  1
             a042  "4th"
@@ -1251,6 +1273,7 @@ dump
             a071  2
             a090  1991-02-16
             a113  15
+            a132  1991-02-16@00:00
             a005  "baz"
             a024  0
             a043  "UNIX"
@@ -1264,6 +1287,7 @@ dump
             a072  0
             a091  -1
             a114  2
+            a133  16:00
             a006  "1"
             a025  4
             a044  "s"
@@ -1276,6 +1300,7 @@ dump
             a054  11:22
             a092  7
             a115  03:33
+            a134  1991-02-13@16:00
             a007  "1991-02-16"
             a026  7
             a045  "iess"
@@ -1289,10 +1314,10 @@ dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(373): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(382): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(375): Trig = Sunday, 26 December, 2010
+../tests/test.rem(384): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
@@ -1324,34 +1349,35 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(378): Trig = Thursday, 28 February, 1991
+../tests/test.rem(387): Trig = Thursday, 28 February, 1991
 
 # Check combo of SATISFY and long-duration events
 REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(381): Trig = Thursday, 14 March, 1991
+../tests/test.rem(390): Trig = Thursday, 14 March, 1991
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(381): Trig(satisfied) = Thursday, 14 March, 1991
+../tests/test.rem(390): Trig(satisfied) = Thursday, 14 March, 1991
 REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(382): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(391): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(382): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(391): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(383): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(392): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(383): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
-../tests/test.rem(383): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
+../tests/test.rem(392): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
+../tests/test.rem(392): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
 Thursday, the 14th
 
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(384): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(393): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(384): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
-../tests/test.rem(384): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(393): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(393): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
 Thursday, the 14th
+
 
 
 

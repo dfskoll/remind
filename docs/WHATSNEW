@@ -12,15 +12,16 @@ CHANGES TO REMIND
   man page for details; thanks to Tim Chase for the suggestion.
 
 - CHANGE: Modify addition so that previously-illegal combinations
-  TIME + TIME, TIME + DATETIME and DATETIME + TIME are now allowed.  If
-  t1 and t2 are expressions of type TIME and dt is an expression of
-  type DATETIME, then the following are now equivalent (before, the
-  expressions on the left-hand side would fail with a "Type mismatch"
-  error.)
+  TIME + TIME, TIME + DATETIME and DATETIME + TIME are now allowed.
+  Also allow DATETIME - TIME.  If t1 and t2 are expressions of type TIME
+  and dt is an expression of type DATETIME, then the following are now
+  equivalent (before, the expressions on the left-hand side would fail
+  with a "Type mismatch" error.)
 
   t1 + t2     ==     t1                + coerce("INT", t2)
   dt + t2     ==     dt                + coerce("INT", t2)
   t1 + dt     ==     coerce("INT", t1) + dt
+  dt - t2     ==     dt                - coerce("INT", t2)
 
 - DOC FIX: Document previously-undocumented $MaxStringLen system variable
 

@@ -1362,26 +1362,36 @@ REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 $Tw => 4
 4 == 4 => 1
 ../tests/test.rem(391): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
-REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(392): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:00
+REM 14 AT 16:00 DURATION 8:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(392): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(392): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
-../tests/test.rem(392): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
+../tests/test.rem(392): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(393): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(393): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+REM 14 AT 16:00 DURATION 32:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(394): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:01
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(394): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
+../tests/test.rem(394): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
 Thursday, the 14th
 
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(393): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(395): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(393): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
-../tests/test.rem(393): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(395): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(395): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
 Thursday, the 14th
 
 
 # This is now an error
 REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
-../tests/test.rem(396): Cannot specify DURATION without specifying AT
+../tests/test.rem(398): Cannot specify DURATION without specifying AT
 
 
 

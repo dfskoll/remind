@@ -43,7 +43,7 @@ ComputeTrigDuration(TimeTrig *t)
 	t->duration == NO_TIME) {
 	return 0;
     }
-    return (t->ttime + t->duration) / 1440;
+    return (t->ttime + t->duration - 1) / 1440;
 }
 
 /***************************************************************/
@@ -413,7 +413,11 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    switch(tok.type) {
 	    case T_Time:
 	    case T_LongTime:
-		tim->duration = tok.val;
+		if (tok.val != 0) {
+		    tim->duration = tok.val;
+		} else {
+		    tim->duration = NO_TIME;
+		}
 		if (save_in_globals) {
 		    SaveLastTimeTrig(tim);
 		}

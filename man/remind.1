@@ -3125,7 +3125,7 @@ three commands are equivalent:
 o
 You cannot use expression-pasting to determine the type (\fBMSG\fR,
 \fBCAL\fR, etc.) of a \fBREM\fR command.  You can paste expressions
-before and after the \fBMSG\fR, etc keywords, but cannot do something like
+before and after the \fBMSG\fR, etc. keywords, but cannot do something like
 this:
 .PP
 .nf
@@ -3221,8 +3221,10 @@ to true if a corresponding \fBREM\fR command would trigger.  Examples:
 .PP
 Note that the \fBIFTRIG\fR command computes a trigger date, which can
 be retrieved with the \fBtrigdate()\fR function.  You can use all of
-the normal trigger components, such as \fBUNTIL\fR, \fIdelta\fR, etc in the
-\fBIFTRIG\fR command.
+the normal trigger components, such as \fBUNTIL\fR, \fIdelta\fR, etc. in the
+\fBIFTRIG\fR command.  However, you cannot use a type specifier such
+as \fBCAL\fR, \fBMSG\fR or \fBSATISFY\fR; attempting to do so
+yields a parse error.
 .PP
 .SH USER-DEFINED FUNCTIONS
 .PP

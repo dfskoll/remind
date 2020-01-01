@@ -376,6 +376,13 @@ OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
 OMIT DUMP
 # Regression test for bugfix in Hebrew calendar Adar jahrzeit
 [_i(14, "Adar", today(), 5761)] MSG Purim
+
+# Check combo of SATISFY and long-duration events
+REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
+REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+
 __EOF__
 REM This line should not even be seen
 And you can put whatever you like here.

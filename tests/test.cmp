@@ -1326,6 +1326,35 @@ trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
 ../tests/test.rem(378): Trig = Thursday, 28 February, 1991
 
+# Check combo of SATISFY and long-duration events
+REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(381): Trig = Thursday, 14 March, 1991
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(381): Trig(satisfied) = Thursday, 14 March, 1991
+REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(382): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(382): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(383): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:00
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(383): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
+../tests/test.rem(383): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:00
+Thursday, the 14th
+
+REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
+../tests/test.rem(384): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
+$Tw => 4
+4 == 4 => 1
+../tests/test.rem(384): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(384): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+Thursday, the 14th
+
+
+
 
 Test 2
 

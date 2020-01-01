@@ -1102,7 +1102,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
     }
     p->pos = t;
     LastTrigValid = 0;
-    return OK;
+    return E_CANT_TRIG;
 }
 
 /***************************************************************/

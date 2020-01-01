@@ -1033,11 +1033,9 @@ by the hexadecimal representation of the MD5 sum of the REM
 command line.  This lets you give a more-or-less unique identifier
 to each distinct REM command.
 .PP
-The \fBDURATION\fR keyword makes sense only for timed reminders;
-it specifies the duration of an event.  Currently, this is not
-used, but it may be used in future by back-ends or scheduling
-systems built around \fBRemind\fR.  For example, if you have
-a 90-minute meeting starting at 1:00pm, you could use:
+The \fBDURATION\fR keyword makes sense only for timed reminders; it
+specifies the duration of an event.  For example, if you have a
+90-minute meeting starting at 1:00pm, you could use:
 .PP
 .nf
 	REM 5 March 1999 AT 13:00 DURATION 1:30 MSG Meeting
@@ -3014,7 +3012,7 @@ Remind handles multi-day events specially.  These are the rules:
 .PP
 On the \fIfirst\fR day of a multi-day event, \fBtrigdatetime()\fR will
 return the starting date and time of the event, and \fBtrigduration()\fR
-will return the original duration.
+will return the original DURATION.
 .PP
 On each \fIsubsequent\fR day of a multi-day event, \fBtrigdatetime()\fR
 will return midnight on the day in question, and \fBtrigduration()\fR

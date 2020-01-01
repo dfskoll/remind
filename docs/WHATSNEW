@@ -24,6 +24,11 @@ CHANGES TO REMIND
 
 - DOC FIX: Document previously-undocumented $MaxStringLen system variable
 
+- DOC FIX: Various minor documentation fixes.
+
+- BUG FIX: Specifying a DURATION without an AT clause results in an error.
+  Before, it would be accepted but not do anything useful.
+
 - BUG FIX: Catch potential date overflow in slide() function
 
 - BUG FIX: Fix compile error when compiling Romanian version; eliminate

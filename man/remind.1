@@ -3021,16 +3021,16 @@ will return midnight on the day in question, and \fBtrigduration()\fR
 will return the \fIremaining\fR duration.  Consider this example:
 .PP
 .nf
-#!/bin/sh
-remind - 12 feb 1991 '*6' <<'EOF'
-BANNER %
-REM 1991-02-13 AT 16:00 DURATION 72:00 SATISFY 1
-set a trigdatetime()
-set b trigduration()
-set c trigeventstart()
-set d trigeventduration()
-MSG now=[today()] dt=[a] dur=[b] estart=[c] edur=[d]%
-EOF
+    #!/bin/sh
+    remind - 12 feb 1991 '*6' <<'EOF'
+    BANNER %
+    REM 1991-02-13 AT 16:00 DURATION 72:00 SATISFY 1
+    set a trigdatetime()
+    set b trigduration()
+    set c trigeventstart()
+    set d trigeventduration()
+    MSG now=[today()] dt=[a] dur=[b] estart=[c] edur=[d]%
+    EOF
 .fi
 .PP
 The output is:

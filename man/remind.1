@@ -1041,7 +1041,9 @@ specifies the duration of an event.  For example, if you have a
 	REM 5 March 1999 AT 13:00 DURATION 1:30 MSG Meeting
 .fi
 .PP
-Note that \fIduration\fR is specified in hours and minutes.
+Note that \fIduration\fR is specified in hours and minutes.  If you
+specify a duration of 00:00, then \fBRemind\fR behaves exactly as if
+no \fBDURATION\fR at all had been present.
 .PP
 .SH THE SUBSTITUTION FILTER
 .PP

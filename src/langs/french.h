@@ -242,7 +242,8 @@ EXTERN char *ErrMsg[] =
     "Can't convert between time zones",
     "No files matching *.rem",
     "String too long",
-    "Time specified twice"
+    "Time specified twice",
+    "Cannot specify DURATION without specifying AT"
 
 #else /* ISOLATIN1 */
     "Ok",
@@ -347,7 +348,8 @@ EXTERN char *ErrMsg[] =
     "Can't convert between time zones",
     "No files matching *.rem",
     "String too long",
-    "Time specified twice"
+    "Time specified twice",
+    "Cannot specify DURATION without specifying AT"
 #endif /* ISOLATIN1 */
 };
 #endif /* MK_GLOBALS */

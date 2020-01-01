@@ -392,6 +392,8 @@ REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
 
+# This is now an error
+REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
 
 __EOF__
 REM This line should not even be seen

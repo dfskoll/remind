@@ -119,6 +119,7 @@
 #define E_NO_MATCHING_REMS  100
 #define E_STRING_TOO_LONG   101
 #define E_TIME_TWICE        102
+#define E_DURATION_NO_AT    103
 #ifdef MK_GLOBALS
 #undef EXTERN
 #define EXTERN
@@ -234,7 +235,8 @@ EXTERN char *ErrMsg[]
     "Can't convert between time zones",
     "No files matching *.rem",
     "String too long",
-    "Time specified twice"
+    "Time specified twice",
+    "Cannot specify DURATION without specifying AT"
 }
 #endif /* MK_GLOBALS */
 ;

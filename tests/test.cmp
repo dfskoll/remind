@@ -1379,6 +1379,9 @@ $Tw => 4
 Thursday, the 14th
 
 
+# This is now an error
+REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
+../tests/test.rem(396): Cannot specify DURATION without specifying AT
 
 
 

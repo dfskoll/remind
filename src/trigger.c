@@ -513,6 +513,11 @@ int ComputeTriggerNoAdjustDuration(int today, Trigger *trig, TimeTrig *tim,
 	return -1;
     }
 
+    if (tim->duration != NO_TIME && tim->ttime == NO_TIME) {
+	*err = E_DURATION_NO_AT;
+	return -1;
+    }
+
     if (trig->rep != NO_REP &&
 	(trig->d == NO_DAY ||
 	 trig->m == NO_MON ||

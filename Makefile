@@ -25,7 +25,7 @@ clean:
 	cd src; $(MAKE) clean
 
 test:
-	@cd src && $(MAKE) test
+	@cd src && $(MAKE) -s test
 
 distclean: clean
 	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out www/Makefile

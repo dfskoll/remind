@@ -1,6 +1,10 @@
 CHANGES TO REMIND
 
-* Version 3.1 Patch 18 - TBD
+* Version 3.2 Patch 0 - TBD
+
+- IMPROVEMENT: Add support for events spanning multiple days (with AT
+  and DURATION).  Add trigeventstart() and trigeventduration()
+  introspection functions; see "MULTI-DAY EVENTS" in the man page.
 
 - IMPROVEMENT: Add introspection functions trigback(), trigdelta(),
   trigduration(), trigfrom(), trigpriority(), trigrep(),

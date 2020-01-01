@@ -2805,7 +2805,24 @@ date, returns the integer 0.
 Similar to trigdate(), but returns a \fBDATETIME\fR if the most recent
 triggerable \fBREM\fR command had an \fBAT\fR clause.  If there was no
 \fBAT\fR clause, returns a \fBDATE\fR.  If no trigger could be computed,
-returns the integer 0.
+returns the integer 0.  See "MULTI-DAY EVENTS" for more information.
+.TP
+.B trigeventstart()
+Returns a \fBDATETIME\fR representing the start of the most recent
+triggerable \fBREM\fR command that had an \fBAT\fR clause.  For events
+without a \fBDURATION\fR or that do not span multiple days, returns
+the same as \fBtrigdatetime()\fR.  If the \fBREM\fR command did not
+have an \fBAT\fR clause, returns the integer -1 (and differs from
+\fBtrigdatetime()\fR in this respect.)  See "MULTI-DAY EVENTS" for more
+information.
+.TP
+.B trigeventduration()
+Returns a \fBTIME\fR representing the duration of the most recent
+triggerable \fBREM\fR command that had an \fBAT\fR and a
+\fBDURATION\fR clause.  If the event does not span multiple days,
+returns the same thing as \fBtrigduration()\fR.  If the \fBREM\fR
+command lacked an \fBAT\fR or \fBDURATION\fR clause, returns -1.  See
+"MULTI-DAY EVENTS" for more information.
 .TP
 .B trigback()
 Returns the "back" amount of the last \fBREM\fR or \fBIFTRIG\fR command.
@@ -2831,8 +2848,9 @@ Similar to \fBtrigrep()\fR, but returns the repeat used in the \fBAT\fR clause
 of a timed reminder.
 .TP
 .B trigduration()
-Returns (as a TIME type) the \fBDURATION\fR parameter of a timed reminder.  If there
-is no \fBDURATION\fR parameter, returns the integer -1.
+Returns (as a TIME type) the \fBDURATION\fR parameter of a timed
+reminder.  If there is no \fBDURATION\fR parameter, returns the
+integer -1.  See "MULTI-DAY EVENTS" for more information.
 .TP
 .B trigpriority()
 Returns the \fBPRIORITY\fR of the last \fBREM\fR or \fBIFTRIG\fR command.
@@ -2974,6 +2992,66 @@ Returns a number from 0 to 6 representing the day-of-week of the specified
 .TP
 .B year(dq_date)
 Returns a \fBINT\fR that is the year component of \fIdate\fR.
+
+.SH MULTI-DAY EVENTS
+
+If you specify a start time with \fBAT\fR and a duration with
+\fBDURATION\fR, you can create events that span multiple days.
+Consider these two REM statements:
+.PP
+.nf
+    REM 1991-02-13 AT 16:00 DURATION 72:00 MSG 72-hour event
+    REM 1991-02-13 THROUGH 1991-02-16 AT 16:00 MSG Four events
+.fi
+.PP
+The first statement creates a \fIsingle\fR event that starts on
+13 February 1991 at 16:00 and runs through 16 February 1991 at 16:00
+.PP
+The second statements creates \fIfour separate\fR events that start
+at 16:00 on 13, 14, 15 and 16 February 1991 and have indefinite duration.
+.PP
+Remind handles multi-day events specially.  These are the rules:
+.PP
+On the \fIfirst\fR day of a multi-day event, \fBtrigdatetime()\fR will
+return the starting date and time of the event, and \fBtrigduration()\fR
+will return the original duration.
+.PP
+On each \fIsubsequent\fR day of a multi-day event, \fBtrigdatetime()\fR
+will return midnight on the day in question, and \fBtrigduration()\fR
+will return the \fIremaining\fR duration.  Consider this example:
+.PP
+.nf
+#!/bin/sh
+remind - 12 feb 1991 '*6' <<'EOF'
+BANNER %
+REM 1991-02-13 AT 16:00 DURATION 72:00 SATISFY 1
+set a trigdatetime()
+set b trigduration()
+set c trigeventstart()
+set d trigeventduration()
+MSG now=[today()] dt=[a] dur=[b] estart=[c] edur=[d]%
+EOF
+.fi
+.PP
+The output is:
+.PP
+.nf
+now=1991-02-12 dt=1991-02-13@16:00 dur=72:00 estart=1991-02-13@16:00 edur=72:00
+now=1991-02-13 dt=1991-02-13@16:00 dur=72:00 estart=1991-02-13@16:00 edur=72:00
+now=1991-02-14 dt=1991-02-14@00:00 dur=64:00 estart=1991-02-13@16:00 edur=72:00
+now=1991-02-15 dt=1991-02-15@00:00 dur=40:00 estart=1991-02-13@16:00 edur=72:00
+now=1991-02-16 dt=1991-02-16@00:00 dur=16:00 estart=1991-02-13@16:00 edur=72:00
+now=1991-02-17 dt=1991-02-13@16:00 dur=72:00 estart=-1 edur=-1
+.fi
+.PP
+As you see, the \fBtrigdatetime()\fR and \fBtrigduration()\fR functions
+return the start time and duration of the \fIremaining\fR portion of
+a multi-day event, whereas \fBtrigeventstart\fR and \fBtrigeventduration\fR
+always return the original start and duration of the multi-day event.  Note also
+that the return value for expired reminders is not reliable; the fact
+that \fBtrigeventstart\fR and \fBtrigeventduration\fR return -1 in that case
+is an implementation artifact.
+.PP
 .SH EXPRESSION PASTING
 .PP
 An extremely powerful feature of \fBRemind\fR is its macro capability,

@@ -2966,14 +2966,35 @@ proc DisplayTime {} {
 #  Creates the moon images "new", "first", "full" and "last"
 #***********************************************************************
 proc CreateMoonImages {} {
-    image create bitmap full -foreground black \
-	    -data "#define newmoon_width 16\n#define newmoon_height 16\nstatic unsigned char newmoon_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0x30, 0x06, 0x0c, 0x18, 0x04, 0x10, 0x02, 0x20,\n0x02, 0x20, 0x01, 0x40, 0x01, 0x40, 0x01, 0x40, 0x02, 0x20, 0x02, 0x20,\n0x04, 0x10, 0x0c, 0x18, 0x30, 0x06, 0xc0, 0x01};"
-    image create bitmap first -foreground black \
-	    -data "#define firstquarter_width 16\n#define firstquarter_height 16\nstatic unsigned char firstquarter_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xf0, 0x06, 0xfc, 0x18, 0xfc, 0x10, 0xfe, 0x20,\n0xfe, 0x20, 0xff, 0x40, 0xff, 0x40, 0xff, 0x40, 0xfe, 0x20, 0xfe, 0x20,\n0xfc, 0x10, 0xfc, 0x18, 0xf0, 0x06, 0xc0, 0x01};"
-    image create bitmap new -foreground black \
-	    -data "#define fullmoon_width 16\n#define fullmoon_height 16\nstatic unsigned char fullmoon_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xf0, 0x07, 0xfc, 0x1f, 0xfc, 0x1f, 0xfe, 0x3f,\n0xfe, 0x3f, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xfe, 0x3f, 0xfe, 0x3f,\n0xfc, 0x1f, 0xfc, 0x1f, 0xf0, 0x07, 0xc0, 0x01};"
-    image create bitmap last -foreground black \
-	    -data "#define lastquarter_width 16\n#define lastquarter_height 16\nstatic unsigned char lastquarter_bits[] = {\n0x00, 0x00, 0xc0, 0x01, 0xb0, 0x07, 0x8c, 0x1f, 0x84, 0x1f, 0x82, 0x3f,\n0x82, 0x3f, 0x81, 0x7f, 0x81, 0x7f, 0x81, 0x7f, 0x82, 0x3f, 0x82, 0x3f,\n0x84, 0x1f, 0x8c, 0x1f, 0xb0, 0x07, 0xc0, 0x01};"
+    image create photo full -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAAjQAAAI0Bxmb3pAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC6SURB
+VDiNzdOxbcMwFIThjwQsaBFVWiZjBEYqA94iZYqMkWVSeRHBAnJpGENWEUhxkwPY3f3vkXyvJLFU
+KWXAEw7uNeMjyeXO/wMopVQ8o8dbkusK3OEFE96TfIEGqHjFmMRvB2Pz1iQ3wHFLeAU5JlHbnfsk
+nzaqefuWdUa3tfqiiw7nisP6wTZ2ccWh7g2u9T8AcxuSXWqZGQac/vALJwy1zfZUShl3VB8xJbk8
+PMoPL9MNsDDuWudvZyX3kTpb2iYAAAAASUVORK5CYII="
+
+    image create photo first -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAAjQAAAI0Bxmb3pAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAD4SURB
+VDiNpdMxSsNBFMThbxcM9mIpaJHGFGLnATyAiJ03CFYWFoI3sLSxSWcfrL2BIghGxPSC2lmJBp6F
+/4Q1JsQkU77d38wuzEsRoVRKqY5drGMVt3jDF9oR0f0FRITKJOMI13hG4AFb1XkNh2giD7gCPsd9
+BcawQRHUwGnfpD88wdMQHOgMGxQmzYiQqz9vo+6v0oiZiOhgMaVUz9jD2qiLE3SGnYwNrExLR8Qn
+FjKWZ0gfKM8DIzLe533BI3rTgimlGnoZLdzNEH6Adq66femn7/9Nb+AjIrpllS/wYpYqFybHuCqM
+Ji5TGrPO+9jEEm7wasw6fwMMGZ17Ce/L3QAAAABJRU5ErkJggg=="
+
+    image create photo new -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAAjQAAAI0Bxmb3pAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADnSURB
+VDiNpdPPKkVRFMfxz95GSmQkD3BKGXgRr2DiAZSBiXgXTBh4AXUfQEnyZ3ZnN4UZN0TRMrCPjtuV
+zrmrfqPd97f32mv9UkRoVkqpwjqWMYvAE26wHxH9X0BEKCYZmzjFewGbesUFdpB/uAa8h6sx4Kju
+cFSb1AZb5eA/uNYAu3X7FU5awLXOUE1hA6uY0a7m8ZGxgoWWMEyjyr5H1bXm8gQwpIzhBAbDjEs8
+dIBfcE33MZ6jymW3e7hvcfstjiOi32WVBzjUXOUxYXobAz6XZ29rhCn9Eec1LGERn3gsH3YwGucv
+LguhmylxT4AAAAAASUVORK5CYII="
+    image create photo last -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAAjQAAAI0Bxmb3pAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADsSURB
+VDiNpdOxLkRBGMXx3zfJbkSlJNGuZolX8Ag6jSfYqBQinkGpV1qdeAyRaIhiVShEdBpB8in2Xrk2
+gr1OMs3M/E9mvpwTmampiOhhHR3MYxX3uMZxZo6+AJmpMikYYBvdam8Nl0g84xw7KJ9cA95Hvz74
+xqBetziqTeqLg0n4B4PEHXYzU6n+PJOZV/6uRWxERK9UAzuYAq61hM2CTma+tjCYxUppATY1V4yH
+0lr/fcFTwXtEdFvAb7gpOMFWC4MLHJYq2y8R0Z8CfsRpZo7aRPnBZJSnKNMZ9jTKFL/UeQHLxtkf
+YThZ5w9CuZvYw7VKDQAAAABJRU5ErkJggg=="
 }
 
 #***********************************************************************

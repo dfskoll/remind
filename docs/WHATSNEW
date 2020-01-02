@@ -11,6 +11,10 @@ CHANGES TO REMIND
   trigscanfrom(), trigtimedelta(), trigtimerep(), and triguntil().  See
   man page for details; thanks to Tim Chase for the suggestion.
 
+- IMPROVEMENT: TkRemind: Use PNG images for the next month / previous
+  month buttons rather than -> and <-.  Also use anti-aliased moon phase
+  images.
+
 - CHANGE: Modify addition so that previously-illegal combinations
   TIME + TIME, TIME + DATETIME and DATETIME + TIME are now allowed.
   Also allow DATETIME - TIME.  If t1 and t2 are expressions of type TIME
@@ -35,7 +39,8 @@ CHANGES TO REMIND
 - BUG FIX: Fix compile error when compiling Romanian version; eliminate
   compiler warning when compiling non-English versions.
 
-- BUG FIX: Fix startup failure of TkRemind if options are at default. :(
+- BUG FIX: TkRemind: Fix startup failure of TkRemind if options are at
+  default. :(
 
 * Version 3.1 Patch 17 - 2019-11-15
 

@@ -1,4 +1,4 @@
-REMIND version 3.1 for UNIX
+REMIND version 3.2 for UNIX
 
 REMIND is a sophisticated alarm/calendar program.  Details are given
 in the man page, "remind.1".
@@ -6,16 +6,16 @@ in the man page, "remind.1".
 INSTALLING REMIND:
 -----------------
 
-If you have Tcl/Tk (wish 4.1 or higher) installed and are running X Windows:
---------------------------------------------------------------
+If you have Tcl/Tk (wish 4.1 or higher) installed and are running X11:
+----------------------------------------------------------------------
 
 1) Type: wish ./build.tk from the top-level Remind directory.
    Fill in the various options and hit "Build Remind"
 
 2) Type: "make install" -- you may need to be root to do this.
 
-If you do NOT have Tcl/Tk or are NOT running X Windows:
--------------------------------------------------------
+If you do NOT have Tcl/Tk or are NOT running X11:
+-------------------------------------------------
 
 1) Edit the file "src/custom.h" according to your preferences.
 
@@ -73,12 +73,12 @@ RELEASE NOTES -- miscellaneous info that couldn't go anywhere else!
 
 1. POPUP REMINDERS
 
-If you're running under X-Windows and you have the TCL tools,
-you can create simple pop-up reminders by creating the following
-TCL script called 'popup'.  It pops a message on to the screen and
-waits for you to press the 'OK' button.  If you don't press the OK button
-within 15 seconds, it exits anyway.  To use it, you can use the '-k' option
-for Remind as follows:
+If you're running under X11 and you have the Tcl tools, you can create
+simple pop-up reminders by creating the following Tcl script called
+'popup'.  It pops a message on to the screen and waits for you to
+press the 'OK' button.  If you don't press the OK button within 15
+seconds, it exits anyway.  To use it, you can use the '-k' option for
+Remind as follows:
 
 	remind "-kpopup '%s'&" .reminders
 
@@ -93,7 +93,7 @@ Norman Walsh.
 #!/usr/local/bin/wish
 wm withdraw .
 after 15000 { destroy . ; exit }
-tk_dialog .d { Message } $argv warning 0 { OK } 
+tk_dialog .d { Message } $argv warning 0 { OK }
 destroy .
 exit
 -------------- Cut Here ---------- Cut Here ---------- Cut Here -------------

@@ -8,7 +8,7 @@ all: src/Makefile
 	@echo "*                 *"
 	@echo "*******************"
 	@echo ""
-	@cd src; $(MAKE) all LANGDEF=$(LANGDEF)
+	@cd src && $(MAKE) all LANGDEF=$(LANGDEF)
 
 install:
 	@echo ""
@@ -18,11 +18,11 @@ install:
 	@echo "*                   *"
 	@echo "*********************"
 	@echo ""
-	cd src; $(MAKE) install
+	@cd src && $(MAKE) install
 
 clean:
 	find . -name '*~' -exec rm {} \;
-	cd src; $(MAKE) clean
+	cd src && $(MAKE) clean
 
 test:
 	@cd src && $(MAKE) -s test

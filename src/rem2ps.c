@@ -157,6 +157,12 @@ int main(int argc, char *argv[])
     /* Search for a valid input file */
     while (!feof(stdin)) {
 	DBufGets(&buf, stdin);
+	if (!strcmp(DBufValue(&buf), PSBEGIN2)) {
+	    fprintf(stderr, "Rem2PS: Please invoke Remind with the '-p' option\n");
+	    fprintf(stderr, "        and not the '-pp' option.\n");
+	    exit(1);
+	}
+
 	if (!strcmp(DBufValue(&buf), PSBEGIN)) {
 	    if (!validfile) {
 		if (Verbose) {

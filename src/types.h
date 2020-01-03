@@ -216,3 +216,7 @@ typedef struct {
 /* Flags for FROM / SCANFROM */
 #define SCANFROM_TYPE 0
 #define FROM_TYPE     1
+
+/* PS Calendar levels */
+#define PSCAL_LEVEL1  1
+#define PSCAL_LEVEL2  2

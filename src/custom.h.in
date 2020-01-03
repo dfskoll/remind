@@ -220,6 +220,9 @@
 #define PSBEGIN "# rem2ps begin"
 #define PSEND   "# rem2ps end"
 
+#define PSBEGIN2 "# rem2ps2 begin"
+#define PSEND2   "# rem2ps2 end"
+
 #ifdef BROKEN_PUTC
 #define Putc SafePutc
 #define PutChar SafePutChar

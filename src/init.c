@@ -400,9 +400,14 @@ void InitRemind(int argc, char const *argv[])
 	    case 'p':
 	    case 'P':
 		DoSimpleCalendar = 1;
-		PsCal = 1;
-		if (*arg == 'a' || *arg == 'A') {
-		    DoSimpleCalDelta = 1;
+		PsCal = PSCAL_LEVEL1;
+		while (*arg == 'a' || *arg == 'A' ||
+		       *arg == 'p' || *arg == 'P') {
+		    if (*arg == 'a' || *arg == 'A') {
+			DoSimpleCalDelta = 1;
+		    } else if (*arg == 'p' || *arg == 'P') {
+			PsCal = PSCAL_LEVEL2;
+		    }
 		    arg++;
 		}
 		PARSENUM(CalMonths, arg);

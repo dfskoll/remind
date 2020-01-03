@@ -12,8 +12,8 @@ CHANGES TO REMIND
   man page for details; thanks to Tim Chase for the suggestion.
 
 - IMPROVEMENT: TkRemind: Use PNG images for the next month / previous
-  month buttons rather than -> and <-.  Also use anti-aliased moon phase
-  images.
+  month buttons rather than -> and <-.  Also use nice anti-aliased
+  moon phase images instead of ugly blocky bitmaps.
 
 - CHANGE: Modify addition so that previously-illegal combinations
   TIME + TIME, TIME + DATETIME and DATETIME + TIME are now allowed.

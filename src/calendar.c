@@ -46,6 +46,8 @@ typedef struct cal_entry {
     int duration;
     char const *filename;
     int lineno;
+    Trigger trig;
+    TimeTrig tt;
 } CalEntry;
 
 /* Line-drawing sequences */
@@ -375,7 +377,11 @@ static void DoCalendarOneMonth(void)
 
     if (PsCal) {
 	FromJulian(JulianToday, &y, &m, &d);
-	printf("%s\n", PSBEGIN);
+	if (PsCal == PSCAL_LEVEL1) {
+	    printf("%s\n", PSBEGIN);
+	} else {
+	    printf("%s\n", PSBEGIN2);
+	}
 	printf("%s %d %d %d %d\n",
 	       MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
 	       MondayFirst);
@@ -396,7 +402,11 @@ static void DoCalendarOneMonth(void)
     }
     while (WriteCalendarRow()) continue;
 
-    if (PsCal) printf("%s\n", PSEND);
+    if (PsCal == PSCAL_LEVEL1) {
+	printf("%s\n", PSEND);
+    } else if (PsCal == PSCAL_LEVEL2) {
+	printf("%s\n", PSEND2);
+    }
     if (!DoSimpleCalendar) WriteCalTrailer();
 }
 
@@ -1161,6 +1171,8 @@ static int DoCalRem(ParsePtr p, int col)
 	    FreeTrig(&trig);
 	    return E_NO_MEM;
 	}
+	e->trig = trig;
+	e->tt = tim;
 #ifdef REM_USE_WCHAR
 	e->wc_pos = NULL;
 	e->wc_text = NULL;
@@ -1213,23 +1225,8 @@ static int DoCalRem(ParsePtr p, int col)
     return OK;
 }
 
-/***************************************************************/
-/*                                                             */
-/*  WriteSimpleEntries                                         */
-/*                                                             */
-/*  Write entries in 'simple calendar' format.                 */
-/*                                                             */
-/***************************************************************/
-static void WriteSimpleEntries(int col, int jul)
+static void WriteSimpleEntryProtocol1(CalEntry *e)
 {
-    CalEntry *e = CalColumn[col];
-    CalEntry *n;
-    int y, m, d;
-
-    FromJulian(jul, &y, &m, &d);
-    while(e) {
-	if (DoPrefixLineNo) printf("# fileinfo %d %s\n", e->lineno, e->filename);
-	printf("%04d/%02d/%02d", y, m+1, d);
 	if (e->passthru[0]) {
 	    printf(" %s", e->passthru);
 	} else {
@@ -1251,6 +1248,92 @@ static void WriteSimpleEntries(int col, int jul)
 	    printf("* ");
 	}
 	printf("%s\n", e->text);
+}
+
+static void PrintJSONString(char const *s)
+{
+    while (*s) {
+	switch(*s) {
+	case '\b': printf("\\b"); break;
+	case '\f': printf("\\f"); break;
+	case '\n': printf("\\n"); break;
+	case '\r': printf("\\r"); break;
+	case '\t': printf("\\t"); break;
+	case '"':  printf("\\\""); break;
+	case '\\': printf("\\\\"); break;
+	default: printf("%c", *s);
+	}
+	s++;
+    }
+}
+
+static void WriteSimpleEntryProtocol2(CalEntry *e)
+{
+	if (e->passthru[0]) {
+	    printf("\"passthru\":\"%s\", ", e->passthru);
+	}
+	if (*DBufValue(&(e->tags))) {
+	    printf("\"tags\":\"");
+	    PrintJSONString(DBufValue(&e->tags));
+	    printf("\", ");
+	}
+	if (e->duration != NO_TIME) {
+	    printf("\"duration\":%d, ", e->duration);
+	}
+	if (e->time != NO_TIME) {
+	    printf("\"time\":%d, ", e->time);
+	}
+	if (e->trig.eventduration != NO_TIME) {
+	    printf("\"eventduration\":%d, ", e->trig.eventduration);
+	}
+	if (e->trig.eventstart != NO_TIME) {
+	    int y, m, d, h, i, k;
+	    i = e->trig.eventstart / MINUTES_PER_DAY;
+	    FromJulian(i, &y, &m, &d);
+	    k = e->trig.eventstart % MINUTES_PER_DAY;
+	    h = k / 60;
+	    i = k % 60;
+	    printf("\"eventstart\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
+	}
+	if (DoPrefixLineNo) {
+	    printf("\"filename\":\"");
+	    PrintJSONString(e->filename);
+	    printf("\", \"lineno\":%d, ", e->lineno);
+	}
+	printf("\"body\":\"");
+	PrintJSONString(e->text);
+	printf("\"");
+}
+
+/***************************************************************/
+/*                                                             */
+/*  WriteSimpleEntries                                         */
+/*                                                             */
+/*  Write entries in 'simple calendar' format.                 */
+/*                                                             */
+/***************************************************************/
+static void WriteSimpleEntries(int col, int jul)
+{
+    CalEntry *e = CalColumn[col];
+    CalEntry *n;
+    int y, m, d;
+
+    FromJulian(jul, &y, &m, &d);
+    while(e) {
+	if (DoPrefixLineNo) {
+	    if (PsCal != PSCAL_LEVEL2) {
+		printf("# fileinfo %d %s\n", e->lineno, e->filename);
+	    }
+	}
+	if (PsCal == PSCAL_LEVEL2) {
+	    printf("{\"date\":\"%04d-%02d-%02d\", ", y, m+1, d);
+	    WriteSimpleEntryProtocol2(e);
+	    printf("}\n");
+	} else {
+	    printf("%04d/%02d/%02d", y, m+1, d);
+	    WriteSimpleEntryProtocol1(e);
+	}
+
 	free((void *)e->text);
 	free((void *)e->filename);
 #ifdef REM_USE_WCHAR

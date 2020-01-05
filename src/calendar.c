@@ -1365,6 +1365,17 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
     PrintJSONKeyPairInt("back", e->trig.back);
     PrintJSONKeyPairInt("delta", e->trig.delta);
     PrintJSONKeyPairInt("rep", e->trig.rep);
+    switch(e->trig.skip) {
+    case SKIP_SKIP:
+	PrintJSONKeyPairString("skip", "SKIP");
+	break;
+    case BEFORE_SKIP:
+	PrintJSONKeyPairString("skip", "BEFORE");
+	break;
+    case AFTER_SKIP:
+	PrintJSONKeyPairString("skip", "AFTER");
+	break;
+    }
     /* Local omit is an array of days from 0=monday to 6=sunday.
        We convert to array of strings */
     printf("\"localomit\":[");

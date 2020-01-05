@@ -1267,42 +1267,115 @@ static void PrintJSONString(char const *s)
     }
 }
 
+static void PrintJSONKeyPairInt(char const *name, int val)
+{
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":%d, ", val);
+}
+
+static void PrintJSONKeyPairString(char const *name, char const *val)
+{
+    /* If value is blank, skip it! */
+    if (!val || !*val) {
+	return;
+    }
+
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"");
+    PrintJSONString(val);
+    printf("\", ");
+}
+
+static void PrintJSONKeyPairDate(char const *name, int jul)
+{
+    int y, m, d;
+    if (jul == NO_DATE) {
+	/* Skip it! */
+	return;
+    }
+    FromJulian(jul, &y, &m, &d);
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"%04d-%02d-%02d\", ", y, m+1, d);
+
+}
+
+static void PrintJSONKeyPairDateTime(char const *name, int dt)
+{
+    int y, m, d, h, i, k;
+    if (dt == NO_TIME) {
+	/* Skip it! */
+	return;
+    }
+    i = dt / MINUTES_PER_DAY;
+    FromJulian(i, &y, &m, &d);
+    k = dt % MINUTES_PER_DAY;
+    h = k / 60;
+    i = k % 60;
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
+
+}
+
 static void WriteSimpleEntryProtocol2(CalEntry *e)
 {
-	if (e->passthru[0]) {
-	    printf("\"passthru\":\"%s\", ", e->passthru);
+    int done = 0;
+    if (DoPrefixLineNo) {
+	PrintJSONKeyPairString("filename", e->filename);
+	PrintJSONKeyPairInt("lineno", e->lineno);
+    }
+    PrintJSONKeyPairString("passthru", e->passthru);
+    PrintJSONKeyPairString("tags", DBufValue(&(e->tags)));
+    if (e->duration != NO_TIME) {
+	PrintJSONKeyPairInt("duration", e->duration);
+    }
+    if (e->time != NO_TIME) {
+	PrintJSONKeyPairInt("time", e->time);
+    }
+    if (e->trig.eventduration != NO_TIME) {
+	PrintJSONKeyPairInt("eventduration", e->trig.eventduration);
+    }
+    if (e->trig.wd != NO_WD) {
+	PrintJSONKeyPairInt("wd", e->trig.wd);
+    }
+    if (e->trig.d != NO_DAY) {
+	PrintJSONKeyPairInt("d", e->trig.d);
+    }
+    if (e->trig.m != NO_MON) {
+	PrintJSONKeyPairInt("m", e->trig.m+1);
+    }
+    if (e->trig.y != NO_YR) {
+	PrintJSONKeyPairInt("y", e->trig.y);
+    }
+    PrintJSONKeyPairDateTime("eventstart", e->trig.eventstart);
+    PrintJSONKeyPairInt("back", e->trig.back);
+    PrintJSONKeyPairInt("delta", e->trig.delta);
+    PrintJSONKeyPairInt("rep", e->trig.rep);
+    /* Local omit is an array of days from 0=monday to 6=sunday.
+       We convert to array of strings */
+    printf("\"localomit\":[");
+    for (int i=0; i<7; i++) {
+	if (e->trig.localomit & (1 << i)) {
+	    if (done) {
+		printf(",");
+	    }
+	    done = 1;
+	    printf("\"%s\"", DayName[i]);
 	}
-	if (*DBufValue(&(e->tags))) {
-	    printf("\"tags\":\"");
-	    PrintJSONString(DBufValue(&e->tags));
-	    printf("\", ");
-	}
-	if (e->duration != NO_TIME) {
-	    printf("\"duration\":%d, ", e->duration);
-	}
-	if (e->time != NO_TIME) {
-	    printf("\"time\":%d, ", e->time);
-	}
-	if (e->trig.eventduration != NO_TIME) {
-	    printf("\"eventduration\":%d, ", e->trig.eventduration);
-	}
-	if (e->trig.eventstart != NO_TIME) {
-	    int y, m, d, h, i, k;
-	    i = e->trig.eventstart / MINUTES_PER_DAY;
-	    FromJulian(i, &y, &m, &d);
-	    k = e->trig.eventstart % MINUTES_PER_DAY;
-	    h = k / 60;
-	    i = k % 60;
-	    printf("\"eventstart\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
-	}
-	if (DoPrefixLineNo) {
-	    printf("\"filename\":\"");
-	    PrintJSONString(e->filename);
-	    printf("\", \"lineno\":%d, ", e->lineno);
-	}
-	printf("\"body\":\"");
-	PrintJSONString(e->text);
-	printf("\"");
+    }
+    printf("], ");
+    PrintJSONKeyPairDate("until", e->trig.until);
+    PrintJSONKeyPairInt("once", e->trig.once);
+    PrintJSONKeyPairDate("scanfrom", e->trig.scanfrom);
+    PrintJSONKeyPairDate("from", e->trig.from);
+    PrintJSONKeyPairInt("priority", e->trig.priority);
+
+    printf("\"body\":\"");
+    PrintJSONString(e->text);
+    printf("\"");
 }
 
 /***************************************************************/

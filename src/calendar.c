@@ -1338,9 +1338,20 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
     if (e->trig.eventduration != NO_TIME) {
 	PrintJSONKeyPairInt("eventduration", e->trig.eventduration);
     }
-    if (e->trig.wd != NO_WD) {
-	PrintJSONKeyPairInt("wd", e->trig.wd);
+    /* wd is an array of days from 0=monday to 6=sunday.
+       We convert to array of strings */
+    printf("\"wd\":[");
+    done = 0;
+    for (int i=0; i<7; i++) {
+	if (e->trig.wd & (1 << i)) {
+	    if (done) {
+		printf(",");
+	    }
+	    done = 1;
+	    printf("\"%s\"", DayName[i]);
+	}
     }
+    printf("], ");
     if (e->trig.d != NO_DAY) {
 	PrintJSONKeyPairInt("d", e->trig.d);
     }
@@ -1357,6 +1368,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
     /* Local omit is an array of days from 0=monday to 6=sunday.
        We convert to array of strings */
     printf("\"localomit\":[");
+    done = 0;
     for (int i=0; i<7; i++) {
 	if (e->trig.localomit & (1 << i)) {
 	    if (done) {

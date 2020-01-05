@@ -1320,7 +1320,7 @@ static void PrintJSONKeyPairDateTime(char const *name, int dt)
 
 }
 
-static void WriteSimpleEntryProtocol2(CalEntry *e)
+static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 {
     int done = 0;
     if (DoPrefixLineNo) {
@@ -1334,24 +1334,32 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
     }
     if (e->time != NO_TIME) {
 	PrintJSONKeyPairInt("time", e->time);
+	if (e->tt.delta) {
+	    PrintJSONKeyPairInt("tdelta", e->tt.delta);
+	}
+	if (e->tt.rep) {
+	    PrintJSONKeyPairInt("trep", e->tt.rep);
+	}
     }
     if (e->trig.eventduration != NO_TIME) {
 	PrintJSONKeyPairInt("eventduration", e->trig.eventduration);
     }
     /* wd is an array of days from 0=monday to 6=sunday.
        We convert to array of strings */
-    printf("\"wd\":[");
-    done = 0;
-    for (int i=0; i<7; i++) {
-	if (e->trig.wd & (1 << i)) {
-	    if (done) {
-		printf(",");
+    if (e->trig.wd != NO_WD) {
+	printf("\"wd\":[");
+	done = 0;
+	for (int i=0; i<7; i++) {
+	    if (e->trig.wd & (1 << i)) {
+		if (done) {
+		    printf(",");
+		}
+		done = 1;
+		printf("\"%s\"", DayName[i]);
 	    }
-	    done = 1;
-	    printf("\"%s\"", DayName[i]);
 	}
+	printf("], ");
     }
-    printf("], ");
     if (e->trig.d != NO_DAY) {
 	PrintJSONKeyPairInt("d", e->trig.d);
     }
@@ -1362,9 +1370,15 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
 	PrintJSONKeyPairInt("y", e->trig.y);
     }
     PrintJSONKeyPairDateTime("eventstart", e->trig.eventstart);
-    PrintJSONKeyPairInt("back", e->trig.back);
-    PrintJSONKeyPairInt("delta", e->trig.delta);
-    PrintJSONKeyPairInt("rep", e->trig.rep);
+    if (e->trig.back) {
+	PrintJSONKeyPairInt("back", e->trig.back);
+    }
+    if (e->trig.delta) {
+	PrintJSONKeyPairInt("delta", e->trig.delta);
+    }
+    if (e->trig.rep) {
+	PrintJSONKeyPairInt("rep", e->trig.rep);
+    }
     switch(e->trig.skip) {
     case SKIP_SKIP:
 	PrintJSONKeyPairString("skip", "SKIP");
@@ -1378,21 +1392,27 @@ static void WriteSimpleEntryProtocol2(CalEntry *e)
     }
     /* Local omit is an array of days from 0=monday to 6=sunday.
        We convert to array of strings */
-    printf("\"localomit\":[");
-    done = 0;
-    for (int i=0; i<7; i++) {
-	if (e->trig.localomit & (1 << i)) {
-	    if (done) {
-		printf(",");
+    if (e->trig.localomit != NO_WD) {
+	printf("\"localomit\":[");
+	done = 0;
+	for (int i=0; i<7; i++) {
+	    if (e->trig.localomit & (1 << i)) {
+		if (done) {
+		    printf(",");
+		}
+		done = 1;
+		printf("\"%s\"", DayName[i]);
 	    }
-	    done = 1;
-	    printf("\"%s\"", DayName[i]);
 	}
+	printf("], ");
     }
-    printf("], ");
     PrintJSONKeyPairDate("until", e->trig.until);
-    PrintJSONKeyPairInt("once", e->trig.once);
-    PrintJSONKeyPairDate("scanfrom", e->trig.scanfrom);
+    if (e->trig.once != NO_ONCE) {
+	PrintJSONKeyPairInt("once", e->trig.once);
+    }
+    if (e->trig.scanfrom != today) {
+	PrintJSONKeyPairDate("scanfrom", e->trig.scanfrom);
+    }
     PrintJSONKeyPairDate("from", e->trig.from);
     PrintJSONKeyPairInt("priority", e->trig.priority);
 
@@ -1423,7 +1443,7 @@ static void WriteSimpleEntries(int col, int jul)
 	}
 	if (PsCal == PSCAL_LEVEL2) {
 	    printf("{\"date\":\"%04d-%02d-%02d\", ", y, m+1, d);
-	    WriteSimpleEntryProtocol2(e);
+	    WriteSimpleEntryProtocol2(e, jul);
 	    printf("}\n");
 	} else {
 	    printf("%04d/%02d/%02d", y, m+1, d);

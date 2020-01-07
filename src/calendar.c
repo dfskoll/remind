@@ -1444,6 +1444,11 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
     PrintJSONKeyPairDate("from", e->trig.from);
     PrintJSONKeyPairInt("priority", e->trig.priority);
 
+    if (e->is_color) {
+	PrintJSONKeyPairInt("r", e->r);
+	PrintJSONKeyPairInt("g", e->g);
+	PrintJSONKeyPairInt("b", e->b);
+    }
     /* Only print rawbody if it differs from body */
     if (strcmp(e->raw_text, e->text)) {
 	PrintJSONKeyPairString("rawbody", e->raw_text);

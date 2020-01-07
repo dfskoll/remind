@@ -31,10 +31,11 @@
 /* Data structures used by the calendar */
 typedef struct cal_entry {
     struct cal_entry *next;
-    char const *text;
+    char *text;
+    char *raw_text;
     char const *pos;
 #ifdef REM_USE_WCHAR
-    wchar_t const *wc_text;
+    wchar_t *wc_text;
     wchar_t const *wc_pos;
 #endif
     int is_color;
@@ -44,7 +45,7 @@ typedef struct cal_entry {
     DynamicBuffer tags;
     char passthru[PASSTHRU_LEN+1];
     int duration;
-    char const *filename;
+    char *filename;
     int lineno;
     Trigger trig;
     TimeTrig tt;
@@ -641,9 +642,10 @@ static int WriteOneColLine(int col)
 	if (!*ws && e->next) {
 	    PrintLeft("", ColSpaces, ' ');
 	    CalColumn[col] = e->next;
-	    free((void *)e->text);
-	    free((void *)e->filename);
-	    if (e->wc_text) free((void *)e->wc_text);
+	    free(e->text);
+	    free(e->raw_text);
+	    free(e->filename);
+	    if (e->wc_text) free(e->wc_text);
 	    free(e);
 	    return 1;
 	}
@@ -691,9 +693,10 @@ static int WriteOneColLine(int col)
 	/* If done, free memory if no next entry. */
 	if (!*ws && !e->next) {
 	    CalColumn[col] = e->next;
-	    free((void *)e->text);
-	    free((void *)e->filename);
-	    if (e->wc_text) free((void *)e->wc_text);
+	    free(e->text);
+	    free(e->raw_text);
+	    free(e->filename);
+	    if (e->wc_text) free(e->wc_text);
 	    free(e);
 	} else {
 	    e->wc_pos = ws;
@@ -709,11 +712,12 @@ static int WriteOneColLine(int col)
 	if (!*s && e->next) {
 	    PrintLeft("", ColSpaces, ' ');
 	    CalColumn[col] = e->next;
-	    free((void *)e->text);
-	    free((void *)e->filename);
+	    free(e->text);
+	    free(e->filename);
 #ifdef REM_USE_WCHAR
-	    if (e->wc_text) free((void *)e->wc_text);
+	    if (e->wc_text) free(e->wc_text);
 #endif
+	    free(e->raw_text);
 	    free(e);
 	    return 1;
 	}
@@ -761,11 +765,12 @@ static int WriteOneColLine(int col)
 	/* If done, free memory if no next entry. */
 	if (!*s && !e->next) {
 	    CalColumn[col] = e->next;
-	    free((void *)e->text);
-	    free((void *)e->filename);
+	    free(e->text);
+	    free(e->filename);
 #ifdef REM_USE_WCHAR
-	    if (e->wc_text) free((void *)e->wc_text);
+	    if (e->wc_text) free(e->wc_text);
 #endif
+	    free(e->raw_text);
 	    free(e);
 	} else {
 	    e->pos = s;
@@ -941,7 +946,7 @@ static int DoCalRem(ParsePtr p, int col)
     CalEntry *CurCol = CalColumn[col];
     CalEntry *e;
     char const *s, *s2;
-    DynamicBuffer buf, obuf, pre_buf;
+    DynamicBuffer buf, obuf, pre_buf, raw_buf;
     Token tok;
 
     int is_color, col_r, col_g, col_b;
@@ -949,6 +954,7 @@ static int DoCalRem(ParsePtr p, int col)
     is_color = 0;
     DBufInit(&buf);
     DBufInit(&pre_buf);
+    DBufInit(&raw_buf);
 
     /* Parse the trigger date and time */
     if ( (r=ParseRem(p, &trig, &tim, 1)) ) {
@@ -1080,6 +1086,15 @@ static int DoCalRem(ParsePtr p, int col)
 	 ShouldTriggerReminder(&trig, &tim, jul, &err))) {
 	NumTriggered++;
 
+	/* The parse_ptr should not be nested, but just in case... */
+	if (!p->isnested) {
+	    if (DBufPuts(&raw_buf, p->pos) != OK) {
+		DBufFree(&obuf);
+		DBufFree(&pre_buf);
+		FreeTrig(&trig);
+		return E_NO_MEM;
+	    }
+	}
 	if (DoSimpleCalendar || tim.ttime != NO_TIME) {
 	    /* Suppress time if it's not today or if it's a non-COLOR special */
 	    if (jul != JulianToday ||
@@ -1088,12 +1103,14 @@ static int DoCalRem(ParsePtr p, int col)
 		 strcmp(trig.passthru, "COLOR"))) {
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);
+		    DBufFree(&raw_buf);
 		    DBufFree(&pre_buf);
 		    FreeTrig(&trig);
 		    return E_NO_MEM;
 		}
 	    } else {
 		if (DBufPuts(&obuf, CalendarTime(tim.ttime, tim.duration)) != OK) {
+		    DBufFree(&raw_buf);
 		    DBufFree(&obuf);
 		    DBufFree(&pre_buf);
 		    FreeTrig(&trig);
@@ -1111,6 +1128,7 @@ static int DoCalRem(ParsePtr p, int col)
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&obuf, v.v.str) != OK) {
 			DestroyValue(v);
+			DBufFree(&raw_buf);
 			DBufFree(&obuf);
 			DBufFree(&pre_buf);
 			FreeTrig(&trig);
@@ -1132,12 +1150,14 @@ static int DoCalRem(ParsePtr p, int col)
 	if (r) {
 	    DBufFree(&pre_buf);
 	    DBufFree(&obuf);
+	    DBufFree(&raw_buf);
 	    FreeTrig(&trig);
 	    return r;
 	}
 	if (DBufLen(&obuf) <= oldLen) {
 	    DBufFree(&obuf);
 	    DBufFree(&pre_buf);
+	    DBufFree(&raw_buf);
 	    FreeTrig(&trig);
 	    return OK;
 	}
@@ -1151,6 +1171,7 @@ static int DoCalRem(ParsePtr p, int col)
 		if (!DoCoerce(STR_TYPE, &v)) {
 		    if (DBufPuts(&obuf, v.v.str) != OK) {
 			DestroyValue(v);
+			DBufFree(&raw_buf);
 			DBufFree(&obuf);
 			DBufFree(&pre_buf);
 			FreeTrig(&trig);
@@ -1167,6 +1188,7 @@ static int DoCalRem(ParsePtr p, int col)
 	e = NEW(CalEntry);
 	if (!e) {
 	    DBufFree(&obuf);
+	    DBufFree(&raw_buf);
 	    DBufFree(&pre_buf);
 	    FreeTrig(&trig);
 	    return E_NO_MEM;
@@ -1182,9 +1204,13 @@ static int DoCalRem(ParsePtr p, int col)
 	e->g = col_g;
 	e->b = col_b;
 	e->text = StrDup(s);
+	e->raw_text = StrDup(DBufValue(&raw_buf));
+	DBufFree(&raw_buf);
 	DBufFree(&obuf);
 	DBufFree(&pre_buf);
-	if (!e->text) {
+	if (!e->text || !e->raw_text) {
+	    if (e->text) free(e->text);
+	    if (e->raw_text) free(e->raw_text);
 	    free(e);
 	    FreeTrig(&trig);
 	    return E_NO_MEM;
@@ -1202,6 +1228,8 @@ static int DoCalRem(ParsePtr p, int col)
 	e->priority = trig.priority;
 	e->filename = StrDup(FileName);
 	if(!e->filename) {
+	    if (e->text) free(e->text);
+	    if (e->raw_text) free(e->raw_text);
 	    free(e);
 	    return E_NO_MEM;
 	}
@@ -1416,6 +1444,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
     PrintJSONKeyPairDate("from", e->trig.from);
     PrintJSONKeyPairInt("priority", e->trig.priority);
 
+    PrintJSONKeyPairString("rawbody", e->raw_text);
     printf("\"body\":\"");
     PrintJSONString(e->text);
     printf("\"");
@@ -1450,10 +1479,11 @@ static void WriteSimpleEntries(int col, int jul)
 	    WriteSimpleEntryProtocol1(e);
 	}
 
-	free((void *)e->text);
-	free((void *)e->filename);
+	free(e->text);
+	free(e->raw_text);
+	free(e->filename);
 #ifdef REM_USE_WCHAR
-	if (e->wc_text) free((void *)e->wc_text);
+	if (e->wc_text) free(e->wc_text);
 #endif
 	n = e->next;
 	free(e);

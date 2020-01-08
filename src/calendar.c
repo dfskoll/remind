@@ -49,6 +49,8 @@ typedef struct cal_entry {
     int lineno;
     Trigger trig;
     TimeTrig tt;
+    int nonconst_expr;
+    int if_depth;
 } CalEntry;
 
 /* Line-drawing sequences */
@@ -948,6 +950,7 @@ static int DoCalRem(ParsePtr p, int col)
     char const *s, *s2;
     DynamicBuffer buf, obuf, pre_buf, raw_buf;
     Token tok;
+    int nonconst_expr = 0;
 
     int is_color, col_r, col_g, col_b;
 
@@ -1023,6 +1026,8 @@ static int DoCalRem(ParsePtr p, int col)
 	}
     }
 
+    /* Save nonconst_expr flag */
+    nonconst_expr = p->nonconst_expr;
     /* Convert PS and PSF to PASSTHRU */
     if (trig.typ == PS_TYPE) {
 	strcpy(trig.passthru, "PostScript");
@@ -1193,6 +1198,8 @@ static int DoCalRem(ParsePtr p, int col)
 	    FreeTrig(&trig);
 	    return E_NO_MEM;
 	}
+	e->nonconst_expr = nonconst_expr;
+	e->if_depth = NumIfs;
 	e->trig = trig;
 	e->tt = tim;
 #ifdef REM_USE_WCHAR
@@ -1406,6 +1413,12 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
     }
     if (e->trig.rep) {
 	PrintJSONKeyPairInt("rep", e->trig.rep);
+    }
+    if (e->nonconst_expr) {
+	PrintJSONKeyPairInt("nonconst_expr", e->nonconst_expr);
+    }
+    if (e->if_depth) {
+	PrintJSONKeyPairInt("if_depth", e->if_depth);
     }
     switch(e->trig.skip) {
     case SKIP_SKIP:

@@ -143,7 +143,6 @@ TextToCalEntry(DynamicBuffer *buf)
 {
     char const *startOfBody;
     char passthru[PASSTHRU_LEN+1];
-    int is_ps;
 
     CalEntry *c = NEW(CalEntry);
     if (!c) {
@@ -169,14 +168,6 @@ TextToCalEntry(DynamicBuffer *buf)
     /* Eat the time */
     startOfBody = EatToken(startOfBody, NULL, 0);
 
-    is_ps = 0;
-    if (!strcmp(passthru, "PostScript") ||
-	!strcmp(passthru, "PSFile") ||
-	!strcmp(passthru, "MOON") ||
-	!strcmp(passthru, "WEEK") ||
-	!strcmp(passthru, "SHADE")) {
-	is_ps = 1;
-    }
     c->entry = malloc(strlen(startOfBody) + 1);
     if (!c->entry) {
 	fprintf(stderr, "malloc failed - aborting.\n");
@@ -184,19 +175,17 @@ TextToCalEntry(DynamicBuffer *buf)
     }
     strcpy(c->entry, startOfBody);
 
-    if (is_ps) {
-	/* Save the type of SPECIAL */
-	if (!strcmp(passthru, "PostScript")) {
-	    c->special = SPECIAL_POSTSCRIPT;
-	} else if (!strcmp(passthru, "SHADE")) {
-	    c->special = SPECIAL_SHADE;
-	} else if (!strcmp(passthru, "MOON")) {
-	    c->special = SPECIAL_MOON;
-	} else if (!strcmp(passthru, "WEEK")) {
-	    c->special = SPECIAL_WEEK;
-	} else {
-	    c->special = SPECIAL_PSFILE;
-	}
+    /* Save the type of SPECIAL */
+    if (!strcmp(passthru, "PostScript")) {
+	c->special = SPECIAL_POSTSCRIPT;
+    } else if (!strcmp(passthru, "SHADE")) {
+	c->special = SPECIAL_SHADE;
+    } else if (!strcmp(passthru, "MOON")) {
+	c->special = SPECIAL_MOON;
+    } else if (!strcmp(passthru, "WEEK")) {
+	c->special = SPECIAL_WEEK;
+    } else if (!strcmp(passthru, "PSFile")) {
+	c->special = SPECIAL_PSFILE;
     } else if (!strcmp(passthru, "COLOUR") ||
 	       !strcmp(passthru, "COLOR")) {
 	c->special = SPECIAL_COLOR;

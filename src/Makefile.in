@@ -45,8 +45,8 @@ test: remind
 
 $(REMINDOBJS): $(REMINDHDRS)
 
-rem2ps: rem2ps.o dynbuf.o
-	@CC@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o
+rem2ps: rem2ps.o dynbuf.o json.o
+	@CC@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o json.o -lm
 
 remind: $(REMINDOBJS)
 	@CC@ @LDFLAGS@ $(LDEXTRA) -o remind $(REMINDOBJS) @LIBS@
@@ -74,7 +74,7 @@ clobber:
 	rm -f *.o *~ remind rem2ps test.out core *.bak
 
 depend:
-	gccmakedep @DEFS@ $(REMINDSRCS) rem2ps.c
+	gccmakedep @DEFS@ $(REMINDSRCS) rem2ps.c json.c
 
 # The next targets are not very useful to you.  I use them to build
 # distributions, etc.

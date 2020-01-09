@@ -46,6 +46,7 @@ typedef struct calentry {
     struct calentry *next;
     int special;
     char *entry;
+    int daynum;
 } CalEntry;
 
 typedef struct {
@@ -137,6 +138,72 @@ void WriteOneEntry (CalEntry *c);
 void GetSmallLocations (void);
 char const *EatToken(char const *in, char *out, int maxlen);
 
+static CalEntry *
+TextToCalEntry(DynamicBuffer *buf)
+{
+    char const *startOfBody;
+    char passthru[PASSTHRU_LEN+1];
+    int is_ps;
+
+    CalEntry *c = NEW(CalEntry);
+    if (!c) {
+	fprintf(stderr, "malloc failed - aborting.\n");
+	exit(1);
+    }
+    c->next = NULL;
+    c->special = SPECIAL_NORMAL;
+    c->daynum = (DBufValue(buf)[8] - '0') * 10 + DBufValue(buf)[9] - '0';
+
+    /* Skip the tag, duration and time */
+    startOfBody = DBufValue(buf)+10;
+
+    /* Eat the passthru */
+    startOfBody = EatToken(startOfBody, passthru, PASSTHRU_LEN);
+
+    /* Eat the tag */
+    startOfBody = EatToken(startOfBody, NULL, 0);
+
+    /* Eat the duration */
+    startOfBody = EatToken(startOfBody, NULL, 0);
+
+    /* Eat the time */
+    startOfBody = EatToken(startOfBody, NULL, 0);
+
+    is_ps = 0;
+    if (!strcmp(passthru, "PostScript") ||
+	!strcmp(passthru, "PSFile") ||
+	!strcmp(passthru, "MOON") ||
+	!strcmp(passthru, "WEEK") ||
+	!strcmp(passthru, "SHADE")) {
+	is_ps = 1;
+    }
+    c->entry = malloc(strlen(startOfBody) + 1);
+    if (!c->entry) {
+	fprintf(stderr, "malloc failed - aborting.\n");
+	exit(1);
+    }
+    strcpy(c->entry, startOfBody);
+
+    if (is_ps) {
+	/* Save the type of SPECIAL */
+	if (!strcmp(passthru, "PostScript")) {
+	    c->special = SPECIAL_POSTSCRIPT;
+	} else if (!strcmp(passthru, "SHADE")) {
+	    c->special = SPECIAL_SHADE;
+	} else if (!strcmp(passthru, "MOON")) {
+	    c->special = SPECIAL_MOON;
+	} else if (!strcmp(passthru, "WEEK")) {
+	    c->special = SPECIAL_WEEK;
+	} else {
+	    c->special = SPECIAL_PSFILE;
+	}
+    } else if (!strcmp(passthru, "COLOUR") ||
+	       !strcmp(passthru, "COLOR")) {
+	c->special = SPECIAL_COLOR;
+    }
+    return c;
+}
+
 /***************************************************************/
 /*                                                             */
 /*   MAIN PROGRAM                                              */
@@ -157,13 +224,8 @@ int main(int argc, char *argv[])
     /* Search for a valid input file */
     while (!feof(stdin)) {
 	DBufGets(&buf, stdin);
-	if (!strcmp(DBufValue(&buf), PSBEGIN2)) {
-	    fprintf(stderr, "Rem2PS: Please invoke Remind with the '-p' option\n");
-	    fprintf(stderr, "        and not the '-pp' option.\n");
-	    exit(1);
-	}
-
-	if (!strcmp(DBufValue(&buf), PSBEGIN)) {
+	if (!strcmp(DBufValue(&buf), PSBEGIN) ||
+	    !strcmp(DBufValue(&buf), PSBEGIN2)) {
 	    if (!validfile) {
 		if (Verbose) {
 		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-2020 by Dianne Skoll\n\n", VERSION);
@@ -197,10 +259,7 @@ void DoPsCal(void)
     int days, wkday, prevdays, nextdays;
     int sfirst;
     int i;
-    int is_ps;
     int firstcol;
-    char const *startOfBody;
-    char passthru[PASSTHRU_LEN+1];
     DynamicBuffer buf;
     CalEntry *c, *d, *p;
 
@@ -278,7 +337,8 @@ void DoPsCal(void)
 	}
 
 	DBufGets(&buf, stdin);
-	if (!strcmp(DBufValue(&buf), PSEND)) {
+	if (!strcmp(DBufValue(&buf), PSEND) ||
+	    !strcmp(DBufValue(&buf), PSEND2)) {
 	    DBufFree(&buf);
 	    break;
 	}
@@ -287,71 +347,30 @@ void DoPsCal(void)
 	if (DBufValue(&buf)[0] == '#') {
 	    continue;
 	}
-	/* Read the day number - a bit of a hack! */
-	DayNum = (DBufValue(&buf)[8] - '0') * 10 + DBufValue(&buf)[9] - '0';
-	if (DayNum != CurDay) {
-	    for(; CurDay<DayNum; CurDay++) {
+
+	/* If it starts with '{', process as JSON */
+	if (DBufValue(&buf)[0] == '{') {
+	    // c = JSONToCalEntry(&buf);
+	    c = NULL;
+	} else {
+	    c = TextToCalEntry(&buf);
+	}
+
+	if (c->daynum != CurDay) {
+	    for(; CurDay<c->daynum; CurDay++) {
 		WriteCalEntry();
 		WkDayNum = (WkDayNum + 1) % 7;
 	    }
 	}
-	/* Add the text */
-	c = NEW(CalEntry);
-	if (!c) {
-	    fprintf(stderr, "malloc failed - aborting.\n");
-	    exit(1);
-	}
-	c->next = NULL;
-	c->special = SPECIAL_NORMAL;
-
-	/* Skip the tag, duration and time */
-	startOfBody = DBufValue(&buf)+10;
-
-	/* Eat the passthru */
-	startOfBody = EatToken(startOfBody, passthru, PASSTHRU_LEN);
-
-	/* Eat the tag */
-	startOfBody = EatToken(startOfBody, NULL, 0);
-
-	/* Eat the duration */
-	startOfBody = EatToken(startOfBody, NULL, 0);
-
-	/* Eat the time */
-	startOfBody = EatToken(startOfBody, NULL, 0);
-
-	is_ps = 0;
-	if (!strcmp(passthru, "PostScript") ||
-	    !strcmp(passthru, "PSFile") ||
-	    !strcmp(passthru, "MOON") ||
-	    !strcmp(passthru, "WEEK") ||
-	    !strcmp(passthru, "SHADE")) {
-	    is_ps = 1;
-	}
-	c->entry = malloc(strlen(startOfBody) + 1);
-	if (!c->entry) {
-	    fprintf(stderr, "malloc failed - aborting.\n");
-	    exit(1);
-	}
-	strcpy(c->entry, startOfBody);
-
-	if (is_ps) {
-	    /* Save the type of SPECIAL */
-	    if (!strcmp(passthru, "PostScript")) {
-		c->special = SPECIAL_POSTSCRIPT;
-	    } else if (!strcmp(passthru, "SHADE")) {
-		c->special = SPECIAL_SHADE;
-	    } else if (!strcmp(passthru, "MOON")) {
-		c->special = SPECIAL_MOON;
-	    } else if (!strcmp(passthru, "WEEK")) {
-		c->special = SPECIAL_WEEK;
+	if (c->special == SPECIAL_POSTSCRIPT ||
+	    c->special == SPECIAL_SHADE ||
+	    c->special == SPECIAL_MOON ||
+	    c->special == SPECIAL_WEEK ||
+	    c->special == SPECIAL_PSFILE) {
+	    if (!PsEntries[c->daynum]) {
+		PsEntries[c->daynum] = c;
 	    } else {
-		c->special = SPECIAL_PSFILE;
-	    }
-
-	    if (!PsEntries[DayNum]) {
-		PsEntries[DayNum] = c;
-	    } else {
-		d = PsEntries[DayNum];
+		d = PsEntries[c->daynum];
 		p = NULL;
 		/* Slot it into the right place */
 		while (d->next && (SpecialSortOrder[c->special] <= SpecialSortOrder[d->special])) {
@@ -365,14 +384,12 @@ void DoPsCal(void)
 		    if (p) {
 			p->next = c;
 		    } else {
-			PsEntries[DayNum] = c;
+			PsEntries[c->daynum] = c;
 		    }
 		    c->next = d;
 		}
 	    }
-	} else if (!strcmp(passthru, "*") ||
-		   !strcmp(passthru, "COLOUR") ||
-	           !strcmp(passthru, "COLOR")) {
+	} else {
 	    /* Put on linked list */
 	    if (!CurEntries) {
 		CurEntries = c;
@@ -380,10 +397,6 @@ void DoPsCal(void)
 		d = CurEntries;
 		while(d->next) d = d->next;
 		d->next = c;
-	    }
-	    if (!strcmp(passthru, "COLOR") ||
-		!strcmp(passthru, "COLOUR")) {
-		c->special = SPECIAL_COLOR;
 	    }
 	}
     }

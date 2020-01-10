@@ -79,6 +79,7 @@ rm -f ../tests/purge_dir/*.rem.purged >> ../tests/test.out 2>&1
 ../src/remind ../tests/runtest.rem >> ../tests/test.out 2>&1
 
 ../src/remind -p ../tests/shade.rem 1 August 2009 | ../src/rem2ps -e -l -c3 >> ../tests/test.out 2>&1
+../src/remind -pp ../tests/shade.rem 1 August 2009 | ../src/rem2ps -e -l -c3 >> ../tests/test.out 2>&1
 
 # The sun tests can fail due to math roundoff error changing the times
 # by a minute...

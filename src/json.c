@@ -162,7 +162,9 @@ static int new_value (json_state * state,
 	       return 0;
 	    }
 
-	    value->_reserved.object_mem = (* (char **) &value->u.object.values) + values_size;
+	    char *s = (char *) value->u.object.values;
+	    s += values_size;
+	    value->_reserved.object_mem = s;
 
 	    value->u.object.length = 0;
 	    break;
@@ -424,10 +426,11 @@ json_value * json_parse_ex (json_settings * settings,
 
 		  case json_object:
 
-		     if (state.first_pass)
-			(*(json_char **) &top->u.object.values) += string_length + 1;
-		     else
-		     {
+		      if (state.first_pass) {
+			 char *s = (char *) top->u.object.values;
+			 s += string_length+1;
+			 top->u.object.values = (void *) s;
+		      } else {
 			top->u.object.values [top->u.object.length].name
 			   = (json_char *) top->_reserved.object_mem;
 

@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "rem2ps.h"
+#include "json.h"
 
 #define NEW(type) (malloc(sizeof(type)))
 
@@ -137,6 +138,84 @@ void WriteCalEntry (void);
 void WriteOneEntry (CalEntry *c);
 void GetSmallLocations (void);
 char const *EatToken(char const *in, char *out, int maxlen);
+
+static CalEntry *
+JSONToCalEntry(DynamicBuffer *buf)
+{
+    CalEntry *c;
+    json_value *val;
+
+    val = json_parse(DBufValue(buf), DBufLen(buf));
+    if (!val) {
+	fprintf(stderr, "Unable to parse JSON line `%s'\n", DBufValue(buf));
+	exit(1);
+    }
+
+    if (val->type != json_object) {
+	fprintf(stderr, "Expecting JSON object; fount `%s'\n",
+		DBufValue(buf));
+	exit(1);
+    }
+
+    c = NEW(CalEntry);
+    if (!c) {
+	fprintf(stderr, "malloc failed - aborting.\n");
+	exit(1);
+    }
+    c->next = NULL;
+    c->special = SPECIAL_NORMAL;
+
+    int got_date = 0, got_body = 0;
+    for (size_t i=0; i<val->u.object.length; i++) {
+	char const *nm = val->u.object.values[i].name;
+	json_value *v = val->u.object.values[i].value;
+	char const *s;
+	if (!strcmp(nm, "date")) {
+	    if (v->type == json_string) {
+		s = v->u.string.ptr;
+		c->daynum = (s[8] - '0') * 10 + s[9] - '0';
+		got_date = 1;
+	    }
+	} else if (!strcmp(nm, "body")) {
+	    if (v->type == json_string) {
+		s = v->u.string.ptr;
+		c->entry = malloc(strlen(s)+1);
+		if (!c->entry) {
+		    fprintf(stderr, "malloc failed - aborting.\n");
+		    exit(1);
+		}
+		strcpy(c->entry, s);
+		got_body = 1;
+	    }
+	} else if (!strcmp(nm, "passthru")) {
+	    if (v->type == json_string) {
+		s = v->u.string.ptr;
+		if (!strcmp(s, "PostScript")) {
+		    c->special = SPECIAL_POSTSCRIPT;
+		} else if (!strcmp(s, "SHADE")) {
+		    c->special = SPECIAL_SHADE;
+		} else if (!strcmp(s, "MOON")) {
+		    c->special = SPECIAL_MOON;
+		} else if (!strcmp(s, "WEEK")) {
+		    c->special = SPECIAL_WEEK;
+		} else if (!strcmp(s, "PSFile")) {
+		    c->special = SPECIAL_PSFILE;
+		} else if (!strcmp(s, "COLOUR") ||
+			   !strcmp(s, "COLOR")) {
+		    c->special = SPECIAL_COLOR;
+		}
+	    }
+	}
+    }
+
+    json_value_free(val);
+
+    if (!got_body || !got_date) {
+	fprintf(stderr, "Could not parse line `%s'\n", DBufValue(buf));
+	exit(1);
+    }
+    return c;
+}
 
 static CalEntry *
 TextToCalEntry(DynamicBuffer *buf)
@@ -339,8 +418,7 @@ void DoPsCal(void)
 
 	/* If it starts with '{', process as JSON */
 	if (DBufValue(&buf)[0] == '{') {
-	    // c = JSONToCalEntry(&buf);
-	    c = NULL;
+	    c = JSONToCalEntry(&buf);
 	} else {
 	    c = TextToCalEntry(&buf);
 	}

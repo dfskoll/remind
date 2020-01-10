@@ -139,6 +139,11 @@ void WriteOneEntry (CalEntry *c);
 void GetSmallLocations (void);
 char const *EatToken(char const *in, char *out, int maxlen);
 
+/***************************************************************/
+/*                                                             */
+/*   Parse the new-style JSON intermediate format              */
+/*                                                             */
+/***************************************************************/
 static CalEntry *
 JSONToCalEntry(DynamicBuffer *buf)
 {
@@ -152,7 +157,7 @@ JSONToCalEntry(DynamicBuffer *buf)
     }
 
     if (val->type != json_object) {
-	fprintf(stderr, "Expecting JSON object; fount `%s'\n",
+	fprintf(stderr, "Expecting JSON object; found `%s'\n",
 		DBufValue(buf));
 	exit(1);
     }
@@ -217,6 +222,11 @@ JSONToCalEntry(DynamicBuffer *buf)
     return c;
 }
 
+/***************************************************************/
+/*                                                             */
+/*   Parse the old-style REM2PS intermediate format            */
+/*                                                             */
+/***************************************************************/
 static CalEntry *
 TextToCalEntry(DynamicBuffer *buf)
 {
@@ -416,10 +426,11 @@ void DoPsCal(void)
 	    continue;
 	}
 
-	/* If it starts with '{', process as JSON */
 	if (DBufValue(&buf)[0] == '{') {
+	    /* Starts with '{', so assume new-style JSON format */
 	    c = JSONToCalEntry(&buf);
 	} else {
+	    /* Assume it's the old-style rem2ps intermediate format */
 	    c = TextToCalEntry(&buf);
 	}
 

@@ -4,10 +4,11 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use JSON::Any;
 
 my %Options;
 
-my $rem2html_version = '2.0';
+my $rem2html_version = '2.1';
 
 my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mondayfirst, $weeks,
     @Daynames, $Nextmon, $Nextlen, $Prevmon, $Prevlen);
@@ -191,7 +192,7 @@ sub parse_input
     my $found_data = 0;
     while(<STDIN>) {
 	chomp;
-	last if /^\# rem2ps begin$/;
+	last if /^\# rem2ps2? begin$/;
     }
 
     my $line;
@@ -228,11 +229,26 @@ sub parse_input
     }
     while(<STDIN>) {
 	chomp;
-	last if /^\# rem2ps end$/;
+	last if /^\# rem2ps2? end$/;
 	next if /^\#/;
-	next unless m/^(\d*).(\d*).(\d*)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$/;
-	my ($y, $m, $d, $special, $tag, $duration, $time, $body) =
-	    ($1, $2, $3, $4, $5, $6, $7, $8);
+	my ($y, $m, $d, $special, $tag, $duration, $time, $body);
+	if (m/^(\d*).(\d*).(\d*)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)$/) {
+		($y, $m, $d, $special, $tag, $duration, $time, $body) =
+		    ($1, $2, $3, $4, $5, $6, $7, $8);
+	} elsif (/\{/) {
+		my $obj = JSON::Any->jsonToObj($_);
+		next unless ($obj->{date} =~ /^(\d+)-(\d+)-(\d+)$/);
+		$y = $1;
+		$m = $2;
+		$d = $3;
+		$special = $obj->{passthru} || '*';
+		$tag = $obj->{tags} || '*';
+		$duration = $obj->{duration} || '*';
+		$time = $obj->{time} || '*';
+		$body = $obj->{body};
+	} else {
+		next;
+	}
 	my $d1 = $d;
 	$d1 =~ s/^0+//;
 	if ($special eq 'HTML') {

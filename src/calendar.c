@@ -1461,6 +1461,22 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 	PrintJSONKeyPairInt("r", e->r);
 	PrintJSONKeyPairInt("g", e->g);
 	PrintJSONKeyPairInt("b", e->b);
+    } else if (!strcmp(e->passthru, "SHADE")) {
+	int r, g, b, n;
+	n = sscanf(e->text, "%d %d %d", &r, &g, &b);
+	if (n < 3) {
+	    g = r;
+	    b = r;
+	}
+	if (r < 0) r = 0;
+	else if (r > 255) r = 255;
+	if (g < 0) g = 0;
+	else if (g > 255) g = 255;
+	if (b < 0) b = 0;
+	else if (b > 255) b = 255;
+	PrintJSONKeyPairInt("r", r);
+	PrintJSONKeyPairInt("g", g);
+	PrintJSONKeyPairInt("b", b);
     }
     /* Only print rawbody if it differs from body */
     if (strcmp(e->raw_text, e->text)) {

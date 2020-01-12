@@ -1390,7 +1390,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 		    printf(",");
 		}
 		done = 1;
-		printf("\"%s\"", DayName[i]);
+		printf("\"%s\"", EnglishDayName[i]);
 	    }
 	}
 	printf("], ");
@@ -1442,7 +1442,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 		    printf(",");
 		}
 		done = 1;
-		printf("\"%s\"", DayName[i]);
+		printf("\"%s\"", EnglishDayName[i]);
 	    }
 	}
 	printf("], ");

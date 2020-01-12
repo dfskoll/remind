@@ -164,7 +164,7 @@ set Rem2PS "rem2ps"
 
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
-set ReminderFile [file nativename "~/.reminders2"]
+set ReminderFile [file nativename "~/.reminders"]
 
 set EditorPid -1
 

@@ -2701,6 +2701,18 @@ proc ReadTaggedOptions { tag date } {
 	} else {
 	    lappend ans -text-ordinal Every
 	}
+    } else {
+	if {$d < 8} {
+	    lappend ans -text-ordinal First
+	} elseif {$d < 15} {
+	    lappend ans -text-ordinal Second
+	} elseif {$d < 22} {
+	    lappend ans -text-ordinal Third
+	} elseif {$d < 29} {
+	    lappend ans -text-ordinal Fourth
+	} else {
+	    lappend ans -text-ordinal Last
+	}
     }
 
     if {[dict exists $obj until]} {

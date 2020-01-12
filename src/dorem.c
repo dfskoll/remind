@@ -389,6 +389,10 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    r=ParseToken(s, &buf);
 	    if (r) return r;
 	    StrnCpy(trig->omitfunc, DBufValue(&buf), VAR_NAME_LEN);
+
+	    /* An OMITFUNC counts as a nonconst_expr! */
+	    s->expr_happened = 1;
+	    s->nonconst_expr = 1;
 	    DBufFree(&buf);
 	    break;
 

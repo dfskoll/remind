@@ -3024,6 +3024,7 @@ proc DeleteTaggedReminder { tag } {
 
     set found 0
 
+    set tagno 0
     while {[gets $in line] >= 0} {
 	if {[string match "REM TAG $tag *" $line]} {
 	    set found 1
@@ -3039,7 +3040,14 @@ proc DeleteTaggedReminder { tag } {
 	if {[string match "# TKEND" $line]} {
 	    continue
 	}
-	puts $out $line
+
+	# Renumber tags
+	if {[regexp {^REM TAG TKTAG([0-9]+) (.*)$} $line all oldtag rest]} {
+	    incr tagno
+	    puts $out "REM TAG TKTAG$tagno $rest"
+	} else {
+	    puts $out $line
+	}
     }
 
     if {! $found } {

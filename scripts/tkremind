@@ -225,6 +225,11 @@ set PrintSmallCalendars 1
 # Highest tag seen so far.  Array of tags is stored in ReminderTags()
 set HighestTagSoFar 0
 
+proc get_weekday { yyyymmdd } {
+    global EnglishDayNames
+    return [lindex $EnglishDayNames [clock format [clock scan $yyyymmdd] -format %w -locale C]]
+}
+
 #***********************************************************************
 # %PROCEDURE: Initialize
 # %ARGUMENTS:
@@ -2589,15 +2594,18 @@ proc ReadTaggedOptions { tag } {
     }
     set obj $TagToObj($tag)
     set ans ""
+    set date [dict get $obj date]
+    regexp {^([0-9][0-9][0-9][0-9]).([0-9][0-9]).([0-9][0-9])} $date all y m d
+
     if {![dict exists $obj skip]} {
 	lappend ans -global-SkipType 1
     } else {
 	set s [dict get $obj skip]
 	if {"$s" == "SKIP"} {
 	    lappend ans -global-SkipType 2
-	} else if {"$s" == "BEFORE"} {
+	} elseif {"$s" == "BEFORE"} {
 	    lappend ans -global-SkipType 3
-	} else if {"$s" == "AFTER"} {
+	} elseif {"$s" == "AFTER"} {
 	    lappend ans -global-SkipType 2
 	} else {
 	    lappend ans -global-SkipType 1
@@ -2606,20 +2614,139 @@ proc ReadTaggedOptions { tag } {
 
     if {[dict exists $obj d]} {
 	lappend ans -text-day1 [dict get $obj d]
+	lappend ans -text-day2 [dict get $obj d]
     } else {
 	lappend ans -text-day1 {every day}
+	lappend ans -text-day2 $d
     }
     if {[dict exists $obj m]} {
 	lappend ans -text-mon1 [lindex $MonthNames [expr [dict get $obj m] -1]]
+	lappend ans -text-mon2 [lindex $MonthNames [expr [dict get $obj m] -1]]
+	lappend ans -text-mon3 [lindex $MonthNames [expr [dict get $obj m] -1]]
     } else {
 	lappend ans -text-mon1 {every month}
+	lappend ans -text-mon2 {every month}
+	lappend ans -text-mon3 {every month}
     }
     if {[dict exists $obj y]} {
 	lappend ans -text-year1 [dict get $obj y]
+	lappend ans -text-year2 [dict get $obj y]
+	lappend ans -text-year3 [dict get $obj y]
     } else {
 	lappend ans -text-year1 {every year}
+	lappend ans -text-year2 {every year}
+	lappend ans -text-year3 {every year}
     }
 
+    set wd {}
+    if {[dict exists $obj wd]} {
+	set wd [dict get $obj wd]
+	if {[llength $wd] == 1} {
+	    lappend ans -text-wkday2 [lindex $wd 0]
+	    lappend ans -text-wkday3 [lindex $wd 0]
+	} elseif {"$wd" == "Monday Tuesday Wednesday Thursday Friday"} {
+	    lappend ans -text-wkday2 weekday
+	    lappend ans -text-wkday3 weekday
+	}
+    } else {
+	lappend ans -text-wkday2 [get_weekday $date]
+	lappend ans -text-wkday3 [get_weekday $date]
+    }
+
+    if {[llength $wd] > 0} {
+	if {[dict exists $obj d]} {
+	    set day [dict get $obj d]
+	    if {$day < 8} {
+		if {[dict exists $obj back]} {
+		    lappend ans -text-ordinal Last
+		    # Adjust month down and possibly year?
+		    if {[dict exists $obj m]} {
+			set idx [expr [dict get $obj m] -1]
+			if {$idx <= 0} {
+			    set idx 12
+			}
+			lappend ans -text-mon1 [lindex $MonthNames [expr $idx -1]]
+			lappend ans -text-mon2 [lindex $MonthNames [expr $idx -1]]
+			lappend ans -text-mon3 [lindex $MonthNames [expr $idx -1]]
+			if {[dict exists $obj y]} {
+			    set year [dict get $obj y]
+			    if {$idx == 12} {
+				lappend ans -text-year1 [expr $year - 1]
+				lappend ans -text-year2 [expr $year - 1]
+				lappend ans -text-year3 [expr $year - 1]
+			    }
+			}
+		    }
+		} else {
+		    lappend ans -text-ordinal First
+		}
+	    } elseif {$day < 15} {
+		lappend ans -text-ordinal Second
+	    } elseif {$day < 22} {
+		lappend ans -text-ordinal Third
+	    } else  {
+		lappend ans -text-ordinal Fourth
+	    }
+	} else {
+	    lappend ans -text-ordinal Every
+	}
+    }
+
+    if {[dict exists $obj until]} {
+	set u [dict get $obj until]
+	regexp {^([0-9][0-9][0-9][0-9]).([0-9][0-9]).([0-9][0-9])} $u all yu mu du
+	lappend ans -global-expbut 1
+	lappend ans -text-expday $du
+	lappend ans -text-expmon [lindex $MonthNames [expr $mu-1]]
+	lappend ans -text-expyear $yu
+
+    } else {
+	lappend ans -global-expbut 0
+	lappend ans -text-expday $d
+	lappend ans -text-expmon [lindex $MonthNames [expr $m-1]]
+	lappend ans -text-expyear $y
+    }
+
+    if {[dict exists $obj delta]} {
+	set delta [dict get $obj delta]
+	if {$delta == 0} {
+	    lappend ans -global-advbut 0
+	    lappend ans -text-advdays 3
+	    lappend ans -global-advcount 1
+	} elseif {$delta < 0} {
+	    set delta [expr abs($delta)]
+	    lappend ans -global-advbut 1
+	    lappend ans -text-advdays $delta
+	    lappend ans -global-advcount 0
+	} else {
+	    lappend ans -global-advbut 1
+	    lappend ans -text-advdays $delta
+	    lappend ans -global-advcount 1
+	}
+    } else {
+	lappend ans -global-advbut 0
+	lappend ans -text-advdays 3
+	lappend ans -global-advcount 1
+    }
+
+    if {[dict exists $obj localomit]} {
+	set lo [dict get $obj localomit]
+	foreach w $EnglishDayNames {
+	    if {[lsearch -exact $lo $w] >= 0} {
+		lappend ans "-global-d$w" 1
+	    } else {
+		lappend ans "-global-d$w" 0
+	    }
+	}
+    } else {
+	lappend ans -global-dSunday 1
+	lappend ans -global-dMonday 0
+	lappend ans -global-dTuesday 0
+	lappend ans -global-dWednesday 0
+	lappend ans -global-dThursday 0
+	lappend ans -global-dFriday 0
+	lappend ans -global-dSaturday 1
+    }
     if {[dict exists $obj rep]} {
 	lappend ans -global-repbut 1
 	lappend ans -text-repdays [dict get $obj rep]
@@ -2628,6 +2755,73 @@ proc ReadTaggedOptions { tag } {
 	lappend ans -text-repdays 1
     }
 
+    if {[dict exists $obj time]} {
+	set t [dict get $obj time]
+	lappend ans -global-timebut 1
+	set hour [expr $t / 60]
+	set minute [format %02d [expr $t % 60]]
+	lappend ans -text-timehour $hour
+	lappend ans -text-timemin $minute
+	if {[dict exists $obj tdelta]} {
+	    lappend ans -global-timeadvbut 1
+	    lappend ans -text-timeadv [dict get $obj tdelta]
+	} else {
+	    lappend ans -global-timeadvbut 0
+	    lappend ans -text-timeadv 15
+	}
+	if {[dict exists $obj trep]} {
+	    lappend ans -global-timerepbut 1
+	    lappend ans -text-timerep [dict get $obj trep]
+	} else {
+	    lappend ans -global-timerepbut 0
+	    lappend ans -text-timerep 5
+	}
+	if {[dict exists $obj duration]} {
+	    lappend ans -global-durationbut 1
+	    set dur [dict get $obj duration]
+	    lappend ans -text-durationh [expr $dur / 60]
+	    lappend ans -text-durationm [format %02d [expr $dur % 60]]
+	} else {
+	    lappend ans -global-durationbut 0
+	    lappend ans -text-durationh 1
+	    lappend ans -text-durationm 00
+	}
+    } else {
+	lappend ans -global-timebut 0
+	lappend ans -text-timehour 12
+	lappend ans -text-timemin 00
+	lappend ans -text-timeadv 15
+	lappend ans -global-timerepbut 0
+	lappend ans -text-timerep 5
+	lappend ans -global-durationbut 0
+	lappend ans -text-durationh 1
+	lappend ans -text-durationm 00
+    }
+    if {[dict exists $obj rawbody]} {
+	lappend ans -entry-entry [dict get $obj rawbody]
+    } else {
+	lappend ans -entry-entry [dict get $obj body]
+    }
+
+    # Figure out the reminder type
+    if {[dict exists $obj rep]} {
+	# Repeat must be type 1
+	lappend ans -global-OptionType 1
+    } elseif {![dict exists $obj wd]} {
+	# No weekdays - must be type 1
+	lappend ans -global-OptionType 1
+    } elseif {![dict exists $obj d]} {
+	# No day... must be "every wkday in ..."
+	lappend ans -global-OptionType 3
+    } else {
+	set day [dict get $obj d]
+	# Take a guess based on day
+	if {$day == 1 || $day == 8 || $day == 15 || $day == 22} {
+	    lappend ans -global-OptionType 3
+	} else {
+	    lappend ans -global-OptionType 2
+	}
+    }
     return $ans
 }
 proc FireEditor { w } {

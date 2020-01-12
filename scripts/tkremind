@@ -1785,7 +1785,8 @@ proc CreateReminder {w} {
 
     # Do the "until" part
     if {$expbut} {
-	append rem " UNTIL [$w.expday cget -text] [$w.expmon cget -text] [$w.expyear cget -text]"
+	append rem " UNTIL "
+	append rem [consolidate [$w.expyear cget -text] [$w.expmon cget -text] [$w.expday cget -text]]
     }
 
     # Advance warning
@@ -1863,6 +1864,15 @@ proc CreateReminder {w} {
     return $rem
 }
 
+proc consolidate {y m d} {
+    global MonthNames
+    if {![regexp {^[0-9]+$} $m]} {
+	set m [lsearch -exact $MonthNames $m]
+	incr m
+    }
+    return [format "%04d-%02d-%02d" $y $m $d]
+}
+
 #---------------------------------------------------------------------------
 # CreateReminder1 -- Create the first part of a type-1 reminder
 # Arguments:
@@ -1878,19 +1888,27 @@ proc CreateReminder1 {w} {
     set gotMon 0
     set gotYear 0
     set d [$w.day1 cget -text]
-    if {"$d" != "every day"} {
-	append rem " $d"
-	set gotDay 1
-    }
     set m [$w.mon1 cget -text]
-    if {"$m" != "every month"} {
-	append rem " $m"
-	set gotMon 1
-    }
     set y [$w.year1 cget -text]
-    if {"$y" != "every year"} {
-	append rem " $y"
+    if {"$d" != "every day" && "$m" != "every month" && $y != "every year"} {
+	set gotDay 1
+	set gotMon 1
 	set gotYear 1
+	append rem " "
+	append rem [consolidate $y $m $d]
+    } else {
+	if {"$d" != "every day"} {
+	    append rem " $d"
+	    set gotDay 1
+	}
+	if {"$m" != "every month"} {
+	    append rem " $m"
+	    set gotMon 1
+	}
+	if {"$y" != "every year"} {
+	    append rem " $y"
+	    set gotYear 1
+	}
     }
 
     # Check for repetition
@@ -1918,12 +1936,17 @@ proc CreateReminder2 {w} {
     set day [$w.day2 cget -text]
     set mon [$w.mon2 cget -text]
     set year [$w.year2 cget -text]
-    set rem "REM $wkday $day"
-    if {$mon != "every month"} {
-	append rem " $mon"
-    }
-    if {$year != "every year"} {
-	append rem " $year"
+    if {$mon != "every month" && $year != "every year"} {
+	set rem "REM $wkday "
+	append rem [consolidate $year $mon $day]
+    } else {
+	set rem "REM $wkday $day"
+	if {$mon != "every month"} {
+	    append rem " $mon"
+	}
+	if {$year != "every year"} {
+	    append rem " $year"
+	}
     }
     return $rem
 }

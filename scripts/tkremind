@@ -956,7 +956,7 @@ proc FillCalWindow {} {
 		continue
 	    }
 	    "SHADE" {
-		DoShadeSpecial $n $stuff
+		DoShadeSpecial $n [dict get $obj r] [dict get $obj g] [dict get $obj b]
 		continue
 	    }
 	    "MOON" {
@@ -3241,20 +3241,13 @@ proc WriteReminder { out tag rem opts } {
 # %PROCEDURE: DoShadeSpecial
 # %ARGUMENTS:
 #  n -- calendar box to shade
-#  stuff -- Remind command line
+#  r, g, b -- colour components
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
 #  Handles the "SHADE" special -- shades a box.
 #***********************************************************************
-proc DoShadeSpecial { n stuff } {
-    set num [scan $stuff "%d %d %d" r g b]
-    if {$num == 1} {
-	set g $r
-	set b $r
-    } elseif {$num != 3} {
-	return
-    }
+proc DoShadeSpecial { n r g b } {
     if {$r < 0 || $r > 255 || $g < 0 || $g > 255 || $b < 0 || $b > 255} {
 	return
     }

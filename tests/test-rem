@@ -100,7 +100,10 @@ REM 1 Jan 2012 AT 10:00 MSG 10am: Should show up
 MSG [$DontTrigAts]
 EOF
 
-
+# An OMITFUNC should indicate nonconst_expr
+../src/remind -pp - 1 jan 2012 9:00 <<'EOF' >> ../tests/test.out 2>&1
+REM Mon OMITFUNC foo MSG bar
+EOF
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

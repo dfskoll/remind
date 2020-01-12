@@ -102,6 +102,9 @@ if {[catch {package require mime}]} {
 if {[catch {package require smtp}]} {
     missing_tcllib smtp
 }
+if {[catch {package require json}]} {
+    missing_tcllib json
+}
 
 
 # Check that we have the right version of wish
@@ -169,6 +172,9 @@ set EditorPid -1
 set AppendFile {NOSUCHFILE}
 catch {set AppendFile $ReminderFile}
 
+# Array of tags -> JSON dicts
+array unset TagToObj
+
 set SetFontsWorked 0
 #---------------- DON'T CHANGE STUFF BELOW HERE ------------------
 
@@ -202,7 +208,6 @@ set TodayDay -1
 # Reminder option types and skip types
 set OptionType 1
 set SkipType 1
-
 # Remind command line
 set CommandLine {}
 set PSCmd {}
@@ -235,8 +240,8 @@ proc Initialize {} {
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst TwentyFourHourMode ReminderFileModTime
     global Option
-    set CommandLine "|$Remind -itkremind=1 -p -y -l EXTRA"
-    set PSCmd "$Remind -p -l EXTRA"
+    set CommandLine "|$Remind -itkremind=1 -pp -y -l EXTRA"
+    set PSCmd "$Remind -pp -l EXTRA"
     set i 0
     while {$i < $argc} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
@@ -846,19 +851,21 @@ proc ConfigureCalWindow { month year firstDay numDays } {
 proc FillCalWindow {} {
     set FileName ""
     set LineNo 0
-    global DayNames CurYear CurMonth MonthNames CommandLine Option
+    global DayNames CurYear CurMonth MonthNames CommandLine Option TagToObj
+
+    array unset TagToObj
 
     Status "Firing off Remind..."
     set month [lindex $MonthNames $CurMonth]
 
     set cmd [regsub EXTRA $CommandLine $Option(ExtraRemindArgs)]
     set file [open "$cmd $month $CurYear" r]
-    # Look for # rem2ps begin line
+    # Look for # rem2ps2 begin line
     while { [gets $file line] >= 0 } {
-	if { [string compare "$line" "# rem2ps begin"] == 0 } { break }
+	if { [string compare "$line" "# rem2ps2 begin"] == 0 } { break }
     }
 
-    if { [string compare "$line" "# rem2ps begin"] != 0 } {
+    if { [string compare "$line" "# rem2ps2 begin"] != 0 } {
 	Status "Problem reading results from Remind!"
 	after 5000 DisplayTime
 	catch { close $file }
@@ -876,19 +883,33 @@ proc FillCalWindow {} {
 
     set fntag "x"
     while { [gets $file line] >= 0 } {
-	# File info
-	if { [ string match "# fileinfo *" $line ] } {
-	    regexp {fileinfo ([0-9]+) (.*)} $line all LineNo Filename
-	    set fntag "FILE_${LineNo}_${Filename}"
+	# Ignore unless begins with left brace
+	if { ! [string match "\{*" $line]} {
+	    continue
 	}
 
-	# Skip comments
-	if { [string match "#*" $line] } {
+	if {[catch {set obj [::json::json2dict $line]}]} {
 	    continue
 	}
-	if { [regexp {^([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]) +([^ ]+) +([^ ]+) +[^ ]+ +[^ ]+(.*)} $line all year month day type tag stuff] == 0 } {
-	    continue
+
+	if {[dict exists $obj filename]} {
+	    set fntag [string cat "FILE_" [dict get $obj lineno] "_" [dict get $obj filename]]
 	}
+
+	set date [dict get $obj date]
+	regexp {^([0-9][0-9][0-9][0-9]).([0-9][0-9]).([0-9][0-9])} $date all year month day
+	if {[dict exists $obj passthru]} {
+	    set type [dict get $obj passthru]
+	} else {
+	    set type "*"
+	}
+	if {[dict exist $obj tags]} {
+	    set tag [dict get $obj tags]
+	} else {
+	    set tag "*"
+	}
+	set stuff [dict get $obj body]
+
 	set day [string trimleft $day 0]
 	set n [expr $day+$offset]
 	set month [string trimleft $month 0]
@@ -944,6 +965,7 @@ proc FillCalWindow {} {
 	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" $extratags $fntag]
 	    .cal.t$n tag bind "TKTAG$tagno" <Enter> "TaggedEnter .cal.t$n"
 	    .cal.t$n tag bind "TKTAG$tagno" <Leave> "TaggedLeave .cal.t$n"
+	    set TagToObj(TKTAG$tagno) $obj
 	} else {
 	    .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
 	}
@@ -2544,7 +2566,7 @@ proc ScanForTags { fname } {
 #  Scans the file for specified tag and returns the "options" list for the
 #  reminder.
 #***********************************************************************
-proc ReadTaggedOptions { tag } {
+proc ReadTaggedOptionsX { tag } {
     global AppendFile
     if {[catch { set f [open $AppendFile "r"]}]} {
 	return ""
@@ -2560,6 +2582,54 @@ proc ReadTaggedOptions { tag } {
     return ""
 }
 
+proc ReadTaggedOptions { tag } {
+    global TagToObj MonthNames
+    if {![info exists TagToObj($tag)]} {
+	return ""
+    }
+    set obj $TagToObj($tag)
+    set ans ""
+    if {![dict exists $obj skip]} {
+	lappend ans -global-SkipType 1
+    } else {
+	set s [dict get $obj skip]
+	if {"$s" == "SKIP"} {
+	    lappend ans -global-SkipType 2
+	} else if {"$s" == "BEFORE"} {
+	    lappend ans -global-SkipType 3
+	} else if {"$s" == "AFTER"} {
+	    lappend ans -global-SkipType 2
+	} else {
+	    lappend ans -global-SkipType 1
+	}
+    }
+
+    if {[dict exists $obj d]} {
+	lappend ans -text-day1 [dict get $obj d]
+    } else {
+	lappend ans -text-day1 {every day}
+    }
+    if {[dict exists $obj m]} {
+	lappend ans -text-mon1 [lindex $MonthNames [expr [dict get $obj m] -1]]
+    } else {
+	lappend ans -text-mon1 {every month}
+    }
+    if {[dict exists $obj y]} {
+	lappend ans -text-year1 [dict get $obj y]
+    } else {
+	lappend ans -text-year1 {every year}
+    }
+
+    if {[dict exists $obj rep]} {
+	lappend ans -global-repbut 1
+	lappend ans -text-repdays [dict get $obj rep]
+    } else {
+	lappend ans -global-repbut 0
+	lappend ans -text-repdays 1
+    }
+
+    return $ans
+}
 proc FireEditor { w } {
     global Option
     global EditorPid

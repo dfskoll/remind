@@ -164,7 +164,7 @@ set Rem2PS "rem2ps"
 
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
-set ReminderFile [file nativename "~/.reminders"]
+set ReminderFile [file nativename "~/.reminders2"]
 
 set EditorPid -1
 
@@ -967,7 +967,7 @@ proc FillCalWindow {} {
 	}
 	.cal.t$n configure -state normal
 	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
-	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" $extratags $fntag]
+	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" "date_$date" $extratags $fntag]
 	    .cal.t$n tag bind "TKTAG$tagno" <Enter> "TaggedEnter .cal.t$n"
 	    .cal.t$n tag bind "TKTAG$tagno" <Leave> "TaggedLeave .cal.t$n"
 	    set TagToObj(TKTAG$tagno) $obj
@@ -2549,8 +2549,8 @@ proc ScanForTags { fname } {
     }
     while {[gets $f line] >= 0} {
 	switch -regexp -- $line {
-	    {^# TKTAG[0-9]+} {
-		regexp {^# TKTAG([0-9]+)} $line dummy tagno
+	    {^REM TAG TKTAG[0-9]+} {
+		regexp {^REM TAG TKTAG([0-9]+)} $line dummy tagno
 		if {$tagno > $HighestTagSoFar} {
 		    set HighestTagSoFar $tagno
 		}
@@ -2565,13 +2565,14 @@ proc ScanForTags { fname } {
 # %PROCEDURE: ReadTaggedOptions
 # %ARGUMENTS:
 #  tag -- tag to match
+#  date -- today's date
 # %RETURNS:
 #  A list of options for the dialog box for the tagged reminder
 # %DESCRIPTION:
 #  Scans the file for specified tag and returns the "options" list for the
 #  reminder.
 #***********************************************************************
-proc ReadTaggedOptionsX { tag } {
+proc ReadTaggedOptionsX { tag date } {
     global AppendFile
     if {[catch { set f [open $AppendFile "r"]}]} {
 	return ""
@@ -2587,16 +2588,17 @@ proc ReadTaggedOptionsX { tag } {
     return ""
 }
 
-proc ReadTaggedOptions { tag } {
-    global TagToObj MonthNames
+proc ReadTaggedOptions { tag date } {
+    global TagToObj MonthNames EnglishDayNames
     if {![info exists TagToObj($tag)]} {
 	return ""
     }
     set obj $TagToObj($tag)
     set ans ""
-    set date [dict get $obj date]
     regexp {^([0-9][0-9][0-9][0-9]).([0-9][0-9]).([0-9][0-9])} $date all y m d
-
+    set m [string trimleft $m 0]
+    set d [string trimleft $d 0]
+    set y [string trimleft $y 0]
     if {![dict exists $obj skip]} {
 	lappend ans -global-SkipType 1
     } else {
@@ -2606,7 +2608,7 @@ proc ReadTaggedOptions { tag } {
 	} elseif {"$s" == "BEFORE"} {
 	    lappend ans -global-SkipType 3
 	} elseif {"$s" == "AFTER"} {
-	    lappend ans -global-SkipType 2
+	    lappend ans -global-SkipType 4
 	} else {
 	    lappend ans -global-SkipType 1
 	}
@@ -2927,8 +2929,14 @@ proc EditTaggedReminder { w } {
 	return
     }
 
+    # Get the date
+    set index [lsearch -glob [$w tag names current] "date_*"]
+    if {$index < 0} {
+	return
+    }
+    set date [string range [lindex [$w tag names current] $index] 5 end]
     # Read in options
-    set opts [ReadTaggedOptions $tag]
+    set opts [ReadTaggedOptions $tag $date]
     if {$opts == ""} {
 	return
     }
@@ -3015,41 +3023,23 @@ proc DeleteTaggedReminder { tag } {
     set out [open $tmpfile "w"]
     set in [open $AppendFile "r"]
 
-    set foundStart 0
-    set foundEnd 0
+    set found 0
 
     while {[gets $in line] >= 0} {
-	if {[string match "# $tag *" $line]} {
-	    set foundStart 1
-	    break
+	if {[string match "REM TAG $tag *" $line]} {
+	    set found 1
+	    continue
 	}
 	puts $out $line
     }
 
-    if {! $foundStart} {
+    if {! $found } {
 	close $in
 	close $out
 	file delete $tmpfile
-	error "Did not find start of reminder with tag $tag"
+	error "Did not find reminder with tag $tag"
     }
 
-    while {[gets $in line] >= 0} {
-	if { $line == "# TKEND"} {
-	    set foundEnd 1
-	    break
-	}
-    }
-
-    if {! $foundEnd} {
-	close $in
-	close $out
-	file delete $tmpfile
-	error "Did not find end of reminder with tag $tag"
-    }
-
-    while {[gets $in line] >= 0} {
-	puts $out $line
-    }
     close $in
     close $out
     file rename -force -- $tmpfile $AppendFile
@@ -3073,46 +3063,25 @@ proc ReplaceTaggedReminder { tag rem opts } {
     set out [open $tmpfile "w"]
     set in [open $AppendFile "r"]
 
-    set foundStart 0
-    set foundEnd 0
+    set found 0
 
     while {[gets $in line] >= 0} {
-	if {[string match "# $tag *" $line]} {
-	    set foundStart 1
-	    break
-	}
-	puts $out $line
-    }
-
-    if {! $foundStart} {
-	close $in
-	close $out
-	file delete $tmpfile
-	error "Did not find start of reminder with tag $tag"
-    }
-
-    # Consume the old reminder
-    while {[gets $in line] >= 0} {
-	if { $line == "# TKEND"} {
-	    set foundEnd 1
-	    break
+	if {[string match "REM TAG $tag *" $line]} {
+	    # Write the new reminder
+	    WriteReminder $out $tag $rem $opts
+	    set found 1
+	} else {
+	    puts $out $line
 	}
     }
 
-    if {! $foundEnd} {
+    if {! $found} {
 	close $in
 	close $out
 	file delete $tmpfile
-	error "Did not find end of reminder with tag $tag"
+	error "Did not find reminder with tag $tag"
     }
 
-    # Write the new reminder
-    WriteReminder $out $tag $rem $opts
-
-    # Copy rest of file over
-    while {[gets $in line] >= 0} {
-	puts $out $line
-    }
     close $in
     close $out
     file rename -force -- $tmpfile $AppendFile
@@ -3131,14 +3100,14 @@ proc ReplaceTaggedReminder { tag rem opts } {
 #  Writes a reminder to a file
 #***********************************************************************
 proc WriteReminder { out tag rem opts } {
-    puts $out "# $tag Next reminder was created with TkRemind.  DO NOT EDIT"
-    puts $out "# $opts"
+    #puts $out "# $tag Next reminder was created with TkRemind.  DO NOT EDIT"
+    #puts $out "# $opts"
     if {[string range $rem 0 3] == "REM "} {
 	puts $out "REM TAG $tag [string range $rem 4 end]"
     } else {
 	puts $out $rem
     }
-    puts $out "# TKEND"
+    #puts $out "# TKEND"
 }
 
 #***********************************************************************

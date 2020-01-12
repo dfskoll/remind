@@ -222,7 +222,7 @@ set PrintEncoding 0
 set PrintMargins 36pt
 set PrintSmallCalendars 1
 
-set WarningHeaders [list "# Lines staring with REM TAG TKTAGnnn ... were created by tkremind" "# Do not edit them by hand or results may be unpredictable." ""]
+set WarningHeaders [list "# Lines staring with REM TAG TKTAGnnn ... were created by tkremind" "# Do not edit them by hand or results may be unpredictable."]
 
 # Highest tag seen so far.  Array of tags is stored in ReminderTags()
 set HighestTagSoFar 0

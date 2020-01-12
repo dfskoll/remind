@@ -309,6 +309,7 @@ proc Initialize {} {
 	catch {
 	    set out [open $ReminderFile w]
 	    write_warning_headers $out
+	    puts $out ""
 	    close $out
 	}
     }
@@ -321,6 +322,7 @@ proc Initialize {} {
 	if {![catch {
 	    set out [open $AppendFile "a"]
 	    write_warning_headers $out
+	    puts $out ""
 	    close $out}]} {
 	    tk_dialog .error "Created File" "Created blank file `$AppendFile'" info 0 "OK"
 	}

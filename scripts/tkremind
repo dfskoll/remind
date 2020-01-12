@@ -222,12 +222,31 @@ set PrintEncoding 0
 set PrintMargins 36pt
 set PrintSmallCalendars 1
 
+set WarningHeaders [list "# Lines staring with REM TAG TKTAGnnn ... were created by tkremind" "# Do not edit them by hand or results may be unpredictable." ""]
+
 # Highest tag seen so far.  Array of tags is stored in ReminderTags()
 set HighestTagSoFar 0
 
 proc get_weekday { yyyymmdd } {
     global EnglishDayNames
     return [lindex $EnglishDayNames [clock format [clock scan $yyyymmdd] -format %w -locale C]]
+}
+
+proc write_warning_headers { out } {
+    global WarningHeaders
+    foreach h $WarningHeaders {
+	puts $out $h
+    }
+}
+
+proc is_warning_header { line } {
+    global WarningHeaders
+    foreach h $WarningHeaders {
+	if {"$line" == "$h"} {
+	    return 1
+	}
+    }
+    return 0
 }
 
 #***********************************************************************
@@ -287,7 +306,11 @@ proc Initialize {} {
 	if {$ans != 0} {
 	    exit 1
 	}
-	catch {close [open "$ReminderFile" w]}
+	catch {
+	    set out [open $ReminderFile w]
+	    write_warning_headers $out
+	    close $out
+	}
     }
     if {! [file readable $ReminderFile]} {
 	tk_dialog .error "TkRemind: Error" "Could not create reminder file `$ReminderFile'" error 0 "Exit"
@@ -295,7 +318,10 @@ proc Initialize {} {
     }
 
     if {[file isdirectory $ReminderFile] && ! [file exists $AppendFile]} {
-	if {![catch {close [open "$AppendFile" "a"]}]} {
+	if {![catch {
+	    set out [open $AppendFile "a"]
+	    write_warning_headers $out
+	    close $out}]} {
 	    tk_dialog .error "Created File" "Created blank file `$AppendFile'" info 0 "OK"
 	}
     }
@@ -3017,15 +3043,20 @@ proc UniqueFileName { stem } {
 #***********************************************************************
 proc DeleteTaggedReminder { tag } {
     global AppendFile
+    global HighestTagSoFar
 
     set tmpfile [UniqueFileName $AppendFile]
     set out [open $tmpfile "w"]
+    write_warning_headers $out
     set in [open $AppendFile "r"]
 
     set found 0
 
     set tagno 0
     while {[gets $in line] >= 0} {
+	if {[is_warning_header $line]} {
+	    continue
+	}
 	if {[string match "REM TAG $tag *" $line]} {
 	    set found 1
 	    continue
@@ -3057,6 +3088,7 @@ proc DeleteTaggedReminder { tag } {
 	error "Did not find reminder with tag $tag"
     }
 
+    set HighestTagSoFar $tagno
     close $in
     close $out
     file rename -force -- $tmpfile $AppendFile
@@ -3078,11 +3110,15 @@ proc ReplaceTaggedReminder { tag rem opts } {
 
     set tmpfile [UniqueFileName $AppendFile]
     set out [open $tmpfile "w"]
+    write_warning_headers $out
     set in [open $AppendFile "r"]
 
     set found 0
 
     while {[gets $in line] >= 0} {
+	if {[is_warning_header $line]} {
+	    continue
+	}
 	if {[string match "REM TAG $tag *" $line]} {
 	    # Write the new reminder
 	    WriteReminder $out $tag $rem $opts

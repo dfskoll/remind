@@ -1562,7 +1562,7 @@ proc OptionsToRemindDialog { w opts } {
 	if {$TwentyFourHourMode} {
 	    if {"$ampm" != ""} {
 		if {"$ampm" == "PM" && $hour < 12} {
-		    incr hour 12;
+		    incr hour 12
 		    $w.timehour configure -text $hour
 		}
 	    }
@@ -2569,27 +2569,10 @@ proc ScanForTags { fname } {
 # %RETURNS:
 #  A list of options for the dialog box for the tagged reminder
 # %DESCRIPTION:
-#  Scans the file for specified tag and returns the "options" list for the
-#  reminder.
+#  Converts the JSON dictionary to a list of options for dialog box
 #***********************************************************************
-proc ReadTaggedOptionsX { tag date } {
-    global AppendFile
-    if {[catch { set f [open $AppendFile "r"]}]} {
-	return ""
-    }
-    while {[gets $f line] >= 0} {
-	if {[string match "# $tag *" $line]} {
-	    gets $f line
-	    close $f
-	    return [string range $line 2 end]
-	}
-    }
-    close $f
-    return ""
-}
-
 proc ReadTaggedOptions { tag date } {
-    global TagToObj MonthNames EnglishDayNames
+    global TagToObj MonthNames EnglishDayNames TwentyFourHourMode
     if {![info exists TagToObj($tag)]} {
 	return ""
     }
@@ -2762,7 +2745,23 @@ proc ReadTaggedOptions { tag date } {
 	lappend ans -global-timebut 1
 	set hour [expr $t / 60]
 	set minute [format %02d [expr $t % 60]]
-	lappend ans -text-timehour $hour
+	if {$hour == 0 && !$TwentyFourHourMode} {
+	    lappend ans -text-timehour 12
+	    lappend ans -text-ampm AM
+	} else {
+	    if {$TwentyFourHourMode} {
+		lappend ans -text-timehour $hour
+	    } else {
+		if {$hour >= 12} {
+		    incr $hour -12
+		    lappend ans -text-timehour $hour
+		    lappend ans -text-ampm PM
+		} else {
+		    lappend ans -text-timehour $hour
+		    lappend ans -text-ampm AM
+		}
+	    }
+	}
 	lappend ans -text-timemin $minute
 	if {[dict exists $obj tdelta]} {
 	    lappend ans -global-timeadvbut 1
@@ -3030,6 +3029,16 @@ proc DeleteTaggedReminder { tag } {
 	    set found 1
 	    continue
 	}
+	# Delete the old comment lines
+	if {[string match "# TKTAG*" $line]} {
+	    continue
+	}
+	if {[string match "# -global-OptionType *" $line]} {
+	    continue
+	}
+	if {[string match "# TKEND" $line]} {
+	    continue
+	}
 	puts $out $line
     }
 
@@ -3071,6 +3080,16 @@ proc ReplaceTaggedReminder { tag rem opts } {
 	    WriteReminder $out $tag $rem $opts
 	    set found 1
 	} else {
+	    # Delete the old comment lines
+	    if {[string match "# TKTAG*" $line]} {
+		continue
+	    }
+	    if {[string match "# -global-OptionType *" $line]} {
+		continue
+	    }
+	    if {[string match "# TKEND" $line]} {
+		continue
+	    }
 	    puts $out $line
 	}
     }

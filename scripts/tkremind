@@ -2871,19 +2871,46 @@ proc ReadTaggedOptions { tag date } {
     if {[dict exists $obj rep]} {
 	# Repeat must be type 1
 	lappend ans -global-OptionType 1
+	lappend ans -text-day2 $d
+	lappend ans -text-mon2 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-mon3 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-year2 $y
+	lappend ans -text-year3 $y
     } elseif {![dict exists $obj wd]} {
 	# No weekdays - must be type 1
 	lappend ans -global-OptionType 1
+	lappend ans -text-day2 $d
+	lappend ans -text-mon2 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-mon3 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-year2 $y
+	lappend ans -text-year3 $y
     } elseif {![dict exists $obj d]} {
 	# No day... must be "every wkday in ..."
 	lappend ans -global-OptionType 3
+	lappend ans -text-day1 $d
+	lappend ans -text-mon1 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-year1 $y
+	lappend ans -text-day2 $d
+	lappend ans -text-mon2 [lindex $MonthNames [expr $m - 1]]
+	lappend ans -text-year2 $y
     } else {
 	set day [dict get $obj d]
 	# Take a guess based on day
 	if {$day == 1 || $day == 8 || $day == 15 || $day == 22} {
 	    lappend ans -global-OptionType 3
+	    lappend ans -text-day1 $d
+	    lappend ans -text-mon1 [lindex $MonthNames [expr $m - 1]]
+	    lappend ans -text-year1 $y
+	    lappend ans -text-day2 $d
+	    lappend ans -text-mon2 [lindex $MonthNames [expr $m - 1]]
+	    lappend ans -text-year2 $y
 	} else {
 	    lappend ans -global-OptionType 2
+	    lappend ans -text-day1 $d
+	    lappend ans -text-mon1 [lindex $MonthNames [expr $m - 1]]
+	    lappend ans -text-year1 $y
+	    lappend ans -text-mon3 [lindex $MonthNames [expr $m - 1]]
+	    lappend ans -text-year3 $y
 	}
     }
     return $ans

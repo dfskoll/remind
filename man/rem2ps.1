@@ -403,9 +403,16 @@ that don't care about this information should ignore lines starting with
 "#" (except, of course, for the # rem2ps lines.)
 .PP
 .SH REM2PS JSON INPUT FORMAT (-PP OPTION)
-\fBRemind \-pp\fR sends the following lines to standard output.  They are
-designed to be easily parsed, but contain much more information than the
-old-style \fBremind -p\fR output.  The lines are as follows:
+\fBRemind \-pp\fR sends the following lines to standard output.  They
+are designed to be easily parsed, but contain much more information
+than the old-style \fBremind -p\fR output.  The extra information
+contains a representation of the parsed "REM" statement, which could
+allow converters to better preserve semantics of a reminder.  For
+example, this format passes enough information to allow a back-end to
+(in many cases) determine a reminder's recurrence rather than just treating
+each reminder as a one-off event.
+.PP
+The lines emitted by \fBremind \-pp\fR are as follows:
 .TP
 .B # rem2ps2 begin
 This line signifies the start of calendar data.  Back-ends can search
@@ -444,11 +451,17 @@ Present if \fBRemind\fR was invoked with the \fB\-l\fR option.
 .B nonconst_expr 1
 If the reminder contained a non-constant expression that had to be evaluated
 to determine the trigger date, this key will be present with the value 1.
+If this key is present, then it is unsafe for a back-end to rely on
+recurrence semantics or even the semantics of any part of the parsed
+reminder, as they may have been computed in a way that cannot be expressed
+in JSON.
 .TP
 .B if_depth \fIn\fR
 If the reminder is inside one or more IF or ELSE statements, this key
-will be present and the value will be the number of nested IFs from the
-top-level to the reminder.
+will be present and the value will be the number of nested IFs from
+the top-level to the reminder.  Back-ends should be wary of
+interpreting recurrence semantics of reminders within an IF or ELSE
+block.
 .TP
 .B passthru \fIspecial\fR
 If the reminder was a SPECIAL reminder, the \fBpassthru\fR key will be

@@ -1384,7 +1384,8 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
     if (e->trig.wd != NO_WD) {
 	printf("\"wd\":[");
 	done = 0;
-	for (int i=0; i<7; i++) {
+	int i;
+	for (i=0; i<7; i++) {
 	    if (e->trig.wd & (1 << i)) {
 		if (done) {
 		    printf(",");
@@ -1436,7 +1437,8 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
     if (e->trig.localomit != NO_WD) {
 	printf("\"localomit\":[");
 	done = 0;
-	for (int i=0; i<7; i++) {
+	int i;
+	for (i=0; i<7; i++) {
 	    if (e->trig.localomit & (1 << i)) {
 		if (done) {
 		    printf(",");

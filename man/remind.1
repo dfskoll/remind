@@ -106,17 +106,20 @@ If you immediately follow the \fBs\fR with the letter
 day they actually occur \fIas well as\fR on any preceding days specified
 by the reminder's \fIdelta\fR.
 .TP
-.B \-p\fR[\fBa\fR]\fIn\fR
+.B \-p\fR[\fBa\fR][\fBp\fR]\fIn\fR
 The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
-\fBRem2PS\fR program, which creates a PostScript calendar.  For this
+\fBRem2PS\fR program, which creates a PostScript calendar, and various
+other back-end programs.  For this
 option, \fIn\fR cannot start with "+"; it must specify a number of months.
 The format of the \fB\-p\fR output is described in the \fBrem2ps(1)\fR
 man page.  If you immediately follow the \fBp\fR with the letter
 \fBa\fR, then \fBRemind\fR displays reminders on the calendar on the
 day they actually occur \fIas well as\fR on any preceding days specified
-by the reminder's \fIdelta\fR.
-
+by the reminder's \fIdelta\fR.  If you follow the \fBp\fR with another
+\fBp\fR, then \fBRemind\fR uses a more comprehensive JSON-based
+format rather than the "simple calendar" format.  This format is
+also documented in the \fBrem2ps(1)\fR man page.
 .TP
 .B \-l
 If you use the \-l option in conjunction with the \-p option, then

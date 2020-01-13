@@ -5,9 +5,9 @@ rem2ps \- draw a PostScript calendar from Remind output
 .SH SYNOPSIS
 .B rem2ps [\fIoptions\fR]
 .SH DESCRIPTION
-\fBRem2ps\fR reads the standard input, which should be the results of running
-\fBRemind\fR with the \fB\-p\fR option.  It emits PostScript code (which
-draws a calendar) to the standard output.
+\fBRem2ps\fR reads the standard input, which should be the results of
+running \fBRemind\fR with the \fB\-p\fR or \fB\-pp\fR option.  It
+emits PostScript code (which draws a calendar) to the standard output.
 .PP
 See the section "Rem2PS Input Format" for details about the \fB\-p\fR
 data.  This may be useful if you wish to create other \fBRemind\fR
@@ -267,7 +267,7 @@ hold:
 .TP
 o
 The PostScript origin is at the bottom left-hand corner of the page, and
-PostScript units of 1/72" are in effect.
+PostScript units of 1/72 inch are in effect.
 .TP
 o
 The variables MinX, MinY, MaxX and MaxY define the bounding box within
@@ -313,7 +313,13 @@ Use that file with the \fBRem2ps\fR \fB\-p\fR option to create calendars
 with the year and month in large grey letters in the background of the
 calendar.
 .PP
-.SH REM2PS INPUT FORMAT
+.SH REM2PS INPUT FORMAT (-P OPTION)
+The \fB\-p\fR option is an older, simpler interchange format used by
+\fBReminf\fR to communicate with back-ends.  New back-ends are
+encoraged to support the new \fB\-pp\fR format preferably, though they
+are encouraged to support the older \fB\-p\fR format as well if the
+older format contains enough information for them to work properly.
+.PP
 \fBRemind \-p\fR sends the following lines to standard output.
 The information is designed to be easily parsed by back-end programs:
 .TP
@@ -375,6 +381,9 @@ was provided.
 .PP
 \fIbody\fR is the body of the reminder.
 .PP
+Future versions of \fBRemind\fR may add additional keys to the JSON
+object.  Back-ends \fImust\fR ignore keys they don't recognize.
+.PP
 After a month's worth of reminders have been emitted, \fBRemind\fR
 emits the line:
 .PP
@@ -393,6 +402,172 @@ the line number and file name of the file containing the reminder.  Back-ends
 that don't care about this information should ignore lines starting with
 "#" (except, of course, for the # rem2ps lines.)
 .PP
+.SH REM2PS JSON INPUT FORMAT (-PP OPTION)
+\fBRemind \-pp\fR sends the following lines to standard output.  They are
+designed to be easily parsed, but contain much more information than the
+old-style \fBremind -p\fR output.  The lines are as follows:
+.TP
+.B # rem2ps2 begin
+This line signifies the start of calendar data.  Back-ends can search
+for it to verify they are being fed correct information.  Note the
+"2" after "rem2ps", which distinguishes this format from the older \fB\-p\fR
+format.
+.TP
+\fImonth_name year num_days first_day monday_first\fR
+Same as the \fB\-p\fR format
+.TP
+\fIsun mon tue wed thu fri sat\fR
+Same as the \fB\-p\fR format
+.TP
+\fInext_mon next_days\fR
+Same as the \fB\-p\fR format
+.TP
+\fIprev_mon prev_days\fR
+Same as the \fB\-p\fR format
+.PP
+The remaining data consists of calendar entries expressed as a JSON object
+on a single line.  Each such line will begin with "{" and will be a well-formed
+JSON object.  The keys that may be present in the JSON object are as
+follows:
+.TP
+.B date \fIYYYY-MM-DD\fR
+The \fbdate\fR key will \fIalways\fR be present; it is the trigger date
+of the reminder expressed as a string in the format \fIYYYY-MM-DD\fR
+.TP
+.B filename \fIf\fR
+The filename in which the reminder was found.  Present if \fBRemind\fR
+was invoked with the \fB\-l\fR option.
+.B lineno \fIn\fR
+The line number within the file on which the reminder was found.
+Present if \fBRemind\fR was invoked with the \fB\-l\fR option.
+.TP
+.B nonconst_expr 1
+If the reminder contained a non-constant expression that had to be evaluated
+to determine the trigger date, this key will be present with the value 1.
+.TP
+.B if_depth \fIn\fR
+If the reminder is inside one or more IF or ELSE statements, this key
+will be present and the value will be the number of nested IFs from the
+top-level to the reminder.
+.TP
+.B passthru \fIspecial\fR
+If the reminder was a SPECIAL reminder, the \fBpassthru\fR key will be
+present and the value will be the type of SPECIAL (such as SHADE, COLOR,
+MOON, etc.)
+.TP
+.B tags \fIdata\fR
+If any TAG clauses are present, the \fBtag\fR key will be present and consist
+of a comma-separated list of tags.
+.TP
+.B time \fIt\fR
+If an AT clause was present, this key will contain the time of the AT clause
+in minutes after midnight.
+.TP
+.B tdelta \fIn\fR
+If a time delta (+n after an AT clause) was present, this key contains the
+delta value in minutes.
+.TP
+.B trep \fIn\fR
+If a time repeat (*n after an AT clause) was present, this key contains the
+repeat value in minutes.
+.TP
+.B eventduration \fIn\fR
+If a DURATION clause was present, this key contains the event duration in
+minutes.
+.TP
+.B duration \fIn\fR
+If a DURATION clause was present, this key contains today's duration in
+minutes.  See the \fBremind(1)\fR man page, "MULTI-DAY EVENTS", for a
+discussion of duration vs. event duration.
+.TP
+.B eventstart \fIdt\fR
+If an AT clause was present, this key contains the event start time in
+the format \fIYYYY-MM-DDTHH:MM\fR.
+.TP
+.B back \fIn\fR
+If the reminder contained a "back" clause (\-n or \-\-n), this key
+contains the back value.  If the "back" value was \-n, the value will
+be positive; if it was \-\-n, the value will be negative.
+.TP
+.B delta \fIn\fR
+If the reminder contained a "delta" clause (\+n or \+\+n), this key
+contains the delta value.  If the "delta" value was \+n, the value will
+be positive; if it was \+\+n, the value will be negative.
+.TP
+.B rep \fIn\fR
+If the reminder contained a "repeat" clause (*n), this key contains
+the repeat value.
+.TP
+.B skip \fItype\fR
+If the reminder contained a SKIP, BEFORE or AFTER keyword, then this
+key will contain that keyword.
+.TP
+.B localomit \fIarray\fR
+If the reminder contains a local OMIT keyword, this key will be present.
+Its value will be an array of English day names that are OMITted.
+.TP
+.B wd \fIarray\fR
+If the reminder contains one or more weekdays, this key will be present.
+Its value will be an array of English day names that are present.
+.TP
+.B d \fIn\fR
+If a day-of-month is present in the reminder specification, this key
+will be present and its value will be the day number.
+.TP
+.B m \fIn\fR
+If a month is present in the reminder specification, this key
+will be present and its value will be the month number.
+.TP
+.B y \fIn\fR
+If a year is present in the reminder specification, this key
+will be present and its value will be the year.
+.TP
+.B until \fIYYYY-MM-DD\fR
+If the reminder contains an UNTIL or THROUGH clause, this key
+will be present.  Its value will be a string of the form YYYY-MM-DD.
+.TP
+.B once 1
+If the reminder contains a ONCE keyword, this key will be present
+with a value of 1.
+.TP
+.B scanfrom \fIYYYY-MM-DD\fR
+If the reminder contains a SCANFROM keyword, this key will be present
+and its value will be a string of the form YYYY-MM-DD.
+.TP
+.B from \fIYYYY-MM-DD\fR
+If the reminder contains a FROM keyword, this key will be present
+and its value will be a string of the form YYYY-MM-DD.
+.TP
+.B priority \fIn\fR
+The priority of the reminder.  Always present; if no PRIORITY keyword
+is specified, then a reminder has a default priority of 5000.
+.TP
+.B r \fIn\fR
+For a SHADE or COLOR special, the red color component.
+.TP
+.B g \fIn\fR
+For a SHADE or COLOR special, the green color component.
+.TP
+.B b \fIn\fR
+For a SHADE or COLOR special, the blue color component.
+.TP
+.B body \fIbody\fR
+The body of the reminder to issue.  Always present.
+.TP
+.B rawbody \fIraw\fR
+The "raw" body of the reminder, before any expression-pasting or
+substitution-sequence processing.  If the raw body would be the same
+as the processed body, then this key is not present.
+.PP
+After a month's worth of reminders have been emitted, \fBRemind\fR
+emits the line:
+.PP
+\fB# rem2ps2 end
+.PP
+However, back-ends should keep reading until EOF in case more data for
+subsequent months is forthcoming.
+.PP
+
 .SH AUTHOR
 Rem2PS was written by Dianne Skoll <dianne@skoll.ca>
 .SH BUGS

@@ -477,7 +477,7 @@ proc CreateCalFrame { w dayNames } {
 	for {set j 0} {$j < 7} {incr j} {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
-		    -state disabled -relief flat -border 0 -padx 0 -pady 0
+		-state disabled -relief flat -border 0 -padx 0 -pady 0
 	    text $w.t$f -width 12 -height $h -border 1 -spacing3 3 -wrap word -relief flat \
 		-state disabled -takefocus 0 -cursor {}
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
@@ -519,6 +519,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
     for {set i 0} {$i < $first} {incr i} {
 	grid $w.l$i $w.t$i
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
+	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
 	foreach t [$w.t$i tag names] {
@@ -535,6 +536,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	set d [expr $i-$first+1]
 	$w.l$i configure -text $d -state normal -relief flat \
 		-command "ModifyDay $d $firstDay"
+	balloon_add_help $w.l$i "Add a reminder..."
 	$w.t$i configure -relief sunken -takefocus 1 -state normal
 	$w.t$i delete 1.0 end
 	foreach t [$w.t$i tag names] {
@@ -560,6 +562,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	    grid rowconfigure $w [expr $row+1] -weight 1
 	}
 	$w.l$i configure -text "" -command "" -state disabled -relief flat
+	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal
 	$w.t$i delete 1.0 end
 	foreach t [$w.t$i tag names] {
@@ -599,13 +602,21 @@ proc CreateCalWindow { dayNames } {
 
     frame .b
     button .b.prev -image leftarrow -width 24 -command {MoveMonth -1} -border 1
+    balloon_add_help .b.prev "Go to previous month"
     button .b.this -text {Today} -command {ThisMonth} -border 1
+    balloon_add_help .b.this "Go to this month"
     button .b.next -image rightarrow -width 24 -command {MoveMonth 1} -border 1
+    balloon_add_help .b.next "Go to next month"
     button .b.goto -text {Go To Date...} -command {GotoDialog} -border 1
+    balloon_add_help .b.goto "Go to a specific date"
     button .b.print -text {Print...} -command {DoPrint} -border 1
+    balloon_add_help .b.print "Print a PostScript calendar"
     button .b.queue -text {Queue...} -command {DoQueue} -border 1
+    balloon_add_help .b.queue "See the queue of pending reminders (debugging purposes only)"
     button .b.quit -text {Quit} -command {Quit} -border 1
+    balloon_add_help .b.quit "Quit TkRemind"
     button .b.options -text {Options...} -command EditOptions -border 1
+    balloon_add_help .b.options "Set TkRemind options"
     label .b.status -text "" -width 25 -relief sunken -border 1
     label .b.nqueued -text "" -width 20 -relief sunken -border 1
     pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
@@ -3456,6 +3467,123 @@ proc SetFonts {} {
 	font configure TkFixedFont -size 6
     }
     set SetFontsWorked 1
+}
+
+### Balloon help
+set Balloon(HelpTime) 400
+set Balloon(StayTime) 3500
+set Balloon(Font) fixed
+
+proc balloon_reset_timer { w } {
+    balloon_destroy_help_window
+    balloon_cancel_timer
+    balloon_schedule_help $w
+}
+
+proc balloon_destroy_help_window {} {
+    catch { destroy .balloonhelp }
+}
+
+proc balloon_cancel_timer {} {
+    global Balloon
+    catch { after cancel $Balloon(HelpId) }
+}
+
+proc balloon_schedule_help { w } {
+    global Balloon
+    if { $Balloon(MustLeave) } {
+	return
+    }
+    set Balloon(HelpId) [ after $Balloon(HelpTime) "balloon_popup_help $w" ]
+}
+
+proc balloon_popup_help { w } {
+    global Balloon
+    if {![info exists Balloon(helptext$w)]} {
+	return
+    }
+
+    if {[string compare [winfo containing [winfo pointerx .] [winfo pointery .]] $w]} {
+	return
+    }
+    set h .balloonhelp
+    toplevel $h -bg #000000
+    label $h.l -text $Balloon(helptext$w) -wraplength 200 -justify left -bg #FFFFC0 -bd 0
+    pack $h.l -padx 1 -pady 1 -ipadx 2 -ipady 1
+    wm overrideredirect $h 1
+    set geom [balloon_calculate_geometry $h]
+    wm geometry $h $geom
+    set Balloon(HelpId) [after $Balloon(StayTime) "catch { destroy $h }"]
+    set Balloon(MustLeave) 1
+}
+
+bind Balloon <Leave> {
+    set Balloon(MustLeave) 0
+    balloon_destroy_help_window
+    balloon_cancel_timer
+}
+
+bind Balloon <Enter> {
+    set Balloon(MustLeave) 0
+    balloon_reset_timer %W
+}
+
+bind Balloon <Any-Motion> "balloon_reset_timer %W"
+bind Balloon <Any-ButtonPress> {
+    set Balloon(MustLeave) 1
+    balloon_reset_timer %W
+}
+
+bind Balloon <Destroy> {
+    balloon_destroy_help_window
+    balloon_cancel_timer
+    catch { unset Balloon(helptext%W) }
+}
+
+proc balloon_add_help { w txt } {
+    global Balloon
+    if {"$txt" == ""} {
+	catch { unset Balloon(helptext$w) }
+	return
+    }
+    set Balloon(helptext$w) $txt
+    bindtags $w "Balloon [bindtags $w]"
+}
+
+proc balloon_calculate_geometry { w } {
+    set x [winfo pointerx $w]
+    set y [winfo pointery $w]
+    set mx [winfo screenwidth $w]
+    set my [winfo screenheight $w]
+    # Adjust for padding
+    set wid [expr [winfo reqwidth $w.l] + 6]
+    set h [expr [winfo reqheight $w.l] + 4]
+
+    # Try above-right of pointer
+    set tx [expr $x+3]
+    set ty [expr $y-3-$h]
+    if {$ty >= 0 && ($tx+$wid) <= $mx} {
+	return "+$tx+$ty"
+    }
+
+    # Try above-left of pointer
+    set tx [expr $x-3-$wid]
+    set ty [expr $y-3-$h]
+    if {$ty >= 0 && $tx >= 0} {
+	return "+$tx+$ty"
+    }
+
+    # Try below-right of pointer
+    set tx [expr $x+3]
+    set ty [expr $y+3]
+    if {$ty+$h <= $my && ($tx+$wid) <= $mx} {
+	return "+$tx+$ty"
+    }
+
+    # Darn... must be below-left
+    set tx [expr $x-3-$wid]
+    set ty [expr $y+3]
+    return "+$tx+$ty"
 }
 
 main

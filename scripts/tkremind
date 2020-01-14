@@ -1235,6 +1235,7 @@ proc GotoDialog {} {
     toplevel .g
     wm title .g "Go To Date"
     menubutton .g.mon -text "$month" -menu .g.mon.menu -relief raised
+    balloon_add_help .g.mon "Select a month"
     menu .g.mon.menu -tearoff 0
 
     foreach m $MonthNames {
@@ -1244,10 +1245,12 @@ proc GotoDialog {} {
     frame .g.y
     label .g.y.lab -text "Year: "
     entry .g.y.e -width 4
+    balloon_add_help .g.y.e "Enter a year"
     .g.y.e insert end $CurYear
     bind .g.y.e <Return> ".g.b.go flash; .g.b.go invoke"
     frame .g.b
     button .g.b.go -text "Go" -command {DoGoto}
+    balloon_add_help .g.b.go "Go to specified month and year"
     button .g.b.cancel -text "Cancel" -command { destroy .g }
     pack .g.b.go .g.b.cancel -expand 1 -fill x -side left
     pack .g.mon -fill x -expand 1
@@ -1344,14 +1347,19 @@ proc CreateModifyDialog {w day firstDay args} {
     # TYPE 1 REMINDER
     radiobutton $w.type1 -variable OptionType -value 1
     menubutton $w.day1 -text $day -relief raised -menu $w.day1.menu
+    balloon_add_help $w.day1 "Select a day"
     CreateDayMenu $w.day1
     menubutton $w.mon1 -text $month -relief raised -menu $w.mon1.menu
+    balloon_add_help $w.mon1 "Select a month"
     CreateMonthMenu $w.mon1
     menubutton $w.year1 -text $year -relief raised -menu $w.year1.menu
+    balloon_add_help $w.year1 "Select a year"
     CreateYearMenu $w.year1
     checkbutton $w.repbut -text "and repeating every"
+    balloon_add_help $w.repbut "Select to enable a recurring reminder"
     $w.repbut deselect
     menubutton $w.repdays -text 1 -relief raised -menu $w.repdays.menu
+    balloon_add_help $w.repdays "Select the repeat interval in days"
     CreateDayMenu $w.repdays 1 28 0
     label $w.label1a -text "day(s) thereafter"
     pack $w.type1 $w.day1 $w.mon1 $w.year1 $w.repbut $w.repbut $w.repdays $w.label1a -side left -anchor w -in $w.o1
@@ -1360,13 +1368,17 @@ proc CreateModifyDialog {w day firstDay args} {
     radiobutton $w.type2 -variable OptionType -value 2
     label $w.label2a -text First
     menubutton $w.wkday2 -text $wkday -relief raised -menu $w.wkday2.menu
+    balloon_add_help $w.wkday2 "Select a day of the week"
     CreateWeekdayMenu $w.wkday2
     label $w.label2b -text "on or after"
     menubutton $w.day2 -text $day -relief raised -menu $w.day2.menu
+    balloon_add_help $w.day2 "Select a day"
     CreateDayMenu $w.day2 1 31 0
     menubutton $w.mon2 -text $month -relief raised -menu $w.mon2.menu
+    balloon_add_help $w.mon2 "Select a month"
     CreateMonthMenu $w.mon2
     menubutton $w.year2 -text $year -relief raised -menu $w.year2.menu
+    balloon_add_help $w.year2 "Select a year"
     CreateYearMenu $w.year2
     pack $w.type2 $w.label2a $w.wkday2 $w.label2b $w.day2 $w.mon2 $w.year2 -side left -anchor w -in $w.o2
 
@@ -1384,6 +1396,7 @@ proc CreateModifyDialog {w day firstDay args} {
     }
     radiobutton $w.type3 -variable OptionType -value 3
     menubutton $w.ordinal -text $which -relief raised -menu $w.ordinal.menu
+    balloon_add_help $w.ordinal "Select the first, second, etc. weekday in a month"
     menu $w.ordinal.menu -tearoff 0
     $w.ordinal.menu add command -label "First" -command "$w.ordinal configure -text First"
     $w.ordinal.menu add command -label "Second" -command "$w.ordinal configure -text Second"
@@ -1392,33 +1405,43 @@ proc CreateModifyDialog {w day firstDay args} {
     $w.ordinal.menu add command -label "Last" -command "$w.ordinal configure -text Last"
     $w.ordinal.menu add command -label "Every" -command "$w.ordinal configure -text Every"
     menubutton $w.wkday3 -text $wkday -relief raised -menu $w.wkday3.menu
+    balloon_add_help $w.wkday3 "Select a day of the week"
     CreateWeekdayMenu $w.wkday3
     label $w.label3 -text "in"
     menubutton $w.mon3 -text $month -relief raised -menu $w.mon3.menu
+    balloon_add_help $w.mon3 "Select a month"
     CreateMonthMenu $w.mon3
     menubutton $w.year3 -text $year -relief raised -menu $w.year3.menu
+    balloon_add_help $w.year3 "Select a year"
     CreateYearMenu $w.year3
     pack $w.type3 $w.ordinal $w.wkday3 $w.label3 $w.mon3 $w.year3 -side left -anchor w -in $w.o3
 
     # EXPIRY DATE
     checkbutton $w.expbut -text "Expire after"
+    balloon_add_help $w.expbut "Select to enable an expiry date"
     $w.expbut deselect
     menubutton $w.expday -text $day -relief raised -menu $w.expday.menu
+    balloon_add_help $w.expday "Select expiry day"
     CreateDayMenu $w.expday 1 31 0
     menubutton $w.expmon -text $month -relief raised -menu $w.expmon.menu
+    balloon_add_help $w.expmon "Select expiry month"
     CreateMonthMenu $w.expmon 0
     menubutton $w.expyear -text $year -relief raised -menu $w.expyear.menu
+    balloon_add_help $w.expyear "Select expiry year"
     CreateYearMenu $w.expyear 0
 
     pack $w.expbut $w.expday $w.expmon $w.expyear -side left -anchor w -in $w.exp
 
     # ADVANCE NOTICE
     checkbutton $w.advbut -text "Issue"
+    balloon_add_help $w.advbut "Select to enable advance notification"
     $w.advbut deselect
     menubutton $w.advdays -text 3 -menu $w.advdays.menu -relief raised
+    balloon_add_help $w.advdays "Select number of days of advance warning"
     CreateDayMenu $w.advdays 1 10 0
     label $w.advlab -text "day(s) in advance"
     checkbutton $w.advcount -text "not counting holidays/weekend"
+    balloon_add_help $w.advcount "Select to avoid counting holidays/weekend as in advance warning days"
     $w.advcount select
     pack $w.advbut $w.advdays $w.advlab $w.advcount -side left -anchor w -in $w.adv
 
@@ -1427,6 +1450,7 @@ proc CreateModifyDialog {w day firstDay args} {
     pack $w.weeklab -side left -anchor w -in $w.weekend
     foreach d $EnglishDayNames {
 	checkbutton $w.d$d -text $d
+	balloon_add_help $w.d$d "Select to include $d in the definition of \"Weekend\""
 	$w.d$d deselect
 	pack $w.d$d -side left -anchor w -in $w.weekend
     }
@@ -1435,14 +1459,17 @@ proc CreateModifyDialog {w day firstDay args} {
 
     # TIMED REMINDER
     checkbutton $w.timebut -text "Timed reminder at"
+    balloon_add_help $w.timebut "Select if this event starts at a specific time"
     $w.timebut deselect
     menubutton $w.timehour -text "12" -menu $w.timehour.menu -relief raised
+    balloon_add_help $w.timehour "Select the starting time's hour"
     if {$TwentyFourHourMode} {
 	CreateDayMenu $w.timehour 0 23 0
     } else {
 	CreateDayMenu $w.timehour 1 12 0
     }
     menubutton $w.timemin -text "00" -menu $w.timemin.menu -relief raised
+    balloon_add_help $w.timemin "Select the starting time's minute"
     menu $w.timemin.menu -tearoff 0
     foreach i {00 05 10 15 20 25 30 35 40 45 50 55} {
 	$w.timemin.menu add command -label $i \
@@ -1451,14 +1478,17 @@ proc CreateModifyDialog {w day firstDay args} {
 
     if {!$TwentyFourHourMode} {
 	menubutton $w.ampm -text "PM" -menu $w.ampm.menu -relief raised
+	balloon_add_help $w.ampm "Select whether the time is AM or PM"
 	menu $w.ampm.menu -tearoff 0
 	$w.ampm.menu add command -label "AM" -command "$w.ampm configure -text {AM}"
 	$w.ampm.menu add command -label "PM" -command "$w.ampm configure -text {PM}"
     }
 
     checkbutton $w.timeadvbut -text "with"
+    balloon_add_help $w.timeadvbut "Select to be given advance warning prior to the start time"
     $w.timeadvbut deselect
     menubutton $w.timeadv -text "15" -menu $w.timeadv.menu -relief raised
+    balloon_add_help $w.timeadv "Select the number of minutes of advance warning"
     menu $w.timeadv.menu -tearoff 0
     foreach i {5 10 15 30 45 60} {
 	$w.timeadv.menu add command -label $i -command "$w.timeadv configure -text $i"
@@ -1466,8 +1496,10 @@ proc CreateModifyDialog {w day firstDay args} {
     label $w.timelab1 -text "minutes advance notice"
 
     checkbutton $w.timerepbut -text "repeated every"
+    balloon_add_help $w.timerepbut "Select to repeat the advance notice"
     $w.timerepbut deselect
     menubutton $w.timerep -text "5" -menu $w.timerep.menu -relief raised
+    balloon_add_help $w.timerep "Select how often to repeat the advance notice"
     menu $w.timerep.menu -tearoff 0
     foreach i {3 5 10 15 30} {
 	$w.timerep.menu add command -label $i -command "$w.timerep configure -text $i"
@@ -1481,14 +1513,17 @@ proc CreateModifyDialog {w day firstDay args} {
 
     # DURATION
     checkbutton $w.durationbut -text "Duration"
+    balloon_add_help $w.durationbut "Select if this event has a specific duration"
     $w.durationbut deselect
     menubutton $w.durationh -text "1" -menu $w.durationh.menu -relief raised
+    balloon_add_help $w.durationh "Select how many hours the event lasts"
     menu $w.durationh.menu -tearoff 0
-    foreach i {0 1 2 3 4 5 6 7 8 9 10 11 12} {
+    foreach i {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24} {
 	$w.durationh.menu add command -label $i -command "$w.durationh configure -text $i"
     }
     label $w.durationcolon -text ":"
     menubutton $w.durationm -text "00" -menu $w.durationm.menu -relief raised
+    balloon_add_help $w.durationm "Select how many minutes the event lasts (in addition to the hours)"
     menu $w.durationm.menu -tearoff 0
     foreach i {00 15 30 45} {
 	$w.durationm.menu add command -label $i -command "$w.durationm configure -text $i"
@@ -1506,6 +1541,7 @@ proc CreateModifyDialog {w day firstDay args} {
     # TEXT ENTRY
     label $w.msglab -text "Body:"
     entry $w.entry
+    balloon_add_help $w.entry "Enter the text of the reminder"
     pack $w.msglab -side left -anchor w -in $w.msg
     pack $w.entry -side left -anchor w -expand 1 -fill x -in $w.msg
 

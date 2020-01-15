@@ -127,14 +127,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (Iterations) {
-	    ClearGlobalOmits();
-	    DestroyOmitContexts();
-	    DestroyVars(0);
-	    DefaultColorR = -1;
-	    DefaultColorG = -1;
-	    DefaultColorB = -1;
-	    NumTriggered = 0;
-	    ClearLastTriggers();
+	    PerIterationInit();
 	    JulianToday++;
 	}
     }
@@ -150,6 +143,19 @@ void PurgeEchoLine(char const *fmt, ...)
     }
     va_end(argptr);
 
+}
+
+void
+PerIterationInit(void)
+{
+    ClearGlobalOmits();
+    DestroyOmitContexts();
+    DestroyVars(0);
+    DefaultColorR = -1;
+    DefaultColorG = -1;
+    DefaultColorB = -1;
+    NumTriggered = 0;
+    ClearLastTriggers();
 }
 
 /***************************************************************/

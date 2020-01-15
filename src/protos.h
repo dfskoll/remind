@@ -148,3 +148,4 @@ char const *SynthesizeTag(void);
 void ClearLastTriggers(void);
 void SaveLastTrigger(Trigger const *t);
 void SaveLastTimeTrig(TimeTrig const *t);
+void PerIterationInit(void);

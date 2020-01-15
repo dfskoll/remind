@@ -914,14 +914,7 @@ static void GenerateCalEntries(int col)
     Parser p;
 
 /* Do some initialization first... */
-    ClearGlobalOmits();
-    DestroyOmitContexts();
-    DestroyVars(0);
-    DefaultColorR = -1;
-    DefaultColorG = -1;
-    DefaultColorB = -1;
-    NumTriggered = 0;
-    ClearLastTriggers();
+    PerIterationInit();
 
     r=IncludeFile(InitialFile);
     if (r) {

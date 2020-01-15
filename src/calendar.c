@@ -1073,15 +1073,7 @@ static int DoCalRem(ParsePtr p, int col)
 
     int is_color, col_r, col_g, col_b;
 
-    is_color = (
-        DefaultColorR != -1
-        && DefaultColorG != -1
-        && DefaultColorB != -1);
-    if (is_color) {
-        col_r = DefaultColorR;
-        col_g = DefaultColorG;
-        col_b = DefaultColorB;
-    }
+    is_color = 0;
     DBufInit(&buf);
     DBufInit(&pre_buf);
     DBufInit(&raw_buf);
@@ -1090,6 +1082,20 @@ static int DoCalRem(ParsePtr p, int col)
     if ( (r=ParseRem(p, &trig, &tim, 1)) ) {
 	FreeTrig(&trig);
 	return r;
+    }
+
+    if (trig.typ == MSG_TYPE ||
+	trig.typ == CAL_TYPE ||
+	trig.typ == MSF_TYPE) {
+	is_color = (
+	    DefaultColorR != -1
+	    && DefaultColorG != -1
+	    && DefaultColorB != -1);
+	if (is_color) {
+	    col_r = DefaultColorR;
+	    col_g = DefaultColorG;
+	    col_b = DefaultColorB;
+	}
     }
 
 /* Don't include timed reminders in calendar if -a option supplied. */
@@ -1167,7 +1173,8 @@ static int DoCalRem(ParsePtr p, int col)
     /* If it's a plain reminder but we have a default color, add the
        three colors to the prebuf and change passthru to "COLOR" */
     if (trig.typ == MSG_TYPE ||
-	trig.typ == CAL_TYPE) {
+	trig.typ == CAL_TYPE ||
+	trig.typ == MSF_TYPE) {
 	if (PsCal && is_color) {
 	    char cbuf[24];
 	    sprintf(cbuf, "%d %d %d ", col_r, col_g, col_b);

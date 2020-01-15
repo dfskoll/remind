@@ -1070,7 +1070,15 @@ static int DoCalRem(ParsePtr p, int col)
 
     int is_color, col_r, col_g, col_b;
 
-    is_color = 0;
+    is_color = (
+        DefaultColorR != -1
+        && DefaultColorG != -1
+        && DefaultColorB != -1);
+    if (is_color) {
+        col_r = DefaultColorR;
+        col_g = DefaultColorG;
+        col_b = DefaultColorB;
+    }
     DBufInit(&buf);
     DBufInit(&pre_buf);
     DBufInit(&raw_buf);
@@ -1151,6 +1159,19 @@ static int DoCalRem(ParsePtr p, int col)
     } else if (trig.typ == PSF_TYPE) {
 	strcpy(trig.passthru, "PSFile");
 	trig.typ = PASSTHRU_TYPE;
+    }
+
+    /* If it's a plain reminder but we have a default color, add the
+       three colors to the prebuf and change passthru to "COLOR" */
+    if (trig.typ == MSG_TYPE ||
+	trig.typ == CAL_TYPE) {
+	if (PsCal && is_color) {
+	    char cbuf[24];
+	    sprintf(cbuf, "%d %d %d ", col_r, col_g, col_b);
+	    DBufPuts(&pre_buf, cbuf);
+	    strcpy(trig.passthru, "COLOR");
+	    /* Don't change trig.typ or next if() will trigger! */
+	}
     }
     if (trig.typ == PASSTHRU_TYPE) {
 	if (!PsCal && strcmp(trig.passthru, "COLOR") && strcmp(trig.passthru, "COLOUR")) {
@@ -1358,7 +1379,7 @@ static int DoCalRem(ParsePtr p, int col)
 	}
 	e->lineno = LineNo;
 
-	if (trig.typ == PASSTHRU_TYPE) {
+	if (trig.typ == PASSTHRU_TYPE || is_color) {
 	    StrnCpy(e->passthru, trig.passthru, PASSTHRU_LEN);
 	} else {
 	    e->passthru[0] = 0;

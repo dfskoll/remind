@@ -168,6 +168,40 @@ static int datetime_sep_func(int do_set, Value *val)
     return OK;
 }
 
+static int default_color_func(int do_set, Value *val)
+{
+    int col_r, col_g, col_b;
+    if (!do_set) {
+    /* 12 = strlen("255 255 255\0") */
+ val->v.str = malloc(12);
+ if (!val->v.str) return E_NO_MEM;
+    snprintf(val->v.str, 12, "%d %d %d",
+        DefaultColorR,
+        DefaultColorB,
+        DefaultColorG
+        );
+ val->type = STR_TYPE;
+ return OK;
+    }
+    if (val->type != STR_TYPE) return E_BAD_TYPE;
+    if (sscanf(val->v.str, "%d %d %d", &col_r, &col_g, &col_b) != 3) {
+        return E_BAD_TYPE;
+    }
+    if (col_r != -1 || col_g != -1 || col_b != -1) {
+      /* if any of them aren't -1, clamp them all as set */
+      if (col_r < 0) col_r = 0;
+      else if (col_r > 255) col_r = 255;
+      if (col_g < 0) col_g = 0;
+      else if (col_g > 255) col_g = 255;
+      if (col_b < 0) col_b = 0;
+      else if (col_b > 255) col_b = 255;
+    }
+    DefaultColorR = col_r;
+    DefaultColorB = col_b;
+    DefaultColorG = col_g;
+    return OK;
+}
+
 static int date_sep_func(int do_set, Value *val)
 {
     if (!do_set) {
@@ -608,6 +642,7 @@ static SysVar SysVarArr[] = {
     {"Daemon",         0,  INT_TYPE,     &Daemon,             0,      0   },
     {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,       0,      0   },
     {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,   0,      0   },
+    {"DefaultColor",   1,  SPECIAL_TYPE, default_color_func,  0,      0   },
     {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,        0,      9999},
     {"DeltaOffset",    0,  INT_TYPE,     &DeltaOffset,        0,      0   },
     {"DontFork",       0,  INT_TYPE,     &DontFork,           0,      0   },

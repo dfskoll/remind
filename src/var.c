@@ -177,8 +177,8 @@ static int default_color_func(int do_set, Value *val)
  if (!val->v.str) return E_NO_MEM;
     snprintf(val->v.str, 12, "%d %d %d",
         DefaultColorR,
-        DefaultColorB,
-        DefaultColorG
+        DefaultColorG,
+        DefaultColorB
         );
  val->type = STR_TYPE;
  return OK;
@@ -202,8 +202,8 @@ static int default_color_func(int do_set, Value *val)
     if (col_b > 255) return E_2HIGH;
 
     DefaultColorR = col_r;
-    DefaultColorB = col_b;
     DefaultColorG = col_g;
+    DefaultColorB = col_b;
     return OK;
 }
 

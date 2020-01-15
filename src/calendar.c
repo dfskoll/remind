@@ -917,6 +917,9 @@ static void GenerateCalEntries(int col)
     ClearGlobalOmits();
     DestroyOmitContexts();
     DestroyVars(0);
+    DefaultColorR = -1;
+    DefaultColorG = -1;
+    DefaultColorB = -1;
     NumTriggered = 0;
     ClearLastTriggers();
 

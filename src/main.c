@@ -130,6 +130,9 @@ int main(int argc, char *argv[])
 	    ClearGlobalOmits();
 	    DestroyOmitContexts();
 	    DestroyVars(0);
+	    DefaultColorR = -1;
+	    DefaultColorG = -1;
+	    DefaultColorB = -1;
 	    NumTriggered = 0;
 	    ClearLastTriggers();
 	    JulianToday++;

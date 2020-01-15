@@ -218,5 +218,12 @@ typedef struct {
 #define FROM_TYPE     1
 
 /* PS Calendar levels */
+
+/* Original interchange format */
 #define PSCAL_LEVEL1  1
+
+/* Line-by-line JSON */
 #define PSCAL_LEVEL2  2
+
+/* Pure JSON */
+#define PSCAL_LEVEL3  3

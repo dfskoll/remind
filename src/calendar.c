@@ -142,6 +142,9 @@ static CalEntry *CalColumn[7];
 
 static int ColSpaces;
 
+static int DidAMonth;
+static int DidADay;
+
 static void Colorize(CalEntry const *e);
 static void Decolorize(void);
 static void SortCol (CalEntry **col);
@@ -163,6 +166,76 @@ static void WriteTopCalLine (void);
 static void WriteBottomCalLine (void);
 static void WriteIntermediateCalLine (void);
 static void WriteCalDays (void);
+
+static void PrintJSONString(char const *s)
+{
+    while (*s) {
+	switch(*s) {
+	case '\b': printf("\\b"); break;
+	case '\f': printf("\\f"); break;
+	case '\n': printf("\\n"); break;
+	case '\r': printf("\\r"); break;
+	case '\t': printf("\\t"); break;
+	case '"':  printf("\\\""); break;
+	case '\\': printf("\\\\"); break;
+	default: printf("%c", *s);
+	}
+	s++;
+    }
+}
+
+static void PrintJSONKeyPairInt(char const *name, int val)
+{
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":%d, ", val);
+}
+
+static void PrintJSONKeyPairString(char const *name, char const *val)
+{
+    /* If value is blank, skip it! */
+    if (!val || !*val) {
+	return;
+    }
+
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"");
+    PrintJSONString(val);
+    printf("\", ");
+}
+
+static void PrintJSONKeyPairDate(char const *name, int jul)
+{
+    int y, m, d;
+    if (jul == NO_DATE) {
+	/* Skip it! */
+	return;
+    }
+    FromJulian(jul, &y, &m, &d);
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"%04d-%02d-%02d\", ", y, m+1, d);
+
+}
+
+static void PrintJSONKeyPairDateTime(char const *name, int dt)
+{
+    int y, m, d, h, i, k;
+    if (dt == NO_TIME) {
+	/* Skip it! */
+	return;
+    }
+    i = dt / MINUTES_PER_DAY;
+    FromJulian(i, &y, &m, &d);
+    k = dt % MINUTES_PER_DAY;
+    h = k / 60;
+    i = k % 60;
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
+
+}
 
 #ifdef REM_USE_WCHAR
 static void PutWideChar(wchar_t const wc)
@@ -255,8 +328,17 @@ void ProduceCalendar(void)
     if (CalMonths) {
 	FromJulian(JulianToday, &y, &m, &d);
 	JulianToday = Julian(y, m, 1);
-	while (CalMonths--)
+	DidAMonth = 0;
+	if (PsCal == PSCAL_LEVEL3) {
+	    printf("[\n");
+	}
+	while (CalMonths--) {
 	    DoCalendarOneMonth();
+	    DidAMonth = 1;
+	}
+	if (PsCal == PSCAL_LEVEL3) {
+	    printf("\n]\n");
+	}
 	return;
     } else {
 	if (MondayFirst) JulianToday -= (JulianToday%7);
@@ -378,30 +460,59 @@ static void DoCalendarOneMonth(void)
 
     if (!DoSimpleCalendar) WriteCalHeader();
 
+    DidADay = 0;
+
     if (PsCal) {
 	FromJulian(JulianToday, &y, &m, &d);
 	if (PsCal == PSCAL_LEVEL1) {
 	    printf("%s\n", PSBEGIN);
-	} else {
+	} else if (PsCal == PSCAL_LEVEL2) {
 	    printf("%s\n", PSBEGIN2);
+	} else {
+	    if (DidAMonth) {
+		printf(",\n");
+	    }
+	    printf("{\n");
 	}
-	printf("%s %d %d %d %d\n",
-	       MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
-	       MondayFirst);
-	printf("%s %s %s %s %s %s %s\n",
-	       DayName[6], DayName[0], DayName[1], DayName[2],
-	       DayName[3], DayName[4], DayName[5]);
+	if (PsCal < PSCAL_LEVEL3) {
+	    printf("%s %d %d %d %d\n",
+		   MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
+		   MondayFirst);
+	    printf("%s %s %s %s %s %s %s\n",
+		   DayName[6], DayName[0], DayName[1], DayName[2],
+		   DayName[3], DayName[4], DayName[5]);
+	} else {
+	    PrintJSONKeyPairString("monthname", MonthName[m]);
+	    PrintJSONKeyPairInt("year", y);
+	    PrintJSONKeyPairInt("daysinmonth", DaysInMonth(m, y));
+	    PrintJSONKeyPairInt("firstwkday", (JulianToday+1) % 7);
+	    PrintJSONKeyPairInt("mondayfirst", MondayFirst);
+	    printf("\"daynames\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],",
+		   DayName[6], DayName[0], DayName[1], DayName[2],
+		   DayName[3], DayName[4], DayName[5]);
+	}
 	mm = m-1;
 	if (mm<0) {
 	    mm = 11; yy = y-1;
 	} else yy=y;
 
-	printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	if (PsCal < PSCAL_LEVEL3) {
+	    printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	} else {
+	    PrintJSONKeyPairString("prevmonthname", MonthName[mm]);
+	    PrintJSONKeyPairInt("daysinprevmonth", DaysInMonth(mm, yy));
+	}
 	mm = m+1;
 	if (mm>11) {
 	    mm = 0; yy = y+1;
 	} else yy=y;
-	printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	if (PsCal < PSCAL_LEVEL3) {
+	    printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	} else {
+	    PrintJSONKeyPairString("nextmonthname", MonthName[mm]);
+	    PrintJSONKeyPairInt("daysinnextmonth", DaysInMonth(mm, yy));
+	    printf("\"entries\":[\n");
+	}
     }
     while (WriteCalendarRow()) continue;
 
@@ -409,6 +520,8 @@ static void DoCalendarOneMonth(void)
 	printf("%s\n", PSEND);
     } else if (PsCal == PSCAL_LEVEL2) {
 	printf("%s\n", PSEND2);
+    } else if (PsCal == PSCAL_LEVEL3){
+	printf("\n]\n}");
     }
     if (!DoSimpleCalendar) WriteCalTrailer();
 }
@@ -1285,75 +1398,6 @@ static void WriteSimpleEntryProtocol1(CalEntry *e)
 	printf("%s\n", e->text);
 }
 
-static void PrintJSONString(char const *s)
-{
-    while (*s) {
-	switch(*s) {
-	case '\b': printf("\\b"); break;
-	case '\f': printf("\\f"); break;
-	case '\n': printf("\\n"); break;
-	case '\r': printf("\\r"); break;
-	case '\t': printf("\\t"); break;
-	case '"':  printf("\\\""); break;
-	case '\\': printf("\\\\"); break;
-	default: printf("%c", *s);
-	}
-	s++;
-    }
-}
-
-static void PrintJSONKeyPairInt(char const *name, int val)
-{
-    printf("\"");
-    PrintJSONString(name);
-    printf("\":%d, ", val);
-}
-
-static void PrintJSONKeyPairString(char const *name, char const *val)
-{
-    /* If value is blank, skip it! */
-    if (!val || !*val) {
-	return;
-    }
-
-    printf("\"");
-    PrintJSONString(name);
-    printf("\":\"");
-    PrintJSONString(val);
-    printf("\", ");
-}
-
-static void PrintJSONKeyPairDate(char const *name, int jul)
-{
-    int y, m, d;
-    if (jul == NO_DATE) {
-	/* Skip it! */
-	return;
-    }
-    FromJulian(jul, &y, &m, &d);
-    printf("\"");
-    PrintJSONString(name);
-    printf("\":\"%04d-%02d-%02d\", ", y, m+1, d);
-
-}
-
-static void PrintJSONKeyPairDateTime(char const *name, int dt)
-{
-    int y, m, d, h, i, k;
-    if (dt == NO_TIME) {
-	/* Skip it! */
-	return;
-    }
-    i = dt / MINUTES_PER_DAY;
-    FromJulian(i, &y, &m, &d);
-    k = dt % MINUTES_PER_DAY;
-    h = k / 60;
-    i = k % 60;
-    printf("\"");
-    PrintJSONString(name);
-    printf("\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
-
-}
 
 static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 {
@@ -1509,10 +1553,19 @@ static void WriteSimpleEntries(int col, int jul)
 		printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	    }
 	}
-	if (PsCal == PSCAL_LEVEL2) {
+	if (PsCal >= PSCAL_LEVEL2) {
+	    if (PsCal == PSCAL_LEVEL3) {
+		if (DidADay) {
+		    printf(",\n");
+		}
+	    }
+	    DidADay = 1;
 	    printf("{\"date\":\"%04d-%02d-%02d\", ", y, m+1, d);
 	    WriteSimpleEntryProtocol2(e, jul);
-	    printf("}\n");
+	    printf("}");
+	    if (PsCal != PSCAL_LEVEL3) {
+		printf("\n");
+	    }
 	} else {
 	    printf("%04d/%02d/%02d", y, m+1, d);
 	    WriteSimpleEntryProtocol1(e);

@@ -406,7 +406,11 @@ void InitRemind(int argc, char const *argv[])
 		    if (*arg == 'a' || *arg == 'A') {
 			DoSimpleCalDelta = 1;
 		    } else if (*arg == 'p' || *arg == 'P') {
-			PsCal = PSCAL_LEVEL2;
+			if (PsCal == PSCAL_LEVEL1) {
+			    PsCal = PSCAL_LEVEL2;
+			} else {
+			    PsCal = PSCAL_LEVEL3;
+			}
 		    }
 		    arg++;
 		}

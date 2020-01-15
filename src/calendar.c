@@ -521,7 +521,10 @@ static void DoCalendarOneMonth(void)
     } else if (PsCal == PSCAL_LEVEL2) {
 	printf("%s\n", PSEND2);
     } else if (PsCal == PSCAL_LEVEL3){
-	printf("\n]\n}");
+	if (DidADay) {
+	    printf("\n");
+	}
+	printf("]\n}");
     }
     if (!DoSimpleCalendar) WriteCalTrailer();
 }

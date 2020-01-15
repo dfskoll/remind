@@ -187,15 +187,20 @@ static int default_color_func(int do_set, Value *val)
     if (sscanf(val->v.str, "%d %d %d", &col_r, &col_g, &col_b) != 3) {
         return E_BAD_TYPE;
     }
-    if (col_r != -1 || col_g != -1 || col_b != -1) {
-      /* if any of them aren't -1, clamp them all as set */
-      if (col_r < 0) col_r = 0;
-      else if (col_r > 255) col_r = 255;
-      if (col_g < 0) col_g = 0;
-      else if (col_g > 255) col_g = 255;
-      if (col_b < 0) col_b = 0;
-      else if (col_b > 255) col_b = 255;
+    /* They either all have to be -1, or all between 0 and 255 */
+    if (col_r == -1 && col_g == -1 && col_b == -1) {
+	DefaultColorR = -1;
+	DefaultColorG = -1;
+	DefaultColorB = -1;
+	return OK;
     }
+    if (col_r < 0) return E_2LOW;
+    if (col_r > 255) return E_2HIGH;
+    if (col_g < 0) return E_2LOW;
+    if (col_g > 255) return E_2HIGH;
+    if (col_b < 0) return E_2LOW;
+    if (col_b > 255) return E_2HIGH;
+
     DefaultColorR = col_r;
     DefaultColorB = col_b;
     DefaultColorG = col_g;

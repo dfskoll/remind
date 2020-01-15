@@ -4950,9 +4950,9 @@ January 2012 31 0 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 December 31
 February 29
-{"date":"2012-01-02", "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
-{"date":"2012-01-09", "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
-{"date":"2012-01-16", "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
-{"date":"2012-01-23", "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
-{"date":"2012-01-30", "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
+{"date":"2012-01-02", "filename":"-", "lineno":1, "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
+{"date":"2012-01-09", "filename":"-", "lineno":1, "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
+{"date":"2012-01-16", "filename":"-", "lineno":1, "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
+{"date":"2012-01-23", "filename":"-", "lineno":1, "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
+{"date":"2012-01-30", "filename":"-", "lineno":1, "wd":["Monday"], "nonconst_expr":1, "priority":5000, "body":"bar"}
 # rem2ps2 end

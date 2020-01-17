@@ -1879,6 +1879,8 @@ char const *SynthesizeTag(void)
     unsigned char buf[16];
     static char out[128];
     MD5Init(&ctx);
+    MD5Update(&ctx, (unsigned char *) FileName, strlen(FileName));
+    MD5Update(&ctx, (unsigned char *) &LineNo, sizeof(LineNo));
     MD5Update(&ctx, (unsigned char *) CurLine, strlen(CurLine));
     MD5Final(buf, &ctx);
     sprintf(out, "__syn__%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",

@@ -300,9 +300,15 @@ int main(int argc, char *argv[])
 	Usage("Input should not come from a terminal");
     }
 
+    int first_line = 1;
     /* Search for a valid input file */
     while (!feof(stdin)) {
 	DBufGets(&buf, stdin);
+	if (first_line && (!strcmp(DBufValue(&buf), "["))) {
+	    fprintf(stderr, "It appears that you have invoked Remind with the -ppp option.\nPlease use either -p or -pp, but not -ppp.\n");
+	    exit(1);
+	}
+	first_line = 0;
 	if (!strcmp(DBufValue(&buf), PSBEGIN) ||
 	    !strcmp(DBufValue(&buf), PSBEGIN2)) {
 	    if (!validfile) {

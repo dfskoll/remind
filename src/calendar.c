@@ -1576,7 +1576,7 @@ static void WriteSimpleEntries(int col, int jul)
     FromJulian(jul, &y, &m, &d);
     while(e) {
 	if (DoPrefixLineNo) {
-	    if (PsCal != PSCAL_LEVEL2) {
+	    if (PsCal != PSCAL_LEVEL2 && PsCal != PSCAL_LEVEL3) {
 		printf("# fileinfo %d %s\n", e->lineno, e->filename);
 	    }
 	}

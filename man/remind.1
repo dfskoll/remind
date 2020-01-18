@@ -106,7 +106,7 @@ If you immediately follow the \fBs\fR with the letter
 day they actually occur \fIas well as\fR on any preceding days specified
 by the reminder's \fIdelta\fR.
 .TP
-.B \-p\fR[\fBa\fR][\fBp\fR]\fIn\fR
+.B \-p\fR[\fBa\fR][\fBp\fR][\fBp\fR]\fIn\fR
 The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
 \fBRem2PS\fR program, which creates a PostScript calendar, and various
@@ -119,7 +119,9 @@ day they actually occur \fIas well as\fR on any preceding days specified
 by the reminder's \fIdelta\fR.  If you follow the \fBp\fR with another
 \fBp\fR, then \fBRemind\fR uses a more comprehensive JSON-based
 format rather than the "simple calendar" format.  This format is
-also documented in the \fBrem2ps(1)\fR man page.
+also documented in the \fBrem2ps(1)\fR man page.  Finally, if you use
+three p's, as in \fB\-ppp\fR, then \fBRemind\fR uses a pure JSON
+format, again documented in \fBrem2ps(1)\fR.
 .TP
 .B \-l
 If you use the \-l option in conjunction with the \-p option, then

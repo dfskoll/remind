@@ -402,7 +402,7 @@ the line number and file name of the file containing the reminder.  Back-ends
 that don't care about this information should ignore lines starting with
 "#" (except, of course, for the # rem2ps lines.)
 .PP
-.SH REM2PS JSON INPUT FORMAT (-PP OPTION)
+.SH REM2PS PARTIAL JSON INPUT FORMAT (-PP OPTION)
 \fBRemind \-pp\fR sends the following lines to standard output.  They
 are designed to be easily parsed, but contain much more information
 than the old-style \fBremind -p\fR output.  The extra information
@@ -431,6 +431,8 @@ Same as the \fB\-p\fR format
 .TP
 \fIprev_mon prev_days\fR
 Same as the \fB\-p\fR format
+.PP
+.B CALENDAR ENTRIES
 .PP
 The remaining data consists of calendar entries expressed as a JSON object
 on a single line.  Each such line will begin with "{" and will be a well-formed
@@ -580,6 +582,52 @@ emits the line:
 However, back-ends should keep reading until EOF in case more data for
 subsequent months is forthcoming.
 .PP
+
+.SH REM2PS PURE JSON INPUT FORMAT (-PPP OPTION)
+\fBRemind \-ppp\fR emits \fIpure JSON\fR output.  The format is
+as follows:
+.PP
+\fBRemind outputs a JSON array.  Each element of the array is a
+\fImonth descriptor\fR.
+.PP
+Each month descriptor is a JSON object with the following elements:
+.TP
+.B monthname \fIname\fR
+The name of the month.
+.TP
+.B year \fIyyyy\fR
+The year.
+.TP
+.B daysinmonnth \fIn\fR
+The number of days in the current month.
+.TP
+.B firstwkday \fIn\fR
+The weekday of the first day of the month (0 = Sunday, 1 = Monday, 6 = Saturday).
+.TP
+.B mondayfirst \fIn\fR
+An indicator of whether or not the calendar week should start with
+Sunday (n=0) or Monday (n=1).
+.TP
+.B daynames \fR[\fIdays\fR]
+A seven-element array of day names; each element is a string representing
+the names of the days from Sunday through Saturday.
+.TP
+.B prevmonthname \fIname\fR
+The name of the previous month.
+.TP
+.B daysinprevmonth \fIn\fR
+The number of days in the previous month.
+.TP
+.B nextmonthname \fIname\fR
+The name of the following month.
+.TP
+.B daysinnextmonth \fIn\fR
+The number of days in the following month.
+.TP
+.B entries \fR[\fIarray\fR]
+The \fBentries\fR key consists of an array of calendar entries; each
+entry is a JSON object that has the same format as described in the
+\fBCALENDAR ENTRIES\fR section in the \fB\-PP FORMAT\fR section.
 
 .SH AUTHOR
 Rem2PS was written by Dianne Skoll <dianne@skoll.ca>

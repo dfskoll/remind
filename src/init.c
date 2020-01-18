@@ -430,7 +430,10 @@ void InitRemind(int argc, char const *argv[])
 	    case 'W':
 		if (*arg != ',') {
 		    PARSENUM(CalWidth, arg);
-		    if (CalWidth < 71) CalWidth = 71;
+		    if (CalWidth != 0 && CalWidth < 71) CalWidth = 71;
+		    if (CalWidth == 0) {
+			CalWidth = -1;
+		    }
 		}
 		if (*arg == ',') {
 		    arg++;

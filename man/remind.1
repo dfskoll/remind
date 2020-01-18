@@ -82,13 +82,18 @@ greater than 128, the color is considered "bright".
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]
 The \fB\-w\fR option specifies the output width, padding and spacing
 of the formatted calendar output.  \fICol\fR specifies the number of
-columns in the output device, and defaults to 80.  \fIPad\fR specifies
-how many lines to use to "pad" empty calendar boxes.  This defaults to
-5.  If you have many reminders on certain days that make your calendar
-too large to fit on a page, you can try reducing \fIpad\fR to make the
-empty boxes smaller.  \fISpc\fR specifies how many blank lines to leave
-between the day number and the first reminder entry.  It defaults to 1.
+columns in the output device.  If not specified, or specified as 0,
+it defaults to the larger of 71 or the actual width of your terminal,
+or to 80 if standard output is not a terminal.
 .RS
+.PP
+\fIPad\fR specifies how many lines
+to use to "pad" empty calendar boxes.  This defaults to 5.  If you
+have many reminders on certain days that make your calendar too large
+to fit on a page, you can try reducing \fIpad\fR to make the empty
+boxes smaller.  \fISpc\fR specifies how many blank lines to leave
+between the day number and the first reminder entry.  It defaults to
+1.
 .PP
 Any of \fIcol\fR, \fIpad\fR or \fIspc\fR can be omitted, providing you
 provide the correct number of commas.  Don't use any spaces in the option.

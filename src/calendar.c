@@ -16,6 +16,8 @@
 #include <ctype.h>
 
 #include <stdlib.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 #ifdef REM_USE_WCHAR
 #include <wctype.h>
@@ -302,6 +304,27 @@ static void Colorize(CalEntry const *e)
   printf("%s", VT100Colors[bright][r][g][b]);
 }
 
+static int
+ComputeCalWidth(int x)
+{
+    struct winsize w;
+    if (x >= 71) {
+	/* Has been set with -w option */
+	return x;
+    }
+    if (!isatty(STDOUT_FILENO)) {
+	/* Output is not a TTY... assume 80 */
+	return 80;
+    }
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) < 0) {
+	return 80;
+    }
+    if (w.ws_col < 71) {
+	return 80;
+    }
+    return w.ws_col;
+}
+
 /***************************************************************/
 /*                                                             */
 /*  ProduceCalendar                                            */
@@ -321,6 +344,8 @@ void ProduceCalendar(void)
         linestruct = &NormalDrawing;
     }
     ShouldCache = 1;
+
+    CalWidth = ComputeCalWidth(CalWidth);
 
     ColSpaces = (CalWidth - 9) / 7;
     CalWidth = 7*ColSpaces + 8;

@@ -104,6 +104,17 @@ EOF
 ../src/remind -pp - 1 jan 2012 9:00 <<'EOF' >> ../tests/test.out 2>&1
 REM Mon OMITFUNC foo MSG bar
 EOF
+
+# Test default color
+../src/remind -ppp - 1 Jan 2012 9:00 <<'EOF' >> ../tests/test.out 2>&1
+REM 2 MSG Normal
+SET $DefaultColor "255 0 0"
+REM 3 MSG Red
+SET $DefaultColor "-1 -1 -1"
+REM 4 MSG Normal
+# Should give an error
+SET $DefaultColor "256 0 0"
+EOF
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

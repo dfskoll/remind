@@ -4989,7 +4989,7 @@ February 29
 -stdin-(7): Number too high
 [
 {
-"monthname":"January", "year":2012, "daysinmonth":31, "firstwkday":0, "mondayfirst":0, "daynames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"prevmonthname":"December", "daysinprevmonth":31, "nextmonthname":"February", "daysinnextmonth":29, "entries":[
+"monthname":"January", "year":2012, "daysinmonth":31, "firstwkday":0, "mondayfirst":0, "daynames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"prevmonthname":"December", "daysinprevmonth":31, "prevmonthyear":2011, "nextmonthname":"February", "daysinnextmonth":29, "nextmonthyear":2012, "entries":[
 {"date":"2012-01-02", "filename":"-", "lineno":1, "d":2, "priority":5000, "body":"Normal"},
 {"date":"2012-01-03", "filename":"-", "lineno":3, "passthru":"COLOR", "d":3, "priority":5000, "r":255, "g":0, "b":0, "rawbody":"Red", "body":"255 0 0 Red"},
 {"date":"2012-01-04", "filename":"-", "lineno":5, "d":4, "priority":5000, "body":"Normal"}

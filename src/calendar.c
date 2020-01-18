@@ -501,6 +501,7 @@ static void DoCalendarOneMonth(void)
 	} else {
 	    PrintJSONKeyPairString("prevmonthname", MonthName[mm]);
 	    PrintJSONKeyPairInt("daysinprevmonth", DaysInMonth(mm, yy));
+	    PrintJSONKeyPairInt("prevmonthyear", yy);
 	}
 	mm = m+1;
 	if (mm>11) {
@@ -511,6 +512,7 @@ static void DoCalendarOneMonth(void)
 	} else {
 	    PrintJSONKeyPairString("nextmonthname", MonthName[mm]);
 	    PrintJSONKeyPairInt("daysinnextmonth", DaysInMonth(mm, yy));
+	    PrintJSONKeyPairInt("nextmonthyear", yy);
 	    printf("\"entries\":[\n");
 	}
     }

@@ -147,8 +147,7 @@ static int ColSpaces;
 static int DidAMonth;
 static int DidADay;
 
-static void Colorize(CalEntry const *e);
-static void Decolorize(void);
+static void ColorizeEntry(CalEntry const *e);
 static void SortCol (CalEntry **col);
 static void DoCalendarOneWeek (int nleft);
 static void DoCalendarOneMonth (void);
@@ -282,26 +281,30 @@ static void goff(void)
   printf("%s", linestruct->graphics_off);
 }
 
-static void Decolorize(void)
+void Decolorize(void)
 {
   printf("%s", "\x1B[0m");
 }
 
-static void Colorize(CalEntry const *e)
+void Colorize(int r, int g, int b)
 {
   int bright = 0;
-  int r, g, b;
-  if (e->r > 128 || e->g > 128 || e->b > 128) {
+  if (r > 128 || g > 128 || b > 128) {
     bright = 1;
   }
-  if (e->r > 64) r = 1;
+  if (r > 64) r = 1;
   else r = 0;
-  if (e->g > 64) g = 1;
+  if (g > 64) g = 1;
   else g = 0;
-  if (e->b > 64) b = 1;
+  if (b > 64) b = 1;
   else b = 0;
 
   printf("%s", VT100Colors[bright][r][g][b]);
+}
+
+static void ColorizeEntry(CalEntry const *e)
+{
+    Colorize(e->r, e->g, e->b);
 }
 
 static int
@@ -804,7 +807,7 @@ static int WriteOneColLine(int col)
 
 	/* Colorize reminder if necessary */
 	if (UseVTColors && e->is_color) {
-	    Colorize(e);
+	    ColorizeEntry(e);
 	}
 
 	/* If we couldn't find a space char, print what we have. */
@@ -876,7 +879,7 @@ static int WriteOneColLine(int col)
 
 	/* Colorize reminder if necessary */
 	if (UseVTColors && e->is_color) {
-	    Colorize(e);
+	    ColorizeEntry(e);
 	}
 
 	/* If we couldn't find a space char, print what we have. */

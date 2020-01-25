@@ -46,7 +46,8 @@ The \fB\-c\fR option causes \fBRemind\fR to produce a calendar that is
 sent to standard output.  If you supply a number \fIn\fR, then a
 calendar will be generated for \fIn\fR months, starting with the
 current month.  By default, a calendar for only the current month is
-produced. 
+produced.
+.RS
 .PP
 You can precede \fIn\fR (if any) with a set of flags.  The flags
 are as follows:
@@ -75,6 +76,7 @@ causes \fBRemind\fR to use VT100 escape sequences to approximate
 SPECIAL COLOR reminders.  Note that this flag is kept for
 backwards-compatibility; you should use the \fB\-@\fI[n]\fR
 command-line option instead.
+.RE
 
 .TP
 .B \-@\fR[\fIn\fR]

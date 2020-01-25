@@ -882,6 +882,13 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 
     /* Correct colors */
     if (UseVTColors) {
+	if (red == -1 && green == -1 && blue == -1) {
+	    if (DefaultColorR != -1 && DefaultColorG != -1 && DefaultColorB != -1) {
+		red = DefaultColorR;
+		green = DefaultColorG;
+		blue = DefaultColorB;
+	    }
+	}
 	if (red >= 0 && green >= 0 && blue >= 0) {
 	    is_color = 1;
 	    if (red > 255) red = 255;

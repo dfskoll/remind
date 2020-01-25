@@ -103,6 +103,11 @@ escape sequences to more closely approximate colors.  A value of 2
 tells \fBRemind\fR that the terminal background is dark, 3 that it is
 light, and 4 that \fBRemind\fR should not do anything special to
 compensate for the background.
+.PP
+Some terminals (again, "xterm" is one) allow you to set exact 24-bit
+colors.  If you supply a value of 5 for \fIn\fR, then \fBRemind\fR
+uses escape sequences to set the exact (R, G, B) color specified
+in a SPECIAL COLOR reminder.
 .RE
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]

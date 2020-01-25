@@ -304,13 +304,13 @@ Colorize(int r, int g, int b)
   if (b > 64) b = 1;
   else b = 0;
 
-  /* Don't do black on a dark terminal or white
-     on a light terminal */
   if (TerminalBackground == TERMINAL_BACKGROUND_DARK) {
-      if (!r && !g && !b) return "";
+      /* Convert black-on-black to grey */
+      if (!r && !g && !b) return VT100Colors[1][0][0][0];
   }
   if (TerminalBackground == TERMINAL_BACKGROUND_LIGHT) {
-      if (r && g && b) return "";
+      /* Convert white-on-white to grey */
+      if (r && g && b) return VT100Colors[1][0][0][0];
   }
   return VT100Colors[bright][r][g][b];
 }

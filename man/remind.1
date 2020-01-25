@@ -72,12 +72,28 @@ only work on terminals that are set to UTF-8 character encoding.
 .TP
 .B 'c'
 causes \fBRemind\fR to use VT100 escape sequences to approximate
-SPECIAL COLOR reminders.  The approximation is (of necessity) very
+SPECIAL COLOR reminders.  Note that this modifier is kept for
+backwards-compatibility; you should use the \fB\-@\fI[n]\fR option
+instead.
+
+.TP
+.B \-@\fR[\fIn\fR]
+Tells \fBRemind\fR to approximate SPECIAL COLOR reminders using VT100
+escape sequences.  The approximation is (of necessity) very
 coarse, because the VT100 only has eight different color sequences,
 each with one of two brightnesses.  A color component greater than
 64 is considered "on", and if any of the three color components is
 greater than 128, the color is considered "bright".
-
+.RS
+.PP
+If you supply the optional \fIn\fR parameter, a value of 0 for \fIn\fR
+tells \fBRemind\fR that your terminal background is dark, and a value of
+1 tells it that your terminal background is light.  In this case, a
+black-on-dark color or a white-on-light color is converted to grey so
+that the reminder is still visible.  If \fIn\fR is not supplied, then
+\fBRemind\fR doesn't treat black or white specially and some reminders
+may be rendered invisible.
+.RE
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]
 The \fB\-w\fR option specifies the output width, padding and spacing

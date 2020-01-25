@@ -38,7 +38,7 @@
  *             simple calendar format.
  *  -r       = Disallow RUN mode
  *  -c[n]    = Produce a calendar for n months (default = 1)
- *  -@       = Use VT100 color codes
+ *  -@[n]    = Use VT100 color codes (n=0 for dark terminal; n=1 for light
  *  -w[n,n,n] = Specify output device width, padding and spacing
  *  -s[n]    = Produce calendar in "simple calendar" format
  *  -p[n]    = Produce calendar in format compatible with rem2ps
@@ -634,7 +634,7 @@ void Usage(void)
     fprintf(ErrFp, "Options:\n");
     fprintf(ErrFp, " -n     Output next occurrence of reminders in simple format\n");
     fprintf(ErrFp, " -r     Disable RUN directives\n");
-    fprintf(ErrFp, " -@     Use VT100 color codes for COLOR reminders\n");
+    fprintf(ErrFp, " -@[n]  Use VT100 color codes for COLOR reminders: n=0 light bg; n=1 dark bg\n");
     fprintf(ErrFp, " -c[a][n] Produce a calendar for n (default 1) months\n");
     fprintf(ErrFp, " -c[a]+[n] Produce a calendar for n (default 1) weeks\n");
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");

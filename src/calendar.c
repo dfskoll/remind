@@ -1331,12 +1331,12 @@ static int DoCalRem(ParsePtr p, int col)
 	}
     }
     if (trig.typ == PASSTHRU_TYPE) {
-	if (!PsCal && strcmp(trig.passthru, "COLOR") && strcmp(trig.passthru, "COLOUR")) {
+	if (!PsCal && StrCmpi(trig.passthru, "COLOR") && StrCmpi(trig.passthru, "COLOUR")) {
 	    FreeTrig(&trig);
 	    return OK;
 	}
-	if (!strcmp(trig.passthru, "COLOR") ||
-	    !strcmp(trig.passthru, "COLOUR")) {
+	if (!StrCmpi(trig.passthru, "COLOR") ||
+	    !StrCmpi(trig.passthru, "COLOUR")) {
 	    is_color = 1;
 	    /* Strip off the three color numbers */
 	    DBufFree(&buf);
@@ -1398,8 +1398,8 @@ static int DoCalRem(ParsePtr p, int col)
 	    /* Suppress time if it's not today or if it's a non-COLOR special */
 	    if (jul != JulianToday ||
 		(trig.typ == PASSTHRU_TYPE &&
-		 strcmp(trig.passthru, "COLOUR") &&
-		 strcmp(trig.passthru, "COLOR"))) {
+		 StrCmpi(trig.passthru, "COLOUR") &&
+		 StrCmpi(trig.passthru, "COLOR"))) {
 		if (DBufPuts(&obuf, SimpleTime(NO_TIME)) != OK) {
 		    DBufFree(&obuf);
 		    DBufFree(&raw_buf);
@@ -1688,7 +1688,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 	PrintJSONKeyPairInt("r", e->r);
 	PrintJSONKeyPairInt("g", e->g);
 	PrintJSONKeyPairInt("b", e->b);
-    } else if (!strcmp(e->passthru, "SHADE")) {
+    } else if (!StrCmpi(e->passthru, "SHADE")) {
 	int r, g, b, n;
 	n = sscanf(e->text, "%d %d %d", &r, &g, &b);
 	if (n < 3) {

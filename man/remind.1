@@ -95,6 +95,14 @@ black-on-dark color or a white-on-light color is converted to grey so
 that the reminder is still visible.  If \fIn\fR is not supplied, then
 \fBRemind\fR doesn't treat black or white specially and some reminders
 may be rendered invisible.
+.PP
+Some terminals (such as "xterm") understand additional escape sequences
+that allow for specification of 256 different colors.  If you supply
+a value of 2, 3 or 4 for \fIn\fR, then \fBRemind\fR uses these enhanced
+escape sequences to more closely approximate colors.  A value of 2
+tells \fBRemind\fR that the terminal background is dark, 3 that it is
+light, and 4 that \fBRemind\fR should not do anything special to
+compensate for the background.
 .RE
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]

@@ -770,14 +770,14 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     DBufInit(&calRow);
     DBufInit(&pre_buf);
     if (t->typ == RUN_TYPE && RunDisabled) return E_RUN_DISABLED;
-    if ((t->typ == PASSTHRU_TYPE && strcmp(t->passthru, "COLOR") && strcmp(t->passthru, "COLOUR")) ||
+    if ((t->typ == PASSTHRU_TYPE && StrCmpi(t->passthru, "COLOR") && StrCmpi(t->passthru, "COLOUR")) ||
 	t->typ == CAL_TYPE ||
 	t->typ == PS_TYPE ||
 	t->typ == PSF_TYPE)
 	return OK;
 
     /* Handle COLOR types */
-    if (t->typ == PASSTHRU_TYPE && (!strcmp(t->passthru, "COLOR") || !strcmp(t->passthru, "COLOUR"))) {
+    if (t->typ == PASSTHRU_TYPE && (!StrCmpi(t->passthru, "COLOR") || !StrCmpi(t->passthru, "COLOUR"))) {
 	/* Strip off three tokens */
 	r = ParseToken(p, &buf);
 	sscanf(DBufValue(&buf), "%d", &red);

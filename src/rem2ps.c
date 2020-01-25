@@ -141,6 +141,24 @@ char const *EatToken(char const *in, char *out, int maxlen);
 
 /***************************************************************/
 /*                                                             */
+/*  StrCmpi                                                    */
+/*                                                             */
+/*  Compare strings, case insensitive.                         */
+/*                                                             */
+/***************************************************************/
+int StrCmpi(char const *s1, char const *s2)
+{
+    int r;
+    while (*s1 && *s2) {
+	r = toupper(*s1) - toupper(*s2);
+	if (r) return r;
+	s1++;
+	s2++;
+    }
+    return toupper(*s1) - toupper(*s2);
+}
+/***************************************************************/
+/*                                                             */
 /*   Parse the new-style JSON intermediate format              */
 /*                                                             */
 /***************************************************************/
@@ -196,18 +214,18 @@ JSONToCalEntry(DynamicBuffer *buf)
 	} else if (!strcmp(nm, "passthru")) {
 	    if (v->type == json_string) {
 		s = v->u.string.ptr;
-		if (!strcmp(s, "PostScript")) {
+		if (!StrCmpi(s, "PostScript")) {
 		    c->special = SPECIAL_POSTSCRIPT;
-		} else if (!strcmp(s, "SHADE")) {
+		} else if (!StrCmpi(s, "SHADE")) {
 		    c->special = SPECIAL_SHADE;
-		} else if (!strcmp(s, "MOON")) {
+		} else if (!StrCmpi(s, "MOON")) {
 		    c->special = SPECIAL_MOON;
-		} else if (!strcmp(s, "WEEK")) {
+		} else if (!StrCmpi(s, "WEEK")) {
 		    c->special = SPECIAL_WEEK;
-		} else if (!strcmp(s, "PSFile")) {
+		} else if (!StrCmpi(s, "PSFile")) {
 		    c->special = SPECIAL_PSFILE;
-		} else if (!strcmp(s, "COLOUR") ||
-			   !strcmp(s, "COLOR")) {
+		} else if (!StrCmpi(s, "COLOUR") ||
+			   !StrCmpi(s, "COLOR")) {
 		    c->special = SPECIAL_COLOR;
 		}
 	    }
@@ -266,18 +284,18 @@ TextToCalEntry(DynamicBuffer *buf)
     strcpy(c->entry, startOfBody);
 
     /* Save the type of SPECIAL */
-    if (!strcmp(passthru, "PostScript")) {
+    if (!StrCmpi(passthru, "PostScript")) {
 	c->special = SPECIAL_POSTSCRIPT;
-    } else if (!strcmp(passthru, "SHADE")) {
+    } else if (!StrCmpi(passthru, "SHADE")) {
 	c->special = SPECIAL_SHADE;
-    } else if (!strcmp(passthru, "MOON")) {
+    } else if (!StrCmpi(passthru, "MOON")) {
 	c->special = SPECIAL_MOON;
-    } else if (!strcmp(passthru, "WEEK")) {
+    } else if (!StrCmpi(passthru, "WEEK")) {
 	c->special = SPECIAL_WEEK;
-    } else if (!strcmp(passthru, "PSFile")) {
+    } else if (!StrCmpi(passthru, "PSFile")) {
 	c->special = SPECIAL_PSFILE;
-    } else if (!strcmp(passthru, "COLOUR") ||
-	       !strcmp(passthru, "COLOR")) {
+    } else if (!StrCmpi(passthru, "COLOUR") ||
+	       !StrCmpi(passthru, "COLOR")) {
 	c->special = SPECIAL_COLOR;
     }
     return c;

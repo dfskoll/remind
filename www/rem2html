@@ -251,6 +251,7 @@ sub parse_input
 	}
 	my $d1 = $d;
 	$d1 =~ s/^0+//;
+	$special = uc($special);
 	if ($special eq 'HTML') {
 	    push(@{$days->[$d]}, $body);
 	} elsif ($special eq 'HTMLCLASS') {

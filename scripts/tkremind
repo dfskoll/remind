@@ -958,7 +958,7 @@ proc FillCalWindow {} {
 	set n [expr $day+$offset]
 	set month [string trimleft $month 0]
 	set extratags ""
-	switch -exact -- $type {
+	switch -nocase -- $type {
 	    "WEEK" {
 		set stuff [string trimleft $stuff]
 		set stuff [string trimright $stuff]
@@ -998,6 +998,7 @@ proc FillCalWindow {} {
 		    .cal.t$n tag configure $extratags -foreground "#$color"
 		    .cal.t$n configure -state disabled
 		    set stuff $rest
+		    set type "COLOR"
 		}
 	    }
 	}

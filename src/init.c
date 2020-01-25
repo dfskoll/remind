@@ -218,6 +218,9 @@ void InitRemind(int argc, char const *argv[])
 		} else if (*arg == '4') {
 		    Use256Colors = 1;
 		    arg++;
+		} else if (*arg == '5') {
+		    UseTrueColors = 1;
+		    arg++;
 		}
 		break;
 

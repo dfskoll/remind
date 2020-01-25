@@ -397,10 +397,23 @@ Colorize256(int r, int g, int b)
     sprintf(buf, "\x1B[38;5;%dm", best);
     return buf;
 }
+
+static char const *
+ColorizeTrue(int r, int g, int b)
+{
+    static char buf[40];
+    sprintf(buf, "\x1B[38;2;%d;%d;%dm", r, g, b);
+    return buf;
+}
+
 char const *
 Colorize(int r, int g, int b)
 {
     int bright = 0;
+
+    if (UseTrueColors) {
+	return ColorizeTrue(r, g, b);
+    }
 
     if (Use256Colors) {
 	return Colorize256(r, g, b);

@@ -104,6 +104,7 @@ EXTERN  INIT(   int     UseVTChars, 0);
 EXTERN  INIT(   int     UseUTF8Chars, 0);
 EXTERN  INIT(   int     UseVTColors, 0);
 EXTERN  INIT(   int     Use256Colors, 0);
+EXTERN  INIT(   int     UseTrueColors, 0);
 EXTERN  INIT(   int     TerminalBackground, TERMINAL_BACKGROUND_UNKNOWN);
 
 /* Latitude and longitude */

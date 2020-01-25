@@ -1,5 +1,31 @@
 CHANGES TO REMIND
 
+* Version 3.3 Patch 0 - YYYY-MM-DD
+
+- IMPROVEMENT: Add JSON-based output with "remind -pp" and "remind -ppp"
+  The JSON-based intermediate format preserves a lot more information
+  about the original reminder, allowing back-ends more insight into
+  the intent of the reminder, the recurrence used, etc.  See the documentation
+  in "man rem2ps"
+
+- IMPROVEMENT: TkRemind can "reverse-engineer" reminders that it creates
+  using the additional information in the "remind -pp" format, so it
+  doesn't create or use ugly comment blocks to delimit the reminders
+  it creates.
+
+- IMPROVEMENT: TkRemind: Add popup help to most buttons and controls.
+
+- NEW FEATURE: Add support for $DefaultColor system variable, suggested
+  by Tim Chase.
+
+- NEW FEATURE: The "-@" command-line option allows colored reminders
+  in Agenda Mode as well as in Calendar Mode.  It also adds support for
+  terminal emulators that can handle the xterm 256-color escape sequences
+  as well as the true 24-bit color escape sequences.
+
+- CHANGE: SPECIALs are now case-insensitive.  Before, only SPECIAL COLOR
+  would work.  Now you can use Special Color, special color, etc.
+
 * Version 3.2 Patch 0 - 2020-01-03
 
 - IMPROVEMENT: Add support for events spanning multiple days (with AT

@@ -857,7 +857,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "03.02.00"
+version() => "03.03.00"
 set a059 wkday(today())
 today() => 1991-02-16
 wkday(1991-02-16) => "Saturday"
@@ -1215,7 +1215,7 @@ dump
             a109  2012-01-01
             a128  2018-02-03@16:45
             a039  "February"
-            a058  "03.02.00"
+            a058  "03.03.00"
             a077  "1992 92
 "
             a096  -4

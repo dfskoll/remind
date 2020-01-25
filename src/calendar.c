@@ -281,12 +281,17 @@ static void goff(void)
   printf("%s", linestruct->graphics_off);
 }
 
-void Decolorize(void)
+char const *
+Decolorize(int r, int g, int b)
 {
-  printf("%s", "\x1B[0m");
+    if (!strcmp(Colorize(r, g, b), "")) {
+	return "";
+    }
+    return "\x1B[0m";
 }
 
-void Colorize(int r, int g, int b)
+char const *
+Colorize(int r, int g, int b)
 {
   int bright = 0;
   if (r > 128 || g > 128 || b > 128) {
@@ -299,12 +304,20 @@ void Colorize(int r, int g, int b)
   if (b > 64) b = 1;
   else b = 0;
 
-  printf("%s", VT100Colors[bright][r][g][b]);
+  /* Don't do black on a dark terminal or white
+     on a light terminal */
+  if (TerminalBackground == TERMINAL_BACKGROUND_DARK) {
+      if (!r && !g && !b) return "";
+  }
+  if (TerminalBackground == TERMINAL_BACKGROUND_LIGHT) {
+      if (r && g && b) return "";
+  }
+  return VT100Colors[bright][r][g][b];
 }
 
 static void ColorizeEntry(CalEntry const *e)
 {
-    Colorize(e->r, e->g, e->b);
+    printf("%s", Colorize(e->r, e->g, e->b));
 }
 
 static int
@@ -829,7 +842,7 @@ static int WriteOneColLine(int col)
 
 	/* Decolorize reminder if necessary */
 	if (UseVTColors && e->is_color) {
-	    Decolorize();
+	    printf("%s", Decolorize(e->r, e->g, e->b));
 	}
 
 	/* Flesh out the rest of the column */
@@ -901,7 +914,7 @@ static int WriteOneColLine(int col)
 
 	/* Decolorize reminder if necessary */
 	if (UseVTColors && e->is_color) {
-	    Decolorize();
+	    printf("%s", Decolorize(e->r, e->g, e->b));
 	}
 
 	/* Flesh out the rest of the column */

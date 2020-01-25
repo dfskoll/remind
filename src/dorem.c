@@ -763,6 +763,9 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     char const *s;
     Value v;
 
+    int red = -1, green = -1, blue = -1;
+    int is_color = 0;
+
     DBufInit(&buf);
     DBufInit(&calRow);
     DBufInit(&pre_buf);
@@ -777,6 +780,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
     if (t->typ == PASSTHRU_TYPE && (!strcmp(t->passthru, "COLOR") || !strcmp(t->passthru, "COLOUR"))) {
 	/* Strip off three tokens */
 	r = ParseToken(p, &buf);
+	sscanf(DBufValue(&buf), "%d", &red);
 	if (!NextMode) {
 	    DBufPuts(&pre_buf, DBufValue(&buf));
 	    DBufPutc(&pre_buf, ' ');
@@ -784,6 +788,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
+	sscanf(DBufValue(&buf), "%d", &green);
 	if (!NextMode) {
 	    DBufPuts(&pre_buf, DBufValue(&buf));
 	    DBufPutc(&pre_buf, ' ');
@@ -791,6 +796,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	DBufFree(&buf);
 	if (r) return r;
 	r = ParseToken(p, &buf);
+	sscanf(DBufValue(&buf), "%d", &blue);
 	if (!NextMode) {
 	    DBufPuts(&pre_buf, DBufValue(&buf));
 	    DBufPutc(&pre_buf, ' ');
@@ -874,6 +880,16 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	return OK;
     }
 
+    /* Correct colors */
+    if (UseVTColors) {
+	if (red >= 0 && green >= 0 && blue >= 0) {
+	    is_color = 1;
+	    if (red > 255) red = 255;
+	    if (green > 255) green = 255;
+	    if (blue > 255) blue = 255;
+	}
+    }
+
     /* Put the substituted string into the substitution buffer */
 
     /* Don't use msgprefix() on RUN-type reminders */
@@ -884,6 +900,9 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	    r = EvalExpr(&s, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
+		    if (is_color) {
+			DBufPuts(&buf, Colorize(red, green, blue));
+		    }
 		    if (DBufPuts(&buf, v.v.str) != OK) {
 			DBufFree(&buf);
 			DestroyValue(v);
@@ -895,6 +914,9 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	}
     }
 
+    if (is_color) {
+	DBufPuts(&buf, Colorize(red, green, blue));
+    }
     if ( (r=DoSubst(p, &buf, t, tim, jul, NORMAL_MODE)) ) return r;
     if (t->typ != RUN_TYPE) {
 	if (UserFuncExists("msgsuffix") == 1) {
@@ -903,6 +925,9 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	    r = EvalExpr(&s, &v, NULL);
 	    if (!r) {
 		if (!DoCoerce(STR_TYPE, &v)) {
+		    if (is_color) {
+			DBufPuts(&buf, Colorize(red, green, blue));
+		    }
 		    if (DBufPuts(&buf, v.v.str) != OK) {
 			DBufFree(&buf);
 			DestroyValue(v);
@@ -912,6 +937,10 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 		DestroyValue(v);
 	    }
 	}
+    }
+
+    if (is_color) {
+	DBufPuts(&buf, Decolorize(red, green, blue));
     }
 
     if ((!MsgCommand && t->typ == MSG_TYPE) || t->typ == MSF_TYPE) {

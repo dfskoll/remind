@@ -207,6 +207,13 @@ void InitRemind(int argc, char const *argv[])
 
 	    case '@':
 		UseVTColors = 1;
+		if (*arg == '0') {
+		    TerminalBackground = TERMINAL_BACKGROUND_DARK;
+		    arg++;
+		} else if (*arg == '1') {
+		    TerminalBackground = TERMINAL_BACKGROUND_LIGHT;
+		    arg++;
+		}
 		break;
 
 	    case 'j':

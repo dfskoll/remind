@@ -227,3 +227,7 @@ typedef struct {
 
 /* Pure JSON */
 #define PSCAL_LEVEL3  3
+
+#define TERMINAL_BACKGROUND_UNKNOWN 0
+#define TERMINAL_BACKGROUND_DARK    1
+#define TERMINAL_BACKGROUND_LIGHT   2

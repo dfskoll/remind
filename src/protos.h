@@ -149,5 +149,5 @@ void ClearLastTriggers(void);
 void SaveLastTrigger(Trigger const *t);
 void SaveLastTimeTrig(TimeTrig const *t);
 void PerIterationInit(void);
-void Decolorize(void);
-void Colorize(int r, int g, int b);
+char const *Decolorize(int r, int g, int b);
+char const *Colorize(int r, int g, int b);

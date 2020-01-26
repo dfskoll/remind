@@ -2971,6 +2971,7 @@ def
 ifelse
 %%EndProlog
 %%Page: Aug09 1
+%%PageBoundingBox: 0 0 612 792
 90 rotate 0 XSIZE neg translate
 /SAVESTATE save def (August) (2009) PreCal SAVESTATE restore
 (August 2009) doheading
@@ -4070,6 +4071,7 @@ def
 ifelse
 %%EndProlog
 %%Page: Aug09 1
+%%PageBoundingBox: 0 0 612 792
 90 rotate 0 XSIZE neg translate
 /SAVESTATE save def (August) (2009) PreCal SAVESTATE restore
 (August 2009) doheading

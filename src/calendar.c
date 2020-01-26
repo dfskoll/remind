@@ -375,7 +375,8 @@ Colorize256(int r, int g, int b)
     int best_dist = 0;
     int dist;
     struct xterm256_colors *cur;
-    for (size_t i=0; i<(sizeof(XTerm256Colors) / sizeof(XTerm256Colors[0])); i++) {
+    size_t i;
+    for (i=0; i<(sizeof(XTerm256Colors) / sizeof(XTerm256Colors[0])); i++) {
 	cur = &XTerm256Colors[i];
 	dist = ((r - cur->r) * (r - cur->r)) +
 	    ((b - cur->b) * (b - cur->b)) +

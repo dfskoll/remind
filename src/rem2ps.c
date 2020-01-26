@@ -398,6 +398,7 @@ void DoPsCal(void)
 
     printf("%%%%Page: %c%c%c%c%c %d\n", month[0], month[1], month[2],
 	   year[2], year[3], validfile);
+    printf("%%%%PageBoundingBox: 0 0 %d %d\n", CurPage->xsize, CurPage->ysize);
 
 /* Emit PostScript to do the heading */
     if (!PortraitMode) printf("90 rotate 0 XSIZE neg translate\n");

@@ -43,7 +43,7 @@ ComputeTrigDuration(TimeTrig *t)
 	t->duration == NO_TIME) {
 	return 0;
     }
-    return (t->ttime + t->duration - 1) / 1440;
+    return (t->ttime + t->duration - 1) / MINUTES_PER_DAY;
 }
 
 /***************************************************************/

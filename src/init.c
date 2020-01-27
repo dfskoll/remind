@@ -38,7 +38,7 @@
  *             simple calendar format.
  *  -r       = Disallow RUN mode
  *  -c[n]    = Produce a calendar for n months (default = 1)
- *  -@[n]    = Use VT100 color codes (n=0 for dark terminal; n=1 for light
+ *  -@[n,m]  = Colorize n=0 VT100 n=1 85 n=2 True m=0 dark terminal m=1 light
  *  -w[n,n,n] = Specify output device width, padding and spacing
  *  -s[n]    = Produce calendar in "simple calendar" format
  *  -p[n]    = Produce calendar in format compatible with rem2ps
@@ -136,7 +136,7 @@ void InitRemind(int argc, char const *argv[])
     int InvokedAsRem = 0;
     char const *s;
     int weeks;
-
+    int x;
     int jul;
 
 #if defined(__APPLE__)
@@ -191,6 +191,7 @@ void InitRemind(int argc, char const *argv[])
 
     /* Parse the command-line options */
     i = 1;
+
     while (i < argc) {
 	arg = argv[i];
 	if (*arg != '-') break; /* Exit the loop if it's not an option */
@@ -207,20 +208,22 @@ void InitRemind(int argc, char const *argv[])
 
 	    case '@':
 		UseVTColors = 1;
-		if (*arg == '0' || *arg == '2') {
-		    TerminalBackground = TERMINAL_BACKGROUND_DARK;
-		    if (*arg == '2') Use256Colors = 1;
+		if (*arg) {
+		    PARSENUM(x, arg);
+		    if (x == 1) {
+			Use256Colors = 1;
+		    } else if (x == 2) {
+			UseTrueColors = 1;
+		    }
+		}
+		if (*arg == ',') {
 		    arg++;
-		} else if (*arg == '1' || *arg == '3') {
-		    TerminalBackground = TERMINAL_BACKGROUND_LIGHT;
-		    if (*arg == '3') Use256Colors = 1;
-		    arg++;
-		} else if (*arg == '4') {
-		    Use256Colors = 1;
-		    arg++;
-		} else if (*arg == '5') {
-		    UseTrueColors = 1;
-		    arg++;
+		    PARSENUM(x, arg);
+		    if (x == 0) {
+			TerminalBackground = TERMINAL_BACKGROUND_DARK;
+		    } else if (x == 1) {
+			TerminalBackground = TERMINAL_BACKGROUND_LIGHT;
+		    }
 		}
 		break;
 
@@ -642,7 +645,7 @@ void Usage(void)
     fprintf(ErrFp, "Options:\n");
     fprintf(ErrFp, " -n     Output next occurrence of reminders in simple format\n");
     fprintf(ErrFp, " -r     Disable RUN directives\n");
-    fprintf(ErrFp, " -@[n]  Use VT100 color codes for COLOR reminders: n=0 light bg; n=1 dark bg\n");
+    fprintf(ErrFp, " -@[n,m] Colorize COLOR reminders\n");
     fprintf(ErrFp, " -c[a][n] Produce a calendar for n (default 1) months\n");
     fprintf(ErrFp, " -c[a]+[n] Produce a calendar for n (default 1) weeks\n");
     fprintf(ErrFp, " -w[n[,p[,s]]]  Specify width, padding and spacing of calendar\n");

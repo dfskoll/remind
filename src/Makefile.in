@@ -88,7 +88,7 @@ distro:
 beta-tgz:
 	cd .. && git archive --worktree-attributes --format=tar --prefix=remind-$(VERSION)/ HEAD > src/remind-$(VERSION)-BETA-$(BETA).tar
 	gzip -f -v -9 remind-$(VERSION)-BETA-$(BETA).tar
-	gpg --detach-sign -u dianne@skoll.ca remind-$(VERSION)-BETA=$(BETA).tar.gz
+	gpg --detach-sign -u dianne@skoll.ca remind-$(VERSION)-BETA-$(BETA).tar.gz
 
 #---------------- Stuff after this added by "make depend" -----------------
 

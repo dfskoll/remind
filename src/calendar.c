@@ -358,6 +358,45 @@ static void goff(void)
   printf("%s", linestruct->graphics_off);
 }
 
+static void
+ClampColor(int *r, int *g, int *b)
+{
+    if (TerminalBackground == TERMINAL_BACKGROUND_UNKNOWN) {
+	/* No special clamping if terminal background is unknown */
+	return;
+    }
+    if (TerminalBackground == TERMINAL_BACKGROUND_DARK) {
+	if (*r <= 64 && *g <= 64 && *b <= 64) {
+	    int max = *r;
+	    double factor;
+	    if (*g > max) max = *g;
+	    if (*b > max) max = *b;
+	    if (max == 0) {
+		*r = 65;
+		*g = 65;
+		*b = 65;
+		return;
+	    }
+	    factor = 65.0 / (double) max;
+	    *r = (int) (factor * (double) *r);
+	    *g = (int) (factor * (double) *g);
+	    *b = (int) (factor * (double) *b);
+	}
+	return;
+    }
+    if (TerminalBackground == TERMINAL_BACKGROUND_LIGHT) {
+	if (*r > 191 && *g > 191 && *b > 191) {
+	    int min = *r;
+	    if (*g < min) min = *g;
+	    if (*b < min) min = *b;
+	    double factor = 192.0 / (double) min;
+	    *r = (int) (factor * (double) *r);
+	    *g = (int) (factor * (double) *g);
+	    *b = (int) (factor * (double) *b);
+	}
+    }
+}
+
 char const *
 Decolorize(int r, int g, int b)
 {
@@ -376,6 +415,8 @@ Colorize256(int r, int g, int b)
     int dist;
     struct xterm256_colors *cur;
     size_t i;
+
+    ClampColor(&r, &g, &b);
     for (i=0; i<(sizeof(XTerm256Colors) / sizeof(XTerm256Colors[0])); i++) {
 	cur = &XTerm256Colors[i];
 	dist = ((r - cur->r) * (r - cur->r)) +
@@ -387,14 +428,6 @@ Colorize256(int r, int g, int b)
 	}
     }
     cur = &XTerm256Colors[best];
-    if (TerminalBackground == TERMINAL_BACKGROUND_DARK &&
-	!cur->r && !cur->g && !cur->b) {
-	return VT100Colors[1][0][0][0];
-    }
-    if (TerminalBackground == TERMINAL_BACKGROUND_LIGHT &&
-	cur->r == 255 && cur->g == 255 && cur->b == 255) {
-	return VT100Colors[1][0][0][0];
-    }
     sprintf(buf, "\x1B[38;5;%dm", best);
     return buf;
 }
@@ -403,6 +436,7 @@ static char const *
 ColorizeTrue(int r, int g, int b)
 {
     static char buf[40];
+    ClampColor(&r, &g, &b);
     sprintf(buf, "\x1B[38;2;%d;%d;%dm", r, g, b);
     return buf;
 }

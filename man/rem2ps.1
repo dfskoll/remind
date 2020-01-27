@@ -633,7 +633,14 @@ current month is December.)
 .B entries \fR[\fIarray\fR]
 The \fBentries\fR key consists of an array of calendar entries; each
 entry is a JSON object that has the same format as described in the
-\fBCALENDAR ENTRIES\fR section in the \fB\-PP FORMAT\fR section.
+\fBCALENDAR ENTRIES\fR section in the \fB\-PP FORMAT\fR section,
+\fIwith the following difference\fR: In \fB\-PP\fR mode, if a reminder
+has \fB%"\fR markers, only the text between the markers
+is included in the \fBbody\fR element.  In \fB\-PPP\fR mode, the
+entire text \fIincluding\fR the \fB%"\fR markers is included and it's up to
+the back-end to extract the portion between the markers if that
+is desired.
+
 
 .SH AUTHOR
 Rem2PS was written by Dianne Skoll <dianne@skoll.ca>

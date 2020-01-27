@@ -25,7 +25,7 @@ CHANGES TO REMIND
 - NEW FEATURE: Add support for $DefaultColor system variable, suggested
   by Tim Chase.
 
-- NEW FEATURE: The "-@" command-line option allows colored reminders
+- NEW FEATURE: The "-@[n][,m]" command-line option allows colored reminders
   in Agenda Mode as well as in Calendar Mode.  It also adds support for
   terminal emulators that can handle the xterm 256-color escape sequences
   as well as the true 24-bit color escape sequences.

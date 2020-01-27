@@ -74,12 +74,12 @@ only work on terminals that are set to UTF-8 character encoding.
 .B 'c'
 causes \fBRemind\fR to use VT100 escape sequences to approximate
 SPECIAL COLOR reminders.  Note that this flag is kept for
-backwards-compatibility; you should use the \fB\-@\fI[n]\fR
+backwards-compatibility; you should use the \fB\-@\fI[n][,m]\fR
 command-line option instead.
 .RE
 
 .TP
-.B \-@\fR[\fIn\fR]
+.B \-@\fR[\fIn\fR][,\fIm\fR]
 Tells \fBRemind\fR to approximate SPECIAL COLOR reminders using VT100
 escape sequences.  The approximation is (of necessity) very
 coarse, because the VT100 only has eight different color sequences,
@@ -88,26 +88,21 @@ each with one of two brightnesses.  A color component greater than
 greater than 128, the color is considered "bright".
 .RS
 .PP
-If you supply the optional \fIn\fR parameter, a value of 0 for \fIn\fR
-tells \fBRemind\fR that your terminal background is dark, and a value of
-1 tells it that your terminal background is light.  In this case, a
-black-on-dark color or a white-on-light color is converted to grey so
-that the reminder is still visible.  If \fIn\fR is not supplied, then
-\fBRemind\fR doesn't treat black or white specially and some reminders
-may be rendered invisible.
+If you supply the optional numeric parameters, the have the following
+meanings:  \fIn\fR=0 tells \fBRemind\fR to use the standard 16 VT100
+colors.  \fIn\fR=1 tells it to use an extended 256-color palette supported
+by many terminal emulators such as xterm.  And \fIn\fR=2 tells it to
+use escape sequences that support true 24-bit colors, again supported
+by many terminal emulators such as xterm.
 .PP
-Some terminals (such as "xterm") understand additional escape sequences
-that allow for specification of 256 different colors.  If you supply
-a value of 2, 3 or 4 for \fIn\fR, then \fBRemind\fR uses these enhanced
-escape sequences to more closely approximate colors.  A value of 2
-tells \fBRemind\fR that the terminal background is dark, 3 that it is
-light, and 4 that \fBRemind\fR should not do anything special to
-compensate for the background.
-.PP
-Some terminals (again, "xterm" is one) allow you to set exact 24-bit
-colors.  If you supply a value of 5 for \fIn\fR, then \fBRemind\fR
-uses escape sequences to set the exact (R, G, B) color specified
-in a SPECIAL COLOR reminder.
+If the optional \fIm\fR parameter is supplied following a comma,
+then \fIm\fR=0 tells \fBRemind\fR that the terminal background is dark,
+and \fBRemind\fR will brighten up dark colors to make them visible.  If
+\fIm\fR=1, then \fBRemind\fR assumes the terminal background is light
+and it will darken bright colors to make them visible.  If no \fIm\fR
+is supplied, then \fBRemind\fR does not perform any adjustments, and
+some reminders may be hard or impossible to see if the color is too close
+to the terminal background color.
 .RE
 .TP
 .B \-w\fR\fIcol\fR[,\fIpad\fR[,\fIspc\fR]]]

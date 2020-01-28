@@ -31,6 +31,7 @@
 #define SPECIAL_COLOR      4
 #define SPECIAL_WEEK       5
 #define SPECIAL_SHADE      6
+#define SPECIAL_UNKNOWN    7
 
 /* Array holding how specials sort */
 static int SpecialSortOrder[] = {
@@ -227,6 +228,8 @@ JSONToCalEntry(DynamicBuffer *buf)
 		} else if (!StrCmpi(s, "COLOUR") ||
 			   !StrCmpi(s, "COLOR")) {
 		    c->special = SPECIAL_COLOR;
+		} else {
+		    c->special = SPECIAL_UNKNOWN;
 		}
 	    }
 	}
@@ -297,6 +300,8 @@ TextToCalEntry(DynamicBuffer *buf)
     } else if (!StrCmpi(passthru, "COLOUR") ||
 	       !StrCmpi(passthru, "COLOR")) {
 	c->special = SPECIAL_COLOR;
+    } else if (StrCmpi(passthru, "*")) {
+	c->special = SPECIAL_UNKNOWN;
     }
     return c;
 }
@@ -449,6 +454,7 @@ void DoPsCal(void)
 
 	/* Ignore lines beginning with '#' */
 	if (DBufValue(&buf)[0] == '#') {
+	    DBufFree(&buf);
 	    continue;
 	}
 
@@ -460,6 +466,11 @@ void DoPsCal(void)
 	    c = TextToCalEntry(&buf);
 	}
 
+	/* If it's an unknown special, ignore */
+	if (c->special == SPECIAL_UNKNOWN) {
+	    DBufFree(&buf);
+	    continue;
+	}
 	if (c->daynum != CurDay) {
 	    for(; CurDay<c->daynum; CurDay++) {
 		WriteCalEntry();

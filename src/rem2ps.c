@@ -469,6 +469,8 @@ void DoPsCal(void)
 	/* If it's an unknown special, ignore */
 	if (c->special == SPECIAL_UNKNOWN) {
 	    DBufFree(&buf);
+	    free(c);
+	    c = NULL;
 	    continue;
 	}
 	if (c->daynum != CurDay) {

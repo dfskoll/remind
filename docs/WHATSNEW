@@ -5,6 +5,8 @@ CHANGES TO REMIND
 - FIX: rem2ps: Add a %%PageBoundingBox: document structuring convention
   comment.
 
+- FIX: rem2ps: Ignore unknown SPECIAL-type reminders.
+
 - IMPROVEMENT: In calendar mode ("-c" option), Remind automatically adjusts
   the width of the calendar to fit the terminal window if standard output
   is a TTY.

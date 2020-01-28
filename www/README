@@ -9,7 +9,7 @@ only tested it with Linux running NCSA's httpd and Apache's httpd, but
 it should work on any UNIX web server.
 
 To install it, you need the Remind package, available via ftp from
-ftp://ftp.doe.carleton.ca/pub/remind-3.0.  You should install Remind,
+https://dianne.skoll.ca/projects/remind/  You should install Remind,
 setting the lattitude, longitude, location and time zone as appropriate
 for your machine.
 
@@ -38,12 +38,8 @@ where "what" is one of:
 	hebps   -- get a PostScript calendar with Jewish holidays.
 	hebhtml -- get an HTML version of the above (requires Perl.)
 
-   (Visit http://www.doe.carleton.ca/~dfs/ for previews.)
-
    All of these links will be set up in a sample HTML document
    called "calendar.html" and installed in the HTMLDIR you specified
    in the Makefile.
 
 4) Enjoy!
-
-	

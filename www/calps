@@ -7,5 +7,5 @@
 echo "Content-type: application/postscript"
 echo
 
-$REMIND -p /dev/null | $REM2PS -e -c3 -l
+$REMIND -p $DIR/blank.rem | $REM2PS -e -c3 -l
 exit 0

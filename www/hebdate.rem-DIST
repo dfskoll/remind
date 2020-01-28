@@ -29,6 +29,8 @@ ENDIF
 #									 #
 ##########################################################################
 
+SET n $NumTrig
+
 # --- HERE ARE THE JEWISH HOLIDAYS ---
 # Set the variable InIsrael to 1 if you live in Israel.  Otherwise,
 # you get the Diaspora versions of Jewish holidays
@@ -138,6 +140,10 @@ ENDIF
 
 fset msgprefix(x) ""
 
+IF $NumTrig > n
+   REM SPECIAL SHADE 224 224 255
+ENDIF
+
 # Counting the omer - do the whole spiel, i.e:
 # "This is the xth day of the omer, being y weeks and z days of the omer."
 # Nice Remind programming example here!
@@ -165,7 +171,7 @@ ELSE
 	[trigger(moondate(2))] SPECIAL MOON 2
 	[trigger(moondate(3))] SPECIAL MOON 3
 	REM PS Border Border moveto /DayFont findfont 10 scalefont setfont ([hebday(today())] [hebmon(today())]) show
-	REM SPECIAL HTML <P><FONT SIZE=-1>[hebday(today())] [hebmon(today())]</FONT></P>
+	REM SPECIAL HTML <P>[hebday(today())] [hebmon(today())]</P>
 
 ENDIF
 

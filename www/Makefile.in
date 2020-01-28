@@ -69,6 +69,7 @@ install:
 	sed $(SEDSCRIPT)  < moon.rem-DIST      > $(DESTDIR)$(SCRIPTDIR)/moon.rem
 	sed $(SEDSCRIPT)  < sunrise.rem-DIST   > $(DESTDIR)$(SCRIPTDIR)/sunrise.rem
 	sed $(SEDSCRIPT)  < sunset.rem-DIST    > $(DESTDIR)$(SCRIPTDIR)/sunset.rem
+	cp blank.rem $(DESTDIR)$(SCRIPTDIR)/blank.rem
 	sed $(SEDSCRIPT)  < calendar.html-DIST > $(DESTDIR)$(HTMLDIR)/calendar.html
 	sed $(SEDSCRIPT)  < hebhtml  > $(DESTDIR)$(SCRIPTDIR)/hebhtml
 	sed $(SEDSCRIPT2) < rem2html > $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)
@@ -76,6 +77,7 @@ install:
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/moon.rem
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/hebdate.rem
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/sunset.rem
+	chmod 644 $(DESTDIR)$(SCRIPTDIR)/blank.rem
 	chmod 644 $(DESTDIR)$(HTMLDIR)/calendar.html
 	chmod 755 $(DESTDIR)$(SCRIPTDIR)/cal_dispatch$(CGISUFFIX)
 	chmod 755 $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)

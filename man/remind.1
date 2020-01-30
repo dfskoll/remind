@@ -489,7 +489,8 @@ of a special reminder depends on the back-end.  For the \fBRem2PS\fR
 back-end, \fBSPECIAL PostScript\fR is equivalent to a \fBPS\fR-type
 reminder, and \fBSPECIAL PSFile\fR is equivalent to a \fBPSFILE\fR-type
 reminder.  The body of a \fBSPECIAL\fR reminder is obviously dependent
-upon the back-end.
+upon the back-end.  A back-end \fImust\fR ignore a \fBSPECIAL\fR that
+it does not recognize.
 .PP
 .B DATE SPECIFICATIONS
 .PP

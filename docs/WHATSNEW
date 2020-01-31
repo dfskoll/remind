@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* Version 3.3 Patch 0 - YYYY-MM-DD
+* Version 3.3 Patch 0 - 2020-01-31
 
 - FIX: rem2ps: Add a %%PageBoundingBox: document structuring convention
   comment.

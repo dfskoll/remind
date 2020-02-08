@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include "types.h"
 #include "protos.h"
@@ -147,6 +148,17 @@ void InitRemind(int argc, char const *argv[])
 
     jul = NO_DATE;
 
+    /* If stdout is a terminal, initialize $FormWidth to terminal width-8,
+       but clamp to [20, 132] */
+    if (isatty(STDOUT_FILENO)) {
+	struct winsize w;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
+	    FormWidth = w.ws_col - 8;
+	    if (FormWidth < 20) FormWidth = 20;
+	    if (FormWidth > 132) FormWidth = 132;
+	}
+    }
+    
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
     DBufInit(&LineBuffer);

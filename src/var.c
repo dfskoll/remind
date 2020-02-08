@@ -657,7 +657,7 @@ static SysVar SysVarArr[] = {
     {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,          0,      0   },
     {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,        0,      132 },
     {"FoldYear",       1,  INT_TYPE,     &FoldYear,           0,      1   },
-    {"FormWidth",      1,  INT_TYPE,     &FormWidth,          20,     132 },
+    {"FormWidth",      1,  INT_TYPE,     &FormWidth,          20,     500 },
     {"HushMode",       0,  INT_TYPE,     &Hush,               0,      0   },
     {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,         0,      0   },
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },

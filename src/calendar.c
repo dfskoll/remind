@@ -495,7 +495,7 @@ ComputeCalWidth(int x)
 	return 80;
     }
     if (w.ws_col < 71) {
-	return 80;
+	return 71;
     }
     return w.ws_col;
 }

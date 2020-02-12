@@ -780,7 +780,8 @@ static int WriteCalendarRow(void)
 	else {
 	    sprintf(buf, "%d ", d+i-wd);
 	    if (OrigJul+i == RealToday) {
-		PrintLeft(buf, ColSpaces, '*');
+		PrintLeft(buf, ColSpaces-1, '*');
+		PutChar(' ');
 	    } else {
 		PrintLeft(buf, ColSpaces, ' ');
 	    }

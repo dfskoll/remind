@@ -778,8 +778,12 @@ static int WriteCalendarRow(void)
 	if (i < wd || d+i-wd>DaysInMonth(m, y))
 	    PrintLeft("", ColSpaces, ' ');
 	else {
-	    sprintf(buf, "%d", d+i-wd);
-	    PrintLeft(buf, ColSpaces, ' ');
+	    sprintf(buf, "%d ", d+i-wd);
+	    if (OrigJul+i == RealToday) {
+		PrintLeft(buf, ColSpaces, '*');
+	    } else {
+		PrintLeft(buf, ColSpaces, ' ');
+	    }
 	}
 	gon();
 	DRAW(tb);

@@ -1083,15 +1083,21 @@ to each distinct REM command.
 .PP
 The \fBDURATION\fR keyword makes sense only for timed reminders; it
 specifies the duration of an event.  For example, if you have a
-90-minute meeting starting at 1:00pm, you could use:
+90-minute meeting starting at 1:00pm, you could use any of the following:
 .PP
 .nf
-	REM 5 March 1999 AT 13:00 DURATION 1:30 MSG Meeting
+	REM 5 March 2021 AT 13:00 DURATION 1:30 MSG Meeting
+	REM 5 March 2021 AT 13:00 DURATION 90 MSG Meeting
+	REM 5 March 2021 AT 1:00pm DURATION 1:30 MSG Meeting
+	REM 5 March 2021 AT 1:00pm DURATION 90 MSG Meeting
 .fi
 .PP
-Note that \fIduration\fR is specified in hours and minutes.  If you
-specify a duration of 00:00, then \fBRemind\fR behaves exactly as if
-no \fBDURATION\fR at all had been present.
+
+Note that \fIduration\fR is specified either in hours and minutes as a
+\fItime\fR, or in minutes as an \fIinteger\fR.  If you specify a
+duration of 00:00 or 0, then \fBRemind\fR behaves exactly as if no
+\fBDURATION\fR at all had been present.
+
 .PP
 .SH THE SUBSTITUTION FILTER
 .PP

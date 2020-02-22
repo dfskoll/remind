@@ -543,7 +543,7 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 	    }
 	    if (*s || h>23 || m>59) return E_BAD_TIME;
 	    if (ampm) {
-		if (h > 12) return E_BAD_TIME;
+		if (h < 1 || h > 12) return E_BAD_TIME;
 		if (ampm == 'a') {
 		    if (h == 12) {
 			h = 0;
@@ -1308,7 +1308,7 @@ int ParseLiteralDate(char const **s, int *jul, int *tim)
 	}
 	if (hour>23 || min>59) return E_BAD_TIME;
 	if (ampm) {
-	    if (hour > 12) return E_BAD_TIME;
+	    if (hour < 1 || hour > 12) return E_BAD_TIME;
 	    if (ampm == 'a') {
 		if (hour == 12) {
 		    hour = 0;

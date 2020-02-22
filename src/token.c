@@ -311,7 +311,7 @@ void FindNumericToken(char const *s, Token *t)
 	    }
 	    if (*s) return;  /* Illegal time */
 	    if (ampm) {
-		if (hour > 12) return;
+		if (hour < 1 || hour > 12) return;
 		if (ampm == 'a') {
 		    if (hour == 12) {
 			hour = 0;

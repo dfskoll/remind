@@ -257,6 +257,7 @@ void FindNumericToken(char const *s, Token *t)
 {
     int mult = 1, hour, min;
     char const *s_orig = s;
+    int ampm = 0;
 
     t->type = T_Illegal;
     t->val = 0;
@@ -299,7 +300,29 @@ void FindNumericToken(char const *s, Token *t)
 	    s++;
 	    hour = t->val;
 	    PARSENUM(min, s);
-	    if (*s || min > 59) return;  /* Illegal time */
+	    if (min > 59) return; /* Illegal time */
+	    /* Check for p[m] or a[m] */
+	    if (*s == 'A' || *s == 'a' || *s == 'P' || *s == 'p') {
+		ampm = tolower(*s);
+		s++;
+		if (*s == 'm' || *s == 'M') {
+		    s++;
+		}
+	    }
+	    if (*s) return;  /* Illegal time */
+	    if (ampm) {
+		if (hour > 12) return;
+		if (ampm == 'a') {
+		    if (hour == 12) {
+			hour = 0;
+		    }
+		} else if (ampm == 'p') {
+		    if (hour < 12) {
+			hour += 12;
+		    }
+		}
+	    }
+
 	    t->val = hour*60 + min;  /* Convert to minutes past midnight */
 	    if (hour <= 23) {
 		t->type = T_Time;

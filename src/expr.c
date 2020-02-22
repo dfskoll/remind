@@ -492,6 +492,7 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 {
     int len;
     int h, m, r;
+    int ampm = 0;
 
     if (*s == '\"') { /* It's a literal string "*/
 	len = strlen(s)-1;
@@ -532,7 +533,27 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 		m += *s - '0';
 		s++;
 	    }
+	    /* Check for p[m] or a[m] */
+	    if (*s == 'A' || *s == 'a' || *s == 'P' || *s == 'p') {
+		ampm = tolower(*s);
+		s++;
+		if (*s == 'm' || *s == 'M') {
+		    s++;
+		}
+	    }
 	    if (*s || h>23 || m>59) return E_BAD_TIME;
+	    if (ampm) {
+		if (h > 12) return E_BAD_TIME;
+		if (ampm == 'a') {
+		    if (h == 12) {
+			h = 0;
+		    }
+		} else if (ampm == 'p') {
+		    if (h < 12) {
+			h += 12;
+		    }
+		}
+	    }
 	    v->type = TIME_TYPE;
 	    v->v.val = h*60 + m;
 	    return OK;
@@ -1234,6 +1255,7 @@ int ParseLiteralDate(char const **s, int *jul, int *tim)
 {
     int y, m, d;
     int hour, min;
+    int ampm = 0;
 
     y=0; m=0; d=0;
     hour=0; min=0;
@@ -1276,7 +1298,27 @@ int ParseLiteralDate(char const **s, int *jul, int *tim)
 	    min *= 10;
 	    min += *(*s)++ - '0';
 	}
-	if (hour > 23 || min > 59) return E_BAD_TIME;
+	/* Check for p[m] or a[m] */
+	if (**s == 'A' || **s == 'a' || **s == 'P' || **s == 'p') {
+	    ampm = tolower(**s);
+	    (*s)++;
+	    if (**s == 'm' || **s == 'M') {
+		(*s)++;
+	    }
+	}
+	if (hour>23 || min>59) return E_BAD_TIME;
+	if (ampm) {
+	    if (hour > 12) return E_BAD_TIME;
+	    if (ampm == 'a') {
+		if (hour == 12) {
+		    hour = 0;
+		}
+	    } else if (ampm == 'p') {
+		if (hour < 12) {
+		    hour += 12;
+		}
+	    }
+	}
 	*tim = hour * 60 + min;
     }
 

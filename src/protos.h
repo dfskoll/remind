@@ -89,7 +89,7 @@ char const *FindInitialToken (Token *tok, char const *s);
 void FindToken (char const *s, Token *tok);
 void FindNumericToken (char const *s, Token *t);
 int ComputeTrigger (int today, Trigger *trig, TimeTrig *tim, int *err, int save_in_globals);
-int ComputeTriggerNoAdjustDuration (int today, Trigger *trig, TimeTrig *tim, int *err, int save_in_globals);
+int ComputeTriggerNoAdjustDuration (int today, Trigger *trig, TimeTrig *tim, int *err, int save_in_globals, int duration_days);
 int AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int save_in_globals);
 int ComputeScanStart(int today, Trigger *trig, TimeTrig *tt);
 char *StrnCpy (char *dest, char const *source, int n);

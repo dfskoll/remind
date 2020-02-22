@@ -474,9 +474,19 @@ AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int sav
 int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 		   int *err, int save_in_globals)
 {
-    int r = ComputeTriggerNoAdjustDuration(today, trig, tim, err, save_in_globals);
+    int r = ComputeTriggerNoAdjustDuration(today, trig, tim, err, save_in_globals, 0);
     if (*err != OK) {
 	return r;
+    }
+    if (r == today) {
+	return r;
+    }
+
+    if (trig->duration_days) {
+	r = ComputeTriggerNoAdjustDuration(today, trig, tim, err, save_in_globals, trig->duration_days);
+	if (*err != OK) {
+	    return r;
+	}
     }
     r = AdjustTriggerForDuration(today, r, trig, tim, save_in_globals);
     return r;
@@ -491,10 +501,10 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 /*                                                             */
 /***************************************************************/
 int ComputeTriggerNoAdjustDuration(int today, Trigger *trig, TimeTrig *tim,
-				   int *err, int save_in_globals)
+				   int *err, int save_in_globals, int duration_days)
 {
     int nattempts = 0,
-	start = today - trig->duration_days,
+	start = today - duration_days,
 	nextstart = 0,
 	y, m, d, omit,
 	result;
@@ -561,7 +571,7 @@ int ComputeTriggerNoAdjustDuration(int today, Trigger *trig, TimeTrig *tim,
 	}
 
 	/** FIXME: Fix bad interaction with SATISFY... need to rethink!!! */
-	if (result+trig->duration_days >= today &&
+	if (result+duration_days >= today &&
 	    (trig->skip != SKIP_SKIP || !omit)) {
 	    if (save_in_globals) {
 		LastTriggerDate = result;  /* Save in global var */

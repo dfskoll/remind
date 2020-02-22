@@ -1102,9 +1102,15 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
     iter = 0;
     start = trig->scanfrom;
     while (iter++ < MaxSatIter) {
-	jul = ComputeTriggerNoAdjustDuration(start, trig, tt, &r, 1);
+	jul = ComputeTriggerNoAdjustDuration(start, trig, tt, &r, 1, 0);
 	if (r) {
 	    if (r == E_CANT_TRIG) return OK; else return r;
+	}
+	if (jul != start && trig->duration_days) {
+	    jul = ComputeTriggerNoAdjustDuration(start, trig, tt, &r, 1, trig->duration_days);
+	    if (r) {
+		if (r == E_CANT_TRIG) return OK; else return r;
+	    }
 	}
 	if (jul == -1) {
 	    return E_EXPIRED;

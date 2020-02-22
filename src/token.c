@@ -285,10 +285,6 @@ void FindNumericToken(char const *s, Token *t)
 	   like Jan 6, 1998 */
 	if (*s == ',') {
 	    s++;
-	    /* Special hack - convert years between 90 and
-	       99 to 1990 and 1999 */
-	    if (t->val >= 90 && t->val <= 99) t->val += 1900;
-
 	    /* Classify the number we've got */
 	    if (t->val >= BASE && t->val <= BASE+YR_RANGE) t->type = T_Year;
 	    else if (t->val >= 1 && t->val <= 31) t->type = T_Day;

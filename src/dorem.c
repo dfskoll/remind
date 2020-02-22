@@ -417,6 +417,9 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    switch(tok.type) {
 	    case T_Time:
 	    case T_LongTime:
+	    case T_Year:
+	    case T_Day:
+	    case T_Number:
 		if (tok.val != 0) {
 		    tim->duration = tok.val;
 		} else {

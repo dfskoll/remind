@@ -1396,7 +1396,7 @@ REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
 # Parsing of AM/PM times
 REM AT 0:00am MSG foo 0a
 ../tests/test.rem(401): Expecting time after AT
-REM AT 1:00am MSG foo 1a
+REM AT 1:00AM MSG foo 1a
 ../tests/test.rem(402): Trig = Saturday, 16 February, 1991 AT 01:00
 foo 1a
 
@@ -1404,7 +1404,7 @@ REM AT 2:00am MSG foo 2a
 ../tests/test.rem(403): Trig = Saturday, 16 February, 1991 AT 02:00
 foo 2a
 
-REM AT 3:00am MSG foo 3a
+REM AT 3:00AM MSG foo 3a
 ../tests/test.rem(404): Trig = Saturday, 16 February, 1991 AT 03:00
 foo 3a
 
@@ -1412,7 +1412,7 @@ REM AT 4:00am MSG foo 4a
 ../tests/test.rem(405): Trig = Saturday, 16 February, 1991 AT 04:00
 foo 4a
 
-REM AT 5:00am MSG foo 5a
+REM AT 5:00AM MSG foo 5a
 ../tests/test.rem(406): Trig = Saturday, 16 February, 1991 AT 05:00
 foo 5a
 
@@ -1420,7 +1420,7 @@ REM AT 6:00am MSG foo 6a
 ../tests/test.rem(407): Trig = Saturday, 16 February, 1991 AT 06:00
 foo 6a
 
-REM AT 7:00am MSG foo 7a
+REM AT 7:00AM MSG foo 7a
 ../tests/test.rem(408): Trig = Saturday, 16 February, 1991 AT 07:00
 foo 7a
 
@@ -1428,7 +1428,7 @@ REM AT 8:00am MSG foo 8a
 ../tests/test.rem(409): Trig = Saturday, 16 February, 1991 AT 08:00
 foo 8a
 
-REM AT 9:00am MSG foo 9a
+REM AT 9:00AM MSG foo 9a
 ../tests/test.rem(410): Trig = Saturday, 16 February, 1991 AT 09:00
 foo 9a
 
@@ -1436,7 +1436,7 @@ REM AT 10:00am MSG foo 10a
 ../tests/test.rem(411): Trig = Saturday, 16 February, 1991 AT 10:00
 foo 10a
 
-REM AT 11:00am MSG foo 11a
+REM AT 11:00AM MSG foo 11a
 ../tests/test.rem(412): Trig = Saturday, 16 February, 1991 AT 11:00
 foo 11a
 
@@ -1444,11 +1444,11 @@ REM AT 12:00am MSG foo 12a
 ../tests/test.rem(413): Trig = Saturday, 16 February, 1991 AT 00:00
 foo 12a
 
-REM AT 13:00am MSG foo 13a
+REM AT 13:00AM MSG foo 13a
 ../tests/test.rem(414): Expecting time after AT
 REM AT 0:00pm MSG foo 0p
 ../tests/test.rem(415): Expecting time after AT
-REM AT 1:00pm MSG foo 1p
+REM AT 1:00PM MSG foo 1p
 ../tests/test.rem(416): Trig = Saturday, 16 February, 1991 AT 13:00
 foo 1p
 
@@ -1456,7 +1456,7 @@ REM AT 2:00pm MSG foo 2p
 ../tests/test.rem(417): Trig = Saturday, 16 February, 1991 AT 14:00
 foo 2p
 
-REM AT 3:00pm MSG foo 3p
+REM AT 3:00PM MSG foo 3p
 ../tests/test.rem(418): Trig = Saturday, 16 February, 1991 AT 15:00
 foo 3p
 
@@ -1464,7 +1464,7 @@ REM AT 4:00pm MSG foo 4p
 ../tests/test.rem(419): Trig = Saturday, 16 February, 1991 AT 16:00
 foo 4p
 
-REM AT 5:00pm MSG foo 5p
+REM AT 5:00PM MSG foo 5p
 ../tests/test.rem(420): Trig = Saturday, 16 February, 1991 AT 17:00
 foo 5p
 
@@ -1472,7 +1472,7 @@ REM AT 6:00pm MSG foo 6p
 ../tests/test.rem(421): Trig = Saturday, 16 February, 1991 AT 18:00
 foo 6p
 
-REM AT 7:00pm MSG foo 7p
+REM AT 7:00PM MSG foo 7p
 ../tests/test.rem(422): Trig = Saturday, 16 February, 1991 AT 19:00
 foo 7p
 
@@ -1480,7 +1480,7 @@ REM AT 8:00pm MSG foo 8p
 ../tests/test.rem(423): Trig = Saturday, 16 February, 1991 AT 20:00
 foo 8p
 
-REM AT 9:00pm MSG foo 9p
+REM AT 9:00PM MSG foo 9p
 ../tests/test.rem(424): Trig = Saturday, 16 February, 1991 AT 21:00
 foo 9p
 
@@ -1488,7 +1488,7 @@ REM AT 10:00pm MSG foo 10p
 ../tests/test.rem(425): Trig = Saturday, 16 February, 1991 AT 22:00
 foo 10p
 
-REM AT 11:00pm MSG foo 11p
+REM AT 11:00PM MSG foo 11p
 ../tests/test.rem(426): Trig = Saturday, 16 February, 1991 AT 23:00
 foo 11p
 
@@ -1496,124 +1496,124 @@ REM AT 12:00pm MSG foo 12p
 ../tests/test.rem(427): Trig = Saturday, 16 February, 1991 AT 12:00
 foo 12p
 
-REM AT 13:00pm MSG foo 13p
+REM AT 13:00PM MSG foo 13p
 ../tests/test.rem(428): Expecting time after AT
 
 DEBUG +x
 SET x 0:00am + 0
 ../tests/test.rem(431): Ill-formed time
-SET x 1:00am + 0
+SET x 1:00AM + 0
 01:00 + 0 => 01:00
 SET x 2:00am + 0
 02:00 + 0 => 02:00
-SET x 3:00am + 0
+SET x 3:00AM + 0
 03:00 + 0 => 03:00
 SET x 4:00am + 0
 04:00 + 0 => 04:00
-SET x 5:00am + 0
+SET x 5:00AM + 0
 05:00 + 0 => 05:00
 SET x 6:00am + 0
 06:00 + 0 => 06:00
-SET x 7:00am + 0
+SET x 7:00AM + 0
 07:00 + 0 => 07:00
 SET x 8:00am + 0
 08:00 + 0 => 08:00
-SET x 9:00am + 0
+SET x 9:00AM + 0
 09:00 + 0 => 09:00
 SET x 10:00am + 0
 10:00 + 0 => 10:00
-SET x 11:00am + 0
+SET x 11:00AM + 0
 11:00 + 0 => 11:00
 SET x 12:00am + 0
 00:00 + 0 => 00:00
-SET x 13:00am + 0
+SET x 13:00AM + 0
 ../tests/test.rem(444): Ill-formed time
 
 SET x 0:00pm + 0
 ../tests/test.rem(446): Ill-formed time
-SET x 1:00pm + 0
+SET x 1:00PM + 0
 13:00 + 0 => 13:00
 SET x 2:00pm + 0
 14:00 + 0 => 14:00
-SET x 3:00pm + 0
+SET x 3:00PM + 0
 15:00 + 0 => 15:00
 SET x 4:00pm + 0
 16:00 + 0 => 16:00
-SET x 5:00pm + 0
+SET x 5:00PM + 0
 17:00 + 0 => 17:00
 SET x 6:00pm + 0
 18:00 + 0 => 18:00
-SET x 7:00pm + 0
+SET x 7:00PM + 0
 19:00 + 0 => 19:00
 SET x 8:00pm + 0
 20:00 + 0 => 20:00
-SET x 9:00pm + 0
+SET x 9:00PM + 0
 21:00 + 0 => 21:00
 SET x 10:00pm + 0
 22:00 + 0 => 22:00
-SET x 11:00pm + 0
+SET x 11:00PM + 0
 23:00 + 0 => 23:00
 SET x 12:00pm + 0
 12:00 + 0 => 12:00
-SET x 13:00pm + 0
+SET x 13:00PM + 0
 ../tests/test.rem(459): Ill-formed time
 
 SET x '2015-02-03@0:00am' + 0
 ../tests/test.rem(461): Ill-formed time
-SET x '2015-02-03@1:00am' + 0
+SET x '2015-02-03@1:00AM' + 0
 2015-02-03@01:00 + 0 => 2015-02-03@01:00
 SET x '2015-02-03@2:00am' + 0
 2015-02-03@02:00 + 0 => 2015-02-03@02:00
-SET x '2015-02-03@3:00am' + 0
+SET x '2015-02-03@3:00AM' + 0
 2015-02-03@03:00 + 0 => 2015-02-03@03:00
 SET x '2015-02-03@4:00am' + 0
 2015-02-03@04:00 + 0 => 2015-02-03@04:00
-SET x '2015-02-03@5:00am' + 0
+SET x '2015-02-03@5:00AM' + 0
 2015-02-03@05:00 + 0 => 2015-02-03@05:00
 SET x '2015-02-03@6:00am' + 0
 2015-02-03@06:00 + 0 => 2015-02-03@06:00
-SET x '2015-02-03@7:00am' + 0
+SET x '2015-02-03@7:00AM' + 0
 2015-02-03@07:00 + 0 => 2015-02-03@07:00
 SET x '2015-02-03@8:00am' + 0
 2015-02-03@08:00 + 0 => 2015-02-03@08:00
-SET x '2015-02-03@9:00am' + 0
+SET x '2015-02-03@9:00AM' + 0
 2015-02-03@09:00 + 0 => 2015-02-03@09:00
 SET x '2015-02-03@10:00am' + 0
 2015-02-03@10:00 + 0 => 2015-02-03@10:00
-SET x '2015-02-03@11:00am' + 0
+SET x '2015-02-03@11:00AM' + 0
 2015-02-03@11:00 + 0 => 2015-02-03@11:00
 SET x '2015-02-03@12:00am' + 0
 2015-02-03@00:00 + 0 => 2015-02-03@00:00
-SET x '2015-02-03@13:00am' + 0
+SET x '2015-02-03@13:00AM' + 0
 ../tests/test.rem(474): Ill-formed time
 
 SET x '2015-02-03@0:00pm' + 0
 ../tests/test.rem(476): Ill-formed time
-SET x '2015-02-03@1:00pm' + 0
+SET x '2015-02-03@1:00PM' + 0
 2015-02-03@13:00 + 0 => 2015-02-03@13:00
 SET x '2015-02-03@2:00pm' + 0
 2015-02-03@14:00 + 0 => 2015-02-03@14:00
-SET x '2015-02-03@3:00pm' + 0
+SET x '2015-02-03@3:00PM' + 0
 2015-02-03@15:00 + 0 => 2015-02-03@15:00
 SET x '2015-02-03@4:00pm' + 0
 2015-02-03@16:00 + 0 => 2015-02-03@16:00
-SET x '2015-02-03@5:00pm' + 0
+SET x '2015-02-03@5:00PM' + 0
 2015-02-03@17:00 + 0 => 2015-02-03@17:00
 SET x '2015-02-03@6:00pm' + 0
 2015-02-03@18:00 + 0 => 2015-02-03@18:00
-SET x '2015-02-03@7:00pm' + 0
+SET x '2015-02-03@7:00PM' + 0
 2015-02-03@19:00 + 0 => 2015-02-03@19:00
 SET x '2015-02-03@8:00pm' + 0
 2015-02-03@20:00 + 0 => 2015-02-03@20:00
-SET x '2015-02-03@9:00pm' + 0
+SET x '2015-02-03@9:00PM' + 0
 2015-02-03@21:00 + 0 => 2015-02-03@21:00
 SET x '2015-02-03@10:00pm' + 0
 2015-02-03@22:00 + 0 => 2015-02-03@22:00
-SET x '2015-02-03@11:00pm' + 0
+SET x '2015-02-03@11:00PM' + 0
 2015-02-03@23:00 + 0 => 2015-02-03@23:00
 SET x '2015-02-03@12:00pm' + 0
 2015-02-03@12:00 + 0 => 2015-02-03@12:00
-SET x '2015-02-03@13:00pm' + 0
+SET x '2015-02-03@13:00PM' + 0
 ../tests/test.rem(489): Ill-formed time
 
 

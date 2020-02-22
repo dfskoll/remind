@@ -399,94 +399,94 @@ REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
 
 # Parsing of AM/PM times
 REM AT 0:00am MSG foo 0a
-REM AT 1:00am MSG foo 1a
+REM AT 1:00AM MSG foo 1a
 REM AT 2:00am MSG foo 2a
-REM AT 3:00am MSG foo 3a
+REM AT 3:00AM MSG foo 3a
 REM AT 4:00am MSG foo 4a
-REM AT 5:00am MSG foo 5a
+REM AT 5:00AM MSG foo 5a
 REM AT 6:00am MSG foo 6a
-REM AT 7:00am MSG foo 7a
+REM AT 7:00AM MSG foo 7a
 REM AT 8:00am MSG foo 8a
-REM AT 9:00am MSG foo 9a
+REM AT 9:00AM MSG foo 9a
 REM AT 10:00am MSG foo 10a
-REM AT 11:00am MSG foo 11a
+REM AT 11:00AM MSG foo 11a
 REM AT 12:00am MSG foo 12a
-REM AT 13:00am MSG foo 13a
+REM AT 13:00AM MSG foo 13a
 REM AT 0:00pm MSG foo 0p
-REM AT 1:00pm MSG foo 1p
+REM AT 1:00PM MSG foo 1p
 REM AT 2:00pm MSG foo 2p
-REM AT 3:00pm MSG foo 3p
+REM AT 3:00PM MSG foo 3p
 REM AT 4:00pm MSG foo 4p
-REM AT 5:00pm MSG foo 5p
+REM AT 5:00PM MSG foo 5p
 REM AT 6:00pm MSG foo 6p
-REM AT 7:00pm MSG foo 7p
+REM AT 7:00PM MSG foo 7p
 REM AT 8:00pm MSG foo 8p
-REM AT 9:00pm MSG foo 9p
+REM AT 9:00PM MSG foo 9p
 REM AT 10:00pm MSG foo 10p
-REM AT 11:00pm MSG foo 11p
+REM AT 11:00PM MSG foo 11p
 REM AT 12:00pm MSG foo 12p
-REM AT 13:00pm MSG foo 13p
+REM AT 13:00PM MSG foo 13p
 
 DEBUG +x
 SET x 0:00am + 0
-SET x 1:00am + 0
+SET x 1:00AM + 0
 SET x 2:00am + 0
-SET x 3:00am + 0
+SET x 3:00AM + 0
 SET x 4:00am + 0
-SET x 5:00am + 0
+SET x 5:00AM + 0
 SET x 6:00am + 0
-SET x 7:00am + 0
+SET x 7:00AM + 0
 SET x 8:00am + 0
-SET x 9:00am + 0
+SET x 9:00AM + 0
 SET x 10:00am + 0
-SET x 11:00am + 0
+SET x 11:00AM + 0
 SET x 12:00am + 0
-SET x 13:00am + 0
+SET x 13:00AM + 0
 
 SET x 0:00pm + 0
-SET x 1:00pm + 0
+SET x 1:00PM + 0
 SET x 2:00pm + 0
-SET x 3:00pm + 0
+SET x 3:00PM + 0
 SET x 4:00pm + 0
-SET x 5:00pm + 0
+SET x 5:00PM + 0
 SET x 6:00pm + 0
-SET x 7:00pm + 0
+SET x 7:00PM + 0
 SET x 8:00pm + 0
-SET x 9:00pm + 0
+SET x 9:00PM + 0
 SET x 10:00pm + 0
-SET x 11:00pm + 0
+SET x 11:00PM + 0
 SET x 12:00pm + 0
-SET x 13:00pm + 0
+SET x 13:00PM + 0
 
 SET x '2015-02-03@0:00am' + 0
-SET x '2015-02-03@1:00am' + 0
+SET x '2015-02-03@1:00AM' + 0
 SET x '2015-02-03@2:00am' + 0
-SET x '2015-02-03@3:00am' + 0
+SET x '2015-02-03@3:00AM' + 0
 SET x '2015-02-03@4:00am' + 0
-SET x '2015-02-03@5:00am' + 0
+SET x '2015-02-03@5:00AM' + 0
 SET x '2015-02-03@6:00am' + 0
-SET x '2015-02-03@7:00am' + 0
+SET x '2015-02-03@7:00AM' + 0
 SET x '2015-02-03@8:00am' + 0
-SET x '2015-02-03@9:00am' + 0
+SET x '2015-02-03@9:00AM' + 0
 SET x '2015-02-03@10:00am' + 0
-SET x '2015-02-03@11:00am' + 0
+SET x '2015-02-03@11:00AM' + 0
 SET x '2015-02-03@12:00am' + 0
-SET x '2015-02-03@13:00am' + 0
+SET x '2015-02-03@13:00AM' + 0
 
 SET x '2015-02-03@0:00pm' + 0
-SET x '2015-02-03@1:00pm' + 0
+SET x '2015-02-03@1:00PM' + 0
 SET x '2015-02-03@2:00pm' + 0
-SET x '2015-02-03@3:00pm' + 0
+SET x '2015-02-03@3:00PM' + 0
 SET x '2015-02-03@4:00pm' + 0
-SET x '2015-02-03@5:00pm' + 0
+SET x '2015-02-03@5:00PM' + 0
 SET x '2015-02-03@6:00pm' + 0
-SET x '2015-02-03@7:00pm' + 0
+SET x '2015-02-03@7:00PM' + 0
 SET x '2015-02-03@8:00pm' + 0
-SET x '2015-02-03@9:00pm' + 0
+SET x '2015-02-03@9:00PM' + 0
 SET x '2015-02-03@10:00pm' + 0
-SET x '2015-02-03@11:00pm' + 0
+SET x '2015-02-03@11:00PM' + 0
 SET x '2015-02-03@12:00pm' + 0
-SET x '2015-02-03@13:00pm' + 0
+SET x '2015-02-03@13:00PM' + 0
 
 __EOF__
 REM This line should not even be seen

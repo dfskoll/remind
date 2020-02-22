@@ -3132,12 +3132,12 @@ is an implementation artifact.
 .B SELF-OVERLAPPING EVENTS
 .PP
 A multi-day event has the possibility of "overlapping itself".  When this
-happens, \fBRemind\fR prefers the \fIearlier\fR event (only one copy of
+happens, \fBRemind\fR prefers the \fIlater\fR event (only one copy of
 an event is ever triggered for a given date.)  Consider this example:
 .PP
 .nf
    #!/bin/sh
-   remind - '*4' 11 Feb 1991 <<'EOF'
+   remind - '*5' 10 Feb 1991 <<'EOF'
 
    BANNER %
    REM MON at 0:00 DURATION 192:0 MSG [today()] [trigeventstart()] [trigduration()]%
@@ -3148,17 +3148,16 @@ an event is ever triggered for a given date.)  Consider this example:
 The output is:
 .PP
 .nf
-   1991-02-11 1991-02-04@00:00 24:00
+   1991-02-10 1991-02-04@00:00 48:00
+   1991-02-11 1991-02-11@00:00 192:00
    1991-02-12 1991-02-11@00:00 168:00
    1991-02-13 1991-02-11@00:00 144:00
    1991-02-14 1991-02-11@00:00 120:00
 .fi
 .PP
-Although 1991-02-11 is a Monday (which should cause the event to be
-triggered, the 8-day-long event that started on 1991-02-04 \fIhas not
-finished yet\fR, so that is the one that is triggered.  The next day,
-the event starting on 1991-02-04 \fIhas\fR finished, so the 1991-02-11
-event triggers, with a remaining duration of 168:00, or 7 days.
+Although the event from 1991-02-04 still has 24 hours left on 1991-02-11,
+the fresh occurrence on 1991-02-11 takes precedences and is the one that
+is triggered.
 .PP
 I do not recommend constructing self-overlapping multi-day events.
 .PP

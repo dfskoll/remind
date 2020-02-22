@@ -479,6 +479,19 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 	return r;
     }
     if (r == today) {
+	if (tim->ttime != NO_TIME) {
+	    trig->eventstart = MINUTES_PER_DAY * r + tim->ttime;
+	    if (tim->duration != NO_TIME) {
+		trig->eventduration = tim->duration;
+	    }
+	}
+	if (save_in_globals) {
+	    LastTriggerTime = tim->ttime;
+	    SaveLastTimeTrig(tim);
+	    SaveLastTrigger(trig);
+	    LastTriggerDate = r;
+	    LastTrigValid = 1;
+	}
 	return r;
     }
 

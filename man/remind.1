@@ -334,14 +334,15 @@ If you supply a \fIdate\fR on the command line, it must consist of
 of the month, and \fIyear\fR is a year (all 4 digits) from 1990 to
 about 2075.  You can leave out the \fIday\fR, which then defaults to 1.
 .PP
-If you do supply a \fIdate\fR on the command line, then \fBRemind\fR uses
-it, rather than the actual system date, as its notion of "today."
-This lets you create calendars for future months, or test to see
-how your reminders will be triggered in the future.  Similarly,
-you can supply a \fItime\fR (in 24-hour format -- for example, 17:15) to
-set \fBRemind\fR's notion of "now" to a particular time.  Supplying
-a \fItime\fR on the command line also implicitly enables the \fB\-q\fR
-option and disables the \fB\-z\fR option.
+If you do supply a \fIdate\fR on the command line, then \fBRemind\fR
+uses it, rather than the actual system date, as its notion of "today."
+This lets you create calendars for future months, or test to see how
+your reminders will be triggered in the future.  Similarly, you can
+supply a \fItime\fR to set \fBRemind\fR's notion of "now" to a
+particular time.  Supplying a \fItime\fR on the command line also
+implicitly enables the \fB\-q\fR option and disables the \fB\-z\fR
+option.  The \fItime\fR may be specified in 24-hour format (eg, 13:20)
+or common "AM/PM" format (1:20pm).
 .PP
 If you would rather specify the date more succinctly, you can supply
 it as YYYY-MM-DD or YYYY/MM/DD.  You can even supply a date and
@@ -967,8 +968,13 @@ it terminates the search after the \fBSATISFY\fR iteration limit
 .PP
 Timed reminders are those that have an \fBAT\fR keyword followed
 by a \fItime\fR and optional \fItdelta\fR and \fItrepeat\fR.  The \fItime\fR
-must be specified in 24-hour format, with 0:00 representing midnight,
+mau be specified in 24-hour format, with 0:00 representing midnight,
 12:00 representing noon, and 23:59 representing one minute to midnight.
+Alternatively, it may be specified in common "AM/PM" format; in this case,
+the hour must range from 1 to 12.  12:00am represents midnight, 12:00pm
+represents noon, and 11:59pm represents one minute to midnight.  The "am"
+and "pm" portions are case-insensitive and the "m" is optional.
+.PP
 You can use either a colon or a period to separate the hours from the
 minutes.  That is, 13:39 and 13.39 are equivalent.
 .PP
@@ -995,7 +1001,7 @@ The following reminder will be triggered on Thursdays and Fridays,
 but will only be queued on Fridays:
 .PP
 .nf
-	REM Fri ++1 AT 13:00 MSG Lunch at 1pm Friday.
+	REM Fri ++1 AT 1:00PM MSG Lunch at 1pm Friday.
 .fi
 .PP
 The \fItdelta\fR and \fItrepeat\fR have the same form as a \fIrepeat\fR
@@ -1665,13 +1671,15 @@ in C.
 .RE
 .TP
 .B TIME constants
-12:33, 0:01, 14:15, 16:42, 12.16, 13.00, 1.11
+12:33, 0:01, 14:15, 16:42, 12.16, 13.00, 1.11, 4:30PM, 12:20am
 .PP
 .RS
-Note that \fBTIME\fR constants are written in 24-hour format.  Either the
-period or colon can be used to separate the minutes from the hours.
-However, Remind will consistently output times using only one separator
-character.  (The output separator character is chosen at compile-time.)
+Note that \fBTIME\fR constants may be written in 24-hour format or in
+common "AM/PM" format.  If you use "AM/PM" format, then the hour can
+range from 1 to 12.  Either a period or colon can be used to separate
+the minutes from the hours.  However, Remind will consistently output
+times in 24-hour format using only one separator character.  (The
+output separator character is chosen at compile-time.)
 .RE
 .TP
 .B DATE constants
@@ -1694,11 +1702,12 @@ versions prior to 03.00.02 did not support the '-' date separator.
 .RE
 .TP
 .B DATETIME constants
-\fBDATETIME\fR constants are expressed similarly to \fBDATE\fR constants
-with the addition of an "@HH:MM" part.  For example:
+\fBDATETIME\fR constants are expressed similarly to \fBDATE\fR
+constants with the addition of an "@HH:MM" part, optionally followed
+by "am" or "pm".  For example:
 .PP
 .RS
-\'2008-04-05@23:11', '1999/02/03@14:06', '2001-04-07@08:30'
+\'2008-04-05@23:11', '1999/02/03@14:06', '2001-04-07@08:30', '2020-01-01@3:20pm'
 .PP
 \fBDATETIME\fR values are printed without the quotes.  Notes about date
 and time separator characters for \fBDATE\fR and \fBTIME\fR constants apply

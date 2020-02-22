@@ -1098,7 +1098,7 @@ trigtimerep() => 0
 set a105 trigduration()
 trigduration() => -1
 
-REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 3:33 MSG foo
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 213 MSG foo
 ../tests/test.rem(340): Trig = Monday, 30 August, 2010 AT 14:41 DURATION 03:33
 set a106 trigback()
 trigback() => 4

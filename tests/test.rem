@@ -337,7 +337,7 @@ set a103 trigtimedelta()
 set a104 trigtimerep()
 set a105 trigduration()
 
-REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 3:33 MSG foo
+REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 213 MSG foo
 set a106 trigback()
 set a107 trigdelta()
 set a108 trigrep()

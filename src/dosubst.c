@@ -644,10 +644,11 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    break;
 
 	case '_':
-	    if (mode != CAL_MODE && mode != ADVANCE_MODE && !MsgCommand)
+	    if (PsCal == PSCAL_LEVEL2 || PsCal == PSCAL_LEVEL3 || (mode != CAL_MODE && mode != ADVANCE_MODE && !MsgCommand)) {
 		sprintf(s, "%s", NL);
-	    else
+	    } else {
 		sprintf(s, " ");
+	    }
 	    SHIP_OUT(s);
 	    break;
 

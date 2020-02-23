@@ -1121,7 +1121,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 	    LastTriggerTime = tt->ttime;
 	    SaveLastTimeTrig(tt);
 	    SaveLastTrigger(trig);
-	    LastTriggerDate = r;
+	    LastTriggerDate = jul;
 	    LastTrigValid = 1;
 	}
 	if (jul == -1) {

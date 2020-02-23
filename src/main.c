@@ -1371,6 +1371,16 @@ ClearLastTriggers(void)
 }
 
 void
+SaveAllTriggerInfo(Trigger const *t, TimeTrig const *tt, int trigdate, int trigtime, int valid)
+{
+    SaveLastTrigger(t);
+    SaveLastTimeTrig(tt);
+    LastTriggerDate = trigdate;
+    LastTriggerTime = trigtime;
+    LastTrigValid = valid;
+}
+
+void
 SaveLastTrigger(Trigger const *t)
 {
     memcpy(&LastTrigger, t, sizeof(LastTrigger));

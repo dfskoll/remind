@@ -454,11 +454,7 @@ AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int sav
 
     }
     if (save_in_globals) {
-	LastTriggerTime = tim->ttime;
-	SaveLastTimeTrig(tim);
-	SaveLastTrigger(trig);
-	LastTriggerDate = r;
-	LastTrigValid = 1;
+	SaveAllTriggerInfo(trig, tim, r, tim->ttime, 1);
     }
     return r;
 }
@@ -486,11 +482,7 @@ int ComputeTrigger(int today, Trigger *trig, TimeTrig *tim,
 	    }
 	}
 	if (save_in_globals) {
-	    LastTriggerTime = tim->ttime;
-	    SaveLastTimeTrig(tim);
-	    SaveLastTrigger(trig);
-	    LastTriggerDate = r;
-	    LastTrigValid = 1;
+	    SaveAllTriggerInfo(trig, tim, r, tim->ttime, 1);
 	}
 	return r;
     }

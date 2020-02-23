@@ -1118,11 +1118,7 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 		    trig->eventduration = tt->duration;
 		}
 	    }
-	    LastTriggerTime = tt->ttime;
-	    SaveLastTimeTrig(tt);
-	    SaveLastTrigger(trig);
-	    LastTriggerDate = jul;
-	    LastTrigValid = 1;
+	    SaveAllTriggerInfo(trig, tt, jul, tt->ttime, 1);
 	}
 	if (jul == -1) {
 	    return E_EXPIRED;

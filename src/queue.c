@@ -246,11 +246,7 @@ void HandleQueuedReminders(void)
 
 	    /* Set up global variables so some functions like trigdate()
 	       and trigtime() work correctly                             */
-	    LastTriggerDate = JulianToday;
-	    LastTriggerTime = q->tt.ttime;
-	    LastTrigValid = 1;
-	    SaveLastTrigger(&(q->t));
-	    SaveLastTimeTrig(&(q->tt));
+	    SaveAllTriggerInfo(&(q->t), &(q->tt), JulianToday, q->tt.ttime, 1);
 	    (void) TriggerReminder(&p, &trig, &q->tt, JulianToday);
 	    if (Daemon < 0) {
 		printf("NOTE endreminder\n");

@@ -148,6 +148,8 @@ char const *SynthesizeTag(void);
 void ClearLastTriggers(void);
 void SaveLastTrigger(Trigger const *t);
 void SaveLastTimeTrig(TimeTrig const *t);
+void SaveAllTriggerInfo(Trigger const *t, TimeTrig const *tt, int trigdate, int trigtime, int valid);
+
 void PerIterationInit(void);
 char const *Decolorize(int r, int g, int b);
 char const *Colorize(int r, int g, int b);

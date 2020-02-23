@@ -1,5 +1,32 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 1 - 2020-XX-XX
+
+- CHANGE: For overlapping multi-day events, issue a reminder for the
+  most *recent* event rather than the earliest event.  NOTE INCOMPATIBILITY:
+  This is a behavior change!
+
+- CHANGE: Do not convert 90-99 to 1990-1999 when parsing numbers to recognize
+  years.  NOTE INCOMPATIBILITY: This is a behavior change!
+
+- CHANGE: Revert change to -y option that included filename and line number
+  in the hash.
+
+- CHANGE: Retain newlines (produced by %_) in JSON output.
+
+- FIX: Document $FormWidth system variable
+
+- FIX: Highlight today's date in "remind -c" output
+
+- IMPROVEMENT: Allow times to be specified either in 24-hour mode
+  (HH:MM or HH.MM) or AM/PM mode (HH:MMam; HH:MMpm, etc.)
+
+- IMPROVEMENT: Allow DURATION to be specified as a time (1:30) or a
+  number of minutes (90).
+
+- IMPROVEMENT: If terminal size can be determined, set $FormWidth to
+  terminal width - 8; if not, set $FormWidth to 72.
+
 * Version 3.3 Patch 0 - 2020-01-31
 
 - FIX: rem2ps: Add a %%PageBoundingBox: document structuring convention

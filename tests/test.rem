@@ -491,6 +491,32 @@ SET x '2015-02-03@11:00PM' + 0
 SET x '2015-02-03@12:00pm' + 0
 SET x '2015-02-03@13:00PM' + 0
 
+# Test the ampm function
+set x ampm(0:12) + ""
+set x ampm(1:12) + ""
+set x ampm(2:12) + ""
+set x ampm(3:12) + ""
+set x ampm(4:12) + ""
+set x ampm(5:12) + ""
+set x ampm(6:12) + ""
+set x ampm(7:12) + ""
+set x ampm(8:12) + ""
+set x ampm(9:12) + ""
+set x ampm(10:12) + ""
+set x ampm(11:12) + ""
+set x ampm(12:12) + ""
+set x ampm(13:12) + ""
+set x ampm(14:12) + ""
+set x ampm(15:12) + ""
+set x ampm(16:12) + ""
+set x ampm(17:12) + ""
+set x ampm(18:12) + ""
+set x ampm(19:12) + ""
+set x ampm(20:12) + ""
+set x ampm(21:12) + ""
+set x ampm(22:12) + ""
+set x ampm(23:12) + ""
+
 __EOF__
 REM This line should not even be seen
 And you can put whatever you like here.

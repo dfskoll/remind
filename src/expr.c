@@ -722,26 +722,12 @@ int DoCoerce(char type, Value *v)
 	    return OK;
 
 	case STR_TYPE:
-	    h = 0;
-	    m = 0;
 	    s = v->v.str;
-	    if (!isdigit(*s)) return E_CANT_COERCE;
-	    while (isdigit(*s)) {
-		h *= 10;
-		h += *s++ - '0';
-	    }
-	    if (*s != ':' && *s != '.' && *s != TimeSep)
-		return E_CANT_COERCE;
-	    s++;
-	    if (!isdigit(*s)) return E_CANT_COERCE;
-	    while (isdigit(*s)) {
-		m *= 10;
-		m += *s++ - '0';
-	    }
-	    if (*s || h>23 || m>59) return E_CANT_COERCE;
+	    if (ParseLiteralTime(&s, &i)) return E_CANT_COERCE;
+	    if (*s) return E_CANT_COERCE;
 	    v->type = TIME_TYPE;
 	    free(v->v.str);
-	    v->v.val = h*60+m;
+	    v->v.val = i;
 	    return OK;
 
 	default: return E_CANT_COERCE;
@@ -1243,6 +1229,48 @@ int CopyValue(Value *dest, const Value *src)
     return OK;
 }
 
+int ParseLiteralTime(char const **s, int *tim)
+{
+    int h=0;
+    int m=0;
+    int ampm=0;
+    if (!isdigit(**s)) return E_BAD_TIME;
+    while(isdigit(**s)) {
+	h *= 10;
+	h += *(*s)++ - '0';
+    }
+    if (**s != ':' && **s != '.' && **s != TimeSep) return E_BAD_TIME;
+    (*s)++;
+    if (!isdigit(**s)) return E_BAD_TIME;
+    while(isdigit(**s)) {
+	m *= 10;
+	m += *(*s)++ - '0';
+    }
+    /* Check for p[m] or a[m] */
+    if (**s == 'A' || **s == 'a' || **s == 'P' || **s == 'p') {
+	ampm = tolower(**s);
+	(*s)++;
+	if (**s == 'm' || **s == 'M') {
+	    (*s)++;
+	}
+    }
+    if (h>23 || m>59) return E_BAD_TIME;
+    if (ampm) {
+	if (h < 1 || h > 12) return E_BAD_TIME;
+	if (ampm == 'a') {
+	    if (h == 12) {
+		h = 0;
+	    }
+	} else if (ampm == 'p') {
+	    if (h < 12) {
+		h += 12;
+	    }
+	}
+    }
+    *tim = h * 60 + m;
+    return OK;
+}
+
 /***************************************************************/
 /*                                                             */
 /*  ParseLiteralDate                                           */
@@ -1254,11 +1282,9 @@ int CopyValue(Value *dest, const Value *src)
 int ParseLiteralDate(char const **s, int *jul, int *tim)
 {
     int y, m, d;
-    int hour, min;
-    int ampm = 0;
+    int r;
 
     y=0; m=0; d=0;
-    hour=0; min=0;
 
     *tim = NO_TIME;
     if (!isdigit(**s)) return E_BAD_DATE;
@@ -1288,40 +1314,9 @@ int ParseLiteralDate(char const **s, int *jul, int *tim)
     /* Do we have a time part as well? */
     if (**s == ' ' || **s == '@' || **s == 'T' || **s == 't') {
 	(*s)++;
-	while(isdigit(**s)) {
-	    hour *= 10;
-	    hour += *(*s)++ - '0';
-	}
-	if (**s != ':' && **s != '.' && **s != TimeSep) return E_BAD_TIME;
-	(*s)++;
-	while(isdigit(**s)) {
-	    min *= 10;
-	    min += *(*s)++ - '0';
-	}
-	/* Check for p[m] or a[m] */
-	if (**s == 'A' || **s == 'a' || **s == 'P' || **s == 'p') {
-	    ampm = tolower(**s);
-	    (*s)++;
-	    if (**s == 'm' || **s == 'M') {
-		(*s)++;
-	    }
-	}
-	if (hour>23 || min>59) return E_BAD_TIME;
-	if (ampm) {
-	    if (hour < 1 || hour > 12) return E_BAD_TIME;
-	    if (ampm == 'a') {
-		if (hour == 12) {
-		    hour = 0;
-		}
-	    } else if (ampm == 'p') {
-		if (hour < 12) {
-		    hour += 12;
-		}
-	    }
-	}
-	*tim = hour * 60 + min;
+	r = ParseLiteralTime(s, tim);
+	if (r != OK) return r;
     }
-
     return OK;
 }
 

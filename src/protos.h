@@ -37,6 +37,7 @@ int ShouldTriggerReminder (Trigger *t, TimeTrig *tim, int jul, int *err);
 int DoSubst (ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, int mode);
 int DoSubstFromString (char const *source, DynamicBuffer *dbuf, int jul, int tim);
 int ParseLiteralDate (char const **s, int *jul, int *tim);
+int ParseLiteralTime (char const **s, int *tim);
 int EvalExpr (char const **e, Value *v, ParsePtr p);
 int DoCoerce (char type, Value *v);
 void PrintValue  (Value *v, FILE *fp);

@@ -57,6 +57,7 @@ static int FADawn          (func_info *);
 static int FADusk          (func_info *);
 static int FAbs            (func_info *);
 static int FAccess         (func_info *);
+static int FAmpm           (func_info *);
 static int FArgs           (func_info *);
 static int FAsc            (func_info *);
 static int FBaseyr         (func_info *);
@@ -206,6 +207,7 @@ BuiltinFunc Func[] = {
     {   "access",       2,      2,      0,          FAccess },
     {   "adawn",        0,      1,      0,          FADawn},
     {   "adusk",        0,      1,      0,          FADusk},
+    {   "ampm",         1,      3,      1,          FAmpm   },
     {   "args",         1,      1,      0,          FArgs   },
     {   "asc",          1,      1,      1,          FAsc    },
     {   "baseyr",       0,      0,      1,          FBaseyr },
@@ -883,6 +885,57 @@ static int FSgn(func_info *info)
     if (v>0) RETVAL = 1;
     else if (v<0) RETVAL = -1;
     else RETVAL = 0;
+    return OK;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FAmpm - return a time as a string with "AM" or "PM" suffix */
+/*                                                             */
+/***************************************************************/
+static int FAmpm(func_info *info)
+{
+    int h, m;
+    char const *am = "AM";
+    char const *pm = "PM";
+    char const *ampm = NULL;
+
+    char outbuf[64];
+
+    ASSERT_TYPE(0, TIME_TYPE);
+    if (Nargs >= 2) {
+	ASSERT_TYPE(1, STR_TYPE);
+	am = ARGSTR(1);
+	if (Nargs >= 3) {
+	    ASSERT_TYPE(2, STR_TYPE);
+	    pm = ARGSTR(2);
+	}
+    }
+    h = ARGV(0) / 60;
+    m = ARGV(0) % 60;
+    if (h <= 11) {
+	/* AM */
+	if (h == 0) {
+	    snprintf(outbuf, sizeof(outbuf), "12:%02d", m);
+	} else {
+	    snprintf(outbuf, sizeof(outbuf), "%d:%02d", h, m);
+	}
+	ampm = am;
+    } else {
+	if (h > 12) {
+	    h -= 12;
+	}
+	snprintf(outbuf, sizeof(outbuf), "%d:%02d", h, m);
+	ampm = pm;
+    }
+    RetVal.type = STR_TYPE;
+    RetVal.v.str = malloc(strlen(outbuf) + strlen(ampm) + 1);
+    if (!RetVal.v.str) {
+	RetVal.type = ERR_TYPE;
+	return E_NO_MEM;
+    }
+    strcpy(RetVal.v.str, outbuf);
+    strcat(RetVal.v.str, ampm);
     return OK;
 }
 

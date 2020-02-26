@@ -1819,6 +1819,20 @@ set x ampm(23:12) + ""
 ampm(23:12) => "11:12PM"
 "11:12PM" + "" => "11:12PM"
 
+# Coerce with am/pm
+set x coerce("TIME", "12:45am")
+coerce("TIME", "12:45am") => 00:45
+set x coerce("TIME", "12:45")
+coerce("TIME", "12:45") => 12:45
+set x coerce("TIME", "1:45pm")
+coerce("TIME", "1:45pm") => 13:45
+set x coerce("DATETIME", "2020-05-05@12:45am")
+coerce("DATETIME", "2020-05-05@12:45am") => 2020-05-05@00:45
+set x coerce("DATETIME", "2020-05-05@12:45")
+coerce("DATETIME", "2020-05-05@12:45") => 2020-05-05@12:45
+set x coerce("DATETIME", "2020-05-05@1:45pm")
+coerce("DATETIME", "2020-05-05@1:45pm") => 2020-05-05@13:45
+
 
 
 Test 2

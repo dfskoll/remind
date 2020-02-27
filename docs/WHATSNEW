@@ -27,6 +27,8 @@ CHANGES TO REMIND
 - IMPROVEMENT: If terminal size can be determined, set $FormWidth to
   terminal width - 8; if not, set $FormWidth to 72.
 
+- MINOR IMPROVEMENT: Add the "ampm()" built-in function.
+
 * Version 3.3 Patch 0 - 2020-01-31
 
 - FIX: rem2ps: Add a %%PageBoundingBox: document structuring convention

@@ -461,16 +461,16 @@ json_queue(QueuedRem const *q)
 
 	printf("{");
 	switch(q->typ) {
-	case NO_TYPE: PrintJSONKeyPairString("type", "NO_TYPE "); break;
-	case MSG_TYPE: PrintJSONKeyPairString("type", "MSG_TYPE "); break;
-	case RUN_TYPE: PrintJSONKeyPairString("type", "RUN_TYPE "); break;
-	case CAL_TYPE: PrintJSONKeyPairString("type", "CAL_TYPE "); break;
-	case SAT_TYPE: PrintJSONKeyPairString("type", "SAT_TYPE "); break;
-	case PS_TYPE: PrintJSONKeyPairString("type", "PS_TYPE "); break;
-	case PSF_TYPE: PrintJSONKeyPairString("type", "PSF_TYPE "); break;
-	case MSF_TYPE: PrintJSONKeyPairString("type", "MSF_TYPE "); break;
-	case PASSTHRU_TYPE: PrintJSONKeyPairString("type", "PASSTHRU_TYPE "); break;
-	default: PrintJSONKeyPairString("type", "? "); break;
+	case NO_TYPE: PrintJSONKeyPairString("type", "NO_TYPE"); break;
+	case MSG_TYPE: PrintJSONKeyPairString("type", "MSG_TYPE"); break;
+	case RUN_TYPE: PrintJSONKeyPairString("type", "RUN_TYPE"); break;
+	case CAL_TYPE: PrintJSONKeyPairString("type", "CAL_TYPE"); break;
+	case SAT_TYPE: PrintJSONKeyPairString("type", "SAT_TYPE"); break;
+	case PS_TYPE: PrintJSONKeyPairString("type", "PS_TYPE"); break;
+	case PSF_TYPE: PrintJSONKeyPairString("type", "PSF_TYPE"); break;
+	case MSF_TYPE: PrintJSONKeyPairString("type", "MSF_TYPE"); break;
+	case PASSTHRU_TYPE: PrintJSONKeyPairString("type", "PASSTHRU_TYPE"); break;
+	default: PrintJSONKeyPairString("type", "?"); break;
 	}
 	PrintJSONKeyPairInt("rundisabled", q->RunDisabled);
 	PrintJSONKeyPairInt("ntrig", q->ntrig);

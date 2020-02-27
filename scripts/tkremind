@@ -582,7 +582,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 
 proc DoQueue {} {
     global DaemonFile
-    puts $DaemonFile "QUEUE"
+    puts $DaemonFile "JSONQUEUE"
     flush $DaemonFile
 }
 
@@ -2418,18 +2418,19 @@ proc ShowQueue { file } {
     grid columnconfigure $w 1 -weight 0
     grid rowconfigure $w 0 -weight 1
     grid rowconfigure $w 1 -weight 0
-    set did 0
     CenterWindow $w .
     while (1) {
+	# We should only get one line
 	gets $file line
-	if {$line == "NOTE endqueue"} {
+	if {$line == "NOTE ENDJSONQUEUE"} {
 	    break
 	}
-	set did 1
-	$w.t insert end "$line\n"
-    }
-    if {!$did} {
-	$w.t insert end "*** Queue is empty ***\n"
+	if {[catch {set obj [::json::many-json2dict $line]}]} {
+	    continue;
+	}
+	foreach q $obj {
+	    $w.t insert end "$q\n"
+	}
     }
     $w.t configure -state disabled
 }
@@ -2456,7 +2457,7 @@ proc DaemonReadable { file } {
 	    scan $line "NOTE reminder %s %s %s" time now tag
 	    IssueBackgroundReminder $file $time $now $tag
 	}
-	"NOTE queue" {
+	"NOTE JSONQUEUE" {
 	    ShowQueue $file
 	}
 	"NOTE newdate" {

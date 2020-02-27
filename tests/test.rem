@@ -525,6 +525,9 @@ set x coerce("DATETIME", "2020-05-05@12:45am")
 set x coerce("DATETIME", "2020-05-05@12:45")
 set x coerce("DATETIME", "2020-05-05@1:45pm")
 
+# Don't want Remind to queue reminders
+EXIT
+
 __EOF__
 REM This line should not even be seen
 And you can put whatever you like here.

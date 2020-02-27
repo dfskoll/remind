@@ -245,7 +245,7 @@ static void WriteBottomCalLine (void);
 static void WriteIntermediateCalLine (void);
 static void WriteCalDays (void);
 
-static void PrintJSONString(char const *s)
+void PrintJSONString(char const *s)
 {
     while (*s) {
 	switch(*s) {
@@ -262,14 +262,14 @@ static void PrintJSONString(char const *s)
     }
 }
 
-static void PrintJSONKeyPairInt(char const *name, int val)
+void PrintJSONKeyPairInt(char const *name, int val)
 {
     printf("\"");
     PrintJSONString(name);
     printf("\":%d, ", val);
 }
 
-static void PrintJSONKeyPairString(char const *name, char const *val)
+void PrintJSONKeyPairString(char const *name, char const *val)
 {
     /* If value is blank, skip it! */
     if (!val || !*val) {
@@ -283,7 +283,7 @@ static void PrintJSONKeyPairString(char const *name, char const *val)
     printf("\", ");
 }
 
-static void PrintJSONKeyPairDate(char const *name, int jul)
+void PrintJSONKeyPairDate(char const *name, int jul)
 {
     int y, m, d;
     if (jul == NO_DATE) {
@@ -297,7 +297,7 @@ static void PrintJSONKeyPairDate(char const *name, int jul)
 
 }
 
-static void PrintJSONKeyPairDateTime(char const *name, int dt)
+void PrintJSONKeyPairDateTime(char const *name, int dt)
 {
     int y, m, d, h, i, k;
     if (dt == NO_TIME) {
@@ -312,6 +312,21 @@ static void PrintJSONKeyPairDateTime(char const *name, int dt)
     printf("\"");
     PrintJSONString(name);
     printf("\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
+
+}
+
+void PrintJSONKeyPairTime(char const *name, int t)
+{
+    int h, i;
+    if (t == NO_TIME) {
+	/* Skip it! */
+	return;
+    }
+    h = t / 60;
+    i = t % 60;
+    printf("\"");
+    PrintJSONString(name);
+    printf("\":\"%02d:%02d\", ", h, i);
 
 }
 

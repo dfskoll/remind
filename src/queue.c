@@ -448,6 +448,66 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
     }
 }
 
+/* Dump the queue in JSON format */
+static void
+json_queue(QueuedRem const *q)
+{
+    printf("[");
+    while(q) {
+	if (q->tt.nexttime == NO_TIME) {
+	    q = q->next;
+	    continue;
+	}
+
+	printf("{");
+	switch(q->typ) {
+	case NO_TYPE: PrintJSONKeyPairString("type", "NO_TYPE "); break;
+	case MSG_TYPE: PrintJSONKeyPairString("type", "MSG_TYPE "); break;
+	case RUN_TYPE: PrintJSONKeyPairString("type", "RUN_TYPE "); break;
+	case CAL_TYPE: PrintJSONKeyPairString("type", "CAL_TYPE "); break;
+	case SAT_TYPE: PrintJSONKeyPairString("type", "SAT_TYPE "); break;
+	case PS_TYPE: PrintJSONKeyPairString("type", "PS_TYPE "); break;
+	case PSF_TYPE: PrintJSONKeyPairString("type", "PSF_TYPE "); break;
+	case MSF_TYPE: PrintJSONKeyPairString("type", "MSF_TYPE "); break;
+	case PASSTHRU_TYPE: PrintJSONKeyPairString("type", "PASSTHRU_TYPE "); break;
+	default: PrintJSONKeyPairString("type", "? "); break;
+	}
+	PrintJSONKeyPairInt("rundisabled", q->RunDisabled);
+	PrintJSONKeyPairInt("ntrig", q->ntrig);
+	PrintJSONKeyPairTime("ttime", q->tt.ttime);
+	PrintJSONKeyPairTime("nextttime", q->tt.nexttime);
+	PrintJSONKeyPairInt("delta", q->tt.delta);
+	if (q->tt.rep != NO_TIME) {
+	    PrintJSONKeyPairInt("rep", q->tt.rep);
+	}
+	if (q->tt.duration != NO_TIME) {
+	    PrintJSONKeyPairInt("duration", q->tt.duration);
+	}
+	if (q->passthru[0]) {
+	    PrintJSONKeyPairString("passthru", q->passthru);
+	}
+	if (q->sched[0]) {
+	    PrintJSONKeyPairString("sched", q->sched);
+	}
+	if (DBufLen(&(q->tags))) {
+	    PrintJSONKeyPairString("tags", DBufValue(&(q->tags)));
+	}
+
+	/* Last one is a special case - no trailing comma */
+	printf("\"");
+	PrintJSONString("body");
+	printf("\":\"");
+	if (q->text) {
+	    PrintJSONString(q->text);
+	} else {
+	    PrintJSONString("");
+	}
+	printf("\"}");
+	q = q->next;
+    }
+    printf("]\n");
+}
+
 /***************************************************************/
 /*                                                             */
 /*  DaemonWait                                                 */
@@ -531,6 +591,11 @@ static void DaemonWait(unsigned int sleeptime)
 	    q = q->next;
 	}
 	printf("NOTE endqueue\n");
+	fflush(stdout);
+    } else if (!strcmp(cmdLine, "JSONQUEUE\n")) {
+	printf("NOTE JSONQUEUE\n");
+	json_queue(QueueHead);
+	printf("NOTE ENDJSONQUEUE\n");
 	fflush(stdout);
     } else if (!strcmp(cmdLine, "REREAD\n")) {
 	printf("NOTE reread\n");

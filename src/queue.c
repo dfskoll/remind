@@ -452,13 +452,17 @@ static int CalculateNextTimeUsingSched(QueuedRem *q)
 static void
 json_queue(QueuedRem const *q)
 {
+    int done = 0;
     printf("[");
     while(q) {
 	if (q->tt.nexttime == NO_TIME) {
 	    q = q->next;
 	    continue;
 	}
-
+	if (done) {
+	    printf(",");
+	}
+	done = 1;
 	printf("{");
 	switch(q->typ) {
 	case NO_TYPE: PrintJSONKeyPairString("type", "NO_TYPE"); break;

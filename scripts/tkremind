@@ -2425,7 +2425,7 @@ proc ShowQueue { file } {
 	if {$line == "NOTE ENDJSONQUEUE"} {
 	    break
 	}
-	if {[catch {set obj [::json::many-json2dict $line]}]} {
+	if {[catch {set obj [::json::json2dict $line]}]} {
 	    continue;
 	}
 	foreach q $obj {

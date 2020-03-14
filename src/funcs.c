@@ -896,13 +896,20 @@ static int FSgn(func_info *info)
 static int FAmpm(func_info *info)
 {
     int h, m;
+    int yr=0, mo=0, da=0;
+
     char const *am = "AM";
     char const *pm = "PM";
     char const *ampm = NULL;
 
-    char outbuf[64];
+    char outbuf[128];
 
-    ASSERT_TYPE(0, TIME_TYPE);
+    if (ARG(0).type != DATETIME_TYPE && ARG(0).type != TIME_TYPE) {
+	return E_BAD_TYPE;
+    }
+    if (HASDATE(ARG(0))) {
+	FromJulian(DATEPART(ARG(0)), &yr, &mo, &da);
+    }
     if (Nargs >= 2) {
 	ASSERT_TYPE(1, STR_TYPE);
 	am = ARGSTR(1);
@@ -911,21 +918,33 @@ static int FAmpm(func_info *info)
 	    pm = ARGSTR(2);
 	}
     }
-    h = ARGV(0) / 60;
-    m = ARGV(0) % 60;
+    h = TIMEPART(ARG(0)) / 60;
+    m = TIMEPART(ARG(0)) % 60;
     if (h <= 11) {
 	/* AM */
 	if (h == 0) {
-	    snprintf(outbuf, sizeof(outbuf), "12:%02d", m);
+	    if (ARG(0).type == DATETIME_TYPE) {
+		snprintf(outbuf, sizeof(outbuf), "%04d%c%02d%c%02d%c12%c%02d", yr, DateSep, mo+1, DateSep, da, DateTimeSep, TimeSep, m);
+	    } else {
+		snprintf(outbuf, sizeof(outbuf), "12%c%02d", TimeSep, m);
+	    }
 	} else {
-	    snprintf(outbuf, sizeof(outbuf), "%d:%02d", h, m);
+	    if (ARG(0).type == DATETIME_TYPE) {
+		snprintf(outbuf, sizeof(outbuf), "%04d%c%02d%c%02d%c%d%c%02d", yr, DateSep, mo+1, DateSep, da, DateTimeSep, h, TimeSep, m);
+	    } else {
+		snprintf(outbuf, sizeof(outbuf), "%d%c%02d", h, TimeSep, m);
+	    }
 	}
 	ampm = am;
     } else {
 	if (h > 12) {
 	    h -= 12;
 	}
-	snprintf(outbuf, sizeof(outbuf), "%d:%02d", h, m);
+	if (ARG(0).type == DATETIME_TYPE) {
+	    snprintf(outbuf, sizeof(outbuf), "%04d%c%02d%c%02d%c%d%c%02d", yr, DateSep, mo+1, DateSep, da, DateTimeSep, h, TimeSep, m);
+	} else {
+	    snprintf(outbuf, sizeof(outbuf), "%d%c%02d", h, TimeSep, m);
+	}
 	ampm = pm;
     }
     RetVal.type = STR_TYPE;

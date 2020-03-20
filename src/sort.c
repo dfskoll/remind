@@ -150,7 +150,7 @@ void IssueSortedReminders(void)
 	    break;
 
 	case RUN_TYPE:
-	    system(cur->text);
+	    System(cur->text);
 	    break;
 	}
 

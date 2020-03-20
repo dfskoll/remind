@@ -1392,3 +1392,14 @@ SaveLastTimeTrig(TimeTrig const *t)
 {
     memcpy(&LastTimeTrig, t, sizeof(LastTimeTrig));
 }
+
+/* Wrapper to ignore warnings about ignoring return value of system() */
+void
+System(char const *cmd)
+{
+    int r;
+    r = system(cmd);
+    if (r == 0) {
+	r = 1;
+    }
+}

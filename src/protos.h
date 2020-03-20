@@ -160,3 +160,4 @@ void PrintJSONKeyPairString(char const *name, char const *val);
 void PrintJSONKeyPairDate(char const *name, int jul);
 void PrintJSONKeyPairDateTime(char const *name, int dt);
 void PrintJSONKeyPairTime(char const *name, int t);
+void System(char const *cmd);

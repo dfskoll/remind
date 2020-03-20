@@ -987,7 +987,7 @@ int TriggerReminder(ParsePtr p, Trigger *t, TimeTrig *tim, int jul)
 	break;
 
     case RUN_TYPE:
-	system(DBufValue(&buf));
+	System(DBufValue(&buf));
 	break;
 
     default: /* Unknown/illegal type? */
@@ -1257,7 +1257,7 @@ int DoMsgCommand(char const *cmd, char const *msg)
     }
     r = OK;
 
-    system(DBufValue(&execBuffer));
+    System(DBufValue(&execBuffer));
 
 finished:
     DBufFree(&buf);

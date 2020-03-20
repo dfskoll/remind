@@ -150,7 +150,9 @@ int DBufGets(DynamicBuffer *dbuf, FILE *fp)
        we can usually save some unnecessary copying */
 
     *(dbuf->buffer) = 0;
-    fgets(dbuf->buffer, dbuf->allocatedLen, fp);
+    if (fgets(dbuf->buffer, dbuf->allocatedLen, fp) == NULL) {
+	return OK;
+    }
     if (!*(dbuf->buffer)) return OK;
     dbuf->len = strlen(dbuf->buffer);
     l = dbuf->len - 1;

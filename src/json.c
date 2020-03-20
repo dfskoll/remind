@@ -213,7 +213,7 @@ static int new_value (json_state * state,
 }
 
 #define whitespace \
-   case '\n': ++ state.cur_line;  state.cur_col = 0; \
+   case '\n': ++ state.cur_line;  state.cur_col = 0; /* FALLTHRU */	\
    case ' ': case '\t': case '\r'
 
 #define string_add(b)  \

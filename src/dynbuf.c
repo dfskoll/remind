@@ -164,7 +164,7 @@ int DBufGets(DynamicBuffer *dbuf, FILE *fp)
 
     while(busy) {
 	*tmp = 0;
-	fgets(tmp, 256, fp);
+	if (fgets(tmp, 256, fp) == NULL) return OK;
 	if (!*tmp) return OK;
 	l = strlen(tmp) - 1;
 	if (tmp[l] == '\n') {

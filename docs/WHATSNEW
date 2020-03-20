@@ -1,22 +1,24 @@
 CHANGES TO REMIND
 
-* VERSION 3.3 Patch 1 - 2020-XX-XX
+* VERSION 3.3 Patch 1 - 2020-03-20
 
 - CHANGE: For overlapping multi-day events, issue a reminder for the
-  most *recent* event rather than the earliest event.  NOTE INCOMPATIBILITY:
-  This is a behavior change!
+  most *recent* event rather than the earliest event.  NOTE
+  INCOMPATIBILITY: This is a behavior change!
 
-- CHANGE: Do not convert 90-99 to 1990-1999 when parsing numbers to recognize
-  years.  NOTE INCOMPATIBILITY: This is a behavior change!
+- CHANGE: Do not convert 90-99 to 1990-1999 when parsing numbers to
+  recognize years.  NOTE INCOMPATIBILITY: This is a behavior change!
 
-- CHANGE: Revert change to -y option that included filename and line number
-  in the hash.
+- CHANGE: Revert change to -y option that included filename and line
+  number in the hash.
 
 - CHANGE: Retain newlines (produced by %_) in JSON output.
 
 - FIX: Document $FormWidth system variable
 
 - FIX: Highlight today's date in "remind -c" output
+
+- FIX: Eliminate compiler warnings on Ubuntu 18.04.
 
 - IMPROVEMENT: Allow times to be specified either in 24-hour mode
   (HH:MM or HH.MM) or AM/PM mode (HH:MMam; HH:MMpm, etc.)

@@ -962,7 +962,8 @@ proc FillCalWindow {} {
 	    "WEEK" {
 		set stuff [string trimleft $stuff]
 		set stuff [string trimright $stuff]
-		set label [expr $firstWkday + $day - 1]
+		set offset [CalEntryOffset $firstWkday]
+		set label [expr $offset + $day]
 		.cal.l$label configure -text "$day $stuff"
 		continue
 	    }

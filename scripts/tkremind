@@ -1171,7 +1171,7 @@ proc DoPrint {} {
 
     # Build the command line
     set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
-    set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
+    set cmd "$p -itkremind=1 -itkprint=1 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
     if {$PrintSize == "letter"} {
 	append cmd " -m Letter"
     } else {
@@ -2342,7 +2342,7 @@ proc BrowseForFileRead {w {dir ""}} {
 #---------------------------------------------------------------------------
 proc StartBackgroundRemindDaemon {} {
     global Remind DaemonFile ReminderFile Option
-    set problem [catch { set DaemonFile [open "|$Remind -z0 $Option(ExtraRemindArgs) $ReminderFile" "r+"] } err]
+    set problem [catch { set DaemonFile [open "|$Remind -z0 -itkremind=1 $Option(ExtraRemindArgs) $ReminderFile" "r+"] } err]
     if {$problem} {
 	tk_dialog .error Error "Can't start Remind daemon in background: $err" error 0 OK
     } else {
@@ -3429,7 +3429,7 @@ proc ShowTodaysReminders {} {
 
     # Grab the reminders
     set stuff ""
-    set cmdline "|$Remind -g -q -r "
+    set cmdline "|$Remind -itkremind=1 -g -q -r "
     append cmdline $Option(ExtraRemindArgs);
     append cmdline " $ReminderFile 2>/dev/null"
     set f [open $cmdline r]

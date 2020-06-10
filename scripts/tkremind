@@ -265,7 +265,7 @@ proc Initialize {} {
     global MondayFirst TwentyFourHourMode ReminderFileModTime
     global Option
     set CommandLine "|$Remind -itkremind=1 -pp -y -l EXTRA"
-    set PSCmd "$Remind -pp -l EXTRA"
+    set PSCmd "$Remind -itkremind=1 -itkprint=1 -pp -l EXTRA"
     set i 0
     while {$i < $argc} {
 	if {[regexp -- {-[bgxim].*} [lindex $argv $i]]} {
@@ -1171,7 +1171,7 @@ proc DoPrint {} {
 
     # Build the command line
     set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
-    set cmd "$p -itkremind=1 -itkprint=1 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
+    set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
     if {$PrintSize == "letter"} {
 	append cmd " -m Letter"
     } else {

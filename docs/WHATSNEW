@@ -1,5 +1,12 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 2 - 2020-??-??
+
+- CHANGE: TkRemind always invokes Remind with the "-itkremind=1" option,
+  even when printing.  NOTE INCOMPATIBILITY: This is a behavior change!
+  When you print from TkRemind, we also invoke Remind with "-itkprint=1"
+  so you can detect that PostScript is being generated.
+
 * VERSION 3.3 Patch 1 - 2020-03-20
 
 - CHANGE: For overlapping multi-day events, issue a reminder for the

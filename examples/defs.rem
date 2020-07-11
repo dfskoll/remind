@@ -84,7 +84,6 @@ SET December  12
 ###########################################################
 # Other symbolic constants and functions for "pasting"... #
 ###########################################################
-
 SET Quote CHAR(34)
 
 # Handy constants/function for specifing week of month...
@@ -95,29 +94,17 @@ SET  Week_4		22
 FSET _last(mo)		"1 " + MON((mo%12)+1) + " --7"
 
 # Handy function to provide SCANFROM dates...
-FSET _back(days)	TODAY()-days
-
-###########################################################
-# Function which returns a string in "am/pm" format based #
-# on the time.  For example, set a am_pm(NOW())...        #
-###########################################################
-
-FSET _am_pm(tm)	IIF(tm<01:00, tm+12*60+"am", \
-                    tm<12:00, tm+"am", \
-                    tm<13:00, tm+"pm", \
-                              tm-12*60+"pm")
+FSET _back(days)	$U-days
 
 #################################################################
-# Function which removes a single leading zero from a string... #
+# Function that removes a single leading zero from a string...  #
 #################################################################
-
 FSET _no_lz(s) IIF(SUBSTR(s, 1, 1)=="0", SUBSTR(s, 2), s)
 
 #################################################################
 # Return the length of the daylight/night portion of a date,    #
 # in minutes.                                                   #
 #################################################################
-
 FSET _light_len(date) MAX(SUNSET(date)-SUNRISE(date), 0)
 FSET _dark_len(date) 1440-_light_len(date)
 
@@ -125,14 +112,12 @@ FSET _dark_len(date) 1440-_light_len(date)
 # Function to calculate number of years since a given year #
 # or number of months since a given month and year...      #
 ############################################################
-
 FSET _yr_num(yr)		ORD($Ty - yr)
-FSET _mo_num(mo, yr)		ORD(12 * ($Ty - yr) + \
-					MONNUM($T) - mo)
+FSET _mo_num(mo, yr)		ORD(12 * ($Ty - yr) + $Tm - mo)
 
 # Here's an example of how to use them:
-REM 1 Nov ++12 MSG %"Dean's [_yr_num(1984)] birthday%" is %b.
-REM 1 MSG Dean's [_mo_num(11, 1984)] 'monthly' anniversary
+REM 1 Nov ++12 MSG %"John's [_yr_num(1984)] birthday%" is %b.
+REM 1 MSG John's [_mo_num(11, 1984)] 'monthly' anniversary
 
 #############################################################################
 # Here's a tricky problem:  The 4th of July is a holiday in the U.S.
@@ -146,7 +131,7 @@ REM 1 MSG Dean's [_mo_num(11, 1984)] 'monthly' anniversary
 # dependent upon the current date, it's tricky and results may not be
 # what you expect.  You should try to make sure that the OMIT context
 # "near" any current reminders will not change during a calendar run.
-# The SCANFROM clause should help make these OMITs very safe.
+# The SCANFROM clause will make these OMITs safe.
 ############################################################################
 
 # Calculate the weekday of the holiday.
@@ -166,10 +151,8 @@ ELSE
 ENDIF
 
 ############################################################################
-#									   #
 # A meeting on the first Monday of every month which is moved to the       #
 # second Monday in the event of a holiday.                                 #
-#									   #
 ############################################################################
 
 # First, the normal meeting.  However, the SKIP keyword means this
@@ -185,64 +168,17 @@ IF ISOMITTED($T-7)
    REM [$T] MSG Delayed meeting
 ENDIF
 
-############################################################################
-#									   #
-# A very complicated reminder sent in by a Remind user.			   #
-# This person gets paid every two weeks, starting from 8 January 1993.	   #
-# If a pay date occurs before the twelfth of a month, then that		   #
-# he pays his mortgage on that pay date.  Otherwise, he pays the mortgage  #
-# on the previous pay date.  Furthermore, he has to schedule his	   #
-# mortgage payment six days before it is due.  He wants to be reminded	   #
-# a further four days before the scheduling deadline.  He also		   #
-# wants to be mailed a notice two weeks before the scheduling deadline.	   #
-#									   #
-# Here's the solution - if you can follow this, consider yourself a	   #
-# Remind programmer extraordinaire!					   #
-#									   #
-############################################################################
-
-# A function to determine whether or not a pay-date is a mortgage-date.
-
-FSET _IsMortDate(x) DAY(x) < 12 || (DAY(x+14) >= 12 && DAY(x+14) <= 14)
-
-# Paydays - for reference
-
-REM 8 Jan 1993 *14 MSG Payday
-
-# Calculate the mortgage payment six days ahead of time.  Note that this
-# is done "implicitly" by subtracting 6 from the starting date - we start
-# on 2 Jan rather than 8 Jan.  We add 6 to $T in _IsMortDate to
-# compensate.
-
-REM 2 Jan 1993 *14 ++4 SATISFY [_IsMortDate($T+6)] \
-	MSG %"Schedule mortgage payment%" for %a.
-
-# Now the mail reminder two weeks before the payment date - because two
-# weeks before a payment date is also a payment date, no pre-compensation
-# in the starting date of 8 Jan is necessary - convince yourself of this!
-# This uses the _mail() function defined earlier.
-
-REM ONCE 8 Jan 1993 *14 SATISFY [_IsMortDate($T+14)] \
-	RUN [_mail("Decatur Federal", \
-		"Pay mortgage by the " + ORD(DAY($T+14)))]
-
-# Make an entry on the calendar when the mortgage should be paid
-
-REM 8 Jan 1993 *14 SATISFY [_IsMortDate($T)] \
-	CAL Mortgage payment
-
 ##########################################################################
 #								         #
-# On our UNIX system, I run a program which queries the university       #
+# On our UNIX system, I run a program that queries the university       #
 # library and creates a file called ".booksdue".  This file is           #
 # a REMIND script to tell me when my library books are due.  Here's      #
 # an example from my reminder file - it shows the use of filedate().     #
 # When the .booksdue file is at least 7 days old, I create a new version #
 # by querying the library computer.  Note the use of realtoday() rather  #
-# than today.   						         #
+# than today().  						         #
 #								         #
 ##########################################################################
-
 IF !$RunOff && !$CalMode && !$SimpleCal
    IF REALTODAY()-FILEDATE("/home/dfs/.booksdue") >= 7
       REM RUN /home/dfs/bilge/library/getbooks
@@ -272,7 +208,7 @@ REM Sat Sun SPECIAL SHADE 220
 #############################################################################
 
 SET SaveTrig $NumTrig
-SET easter EASTERDATE(YEAR(TODAY()))
+SET easter EASTERDATE($Uy)
 REM  [easter-46] MSG %"Ash Wednesday%"
 REM  [easter-7]  MSG %"Palm Sunday%"
 OMIT [easter-2]  MSG %"Good Friday%"
@@ -339,13 +275,6 @@ if $NumTrig > SaveTrig
 	REM SPECIAL SHADE 220
 endif
 
-# Seasons (valid from 1992 to 2000)...
-REM Mar 20 MSG %"Spring%" begins
-REM Jun [IIF(YEAR(TODAY())%4, 21, 20)] MSG %"Summer%" begins
-REM Sep [CHOOSE(YEAR(TODAY())-1991, 22,22,23,23,22,22,22,23,22)] \
-	MSG %"Fall%" begins
-REM Dec [IIF((YEAR(TODAY())+1)%4, 21, 22)] MSG %"Winter%" begins
-
 #PSSTUFF2
 ##########################################################################
 #									 #
@@ -359,7 +288,7 @@ REM Dec [IIF((YEAR(TODAY())+1)%4, 21, 22)] MSG %"Winter%" begins
 # example, I recommend that you use the -sd 10 option for Rem2PS.
 REM PS Border Border moveto \
    /DayFont findfont DaySize scalefont setfont \
-   ([hebday(today())] [hebmon(today())]) show
+   ([hebday($U)] [hebmon($U)]) show
 
 # Fill in the phases of the moon on the PostScript calendar
 [moondate(0)] SPECIAL MOON 0
@@ -379,7 +308,7 @@ REM PS Border Border 5 sub moveto \
 FSET _DayOfYear(x) x-(date(year(x),1,1) - 1)
 REM PS BoxWidth 3 mul 4 div Border 5 sub moveto \
 	/SmallFont findfont 4 scalefont setfont \
-	([_DayOfYear(today())]([365+isleap(today())-_DayOfYear(today())])) show
+	([_DayOfYear($U)]([365+isleap($U)-_DayOfYear($U)])) show
 
 #JHOLS
 ##########################################################################
@@ -419,7 +348,7 @@ SET Reform 0
 
 # Convenient function definition to save typing
 FSET _h(x, y) HEBDATE(x,y)
-FSET _h2(x, y) HEBDATE(x, y, TODAY()-7)
+FSET _h2(x, y) HEBDATE(x, y, $U-7)
 FSET _PastSat(x, y) IIF(WKDAYNUM(_h2(x,y))!=6, _h2(x,y), _h2(x,y)+1)
 FSET _PastSun(x, y) IIF(WKDAYNUM(_h2(x,y))!=0, _h2(x,y), _h2(x,y)+1)
 FSET _PastMon(x, y) IIF(WKDAYNUM(_h2(x,y))!=1, _h2(x,y), _h2(x,y)+1)
@@ -453,7 +382,7 @@ ELSE
 ENDIF
 
 # Because Kislev can change length, we must be more careful about Chanukah
-FSET _chan(x) HEBDATE(24, "Kislev", today()-9)+x
+FSET _chan(x) HEBDATE(24, "Kislev", $U-9)+x
 [_chan(1)] ++4 MSG %"Chanukah 1%" is %b.
 [_chan(2)] MSG %"Chanukah 2%"
 [_chan(3)] MSG %"Chanukah 3%"
@@ -542,9 +471,9 @@ ENDIF
 # Counting the omer - do the whole spiel, i.e:
 # "This is the xth day of the omer, being y weeks and z days of the omer."
 # Nice Remind programming example here!
-SET ostart HEBDATE(16, "Nisan", TODAY()-50)
-IF ostart <= TODAY() && (TODAY() - ostart < 49)
-   SET odays TODAY()-ostart+1
+SET ostart HEBDATE(16, "Nisan", $U-50)
+IF ostart <= $U && ($U - ostart < 49)
+   SET odays $U-ostart+1
    IF odays < 7
       MSG %"%"Today is the [ORD(odays)] day of the Omer.
    ELSE

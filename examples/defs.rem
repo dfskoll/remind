@@ -26,8 +26,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.01.08"
-   ERRMSG This file requires at least version 03.01.08 of Remind.%
+IF version() < "03.01.09"
+   ERRMSG This file requires at least version 03.01.09 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF
@@ -126,25 +126,13 @@ FSET _dark_len(date) 1440-_light_len(date)
 # or number of months since a given month and year...      #
 ############################################################
 
-FSET _yr_num(yr)		ORD(YEAR(TRIGDATE()) - yr)
-FSET _mo_num(mo, yr)		ORD(12 * (YEAR(TRIGDATE()) - yr) + \
-					MONNUM(TRIGDATE()) - mo)
+FSET _yr_num(yr)		ORD($Ty - yr)
+FSET _mo_num(mo, yr)		ORD(12 * ($Ty - yr) + \
+					MONNUM($T) - mo)
 
 # Here's an example of how to use them:
 REM 1 Nov ++12 MSG %"Dean's [_yr_num(1984)] birthday%" is %b.
 REM 1 MSG Dean's [_mo_num(11, 1984)] 'monthly' anniversary
-
-###########################################################
-# Function to send mail via elm's "fastmail" (by GMS!)... #
-###########################################################
-
-#FSET _mail(from, subj)	"mailx -s " + \
-#				Quote + from + " : " + subj + Quote \
-#				GETENV("LOGNAME") + " < /dev/null 1>&0"
-FSET _mail(from, subj)	"fastmail -f " + \
-				Quote + from + Quote + \
-				" -s " + Quote + subj + Quote + \
-				" /dev/null " + GETENV("LOGNAME")
 
 #############################################################################
 # Here's a tricky problem:  The 4th of July is a holiday in the U.S.
@@ -164,15 +152,16 @@ FSET _mail(from, subj)	"fastmail -f " + \
 # Calculate the weekday of the holiday.
 REM 4 July SCANFROM [_back(7)] SATISFY 1
 
-IF WKDAYNUM(TRIGDATE()) == Sat
-	REM [TRIGDATE()] MSG Independence day (actual)
-	OMIT [TRIGDATE()-1] MSG Independence day (observed)
+SET iday $T
+IF WKDAYNUM(iday) == Sat
+	REM [iday] MSG Independence day (actual)
+	OMIT [iday-1] MSG Independence day (observed)
 ELSE
-	IF WKDAYNUM(TRIGDATE()) == Sun
-		REM [TRIGDATE()] MSG Independence day (actual)
-		OMIT [TRIGDATE()+1] MSG Independence day (observed)
+	IF WKDAYNUM(iday) == Sun
+		REM [iday] MSG Independence day (actual)
+		OMIT [iday+1] MSG Independence day (observed)
 	ELSE
-		OMIT [TRIGDATE()] MSG Independence day
+		OMIT [iday] MSG Independence day
 	ENDIF
 ENDIF
 
@@ -192,8 +181,8 @@ REM Mon 8 SATISFY 1
 
 # But only actually trigger the delayed meeting if the previous
 # Monday was a holiday
-IF ISOMITTED(TRIGDATE()-7)
-   REM [TRIGDATE()] MSG Delayed meeting
+IF ISOMITTED($T-7)
+   REM [$T] MSG Delayed meeting
 ENDIF
 
 ############################################################################
@@ -222,10 +211,10 @@ REM 8 Jan 1993 *14 MSG Payday
 
 # Calculate the mortgage payment six days ahead of time.  Note that this
 # is done "implicitly" by subtracting 6 from the starting date - we start
-# on 2 Jan rather than 8 Jan.  We add 6 to TRIGDATE() in _IsMortDate to
+# on 2 Jan rather than 8 Jan.  We add 6 to $T in _IsMortDate to
 # compensate.
 
-REM 2 Jan 1993 *14 ++4 SATISFY [_IsMortDate(TRIGDATE()+6)] \
+REM 2 Jan 1993 *14 ++4 SATISFY [_IsMortDate($T+6)] \
 	MSG %"Schedule mortgage payment%" for %a.
 
 # Now the mail reminder two weeks before the payment date - because two
@@ -233,13 +222,13 @@ REM 2 Jan 1993 *14 ++4 SATISFY [_IsMortDate(TRIGDATE()+6)] \
 # in the starting date of 8 Jan is necessary - convince yourself of this!
 # This uses the _mail() function defined earlier.
 
-REM ONCE 8 Jan 1993 *14 SATISFY [_IsMortDate(TRIGDATE()+14)] \
+REM ONCE 8 Jan 1993 *14 SATISFY [_IsMortDate($T+14)] \
 	RUN [_mail("Decatur Federal", \
-		"Pay mortgage by the " + ORD(DAY(TRIGDATE()+14)))]
+		"Pay mortgage by the " + ORD(DAY($T+14)))]
 
 # Make an entry on the calendar when the mortgage should be paid
 
-REM 8 Jan 1993 *14 SATISFY [_IsMortDate(TRIGDATE())] \
+REM 8 Jan 1993 *14 SATISFY [_IsMortDate($T)] \
 	CAL Mortgage payment
 
 ##########################################################################
@@ -301,7 +290,7 @@ REM  Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
 REM      Feb  2		MSG %"Ground Hog Day%"
 REM      Feb 14		MSG %"Valentine's%" Day
 REM  Mon Feb [Week_3]	SCANFROM [_back(7)] SATISFY 1
-OMIT [trigdate()] MSG %"President's Day%"
+OMIT [$T] MSG %"President's Day%"
 REM      Mar 17		MSG %"St. Patrick's%" Day
 
 # The DST rules are accurate for most locations in
@@ -319,23 +308,23 @@ REM  Sat May [Week_1]	MSG %"Kentucky Derby%"
 REM  Sun May [Week_2]	MSG %"Mother's Day%"
 REM  Sat May [Week_3]	MSG %"Armed Forces Day%"
 REM  Mon [_last(May)]	SCANFROM [_back(7)] SATISFY 1
-OMIT [trigdate()] MSG %"Memorial Day%"
+OMIT [$T] MSG %"Memorial Day%"
 REM      Jun 14		MSG %"Flag Day%"
 REM  Sun Jun [Week_3]	MSG %"Father's Day%"
 REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
-OMIT [trigdate()] MSG %"Labor Day%"
+OMIT [$T] MSG %"Labor Day%"
 REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
 REM      Nov 11		MSG %"Veterans Day%"
 
 REM      Oct 30		MSG %"Mischief Night%"
 REM      Oct 31		MSG %"Halloween%"
 REM  Tue Nov  2		SCANFROM [_back(7)] \
-	SATISFY [(YEAR(TRIGDATE()) % 4) == 0] \
+	SATISFY [($Ty % 4) == 0] \
 	MSG %"Election%" Day
 REM  Thu Nov [Week_4]	SCANFROM [_back(7)] SATISFY 1
-OMIT [trigdate()] MSG %"Thanksgiving%" Day
+OMIT [$T] MSG %"Thanksgiving%" Day
 REM  Fri Nov [Week_4+1]	SCANFROM [_back(7)] SATISFY 1
-OMIT [trigdate()] MSG %"Thanksgiving%" (cont.)
+OMIT [$T] MSG %"Thanksgiving%" (cont.)
 OMIT     Dec 24		MSG %"Christmas Eve%"
 OMIT     Dec 25		MSG %"Christmas%" Day
 
@@ -382,7 +371,7 @@ REM PS Border Border moveto \
 # calendar - the sizes are hard-coded, however, and work best in landscape.
 REM PS Border Border 5 sub moveto \
 	/SmallFont findfont 4 scalefont setfont \
-	(Sunrise: [sunrise(trigdate())] Sunset: [sunset(trigdate())]) show
+	(Sunrise: [sunrise($T)] Sunset: [sunset($T)]) show
 
 # The next one puts the day number (1-366) and days left in the year at the
 # bottom of the post-script calendar.  Again, the hard-coded sizes work best
@@ -573,8 +562,8 @@ ENDIF
 ### for Friday and Saturday.  Note:  You must set your latitude, longitude
 ### and possibly time zone for these to work properly!
 
-REM Friday   CAL Candle lighting at [sunset(trigdate())-18]
-REM Saturday CAL Havdalah at [sunset(trigdate())+42]
+REM Friday   CAL Candle lighting at [sunset($T)-18]
+REM Saturday CAL Havdalah at [sunset($T)+42]
 
 #COLORS
 ##########################################################################

@@ -2560,7 +2560,7 @@ proc IssueBackgroundReminder { file time now tag } {
     }
     if {$Option(RunCmd) != ""} {
 	if {$Option(FeedReminder)} {
-	    FeedReminderToCommand $Option(RunCmd) $msg
+	    FeedReminderToCommand $Option(RunCmd) "$time: $msg"
 	} else {
 	    exec "/bin/sh" "-c" $Option(RunCmd) "&"
 	}

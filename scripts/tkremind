@@ -2341,7 +2341,7 @@ proc BrowseForFileRead {w {dir ""}} {
 #    Starts a background Remind daemon to handle timed reminders
 #---------------------------------------------------------------------------
 proc StartBackgroundRemindDaemon {} {
-    global Remind DaemonFile ReminderFile Option
+    global Remind DaemonFile ReminderFile Option TwentyFourHourMode
     if {$TwentyFourHourMode} {
         set problem [catch { set DaemonFile [open "|$Remind -b1 -z0 -itkremind=1 $Option(ExtraRemindArgs) $ReminderFile" "r+"] } err]
     } else {

@@ -2710,9 +2710,11 @@ proc ReadTaggedOptions { tag date } {
 	lappend ans -text-day2 $d
     }
     if {[dict exists $obj m]} {
-	lappend ans -text-mon1 [lindex $MonthNames [expr [dict get $obj m] -1]]
-	lappend ans -text-mon2 [lindex $MonthNames [expr [dict get $obj m] -1]]
-	lappend ans -text-mon3 [lindex $MonthNames [expr [dict get $obj m] -1]]
+        set mm [dict get $obj m]
+        set mm [string trimleft $m 0]
+	lappend ans -text-mon1 [lindex $MonthNames [expr $mm -1]]
+	lappend ans -text-mon2 [lindex $MonthNames [expr $mm -1]]
+	lappend ans -text-mon3 [lindex $MonthNames [expr $mm -1]]
     } else {
 	lappend ans -text-mon1 {every month}
 	lappend ans -text-mon2 {every month}
@@ -2751,7 +2753,8 @@ proc ReadTaggedOptions { tag date } {
 		    lappend ans -text-ordinal Last
 		    # Adjust month down and possibly year?
 		    if {[dict exists $obj m]} {
-			set idx [expr [dict get $obj m] -1]
+                        set mm [string trimleft [dict get $obj m] 0]
+			set idx [expr $mm -1]
 			if {$idx <= 0} {
 			    set idx 12
 			}
@@ -2797,15 +2800,18 @@ proc ReadTaggedOptions { tag date } {
     if {[dict exists $obj until]} {
 	set u [dict get $obj until]
 	regexp {^([0-9][0-9][0-9][0-9]).([0-9][0-9]).([0-9][0-9])} $u all yu mu du
+        # Trim leading zeros, or Tcl complains
+        set mu [string trimleft $mu 0]
 	lappend ans -global-expbut 1
 	lappend ans -text-expday $du
 	lappend ans -text-expmon [lindex $MonthNames [expr $mu-1]]
 	lappend ans -text-expyear $yu
 
     } else {
+        set mm [string trimleft $m 0]
 	lappend ans -global-expbut 0
 	lappend ans -text-expday $d
-	lappend ans -text-expmon [lindex $MonthNames [expr $m-1]]
+	lappend ans -text-expmon [lindex $MonthNames [expr $mm-1]]
 	lappend ans -text-expyear $y
     }
 

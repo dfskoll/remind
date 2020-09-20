@@ -1,6 +1,6 @@
 /***************************************************************/
 /*                                                             */
-/*  CUSTOM.H.                                                  */
+/*  CUSTOM.H.IN                                                */
 /*                                                             */
 /*  Contains various configuration parameters for Remind       */
 /*  which you can customize.                                   */

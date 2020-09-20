@@ -835,7 +835,7 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	return;
     }
     if (name) strcat(buffer, name); else strcat(buffer, v->name);
-    fprintf(ErrFp, "%s  ", buffer);
+    fprintf(ErrFp, "%16s  ", buffer);
     if (v) {
 	if (v->type == SPECIAL_TYPE) {
 	    Value val;

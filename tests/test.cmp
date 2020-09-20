@@ -1175,142 +1175,142 @@ set a135 trigeventduration()
 trigeventduration() => 72:00
 
 dump
-        Variable  Value
+Variable  Value
 
-            a017  29
-            a036  "bar"
-            a055  1
-            a074  "Tuesday, 5 May, 1992 In 444 days' time T"...
-            a093  0
-            a116  -4
-            a135  72:00
-            a008  "11:44"
-            a027  0
-            a046  "ies"
-            a065  1
-            a084  7
-            a107  3
-            a126  14:00
-            a018  1
-            a037  1991-02-15
-            a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-            a075  "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
-            a094  0
-            a117  -3
-            a028  1
-            a047  -1
-            a066  0
-            a085  7
-            a108  14
-            a127  04:30
-            a019  0
-            a038  33
-            a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
-            a076  "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
-            a095  -1
-            a118  0
-            a029  0
-            a048  "foo"
-            a067  "INT"
-            a086  4
-            a109  2012-01-01
-            a128  2018-02-03@16:45
-            a039  "February"
-            a058  "03.03.01"
-            a077  "1992 92
+a017  29
+a036  "bar"
+a055  1
+a074  "Tuesday, 5 May, 1992 In 444 days' time T"...
+a093  0
+a116  -4
+a135  72:00
+a008  "11:44"
+a027  0
+a046  "ies"
+a065  1
+a084  7
+a107  3
+a126  14:00
+a018  1
+a037  1991-02-15
+a056  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+a075  "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
+a094  0
+a117  -3
+a028  1
+a047  -1
+a066  0
+a085  7
+a108  14
+a127  04:30
+a019  0
+a038  33
+a057  "SDFJHSDF KSJDFH KJSDFH KSJDFH"
+a076  "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
+a095  -1
+a118  0
+a029  0
+a048  "foo"
+a067  "INT"
+a086  4
+a109  2012-01-01
+a128  2018-02-03@16:45
+a039  "February"
+a058  "03.03.01"
+a077  "1992 92
 "
-            a096  -4
-            a119  -1
-            a049  21
-            a068  "STRING"
-            a087  3
-            a129  2019-02-03@16:14
-            a059  "Saturday"
-            a078  1991-03-31
-            a097  -3
-            a069  "TIME"
-            a088  14
-            a079  1992-04-19
-            a098  0
-            a089  2012-01-01
-            a099  -1
-            a000  1
-            a010  12
-            a001  1
-            a020  "../tests/test.rem"
-            a100  2010-09-03
-            a011  704
-            a030  1
-            a110  1991-02-16
-            a002  102
-            a021  "foo bar baz"
-            a040  2
-            a101  2010-09-03
-            a120  2010-09-03
-            a012  411
-            a031  "foobarbaz"
-            a111  -1
-            a130  1991-02-16
-            a003  1990
-            a022  11
-            a041  "3rd"
-            a060  6
-            a102  5000
-            a121  2010-09-03
-            a013  1992-02-02
-            a032  34
-            a070  "DATE"
-            a112  7
-            a131  00:00
-            a004  "B7BMB"
-            a023  1
-            a042  "4th"
-            a061  1991
-            a080  1995-04-16
-            a103  0
-            a122  5000
-            a033  "foo"
-            a052  03:07
-            a071  2
-            a090  1991-02-16
-            a113  15
-            a132  1991-02-16@00:00
-            a005  "baz"
-            a024  0
-            a043  "UNIX"
-            a062  -19
-            a081  ""
-            a104  0
-            a123  0
-            a015  16
-            a034  1991-02-17
-            a053  1992-01-10
-            a072  0
-            a091  -1
-            a114  2
-            a133  16:00
-            a006  "1"
-            a025  4
-            a044  "s"
-            a063  0
-            a082  1991-03-13
-            a105  -1
-            a124  0
-            a016  28
-            a035  1
-            a054  11:22
-            a092  7
-            a115  03:33
-            a134  1991-02-13@16:00
-            a007  "1991-02-16"
-            a026  7
-            a045  "iess"
-            a064  1
-            a083  1991-03-24
-            a106  4
-            a125  -1
+a096  -4
+a119  -1
+a049  21
+a068  "STRING"
+a087  3
+a129  2019-02-03@16:14
+a059  "Saturday"
+a078  1991-03-31
+a097  -3
+a069  "TIME"
+a088  14
+a079  1992-04-19
+a098  0
+a089  2012-01-01
+a099  -1
+a000  1
+a010  12
+a001  1
+a020  "../tests/test.rem"
+a100  2010-09-03
+a011  704
+a030  1
+a110  1991-02-16
+a002  102
+a021  "foo bar baz"
+a040  2
+a101  2010-09-03
+a120  2010-09-03
+a012  411
+a031  "foobarbaz"
+a111  -1
+a130  1991-02-16
+a003  1990
+a022  11
+a041  "3rd"
+a060  6
+a102  5000
+a121  2010-09-03
+a013  1992-02-02
+a032  34
+a070  "DATE"
+a112  7
+a131  00:00
+a004  "B7BMB"
+a023  1
+a042  "4th"
+a061  1991
+a080  1995-04-16
+a103  0
+a122  5000
+a033  "foo"
+a052  03:07
+a071  2
+a090  1991-02-16
+a113  15
+a132  1991-02-16@00:00
+a005  "baz"
+a024  0
+a043  "UNIX"
+a062  -19
+a081  ""
+a104  0
+a123  0
+a015  16
+a034  1991-02-17
+a053  1992-01-10
+a072  0
+a091  -1
+a114  2
+a133  16:00
+a006  "1"
+a025  4
+a044  "s"
+a063  0
+a082  1991-03-13
+a105  -1
+a124  0
+a016  28
+a035  1
+a054  11:22
+a092  7
+a115  03:33
+a134  1991-02-13@16:00
+a007  "1991-02-16"
+a026  7
+a045  "iess"
+a064  1
+a083  1991-03-24
+a106  4
+a125  -1
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        Variable  Value
+Variable  Value
 
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15

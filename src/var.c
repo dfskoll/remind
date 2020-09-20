@@ -475,17 +475,17 @@ int DoDump(ParsePtr p)
 	DumpVarTable();
 	return OK;
     }
-    fprintf(ErrFp, "%*s  %s\n\n", VAR_NAME_LEN, VARIABLE, VALUE);
+    fprintf(ErrFp, "%s  %s\n\n", VARIABLE, VALUE);
     while(1) {
 	if (*DBufValue(&buf) == '$') {
 	    DumpSysVarByName(DBufValue(&buf)+1);
 	} else {
 	    v = FindVar(DBufValue(&buf), 0);
 	    DBufValue(&buf)[VAR_NAME_LEN] = 0;
-	    if (!v) fprintf(ErrFp, "%*s  %s\n", VAR_NAME_LEN,
+	    if (!v) fprintf(ErrFp, "%s  %s\n",
 			    DBufValue(&buf), UNDEF);
 	    else {
-		fprintf(ErrFp, "%*s  ", VAR_NAME_LEN, v->name);
+		fprintf(ErrFp, "%s  ", v->name);
 		PrintValue(&(v->v), ErrFp);
 		fprintf(ErrFp, "\n");
 	    }
@@ -513,12 +513,12 @@ void DumpVarTable(void)
     register Var *v;
     register int i;
 
-    fprintf(ErrFp, "%*s  %s\n\n", VAR_NAME_LEN, VARIABLE, VALUE);
+    fprintf(ErrFp, "%s  %s\n\n", VARIABLE, VALUE);
 
     for (i=0; i<VAR_HASH_SIZE; i++) {
 	v = VHashTbl[i];
 	while(v) {
-	    fprintf(ErrFp, "%*s  ", VAR_NAME_LEN, v->name);
+	    fprintf(ErrFp, "%s  ", v->name);
 	    PrintValue(&(v->v), ErrFp);
 	    fprintf(ErrFp, "\n");
 	    v = v->next;
@@ -835,7 +835,7 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	return;
     }
     if (name) strcat(buffer, name); else strcat(buffer, v->name);
-    fprintf(ErrFp, "%*s  ", VAR_NAME_LEN+1, buffer);
+    fprintf(ErrFp, "%s  ", buffer);
     if (v) {
 	if (v->type == SPECIAL_TYPE) {
 	    Value val;

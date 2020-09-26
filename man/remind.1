@@ -3663,6 +3663,35 @@ Note that \fBSATISFY\fR and \fBOMITFUNC\fR can often be used to solve the
 same problem, though in different ways.  Sometimes a \fBSATISFY\fR is cleaner
 and sometimes an \fBOMITFUNC\fR; experiment and use whichever seems clearer.
 .PP
+.SH POSSIBLY-UNCOMPUTABLE TRIGGERS
+.PP
+Occasionally, you may wish to suppress the "Can't compute trigger" warnings
+for reminders for which a trigger date cannot be compute.  For example,
+the following reminder is triggered on a Monday that is not a holiday
+if the following Tuesday is a holiday:
+.PP
+.nf
+        REM Mon SKIP SATISFY [isomitted($T+1)] MSG Work between holidays
+.fi
+.PP
+However, if there are no Mondays after today's date that satisfy the
+condition, Remind will print the "Can't compute trigger" error.  To
+suppress this, use the \fBMAYBE-UNCOMPUTABLE\fR keyword:
+.PP
+.nf
+        REM MAYBE-UNCOMPUTABLE Mon SKIP SATISFY [isomitted($T+1)] MSG Work between holidays
+.fi
+.PP
+It's almost never appropriate to use \fBMAYBE-UNCOMPUTABLE\fR, but it is
+provided for those rare occasions when it makes sense.  If you use
+\fBMAYBE-UNCOMPUTABLE\fR inside the \fBevaltrig()\fR function, then
+untriggerable triggers return -1.  For example:
+.PP
+.nf
+        SET a evaltrig("MAYBE-UNCOMPUTABLE Mon SKIP OMIT Mon")
+.fi
+.PP
+will set a to 1.
 .SH DEBUGGING REMINDER SCRIPTS
 .PP
 Although the command-line \fB\-d\fR option is useful for debugging, it

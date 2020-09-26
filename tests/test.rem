@@ -376,6 +376,14 @@ set a133 trigduration()
 set a134 trigeventstart()
 set a135 trigeventduration()
 
+# These will issue errors
+REM Mon OMIT Mon SKIP MSG Never ever ever...
+REM Mon SATISFY [wkdaynum($T) == 3] MSG Nope nope...
+
+# These will just silently not trigger
+REM MAYBE-UNCOMPUTABLE Mon OMIT Mon SKIP MSG Never ever ever...
+REM MAYBE-UNCOMPUTABLE Mon SATISFY [wkdaynum($T) == 3] MSG Nope nope...
+
 dump
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15

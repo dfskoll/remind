@@ -813,9 +813,11 @@ int DoIfTrig(ParsePtr p)
 	if (trig.typ != NO_TYPE) return E_PARSE_ERR;
 	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 1);
 	if (r) {
-	    if (!Hush || r != E_RUN_DISABLED) {
-		Eprint("%s", ErrMsg[r]);
-	    }
+            if (r != E_CANT_TRIG || !trig.maybe_uncomputable) {
+                if (!Hush || r != E_RUN_DISABLED) {
+                    Eprint("%s", ErrMsg[r]);
+                }
+            }
 	    syndrome = IF_TRUE | BEFORE_ELSE;
 	}
 	else {

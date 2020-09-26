@@ -67,6 +67,7 @@ Token TokArray[] = {
     { "june",		3,	T_Month,	5 },
     { "march",		3,	T_Month,	2 },
     { "may",		3,	T_Month,	4 },
+    { "maybe-uncomputable", 5,  T_MaybeUncomputable, 0},
     { "monday",		3,	T_WkDay,	0 },
     { "msf",		3,	T_RemType,	MSF_TYPE },
     { "msg",		3,	T_RemType,	MSG_TYPE },

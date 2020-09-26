@@ -73,6 +73,7 @@ typedef struct {
     int duration_days;           /* Duration converted to days to search */
     int eventstart;              /* Original event start (datetime) */
     int eventduration;           /* Original event duration (minutes) */
+    int maybe_uncomputable;      /* Suppress "can't compute trigger" warnings */
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
     char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */
@@ -171,7 +172,8 @@ enum TokTypes
   T_Duration,
   T_LongTime,
   T_OmitFunc,
-  T_Through
+  T_Through,
+  T_MaybeUncomputable
 };
 
 /* The structure of a token */

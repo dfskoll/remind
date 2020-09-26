@@ -1325,6 +1325,9 @@ static int DoCalRem(ParsePtr p, int col)
     if (trig.typ == SAT_TYPE) {
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) {
+            if (r == E_CANT_TRIG && trig.maybe_uncomputable) {
+                r = OK;
+            }
 	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
 	    return r;
@@ -1369,6 +1372,9 @@ static int DoCalRem(ParsePtr p, int col)
 	/* Calculate the trigger date */
 	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 1);
 	if (r) {
+            if (r == E_CANT_TRIG && trig.maybe_uncomputable) {
+                r = OK;
+            }
 	    FreeTrig(&trig);
 	    return r;
 	}

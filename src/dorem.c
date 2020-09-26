@@ -81,6 +81,9 @@ int DoRem(ParsePtr p)
 	PurgeEchoLine("%s\n", CurLine);
 	r=DoSatRemind(&trig, &tim, p);
 	if (r) {
+            if (r == E_CANT_TRIG && trig.maybe_uncomputable) {
+                r = OK;
+            }
 	    FreeTrig(&trig);
 	    if (r == E_EXPIRED) return OK;
 	    return r;
@@ -134,6 +137,9 @@ int DoRem(ParsePtr p)
 		PurgeEchoLine("%s: %s\n", "#!P! Problem calculating trigger date", ErrMsg[r]);
 		PurgeEchoLine("%s\n", CurLine);
 	    }
+            if (r == E_CANT_TRIG && trig.maybe_uncomputable) {
+                r = OK;
+            }
 	    FreeTrig(&trig);
 	    return r;
 	}
@@ -219,6 +225,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->duration_days = 0;
     trig->eventstart = NO_TIME;
     trig->eventduration = NO_TIME;
+    trig->maybe_uncomputable = 0;
     DBufInit(&(trig->tags));
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
@@ -275,6 +282,10 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    if (trig->m != NO_MON) return E_MON_TWICE;
 	    trig->m = tok.val;
 	    break;
+
+        case T_MaybeUncomputable:
+            trig->maybe_uncomputable = 1;
+            break;
 
 	case T_Skip:
 	    DBufFree(&buf);

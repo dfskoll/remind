@@ -2917,6 +2917,10 @@ FEvalTrig(func_info *info)
 	}
 	jul = ComputeTrigger(scanfrom, &trig, &tim, &r, 0);
     }
+    if (r == E_CANT_TRIG && trig.maybe_uncomputable) {
+        r = 0;
+        jul = -1;
+    }
     FreeTrig(&trig);
     if (r) return r;
     if (jul < 0) {

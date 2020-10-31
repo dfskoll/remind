@@ -26,7 +26,7 @@ Anything after the __EOF__ marker is completely ignored.
 
 .SH OPTIONS
 \fBRemind\fR has a slew of options.  If you're new to the program,
-ignore them for now and skip to the section "Reminder Files".
+ignore them for now and skip to the section "REMINDER FILES".
 .TP
 .B \-n
 The \fB\-n\fR option causes \fBRemind\fR to print the \fBnext\fR occurrence
@@ -248,7 +248,7 @@ encountered in the reminder script.  The \fB\-g\fR option cause
 \fBRemind\fR to sort reminders by date and time prior to issuing them.
 The optional \fBa\fR and \fBd\fR characters specify the sort order
 (ascending or descending) for the date, time and priority fields.  See
-the section "Sorting Reminders" for more information.
+the section "SORTING REMINDERS" for more information.
 
 .TP
 \fB\-b\fR[\fIn\fR]
@@ -323,7 +323,7 @@ TAG clause.
 \fB\-i\fR\fIvar\fR\fB=\fR\fIexpr\fR
 Sets the value of the specified \fIvar\fR to \fIexpr\fR, and \fBpreserves\fR
 \fIvar\fR.  \fIExpr\fR can be any valid \fBRemind\fR expression.  See the
-section "Initializing Variables on the Command Line" for more details.
+section "INITIALIZING VARIABLES ON THE COMMAND LINE" for more details.
 .TP
 \fB\-i\fR\fIfunc\fR(\fIargs\fR)=\fIdefinition\fR
 Allows you to define a function on the command line.
@@ -352,7 +352,7 @@ In addition, you can supply a \fIrepeat\fR parameter, which has the
 form *\fInum\fR.  This causes \fBRemind\fR to be run \fInum\fR times,
 with the date incrementing on each iteration.  You may have to enclose
 the parameter in quotes to avoid shell expansion.  See the subsection
-"Repeated Execution" in the section "Calendar Mode" for more
+"Repeated Execution" in the section "CALENDAR MODE" for more
 information.
 .SH REMINDER FILES
 .PP
@@ -439,7 +439,7 @@ These keywords denote the \fItype\fR
 of the reminder.  (\fBSATISFY\fR is more complicated and will be explained
 later.)  A \fBMSG\fR-type reminder normally prints a message to the standard
 output, after passing the \fIbody\fR through a special substitution filter,
-described in the section "The Substitution Filter."  However, if you have
+described in the section "THE SUBSTITUTION FILTER."  However, if you have
 used the \fB\-k\fR command-line option, then \fBMSG\fR-type reminders are
 passed to the appropriate program.  Note that the options \fB\-c\fR,
 \fB\-s\fR, \fB\-p\fR and \fB\-n\fR disable the \fB\-k\fR option.
@@ -457,7 +457,7 @@ The \fBMSF\fR keyword is almost the same as the \fBMSG\fR keyword,
 except that the reminder is formatted to fit into a paragraph-like
 format.  Three system variables control the formatting of \fBMSF\fR-type
 reminders - they are \fB$FirstIndent\fR, \fB$SubsIndent\fR and
-\fB$FormWidth\fR.  They are discussed in the section "System Variables."
+\fB$FormWidth\fR.  They are discussed in the section "SYSTEM VARIABLES."
 The \fBMSF\fR keyword causes the spacing of your reminder to be altered -
 extra spaces are discarded, and two spaces are placed after periods and
 other characters, as specified by the system variables \fB$EndSent\fR and
@@ -815,7 +815,7 @@ the initial date, and does not affect the repetition period.
 .B SCANFROM \fRand\fB FROM
 .PP
 The \fBSCANFROM\fR and \fBFROM\fR keywords are for advanced \fBRemind\fR programmers
-only, and will be explained in the section "Details about Trigger Computation"
+only, and will be explained in the section "DETAILS ABOUT TRIGGER COMPUTATION"
 near the end of this manual.  Note that \fBSCANFROM\fR is available only
 in versions of \fBRemind\fR from 03.00.04 up.  \fBFROM\fR is available only
 from 03.01.00 and later.
@@ -827,7 +827,7 @@ It is used in calendar mode and when sorting reminders.  If two reminders
 have the same trigger date and time, then they are sorted by priority.
 If the \fBPRIORITY\fR keyword is not supplied, a default priority of 5000
 is used.  (This default can be changed by adjusting the system variable
-\fB$DefaultPrio\fR.  See the section "System Variables" for more
+\fB$DefaultPrio\fR.  See the section "SYSTEM VARIABLES" for more
 information.)
 .PP
 .B EXPIRY DATES
@@ -1061,7 +1061,7 @@ of timed reminders, and the \fBWARN\fR keyword allows precise control
 over the advance triggering of all types of reminders.
 However, discussion must be deferred until after
 expressions and user-defined functions are explained.  See the subsection
-"Precise Scheduling" further on.
+"PRECISE SCHEDULING" further on.
 .PP
 .B TAG AND DURATION
 .PP
@@ -1323,7 +1323,7 @@ is similar to \fB%3\fR but displays the current time.
 used by the substitution filter,
 but is used to tell \fBRemind\fR which text to include in a calendar
 entry when the \fB\-c\fR, \fB\-s\fR or \fB\-p\fR option is chosen.
-See "Calendar Mode"
+See "CALENDAR MODE"
 .PP
 Notes:
 .TP
@@ -2494,16 +2494,16 @@ variables are generally case-sensitive; thus, getenv("HOME") is not
 the same as getenv("home").
 .TP
 .B hebdate(i_day, s_hebmon [,idq_yrstart [,i_jahr [,i_aflag]]])
-Support for Hebrew dates - see the section "The Hebrew Calendar"
+Support for Hebrew dates - see the section "THE HEBREW CALENDAR"
 .TP
 .B hebday(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
+Support for Hebrew dates - see the section "THE HEBREW CALENDAR"
 .TP
 .B hebmon(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
+Support for Hebrew dates - see the section "THE HEBREW CALENDAR"
 .TP
 .B hebyear(dq_date)
-Support for Hebrew dates - see the section "The Hebrew Calendar"
+Support for Hebrew dates - see the section "THE HEBREW CALENDAR"
 .TP
 .B hour(tq_time)
 Returns the hour component of \fItime\fR.
@@ -3632,7 +3632,7 @@ However, when \fBRemind\fR gets around to calculating the trigger
 for Tuesday, 8 September, 1992, the \fBOMIT\fR command will now be
 omitting Labour Day for 1993, and the "Mon AFTER" command
 will not be triggered.  (But see the description of \fBSCANFROM\fR
-in the section "Details about Trigger Computation.")
+in the section "DETAILS ABOUT TRIGGER COMPUTATION.")
 .PP
 It is probably best to stay away from computing \fBOMIT\fR
 trigger dates unless you keep these pitfalls in mind.

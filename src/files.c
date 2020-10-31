@@ -366,12 +366,12 @@ static int CacheFile(char const *fname)
     cl = NULL;
 /* Create a file header */
     cf = NEW(CachedFile);
-    cf->cache = NULL;
     if (!cf) {
 	ShouldCache = 0;
 	FCLOSE(fp);
 	return E_NO_MEM;
     }
+    cf->cache = NULL;
     cf->filename = StrDup(fname);
     if (!cf->filename) {
 	ShouldCache = 0;

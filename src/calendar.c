@@ -889,6 +889,7 @@ static void PrintCentered(char const *s, int width, char *pad)
     for (i=d+len; i<width; i++) fputs(pad, stdout);
 #else
     size_t len = mbstowcs(NULL, s, 0);
+    int display_len;
     int i;
     wchar_t static_buf[128];
     wchar_t *buf;
@@ -912,11 +913,21 @@ static void PrintCentered(char const *s, int width, char *pad)
 	}
     }
     (void) mbstowcs(buf, s, len+1);
-    d = (width - len) / 2;
+    display_len = wcswidth(buf, len+1);
+    d = (width - display_len) / 2;
+    if (d < 0) d = 0;
     ws = buf;
     for (i=0; i<d; i++) fputs(pad, stdout);
     for (i=0; i<width; i++) {
-	if (*ws) PutWideChar(*ws++); else break;
+	if (*ws) {
+            PutWideChar(*ws++);
+            if (wcwidth(*ws) == 0) {
+                /* Don't count this character... it's zero-width */
+                i--;
+            }
+        } else {
+            break;
+        }
     }
     for (i=d+len; i<width; i++) fputs(pad, stdout);
     if (buf != static_buf) free(buf);

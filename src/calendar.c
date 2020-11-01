@@ -9,6 +9,7 @@
 /*                                                             */
 /***************************************************************/
 
+#define _XOPEN_SOURCE
 #include "config.h"
 
 #include <stdio.h>
@@ -21,6 +22,7 @@
 
 #ifdef REM_USE_WCHAR
 #include <wctype.h>
+#include <wchar.h>
 #endif
 
 #include "types.h"
@@ -356,6 +358,7 @@ static int make_wchar_versions(CalEntry *e)
     if (!buf) return 0;
 
     (void) mbstowcs(buf, e->text, len+1);
+    buf[len] = 0;
     e->wc_text = buf;
     e->wc_pos = buf;
     return 1;
@@ -1006,7 +1009,9 @@ static int WriteOneColLine(int col)
 	if (!wspace) {
 	    for (ws = e->wc_pos; ws - e->wc_pos < ColSpaces; ws++) {
 		if (!*ws) break;
-		numwritten++;
+                if (wcwidth(*ws) > 0) {
+                    numwritten += wcwidth(*ws);
+                }
 		PutWideChar(*ws);
 	    }
 	    e->wc_pos = ws;
@@ -1014,7 +1019,9 @@ static int WriteOneColLine(int col)
 	    /* We found a space - print everything before it. */
 	    for (ws = e->wc_pos; ws<wspace; ws++) {
 		if (!*ws) break;
-		numwritten++;
+                if (wcwidth(*ws) > 0) {
+                    numwritten += wcwidth(*ws);
+                }
 		PutWideChar(*ws);
 	    }
 	}
@@ -1605,6 +1612,7 @@ static int DoCalRem(ParsePtr p, int col)
 	if(!e->filename) {
 	    if (e->text) free(e->text);
 	    if (e->raw_text) free(e->raw_text);
+            if (e->wc_text) free(e->wc_text);
 	    free(e);
 	    return E_NO_MEM;
 	}

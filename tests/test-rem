@@ -289,6 +289,9 @@ rem 24 SPECIAL COLOR 200 200   0 BRIGHT YELLOW
 rem 25 SPECIAL COLOR 200 200  200 BRIGHT WHITE
 EOF
 
+export LC_ALL=en_US.utf-8
+export LANG=en_US.utf-8
+../src/remind -c ../tests/utf-8.rem >> ../tests/test.out
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

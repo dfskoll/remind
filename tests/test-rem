@@ -291,7 +291,7 @@ EOF
 
 export LC_ALL=en_US.utf-8
 export LANG=en_US.utf-8
-../src/remind -c ../tests/utf-8.rem >> ../tests/test.out
+../src/remind -w128 -c ../tests/utf-8.rem >> ../tests/test.out
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

@@ -929,6 +929,10 @@ static void PrintCentered(char const *s, int width, char *pad)
             break;
         }
     }
+    /* Mop up any potential combining characters */
+    while (*ws && wcwidth(*ws) == 0) {
+        PutWideChar(*ws++);
+    }
     for (i=d+len; i<width; i++) fputs(pad, stdout);
     if (buf != static_buf) free(buf);
 #endif
@@ -981,6 +985,7 @@ static int WriteOneColLine(int col)
 #ifdef REM_USE_WCHAR
     wchar_t const *ws;
     wchar_t const *wspace;
+    int width;
 #endif
 
     int numwritten = 0;
@@ -1005,9 +1010,18 @@ static int WriteOneColLine(int col)
 	}
 
 	/* Find the last space char within the column. */
-	while (ws - e->wc_pos <= ColSpaces) {
-	    if (!*ws) {wspace = ws; break;}
-	    if (iswspace(*ws)) wspace = ws;
+        width = 0;
+	while (width <= ColSpaces) {
+	    if (!*ws) {
+                wspace = ws;
+                break;
+            }
+	    if (iswspace(*ws)) {
+                wspace = ws;
+            }
+            if (wcwidth(*ws)) {
+                width++;
+            }
 	    ws++;
 	}
 

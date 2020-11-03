@@ -884,7 +884,16 @@ static void PrintCentered(char const *s, int width, char *pad)
 
     for (i=0; i<d; i++) fputs(pad, stdout);
     for (i=0; i<width; i++) {
-	if (*s) PutChar(*s++); else break;
+	if (*s) {
+            if (isspace(*s)) {
+                PutChar(' ');
+                s++;
+            } else {
+                PutChar(*s++);
+            }
+        } else {
+            break;
+        }
     }
     for (i=d+len; i<width; i++) fputs(pad, stdout);
 #else
@@ -1034,20 +1043,30 @@ static int WriteOneColLine(int col)
 	if (!wspace) {
 	    for (ws = e->wc_pos; ws - e->wc_pos < ColSpaces; ws++) {
 		if (!*ws) break;
-                if (wcwidth(*ws) > 0) {
-                    numwritten += wcwidth(*ws);
+                if (iswspace(*ws)) {
+                    PutChar(' ');
+                    numwritten++;
+                } else {
+                    if (wcwidth(*ws) > 0) {
+                        numwritten += wcwidth(*ws);
+                    }
+                    PutWideChar(*ws);
                 }
-		PutWideChar(*ws);
 	    }
 	    e->wc_pos = ws;
 	} else {
 	    /* We found a space - print everything before it. */
 	    for (ws = e->wc_pos; ws<wspace; ws++) {
 		if (!*ws) break;
-                if (wcwidth(*ws) > 0) {
-                    numwritten += wcwidth(*ws);
+                if (iswspace(*ws)) {
+                    PutChar(' ');
+                    numwritten++;
+                } else {
+                    if (wcwidth(*ws) > 0) {
+                        numwritten += wcwidth(*ws);
+                    }
+                    PutWideChar(*ws);
                 }
-		PutWideChar(*ws);
 	    }
 	}
 
@@ -1097,7 +1116,7 @@ static int WriteOneColLine(int col)
 	/* Find the last space char within the column. */
 	while (s - e->pos <= ColSpaces) {
 	    if (!*s) {space = s; break;}
-	    if (*s == ' ') space = s;
+	    if (isspace(*s)) space = s;
 	    s++;
 	}
 
@@ -1111,7 +1130,11 @@ static int WriteOneColLine(int col)
 	    for (s = e->pos; s - e->pos < ColSpaces; s++) {
 		if (!*s) break;
 		numwritten++;
-		PutChar(*s);
+                if (isspace(*s)) {
+                    PutChar(' ');
+                } else {
+                    PutChar(*s);
+                }
 	    }
 	    e->pos = s;
 	} else {
@@ -1119,7 +1142,11 @@ static int WriteOneColLine(int col)
 	    for (s = e->pos; s<space; s++) {
 		if (!*s) break;
 		numwritten++;
-		PutChar(*s);
+                if (isspace(*s)) {
+                    PutChar(' ');
+                } else {
+                    PutChar(*s);
+                }
 	    }
 	}
 
@@ -1132,7 +1159,7 @@ static int WriteOneColLine(int col)
 	while(numwritten++ < ColSpaces) PutChar(' ');
 
 	/* Skip any spaces before next word */
-	while (*s == ' ') s++;
+	while (isspace(*s)) s++;
 
 	/* If done, free memory if no next entry. */
 	if (!*s && !e->next) {

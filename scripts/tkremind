@@ -3418,6 +3418,7 @@ proc ShowTodaysReminders {} {
     global Option
     global Remind
     global ReminderFile
+    global TwentyFourHourMode
     if {!$Option(ShowTodaysReminders)} {
 	return
     }

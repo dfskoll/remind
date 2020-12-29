@@ -155,6 +155,8 @@ set OptDescr(SMTPServer) "(String) IP address or host name of SMTP server to use
 set Option(ExtraRemindArgs) ""
 set OptDescr(ExtraRemindArgs) "(String) Extra arguments when invoking remind"
 
+set TimerUpdateForChanges ""
+
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
 #set Remind "/home/dfs/Remind/src/remind"
@@ -375,8 +377,7 @@ proc MonitorReminderFile {} {
     # Redraw calendar and restart daemon if needed
     if {$ReminderFileModTime < $mtime} {
 	set ReminderFileModTime $mtime
-	FillCalWindow
-	RestartBackgroundRemindDaemon
+        ScheduleUpdateForChanges
     }
 }
 #---------------------------------------------------------------------------
@@ -1777,8 +1778,7 @@ proc ModifyDay {d firstDay} {
 	    WriteReminder $f TKTAG$HighestTagSoFar $rem $opts
 	    close $f
 
-	    FillCalWindow
-	    RestartBackgroundRemindDaemon
+            ScheduleUpdateForChanges
 	    return 0
 	}
     }
@@ -3134,10 +3134,32 @@ proc EditTaggedReminder { w } {
 	    return 1
 	}
 
-	FillCalWindow
-	RestartBackgroundRemindDaemon
+        ScheduleUpdateForChanges
 	return 0
     }
+}
+
+
+#***********************************************************************
+# %PROCEDURE: UpdateForChanges
+#  Updates the calendar window and restarts background daemon because
+#  something has changed.
+# %ARGUMENTS:
+#  None
+# %RETURNS:
+#  Nothing
+#***********************************************************************
+proc UpdateForChanges {} {
+    global TimerUpdateForChanges
+    catch { after cancel $TimerUpdateForChanges }
+    FillCalWindow
+    RestartBackgroundRemindDaemon
+}
+
+proc ScheduleUpdateForChanges {} {
+    global TimerUpdateForChanges
+    catch { after cancel $TimerUpdateForChanges }
+    set TimerUpdateForChanges [after 250 UpdateForChanges]
 }
 
 #***********************************************************************
@@ -3468,8 +3490,7 @@ proc InteractiveDeleteReminder { tag } {
     set ans [tk_dialog .error "Really Delete" "Really delete reminder?" warning 0 No Yes]
     if {$ans == 1} {
 	DeleteTaggedReminder $tag
-	FillCalWindow
-	RestartBackgroundRemindDaemon
+        ScheduleUpdateForChanges
     }
 }
 

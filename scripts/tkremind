@@ -3156,10 +3156,14 @@ proc UpdateForChanges {} {
     RestartBackgroundRemindDaemon
 }
 
+# Schedule an update for 100ms in the future.
+# That way, if we get a rapid succession of
+# change notifications, we (probably) only
+# end up doing one call to UpdateForChanges
 proc ScheduleUpdateForChanges {} {
     global TimerUpdateForChanges
     catch { after cancel $TimerUpdateForChanges }
-    set TimerUpdateForChanges [after 250 UpdateForChanges]
+    set TimerUpdateForChanges [after 100 UpdateForChanges]
 }
 
 #***********************************************************************

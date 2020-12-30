@@ -170,6 +170,9 @@ set ReminderFile [file nativename "~/.reminders"]
 
 set EditorPid -1
 
+# Inotify file
+set InotifyFP ""
+
 # Reminder file to append to -- default
 set AppendFile {NOSUCHFILE}
 catch {set AppendFile $ReminderFile}
@@ -1297,15 +1300,20 @@ proc DoGoto {} {
 #---------------------------------------------------------------------------
 proc Quit {} {
     global Option
+    global InotifyFP
     if { !$Option(ConfirmQuit) } {
 	destroy .
 	StopBackgroundRemindDaemon
-	exit
+        catch { exec kill [pid $InotifyFP] }
+        catch { close $InotifyFP }
+	exit 0
     }
     if { [tk_dialog .question "Confirm..." {Really quit?} question 0 No Yes] } {
 	destroy .
 	StopBackgroundRemindDaemon
-	exit
+        catch { exec kill [pid $InotifyFP] }
+        catch { close $InotifyFP }
+	exit 0
     }
 }
 
@@ -2634,6 +2642,7 @@ proc main {} {
     CreateCalWindow $DayNames
     FillCalWindow
     StartBackgroundRemindDaemon
+    SetupInotify
     DisplayTimeContinuously
 }
 
@@ -3545,6 +3554,29 @@ proc SetFonts {} {
 	font configure TkFixedFont -size 6
     }
     set SetFontsWorked 1
+}
+
+# Set up inotify to watch for changes to reminder file/directory
+
+proc SetupInotify {} {
+    global InotifyFP
+    global ReminderFile
+    set failed [catch {set InotifyFP [open "|inotifywait -m -e close_write -e move -e create -e delete $ReminderFile" "r"] } ]
+    if {$failed} {
+        # inotifywait probably not available... meh.
+        return
+    }
+    fileevent $InotifyFP readable [list InotifyReadable $InotifyFP]
+}
+
+proc InotifyReadable { fp } {
+    catch { set num [gets $fp line] }
+    if {$num < 0} {
+        catch { exec kill [pid $fp] }
+        close $fp
+        return
+    }
+    ScheduleUpdateForChanges
 }
 
 ### Balloon help

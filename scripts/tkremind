@@ -3557,11 +3557,10 @@ proc SetFonts {} {
 }
 
 # Set up inotify to watch for changes to reminder file/directory
-
 proc SetupInotify {} {
     global InotifyFP
     global ReminderFile
-    set failed [catch {set InotifyFP [open "|inotifywait -m -e close_write -e move -e create -e delete $ReminderFile" "r"] } ]
+    set failed [catch {set InotifyFP [open "|inotifywait -q -m -e close_write -e move -e create -e delete $ReminderFile" "r"] } ]
     if {$failed} {
         # inotifywait probably not available... meh.
         return
@@ -3569,6 +3568,8 @@ proc SetupInotify {} {
     fileevent $InotifyFP readable [list InotifyReadable $InotifyFP]
 }
 
+# Called when inotifywait reports an event.  Schedule a calendar update
+# and daemon reload.
 proc InotifyReadable { fp } {
     catch { set num [gets $fp line] }
     if {$num < 0} {

@@ -223,6 +223,7 @@ set PrintDest file
 set PrintSize letter
 set PrintOrient landscape
 set PrintFill 1
+set PrintDaysRight 1
 set PrintEncoding 0
 set PrintMargins 36pt
 set PrintSmallCalendars 1
@@ -1082,7 +1083,7 @@ proc Status { stuff } {
 #   None
 #---------------------------------------------------------------------------
 proc DoPrint {} {
-    global PrintDest PrintSize PrintMargins PrintOrient PrintFill PrintEncoding PrintSmallCalendars PrintStatus Rem2PS PSCmd Option
+    global PrintDest PrintSize PrintMargins PrintOrient PrintFill PrintDaysRight PrintEncoding PrintSmallCalendars PrintStatus Rem2PS PSCmd Option
     global CurMonth CurYear MonthNames
     catch {destroy .p}
     toplevel .p
@@ -1118,6 +1119,7 @@ proc DoPrint {} {
     radiobutton .p.portrait -text "Portrait" -variable PrintOrient -value portrait
 
     checkbutton .p.fill -text "Fill page" -variable PrintFill
+    checkbutton .p.right -text "Day numbers at top-right" -variable PrintDaysRight
     checkbutton .p.encoding -text "ISO 8859-1 PostScript encoding" -variable PrintEncoding
     checkbutton .p.calendars -text "Print small calendars" -variable PrintSmallCalendars
 
@@ -1126,7 +1128,7 @@ proc DoPrint {} {
 
     pack .p.f1 .p.f2 .p.f2a .p.f3 .p.f3a \
 	    -side top -fill both -expand 1 -anchor w
-    pack .p.fill .p.encoding .p.calendars -in .p.f3a \
+    pack .p.fill .p.right .p.encoding .p.calendars -in .p.f3a \
 	    -side top -anchor w -fill none -expand 0
     pack .p.f4 -side top -fill both -expand 1 -anchor w
     pack .p.f11 .p.f12 -in .p.f1 -side top -fill none -expand 0 -anchor w
@@ -1198,6 +1200,9 @@ proc DoPrint {} {
 	append cmd " -e"
     }
 
+    if {!$PrintDaysRight} {
+        append cmd " -x"
+    }
     if {$PrintEncoding} {
 	append cmd " -i"
     }

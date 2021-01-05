@@ -65,6 +65,8 @@ char const *SmallCalLoc[] = {
     "sbt",
 };
 
+#define MOONMOVE "/DayFont findfont DaySize scalefont setfont (%d) stringwidth pop add Border 3 mul add"
+
 #define NUMSMALL ((int) (sizeof(SmallCalLoc)/sizeof(SmallCalLoc[0])))
 char const *SmallLocation;
 int SmallCol1, SmallCol2;
@@ -99,6 +101,7 @@ CalEntry *CurEntries = NULL;
 CalEntry *PsEntries[32];
 PageType *CurPage;
 char PortraitMode;
+char DaynumRight;
 char NoSmallCal;
 char UseISO;
 
@@ -679,7 +682,7 @@ void WriteCalEntry(void)
     printf("]\n");
 
 /* Print the day number */
-    printf("(%d)\n", CurDay);
+    printf("(%d) %d\n", CurDay, (int) DaynumRight);
 /* Do it! */
     printf("DoCalBox\n");
 
@@ -819,6 +822,7 @@ void Init(int argc, char *argv[])
     FillPage = 0;
     MondayFirst = 0;
     SmallLocation = "bt";
+    DaynumRight = 1;
 
     for(j=0; j<32; j++) PsEntries[i] = NULL;
 
@@ -935,6 +939,7 @@ void Init(int argc, char *argv[])
 
 	case 'i': UseISO = 1; break;
 
+        case 'x': DaynumRight = 0; break;
 	case 'c': k=(*s);
 	    if (!k) {
 		SmallLocation = SmallCalLoc[0];
@@ -979,6 +984,7 @@ void Usage(char const *s)
     fprintf(stderr, "-b size       Set border size for calendar entries\n");
     fprintf(stderr, "-t size       Set line thickness\n");
     fprintf(stderr, "-e            Make calendar fill entire page\n");
+    fprintf(stderr, "-x            Put day numbers on left instead of right\n");
     fprintf(stderr, "-o[lrtb] marg Specify left, right, top and bottom margins\n");
     exit(1);
 }
@@ -1163,7 +1169,12 @@ int DoQueuedPs(void)
 		    size = buffer;
 		}
 
-		printf("gsave 0 setgray newpath Border %s add BoxHeight Border sub %s sub\n", size, size);
+                printf("gsave 0 setgray newpath ");
+                if (DaynumRight) {
+                    printf("Border %s add BoxHeight Border sub %s sub\n", size, size);
+                } else {
+                    printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n", size, e->daynum, size);
+                }
 		printf(" %s 0 360 arc closepath\n", size);
 		switch(phase) {
 		case 0:
@@ -1174,15 +1185,23 @@ int DoQueuedPs(void)
 		    break;
 
 		case 1:
-		    printf("stroke\n");
-		    printf("newpath Border %s add BoxHeight Border sub %s sub\n",
-			   size, size);
+		    printf("stroke\nnewpath ");
+                    if (DaynumRight) {
+                        printf("Border %s add BoxHeight Border sub %s sub\n",
+                               size, size);
+                    } else {
+                        printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n",
+                               size, e->daynum, size);
+                    }
 		    printf("%s 90 270 arc closepath fill\n", size);
 		    break;
 		default:
-		    printf("stroke\n");
-		    printf("newpath Border %s add BoxHeight Border sub %s sub\n",
-		size, size);
+		    printf("stroke\nnewpath ");
+                    if (DaynumRight) {
+                        printf("Border %s add BoxHeight Border sub %s sub\n", size, size);
+                    } else {
+                        printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n", size, e->daynum, size);
+                    }
 		    printf("%s 270 90 arc closepath fill\n", size);
 		    break;
 		}
@@ -1203,7 +1222,11 @@ int DoQueuedPs(void)
 
 		/* Anything left? */
 		if (*extra) {
-		    printf("Border %s add %s add Border add BoxHeight border sub %s sub %s sub moveto\n", size, size, size, size);
+                    if (DaynumRight) {
+                        printf("Border %s add %s add Border add BoxHeight border sub %s sub %s sub moveto\n", size, size, size, size);
+                    } else {
+                        printf("Border %s add %s add Border add " MOONMOVE " BoxHeight border sub %s sub %s sub moveto\n", size, size, e->daynum, size, size);
+                    }
 		    if (fontsize < 0) {
 			size = "EntrySize";
 		    } else {

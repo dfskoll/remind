@@ -593,6 +593,7 @@ void WriteProlog(void)
     if (PortraitMode) {
         printf("<< /PageSize [%d %d] >> setpagedevice\n", x, y);
     } else {
+        /* They were swapped up above, so swap them back or we'll get rotated output */
         printf("<< /PageSize [%d %d] >> setpagedevice\n", y, x);
     }
 

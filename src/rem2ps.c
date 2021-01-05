@@ -590,7 +590,11 @@ void WriteProlog(void)
     printf("%%%%Pages: (atend)\n");
     printf("%%%%Orientation: %s\n", PortraitMode ? "Portrait" : "Landscape");
     printf("%%%%EndComments\n");
-    printf("<< /PageSize [%d %d] >> setpagedevice\n", x, y);
+    if (PortraitMode) {
+        printf("<< /PageSize [%d %d] >> setpagedevice\n", x, y);
+    } else {
+        printf("<< /PageSize [%d %d] >> setpagedevice\n", y, x);
+    }
 
     for (i=0; PSProlog1[i]; i++) puts(PSProlog1[i]);
     if (!MondayFirst)

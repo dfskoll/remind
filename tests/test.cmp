@@ -4392,7 +4392,7 @@ No reminders.
 %%Pages: (atend)
 %%Orientation: Landscape
 %%EndComments
-<< /PageSize [792 612] >> setpagedevice
+<< /PageSize [612 792] >> setpagedevice
 % This file was produced by Remind and Rem2PS, written by
 % Dianne Skoll.
 % Remind and Rem2PS are Copyright 1992-2020 Dianne Skoll.
@@ -5496,7 +5496,7 @@ showpage
 %%Pages: (atend)
 %%Orientation: Landscape
 %%EndComments
-<< /PageSize [792 612] >> setpagedevice
+<< /PageSize [612 792] >> setpagedevice
 % This file was produced by Remind and Rem2PS, written by
 % Dianne Skoll.
 % Remind and Rem2PS are Copyright 1992-2020 Dianne Skoll.

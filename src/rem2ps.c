@@ -143,6 +143,18 @@ void WriteOneEntry (CalEntry *c);
 void GetSmallLocations (void);
 char const *EatToken(char const *in, char *out, int maxlen);
 
+static void
+put_escaped_string(char const *s)
+{
+    while(*s) {
+        if (*s == '\\' || *s == '(' || *s == ')') {
+            PutChar('\\');
+        }
+        PutChar(*s);
+        s++;
+    }
+}
+
 /***************************************************************/
 /*                                                             */
 /*  StrCmpi                                                    */
@@ -1066,10 +1078,10 @@ int DoQueuedPs(void)
     FILE *fp;
     int fnoff;
     char buffer[512];
-    char const *size, *extra;
+    char fbuffer[512];
+    char const *size, *fsize, *extra;
     char const *s;
     int num, r, g, b, phase, fontsize, moonsize;
-    unsigned char c;
 
     if (!MondayFirst) begin = CurDay - WkDayNum;
     else		     begin = CurDay - (WkDayNum ? WkDayNum-1 : 6);
@@ -1141,19 +1153,28 @@ int DoQueuedPs(void)
 		while(*s && isspace(*s)) {
 		    s++;
 		}
-		while(*s) {
-		    if (*s == '\\' || *s == '(' || *s == ')') {
-			PutChar('\\');
-		    }
-		    PutChar(*s);
-		    s++;
-		}
+                put_escaped_string(s);
 		printf(") show grestore\n");
 		break;
 
 	    case SPECIAL_MOON:		/* Moon phase */
 		num = sscanf(e->entry+fnoff, "%d %d %d", &phase, &moonsize,
 			     &fontsize);
+		/* See if we have extra stuff */
+		extra = e->entry+fnoff;
+
+		/* Skip phase */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
+		/* Skip moon size */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
+		/* Skip font size */
+		while(*extra && !isspace(*extra)) extra++;
+		while(*extra && isspace(*extra)) extra++;
+
 		if (num == 1) {
 		    moonsize = -1;
 		    fontsize = -1;
@@ -1175,12 +1196,27 @@ int DoQueuedPs(void)
 		    size = buffer;
 		}
 
-                printf("gsave 0 setgray newpath ");
+                /* Store the starting X coordinate in "moonstartx" */
                 if (DaynumRight) {
-                    printf("Border %s add BoxHeight Border sub %s sub\n", size, size);
+                    printf("Border %s add /moonstartx exch def", size);
                 } else {
-                    printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n", size, e->daynum, size);
+                    printf("xincr Border sub %s sub", size);
+                    if (*extra) {
+                        if (fontsize < 0) {
+                            fsize = "EntrySize";
+                        } else {
+                            sprintf(fbuffer, "%d", fontsize);
+                            fsize = fbuffer;
+                        }
+                        printf("/EntryFont findfont %s scalefont setfont (",
+                               fsize);
+                        put_escaped_string(extra);
+                        printf(") stringwidth pop sub Border sub ");
+                    }
+                    printf("/moonstartx exch def\n");
                 }
+                printf(" gsave 0 setgray newpath ");
+                printf("moonstartx BoxHeight Border sub %s sub\n", size);
 		printf(" %s 0 360 arc closepath\n", size);
 		switch(phase) {
 		case 0:
@@ -1192,60 +1228,27 @@ int DoQueuedPs(void)
 
 		case 1:
 		    printf("stroke\nnewpath ");
-                    if (DaynumRight) {
-                        printf("Border %s add BoxHeight Border sub %s sub\n",
-                               size, size);
-                    } else {
-                        printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n",
-                               size, e->daynum, size);
-                    }
+                    printf("moonstartx BoxHeight Border sub %s sub\n", size);
 		    printf("%s 90 270 arc closepath fill\n", size);
 		    break;
 		default:
 		    printf("stroke\nnewpath ");
-                    if (DaynumRight) {
-                        printf("Border %s add BoxHeight Border sub %s sub\n", size, size);
-                    } else {
-                        printf("Border %s add " MOONMOVE " BoxHeight Border sub %s sub\n", size, e->daynum, size);
-                    }
+                    printf("moonstartx BoxHeight Border sub %s sub\n", size);
 		    printf("%s 270 90 arc closepath fill\n", size);
 		    break;
 		}
-		/* See if we have extra stuff */
-		extra = e->entry+fnoff;
-
-		/* Skip phase */
-		while(*extra && !isspace(*extra)) extra++;
-		while(*extra && isspace(*extra)) extra++;
-
-		/* Skip moon size */
-		while(*extra && !isspace(*extra)) extra++;
-		while(*extra && isspace(*extra)) extra++;
-
-		/* Skip font size */
-		while(*extra && !isspace(*extra)) extra++;
-		while(*extra && isspace(*extra)) extra++;
-
 		/* Anything left? */
 		if (*extra) {
-                    if (DaynumRight) {
-                        printf("Border %s add %s add Border add BoxHeight border sub %s sub %s sub moveto\n", size, size, size, size);
-                    } else {
-                        printf("Border %s add %s add Border add " MOONMOVE " BoxHeight border sub %s sub %s sub moveto\n", size, size, e->daynum, size, size);
-                    }
+                    printf("moonstartx %s add Border add BoxHeight border sub %s sub %s sub moveto\n", size, size, size);
 		    if (fontsize < 0) {
-			size = "EntrySize";
+			fsize = "EntrySize";
 		    } else {
-			sprintf(buffer, "%d", fontsize);
-			size = buffer;
+			sprintf(fbuffer, "%d", fontsize);
+			fsize = fbuffer;
 		    }
 		    printf("/EntryFont findfont %s scalefont setfont (",
-			   size);
-		    while(*extra) {
-			c = (unsigned char) *extra++;
-			if (c == '\\' || c == '(' || c == ')') PutChar('\\');
-			PutChar(c);
-		    }
+			   fsize);
+                    put_escaped_string(extra);
 		    printf(") show\n");
 
 		}

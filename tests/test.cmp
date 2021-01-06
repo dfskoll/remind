@@ -4778,10 +4778,10 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 1 0.8 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (20:56) show
 grestore
 
@@ -4953,12 +4953,12 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+newpath moonstartx BoxHeight Border sub DaySize 2 div sub
 DaySize 2 div 270 90 arc closepath fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (14:56) show
 grestore
 
@@ -5119,10 +5119,10 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (06:02) show
 grestore
 
@@ -5283,12 +5283,12 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+newpath moonstartx BoxHeight Border sub DaySize 2 div sub
 DaySize 2 div 90 270 arc closepath fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (07:42) show
 grestore
 
@@ -5882,10 +5882,10 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 1 0.8 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (20:56) show
 grestore
 
@@ -6057,12 +6057,12 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+newpath moonstartx BoxHeight Border sub DaySize 2 div sub
 DaySize 2 div 270 90 arc closepath fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (14:56) show
 grestore
 
@@ -6223,10 +6223,10 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (06:02) show
 grestore
 
@@ -6387,12 +6387,12 @@ _A BoxHeight _A sub lineto closepath
 BoxWidth _A sub _A lineto BoxWidth _A sub BoxHeight _A sub lineto
 _A BoxHeight _A sub lineto closepath
 0.8 1 1 setrgbcolor fill 0.0 setgray
-gsave 0 setgray newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+Border DaySize 2 div add /moonstartx exch def gsave 0 setgray newpath moonstartx BoxHeight Border sub DaySize 2 div sub
  DaySize 2 div 0 360 arc closepath
 stroke
-newpath Border DaySize 2 div add BoxHeight Border sub DaySize 2 div sub
+newpath moonstartx BoxHeight Border sub DaySize 2 div sub
 DaySize 2 div 90 270 arc closepath fill
-Border DaySize 2 div add DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
+moonstartx DaySize 2 div add Border add BoxHeight border sub DaySize 2 div sub DaySize 2 div sub moveto
 /EntryFont findfont EntrySize scalefont setfont (07:42) show
 grestore
 

@@ -65,8 +65,6 @@ char const *SmallCalLoc[] = {
     "sbt",
 };
 
-#define MOONMOVE "/DayFont findfont DaySize scalefont setfont (%d) stringwidth pop add Border 3 mul add"
-
 #define NUMSMALL ((int) (sizeof(SmallCalLoc)/sizeof(SmallCalLoc[0])))
 char const *SmallLocation;
 int SmallCol1, SmallCol2;
@@ -1200,7 +1198,7 @@ int DoQueuedPs(void)
                 if (DaynumRight) {
                     printf("Border %s add /moonstartx exch def", size);
                 } else {
-                    printf("xincr Border sub %s sub", size);
+                    printf("xincr Border sub %s sub ", size);
                     if (*extra) {
                         if (fontsize < 0) {
                             fsize = "EntrySize";

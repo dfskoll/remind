@@ -860,6 +860,20 @@ As a special case, you can use the \fBTHROUGH\fR keyword instead of
 	REM 1992-11-30 +2 THROUGH 1992-12-04 MSG Jury duty
 .fi
 .PP
+If you have an expiry date via the use of \fBTHROUGH\fR or \fBUNTIL\fR,
+then Remind will \fInever\fR trigger the reminder after the expiry
+date.  For example, if you have this:
+.PP
+.nf
+        OMIT 2021-01-08
+        REM 2021-01-01 THROUGH 2021-01-08 AFTER MSG Test
+.fi
+.PP
+the reminder will not be triggered on 2021-01-08, and nor will it be
+triggered on 2021-01-09; even though the AFTER keyword would normally
+move the 8th's reminder to the 9th, the expiry date of 2021-01-08
+overrides that.
+.PP
 .B THE ONCE KEYWORD
 .PP
 Sometimes, it is necessary to ensure that reminders are run only once

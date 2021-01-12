@@ -13,6 +13,9 @@ CHANGES TO REMIND
 - MINOR FIXES: A typo in remind.1 was fixed; additional comments regarding
   UNTIL were added.
 
+- BUG FIX: rem2ps: Call setpagedevice to set page size.  Based on a patch
+  from Jonathan Kamens.
+
 * VERSION 3.3 Patch 3 - 2020-11-09
 
 - BUG FIX: Fix startup crash in TkRemind if "Show Today's Reminders on

@@ -155,6 +155,12 @@ set OptDescr(SMTPServer) "(String) IP address or host name of SMTP server to use
 set Option(ExtraRemindArgs) ""
 set OptDescr(ExtraRemindArgs) "(String) Extra arguments when invoking remind"
 
+set Option(CalboxFont) [font actual TkFixedFont]
+set OptDescr(CalboxFont) "Font to use in calendar boxes in Tk font format"
+
+set Option(HeadingFont) [font actual TkDefaultFont]
+set OptDescr(HeadingFont) "Font to use in calendar headings in Tk font format"
+
 set TimerUpdateForChanges ""
 
 # Remind program to execute -- supply full path if you want
@@ -474,7 +480,7 @@ proc CreateCalFrame { w dayNames } {
 	    set index $i
 	}
 
-	label $w.day$i -border 1 -text [lindex $dayNames $index] -justify center
+	label $w.day$i -border 1 -text [lindex $dayNames $index] -justify center -font HeadingFont
 	grid configure $w.day$i -row 0 -column $i -sticky ew
     }
     for {set i 0} {$i < 6} {incr i} {
@@ -482,9 +488,9 @@ proc CreateCalFrame { w dayNames } {
 	for {set j 0} {$j < 7} {incr j} {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
-		-state disabled -relief flat -border 0 -padx 0 -pady 0
+		-state disabled -relief flat -border 0 -padx 0 -pady 0 -font HeadingFont
 	    text $w.t$f -width 12 -height $h -border 1 -spacing3 3 -wrap word -relief flat \
-		-state disabled -takefocus 0 -cursor {}
+		-state disabled -takefocus 0 -cursor {} -font CalboxFont
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
 	    $w.t$f tag bind REM <ButtonPress-3> "FireEditor $w.t$f"
 
@@ -741,6 +747,11 @@ proc EditOptions {} {
     pack $w.extraargs -in $w.eaf -side left -expand 1 -fill x
     $w.extraargs insert 0 $tmpOpt(ExtraRemindArgs)
 
+    frame $w.fframe
+    button $w.font -text "Change entry font..." -command "ChooseCalboxFont"
+    button $w.hfont -text "Change Heading font..." -command "ChooseHeadingFont"
+    pack $w.font $w.hfont -in $w.fframe -side left -expand 1 -fill x
+
     frame $w.sep1 -border 1 -relief sunken
     frame $w.sep2 -border 1 -relief sunken
 
@@ -762,6 +773,7 @@ proc EditOptions {} {
     pack $w.fsmtp -in $w.f -side top -expand 0 -fill x
     pack $w.ef -in $w.f -side top -expand 0 -fill x
     pack $w.eaf -in $w.f -side top -expand 0 -fill x
+    pack $w.fframe -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
     button $w.apply -text "Apply Options" -command "ApplyOptions $w; destroy $w"
@@ -854,16 +866,22 @@ proc LoadOptions {} {
 	return
     }
     while {[gets $f line] >= 0} {
-	if {[string match "#*" $line]} { continue }
-	if {$line == ""} { continue }
-	foreach {key val} $line {}
-	if {![info exists Option($key)]} {
-	    puts "Unknown option in ~/.tkremindrc: $key"
-	    continue
-	}
-	set Option($key) $val
+	if {[string match "#*" $line]} {
+            continue
+        }
+        if {$line == ""} {
+            continue
+        }
+        foreach {key val} $line {}
+        if {![info exists Option($key)]} {
+            puts "Unknown option in ~/.tkremindrc: $key"
+            continue
+        }
+        set Option($key) $val
     }
     close $f
+    font configure CalboxFont {*}$Option(CalboxFont)
+    font configure HeadingFont {*}$Option(HeadingFont)
 }
 
 
@@ -2634,6 +2652,9 @@ proc main {} {
 	}
     }
 
+    font create CalboxFont {*}[font actual TkFixedFont]
+    font create HeadingFont {*}[font actual TkDefaultFont]
+
     global AppendFile HighestTagSoFar DayNames
     catch {
 	puts "\nTkRemind Copyright (C) 1996-2020 Dianne Skoll"
@@ -3702,4 +3723,27 @@ proc balloon_calculate_geometry { w } {
     return "+$tx+$ty"
 }
 
+proc ChooseCalboxFont {} {
+    tk fontchooser show
+    tk fontchooser configure -font [font actual CalboxFont]
+    tk fontchooser configure -command SetCalboxFont
+}
+
+proc SetCalboxFont {font} {
+    global Option
+    font configure CalboxFont {*}[font actual $font]
+    set Option(CalboxFont) [font actual $font]
+}
+
+proc ChooseHeadingFont {} {
+    tk fontchooser show
+    tk fontchooser configure -font [font actual HeadingFont]
+    tk fontchooser configure -command SetHeadingFont
+}
+
+proc SetHeadingFont {font} {
+    global Option
+    font configure HeadingFont {*}[font actual $font]
+    set Option(HeadingFont) [font actual $font]
+}
 main

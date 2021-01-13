@@ -605,7 +605,7 @@ proc DoQueue {} {
 proc CreateCalWindow { dayNames } {
     global Option
     frame .h
-    label .h.title -text "" -justify center -pady 1 -border 1 -relief raised
+    label .h.title -text "" -justify center -pady 1 -border 1 -relief raised -font HeadingFont
     pack .h.title -side top -fill x
     pack .h -side top -expand 0 -fill x
 

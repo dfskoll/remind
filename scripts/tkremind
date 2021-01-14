@@ -776,11 +776,10 @@ proc EditOptions {} {
     pack $w.fframe -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
-    button $w.apply -text "Apply Options" -command "ApplyOptions $w; destroy $w"
     button $w.save -text "Save Options" -command "SaveOptions $w; destroy $w"
     button $w.cancel -text "Cancel" -command "destroy $w"
 
-    pack $w.apply $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
+    pack $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
     CenterWindow $w .
 }
 

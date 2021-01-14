@@ -14,6 +14,13 @@
 # the next line restarts using wish \
 exec wish "$0" "$@"
 
+# We need at least version 8.5 because of {*} list expansion operator
+if {[catch {package require Tcl 8.5}]} {
+    puts "This program requires Tcl 8.5 or higher."
+    puts "You have version [info tclversion]"
+    exit 1
+}
+
 wm withdraw .
 
 set Hostname [exec hostname]

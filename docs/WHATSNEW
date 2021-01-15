@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 3.3 Patch 3 - 2021-01-12
+* VERSION 3.3 Patch 4 - 2021-01-12
 
 - NEW FEATURE: If "inotifywait" is installed, TkRemind uses it to refresh
   the calendar display right away when the reminders file/directory is updated.

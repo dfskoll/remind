@@ -756,7 +756,7 @@ proc EditOptions {} {
 
     frame $w.fframe
     button $w.font -text "Change entry font..." -command "ChooseCalboxFont"
-    button $w.hfont -text "Change Heading font..." -command "ChooseHeadingFont"
+    button $w.hfont -text "Change heading font..." -command "ChooseHeadingFont"
     pack $w.font $w.hfont -in $w.fframe -side left -expand 1 -fill x
 
     frame $w.sep1 -border 1 -relief sunken

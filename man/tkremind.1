@@ -1,4 +1,4 @@
-.TH TKREMIND 1 "1 January 2020"
+.TH TKREMIND 1 "15 January 2021"
 .UC 4
 .SH NAME
 tkremind \- graphical front-end to Remind calendar program
@@ -51,11 +51,14 @@ notice that the box appears completely full.
 
 .SH NAVIGATING
 To change to the previous or next month, click the \fB<\-\fR
-or \fB\->\fR button, respectively.  To change back to
-the current month, click \fBToday\fR.  To go to a specific month,
-click \fBGo To Date...\fR.  This pops up a dialog box which allows you
-to select a month and enter a year.  Once you've done this, click
-\fBGo\fR to go to the date, or \fBCancel\fR to cancel.
+or \fB\->\fR button, respectively.  You can also use the left/right arrow
+keys or PageUp/PageDown to navigate.
+
+To change back to the current month, click \fBToday\fR or press the
+Home key.  To go to a specific month, click \fBGo To Date...\fR.  This
+pops up a dialog box which allows you to select a month and enter a
+year.  Once you've done this, click \fBGo\fR to go to the date, or
+\fBCancel\fR to cancel.
 
 To exit \fBTkRemind\fR, click \fBQuit\fR.
 
@@ -232,6 +235,22 @@ This specifies a text editor to invoke when a reminder is right-clicked.
 The characters "%d" are replaced with the lined number of the file
 containing the reminder, and "%s" are replaced with the file name.
 Useful strings might be "emacs +%d %s" or "gvim +%d %s"
+
+.TP
+.B Extra Argument for Remind
+This specifies any extra arguments that should be passed to Remind
+when \BTkRemind\fR invokes \fBremind\fR.  Unless you know what
+you are doing, leave this blank.
+
+.TP
+.B Change entry font...
+This button pops up a font selection dialog that lets you change the
+font used to draw calendar items in the calendar boxes.
+
+.TP
+.B Change heading font...
+Similar to Change entry font, but applies to calendar heading
+(the month and day names and the day numbers.)
 
 .PP
 Once you've configured the options the way you like them,

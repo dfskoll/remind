@@ -547,7 +547,8 @@ proc ConfigureCalFrame { w firstDay numDays } {
 
     for {set i 0} {$i < $first} {incr i} {
 	grid $w.l$i $w.t$i
-	$w.l$i configure -text "" -command "" -state disabled -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+        $w.l$i configure -state disabled
 	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal -background $Option(WinBackground)
 	$w.t$i delete 1.0 end
@@ -584,9 +585,11 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	    grid rowconfigure $w $row -weight 0
 	    grid rowconfigure $w [expr $row+1] -weight 0
 	} else {
+	    grid $w.l$i $w.t$i
 	    grid rowconfigure $w [expr $row+1] -weight 1
 	}
-	$w.l$i configure -text "" -command "" -state disabled -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+        $w.l$i configure -state disabled
 	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal -background $Option(WinBackground)
 	$w.t$i delete 1.0 end
@@ -640,8 +643,8 @@ proc CreateCalWindow { dayNames } {
     balloon_add_help .b.quit "Quit TkRemind"
     button .b.options -text {Options...} -command EditOptions -border 1
     balloon_add_help .b.options "Set TkRemind options"
-    label .b.status -text "" -width 25 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    label .b.nqueued -text "" -width 20 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    label .b.status -text "" -width 25 -relief sunken -border 1
+    label .b.nqueued -text "" -width 20 -relief sunken -border 1
     pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x

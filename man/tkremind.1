@@ -3,7 +3,7 @@
 .SH NAME
 tkremind \- graphical front-end to Remind calendar program
 .SH SYNOPSIS
-.B tkremind \fR[\fIoptions\fR] [\fIread_file\fR] [\fIwrite_file\fR]
+.B tkremind \fR[\fIoptions\fR] [\fIread_file\fR] [\fIwrite_file\fR] [\fIconfig_file\fR]
 .SH DESCRIPTION
 \fBTkRemind\fR is a graphical front-end to the \fBRemind\fR program.
 It provides a friendly graphical interface which allows you to view
@@ -40,6 +40,9 @@ include the line:
 	INCLUDE [getenv("HOME")]/.tkreminders
 .fi
 .PP
+
+\fIConfig_file\fR is the file in which \fBTkRemind\fR stores
+its options.  If it is omitted, it defaults to \fI$HOME/.tkremindrt\fR.
 
 .SH THE CALENDAR WINDOW
 When you start \fBTkRemind\fR, it displays a calendar for the current

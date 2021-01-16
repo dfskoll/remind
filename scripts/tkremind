@@ -193,6 +193,9 @@ set Rem2PS "rem2ps"
 set ReminderFile {NOSUCHFILE}
 set ReminderFile [file nativename "~/.reminders"]
 
+# Default options file
+set ConfigFile ~/.tkremindrc
+
 set EditorPid -1
 
 # Inotify file
@@ -294,7 +297,7 @@ proc Initialize {} {
 
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst TwentyFourHourMode ReminderFileModTime
-    global Option
+    global Option ConfigFile
     set CommandLine "|$Remind -itkremind=1 -pp -y -l EXTRA"
     set PSCmd "$Remind -itkremind=1 -itkprint=1 -pp -l EXTRA"
     set i 0
@@ -320,6 +323,10 @@ proc Initialize {} {
 	if {$i < $argc} {
 	    set AppendFile [lindex $argv $i]
 	    incr i
+            if {$i < $argc} {
+                set ConfigFile [lindex $argv $i]
+                incr i
+            }
 	}
     }
 
@@ -865,15 +872,15 @@ proc ApplyOptions { w } {
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
-#  Saves options in $HOME/.tkremindrc
+#  Saves options in specified config file
 #***********************************************************************
 proc SaveOptions { w } {
-    global Option OptDescr
+    global Option OptDescr ConfigFile
     ApplyOptions $w
 
-    set problem [catch {set f [open ~/.tkremindrc "w"]} err]
+    set problem [catch {set f [open $ConfigFile "w"]} err]
     if {$problem} {
-	tk_dialog .error Error "Can't write ~/.tkremindrc: $err" 0 OK
+	tk_dialog .error Error "Can't write $ConfigFile: $err" 0 OK
 	return
     }
 
@@ -903,11 +910,11 @@ proc SaveOptions { w } {
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
-#  Loads options from ~/.tkremindrc
+#  Loads options from $ConfigFile
 #***********************************************************************
 proc LoadOptions {} {
-    global Option
-    set problem [catch {set f [open "~/.tkremindrc" "r"]}]
+    global Option ConfigFile
+    set problem [catch {set f [open "$ConfigFile" "r"]}]
     if {$problem} {
 	return
     }
@@ -920,7 +927,7 @@ proc LoadOptions {} {
         }
         foreach {key val} $line {}
         if {![info exists Option($key)]} {
-            puts "Unknown option in ~/.tkremindrc: $key"
+            puts "Unknown option in $ConfigFile: $key"
             continue
         }
         set Option($key) $val
@@ -2690,13 +2697,7 @@ proc CommandWritable { f msg } {
 
 
 proc main {} {
-    # If no ~/.tkremindrc file, create an empty one
-    if {![file exists ~/.tkremindrc]} {
-	catch {
-	    set f [open ~/.tkremindrc "w"]
-	    close $f
-	}
-    }
+    global ConfigFile
 
     font create CalboxFont {*}[font actual TkFixedFont]
     font create HeadingFont {*}[font actual TkDefaultFont]
@@ -2706,9 +2707,17 @@ proc main {} {
 	puts "\nTkRemind Copyright (C) 1996-2021 Dianne Skoll"
     }
     catch { SetFonts }
+    Initialize
+
+    # If no $ConfigFile file, create an empty one
+    if {![file exists $ConfigFile]} {
+	catch {
+	    set f [open $ConfigFile "w"]
+	    close $f
+	}
+    }
     LoadOptions
     CreateMoonImages
-    Initialize
     ShowTodaysReminders
     ScanForTags $AppendFile
     CreateCalWindow $DayNames
@@ -3657,6 +3666,7 @@ proc InotifyReadable { fp } {
 set Balloon(HelpTime) 400
 set Balloon(StayTime) 3500
 set Balloon(Font) fixed
+set Balloon(MustLeave) 0
 
 proc balloon_reset_timer { w } {
     balloon_destroy_help_window

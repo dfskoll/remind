@@ -772,18 +772,21 @@ proc EditOptions {} {
     # Colors
     frame $w.colors1
     label $w.textcolor -text "Text Color:"
-    button $w.btextcolor -background $Option(TextColor) -command [list PickColor TextColor $w.btextcolor]
+    button $w.btextcolor -background $Option(TextColor) -command [list PickColor TextColor $w.btextcolor] -text ...
     label $w.bgcolor -text "  Background color:"
-    button $w.bbgcolor -background $Option(BackgroundColor) -command [list PickColor BackgroundColor $w.bbgcolor]
-    pack $w.textcolor $w.btextcolor $w.bgcolor $w.bbgcolor -in $w.colors1 -side left -expand 1 -fill x
+    button $w.bbgcolor -background $Option(BackgroundColor) -command [list PickColor BackgroundColor $w.bbgcolor] -text ...
 
-    frame $w.colors2
+    grid $w.textcolor $w.btextcolor $w.bgcolor $w.bbgcolor -in $w.colors1
+    grid $w.bgcolor $w.bbgcolor -in $w.colors1
+
     label $w.headcolor -text "Heading Color:"
-    button $w.bheadcolor -background $Option(LabelColor) -command [list PickColor LabelColor $w.bheadcolor]
+    button $w.bheadcolor -background $Option(LabelColor) -command [list PickColor LabelColor $w.bheadcolor] -text ...
     label $w.wincolor -text "  Window color:"
-    button $w.bwincolor -background $Option(WinBackground) -command [list PickColor WinBackground $w.bwincolor]
-    pack $w.headcolor $w.bheadcolor $w.wincolor $w.bwincolor -in $w.colors2 -side left -expand 1 -fill x
+    button $w.bwincolor -background $Option(WinBackground) -command [list PickColor WinBackground $w.bwincolor] -text ...
+    grid $w.headcolor $w.bheadcolor $w.wincolor $w.bwincolor -in $w.colors1
 
+    grid columnconfigure $w.colors1 0 -weight 1
+    grid columnconfigure $w.colors1 2 -weight 1
     frame $w.sep1 -border 1 -relief sunken
     frame $w.sep2 -border 1 -relief sunken
 
@@ -807,7 +810,6 @@ proc EditOptions {} {
     pack $w.eaf -in $w.f -side top -expand 0 -fill x
     pack $w.fframe -in $w.f -side top -expand 0 -fill x
     pack $w.colors1 -in $w.f -side top -expand 0 -fill x
-    pack $w.colors2 -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
     button $w.save -text "Save Options" -command "SaveOptions $w; destroy $w"

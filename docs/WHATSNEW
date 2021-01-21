@@ -1,5 +1,23 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 5 - 2021-01-21
+
+- NEW FEATURE: tkremind: Add ability to change fonts and colors from
+  within TkRemind "Options" dialog.
+
+- CHANGE: tkremind: TkRemind now requires Tcl/Tk 8.5 or newer.
+
+- CHANGE: tkremind: You can specify the location of the options
+  file on the command-line if you want to use one other than ~/.tkremindrc
+
+- CLEANUP: tkremind: Remove "Apply Options" from Options dialog; we only
+  need "Save Options".
+
+- DOC FIX: Add missing release note in 3.3.4 notes regarding
+  setpagedevice patch
+
+- DOC FIX: tkremind: Document shortcut keys.
+
 * VERSION 3.3 Patch 4 - 2021-01-12
 
 - NEW FEATURE: If "inotifywait" is installed, TkRemind uses it to refresh

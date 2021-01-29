@@ -493,6 +493,7 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
     int len;
     int h, m, r;
     int ampm = 0;
+    int prev_val;
 
     if (*s == '\"') { /* It's a literal string "*/
 	len = strlen(s)-1;
@@ -519,9 +520,15 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 	return OK;
     } else if (isdigit(*s)) { /* It's a number - use len to hold it.*/
 	len = 0;
+        prev_val = 0;
 	while (*s && isdigit(*s)) {
 	    len *= 10;
 	    len += (*s++ - '0');
+            if (len < prev_val) {
+                /* We overflowed */
+                return E_2HIGH;
+            }
+            prev_val = len;
 	}
 	if (*s == ':' || *s == '.' || *s == TimeSep) { /* Must be a literal time */
 	    s++;

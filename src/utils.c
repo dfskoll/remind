@@ -123,3 +123,20 @@ int DateOK(int y, int m, int d)
 	d > DaysInMonth(m, y) ) return 0;
     else return 1;
 }
+
+/* Functions designed to defeat gcc optimizer */
+
+int _private_div(int a, int b) { return a/b; }
+int _private_add_overflow(int result, int b, int old)
+{
+    if (b > 0 && result < old) return 1;
+    if (b < 0 && result > old) return 1;
+    return 0;
+}
+int _private_sub_overflow(int result, int b, int old)
+{
+    if (b < 0 && result < old) return 1;
+    if (b > 0 && result > old) return 1;
+    return 0;
+}
+

@@ -765,7 +765,12 @@ static int Add(void)
 
 /* If both are ints, just add 'em */
     if (v2.type == INT_TYPE && v1.type == INT_TYPE) {
+        int old = v2.v.val;
 	v2.v.val += v1.v.val;
+        /* Check for overflow */
+        if (_private_add_overflow(v2.v.val, v1.v.val, old)) {
+            return E_2HIGH;
+        }
 	PushValStack(v2);
 	return OK;
     }
@@ -855,7 +860,9 @@ static int Subtract(void)
 
     /* If they're both INTs, do subtraction */
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
+        int old = v1.v.val;
 	v1.v.val -= v2.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_2HIGH;
 	PushValStack(v1);
 	return OK;
     }
@@ -919,7 +926,11 @@ static int Multiply(void)
     }
 
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
+        int old = v1.v.val;
 	v1.v.val *= v2.v.val;
+        if (v2.v.val != 0) {
+            if (_private_div(v1.v.val, v2.v.val) != old) return E_2HIGH;
+        }
 	PushValStack(v1);
 	return OK;
     }

@@ -876,7 +876,9 @@ static int Subtract(void)
 
     /* If it's a date minus an int, do subtraction, checking for underflow */
     if (v1.type == DATE_TYPE && v2.type == INT_TYPE) {
+        int old = v1.v.val;
 	v1.v.val -= v2.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);
 	return OK;
@@ -885,7 +887,9 @@ static int Subtract(void)
     /* If it's a datetime minus an int or a time, do subtraction,
      * checking for underflow */
     if (v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) {
+        int old = v1.v.val;
 	v1.v.val -= v2.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);
 	return OK;
@@ -903,7 +907,9 @@ static int Subtract(void)
     if ((v1.type == TIME_TYPE && v2.type == TIME_TYPE) ||
 	(v1.type == DATETIME_TYPE && v2.type == DATETIME_TYPE) ||
 	(v1.type == DATE_TYPE && v2.type == DATE_TYPE)) {
+        int old = v1.v.val;
 	v1.v.val -= v2.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	v1.type = INT_TYPE;
 	PushValStack(v1);
 	return OK;

@@ -765,13 +765,13 @@ static int Add(void)
 
 /* If both are ints, just add 'em */
     if (v2.type == INT_TYPE && v1.type == INT_TYPE) {
-        int old = v2.v.val;
-	v2.v.val += v1.v.val;
+        int old = v1.v.val;
+	v1.v.val += v2.v.val;
         /* Check for overflow */
-        if (_private_add_overflow(v2.v.val, v1.v.val, old)) {
+        if (_private_add_overflow(v1.v.val, v2.v.val, old)) {
             return E_2HIGH;
         }
-	PushValStack(v2);
+	PushValStack(v1);
 	return OK;
     }
 

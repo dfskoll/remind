@@ -778,7 +778,9 @@ static int Add(void)
 /* If it's a date plus an int, add 'em */
     if ((v1.type == DATE_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == DATE_TYPE)) {
+        int old = v1.v.val;
 	v1.v.val += v2.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	v1.type = DATE_TYPE;
 	PushValStack(v1);
@@ -788,7 +790,9 @@ static int Add(void)
 /* If it's a datetime plus an int or a time, add 'em */
     if ((v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) ||
 	((v1.type == INT_TYPE || v1.type == TIME_TYPE) && v2.type == DATETIME_TYPE)) {
+        int old = v1.v.val;
 	v1.v.val += v2.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	v1.type = DATETIME_TYPE;
 	PushValStack(v1);
@@ -800,7 +804,10 @@ static int Add(void)
     if ((v1.type == TIME_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == TIME_TYPE) ||
 	(v1.type == TIME_TYPE && v2.type == TIME_TYPE)) {
-	v1.v.val = (v1.v.val + v2.v.val) % MINUTES_PER_DAY;
+        int old = v1.v.val;
+	v1.v.val += v2.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
+	v1.v.val = v1.v.val % MINUTES_PER_DAY;
 	if (v1.v.val < 0) v1.v.val += MINUTES_PER_DAY;
 	v1.type = TIME_TYPE;
 	PushValStack(v1);

@@ -140,3 +140,9 @@ int _private_sub_overflow(int result, int b, int old)
     return 0;
 }
 
+int _private_unminus_overflow(int a, int b)
+{
+    if (a > 0 && b > 0) return 1;
+    if (a < 0 && b < 0) return 1;
+    return 0;
+}

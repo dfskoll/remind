@@ -1145,7 +1145,9 @@ static int UnMinus(void)
 {
     Value *v = &ValStack[ValStackPtr-1];
     if (v->type != INT_TYPE) return E_BAD_TYPE;
+    int old = v->v.val;
     v->v.val = -v->v.val;
+    if (_private_unminus_overflow(old, v->v.val)) return E_2HIGH;
     return OK;
 }
 

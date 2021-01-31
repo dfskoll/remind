@@ -57,3 +57,4 @@ else \
 extern int _private_div(int a, int b);
 extern int _private_add_overflow(int result, int b, int old);
 extern int _private_sub_overflow(int result, int b, int old);
+extern int _private_unminus_overflow(int a, int b);

@@ -5,7 +5,7 @@
 /*  Contains a few definitions used by expression evaluator.   */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2020 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2021 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 
@@ -54,6 +54,10 @@ return E_VA_STK_UNDER; \
 else \
 (val) = ValStack[--ValStackPtr]
 
+/* These functions are in utils.c and are used to detect overflow
+   in various arithmetic operators.  They have to be in separate
+   functions with extern linkage to defeat compiler optimizations
+   that would otherwise break the overflow checks. */
 extern int _private_div(int a, int b);
 extern int _private_add_overflow(int result, int b, int old);
 extern int _private_sub_overflow(int result, int b, int old);

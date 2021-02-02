@@ -17,6 +17,7 @@
 #include <ctype.h>
 
 #include <stdlib.h>
+#include <limits.h>
 #include "types.h"
 #include "expr.h"
 #include "globals.h"
@@ -30,6 +31,9 @@
 #define VARIABLE ErrMsg[E_VAR]
 #define VALUE    ErrMsg[E_VAL]
 #define UNDEF	 ErrMsg[E_UNDEF]
+
+static int IntMin = INT_MIN;
+static int IntMax = INT_MAX;
 
 static Var *VHashTbl[VAR_HASH_SIZE];
 
@@ -661,6 +665,8 @@ static SysVar SysVarArr[] = {
     {"HushMode",       0,  INT_TYPE,     &Hush,               0,      0   },
     {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,         0,      0   },
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },
+    {"IntMax",         0,  INT_TYPE,     &IntMax,             0,      0   },
+    {"IntMin",         0,  INT_TYPE,     &IntMin,             0,      0   },
     {"LatDeg",         1,  INT_TYPE,     &LatDeg,             -90,    90  },
     {"LatMin",         1,  INT_TYPE,     &LatMin,             -59,    59  },
     {"LatSec",         1,  INT_TYPE,     &LatSec,             -59,    59  },

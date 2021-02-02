@@ -2065,6 +2065,14 @@ then \fBONCE\fR directives will be ignored.
 .B $InfDelta (read-only)
 If non-zero, then the \fB\-t\fR option was supplied on the command line.
 .TP
+.B $IntMax (read-only)
+The largest representable \fBINT\fR.  On a machine with 32-bit signed integers
+using twos-complement representation, this will be 2147483647.
+.TP
+.B $IntMin (read-only)
+The smallest representable \fBINT\fR.  On a machine with 32-bit signed integers
+using twos-complement representation, this will be -2147483648.
+.TP
 .B $LatDeg, $LatMin, $LatSec
 These specify the latitude of your location.  \fB$LatDeg\fR can
 range from \-90 to 90, and the others from \-59 to 59.  Northern latitudes

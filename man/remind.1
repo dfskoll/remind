@@ -1868,6 +1868,11 @@ otherwise.
 .PP
 .B NOTES
 .PP
+If the result of an addition, subtraction or multiplication operation
+would not fit in a C "int" type, \fBRemind\fR issues a "Number too
+high" error.  Unlike C, integer operations will not simply give the
+wrong answer in case of overflow.
+.PP
 Operators of equal precedence are \fIalways\fR evaluated from left
 to right, except where parentheses dictate otherwise.  This is important,
 because the enhanced "+" operator is not necessarily associative.

@@ -866,12 +866,14 @@ static int FTime(func_info *info)
 /***************************************************************/
 static int FAbs(func_info *info)
 {
-    int v;
+    volatile int v;
 
     ASSERT_TYPE(0, INT_TYPE);
     v = ARGV(0);
     RetVal.type = INT_TYPE;
     RETVAL = (v < 0) ? (-v) : v;
+    v = RETVAL;
+    if (v < 0) return E_2HIGH;
     return OK;
 }
 

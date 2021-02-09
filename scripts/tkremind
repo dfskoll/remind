@@ -16,8 +16,8 @@ exec wish "$0" "$@"
 
 # We need at least version 8.5 because of {*} list expansion operator
 if {[catch {package require Tcl 8.5}]} {
-    puts "This program requires Tcl 8.5 or higher."
-    puts "You have version [info tclversion]"
+    puts stderr "This program requires Tcl 8.5 or higher."
+    puts stderr "You have version [info tclversion]"
     exit 1
 }
 
@@ -26,9 +26,9 @@ if {[catch {package require Tcl 8.5}]} {
 if {[info tclversion] == 8.5} {
     if {[catch {package require Img}]} {
         if {[catch {package require tkpng}]} {
-            puts "Tcl/Tk version 8.5 might require either the Img or tkpng"
-            puts "package to handle PNG images correctly.  TkRemind may"
-            puts "crash because neither of these packages was found."
+            puts stderr "Tcl/Tk version 8.5 might require either the Img or tkpng"
+            puts stderr "package to handle PNG images correctly.  TkRemind may"
+            puts stderr "crash because neither of these packages was found."
         }
     }
 }
@@ -931,7 +931,7 @@ proc LoadOptions {} {
         }
         foreach {key val} $line {}
         if {![info exists Option($key)]} {
-            puts "Unknown option in $ConfigFile: $key"
+            puts stderr "Unknown option in $ConfigFile: $key"
             continue
         }
         set Option($key) $val
@@ -2573,7 +2573,7 @@ proc DaemonReadable { file } {
 	    }
 	}
 	default {
-	    puts "Unknown message from daemon: $line\n"
+	    puts stderr "Unknown message from daemon: $line\n"
 	}
     }
 }

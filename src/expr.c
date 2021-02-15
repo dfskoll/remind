@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <limits.h>
 
 #include <stdlib.h>
 
@@ -971,6 +972,10 @@ static int Divide(void)
 
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
 	if (v2.v.val == 0) return E_DIV_ZERO;
+        /* This is the only way it can overflow */
+        if (v2.v.val == -1 && v1.v.val == INT_MIN) {
+            return E_2HIGH;
+        }
 	v1.v.val /= v2.v.val;
 	PushValStack(v1);
 	return OK;

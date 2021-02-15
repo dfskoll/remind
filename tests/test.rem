@@ -533,6 +533,26 @@ set x coerce("DATETIME", "2020-05-05@12:45am")
 set x coerce("DATETIME", "2020-05-05@12:45")
 set x coerce("DATETIME", "2020-05-05@1:45pm")
 
+# Overflow - these tests only work on machines
+# with 32-bit integers.  You may get test failures
+# on machines with 16- or 64-bit ints.
+set a $IntMin - 1
+set a $IntMin - $IntMax
+set a $IntMax - $IntMin
+set a $IntMax - (-1)
+set a $IntMax + 1
+set a $IntMax + $IntMax
+set a $IntMin + (-1)
+set a $IntMin + $IntMin
+set a $IntMax * 2
+set a $IntMax * $IntMax
+set a $IntMax * $IntMin
+set a $IntMin * 2
+set a $IntMin * $IntMin
+set a $IntMin * $IntMax
+set a $IntMin / (-1)
+set a abs($IntMin)
+
 # Don't want Remind to queue reminders
 EXIT
 

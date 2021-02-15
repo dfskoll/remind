@@ -3043,6 +3043,85 @@ coerce("DATETIME", "2020-05-05@12:45") => 2020-05-05@12:45
 set x coerce("DATETIME", "2020-05-05@1:45pm")
 coerce("DATETIME", "2020-05-05@1:45pm") => 2020-05-05@13:45
 
+# Overflow - these tests only work on machines
+# with 32-bit integers.  You may get test failures
+# on machines with 16- or 64-bit ints.
+set a $IntMin - 1
+$IntMin => -2147483648
+-2147483648 - 1 => Number too high
+../tests/test.rem(539): `-': Number too high
+set a $IntMin - $IntMax
+$IntMin => -2147483648
+$IntMax => 2147483647
+-2147483648 - 2147483647 => Number too high
+../tests/test.rem(540): `-': Number too high
+set a $IntMax - $IntMin
+$IntMax => 2147483647
+$IntMin => -2147483648
+2147483647 - -2147483648 => Number too high
+../tests/test.rem(541): `-': Number too high
+set a $IntMax - (-1)
+$IntMax => 2147483647
+- 1 => -1
+2147483647 - -1 => Number too high
+../tests/test.rem(542): `-': Number too high
+set a $IntMax + 1
+$IntMax => 2147483647
+2147483647 + 1 => Number too high
+../tests/test.rem(543): `+': Number too high
+set a $IntMax + $IntMax
+$IntMax => 2147483647
+$IntMax => 2147483647
+2147483647 + 2147483647 => Number too high
+../tests/test.rem(544): `+': Number too high
+set a $IntMin + (-1)
+$IntMin => -2147483648
+- 1 => -1
+-2147483648 + -1 => Number too high
+../tests/test.rem(545): `+': Number too high
+set a $IntMin + $IntMin
+$IntMin => -2147483648
+$IntMin => -2147483648
+-2147483648 + -2147483648 => Number too high
+../tests/test.rem(546): `+': Number too high
+set a $IntMax * 2
+$IntMax => 2147483647
+2147483647 * 2 => Number too high
+../tests/test.rem(547): `*': Number too high
+set a $IntMax * $IntMax
+$IntMax => 2147483647
+$IntMax => 2147483647
+2147483647 * 2147483647 => Number too high
+../tests/test.rem(548): `*': Number too high
+set a $IntMax * $IntMin
+$IntMax => 2147483647
+$IntMin => -2147483648
+2147483647 * -2147483648 => Number too high
+../tests/test.rem(549): `*': Number too high
+set a $IntMin * 2
+$IntMin => -2147483648
+-2147483648 * 2 => Number too high
+../tests/test.rem(550): `*': Number too high
+set a $IntMin * $IntMin
+$IntMin => -2147483648
+$IntMin => -2147483648
+-2147483648 * -2147483648 => Number too high
+../tests/test.rem(551): `*': Number too high
+set a $IntMin * $IntMax
+$IntMin => -2147483648
+$IntMax => 2147483647
+-2147483648 * 2147483647 => Number too high
+../tests/test.rem(552): `*': Number too high
+set a $IntMin / (-1)
+$IntMin => -2147483648
+- 1 => -1
+-2147483648 / -1 => Number too high
+../tests/test.rem(553): `/': Number too high
+set a abs($IntMin)
+$IntMin => -2147483648
+abs(-2147483648) => Number too high
+../tests/test.rem(554): Number too high
+
 # Don't want Remind to queue reminders
 EXIT
 

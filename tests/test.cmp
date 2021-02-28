@@ -3045,7 +3045,7 @@ coerce("DATETIME", "2020-05-05@1:45pm") => 2020-05-05@13:45
 
 # Overflow - these tests only work on machines with 32-bit
 # twos-complement signed integers.  You may get test failures on
-# machines different architectures.
+# machines with different architectures.
 set a $IntMin - 1
 $IntMin => -2147483648
 -2147483648 - 1 => Number too high

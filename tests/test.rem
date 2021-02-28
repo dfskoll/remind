@@ -535,7 +535,7 @@ set x coerce("DATETIME", "2020-05-05@1:45pm")
 
 # Overflow - these tests only work on machines with 32-bit
 # twos-complement signed integers.  You may get test failures on
-# machines different architectures.
+# machines with different architectures.
 set a $IntMin - 1
 set a $IntMin - $IntMax
 set a $IntMax - $IntMin

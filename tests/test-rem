@@ -289,8 +289,17 @@ rem 24 SPECIAL COLOR 200 200   0 BRIGHT YELLOW
 rem 25 SPECIAL COLOR 200 200  200 BRIGHT WHITE
 EOF
 
-export LC_ALL=en_US.utf-8
-export LANG=en_US.utf-8
+# If we're already in a utf-8 locale, do
+# nothing
+
+if ! echo $LC_ALL | grep -i utf-8 > /dev/null 2>&1 ; then
+    export LC_ALL=en_US.utf-8
+fi
+
+if ! echo $LANG | grep -i utf-8 > /dev/null 2>&1 ; then
+    export LANG=en_US.utf-8
+fi
+
 ../src/remind -w128 -c ../tests/utf-8.rem 1 Nov 2019 >> ../tests/test.out
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then

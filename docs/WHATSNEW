@@ -1,5 +1,18 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 6 - 2021-03-30
+
+- test/test.rem: Change local to en_US.utf-8 only if current locale
+  is not a UTF-8 locale.
+
+- MINOR CHANGE: Remind's arithemtic operators (+, -, *, /) give errors
+  on overflow rather than silently giving the wrong answer.
+
+- MINOR CHANGE: Add $IntMin and $IntMax system variables.
+
+- DOCUMENTATION FIX: Document that TkRemind now requires Tcl/Tk version
+  8.5 or newer.
+
 * VERSION 3.3 Patch 5 - 2021-01-21
 
 - NEW FEATURE: tkremind: Add ability to change fonts and colors from

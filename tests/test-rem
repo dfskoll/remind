@@ -13,7 +13,16 @@
 DIR=`dirname $0`
 cd $DIR
 if test $? != 0 ; then
+    echo ""
     echo "Unable to cd $DIR" >&2
+    echo ""
+    exit 1
+fi
+
+if test `id -u` = 0 ; then
+    echo ""
+    echo "*** Please do not run the test suite as root; it will fail."
+    echo ""
     exit 1
 fi
 

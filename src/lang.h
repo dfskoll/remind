@@ -5,7 +5,7 @@
 /*  Header file for language support for various languages.    */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2020 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2021 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 

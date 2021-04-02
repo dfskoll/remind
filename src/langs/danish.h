@@ -6,7 +6,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-2020 by Dianne Skoll          */
+/*  REMIND is Copyright (C) 1992-2021 by Dianne Skoll          */
 /*  This file is Copyright (C) 1993 by Mogens Lynnerup.        */
 /*                                                             */
 /***************************************************************/

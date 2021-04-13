@@ -65,6 +65,10 @@ echo "" >> ../tests/test.out
 
 chmod 644 include_dir/04cantread.rem
 
+# Feb 29 bug
+echo "Feb 29 Bug Test" >> ../tests/test.out
+echo 'REM Sun 29 Feb MSG [$T]' | ../src/remind -dt - 1 feb 2021 >> ../tests/test.out 2>&1
+
 echo "Color Test" >> ../tests/test.out
 ../src/remind -ccl ../tests/colors.rem 1 aug 2007 >> ../tests/test.out 2>&1
 

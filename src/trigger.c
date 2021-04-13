@@ -221,6 +221,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 
 	/* Try this year */
 	y++;
+	while (trig->d > DaysInMonth(trig->m, y)) y++;
 	j = Julian(y, trig->m, trig->d);
         ADVANCE_TO_WD(j, trig->wd);
 	if (j >= startdate) return j;

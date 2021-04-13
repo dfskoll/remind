@@ -24,7 +24,7 @@
 #define GOT_YR 4
 #define GOT_WD 8
 
-#define ADVANCE_TO_WD(x) while (! (trig->wd & (1 << ((x)%7)))) (x)++
+#define ADVANCE_TO_WD(x, wd) while (! ((wd) & (1 << ((x)%7)))) (x)++
 
 static int JYear(int jul);
 static int JMonth(int jul);
@@ -61,7 +61,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
     switch(typ) {
     case 0:
     case GOT_WD:
-	if (trig->wd != NO_WD) ADVANCE_TO_WD(startdate);
+	if (trig->wd != NO_WD) ADVANCE_TO_WD(startdate, trig->wd);
 	return startdate;
 
     case GOT_DAY:
@@ -122,19 +122,19 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	if (y > trig->y) return -1;
 	if (y < trig->y) j = Julian(trig->y, 0, 1);
 	else j = startdate;
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	if (JYear(j) > trig->y) return -1;
 	return j;
 
     case GOT_MON+GOT_WD:
 	if (m == trig->m) {
 	    j = startdate;
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    if (JMonth(j) == trig->m) return j;
 	}
 	if (m >= trig->m) j = Julian(y+1, trig->m, 1);
 	else j = Julian(y, trig->m, 1);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	return j; /* Guaranteed to be within the month */
 
     case GOT_DAY+GOT_WD:
@@ -145,7 +145,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	    /* If there are fewer days in previous month, no match */
 	    if (trig->d <= DaysInMonth(m2, y2)) {
 		j = Julian(y2, m2, trig->d);
-                ADVANCE_TO_WD(j);
+                ADVANCE_TO_WD(j, trig->wd);
 		if (j >= startdate) return j;
 
 	    }
@@ -154,7 +154,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	/* Try this month */
 	if (trig->d <= DaysInMonth(m, y)) {
 	    j = Julian(y, m, trig->d);
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    if (j >= startdate) return j;
 	}
 
@@ -163,18 +163,18 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	if (m2 > 11) { m2 = 0; y++; }
 	while (trig->d > DaysInMonth(m2, y)) m2++;
 	j = Julian(y, m2, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	return j;
 
     case GOT_WD+GOT_YR+GOT_DAY:
 	if (y > trig->y+1 || (y > trig->y && m>0)) return -1;
 	if (y > trig->y) {
 	    j = Julian(trig->y, 11, trig->d);
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    if (j >= startdate) return j;
 	} else if (y < trig->y) {
 	    j = Julian(trig->y, 0, trig->d);
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    return j;
 	} else {
 	    /* Try last month */
@@ -182,14 +182,14 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 		m2 = m-1;
 		while (trig->d > DaysInMonth(m2, trig->y)) m2--;
 		j = Julian(trig->y, m2, trig->d);
-                ADVANCE_TO_WD(j);
+                ADVANCE_TO_WD(j, trig->wd);
 		if (j >= startdate) return j;
 	    }
 	}
 	/* Try this month */
 	if (trig->d <= DaysInMonth(m, trig->y)) {
 	    j = Julian(trig->y, m, trig->d);
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    if (j >= startdate) return j;
 	}
 
@@ -198,7 +198,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	m++;
 	while (trig->d > DaysInMonth(m, trig->d)) m++;
 	j = Julian(trig->y, m, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	return j;
 
     case GOT_DAY+GOT_MON+GOT_WD:
@@ -216,31 +216,31 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 
 	/* Try last year */
 	j = Julian(y, trig->m, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	if (j >= startdate) return j;
 
 	/* Try this year */
 	y++;
 	j = Julian(y, trig->m, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	if (j >= startdate) return j;
 
 	/* Must be next year */
 	y++;
 	while (trig->d > DaysInMonth(trig->m, y)) y++;
 	j = Julian(y, trig->m, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	return j;
 
     case GOT_WD+GOT_MON+GOT_YR:
 	if (y > trig->y || (y == trig->y && m > trig->m)) return -1;
 	if (trig->y > y || (trig->y == y && trig->m > m)) {
 	    j = Julian(trig->y, trig->m, 1);
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    return j;
 	} else {
 	    j = startdate;
-            ADVANCE_TO_WD(j);
+            ADVANCE_TO_WD(j, trig->wd);
 	    FromJulian(j, &y2, &m2, &d2);
 	    if (m2 == trig->m) return j; else return -1;
 	}
@@ -251,7 +251,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	    return -1;
 	}
 	j = Julian(trig->y, trig->m, trig->d);
-        ADVANCE_TO_WD(j);
+        ADVANCE_TO_WD(j, trig->wd);
 	return j;
 
     default:

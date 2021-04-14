@@ -60,8 +60,10 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
     if (trig->wd != NO_WD) typ |= GOT_WD;
     switch(typ) {
     case 0:
+        return startdate;
+
     case GOT_WD:
-	if (trig->wd != NO_WD) ADVANCE_TO_WD(startdate, trig->wd);
+	ADVANCE_TO_WD(startdate, trig->wd);
 	return startdate;
 
     case GOT_DAY:
@@ -84,12 +86,12 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	else return -1;
 
     case GOT_DAY+GOT_MON:
-	if (m > trig->m || (m == trig->m && d > trig->d)) y++;
 	if (trig->d > MonthDays[trig->m]) {
 	    *err = E_BAD_DATE;
 	    return -1;
 	}
 
+	if (m > trig->m || (m == trig->m && d > trig->d)) y++;
 	/* Take care of Feb. 29 */
 	while (trig->d > DaysInMonth(trig->m, y)) y++;
 	return Julian(y, trig->m, trig->d);

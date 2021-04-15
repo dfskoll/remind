@@ -185,6 +185,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 		while (trig->d > DaysInMonth(m2, trig->y)) m2--;
 		j = Julian(trig->y, m2, trig->d);
                 ADVANCE_TO_WD(j, trig->wd);
+                if (JYear(j) > trig->y) return -1;
 		if (j >= startdate) return j;
 	    }
 	}
@@ -192,6 +193,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	if (trig->d <= DaysInMonth(m, trig->y)) {
 	    j = Julian(trig->y, m, trig->d);
             ADVANCE_TO_WD(j, trig->wd);
+            if (JYear(j) > trig->y) return -1;
 	    if (j >= startdate) return j;
 	}
 
@@ -201,6 +203,7 @@ static int NextSimpleTrig(int startdate, Trigger *trig, int *err)
 	while (trig->d > DaysInMonth(m, trig->d)) m++;
 	j = Julian(trig->y, m, trig->d);
         ADVANCE_TO_WD(j, trig->wd);
+        if (JYear(j) > trig->y) return -1;
 	return j;
 
     case GOT_DAY+GOT_MON+GOT_WD:

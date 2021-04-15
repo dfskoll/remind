@@ -69,6 +69,10 @@ chmod 644 include_dir/04cantread.rem
 echo "Feb 29 Bug Test" >> ../tests/test.out
 echo 'REM Sun 29 Feb MSG [$T]' | ../src/remind -dt - 1 feb 2021 >> ../tests/test.out 2>&1
 
+# Day Weekday Year out-of-year bug
+echo "Mon 31 Dec Bug Test" >> ../tests/test.out
+echo 'REM Mon 31 2021 MSG [$T]' | ../src/remind -dt - 31 dec 2021 >> ../tests/test.out 2>&1
+
 echo "Color Test" >> ../tests/test.out
 ../src/remind -ccl ../tests/colors.rem 1 aug 2007 >> ../tests/test.out 2>&1
 

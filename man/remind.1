@@ -31,7 +31,8 @@ ignore them for now and skip to the section "REMINDER FILES".
 .B \-n
 The \fB\-n\fR option causes \fBRemind\fR to print the \fBnext\fR occurrence
 of each reminder in a simple calendar format.  You can sort this by
-date by piping the output through \fBsort(1)\fR.
+date by piping the output through \fBsort(1)\fR.  Note that the \fB\-n\fR
+option causes any \fB\-g\fR option to be \fIignored\fR.
 .TP
 .B \-j\fR[\fIn\fR]
 Runs \fBRemind\fR in "purge" mode to get rid of expired reminders.
@@ -250,6 +251,7 @@ The optional \fBa\fR and \fBd\fR characters specify the sort order
 (ascending or descending) for the date, time and priority fields.  See
 the section "SORTING REMINDERS" for more information.
 
+Note that \fB\-g\fR is \fIignored\fR if you use the \fB\-n\fR option.
 .TP
 \fB\-b\fR[\fIn\fR]
 Set the time format for the calendar and simple-calendar outputs.  \fIN\fR

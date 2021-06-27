@@ -307,14 +307,21 @@ rem 25 SPECIAL COLOR 200 200  200 BRIGHT WHITE
 EOF
 
 # If we're already in a utf-8 locale, do
-# nothing
-
-if ! echo $LC_ALL | grep -i utf-8 > /dev/null 2>&1 ; then
-    export LC_ALL=en_US.utf-8
+# nothing; otherwise, set LC_ALL
+OK=0
+if echo $LC_ALL | grep -i utf-8 > /dev/null 2>&1 ; then
+    OK=1
 fi
 
-if ! echo $LANG | grep -i utf-8 > /dev/null 2>&1 ; then
-    export LANG=en_US.utf-8
+if test -z "$LC_ALL" ; then
+    if echo $LANG | grep -i utf-8 > /dev/null 2>&1 ; then
+        export LC_ALL="$LANG"
+        OK=1
+    fi
+fi
+
+if test "$OK" = 0 ; then
+    export LC_ALL=en_US.utf-8
 fi
 
 ../src/remind -w128 -c ../tests/utf-8.rem 1 Nov 2019 >> ../tests/test.out

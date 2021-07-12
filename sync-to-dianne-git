@@ -1,8 +1,0 @@
-#!/bin/sh
-cd /home/dfs/Software/Remind.git || exit 1
-
-rm -f .git/COMMIT_EDITMSG .git/*~
-
-git update-server-info && cd .git && rsync --exclude HEADER.html --archive --verbose --progress --delete ./ dianne.skoll.ca:web/projects/remind/git/Remind.git/
-exit $?
-

@@ -3117,10 +3117,20 @@ $IntMin => -2147483648
 - 1 => -1
 -2147483648 / -1 => Number too high
 ../tests/test.rem(553): `/': Number too high
+set a $IntMin * (-1)
+$IntMin => -2147483648
+- 1 => -1
+-2147483648 * -1 => Number too high
+../tests/test.rem(554): `*': Number too high
+set a (-1) * $IntMin
+- 1 => -1
+$IntMin => -2147483648
+-1 * -2147483648 => Number too high
+../tests/test.rem(555): `*': Number too high
 set a abs($IntMin)
 $IntMin => -2147483648
 abs(-2147483648) => Number too high
-../tests/test.rem(554): Number too high
+../tests/test.rem(556): Number too high
 
 # Don't want Remind to queue reminders
 EXIT

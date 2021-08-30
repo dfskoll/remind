@@ -940,6 +940,11 @@ static int Multiply(void)
     }
 
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
+        /* Prevent floating-point exception */
+        if ((v2.v.val == -1 && v1.v.val == INT_MIN) ||
+            (v1.v.val == -1 && v2.v.val == INT_MIN)) {
+            return E_2HIGH;
+        }
         int old = v1.v.val;
 	v1.v.val *= v2.v.val;
         if (v2.v.val != 0) {

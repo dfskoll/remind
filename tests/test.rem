@@ -551,6 +551,8 @@ set a $IntMin * 2
 set a $IntMin * $IntMin
 set a $IntMin * $IntMax
 set a $IntMin / (-1)
+set a $IntMin * (-1)
+set a (-1) * $IntMin
 set a abs($IntMin)
 
 # Don't want Remind to queue reminders

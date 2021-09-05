@@ -1598,6 +1598,17 @@ of a central database for the named user.
 Note that if RUN is disabled, then INCLUDECMD will fail with the error
 message "RUN disabled"
 .PP
+INCLUDECMD passes the rest of the line to \fBpopen\fR(3), meaning that
+the command is executed by the shell.  As such, shell metacharacters
+may need escaping or arguments quoting, depending on what you're trying
+to do.  Remind itself does not perform any modification of the command
+line (apart from the normal [expr] expression-pasting mechanism).
+.PP
+If the command passed to INCLUDECMD begins with an exclamation mark "!",
+then Remind disables \fBRUN\fR for the output of the command.  If you are
+running a command whose output you don't quite trust, you should
+prefix it with "!" so that any RUN commands it emits fail.
+.PP
 An \fBINCLUDECMD\fR command counts towards the INCLUDE nesting depth.
 For any given Remind run, a given INCLUDECMD command is only executed
 once and the results are cached.  For example, if you generate a calendar,

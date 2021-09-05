@@ -282,9 +282,6 @@ int OpenFile(char const *fname)
 	PurgeFP = NULL;
     }
 
-/* Assume we own the file for now */
-    RunDisabled &= ~RUN_NOTOWNER;
-
 /* If it's in the cache, get it from there. */
 
     while (h) {
@@ -297,7 +294,9 @@ int OpenFile(char const *fname)
 	    LineNo = 0;
 	    if (!h->ownedByMe) {
 		RunDisabled |= RUN_NOTOWNER;
-	    }
+	    } else {
+		RunDisabled &= ~RUN_NOTOWNER;
+            }
 	    if (FileName) return OK; else return E_NO_MEM;
 	}
 	h = h->next;
@@ -306,6 +305,7 @@ int OpenFile(char const *fname)
 /* If it's a dash, then it's stdin */
     if (!strcmp(fname, "-")) {
 	fp = stdin;
+        RunDisabled &= ~RUN_NOTOWNER;
 	if (PurgeMode) {
 	    PurgeFP = stdout;
 	}
@@ -471,12 +471,10 @@ static int PopFile(void)
 {
     IncludeStruct *i;
 
-    /* Assume we own the file for now */
-    RunDisabled &= ~RUN_NOTOWNER;
-
     if (!Hush && NumIfs) Eprint("%s", ErrMsg[E_MISS_ENDIF]);
     if (!IStackPtr) return E_EOF;
     i = &IStack[IStackPtr-1];
+
     if (i->chain) {
 	int oldRunDisabled = RunDisabled;
 	if (NextChainedFile(i) == OK) {
@@ -499,6 +497,8 @@ static int PopFile(void)
     STRSET(FileName, i->filename);
     if (!i->ownedByMe) {
 	RunDisabled |= RUN_NOTOWNER;
+    } else {
+	RunDisabled &= ~RUN_NOTOWNER;
     }
     if (!CLine && (i->offset != -1L || !strcmp(i->filename, "-"))) {
 	/* We must open the file, then seek to specified position */
@@ -580,6 +580,11 @@ int DoIncludeCmd(ParsePtr p)
 	    DBufFree(&buf);
 	    return E_NO_MEM;
 	}
+    }
+
+    if (RunDisabled) {
+        DBufFree(&buf);
+        return E_RUN_DISABLED;
     }
 
     if ( (r=IncludeCmd(DBufValue(&buf))) ) {
@@ -724,7 +729,6 @@ static int IncludeCmd(char const *cmd)
 {
     IncludeStruct *i;
     DynamicBuffer buf;
-    char line_no[64];
     FILE *fp2;
     int r;
     CachedFile *h;
@@ -735,21 +739,39 @@ static int IncludeCmd(char const *cmd)
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
 
-    if (RunDisabled) return E_RUN_DISABLED;
-
-    /* Synthesize a new filename consisting of existing filename //cmd// lineno */
-    snprintf(line_no, sizeof(line_no), "//cmd//%d", LineNo);
-    line_no[15] = 0;
+    /* Use "cmd|" as the filename */
     DBufInit(&buf);
-    if (DBufPuts(&buf, FileName) != OK) {
+    if (DBufPuts(&buf, cmd) != OK) {
 	DBufFree(&buf);
 	return E_NO_MEM;
     }
-    if (DBufPuts(&buf, line_no) != OK) {
+    if (DBufPuts(&buf, "|") != OK) {
 	DBufFree(&buf);
 	return E_NO_MEM;
     }
     fname = DBufValue(&buf);
+
+    if (FileName) {
+	i->filename = StrDup(FileName);
+	if (!i->filename) {
+	    DBufFree(&buf);
+	    return E_NO_MEM;
+	}
+    } else {
+	i->filename = NULL;
+    }
+    i->ownedByMe = 1;
+    i->LineNo = LineNo;
+    i->NumIfs = NumIfs;
+    i->IfFlags = IfFlags;
+    i->CLine = CLine;
+    i->offset = -1L;
+    i->chain = NULL;
+    if (fp) {
+	i->offset = ftell(fp);
+	FCLOSE(fp);
+    }
+    IStackPtr++;
 
     /* If the file is cached, use it */
     h = CachedFiles;
@@ -760,9 +782,12 @@ static int IncludeCmd(char const *cmd)
             }
             CLine = h->cache;
             STRSET(FileName, fname);
+            DBufFree(&buf);
             LineNo = 0;
             if (!h->ownedByMe) {
                 RunDisabled |= RUN_NOTOWNER;
+            } else {
+                RunDisabled &= ~RUN_NOTOWNER;
             }
             if (FileName) return OK; else return E_NO_MEM;
         }
@@ -773,43 +798,31 @@ static int IncludeCmd(char const *cmd)
         fprintf(ErrFp, "Executing `%s' for INCLUDECMD and caching as `%s'\n",
                 cmd, fname);
     }
+
     /* Not found in cache */
-    fp2 = popen(cmd, "r");
+
+    /* If cmd starts with !, then disable RUN within the cmd output */
+    if (cmd[0] == '!') {
+        fp2 = popen(cmd+1, "r");
+    } else {
+        fp2 = popen(cmd, "r");
+    }
     if (!fp2) {
 	DBufFree(&buf);
 	return E_CANT_OPEN;
     }
-    if (FileName) {
-	i->filename = StrDup(FileName);
-	if (!i->filename) {
-	    DBufFree(&buf);
-	    return E_NO_MEM;
-	}
-    } else {
-	i->filename = NULL;
-    }
-    i->LineNo = LineNo;
-    i->NumIfs = NumIfs;
-    i->IfFlags = IfFlags;
-    i->CLine = CLine;
-    i->offset = -1L;
-    i->chain = NULL;
-    if (RunDisabled & RUN_NOTOWNER) {
-	i->ownedByMe = 0;
-    } else {
-	i->ownedByMe = 1;
-    }
-    if (fp) {
-	i->offset = ftell(fp);
-	FCLOSE(fp);
-    }
     fp = fp2;
-    IStackPtr++;
     LineNo = 0;
+
     /* Temporarily turn of file tracing */
     old_flag = DebugFlag;
     DebugFlag &= (~DB_TRACE_FILES);
+
+    if (cmd[0] == '!') {
+        RunDisabled |= RUN_NOTOWNER;
+    }
     r = CacheFile(fname);
+
     DebugFlag = old_flag;
     if (r == OK) {
 	fp = NULL;
@@ -1030,6 +1043,8 @@ static int CheckSafety(void)
 /* If file is not owned by me, disable RUN command */
     if (statbuf.st_uid != geteuid()) {
 	RunDisabled |= RUN_NOTOWNER;
+    } else {
+	RunDisabled &= ~RUN_NOTOWNER;
     }
 
     return 1;

@@ -1599,6 +1599,10 @@ Note that if RUN is disabled, then INCLUDECMD will fail with the error
 message "RUN disabled"
 .PP
 An \fBINCLUDECMD\fR command counts towards the INCLUDE nesting depth.
+For any given Remind run, a given INCLUDECMD command is only executed
+once and the results are cached.  For example, if you generate a calendar,
+each INCLUDECMD command is run just once, not once for each day of the
+produced calendar.
 .PP
 
 .SH THE BANNER COMMAND

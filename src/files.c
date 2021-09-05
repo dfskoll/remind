@@ -556,6 +556,7 @@ int DoIncludeCmd(ParsePtr p)
     int r;
     int ch;
     char append_buf[2];
+    int seen_nonspace = 0;
 
     append_buf[1] = 0;
 
@@ -570,6 +571,10 @@ int DoIncludeCmd(ParsePtr p)
         if (!ch) {
             break;
         }
+        if (isspace(ch) && !seen_nonspace) {
+            continue;
+        }
+        seen_nonspace = 1;
         append_buf[0] = (char) ch;
 	if (DBufPuts(&buf, append_buf) != OK) {
 	    DBufFree(&buf);

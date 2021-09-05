@@ -1005,8 +1005,8 @@ proc FillCalWindow {} {
     ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
     set offset [CalEntryOffset $firstWkday]
 
-    set fntag "x"
     while { [gets $file line] >= 0 } {
+        set fntag "x"
 	# Ignore unless begins with left brace
 	if { ! [string match "\{*" $line]} {
 	    continue
@@ -1017,7 +1017,11 @@ proc FillCalWindow {} {
 	}
 
 	if {[dict exists $obj filename]} {
-	    set fntag [string cat "FILE_" [dict get $obj lineno] "_" [dict get $obj filename]]
+            set fname [dict get $obj filename]
+            # Don't make INCLUDECMD output editable
+            if {![string match "*|" $fname]} {
+                set fntag [string cat "FILE_" [dict get $obj lineno] "_" $fname]
+            }
 	}
 
 	set date [dict get $obj date]
@@ -1087,13 +1091,17 @@ proc FillCalWindow {} {
 	    continue
 	}
 	.cal.t$n configure -state normal
-	if {[regexp {TKTAG([0-9]+)} $tag all tagno]} {
+	if {[regexp {TKTAG([0-9]+)} $tag all tagno] && "$fntag" != "x"} {
 	    .cal.t$n insert end [string trim $stuff] [list REM TAGGED "TKTAG$tagno" "date_$date" $extratags $fntag]
 	    .cal.t$n tag bind "TKTAG$tagno" <Enter> "TaggedEnter .cal.t$n"
 	    .cal.t$n tag bind "TKTAG$tagno" <Leave> "TaggedLeave .cal.t$n"
 	    set TagToObj(TKTAG$tagno) $obj
 	} else {
-	    .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
+            if {"$fntag" == "x" } {
+                .cal.t$n insert end [string trim $stuff] [list REM $extratags]
+            } else {
+                .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
+            }
 	}
 	.cal.t$n insert end "\n"
 	.cal.t$n configure -state disabled

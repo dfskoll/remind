@@ -96,7 +96,7 @@ static int CacheFile (char const *fname);
 static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
 static int PopFile (void);
-
+static int IncludeCmd(char const *);
 static void OpenPurgeFile(char const *fname, char const *mode)
 {
     DynamicBuffer fname_buf;
@@ -477,7 +477,6 @@ static int PopFile(void)
     if (!Hush && NumIfs) Eprint("%s", ErrMsg[E_MISS_ENDIF]);
     if (!IStackPtr) return E_EOF;
     i = &IStack[IStackPtr-1];
-
     if (i->chain) {
 	int oldRunDisabled = RunDisabled;
 	if (NextChainedFile(i) == OK) {
@@ -501,7 +500,7 @@ static int PopFile(void)
     if (!i->ownedByMe) {
 	RunDisabled |= RUN_NOTOWNER;
     }
-    if (!CLine && (i->offset != -1L)) {
+    if (!CLine && (i->offset != -1L || !strcmp(i->filename, "-"))) {
 	/* We must open the file, then seek to specified position */
 	if (strcmp(i->filename, "-")) {
 	    fp = fopen(i->filename, "r");
@@ -535,6 +534,55 @@ int DoInclude(ParsePtr p)
     e = VerifyEoln(p);
     if (e) Eprint("%s", ErrMsg[e]);
     if ( (r=IncludeFile(DBufValue(&buf))) ) {
+	DBufFree(&buf);
+	return r;
+    }
+    DBufFree(&buf);
+    NumIfs = 0;
+    IfFlags = 0;
+    return OK;
+}
+
+/***************************************************************/
+/*                                                             */
+/*  DoIncludeCmd                                               */
+/*                                                             */
+/*  The INCLUDECMD command.                                    */
+/*                                                             */
+/***************************************************************/
+int DoIncludeCmd(ParsePtr p)
+{
+    DynamicBuffer buf;
+    DynamicBuffer token;
+    int r;
+
+    int done = 0;
+    DBufInit(&buf);
+    DBufInit(&token);
+
+    while(1) {
+	if ( (r=ParseToken(p, &token)) ) {
+	    DBufFree(&buf);
+	    return r;
+	}
+	if (!*DBufValue(&token)) break;
+	if (done) {
+	    if (DBufPuts(&buf, " ") != OK) {
+		DBufFree(&buf);
+		return E_NO_MEM;
+	    }
+		
+	}
+	done = 1;
+	if (DBufPuts(&buf, DBufValue(&token)) != OK) {
+	    DBufFree(&buf);
+	    return E_NO_MEM;
+	}
+	DBufFree(&token);
+	DBufInit(&token);
+    }
+    
+    if ( (r=IncludeCmd(DBufValue(&buf))) ) {
 	DBufFree(&buf);
 	return r;
     }
@@ -663,6 +711,88 @@ static int SetupGlobChain(char const *dirname, IncludeStruct *i)
     return OK;
 }
 #endif
+
+/***************************************************************/
+/*                                                             */
+/*  IncludeCmd                                                 */
+/*                                                             */
+/*  Process the INCLUDECMD command - actually do the command   */
+/*  inclusion.                                                 */
+/*                                                             */
+/***************************************************************/
+static int IncludeCmd(char const *cmd)
+{
+    IncludeStruct *i;
+    DynamicBuffer buf;
+    char line_no[64];
+    FILE *fp2;
+    int r;
+    
+    FreshLine = 1;
+    if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
+    i = &IStack[IStackPtr];
+
+    if (RunDisabled) return E_RUN_DISABLED;
+
+    /* Synthesize a new filename consisting of existing filename //cmd// lineno */
+    snprintf(line_no, sizeof(line_no), "//cmd//%d", LineNo);
+    line_no[15] = 0;
+    DBufInit(&buf);
+    if (DBufPuts(&buf, FileName) != OK) {
+	DBufFree(&buf);
+	return E_NO_MEM;
+    }
+    if (DBufPuts(&buf, line_no) != OK) {
+	DBufFree(&buf);
+	return E_NO_MEM;
+    }
+
+    fp2 = popen(cmd, "r");
+    if (!fp2) {
+	DBufFree(&buf);
+	return E_CANT_OPEN;
+    }
+    if (FileName) {
+	i->filename = StrDup(FileName);
+	if (!i->filename) {
+	    DBufFree(&buf);
+	    return E_NO_MEM;
+	}
+    } else {
+	i->filename = NULL;
+    }
+    i->LineNo = LineNo;
+    i->NumIfs = NumIfs;
+    i->IfFlags = IfFlags;
+    i->CLine = CLine;
+    i->offset = -1L;
+    i->chain = NULL;
+    if (RunDisabled & RUN_NOTOWNER) {
+	i->ownedByMe = 0;
+    } else {
+	i->ownedByMe = 1;
+    }
+    if (fp) {
+	i->offset = ftell(fp);
+	FCLOSE(fp);
+    }
+    fp = fp2;
+    IStackPtr++;
+    LineNo = 0;
+    r = CacheFile(DBufValue(&buf));
+    if (r == OK) {
+	fp = NULL;
+	CLine = CachedFiles->cache;
+	LineNo = 0;
+	STRSET(FileName, DBufValue(&buf));
+	DBufFree(&buf);
+	return OK;
+    }
+    DBufFree(&buf);
+    /* We failed */
+    PopFile();
+    return E_CANT_OPEN;
+}
 
 /***************************************************************/
 /*                                                             */

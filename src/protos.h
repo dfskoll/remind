@@ -45,6 +45,7 @@ int CopyValue (Value *dest, const Value *src);
 int ReadLine (void);
 int OpenFile (char const *fname);
 int DoInclude (ParsePtr p);
+int DoIncludeCmd (ParsePtr p);
 int IncludeFile (char const *fname);
 int GetAccessDate (char const *file);
 int SetAccessDate (char const *fname, int jul);

@@ -243,6 +243,15 @@ static void DoReminders(void)
 		r=DoInclude(&p);
 		purge_handled = 1;
 		break;
+	    case T_IncludeCmd:
+		/* In purge mode, include closes file, so we
+		   need to echo it here! */
+		if (PurgeMode) {
+		    PurgeEchoLine("%s\n", CurLine);
+		}
+		r=DoIncludeCmd(&p);
+		purge_handled = 1;
+		break;
 	    case T_Exit:    DoExit(&p);      break;
 	    case T_Flush:   r=DoFlush(&p);   break;
 	    case T_Set:     r=DoSet(&p);     break;

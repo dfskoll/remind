@@ -15,6 +15,15 @@ REM Wed UNTIL 15 Feb 1991 SATISFY [trigdate() > '1990-01-01'] MSG wookie
 # bad AT
 REM AT 0:00 0:01 0:02 MSG foo
 
+# Includecmd
+INCLUDECMD echo REM 16 Feb 1991 MSG Blork
+INCLUDECMD echo REM 18 Feb 1991 MSG Blork
+
+# This should work
+INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo MSG Yippee
+
+# This should fail
+INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo MSG Yippee
 REM MSG Today is [hebday(today())] [hebmon(today())] [hebyear(today())]
 fset _h(x, y) trigger(hebdate(x,y))
 

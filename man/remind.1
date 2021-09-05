@@ -1611,9 +1611,13 @@ prefix it with "!" so that any RUN commands it emits fail.
 .PP
 An \fBINCLUDECMD\fR command counts towards the INCLUDE nesting depth.
 For any given Remind run, a given INCLUDECMD command is only executed
-once and the results are cached.  For example, if you generate a calendar,
-each INCLUDECMD command is run just once, not once for each day of the
-produced calendar.
+once and the results are cached.  For example, if you generate a
+calendar, each unique INCLUDECMD command is run just once, not once
+for each day of the produced calendar.  "Uniqueness" is determined by
+looking at the command that will be passed to the shell, so if (for example)
+your INCLUDECMD uses expression-pasting that results in differences depending
+on the value of \fBtoday()\fR, then each \fIunique\fR version of the
+command will be executed once.
 .PP
 
 .SH THE BANNER COMMAND

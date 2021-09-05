@@ -553,32 +553,28 @@ int DoInclude(ParsePtr p)
 int DoIncludeCmd(ParsePtr p)
 {
     DynamicBuffer buf;
-    DynamicBuffer token;
     int r;
+    int ch;
+    char append_buf[2];
 
-    int done = 0;
+    append_buf[1] = 0;
+
     DBufInit(&buf);
-    DBufInit(&token);
 
     while(1) {
-	if ( (r=ParseToken(p, &token)) ) {
+        ch = ParseChar(p, &r, 0);
+        if (r) {
 	    DBufFree(&buf);
 	    return r;
 	}
-	if (!*DBufValue(&token)) break;
-	if (done) {
-	    if (DBufPuts(&buf, " ") != OK) {
-		DBufFree(&buf);
-		return E_NO_MEM;
-	    }
-	}
-	done = 1;
-	if (DBufPuts(&buf, DBufValue(&token)) != OK) {
+        if (!ch) {
+            break;
+        }
+        append_buf[0] = (char) ch;
+	if (DBufPuts(&buf, append_buf) != OK) {
 	    DBufFree(&buf);
 	    return E_NO_MEM;
 	}
-	DBufFree(&token);
-	DBufInit(&token);
     }
 
     if ( (r=IncludeCmd(DBufValue(&buf))) ) {

@@ -1580,7 +1580,27 @@ features.  It will not read a file that is group- or world-writable.
 It will not run set-uid.  If it reads a file you don't own, it will
 disable RUN and the shell() function.  And if it is run as \fIroot\fR,
 it will only read files owned by \fIroot\fR.
+
+.SH THE INCLUDECMD COMMAND
 .PP
+\fBRemind\fR allows you to execute a shell command and evaluate the
+output of that command as if it were an included file.  For example,
+you could have scripts that extract reminders out of a database and print
+them on stdout as REM commands.  Here is an example:
+.PP
+.nf
+	INCLUDECMD extract_reminders_for dfs
+.fi
+.PP
+We assume that the command "extract_reminders_for" extracts reminders out
+of a central database for the named user.
+.PP
+Note that if RUN is disabled, then INCLUDECMD will fail with the error
+message "RUN disabled"
+.PP
+An \fBINCLUDECMD\fR command counts towards the INCLUDE nesting depth.
+.PP
+
 .SH THE BANNER COMMAND
 .PP
 When \fBRemind\fR first issues a reminder, it prints a message like this:

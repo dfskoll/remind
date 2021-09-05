@@ -571,7 +571,6 @@ int DoIncludeCmd(ParsePtr p)
 		DBufFree(&buf);
 		return E_NO_MEM;
 	    }
-		
 	}
 	done = 1;
 	if (DBufPuts(&buf, DBufValue(&token)) != OK) {
@@ -581,7 +580,7 @@ int DoIncludeCmd(ParsePtr p)
 	DBufFree(&token);
 	DBufInit(&token);
     }
-    
+
     if ( (r=IncludeCmd(DBufValue(&buf))) ) {
 	DBufFree(&buf);
 	return r;
@@ -727,7 +726,10 @@ static int IncludeCmd(char const *cmd)
     char line_no[64];
     FILE *fp2;
     int r;
-    
+    CachedFile *h;
+    char const *fname;
+    int old_flag;
+
     FreshLine = 1;
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
@@ -746,7 +748,31 @@ static int IncludeCmd(char const *cmd)
 	DBufFree(&buf);
 	return E_NO_MEM;
     }
+    fname = DBufValue(&buf);
 
+    /* If the file is cached, use it */
+    h = CachedFiles;
+    while(h) {
+        if (!strcmp(fname, h->filename)) {
+            if (DebugFlag & DB_TRACE_FILES) {
+                fprintf(ErrFp, "Reading command `%s': Found in cache\n", fname);
+            }
+            CLine = h->cache;
+            STRSET(FileName, fname);
+            LineNo = 0;
+            if (!h->ownedByMe) {
+                RunDisabled |= RUN_NOTOWNER;
+            }
+            if (FileName) return OK; else return E_NO_MEM;
+        }
+        h = h->next;
+    }
+
+    if (DebugFlag & DB_TRACE_FILES) {
+        fprintf(ErrFp, "Executing `%s' for INCLUDECMD and caching as `%s'\n",
+                cmd, fname);
+    }
+    /* Not found in cache */
     fp2 = popen(cmd, "r");
     if (!fp2) {
 	DBufFree(&buf);
@@ -779,12 +805,16 @@ static int IncludeCmd(char const *cmd)
     fp = fp2;
     IStackPtr++;
     LineNo = 0;
-    r = CacheFile(DBufValue(&buf));
+    /* Temporarily turn of file tracing */
+    old_flag = DebugFlag;
+    DebugFlag &= (~DB_TRACE_FILES);
+    r = CacheFile(fname);
+    DebugFlag = old_flag;
     if (r == OK) {
 	fp = NULL;
 	CLine = CachedFiles->cache;
 	LineNo = 0;
-	STRSET(FileName, DBufValue(&buf));
+	STRSET(FileName, fname);
 	DBufFree(&buf);
 	return OK;
     }

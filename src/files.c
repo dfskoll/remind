@@ -575,6 +575,10 @@ int DoIncludeCmd(ParsePtr p)
             continue;
         }
         seen_nonspace = 1;
+        /* Convert \n to ' ' to better handle line continuation */
+        if (ch == '\n') {
+            ch = ' ';
+        }
         append_buf[0] = (char) ch;
 	if (DBufPuts(&buf, append_buf) != OK) {
 	    DBufFree(&buf);

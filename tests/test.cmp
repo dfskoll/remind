@@ -89,8 +89,19 @@ fset _h(x, y) trigger(hebdate(x,y))
 
 # Test case from Remind mailing list
 set mltest "a b"
-INCLUDECMD printf 'REM %s\n' [x]
-x => ../tests/test.rem(32): Undefined variable: x
+INCLUDECMD printf 'REM %s\n' [mltest]
+mltest => "a b"
+REM a
+REM b
+
+REM a
+printf 'REM %s\n' a b|(1): Trig = Saturday, 16 February, 1991
+a 
+
+REM b
+printf 'REM %s\n' a b|(2): Trig = Saturday, 16 February, 1991
+b 
+
 
 # Disabling RUN in an !includecmd
 INCLUDECMD !echo MSG foo

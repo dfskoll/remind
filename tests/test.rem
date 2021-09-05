@@ -29,7 +29,7 @@ fset _h(x, y) trigger(hebdate(x,y))
 
 # Test case from Remind mailing list
 set mltest "a b"
-INCLUDECMD printf 'REM %s\n' [x]
+INCLUDECMD printf 'REM %s\n' [mltest]
 
 # Disabling RUN in an !includecmd
 INCLUDECMD !echo MSG foo

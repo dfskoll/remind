@@ -19,6 +19,10 @@ REM AT 0:00 0:01 0:02 MSG foo
 INCLUDECMD echo REM 16 Feb 1991 MSG Blork
 INCLUDECMD echo REM 18 Feb 1991 MSG Blork
 
+# Includecmd with continuation line
+INCLUDECMD echo REM 18 Feb 1991 MSG This line is \
+continued so there
+
 # This should work
 INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo INCLUDECMD echo MSG Yippee
 

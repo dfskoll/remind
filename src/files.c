@@ -40,8 +40,9 @@
 #include "err.h"
 
 
-/* Convenient macro for closing files */
+/* Convenient macros for closing files */
 #define FCLOSE(fp) (((fp)&&((fp)!=stdin)) ? (fclose(fp),(fp)=NULL) : ((fp)=NULL))
+#define PCLOSE(fp) (((fp)&&((fp)!=stdin)) ? (pclose(fp),(fp)=NULL) : ((fp)=NULL))
 
 /* Define the structures needed by the file caching system */
 typedef struct cache {
@@ -91,8 +92,8 @@ static FILE *fp;
 static IncludeStruct IStack[INCLUDE_NEST];
 static int IStackPtr = 0;
 
-static int ReadLineFromFile (void);
-static int CacheFile (char const *fname);
+static int ReadLineFromFile (int use_pclose);
+static int CacheFile (char const *fname, int use_pclose);
 static void DestroyCache (CachedFile *cf);
 static int CheckSafety (void);
 static int PopFile (void);
@@ -167,7 +168,7 @@ int ReadLine(void)
     }
 
 /* Not cached.  Read from the file. */
-    return ReadLineFromFile();
+    return ReadLineFromFile(0);
 }
 
 /***************************************************************/
@@ -177,7 +178,7 @@ int ReadLine(void)
 /*  Read a line from the file pointed to by fp.                */
 /*                                                             */
 /***************************************************************/
-static int ReadLineFromFile(void)
+static int ReadLineFromFile(int use_pclose)
 {
     int l;
     char copy_buffer[4096];
@@ -200,7 +201,11 @@ static int ReadLineFromFile(void)
 	    return E_IO_ERR;
 	}
 	if (feof(fp)) {
-	    FCLOSE(fp);
+            if (use_pclose) {
+                PCLOSE(fp);
+            } else {
+                FCLOSE(fp);
+            }
 	    if ((DBufLen(&buf) == 0) &&
 		(DBufLen(&LineBuffer) == 0) && PurgeMode) {
 		if (PurgeFP != NULL && PurgeFP != stdout) fclose(PurgeFP);
@@ -248,7 +253,11 @@ static int ReadLineFromFile(void)
 		if (PurgeFP != stdout) fclose(PurgeFP);
 		PurgeFP = NULL;
 	    }
-	    FCLOSE(fp);
+            if (use_pclose) {
+                PCLOSE(fp);
+            } else {
+                FCLOSE(fp);
+            }
 	    DBufFree(&LineBuffer);
 	    CurLine = DBufValue(&LineBuffer);
 	}
@@ -325,7 +334,7 @@ int OpenFile(char const *fname)
     CLine = NULL;
     if (ShouldCache) {
 	LineNo = 0;
-	r = CacheFile(fname);
+	r = CacheFile(fname, 0);
 	if (r == OK) {
 	    fp = NULL;
 	    CLine = CachedFiles->cache;
@@ -353,7 +362,7 @@ int OpenFile(char const *fname)
 /*  Returns an indication of success or failure.               */
 /*                                                             */
 /***************************************************************/
-static int CacheFile(char const *fname)
+static int CacheFile(char const *fname, int use_pclose)
 {
     int r;
     CachedFile *cf;
@@ -368,14 +377,22 @@ static int CacheFile(char const *fname)
     cf = NEW(CachedFile);
     if (!cf) {
 	ShouldCache = 0;
-	FCLOSE(fp);
+        if (use_pclose) {
+            PCLOSE(fp);
+        } else {
+            FCLOSE(fp);
+        }
 	return E_NO_MEM;
     }
     cf->cache = NULL;
     cf->filename = StrDup(fname);
     if (!cf->filename) {
 	ShouldCache = 0;
-	FCLOSE(fp);
+        if (use_pclose) {
+            PCLOSE(fp);
+        } else {
+            FCLOSE(fp);
+        }
 	free(cf);
 	return E_NO_MEM;
     }
@@ -388,11 +405,15 @@ static int CacheFile(char const *fname)
 
 /* Read the file */
     while(fp) {
-	r = ReadLineFromFile();
+	r = ReadLineFromFile(use_pclose);
 	if (r) {
 	    DestroyCache(cf);
 	    ShouldCache = 0;
-	    FCLOSE(fp);
+            if (use_pclose) {
+                PCLOSE(fp);
+            } else {
+                FCLOSE(fp);
+            }
 	    return r;
 	}
 /* Skip blank chars */
@@ -406,7 +427,11 @@ static int CacheFile(char const *fname)
 		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
-		    FCLOSE(fp);
+                    if (use_pclose) {
+                        PCLOSE(fp);
+                    } else {
+                        FCLOSE(fp);
+                    }
 		    return E_NO_MEM;
 		}
 		cl = cf->cache;
@@ -416,7 +441,11 @@ static int CacheFile(char const *fname)
 		    DBufFree(&LineBuffer);
 		    DestroyCache(cf);
 		    ShouldCache = 0;
-		    FCLOSE(fp);
+                    if (use_pclose) {
+                        PCLOSE(fp);
+                    } else {
+                        FCLOSE(fp);
+                    }
 		    return E_NO_MEM;
 		}
 		cl = cl->next;
@@ -428,7 +457,11 @@ static int CacheFile(char const *fname)
 	    if (!cl->text) {
 		DestroyCache(cf);
 		ShouldCache = 0;
-		FCLOSE(fp);
+                if (use_pclose) {
+                    PCLOSE(fp);
+                } else {
+                    FCLOSE(fp);
+                }
 		return E_NO_MEM;
 	    }
 	}
@@ -825,7 +858,7 @@ static int IncludeCmd(char const *cmd)
     if (cmd[0] == '!') {
         RunDisabled |= RUN_NOTOWNER;
     }
-    r = CacheFile(fname);
+    r = CacheFile(fname, 1);
 
     DebugFlag = old_flag;
     if (r == OK) {

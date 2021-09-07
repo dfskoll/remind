@@ -43,6 +43,12 @@ INCLUDECMD !echo INCLUDECMD echo MSG foo
 INCLUDECMD !echo MSG foo
 INCLUDECMD !echo MSG foo
 
+# INCLUDECMD with RUN disabled
+RUN OFF
+INCLUDECMD echo MSG foo
+RUN ON
+INCLUDECMD echo MSG foo
+
 [_h(1,  "Tishrey")] MSG Rosh Hashana 1
 [_h(2,  "Tishrey")] MSG Rosh Hashana 2
 [_h(3,  "Tishrey")] MSG Tzom Gedalia

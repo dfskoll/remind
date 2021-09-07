@@ -1593,7 +1593,10 @@ them on stdout as REM commands.  Here is an example:
 .fi
 .PP
 We assume that the command "extract_reminders_for" extracts reminders out
-of a central database for the named user.
+of a central database for the named user.  Another use-case of INCLUDECMD
+is if you have your reminders stored in a file in some non-Remind format;
+you can write a command that transforms them to Remind format and then
+Remind can "include" the file with an appropriate INCLUDECMD command.
 .PP
 Note that if RUN is disabled, then INCLUDECMD will fail with the error
 message "RUN disabled"

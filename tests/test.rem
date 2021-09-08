@@ -586,6 +586,11 @@ set a $IntMin * (-1)
 set a (-1) * $IntMin
 set a abs($IntMin)
 
+# Shellescape
+set a shellescape(" !\"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
+
+msg [a]
+
 # Don't want Remind to queue reminders
 EXIT
 

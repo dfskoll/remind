@@ -9,7 +9,11 @@
 /*                                                             */
 /***************************************************************/
 
+static char const DontEscapeMe[] =
+"1234567890_-=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.,/";
+
 #include "config.h"
+#include "err.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -145,4 +149,16 @@ int _private_unminus_overflow(int a, int b)
     if (a > 0 && b > 0) return 1;
     if (a < 0 && b < 0) return 1;
     return 0;
+}
+
+int
+ShellEscape(char const *in, DynamicBuffer *out)
+{
+    while(*in) {
+        if (!strchr(DontEscapeMe, *in)) {
+            if (DBufPutc(out, '\\') != OK) return E_NO_MEM;
+        }
+        if (DBufPutc(out, *in++) != OK) return E_NO_MEM;
+    }
+    return OK;
 }

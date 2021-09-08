@@ -151,6 +151,7 @@ static int FWeekno         (func_info *);
 static int FWkday          (func_info *);
 static int FWkdaynum       (func_info *);
 static int FYear           (func_info *);
+static int FShellescape    (func_info *);
 
 static int CleanUpAfterFunc (func_info *);
 static int CheckArgs       (BuiltinFunc *f, int nargs);
@@ -267,6 +268,7 @@ BuiltinFunc Func[] = {
     {   "realtoday",    0,      0,      0,          FRealtoday },
     {   "sgn",          1,      1,      1,          FSgn    },
     {   "shell",        1,      2,      0,          FShell  },
+    {   "shellescape",  1,      1,      1,          FShellescape },
     {   "slide",        2,      NO_MAX, 0,          FSlide  },
     {   "strlen",       1,      1,      1,          FStrlen },
     {   "substr",       2,      3,      1,          FSubstr },
@@ -1070,6 +1072,28 @@ static int FVersion(func_info *info)
 static int FOstype(func_info *info)
 {
     return RetStrVal("UNIX", info);
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FShellescape - escape shell meta-characters                */
+/*                                                             */
+/***************************************************************/
+static int FShellescape(func_info *info)
+{
+    DynamicBuffer buf;
+    int r;
+
+    ASSERT_TYPE(0, STR_TYPE);
+    DBufInit (&buf);
+    if (ShellEscape(ARG(0).v.str, &buf) != OK) {
+        DBufFree(&buf);
+        return E_NO_MEM;
+    }
+
+    r = RetStrVal(DBufValue(&buf), info);
+    DBufFree(&buf);
+    return r;
 }
 
 /***************************************************************/

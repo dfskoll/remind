@@ -3255,6 +3255,16 @@ $IntMin => -2147483648
 abs(-2147483648) => Number too high
 ../tests/test.rem(587): Number too high
 
+# Shellescape
+set a shellescape(" !\"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
+shellescape(" !"#$%%&'()*+,-./0123456789:;<=>?@ABCDEF"...) => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
+
+msg [a]
+../tests/test.rem(592): Trig = Saturday, 16 February, 1991
+a => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
+\ \!\"\#\$\\\&\'\(\)\*+,-./0123456789\:\;\<=\>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\[\\\]\^_\`abcdefghijklmnopqrstuvwxyz\{\|\}\~
+
+
 # Don't want Remind to queue reminders
 EXIT
 

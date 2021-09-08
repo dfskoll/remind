@@ -2896,6 +2896,23 @@ If \fImaxlen\fR is specified, then \fBshell()\fR returns the first
 output from \fIcmd\fR is returned.
 .RE
 .TP
+.B shellescape(s_str)
+Returns \fIstr\fR with all shell metacharacters such as " ", "*", etc
+escaped with a backslash.  For example:
+.PP
+.nf
+        SET a shellescape("a b*? c&d$e")
+.fi
+.RS
+.PP
+will set \fBa\fR to:
+.RE
+.PP
+.nf
+        "a\\ b\\*\\?\\ c\\&d\\$e"
+.fi
+
+.TP
 .B slide(d_start, i_amt [,s_wkday...])
 This function is the inverse of \fBnonomitted\fR.  It adds \fIamt\fR
 days (which can be negative) to \fIstart\fR, \fInot counting omitted days\fR.

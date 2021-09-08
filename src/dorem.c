@@ -24,10 +24,6 @@
 #include "protos.h"
 #include "expr.h"
 
-/* Define the shell characters not to escape */
-static char const DontEscapeMe[] =
-"1234567890_-=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.,";
-
 static int ParseTimeTrig (ParsePtr s, TimeTrig *tim, int save_in_globals);
 static int ParseLocalOmit (ParsePtr s, Trigger *t);
 static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
@@ -1230,24 +1226,16 @@ int DoMsgCommand(char const *cmd, char const *msg)
     DynamicBuffer execBuffer;
 
     DynamicBuffer buf;
-    char const *s;
 
     DBufInit(&buf);
     DBufInit(&execBuffer);
 
-    /* Escape shell characters in msg INCLUDING WHITESPACE! */
-    for (s=msg; *s; s++) {
-	if (isspace(*s) || !strchr(DontEscapeMe, *s)) {
-	    if (DBufPutc(&buf, '\\') != OK) {
-		r = E_NO_MEM;
-		goto finished;
-	    }
-	}
-	if (DBufPutc(&buf, *s) != OK) {
-	    r = E_NO_MEM;
-	    goto finished;
-	}
+    /* Escape shell characters in msg */
+    if (ShellEscape(msg, &buf) != OK) {
+        r = E_NO_MEM;
+        goto finished;
     }
+
     msg = DBufValue(&buf);
 
     /* Do "%s" substitution */

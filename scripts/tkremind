@@ -2817,7 +2817,7 @@ proc ReadTaggedOptions { tag date } {
 	lappend ans -text-day2 $d
     }
     if {[dict exists $obj m]} {
-        set mm [dict get $obj m]
+        set m [dict get $obj m]
         set mm [string trimleft $m 0]
 	lappend ans -text-mon1 [lindex $MonthNames [expr $mm -1]]
 	lappend ans -text-mon2 [lindex $MonthNames [expr $mm -1]]

@@ -1845,6 +1845,7 @@ proc ModifyDay {d firstDay} {
     set oldFocus [focus]
     while {1} {
 	grab .mod
+        raise .mod
 	focus .mod.entry
 	set ModifyDialogResult -1
 	tkwait variable ModifyDialogResult
@@ -1991,7 +1992,7 @@ proc CreateReminder {w} {
 
     # Check it out!
     global Remind
-    set f [open "|$Remind -arq -e -" r+]
+    set f [open "|$Remind -arq -e - 2>&1" r+]
     puts $f "BANNER %"
     puts $f "$rem MSG %"
     puts $f "MSG %_%_%_%_"
@@ -2009,13 +2010,17 @@ proc CreateReminder {w} {
     return $rem
 }
 
+# We used to return YYYY-MM-DD, but reverted to
+# day monthname year because this lets Remind produce
+# much better error messages.
 proc consolidate {y m d} {
     global MonthNames
     if {![regexp {^[0-9]+$} $m]} {
 	set m [lsearch -exact $MonthNames $m]
 	incr m
     }
-    return [format "%04d-%02d-%02d" $y $m $d]
+    set mname [lindex $MonthNames [expr $m-1]]
+    return "$d $mname $y"
 }
 
 #---------------------------------------------------------------------------
@@ -3202,6 +3207,7 @@ proc EditTaggedReminder { w } {
     tkwait visibility .mod
     set oldFocus [focus]
     while {1} {
+        raise .mod
 	grab .mod
 	focus .mod.entry
 	set ModifyDialogResult -1

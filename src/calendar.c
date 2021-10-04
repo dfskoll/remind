@@ -1665,7 +1665,9 @@ static int DoCalRem(ParsePtr p, int col)
 	if(!e->filename) {
 	    if (e->text) free(e->text);
 	    if (e->raw_text) free(e->raw_text);
+#ifdef REM_USE_WCHAR
             if (e->wc_text) free(e->wc_text);
+#endif
 	    free(e);
 	    return E_NO_MEM;
 	}

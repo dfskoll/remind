@@ -335,8 +335,12 @@ void InitRemind(int argc, char const *argv[])
 
 	    case 'u':
 	    case 'U':
-		ChgUser(arg);
-		RunDisabled = RUN_CMDLINE;
+                if (*arg == '+') {
+                    ChgUser(arg+1);
+                } else {
+                    RunDisabled = RUN_CMDLINE;
+                    ChgUser(arg);
+                }
 		while (*arg) arg++;
 		break;
 	    case 'z':

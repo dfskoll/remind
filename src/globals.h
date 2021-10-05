@@ -21,6 +21,12 @@
 #define INIT(var, val) var
 #endif
 
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+
+#define MAX_TRUSTED_USERS 20
+
 #define MINUTES_PER_DAY 1440
 
 #define DaysInYear(y) (((y) % 4) ? 365 : ((!((y) % 100) && ((y) % 400)) ? 365 : 366 ))
@@ -36,6 +42,9 @@ EXTERN	int	CurMon;
 EXTERN	int	CurYear;
 EXTERN  int	LineNo;
 EXTERN  int     FreshLine;
+EXTERN  uid_t   TrustedUsers[MAX_TRUSTED_USERS];
+
+EXTERN  INIT(   int     NumTrustedUsers, 0);
 EXTERN  INIT(   char    const *MsgCommand, NULL);
 EXTERN  INIT(	int     ShowAllErrors, 0);
 EXTERN  INIT(	int     DebugFlag, 0);

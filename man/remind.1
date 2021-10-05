@@ -318,6 +318,13 @@ case, it only changes the environment variables as described above.
 It does not change the effective uid or gid.
 .RE
 .TP
+\fB\-+\fIusername\fR
+Causes \fBRemind\fR to trust files owned by the user \fIusername\fR.
+Normally, if \fBRemind\fR reads a file that you do not own, it disables
+RUN and the shell() function.  This option causes it to also trust files
+owned by \fIusername\fR.  You can supply multiple \fB\-+\fR options
+to trust multiple users, up to a limit of 20 trusted users.
+.TP
 \fB-y\fR
 Causes \fBRemind\fR to synthesize a tag for any reminder that lacks a
 TAG clause.
@@ -1580,6 +1587,11 @@ features.  It will not read a file that is group- or world-writable.
 It will not run set-uid.  If it reads a file you don't own, it will
 disable RUN and the shell() function.  And if it is run as \fIroot\fR,
 it will only read files owned by \fIroot\fR.
+.PP
+Note that if \fBRemind\fR reads standard input, it does \fInot\fR
+attempt to check the ownership of standard input, even if it is
+coming from a file, and hence does \fInot\fR disable RUN and shell()
+in this situation.
 
 .SH THE INCLUDECMD COMMAND
 .PP

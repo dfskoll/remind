@@ -89,6 +89,7 @@ static void ChgUser(char const *u);
 static void InitializeVar(char const *str);
 
 static char const *BadDate = "Illegal date on command line\n";
+static void AddTrustedUser(char const *username);
 
 static DynamicBuffer default_filename_buf;
 
@@ -114,7 +115,7 @@ static char const *DefaultFilename(void)
     s = getenv("HOME");
     if (!s) {
 	fprintf(stderr, "HOME environment variable not set.  Unable to determine reminder file.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     DBufPuts(&default_filename_buf, s);
     DBufPuts(&default_filename_buf, "/.reminders");
@@ -172,7 +173,7 @@ void InitRemind(int argc, char const *argv[])
     if (getgid() != getegid() ||
 	getuid() != geteuid()) {
 	fprintf(ErrFp, "\nRemind should not be installed set-uid or set-gid.\nCHECK YOUR SYSTEM SECURITY.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     y = NO_YR;
@@ -183,7 +184,7 @@ void InitRemind(int argc, char const *argv[])
     RealToday = SystemDate(&CurYear, &CurMon, &CurDay);
     if (RealToday < 0) {
 	fprintf(ErrFp, ErrMsg[M_BAD_SYS_DATE], BASE);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     JulianToday = RealToday;
     FromJulian(JulianToday, &CurYear, &CurMon, &CurDay);
@@ -217,6 +218,10 @@ void InitRemind(int argc, char const *argv[])
 	}
 	while (*arg) {
 	    switch(*arg++) {
+            case '+':
+                AddTrustedUser(arg);
+                while(*arg) arg++;
+                break;
 
 	    case '@':
 		UseVTColors = 1;
@@ -535,7 +540,7 @@ void InitRemind(int argc, char const *argv[])
     if (!InvokedAsRem) {
 	if (i >= argc) {
 	    Usage();
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	InitialFile = argv[i++];
     } else {
@@ -682,7 +687,7 @@ void Usage(void)
     fprintf(ErrFp, " -m     Start calendar with Monday rather than Sunday\n");
     fprintf(ErrFp, " -y     Synthesize tags for tagless reminders\n");
     fprintf(ErrFp, " -j[n]  Run in 'purge' mode.  [n = INCLUDE depth]\n");
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 #endif /* L_USAGE_OVERRIDE */
 /***************************************************************/
@@ -711,23 +716,23 @@ static void ChgUser(char const *user)
 
     if (!pwent) {
 	fprintf(ErrFp, ErrMsg[M_BAD_USER], user);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if (!myuid && setgid(pwent->pw_gid)) {
 	fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if (!myuid && setuid(pwent->pw_uid)) {
 	fprintf(ErrFp, ErrMsg[M_NO_CHG_UID], pwent->pw_uid);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     home = malloc(strlen(pwent->pw_dir) + 6);
     if (!home) {
 	fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     sprintf(home, "HOME=%s", pwent->pw_dir);
     putenv(home);
@@ -735,7 +740,7 @@ static void ChgUser(char const *user)
     shell = malloc(strlen(pwent->pw_shell) + 7);
     if (!shell) {
 	fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     sprintf(shell, "SHELL=%s", pwent->pw_shell);
     putenv(shell);
@@ -744,14 +749,14 @@ static void ChgUser(char const *user)
 	username = malloc(strlen(pwent->pw_name) + 6);
 	if (!username) {
 	    fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	sprintf(username, "USER=%s", pwent->pw_name);
 	putenv(username);
 	logname= malloc(strlen(pwent->pw_name) + 9);
 	if (!logname) {
 	    fprintf(ErrFp, "%s", ErrMsg[M_NOMEM_ENV]);
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	sprintf(logname, "LOGNAME=%s", pwent->pw_name);
 	putenv(logname);
@@ -836,6 +841,25 @@ static void InitializeVar(char const *str)
     r=PreserveVar(varname);
     if (r) fprintf(ErrFp, ErrMsg[M_I_OPTION], ErrMsg[r]);
     return;
+}
+
+static void
+AddTrustedUser(char const *username)
+{
+    struct passwd *pwent;
+    if (NumTrustedUsers >= MAX_TRUSTED_USERS) {
+        fprintf(stderr, "Too many trusted users (%d max)\n",
+                MAX_TRUSTED_USERS);
+        exit(EXIT_FAILURE);
+    }
+
+    pwent = getpwnam(username);
+    if (!pwent) {
+	fprintf(ErrFp, ErrMsg[M_BAD_USER], username);
+	exit(EXIT_FAILURE);
+    }
+    TrustedUsers[NumTrustedUsers] = pwent->pw_uid;
+    NumTrustedUsers++;
 }
 
 #if defined(__APPLE__) || defined(__CYGWIN__)

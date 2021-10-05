@@ -61,7 +61,7 @@ AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(unsigned long)
 
 dnl Checks for header files.
-AC_CHECK_HEADERS(sys/file.h glob.h wctype.h locale.h)
+AC_CHECK_HEADERS(sys/types.h sys/file.h glob.h wctype.h locale.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM

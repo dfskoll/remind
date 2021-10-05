@@ -1039,7 +1039,8 @@ int TopLevel(void)
 /*  root, we refuse to open files not owned by root.           */
 /*  We also reject world-writable files, no matter             */
 /*  who we're running as.                                      */
-/*  As a side effect, if we don't own the file, we disable RUN */
+/*  As a side effect, if we don't own the file, or it's not    */
+/*  owned by a trusted user, we disable RUN                    */
 /***************************************************************/
 static int CheckSafety(void)
 {
@@ -1077,11 +1078,22 @@ static int CheckSafety(void)
 	return 0;
     }
 
-/* If file is not owned by me, disable RUN command */
-    if (statbuf.st_uid != geteuid()) {
-	RunDisabled |= RUN_NOTOWNER;
-    } else {
+    /* If file is not owned by me or a trusted user, disable RUN command */
+
+    /* Assume unsafe */
+    RunDisabled |= RUN_NOTOWNER;
+    if (statbuf.st_uid == geteuid()) {
+        /* Owned by me... safe */
 	RunDisabled &= ~RUN_NOTOWNER;
+    } else {
+        int i;
+        for (i=0; i<NumTrustedUsers; i++) {
+            if (statbuf.st_uid == TrustedUsers[i]) {
+                /* Owned by a trusted user... safe */
+                RunDisabled &= ~RUN_NOTOWNER;
+                break;
+            }
+        }
     }
 
     return 1;

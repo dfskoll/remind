@@ -88,12 +88,8 @@ install:
         $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)
 
 	-mkdir -p $(DESTDIR)$(IMAGEDIR)
-	cp firstquarter.png fullmoon.png lastquarter.png newmoon.png rem-default.css $(DESTDIR)$(IMAGEDIR)
-	chmod 644 $(DESTDIR)$(IMAGEDIR)/firstquarter.png \
-        $(DESTDIR)$(IMAGEDIR)/fullmoon.png \
-        $(DESTDIR)$(IMAGEDIR)/lastquarter.png \
-        $(DESTDIR)$(IMAGEDIR)/newmoon.png \
-	$(DESTDIR)$(IMAGEDIR)/rem-default.css
+	cp rem-default.css $(DESTDIR)$(IMAGEDIR)
+	chmod 644 $(DESTDIR)$(IMAGEDIR)/rem-default.css
 
 
 

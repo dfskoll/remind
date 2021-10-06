@@ -1,0 +1,8 @@
+REM 1 SPECIAL COLOR 128 0 0 MSG Red
+REM 2 SPECIAL SHADE 192 192 255
+REM [moondate(0)] SPECIAL MOON 0 -1 -1 [moontime(0)]
+REM [moondate(1)] SPECIAL MOON 1 -1 -1 [moontime(1)]
+REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]
+REM [moondate(3)] SPECIAL MOON 3 -1 -1 [moontime(3)]
+REM Monday SPECIAL WEEK (W[weekno()])
+REM 15 MSG A normal reminder

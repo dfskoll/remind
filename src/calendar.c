@@ -268,7 +268,7 @@ void PrintJSONKeyPairInt(char const *name, int val)
 {
     printf("\"");
     PrintJSONString(name);
-    printf("\":%d, ", val);
+    printf("\":%d,", val);
 }
 
 void PrintJSONKeyPairString(char const *name, char const *val)
@@ -282,7 +282,7 @@ void PrintJSONKeyPairString(char const *name, char const *val)
     PrintJSONString(name);
     printf("\":\"");
     PrintJSONString(val);
-    printf("\", ");
+    printf("\",");
 }
 
 void PrintJSONKeyPairDate(char const *name, int jul)
@@ -295,7 +295,7 @@ void PrintJSONKeyPairDate(char const *name, int jul)
     FromJulian(jul, &y, &m, &d);
     printf("\"");
     PrintJSONString(name);
-    printf("\":\"%04d-%02d-%02d\", ", y, m+1, d);
+    printf("\":\"%04d-%02d-%02d\",", y, m+1, d);
 
 }
 
@@ -313,7 +313,7 @@ void PrintJSONKeyPairDateTime(char const *name, int dt)
     i = k % 60;
     printf("\"");
     PrintJSONString(name);
-    printf("\":\"%04d-%02d-%02dT%02d:%02d\", ", y, m+1, d, h, i);
+    printf("\":\"%04d-%02d-%02dT%02d:%02d\",", y, m+1, d, h, i);
 
 }
 
@@ -328,7 +328,7 @@ void PrintJSONKeyPairTime(char const *name, int t)
     i = t % 60;
     printf("\"");
     PrintJSONString(name);
-    printf("\":\"%02d:%02d\", ", h, i);
+    printf("\":\"%02d:%02d\",", h, i);
 
 }
 
@@ -1756,7 +1756,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 		printf("\"%s\"", EnglishDayName[i]);
 	    }
 	}
-	printf("], ");
+	printf("],");
     }
     if (e->trig.d != NO_DAY) {
 	PrintJSONKeyPairInt("d", e->trig.d);
@@ -1809,7 +1809,7 @@ static void WriteSimpleEntryProtocol2(CalEntry *e, int today)
 		printf("\"%s\"", EnglishDayName[i]);
 	    }
 	}
-	printf("], ");
+	printf("],");
     }
     PrintJSONKeyPairDate("until", e->trig.until);
     if (e->trig.once != NO_ONCE) {
@@ -1878,7 +1878,7 @@ static void WriteSimpleEntries(int col, int jul)
 		}
 	    }
 	    DidADay = 1;
-	    printf("{\"date\":\"%04d-%02d-%02d\", ", y, m+1, d);
+	    printf("{\"date\":\"%04d-%02d-%02d\",", y, m+1, d);
 	    WriteSimpleEntryProtocol2(e, jul);
 	    printf("}");
 	    if (PsCal != PSCAL_LEVEL3) {

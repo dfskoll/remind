@@ -16,15 +16,20 @@ my($days, $shades, $moons, $classes, $Month, $Year, $Numdays, $Firstwkday, $Mond
 my $TIDY_PROGNAME = $0;
 $TIDY_PROGNAME =~ s|^.*/||;
 
-# rem2html -- convert the output of "remind -p" to HTML
+# rem2html -- convert the output of "remind -pp" to HTML
 
 =head1 NAME
 
-rem2html - Convert the output of "remind -p" to HTML
+rem2html - Convert the output of "remind -pp" to HTML
 
 =head1 SYNOPSIS
 
-remind -p ... | rem2html [options]
+    remind -pp ... | rem2html [options]
+
+You can also use the old interchange format as below, but the -pp
+version is preferred.
+
+    remind -p ... | rem2html [options]
 
 =head1 OPTIONS
 
@@ -97,9 +102,9 @@ sub usage
 	    $exit_status = 1;
     }
     print STDERR <<"EOM";
-$TIDY_PROGNAME: Produce an HTML calendar from the output of "remind -p"
+$TIDY_PROGNAME: Produce an HTML calendar from the output of "remind -pp"
 
-Usage: remind -p ... | rem2html [options]
+Usage: remind -pp ... | rem2html [options]
 
 Options:
 

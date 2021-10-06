@@ -50,7 +50,7 @@ month name a link to I<url>.
 
 =item --imgbase I<url>
 
-When creating URLs for images and the stylesheet, use
+When creating URLs for the stylesheet, use
 I<url> as the base URL.
 
 =item --stylesheet I<url.css>
@@ -532,24 +532,21 @@ sub draw_day_cell
 	    my $alt;
 	    my $title;
 	    if ($phase == 0) {
-		    $img = 'newmoon.png';
+		    $img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC6SURBVDiNpdNNbsIwFATgL0HKolchHKBX6yFaBOEyoPYUabvOIVKJRaCL2JX5TRNGGvnJ8ozGz89cYoElPvET+BX2yivn/1Bggw5HHMKa1h2qcPZC/JEIhvh+brIZIY6sorhMYo9hh3KGFzzfa84NZNjDt9OG/ZcH1BlaPE1IAG0+URhxzNGESKPFaHJs9Q0Ziww7HnvGeXSrJhis0jiFfjwnj3I0WRv+TKtr4hQl3lDrZ6QN9Wt654hfWfGDmBpUwDkAAAAASUVORK5CYII=';
 		    $title = 'New Moon';
 		    $alt = 'new';
 	    } elsif ($phase == 1) {
-		    $img = 'firstquarter.png';
+		    $img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADfSURBVDiNndM9TsNAFATgzy5yjZSAE85JBygETgENUPF3iBCitHAFQkcIhZ/Ryn9gRlrZmp2Z3ef3TBOHOMULPrDBMrhpi/4HI5xjix2+4nmJRbx/Yh7ahvkpRPVV4QDXwT3UQy46zGkAZDgK/iytefvHgCrkJsqZUH6cLnNbABSxd5Jhhf1IbkMXv8Qux7hH1Ic1xvk/jBWy6gavumvtwx7ectwZXkKh7MA95XgObeOtpI2U4zl0kGbpxgiPvwQUcXLrKFchc82f6Ur0PK49azOnmOI4TBu84zm4SV38DeIVYkrYJyNbAAAAAElFTkSuQmCC';
 		    $title = 'First Quarter';
 		    $alt = '1st';
 	    } elsif ($phase == 2) {
-		    $img = 'fullmoon.png';
+		    $img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADlSURBVDiNrdNBUsJAEAXQlyw4hq4hwWPqTixET6ELkZ16CcAq7oFLqXExjaYgQVNlV/Viev7/6XT/4TjGuME7PiLXUatb8N8xwB12SFjiIXIZtU/MAntEfgvQE4YtHxhiHpjXQ5H7uLhEcaLLAleBvd0Xx9Ha/BdyU+Q5OBV5OKmj7a4YBWdSyNPe4aKHAHkzqcQZNj3JgnNexqE8heyIAulffuFF3kTfIVbBVeu/xoXGGsn2TLJJ/mqkafNiINszySYZdbS90GHlvcgsWktY4TFy7ecxTdvIzahxHQLbyFXUqkPwF2ASRNYgB/PXAAAAAElFTkSuQmCC';
 		    $alt = 'full';
 		    $title = 'Full Moon';
 	    } else {
-		    $img = 'lastquarter.png';
+		    $img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADmSURBVDiNndMxTsNAEIXhzy5yCyQ6FAgcE7oQheQWUAAl5BIkREoZrgB0GFNkHBl7bURGsryaee/3jHeXdpxjghU+8InXyI0S+n0MMEeBEi+4jfV3vAvMQtsyL0J0j2GtViaeRRMyj8IlsgY8BSijE2Kur/hy09wHKMJrEolhwtwHKDHOsI4OLnoAXfl1jiNsOkR9keE4P8D4q4scbzg5xIxtjie709f1E7siC+9+Gx/8fxvPKtEsklcJSBdgWhcN8ByFR5z+AWgd5QpyE+OUWOJO+zJNU+Z6jHAdgHe7K73CuD5zFT9nCmRDIssCaAAAAABJRU5ErkJggg==';
 		    $alt = 'last';
 		    $title = 'Last Quarter';
-	    }
-	    if ($Options{'imgbase'}) {
-		    $img = $Options{'imgbase'} . '/' . $img;
 	    }
 	    if ($Options{'nostyle'}) {
 		print("<div style=\"float: left\"><img border=\"0\" width=\"16\" height=\"16\" alt=\"$alt\" title=\"$title\" src=\"$img\">$msg</div>");

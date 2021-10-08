@@ -1,8 +1,27 @@
-REM 1 SPECIAL COLOR 128 0 0 MSG Red
-REM 2 SPECIAL SHADE 192 192 255
+# This file is designed for testing how back-ends
+# handle SPECIALs, including SPECIALS they don't understand
+# If you're writing a back-end, test it by feeding it the output
+# of:   remind -pp test-for-backends.rem
+
+# Color and shade
+REM 1 SPECIAL COLOR 128 0 0 Red
+REM 2 SPECIAL COLOUR 0 128 0 British Green
+REM 3 SPECIAL SHADE 192 192 255
+
+# Moon
 REM [moondate(0)] SPECIAL MOON 0 -1 -1 [moontime(0)]
 REM [moondate(1)] SPECIAL MOON 1 -1 -1 [moontime(1)]
 REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]
 REM [moondate(3)] SPECIAL MOON 3 -1 -1 [moontime(3)]
+
+# Week
 REM Monday SPECIAL WEEK (W[weekno()])
-REM 15 MSG A normal reminder
+
+# PostScript
+REM Wed PS Border Border 2 div moveto /Helvetica-Oblique findfont 6 scalefont setfont (oof!) show
+
+# A SPECIAL that should be ignored
+REM 15 SPECIAL RANDOM-STUFF ignore me and be happy
+
+# A normal reminder
+REM 16 MSG A normal reminder

@@ -32,7 +32,7 @@ datarootdir=@datarootdir@
 # Where do Remind and Rem2PS executables live?
 REMIND = $(bindir)/remind
 REM2PS = $(bindir)/rem2ps
-
+REM2HTML = $(bindir)/rem2html
 # If your Web server requires CGI programs to have a .cgi suffix, use
 # the next line.  Otherwise, comment it out
 CGISUFFIX=.cgi
@@ -46,13 +46,8 @@ SEDSCRIPT = -e 's@%CGIDIR%@$(CGIDIR)@g' \
 	    -e 's@%REMIND%@$(REMIND)@g' \
 	    -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
 	    -e 's@%REM2PS%@$(REM2PS)@g' \
+	    -e 's@%REM2HTML%@$(REM2HTML)@g' \
 	    -e 's@cal_dispatch@cal_dispatch$(CGISUFFIX)@g' \
-
-SEDSCRIPT2 = -e 's@%CGIDIR%@$(CGIDIR)@g' \
-	     -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
-	     -e 's@%REMIND%@$(REMIND)@g' \
-	     -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
-	     -e 's@%REM2PS%@$(REM2PS)@g'
 
 all:
 	@echo "Edit the Makefile; then type 'make install' to install"

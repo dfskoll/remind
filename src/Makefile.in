@@ -18,10 +18,10 @@ INSTALL_PROGRAM=@INSTALL_PROGRAM@
 INSTALL_DATA=@INSTALL_DATA@
 
 PROGS=		remind rem2ps
-SCRIPTS=	$(srcdir)/../scripts/tkremind $(srcdir)/../scripts/cm2rem.tcl
+SCRIPTS=	$(srcdir)/../scripts/tkremind
 
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
-		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/cm2rem.1 \
+		$(srcdir)/../man/tkremind.1
 		$(srcdir)/../man/rem.1
 
 .SUFFIXES:

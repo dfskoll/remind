@@ -14,7 +14,7 @@ all:
 install:
 	@for m in $(PERLMODS_NEEDED) ; \
          do \
-	    perl -M$$m -e 1; \
+	    perl -M$$m -e 1 > /dev/null 2>&1; \
 	    if test $$? != 0 ; then echo "Not installing rem2html; missing $$m"; exit 0; fi; \
 	done; \
 	echo "Installing rem2html in $(DESTDIR)$(bindir)"; \

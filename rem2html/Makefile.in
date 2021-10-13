@@ -1,0 +1,27 @@
+# Set by configure - don't touch.
+srcdir=@srcdir@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+mandir=@mandir@
+bindir=@bindir@
+datadir=@datadir@
+datarootdir=@datarootdir@
+PERL=@PERL@
+PERLMODS_NEEDED=JSON::Any Getopt::Long
+all:
+	true
+
+install:
+	@for m in $(PERLMODS_NEEDED) ; \
+         do \
+	    perl -M$$m -e 1; \
+	    if test $$? != 0 ; then echo "Not installing rem2html; missing $$m"; exit 0; fi; \
+	done; \
+	echo "Installing rem2html in $(DESTDIR)$(bindir)"; \
+	mkdir -p $(DESTDIR)$(bindir) && sed -e 's|^#!perl|#!$(PERL)|' < rem2html > $(DESTDIR)$(bindir)/rem2html && chmod 755 $(DESTDIR)$(bindir)/rem2html && exit 0; \
+	exit 1;
+
+
+
+
+

@@ -49,6 +49,7 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+AC_PATH_PROG([PERL], [perl])
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lm:
@@ -77,4 +78,5 @@ fi
 AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale)
 VERSION=03.03.08
 AC_SUBST(VERSION)
-AC_OUTPUT(src/Makefile www/Makefile src/version.h)
+AC_SUBST(PERL)
+AC_OUTPUT(src/Makefile www/Makefile src/version.h rem2html/Makefile)

@@ -4,7 +4,7 @@
 
 # The complete path to where the scripts actually live, as seen by
 # the UNIX operating system.
-SCRIPTDIR = /var/www/cgi-bin
+SCRIPTDIR = /usr/lib/cgi-bin
 
 # Where the scripts live as seen by the web browser.
 CGIDIR = /cgi-bin
@@ -17,7 +17,7 @@ HTMLDIR = /var/www/remind
 # Where you stick images and CSS files, as seen by UNIX
 IMAGEDIR = /var/www/remind/resources
 
-# Where images are, as seen by web browers
+# Where images and CSS fiels are, as seen by web browers
 IMAGEBASE = /remind/resources
 
 # Set by configure - don't touch.
@@ -47,7 +47,6 @@ SEDSCRIPT = -e 's@%CGIDIR%@$(CGIDIR)@g' \
 	    -e 's@%IMAGEBASE%@$(IMAGEBASE)@g' \
 	    -e 's@%REM2PS%@$(REM2PS)@g' \
 	    -e 's@cal_dispatch@cal_dispatch$(CGISUFFIX)@g' \
-	    -e 's@rem2html@rem2html$(CGISUFFIX)@g'
 
 SEDSCRIPT2 = -e 's@%CGIDIR%@$(CGIDIR)@g' \
 	     -e 's@%SCRIPTDIR%@$(SCRIPTDIR)@g' \
@@ -72,7 +71,6 @@ install:
 	cp blank.rem $(DESTDIR)$(SCRIPTDIR)/blank.rem
 	sed $(SEDSCRIPT)  < calendar.html-DIST > $(DESTDIR)$(HTMLDIR)/calendar.html
 	sed $(SEDSCRIPT)  < hebhtml  > $(DESTDIR)$(SCRIPTDIR)/hebhtml
-	sed $(SEDSCRIPT2) < rem2html > $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/sunrise.rem
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/moon.rem
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/hebdate.rem
@@ -80,12 +78,10 @@ install:
 	chmod 644 $(DESTDIR)$(SCRIPTDIR)/blank.rem
 	chmod 644 $(DESTDIR)$(HTMLDIR)/calendar.html
 	chmod 755 $(DESTDIR)$(SCRIPTDIR)/cal_dispatch$(CGISUFFIX)
-	chmod 755 $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)
 	chmod 755 $(DESTDIR)$(SCRIPTDIR)/calps $(DESTDIR)$(SCRIPTDIR)/hebdate \
 	$(DESTDIR)$(SCRIPTDIR)/hebps $(DESTDIR)$(SCRIPTDIR)/moon \
 	$(DESTDIR)$(SCRIPTDIR)/sunrise $(DESTDIR)$(SCRIPTDIR)/sunset \
         $(DESTDIR)$(SCRIPTDIR)/hebhtml \
-        $(DESTDIR)$(SCRIPTDIR)/rem2html$(CGISUFFIX)
 
 	-mkdir -p $(DESTDIR)$(IMAGEDIR)
 	cp rem-default.css $(DESTDIR)$(IMAGEDIR)

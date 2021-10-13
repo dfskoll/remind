@@ -19,9 +19,7 @@ server:
 1) Edit the Makefile in this directory.  See the comments in the Makefile
    for details.
 
-2) Edit the first line of "rem2html" to reflect the location of
-   Perl on your system. (Oh yeah, you need Perl for the
-   HTML Hebrew calendar...)
+2) Make sure "rem2html" is installed.
 
 3) Type "make install"
 

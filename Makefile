@@ -18,7 +18,8 @@ install:
 	@echo "*                   *"
 	@echo "*********************"
 	@echo ""
-	@cd src && $(MAKE) install
+	@$(MAKE) -C src install
+	@$(MAKE) -C rem2html install
 
 clean:
 	find . -name '*~' -exec rm {} \;

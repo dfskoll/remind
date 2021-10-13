@@ -61,7 +61,8 @@ I<url> as the base URL.
 =item --stylesheet I<url.css>
 
 Use I<url.css> as the stylesheet.  If this option is used,
-I<url.css> is I<not> interpreted relative to B<imgbase>.
+I<url.css> is interpreted relative to B<imgbase> I<unless> it start
+with a "/".
 
 =item --nostyle
 
@@ -145,19 +146,17 @@ sub parse_options
     }
     $Options{'title'} ||= 'HTML Calendar';
 
-    # Fix up imgbase
-    my $imgbase = '%IMAGEBASE%';
-    if ($imgbase ne '%' . 'IMAGEBASE' . '%') {
-	    $Options{'imgbase'} ||= $imgbase;
-    } else {
-	    $Options{'imgbase'} ||= '';
+    my $stylesheet = $Options{'stylesheet'};
+    if ($stylesheet) {
+            if ($stylesheet !~ m{^/}) {
+                    my $imgbase = $Options{'imgbase'};
+                    if ($imgbase) {
+                            $imgbase .= '/' unless $imgbase =~ m{/$};
+                            $stylesheet = $imgbase . $stylesheet;
+                    }
+            }
+            $Options{'stylesheet'} = $stylesheet;
     }
-
-    $Options{'imgbase'} =~ s|/+$||;
-    my $stylesheet = $Options{'imgbase'};
-    $stylesheet .= '/' if ($stylesheet ne '');
-    $stylesheet .= 'rem-default.css';
-    $Options{'stylesheet'} ||= $stylesheet;
 }
 
 sub start_output
@@ -167,9 +166,13 @@ sub start_output
     print("<html>\n<head>\n<title>" . $Options{'title'} . "</title>\n");
     if (!$Options{'nostyle'}) {
 	if ($Options{'stylesheet'}) {
-	    print('<link rel="stylesheet" type="text/css" href="' .
-		  $Options{'stylesheet'} . '">' . "\n");
-	}
+                print('<link rel="stylesheet" type="text/css" href="' .
+                      $Options{'stylesheet'} . '">' . "\n");
+	} else {
+                print("<style>\n");
+                print default_stylesheet();
+                print("</style>\n");
+        }
     }
     print("</head>\n<body>\n");
     if ($Options{'prologue'}) {
@@ -614,3 +617,81 @@ if ($found_something) {
     exit(1);
 }
 
+sub default_stylesheet
+{
+        return <<'EOF';
+table.rem-cal {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 12pt;
+}
+
+table.rem-sc-table {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 10pt;
+  width: 95%;
+  float: left;
+}
+
+caption.rem-cal-caption {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+th.rem-cal-hdr {
+  width: 14%;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+td.rem-empty, td.rem-cell, td.rem-small-calendar {
+  width: 14%;
+  height: 7em;
+  border-style: solid;
+  border-width: 1px;
+  vertical-align: top;
+}
+td.rem-today {
+  width: 14%;
+  height: 7em;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #EE3333;
+  vertical-align: top;
+}
+
+table.rem-cal {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+div.rem-daynumber {
+  float: right;
+  text-align: right;
+  vertical-align: top;
+  font-size: 14pt;
+}
+
+p.rem-entry {
+    clear: both;
+}
+
+div.rem-moon {
+  float: left;
+  text-align: left;
+  vertical-align: top;
+}
+
+th.rem-sc-hdr {
+  text-align: right;
+}
+
+td.rem-sc-empty-cell, td.rem-sc-cell {
+  text-align: right;
+  width: 14%;
+}
+
+caption.rem-sc-caption {
+  font-size: 12pt;
+}
+EOF
+}

@@ -12,7 +12,9 @@ all:
 	true
 
 install:
-	@for m in $(PERLMODS_NEEDED) ; \
+	@if test "$(PERL)" = "" ; then \
+	    echo "Not installing rem2html; Perl is required"; exit 0; fi; \
+	 for m in $(PERLMODS_NEEDED) ; \
          do \
 	    perl -M$$m -e 1 > /dev/null 2>&1; \
 	    if test $$? != 0 ; then echo "Not installing rem2html; missing $$m"; exit 0; fi; \

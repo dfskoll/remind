@@ -1,11 +1,12 @@
 REM2HTML
 --------
 
-rem2html is a Perl script that transforms the output of `remind -p
+rem2html is a Perl script that transforms the output of `remind -pp
 ...' to HTML.  Type `perl rem2html --help' for usage information.
 
 rem2html requires the Perl modules `JSON::Any' and `Getopt::Long'.  It
-will not be installed unless you have those modules as well as Perl.
+will not be installed unless you have those modules as well as Perl
+itself.
 
 --
 Dianne Skoll

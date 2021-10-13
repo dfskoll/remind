@@ -18,7 +18,7 @@ set lastyear iif(lastmon==12, thisyear-1, thisyear)
 set nextmon mon(nextmon)
 set lastmon mon(lastmon)
 BANNER %
-REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]" --imgbase %IMAGEBASE%
+REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]" --imgbase "%IMAGEBASE%" --stylesheet rem-default.css
 EOR
 
 else
@@ -33,7 +33,7 @@ set lastyear iif(lastmon==12, thisyear-1, thisyear)
 set nextmon mon(nextmon)
 set lastmon mon(lastmon)
 BANNER %
-REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]" --imgbase %IMAGEBASE%
+REM RUN $REMIND -iHTML=1 -p $DIR/hebdate.rem %m %y | rem2html --forwurl "cal_dispatch?hebhtml+[nextmon]+[nextyear]" --backurl "cal_dispatch?hebhtml+[lastmon]+[lastyear]" --imgbase "%IMAGEBASE%" --stylesheet rem-default.css
 EOR
 
 fi

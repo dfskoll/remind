@@ -21,8 +21,7 @@ PROGS=		remind rem2ps
 SCRIPTS=	$(srcdir)/../scripts/tkremind
 
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
-		$(srcdir)/../man/tkremind.1
-		$(srcdir)/../man/rem.1
+		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/rem.1
 
 .SUFFIXES:
 .SUFFIXES: .c .o

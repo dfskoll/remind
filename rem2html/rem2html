@@ -55,8 +55,15 @@ month name a link to I<url>.
 
 =item --imgbase I<url>
 
-When creating URLs for the stylesheet, use
-I<url> as the base URL.
+When creating URLs for the stylesheet or external images, use I<url>
+as the base URL.
+
+=item --pngs
+
+Normally, rem2html uses inline "data:" URLs for the moon phase images,
+yielding a standalone HTML file.  The C<--pngs> option makes it use
+external images named firstquarter.png, fullmoon.png, lastquarter.png
+and newmoon.png, which are expected to live in C<--imgbase>.
 
 =item --stylesheet I<url.css>
 

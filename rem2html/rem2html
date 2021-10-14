@@ -116,7 +116,8 @@ Options:
                       entry a link to <url>
 --forwurl url         Same as --backurl, but for the next month's small calendar
 --imgbase url         Base URL of images and default stylesheet file
---pngs                Use external .PNG images for moon phases rater than data:
+--pngs                Use external .PNG images for moon phases rater than
+                      inline data: URLs
 --stylesheet url.css  URL of CSS stylesheet.  If specified, imgbase is NOT
                       prepended to url.css
 --nostyle             Produce basic HTML that does not use a CSS stylesheet

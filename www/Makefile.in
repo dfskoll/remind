@@ -79,8 +79,8 @@ install:
         $(DESTDIR)$(SCRIPTDIR)/hebhtml \
 
 	-mkdir -p $(DESTDIR)$(IMAGEDIR)
-	cp rem-default.css $(DESTDIR)$(IMAGEDIR)
-	chmod 644 $(DESTDIR)$(IMAGEDIR)/rem-default.css
+	cp rem-default.css *.png $(DESTDIR)$(IMAGEDIR)
+	chmod 644 $(DESTDIR)$(IMAGEDIR)/rem-default.css $(DESTDIR)$(IMAGEDIR)/*.png
 
 
 

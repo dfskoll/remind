@@ -6,7 +6,7 @@ CHANGES TO REMIND
   "username" and allow RUN directives in them.  Idea courtesy of Ian! D. Allen
 
 - NEW FEATURE: Add "-u+username" variant to tell Remind to switch users to
-  "username" without disabling RUN directices.  Idea courtesy of Ian! D. Allen
+  "username" without disabling RUN directives.  Idea courtesy of Ian! D. Allen
 
 - CHANGE: rem2html: rem2html has been moved out of the www/ directory into
   its own rem2html/ directory.  If your system has the prerequisites

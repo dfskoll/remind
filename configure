@@ -4020,7 +4020,7 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
 fi
 
-for ac_func in setenv unsetenv glob mbstowcs setlocale
+for ac_func in setenv unsetenv glob mbstowcs setlocale initgroups
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"

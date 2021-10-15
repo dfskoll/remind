@@ -75,7 +75,7 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
 fi
 
-AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale)
+AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale initgroups)
 VERSION=03.03.09
 AC_SUBST(VERSION)
 AC_SUBST(PERL)

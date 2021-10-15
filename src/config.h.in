@@ -24,6 +24,8 @@
 
 #undef HAVE_SETENV
 
+#undef HAVE_INITGROUPS
+
 #undef HAVE_UNSETENV
 
 #undef HAVE_MBSTOWCS

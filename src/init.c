@@ -25,6 +25,10 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+#ifdef HAVE_INITGROUPS
+#include <grp.h>
+#endif
+
 #include "types.h"
 #include "protos.h"
 #include "expr.h"
@@ -723,12 +727,18 @@ static void ChgUser(char const *user)
 	exit(EXIT_FAILURE);
     }
 
-    if (!myuid && setgid(pwent->pw_gid)) {
+#ifdef HAVE_INITGROUPS
+    if (!myuid && (initgroups(pwent->pw_name, pwent->pw_gid) < 0)) {
+	fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
+	exit(EXIT_FAILURE);
+    };
+#endif
+    if (!myuid && (setgid(pwent->pw_gid) < 0)) {
 	fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
 	exit(EXIT_FAILURE);
     }
 
-    if (!myuid && setuid(pwent->pw_uid)) {
+    if (!myuid && (setuid(pwent->pw_uid) < 0)) {
 	fprintf(ErrFp, ErrMsg[M_NO_CHG_UID], pwent->pw_uid);
 	exit(EXIT_FAILURE);
     }

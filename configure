@@ -4032,7 +4032,7 @@ _ACEOF
 fi
 done
 
-VERSION=03.03.08
+VERSION=03.03.09
 
 
 ac_config_files="$ac_config_files src/Makefile www/Makefile src/version.h rem2html/Makefile"

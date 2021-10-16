@@ -710,7 +710,7 @@ void Usage(void)
 /***************************************************************/
 static void ChgUser(char const *user)
 {
-    uid_t myuid;
+    uid_t myeuid;
 
     struct passwd *pwent;
     static char *home;
@@ -718,7 +718,7 @@ static void ChgUser(char const *user)
     static char *username;
     static char *logname;
 
-    myuid = getuid();
+    myeuid = geteuid();
 
     pwent = getpwnam(user);
 
@@ -727,20 +727,23 @@ static void ChgUser(char const *user)
 	exit(EXIT_FAILURE);
     }
 
+    if (!myeuid) {
+        /* Started as root, so drop privileges */
 #ifdef HAVE_INITGROUPS
-    if (!myuid && (initgroups(pwent->pw_name, pwent->pw_gid) < 0)) {
-	fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
-	exit(EXIT_FAILURE);
-    };
+        if (initgroups(pwent->pw_name, pwent->pw_gid) < 0) {
+            fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
+            exit(EXIT_FAILURE);
+        };
 #endif
-    if (!myuid && (setgid(pwent->pw_gid) < 0)) {
-	fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
-	exit(EXIT_FAILURE);
-    }
+        if (setgid(pwent->pw_gid) < 0) {
+            fprintf(ErrFp, ErrMsg[M_NO_CHG_GID], pwent->pw_gid);
+            exit(EXIT_FAILURE);
+        }
 
-    if (!myuid && (setuid(pwent->pw_uid) < 0)) {
-	fprintf(ErrFp, ErrMsg[M_NO_CHG_UID], pwent->pw_uid);
-	exit(EXIT_FAILURE);
+        if (setuid(pwent->pw_uid) < 0) {
+            fprintf(ErrFp, ErrMsg[M_NO_CHG_UID], pwent->pw_uid);
+            exit(EXIT_FAILURE);
+        }
     }
 
     home = malloc(strlen(pwent->pw_dir) + 6);

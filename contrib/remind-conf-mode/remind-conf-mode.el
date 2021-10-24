@@ -1,11 +1,11 @@
 ;;; remind-conf-mode.el --- A mode to help configure remind.
 
-;; Copyright (C) 2008  Shelagh Manton <shelagh.manton@gmail.com>
+;; Copyright (C) 2008 - 2011  Shelagh Manton <shelagh.manton@gmail.com>
 
 ;; Author: Shelagh Manton <shelagh.manton@gmail.com> with help from
-;; Dianne Skoll
-;; Keywords: remind configure mode
-;; Version: .04
+;; David F. Skoll
+;; Keywords: remind configure convenience
+;; Version: 0.14
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 
 ;; If you want to use the auto-complete stuff, you will need to download and install the
 ;; auto-complete library from  http://www.cx4a.org/pub/auto-complete.el and put
-;; (require 'auto-complete) in your emacs with
+;; (require 'auto-complete) in your Emacs with
 ;; (add-hook 'remind-conf-mode-hook
 ;;  (lambda ()
 ;;    (make-local-variable 'ac-sources)
@@ -42,10 +42,13 @@
 ;;    (auto-complete t)))
 ;;   in your .emacs file
 
-;;   PS. you could add ac-source-abbrev ac-source-words-in-buffer to have abbrevs and
+;;   PS.  you could add ac-source-abbrev ac-source-words-in-buffer to have abbrevs and
 ;;   other words in buffer auto-complete too
 
 ;;; History:
+;;Thu, Nov 26, 2009 
+;; sorted out why the rem-save-file was not working. fixed. 
+;;
 ;; Thu, Feb 14, 2008
 ;; Based mode on wpld-mode tutorial and sample-mode on emacs wiki.
 ;; Ideas from mupad.el for font-lock styles.
@@ -54,14 +57,14 @@
 ;; Added a demo skeleton for people to copy for easy entry of coloured remind entries.
 ;; tried to hook in the auto-complete library so that all known functions and keywords can be easily entered.
 ;; EXPERIMENTAL, but seems to work well here (emacs cvs).
-;; Seems to work without case folding which is nice. wonder why it didn't yesterday?
+;; Seems to work without case folding which is nice.
 
 ;;; Code:
 
 
 (require 'font-lock); this goes in the define-derived-mode part.
 (when (featurep 'xemacs)
-  (require 'overlay)) ;I wonder if this will help with font-lock and xemacs?
+  (require 'overlay)) ;supposed to make it compatible with Xemacs.
 
 
 (defgroup remind-conf nil
@@ -80,12 +83,13 @@
     remind-conf-mode-map)
   "Keymap for `remind-conf-mode'.")
 
-(define-key remind-conf-mode-map "\C-cr" 'rem-skel)
-(define-key remind-conf-mode-map "\C-ct" 'rem-today)
-(define-key remind-conf-mode-map "\C-cd" 'rem-today-skel)
-(define-key remind-conf-mode-map "\C-cw" 'rem-week-away)
-(define-key remind-conf-mode-map "\C-cx" 'rem-tomorrow)
-(define-key remind-conf-mode-map "\C-ca" 'rem-days-away)
+(define-key remind-conf-mode-map "\C-c\C-r" 'rem-skel)
+(define-key remind-conf-mode-map "\C-c\C-t" 'rem-today)
+(define-key remind-conf-mode-map "\C-c\C-d" 'rem-today-skel)
+(define-key remind-conf-mode-map "\C-c\C-w" 'rem-week-away)
+(define-key remind-conf-mode-map "\C-c\C-W" 'rem-weeks-away)
+(define-key remind-conf-mode-map "\C-c\C-x" 'rem-tomorrow)
+(define-key remind-conf-mode-map "\C-c\C-a" 'rem-days-away)
 (define-key remind-conf-mode-map "\M-j" 'remind-indent-line)
 (define-key remind-conf-mode-map (kbd "RET") 'remind-indent-line)
 (define-key remind-conf-mode-map "\C-c\C-c" 'rem-save-file)
@@ -107,41 +111,51 @@
 
 (defconst remind-keywords
   (sort
-   (list "RUN" "REM" "ONCE" "SATISFY" "BEFORE" "UNSET" "OMIT"
+   (list "RUN" "REM" "ONCE" "SATISFY" "BEFORE" "UNSET" "OMIT" "FIRST" "SATISFY"
 	 "OMIT" "DATE" "SKIP" "ONCE" "AFTER" "WARN" "PRIORITY" "AT" "SCHED" "IF" "ELSE" "ENDIF"
 	 "WARN" "UNTIL" "THROUGH" "SCANFROM" "DURATION" "TAG" "MSG" "MSF" "CAL" "SPECIAL" "IFTRIG"
-	 "PS" "PSFILE" "BANNER" "INCLUDE" "PUSH-OMIT-CONTEXT" "DEBUG" "DUMPVARS"
-	 "CLEAR-OMIT-CONTEXT" "POP-OMIT-CONTEXT"  "SET" "ERRMSG" "FSET"
-	 "EXIT" "FLUSH" "PRESERVE" "MOON" "COLOR" "COLOUR")
+	 "PS" "PSFILE" "BANNER" "INCLUDE" "PUSH-OMIT-CONTEXT" "DEBUG" "DUMPVARS" "PUSH" "CLEAR" "POP"
+	 "CLEAR-OMIT-CONTEXT" "POP-OMIT-CONTEXT"  "SET" "ERRMSG" "FSET" "DUMP" "BAN" "INC" "SCAN"
+	 "EXIT" "FLUSH" "PRESERVE" "MOON" "COLOR" "UNSET")
    #'(lambda (a b) (> (length a) (length b)))))
+
 
 (defconst remind-type-keywords
   (sort
-   (list "INT" "STRING" "TIME" "DATE" "SHADE")
+   (list "INT" "STRING" "TIME" "DATE" "SHADE" "DATETIME")
      #'(lambda (a b) (> (length a) (length b)))))
 
 (defconst remind-builtin-variables
   (sort
-   (list "$CalcUTC" "$CalMode" "$DefaultPrio" "$EndSent" "$EndSentIg" "$NumTrig"
-	 "$FirstIndent" "$FoldYear" "$FormWidth" "$MinsFromUTC" "$LatDeg" "$LatMin" "$LatSec"
-	 "$Location" "$LongDeg" "$LongMin" "$LongSec" "$MaxSatIter" "$SubsIndent")
+   (list "$CalcUTC" "$CalMode" "$Daemon" "$DateSep" "$DefaultPrio" "$DontFork" "$DontTrigAts" "$DontQueue"
+	 "$EndSent" "$EndSentIg" "$NumTrig" "$FirstIndent" "$FoldYear" "$FormWidth" "$HushMode"
+	 "$IgnoreOnce" "$InfDelta" "$NextMode" "$NumQueued" "$NumTrig" "$PrefixLineNo" "$PSCal" "$RunOff"
+	 "$SimpleCal" "$SortByDate" "$SortByPrio" "$MinsFromUTC" "$LatDeg" "$LatMin" "$LatSec" "$EndSent"
+	 "$EndSentIg" "$Location" "$LongDeg" "$LongMin" "$LongSec" "$MaxSatIter" "$SubsIndent" "$T" "$Td"
+	 "$Tm" "$Tw" "$Ty" "$TimeSep" "$UntimedFirst" "$U" "$Ud" "$Um" "$Uw" "$Uy")
    #'(lambda (a b) (> (length a) (length b)))))
+
 
 (defconst remind-time-words
   (sort
-   (list "Jan" "January" "Feb" "Mar" "Apr" "Jun" "Jul" "Aug" "Sept" "Sep" "Oct" "Nov" "Dec" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" "Mon" "Monday" "Tue" "Tues" "Tuesday" "Wed" "Wednesday" "Thu" "Thursday" "Fri" "Friday" "Saturday" "Sat" "Sun" "Sunday")
+   (list "Jan" "January" "Feb" "Mar" "Apr" "Jun" "Jul" "Aug" "Sept" "Sep" "Oct" "Nov" "Dec"
+	 "February" "March" "April" "May" "June" "July" "August" "September" "October"
+	 "November" "December" "Mon" "Monday" "Tue" "Tues" "Tuesday" "Wed" "Wednesday"
+	 "Thu" "Thursday" "Thurs" "Fri" "Friday" "Saturday" "Sat" "Sun" "Sunday")
    #'(lambda (a b) (> (length a) (length b)))))
+
 
 (defconst remind-builtin-functions
   (sort
-   (list "abs" "access" "shell" "args" "asc" "baseyr" "char" "choose" "coerce" "date"
-	 "dawn" "today" "day" "daysinmon" "defined" "dosubst" "dusk" "easterdate" "easter"
-	 "filedir" "filename" "getenv" "hour" "iif" "trigger" "index" "isdst" "isleap"
-	 "isomitted" "hebdate" "hebday" "hebmon" "hebyear" "language" "ord" "thisyear"
-	 "sunrise" "sunset" "lower" "max" "min" "minute" "mon" "moondate" "moontime"
-	 "moonphase" "now" "ostype" "plural" "realnow" "realtoday" "sgn" "strlen" "psshade"
-	 "substr" "trigdate" "trigger" "trigtime" "trigvalid" "typeof" "upper" "psmoon"
-	 "value" "version" "wkday" "wkdaynum" "msgprefix" "msgsuffix" "year")
+   (list "abs" "access" "args" "asc" "baseyr" "char" "choose" "coerce" "current" "date" "datetime" "datepart" 
+	 "dawn" "day" "daysinmon" "defined" "dosubst" "dusk" "easter" "easterdate" "evaltrig" "filedate" 
+	 "filedatetime" "filedir" "filename" "getenv" "hebdate" "hebday" "hebmon" "hebyear" "hour" "iif" "index" "isdst" 
+	 "isleap" "isomitted" "language" "lower" "max" "min" "minute" "minsfromutc" "mon" "monnum" "moondate" "moondatetime"
+	 "moonphase" "moontime" "msgprefix" "msgsuffix" "nonomitted" "now" "ord" "ostype" "plural" 
+	 "psmoon" "psshade" "realcurrent" "realnow" "realtoday" "sgn" "shell" "slide" "strlen" "substr" "sunrise" "sunset" "time" "timepart" 
+	 "thisyear" "today" "trigdate" "trigdatetime" "trigger" "trigger" "trigtime" "trigvalid" "typeof" "tzconvert" "upper" "value" 
+	 "version" "weekno" "wkday" "wkdaynum" "year"
+	 )
    #'(lambda (a b) (> (length a) (length b)))))
 
 ;;; faces
@@ -225,10 +239,7 @@
   :group 'remind-conf)
 
 (defcustom rem-post-save-function ""
-  "Name of shell function that can be run when you save and close a remind file.
-
-If you put a & after the name of the function, it will run asyncronously.  This might
-be useful if the process takes a long time."
+  "Name of shell function that can be run when you save and close a remind file."
 :type 'string
 :group 'remind-conf
 )
@@ -258,18 +269,22 @@ be useful if the process takes a long time."
 	   (cons (regexp-opt remind-type-keywords 'words) remind-conf-type-face)
 	   '("\[[a-zA-Z]\\{3,6\\}\]" . remind-conf-color-face)
 	   '("\\s-+\\([12][0-9]\\|3[01]\\|0?[0-9]\\)\\s-+" . remind-conf-substitutes-face);better date regexp
+	   '("\\s-+\\([12][09][0-9][0-9][-/]\\(0[1-9]\\|1[0-2]\\)[-/]\\([12][0-9]\\|0[1-9]\\|3[01]\\)\\)\\s-+" . remind-time-face) ;; pseudo ISO 8601 date format.
+	   '("\\s-+\\([12][09][0-9][0-9][-/]\\(0[1-9]\\|1[0-2]\\)[-/]\\([12][0-9]\\|0[1-9]\\|3[01]\\)\\)@\\(2[0-4]\\|[01]?[0-9][.:][0-5][0-9]\\)\\s-+" . remind-time-face) ;;extended pseudo ISO time format
 	   '("\\s-+\\(\\(?:20\\|19\\)[0-9][0-9]\\)\\s-+" . remind-conf-substitutes-face);years
 	   '("\\s-+\\(2[0-4]\\|[01]?[0-9][.:][0-5][0-9]\\)\\s-+" . remind-conf-substitutes-face);24hour clock, more precise
 	   '("\\s-+\\([+-][+-]?[1-9][0-9]*\\)\\s-+" 1 remind-conf-delta-face prepend)
 	   (cons (regexp-opt remind-builtin-variables 'words) remind-conf-variable-face)))
   "The ultimate in highlighting experiences for `remind-conf-mode'.")
 
+;;YYYY-MM-DD@hh:mm, YYYY-MM-DD@hh.mm, YYYY/MM/DD@hh:mm and YYYY/MM/DD@hh.mm
+
 (defcustom remind-conf-font-lock-keywords 'remind-conf-font-lock-keywords-3
   "Font-lock highlighting level for `remind-conf-mode'."
   :group 'remind-conf
   :type '(choice (const :tag "Barest minimum of highlighting." remind-conf-font-lock-keywords-1)
 		 (const :tag "Medium highlighting." remind-conf-font-lock-keywords-2)
-		 (const :tag "Highlighting deluxe." remind-conf-font-lock-keywords-3)))
+		 (const :tag "Fruit salad." remind-conf-font-lock-keywords-3)))
 
 ;;; Indentation (I'm sure this could be made more simple. But at least it works.)
 
@@ -289,8 +304,8 @@ be useful if the process takes a long time."
      	(if (looking-at "^[ \t]*\\<\\(ENDIF\\|POP\\(?:-OMIT-CONTEXT\\)?\\)\\>")
 	   (progn
 	     (save-excursion
-	     (forward-line -1) 
-	     (setq cur-indent (- (current-indentation) remind-indent-level))) ;note that not-indented is still t
+	       (forward-line -1) 
+	       (setq cur-indent (- (current-indentation) remind-indent-level))) ;note that not-indented is still t
 	     (if (< cur-indent 0) (setq cur-indent 0)))
 	  (save-excursion
 	    (while not-indented
@@ -313,14 +328,17 @@ be useful if the process takes a long time."
 ;;; Convenience functions
 
 (define-skeleton rem-skel
-  "Skeleton to insert a rem line in a remind configuration file."
-  nil
-  "REM "(skeleton-read "Date? " )
-  ("Optional: How many days ahead? " " +" str )
+  "Skeleton to insert a rem line in a remind configuration file.
+
+If you don't want an optional feature just RET and move on."
+nil
+    '(setq v1 (skeleton-read "How many days in future?: "))
+  "REM " (rem-days-away (string-to-number v1))
+  ("Optional: How many days warning? " " +" str )
   resume:
   ("Optional: At what time? Format eg 13:00. " " AT " str)
   resume:
-  ("Optional: How many minutes ahead? " " +" str )
+  ("Optional: How many minutes warning? " " +" str )
   resume:
   ("Optional: At what priority? eg 0-9999" " PRIORITY " str )
   resume:
@@ -333,7 +351,7 @@ be useful if the process takes a long time."
   "REM " (format-time-string "%d %b %Y")
   ("Optional: At what time? Format eg 13:20. " " AT " str)
   resume:
-  ("Optional: How many minutes ahead? " " +" str )
+  ("Optional: How many minutes warning? " " +" str )
   resume:
   ("Optional: At what priority? eg 0-9999" " PRIORITY " str )
   resume:
@@ -351,9 +369,7 @@ be useful if the process takes a long time."
   (insert (format-time-string "%e %b %Y" (time-add (current-time) (days-to-time 1)))))
 
 (defun rem-days-away (arg)
-  "Insert a day N number of days in the future.
-
-Takes a prefix argument, but defaults to 4."
+  "Insert a day ARG number of days in the future."
   (interactive "nHow many Days?: ")
   (insert (format-time-string "%e %b %Y" (time-add (current-time) (days-to-time arg)))))
 
@@ -362,11 +378,10 @@ Takes a prefix argument, but defaults to 4."
   (interactive)
   (insert (format-time-string "%e %b %Y" (time-add (current-time) (days-to-time 7)))))
 
-(setq skeleton-end-hook nil) ; so the skeletons will not automatically go to a new line.
-
-;;; private function
-;; could make it useful for others. Put somethin like the following in your .emacs
-;(setq rem-post-save-function "~/bin/dailypic &")
+(defun rem-weeks-away (arg)
+  "Insert a day ARG many weeks in future."
+(interactive "nHow many weeks?: ")
+(insert (format-time-string "%e %b %Y" (time-add (current-time) (days-to-time (* 7 arg))))))
 
 (defun rem-save-file ()
   "Save the file and start the shell function in one go.
@@ -374,7 +389,7 @@ Takes a prefix argument, but defaults to 4."
 This function will close the window after running. It needs the
 variable `rem-post-save-function' to be set. It will be most
 useful to people who have some sort of function they run to use
-remind data ie procucing calendars."
+remind data ie producing calendars."
   (interactive)
   (if (boundp 'rem-post-save-function)
       (progn (save-buffer)
@@ -383,7 +398,9 @@ remind data ie procucing calendars."
     (error "`rem-post-save-function' variable is not set")))
 
 (defun rem-setup-colors ()
-  "Insert set of variables for coloured output in remind messages."
+  "Insert set of variables for coloured output in remind messages.
+
+You would only need to do this once in your main reminders file."
   (interactive)
   (find-file (expand-file-name "~/.reminders"))
   (goto-char 0) ;we do want it somewhere near the top of the file.
@@ -410,11 +427,37 @@ SET BrWht Esc + \"[37;1m\" \n \n")))
 
     ;; So now you can do things like:
 
-(define-skeleton birthcol
+(define-skeleton rem-birthday
   "Make birthdays magenta.
 Acts on the region or places point where it needs to be."
   nil
   "[Mag]" _ " [Nrm]")
+
+(define-skeleton rem-urgent
+  "Colour urgent notices red.
+Acts on the region or places point where it needs to be."
+  nil
+  "[Red]" _ " [Nrm]")
+
+;; menu anyone?
+
+(easy-menu-define remind-menu
+   remind-conf-mode-map
+   "Menu used in remind-conf-mode."
+   (append '("Remind")
+	   '([ "Insert a reminder" rem-skel t])
+	   '([ "Insert todays date" rem-today t])
+	   '([ "Insert tomorrows date" rem-tomorrow t])
+	   '([ "How many days away?" rem-days-away t])
+	   '([ "A week away" rem-week-away t])
+	   '([ "How many weeks away?" rem-weeks-away t])
+	   '([ "Birthday color" rem-birthday t])
+	   '([ "Urgent color" rem-urgent t])
+	   '([ "Save the file and run a script" rem-save-file t])
+	   '("-----")
+	   '([ "Setting up the colors - once-off" rem-setup-colors t])
+	  ))
+
 
 ;; finally the derived mode.
 
@@ -429,6 +472,7 @@ Acts on the region or places point where it needs to be."
   (set (make-local-variable 'comment-start) ";")
   (set (make-local-variable 'comment-start) "#")
   (set (make-local-variable 'comment-end) "\n")
+  (set (make-local-variable 'skeleton-end-hook) nil) ; so the skeletons will not automatically go to a new line.
   (set (make-local-variable 'fill-column) '100);cause I was having problems with autofill.
   (set (make-local-variable 'indent-line-function) 'remind-indent-line)
   (use-local-map remind-conf-mode-map)
@@ -438,7 +482,5 @@ Acts on the region or places point where it needs to be."
     (provide 'remind-conf-mode)
 ;;; remind-conf-mode.el ends here
 
-;;; Indentation code
-;;; work out how to make the syntax highlighting work only before the (MSG|MSF)
-;;; keywords and not after. 
-;;; for my own use. keymap to save file and do dailypic C-c C-c in time honoured tradition?
+;;;  work out how to make the syntax highlighting work only before the
+;;; (MSG|MSF) keywords and not after.

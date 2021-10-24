@@ -3,7 +3,7 @@
 ;; Copyright (C) 2008 - 2011  Shelagh Manton <shelagh.manton@gmail.com>
 
 ;; Author: Shelagh Manton <shelagh.manton@gmail.com> with help from
-;; David F. Skoll
+;; Dianne Skoll
 ;; Keywords: remind configure convenience
 ;; Version: 0.14
 

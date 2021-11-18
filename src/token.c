@@ -37,7 +37,7 @@ while (isdigit(*(string))) { \
    Keep this array sorted, or software will not work. */
 Token TokArray[] = {
     /* NAME          MINLEN      TYPE           VALUE */
-
+    { "addomit",        7,      T_AddOmit,      0 },
     { "after",		3,	T_Skip,	AFTER_SKIP },
     { "april",		3,	T_Month,	3 },
     { "at",		2,	T_At,		0 },

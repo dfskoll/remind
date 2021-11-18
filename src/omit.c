@@ -370,18 +370,28 @@ int DoOmit(ParsePtr p)
 	    NumPartialOmits++;
 	}
     } else {
-	if (NumFullOmits == MAX_FULL_OMITS) return E_2MANY_FULL;
 
 	if (d > DaysInMonth(m, y)) return E_BAD_DATE;
 	syndrome = Julian(y, m, d);
-	if (!BexistsIntArray(FullOmitArray, NumFullOmits, syndrome)) {
-	    InsertIntoSortedArray(FullOmitArray, NumFullOmits, syndrome);
-	    NumFullOmits++;
-	}
+        r = AddGlobalOmit(syndrome);
+        if (r) {
+            return r;
+        }
     }
     if (tok.type == T_Tag || tok.type == T_Duration || tok.type == T_RemType || tok.type == T_Priority) return E_PARSE_AS_REM;
     return OK;
 
+}
+
+int
+AddGlobalOmit(int jul)
+{
+    if (NumFullOmits == MAX_FULL_OMITS) return E_2MANY_FULL;
+    if (!BexistsIntArray(FullOmitArray, NumFullOmits, jul)) {
+        InsertIntoSortedArray(FullOmitArray, NumFullOmits, jul);
+        NumFullOmits++;
+    }
+    return OK;
 }
 
 static int

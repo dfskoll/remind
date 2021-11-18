@@ -74,6 +74,7 @@ typedef struct {
     int eventstart;              /* Original event start (datetime) */
     int eventduration;           /* Original event duration (minutes) */
     int maybe_uncomputable;      /* Suppress "can't compute trigger" warnings */
+    int addomit;                 /* Add trigger date to global OMITs */
     char sched[VAR_NAME_LEN+1];  /* Scheduling function */
     char warn[VAR_NAME_LEN+1];   /* Warning function    */
     char omitfunc[VAR_NAME_LEN+1]; /* OMITFUNC function */
@@ -153,6 +154,7 @@ enum TokTypes
   T_Rem, T_Push, T_Pop, T_Preserve, T_Include, T_IncludeCmd, T_If, T_Else, T_EndIf,
   T_IfTrig, T_ErrMsg,
   T_Set, T_UnSet, T_Fset, T_Omit, T_Banner, T_Exit,
+  T_AddOmit,
   T_WkDay,
   T_Month, T_Time, T_Date, T_DateTime,
   T_Skip, T_At, T_RemType, T_Until, T_Year, T_Day, T_Rep, T_Delta, T_Back,

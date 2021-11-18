@@ -226,6 +226,13 @@ REM 1991/02/28@14:45 MSG Feb 28
 REM Wed UNTIL 1991-01-01 MSG Expired
 REM Wed SCANFROM 1991-02-26 MSG SCANFROM
 
+CLEAR-OMIT-CONTEXT
+# Test ADDOMIT
+
+REM Mon 15 Feb ADDOMIT MSG Family Day
+REM Feb 18 AFTER MSG Should trigger on Feb 19
+OMIT DUMP
+
 set a000 abs(1)
 set a001 abs(-1)
 set a002 asc("foo")

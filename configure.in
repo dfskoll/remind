@@ -76,7 +76,7 @@ if test "$GCC" = yes; then
 fi
 
 AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale initgroups)
-VERSION=03.03.09
+VERSION=03.03.10
 AC_SUBST(VERSION)
 AC_SUBST(PERL)
 AC_OUTPUT(src/Makefile www/Makefile src/version.h rem2html/Makefile)

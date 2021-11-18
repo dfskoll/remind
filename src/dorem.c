@@ -141,6 +141,14 @@ int DoRem(ParsePtr p)
 	}
     }
 
+    /* Add to global OMITs if so indicated */
+    if (trig.addomit) {
+        r = AddGlobalOmit(jul);
+        if (r) {
+	    FreeTrig(&trig);
+            return r;
+        }
+    }
     if (PurgeMode) {
 	if (trig.expired || jul < JulianToday) {
 	    if (p->expr_happened) {
@@ -211,6 +219,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     trig->localomit = NO_WD;
     trig->skip = NO_SKIP;
     trig->once = NO_ONCE;
+    trig->addomit = 0;
     trig->typ = NO_TYPE;
     trig->scanfrom = NO_DATE;
     trig->from = NO_DATE;
@@ -280,6 +289,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    break;
 
         case T_MaybeUncomputable:
+	    DBufFree(&buf);
             trig->maybe_uncomputable = 1;
             break;
 
@@ -373,6 +383,11 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    if (trig->once != NO_ONCE) return E_ONCE_TWICE;
 	    trig->once = ONCE_ONCE;
 	    break;
+
+        case T_AddOmit:
+	    DBufFree(&buf);
+            trig->addomit = 1;
+            break;
 
 	case T_Omit:
 	    DBufFree(&buf);

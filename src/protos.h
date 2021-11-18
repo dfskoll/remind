@@ -163,3 +163,4 @@ void PrintJSONKeyPairDateTime(char const *name, int dt);
 void PrintJSONKeyPairTime(char const *name, int t);
 void System(char const *cmd);
 int ShellEscape(char const *in, DynamicBuffer *out);
+int AddGlobalOmit(int jul);

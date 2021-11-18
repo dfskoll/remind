@@ -998,6 +998,21 @@ If the \fBADDOMIT\fR keyword appears in a \fBREM\fR command, then
 the trigger date (if one could be calculated) is automatically
 added to the list of global OMITs.
 .PP
+The command:
+.PP
+.nf
+        REM ... whatever ... ADDOMIT MSG Foo
+.fi
+.PP
+is identical in behaviour to the sequence:
+.PP
+.nf
+        REM ... whatever ... SATISFY 1
+        IF trigvalid()
+            OMIT [trigdate()] MSG Foo
+        ENDIF
+.fi
+.PP
 .B TIMED REMINDERS
 .PP
 Timed reminders are those that have an \fBAT\fR keyword followed

@@ -1,5 +1,26 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 10 - 2021-11-??
+
+- NEW FEATURE: The new ADDOMIT keyword can shorten reminder files.
+  The command:
+
+      REM ...whatever... ADDOMIT MSG Foo
+
+  behaves identically to:
+
+      REM ...whatever... SATISFY 1
+      IF trigvalid()
+          OMIT [trigdate()] MSG Foo
+      ENDIF
+
+- UPDATE: Update contrib/remind-conf-mode to latest release
+
+- BUG FIX: Various documentation fixes
+
+- BUG FIX: When switching users with the "-u" option, call initgroups()
+  to properly set group membership list.
+
 * VERSION 3.3 Patch 9 - 2021-10-14
 
 - NEW FEATURE: Add "-+username" option to tell Remind to trust files owned by
@@ -64,7 +85,7 @@ CHANGES TO REMIND
 - test/test.rem: Change local to en_US.utf-8 only if current locale
   is not a UTF-8 locale.
 
-- MINOR CHANGE: Remind's arithemtic operators (+, -, *, /) give errors
+- MINOR CHANGE: Remind's arithmetic operators (+, -, *, /) give errors
   on overflow rather than silently giving the wrong answer.
 
 - MINOR CHANGE: Add $IntMin and $IntMax system variables.
@@ -123,7 +144,7 @@ CHANGES TO REMIND
   When you print from TkRemind, we also invoke Remind with "-itkprint=1"
   so you can detect that PostScript is being generated.
 
-- CHANGE: The maxmimum length of a variable name has been increased from
+- CHANGE: The maximum length of a variable name has been increased from
   16 characters to 64 characters.  Modern computers have plenty of memory.
 
 - BUG FIXES: Minor documentation updates, typo fixes, clarifications, etc.
@@ -301,7 +322,7 @@ CHANGES TO REMIND
 
 - BUG FIX: Make parser reject an AT followed by more than one time.
 
-- BUG FIX: Make parser reject epeated delta or *repeat values.
+- BUG FIX: Make parser reject repeated delta or *repeat values.
 
 * Version 3.1 Patch 14 - 2015-04-24
 
@@ -492,7 +513,7 @@ CHANGES TO REMIND
 
 * Version 3.1 Patch 4 - 2008-02-03
 
-- ENHANCMENT: tkremind respects the "-b1" option and operates in 24-hour
+- ENHANCEMENT: tkremind respects the "-b1" option and operates in 24-hour
   clock mode if the option is supplied.
 
 - ENHANCEMENT: tkremind has been tweaked to look better with Tcl/Tk 8.5.
@@ -631,7 +652,7 @@ CHANGES TO REMIND
 
 - The SPECIAL COLOR reminder type has been hacked to behave more like
   a MSG type.  It sorts properly and is emitted as a normal reminder
-  in non-calendar mode.  Simlarly, SPECIAL HTML sorts with -g as well.
+  in non-calendar mode.  Similarly, SPECIAL HTML sorts with -g as well.
 
 + MINOR ENHANCEMENTS
 
@@ -1567,7 +1588,7 @@ CHANGES TO REMIND
 
 - Improved debugging of reminder scripts
 
-- Took out the "purge" option - it is in general too dificult to tell when
+- Took out the "purge" option - it is in general too difficult to tell when
   a reminder has expired for good, so now it's up to you to do this
   by hand.
 

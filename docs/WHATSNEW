@@ -16,7 +16,7 @@ CHANGES TO REMIND
 
   For example, Labour Day can be displayed and omitted as follows:
 
-      REM Mon 1 Sep SCANFROM [back(7)] ADDOMIT MSG Labour Day
+      REM Mon 1 Sep SCANFROM -7 ADDOMIT MSG Labour Day
 
 - UPDATE: Update contrib/remind-conf-mode to latest release
 

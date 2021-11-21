@@ -1373,11 +1373,6 @@ static int DoCalRem(ParsePtr p, int col)
 	}
     }
 
-/* Don't include timed reminders in calendar if -a option supplied. */
-    if (DontIssueAts && tim.ttime != NO_TIME) {
-	FreeTrig(&trig);
-	return OK;
-    }
     if (trig.typ == NO_TYPE) {
 	FreeTrig(&trig);
 	return E_EOLN;
@@ -1447,6 +1442,12 @@ static int DoCalRem(ParsePtr p, int col)
 	    FreeTrig(&trig);
             return r;
         }
+    }
+
+    /* Don't include timed reminders in calendar if -a option supplied. */
+    if (DontIssueAts && tim.ttime != NO_TIME) {
+	FreeTrig(&trig);
+	return OK;
     }
 
     /* Save nonconst_expr flag */

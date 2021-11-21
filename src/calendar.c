@@ -1440,6 +1440,15 @@ static int DoCalRem(ParsePtr p, int col)
 	}
     }
 
+    /* Add to global OMITs if so indicated */
+    if (trig.addomit) {
+        r = AddGlobalOmit(jul);
+        if (r) {
+	    FreeTrig(&trig);
+            return r;
+        }
+    }
+
     /* Save nonconst_expr flag */
     nonconst_expr = p->nonconst_expr;
     /* Convert PS and PSF to PASSTHRU */

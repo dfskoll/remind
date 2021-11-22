@@ -654,8 +654,8 @@ proc CreateCalWindow { dayNames } {
     balloon_add_help .b.quit "Quit TkRemind"
     button .b.options -text {Options...} -command EditOptions -border 1
     balloon_add_help .b.options "Set TkRemind options"
-    label .b.status -text "" -width 25 -relief sunken -border 1
-    label .b.nqueued -text "" -width 20 -relief sunken -border 1
+    label .b.status -text "" -width 25 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    label .b.nqueued -text "" -width 20 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
     pack .b.status -side left -fill x -expand 1
     pack .b.nqueued -side left -fill x
@@ -905,6 +905,8 @@ proc SaveOptions { w } {
     for {set i 0} {$i < 7} {incr i} {
         .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
     }
+    .b.status configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.nqueued configure -foreground $Option(LabelColor) -background $Option(WinBackground)
 }
 
 #***********************************************************************

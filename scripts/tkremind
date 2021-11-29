@@ -617,8 +617,8 @@ proc CreateCalWindow { dayNames } {
     label .b.status -text "" -width 25 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     label .b.nqueued -text "" -width 20 -relief sunken -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
-    pack .b.status -side left -fill x -expand 1
-    pack .b.nqueued -side left -fill x
+    pack .b.status -side left -fill both -expand 1
+    pack .b.nqueued -side left -fill both
     pack .b -side bottom -fill x -expand 0
     pack .cal -side top -fill both -expand 1
     wm title . "TkRemind"

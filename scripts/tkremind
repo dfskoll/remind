@@ -598,11 +598,11 @@ proc CreateCalWindow { dayNames } {
     CreateCalFrame .cal $dayNames
 
     frame .b -background $Option(WinBackground);
-    button .b.prev -text "\u21e6" -command {MoveMonth -1} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.prev -text "\u2b9c" -command {MoveMonth -1} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     balloon_add_help .b.prev "Go to previous month"
     button .b.this -text {Today} -command {ThisMonth} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     balloon_add_help .b.this "Go to this month"
-    button .b.next -text "\u21e8" -command {MoveMonth 1} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.next -text "\u2b9e" -command {MoveMonth 1} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     balloon_add_help .b.next "Go to next month"
     button .b.goto -text {Go To Date...} -command {GotoDialog} -border 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
     balloon_add_help .b.goto "Go to a specific date"

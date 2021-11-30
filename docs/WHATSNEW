@@ -1,6 +1,9 @@
 CHANGES TO REMIND
 
-* VERSION 3.3 Patch 10 - 2021-11-??
+* VERSION 3.3 Patch 10 - 2021-11-30
+
+- IMPROVEMENT: TkRemind: Apply window and text colors to all GUI elements
+  including buttons and status labels.
 
 - NEW FEATURE: The new ADDOMIT keyword can shorten reminder files.
   The command:
@@ -19,6 +22,10 @@ CHANGES TO REMIND
       REM Mon 1 Sep SCANFROM -7 ADDOMIT MSG Labour Day
 
 - UPDATE: Update contrib/remind-conf-mode to latest release
+
+- CHANGE: The parser does not auto-convert numbers 90-99 to 1990-1999.  This
+  was messing up things like "DURATION 90".  It also means you can no longer
+  abbreviate the years 1990-1999 as 90-99.
 
 - BUG FIX: Various documentation fixes
 

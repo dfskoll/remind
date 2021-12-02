@@ -2505,11 +2505,24 @@ proc ShowQueue { file } {
 	if {[catch {set obj [::json::json2dict $line]}]} {
 	    continue;
 	}
+        set obj [lsort -command sort_q $obj]
 	foreach q $obj {
 	    $w.t insert end "$q\n"
 	}
     }
     $w.t configure -state disabled
+}
+
+proc sort_q { a b } {
+    set a_ttime [dict get $a nextttime]
+    set b_ttime [dict get $b nextttime]
+    if {$a_ttime < $b_ttime} {
+        return -1
+    }
+    if {$a_ttime > $b_ttime} {
+        return 1
+    }
+    return 0
 }
 
 #---------------------------------------------------------------------------

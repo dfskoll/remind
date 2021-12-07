@@ -3738,6 +3738,14 @@ We could also have written:
 but this would result in more iterations, since "Fridays" occur more
 often than "13ths of the month."
 .PP
+Here is another example: Suppose you want to be reminded of something
+on the 15th of January, April, July, and October.  You could make
+four separate reminders, or you could use:
+.PP
+.nf
+        REM 15 SATISFY [any($Tm, 1, 4, 7, 10)] MSG 15th Reminder!
+.fi
+.PP
 This technique of using one \fBREM\fR command to calculate a trigger date
 to be used by another command is quite powerful.  For example, suppose
 you wanted to OMIT Labour day, which is the first Monday in September.  You

@@ -2362,6 +2362,16 @@ $TimeSep and $DateTimeSep when formatting its output.  For example:
 Returns 1 if the first argument \fIarg1\fR is equal to any of the
 subsequent arguments \fIarg2\fR through \fIargN\fR; returns 0 otherwise.
 Also returns 0 if called with only one argument.
+.RS
+.PP
+As an example, the following two expressions are equivalent:
+.PP
+.nf
+        (a == b) || (a == c) || (a == d) || (a == e)
+
+        any(a, b, c, d, e)
+.fi
+.RE
 .TP
 .B args(s_fname)
 Returns the number of arguments expected by the user-defined function

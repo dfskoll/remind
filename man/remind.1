@@ -2358,6 +2358,11 @@ $TimeSep and $DateTimeSep when formatting its output.  For example:
 .PP
 .RE
 .TP
+.B any(arg1 [,arg2, ..., argN]);
+Returns 1 if the first argument \fIarg1\fR is equal to any of the
+subsequent arguments \fIarg2\fR through \fIargN\fR; returns 0 otherwise.
+Also returns 0 if called with only one argument.
+.TP
 .B args(s_fname)
 Returns the number of arguments expected by the user-defined function
 \fIfname\fR, or \-1 if no such user-defined function exists.  Note that

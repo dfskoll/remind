@@ -58,6 +58,7 @@ static int FADusk          (func_info *);
 static int FAbs            (func_info *);
 static int FAccess         (func_info *);
 static int FAmpm           (func_info *);
+static int FAny            (func_info *);
 static int FArgs           (func_info *);
 static int FAsc            (func_info *);
 static int FBaseyr         (func_info *);
@@ -209,6 +210,7 @@ BuiltinFunc Func[] = {
     {   "adawn",        0,      1,      0,          FADawn},
     {   "adusk",        0,      1,      0,          FADusk},
     {   "ampm",         1,      3,      1,          FAmpm   },
+    {   "any",          1,      NO_MAX, 1,          FAny    },
     {   "args",         1,      1,      0,          FArgs   },
     {   "asc",          1,      1,      1,          FAsc    },
     {   "baseyr",       0,      0,      1,          FBaseyr },
@@ -1031,6 +1033,36 @@ static int FPlural(func_info *info)
 	else DCOPYVAL(RetVal, ARG(2));
 	return OK;
     }
+}
+
+/***************************************************************/
+/*                                                             */
+/*  FAny                                                       */
+/*  Return 1 if the first arg equals any subsequent arg, 0     */
+/*  otherwise.                                                 */
+/*                                                             */
+/***************************************************************/
+static int FAny(func_info *info)
+{
+    int i;
+    RetVal.type = INT_TYPE;
+    RETVAL = 0;
+    for (i=1; i<Nargs; i++) {
+        if (ARG(0).type == ARG(i).type) {
+            if (ARG(0).type == STR_TYPE) {
+                if (!strcmp(ARGSTR(0), ARGSTR(i))) {
+                    RETVAL = 1;
+                    return OK;
+                }
+            } else {
+                if (ARGV(0) == ARGV(i)) {
+                    RETVAL = 1;
+                    return OK;
+                }
+            }
+        }
+    }
+    return OK;
 }
 
 /***************************************************************/

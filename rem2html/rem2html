@@ -419,6 +419,14 @@ sub output_calendar
     # Last column
     my $last_col = ($first_col + $Numdays - 1) % 7;
 
+    # Figure out how many rows
+    my $number_of_rows = int(($first_col + $Numdays ) / 7 + 0.999);
+
+    # Add a row for small calendars if necessary
+    if ($first_col == 0 && $last_col == 6) {
+            $number_of_rows++;
+    }
+
     # Start the table
     my $class;
     if ($Options{nostyle}) {
@@ -448,7 +456,7 @@ sub output_calendar
     if ($Options{nostyle}) {
 	print "<tr>\n";
     } else {
-	print "<tr class=\"rem-cal-row\">\n";
+	print "<tr class=\"rem-cal-row rem-cal-row-$number_of_rows-rows\">\n";
     }
     if ($first_col > 0) {
 	small_calendar($Prevmon, $Prevlen, $Options{backurl},
@@ -464,7 +472,7 @@ sub output_calendar
     if ($Options{nostyle}) {
 	$class = ' width="14%"';
     } else {
-	$class = ' class="rem-empty"';
+	$class = ' class="rem-empty rem-empty-$number_of_rows-rows"';
     }
     while ($col < $first_col) {
 	print("<td$class>&nbsp;</td>\n");
@@ -472,7 +480,7 @@ sub output_calendar
     }
 
     for (my $day=1; $day<=$Numdays; $day++) {
-	draw_day_cell($day);
+	draw_day_cell($day, $number_of_rows);
 	$col++;
 	if ($col == 7) {
 	    $col = 0;
@@ -481,7 +489,7 @@ sub output_calendar
 		if ($Options{nostyle}) {
 		    print "<tr>\n";
 		} else {
-		    print "<tr class=\"rem-cal-row\">\n";
+                    print "<tr class=\"rem-cal-row rem-cal-row-$number_of_rows-rows\">\n";
 		}
 	    }
 	}
@@ -512,7 +520,7 @@ sub output_calendar
 	    if ($Options{nostyle}) {
 		    print "<tr>\n";
 	    } else {
-		    print "<tr class=\"rem-cal-row\">\n";
+                    print "<tr class=\"rem-cal-row rem-cal-row-$number_of_rows-rows\">\n";
 	    }
 	    small_calendar($Prevmon, $Prevlen, $Options{backurl},
 			   ($Firstwkday - $Prevlen + 35) % 7);
@@ -529,7 +537,7 @@ sub output_calendar
 
 sub draw_day_cell
 {
-    my($day) = @_;
+    my($day, $number_of_rows) = @_;
     my $shade = $shades->[$day];
     my $week = '';
     if (exists($weeks->{$day})) {
@@ -539,7 +547,7 @@ sub draw_day_cell
     if ($Options{nostyle}) {
 	$class = $classes->[$day] || '';
     } else {
-	$class = $classes->[$day] || "rem-cell";
+	$class = $classes->[$day] || "rem-cell rem-cell-$number_of_rows-rows";
     }
     if ($shade) {
 	    $shade = " style=\"background: $shade;\"";

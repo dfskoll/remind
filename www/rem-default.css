@@ -1,6 +1,8 @@
 table.rem-cal {
   font-family: helvetica, arial, sans-serif;
   font-size: 12pt;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table.rem-sc-table {
@@ -35,11 +37,6 @@ td.rem-today {
   border-width: 2px;
   border-color: #EE3333;
   vertical-align: top;
-}
-
-table.rem-cal {
-  width: 100%;
-  border-collapse: collapse;
 }
 
 div.rem-daynumber {

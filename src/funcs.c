@@ -58,7 +58,7 @@ static int FADusk          (func_info *);
 static int FAbs            (func_info *);
 static int FAccess         (func_info *);
 static int FAmpm           (func_info *);
-static int FAny            (func_info *);
+static int FIsAny          (func_info *);
 static int FArgs           (func_info *);
 static int FAsc            (func_info *);
 static int FBaseyr         (func_info *);
@@ -210,7 +210,6 @@ BuiltinFunc Func[] = {
     {   "adawn",        0,      1,      0,          FADawn},
     {   "adusk",        0,      1,      0,          FADusk},
     {   "ampm",         1,      3,      1,          FAmpm   },
-    {   "any",          1,      NO_MAX, 1,          FAny    },
     {   "args",         1,      1,      0,          FArgs   },
     {   "asc",          1,      1,      1,          FAsc    },
     {   "baseyr",       0,      0,      1,          FBaseyr },
@@ -241,6 +240,7 @@ BuiltinFunc Func[] = {
     {   "hour",         1,      1,      1,          FHour   },
     {   "iif",          1,      NO_MAX, 1,          FIif    },
     {   "index",        2,      3,      1,          FIndex  },
+    {   "isany",        1,      NO_MAX, 1,          FIsAny  },
     {   "isdst",        0,      2,      0,          FIsdst },
     {   "isleap",       1,      1,      1,          FIsleap },
     {   "isomitted",    1,      1,      0,          FIsomitted },
@@ -1037,12 +1037,12 @@ static int FPlural(func_info *info)
 
 /***************************************************************/
 /*                                                             */
-/*  FAny                                                       */
+/*  FIsAny                                                     */
 /*  Return 1 if the first arg equals any subsequent arg, 0     */
 /*  otherwise.                                                 */
 /*                                                             */
 /***************************************************************/
-static int FAny(func_info *info)
+static int FIsAny(func_info *info)
 {
     int i;
     RetVal.type = INT_TYPE;

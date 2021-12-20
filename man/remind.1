@@ -2358,7 +2358,7 @@ $TimeSep and $DateTimeSep when formatting its output.  For example:
 .PP
 .RE
 .TP
-.B any(arg1 [,arg2, ..., argN]);
+.B isany(arg1 [,arg2, ..., argN]);
 Returns 1 if the first argument \fIarg1\fR is equal to any of the
 subsequent arguments \fIarg2\fR through \fIargN\fR; returns 0 otherwise.
 Also returns 0 if called with only one argument.
@@ -2369,7 +2369,7 @@ As an example, the following two expressions are equivalent:
 .nf
         (a == b) || (a == c) || (a == d) || (a == e)
 
-        any(a, b, c, d, e)
+        isany(a, b, c, d, e)
 .fi
 .RE
 .TP
@@ -3753,7 +3753,7 @@ on the 15th of January, April, July, and October.  You could make
 four separate reminders, or you could use:
 .PP
 .nf
-        REM 15 SATISFY [any($Tm, 1, 4, 7, 10)] MSG 15th Reminder!
+        REM 15 SATISFY [isany($Tm, 1, 4, 7, 10)] MSG 15th Reminder!
 .fi
 .PP
 This technique of using one \fBREM\fR command to calculate a trigger date

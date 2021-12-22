@@ -3644,7 +3644,7 @@ proc SetFonts {} {
 proc SetupInotify {} {
     global InotifyFP
     global ReminderFile
-    set failed [catch {set InotifyFP [open "|inotifywait -r -q -m -e close_write -e move -e create -e delete $ReminderFile" "r"] } ]
+    set failed [catch {set InotifyFP [open "|inotifywait -r -q -m -e close_write -e move -e create -e delete $ReminderFile < /dev/null 2>/dev/null" "r"] } ]
     if {$failed} {
         # inotifywait probably not available... meh.
         return

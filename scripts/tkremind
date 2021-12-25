@@ -3512,14 +3512,14 @@ proc CreateMoonWindows {} {
 
     canvas .moon_first -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
     .moon_first create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_first create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180
+    .moon_first create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180 -outline {}
 
     canvas .moon_full -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
     .moon_full create oval $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -width 1
 
     canvas .moon_last -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
     .moon_last create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_last create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180
+    .moon_last create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180 -outline {}
 }
 
 #***********************************************************************

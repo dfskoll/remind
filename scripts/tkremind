@@ -21,17 +21,6 @@ if {[catch {package require Tcl 8.5}]} {
     exit 1
 }
 
-# If it's 8.5, try using the Img or the TkPNG package to
-# get PNG support
-if {[info tclversion] == 8.5} {
-    if {[catch {package require Img}]} {
-        if {[catch {package require tkpng}]} {
-            puts stderr "Tcl/Tk version 8.5 might require either the Img or tkpng"
-            puts stderr "package to handle PNG images correctly.  TkRemind may"
-            puts stderr "crash because neither of these packages was found."
-        }
-    }
-}
 wm withdraw .
 
 set Hostname [exec hostname]
@@ -512,6 +501,8 @@ proc CreateCalFrame { w dayNames } {
 proc ConfigureCalFrame { w firstDay numDays } {
     global CurMonth CurYear TodayMonth TodayYear TodayDay
     global tk_version Option
+
+    CreateMoonWindows
     set offset [CalEntryOffset $firstDay]
     set first [expr $offset+1]
     set last [expr $offset+$numDays]
@@ -2718,7 +2709,6 @@ proc main {} {
 	}
     }
     LoadOptions
-    CreateMoonImages
     ShowTodaysReminders
     ScanForTags $AppendFile
     CreateCalWindow $DayNames
@@ -3454,13 +3444,13 @@ proc DoMoonSpecial { n stuff } {
 	return
     }
     switch -exact -- $phase {
-	0 { set image new }
-	1 { set image first }
-	2 { set image full }
-	3 { set image last }
+	0 { set win .moon_new }
+	1 { set win .moon_first }
+	2 { set win .moon_full }
+	3 { set win .moon_last }
     }
     .cal.t$n configure -state normal
-    .cal.t$n image create 1.0 -image $image
+    .cal.t$n window create 1.0 -window $win
 
     if {$msg != ""} {
 	.cal.t$n insert 1.1 " $msg\n"
@@ -3489,19 +3479,47 @@ proc DisplayTime {} {
 }
 
 #***********************************************************************
-# %PROCEDURE: CreateMoonImages
+# %PROCEDURE: CreateMoonWindows
 # %ARGUMENTS:
 #  None
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
-#  Creates the moon images "new", "first", "full" and "last"
+#  Creates the moon windows .moon_new, .moon_first, .moon_full and
+#  .moon_last
 #***********************************************************************
-proc CreateMoonImages {} {
-    image create photo full -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADlSURBVDiNrdNBUsJAEAXQlyw4hq4hwWPqTixET6ELkZ16CcAq7oFLqXExjaYgQVNlV/Viev7/6XT/4TjGuME7PiLXUatb8N8xwB12SFjiIXIZtU/MAntEfgvQE4YtHxhiHpjXQ5H7uLhEcaLLAleBvd0Xx9Ha/BdyU+Q5OBV5OKmj7a4YBWdSyNPe4aKHAHkzqcQZNj3JgnNexqE8heyIAulffuFF3kTfIVbBVeu/xoXGGsn2TLJJ/mqkafNiINszySYZdbS90GHlvcgsWktY4TFy7ecxTdvIzahxHQLbyFXUqkPwF2ASRNYgB/PXAAAAAElFTkSuQmCC"
-    image create photo first -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADfSURBVDiNndM9TsNAFATgzy5yjZSAE85JBygETgENUPF3iBCitHAFQkcIhZ/Ryn9gRlrZmp2Z3ef3TBOHOMULPrDBMrhpi/4HI5xjix2+4nmJRbx/Yh7ahvkpRPVV4QDXwT3UQy46zGkAZDgK/iytefvHgCrkJsqZUH6cLnNbABSxd5Jhhf1IbkMXv8Qux7hH1Ic1xvk/jBWy6gavumvtwx7ectwZXkKh7MA95XgObeOtpI2U4zl0kGbpxgiPvwQUcXLrKFchc82f6Ur0PK49azOnmOI4TBu84zm4SV38DeIVYkrYJyNbAAAAAElFTkSuQmCC"
-    image create photo new -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC6SURBVDiNpdNNbsIwFATgL0HKolchHKBX6yFaBOEyoPYUabvOIVKJRaCL2JX5TRNGGvnJ8ozGz89cYoElPvET+BX2yivn/1Bggw5HHMKa1h2qcPZC/JEIhvh+brIZIY6sorhMYo9hh3KGFzzfa84NZNjDt9OG/ZcH1BlaPE1IAG0+URhxzNGESKPFaHJs9Q0Ziww7HnvGeXSrJhis0jiFfjwnj3I0WRv+TKtr4hQl3lDrZ6QN9Wt654hfWfGDmBpUwDkAAAAASUVORK5CYII="
-    image create photo last -data "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAGQAAABkABchkaRQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADmSURBVDiNndMxTsNAEIXhzy5yCyQ6FAgcE7oQheQWUAAl5BIkREoZrgB0GFNkHBl7bURGsryaee/3jHeXdpxjghU+8InXyI0S+n0MMEeBEi+4jfV3vAvMQtsyL0J0j2GtViaeRRMyj8IlsgY8BSijE2Kur/hy09wHKMJrEolhwtwHKDHOsI4OLnoAXfl1jiNsOkR9keE4P8D4q4scbzg5xIxtjie709f1E7siC+9+Gx/8fxvPKtEsklcJSBdgWhcN8ByFR5z+AWgd5QpyE+OUWOJO+zJNU+Z6jHAdgHe7K73CuD5zFT9nCmRDIssCaAAAAABJRU5ErkJggg=="
+proc CreateMoonWindows {} {
+    global Option;
+    catch { destroy .moon_new   }
+    catch { destroy .moon_first }
+    catch { destroy .moon_full  }
+    catch { destroy .moon_last  }
+
+    set extra 1
+    #set wid [font measure CalboxFont 0]
+    set wid [font metrics CalboxFont -ascent]
+    set orig_wid $wid
+    incr wid $extra
+    incr wid $extra
+    incr wid $extra
+    incr wid $extra
+    incr orig_wid $extra
+    incr orig_wid $extra
+
+    set w [expr $extra+$orig_wid]
+    canvas .moon_new -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+    .moon_new create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+
+    canvas .moon_first -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+    .moon_first create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+    .moon_first create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180
+
+    canvas .moon_full -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+    .moon_full create oval $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -width 1
+
+    canvas .moon_last -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+    .moon_last create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+    .moon_last create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180
 }
 
 #***********************************************************************

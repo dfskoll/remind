@@ -473,7 +473,6 @@ proc CreateCalFrame { w dayNames } {
 		-state disabled -takefocus 0 -cursor {} -font CalboxFont -foreground $Option(TextColor) -background $Option(BackgroundColor)
 	    $w.t$f tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$f"
 	    $w.t$f tag bind REM <ButtonPress-3> "FireEditor $w.t$f"
-
 	    grid configure $w.l$f -row [expr $i*2+1] -column $j -sticky ew
 	    grid configure $w.t$f -row [expr $i*2+2] -column $j -sticky nsew
 	}
@@ -1063,6 +1062,9 @@ proc FillCalWindow {} {
                 .cal.t$n insert end [string trim $stuff] [list REM $extratags]
             } else {
                 .cal.t$n insert end [string trim $stuff] [list REM $extratags $fntag]
+                .cal.t$n tag bind $fntag <Enter> "EditableEnter .cal.t$n"
+                .cal.t$n tag bind $fntag <Leave> "EditableLeave .cal.t$n"
+                .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n"
             }
 	}
 	.cal.t$n insert end "\n"
@@ -3119,6 +3121,7 @@ proc TaggedEnter { w } {
 	$w tag configure $tag -foreground #FF0000
     }
 }
+
 #***********************************************************************
 # %PROCEDURE: TaggedLeave
 # %ARGUMENTS:
@@ -3144,6 +3147,24 @@ proc TaggedLeave { w } {
     }
 }
 
+proc EditableEnter { w } {
+    set tags [$w tag names current]
+    set index [lsearch -glob $tags "FILE_*"]
+    if {$index < 0} {
+	return
+    }
+    set tag [lindex $tags $index]
+    $w tag configure $tag -underline 1
+}
+proc EditableLeave { w } {
+    set tags [$w tag names current]
+    set index [lsearch -glob $tags "FILE_*"]
+    if {$index < 0} {
+	return
+    }
+    set tag [lindex $tags $index]
+    $w tag configure $tag -underline 0
+}
 #***********************************************************************
 # %PROCEDURE: EditTaggedReminder
 # %ARGUMENTS:
@@ -3458,12 +3479,18 @@ proc DoMoonSpecial { n stuff fntag } {
             .cal.t$n insert 1.1 " $msg\n"
         } else {
             .cal.t$n insert 1.1 " $msg\n" [list REM $fntag]
+            .cal.t$n tag bind $fntag <Enter> "EditableEnter .cal.t$n"
+            .cal.t$n tag bind $fntag <Leave> "EditableLeave .cal.t$n"
+            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n"
         }
     } else {
         if {"$fntag" == "x"} {
             .cal.t$n insert 1.1 "\n"
         } else {
             .cal.t$n insert 1.1 "\n" [list REM $fntag]
+            .cal.t$n tag bind $fntag <Enter> "EditableEnter .cal.t$n"
+            .cal.t$n tag bind $fntag <Leave> "EditableLeave .cal.t$n"
+            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n"
         }
     }
     .cal.t$n configure -state disabled

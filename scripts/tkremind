@@ -1018,7 +1018,7 @@ proc FillCalWindow {} {
 		continue
 	    }
 	    "MOON" {
-		DoMoonSpecial $n $stuff
+		DoMoonSpecial $n $stuff $fntag
 		continue
 	    }
 	    "COLOUR" -
@@ -3429,12 +3429,13 @@ proc DoShadeSpecial { n r g b } {
 # %ARGUMENTS:
 #  n -- calendar box for moon
 #  stuff -- Remind command line
+#  fntag - filename tag, if any
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
 #  Handles the "MOON" special -- draws a moon symbol
 #***********************************************************************
-proc DoMoonSpecial { n stuff } {
+proc DoMoonSpecial { n stuff fntag } {
     set msg ""
     set num [scan $stuff "%d %d %d %s" phase junk1 junk2 msg]
     if {$num < 1} {
@@ -3453,9 +3454,17 @@ proc DoMoonSpecial { n stuff } {
     .cal.t$n window create 1.0 -window $win
 
     if {$msg != ""} {
-	.cal.t$n insert 1.1 " $msg\n"
+        if {"$fntag" == "x"} {
+            .cal.t$n insert 1.1 " $msg\n"
+        } else {
+            .cal.t$n insert 1.1 " $msg\n" [list REM $fntag]
+        }
     } else {
-	.cal.t$n insert 1.1 "\n"
+        if {"$fntag" == "x"} {
+            .cal.t$n insert 1.1 "\n"
+        } else {
+            .cal.t$n insert 1.1 "\n" [list REM $fntag]
+        }
     }
     .cal.t$n configure -state disabled
 }

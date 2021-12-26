@@ -3560,6 +3560,11 @@ proc CreateMoonWindows {} {
     canvas .moon_last -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
     .moon_last create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
     .moon_last create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180 -outline {}
+
+    balloon_add_help .moon_new   "New Moon"
+    balloon_add_help .moon_first "First Quarter"
+    balloon_add_help .moon_full  "Full Moon"
+    balloon_add_help .moon_last  "Last Quarter"
 }
 
 #***********************************************************************

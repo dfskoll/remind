@@ -3058,17 +3058,19 @@ proc ReadTaggedOptions { tag date } {
     }
     return $ans
 }
-proc FireEditor { w } {
+proc FireEditor { w {fntag ""}} {
     global Option
     global EditorPid
-    set tags [$w tag names current]
-    set index [lsearch -glob $tags "FILE_*"]
-    if {$index < 0} {
-	return
+    if {"$fntag" == ""} {
+        set tags [$w tag names current]
+        set index [lsearch -glob $tags "FILE_*"]
+        if {$index < 0} {
+            return
+        }
+        set fntag [lindex $tags $index]
     }
-    set tag [lindex $tags $index]
-    if {![regexp {^FILE_([0-9]+)_(.*)} $tag all line file]} {
-	return
+    if {![regexp {^FILE_([0-9]+)_(.*)} $fntag all line file]} {
+        return
     }
     set editor $Option(Editor)
     regsub -all "%s" $editor $file editor
@@ -3481,7 +3483,9 @@ proc DoMoonSpecial { n stuff fntag } {
             .cal.t$n insert 1.1 " $msg\n" [list REM $fntag]
             .cal.t$n tag bind $fntag <Enter> "EditableEnter .cal.t$n"
             .cal.t$n tag bind $fntag <Leave> "EditableLeave .cal.t$n"
-            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n"
+            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n $fntag"
+            bind $win <ButtonPress-1> "FireEditor .cal.t$n $fntag"
+            bind $win <ButtonPress-3> "FireEditor .cal.t$n $fntag"
         }
     } else {
         if {"$fntag" == "x"} {
@@ -3490,7 +3494,7 @@ proc DoMoonSpecial { n stuff fntag } {
             .cal.t$n insert 1.1 "\n" [list REM $fntag]
             .cal.t$n tag bind $fntag <Enter> "EditableEnter .cal.t$n"
             .cal.t$n tag bind $fntag <Leave> "EditableLeave .cal.t$n"
-            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n"
+            .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n $fntag"
         }
     }
     .cal.t$n configure -state disabled

@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include <errno.h>
 #include "types.h"
 #include "expr.h"
 #include "globals.h"
@@ -38,6 +39,156 @@ static int IntMax = INT_MAX;
 static Var *VHashTbl[VAR_HASH_SIZE];
 
 typedef int (*SysVarFunc)(int, Value *);
+
+static int latdeg_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LatDeg;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -90) return E_2LOW;
+    if (val->v.val > 90)  return E_2HIGH;
+    LatDeg = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int latmin_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LatMin;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -59) return E_2LOW;
+    if (val->v.val > 59)  return E_2HIGH;
+    LatMin = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int latsec_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LatSec;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -59) return E_2LOW;
+    if (val->v.val > 59)  return E_2HIGH;
+    LatSec = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int longdeg_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LongDeg;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -180) return E_2LOW;
+    if (val->v.val > 180)  return E_2HIGH;
+    LongDeg = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int longmin_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LongMin;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -59) return E_2LOW;
+    if (val->v.val > 59)  return E_2HIGH;
+    LongMin = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int longsec_func(int do_set, Value *val)
+{
+    if (!do_set) {
+        val->type = INT_TYPE;
+        val->v.val = LongSec;
+        return OK;
+    }
+    if (val->type != INT_TYPE) return E_BAD_TYPE;
+    if (val->v.val < -59) return E_2LOW;
+    if (val->v.val > 59)  return E_2HIGH;
+    LongSec = val->v.val;
+    set_lat_and_long_from_components();
+    return OK;
+}
+
+static int longitude_func(int do_set, Value *val)
+{
+    char buf[64];
+    double x;
+    char *endptr;
+
+    if (!do_set) {
+        snprintf(buf, sizeof(buf), "%f", Longitude);
+        val->v.str = malloc(strlen(buf)+1);
+        if (!val->v.str) return E_NO_MEM;
+        strcpy(val->v.str, buf);
+        val->type = STR_TYPE;
+        return OK;
+    }
+    if (val->type == INT_TYPE) {
+        x = (double) val->v.val;
+    } else {
+        if (val->type != STR_TYPE) return E_BAD_TYPE;
+        errno = 0;
+        x = strtod(val->v.str, &endptr);
+        if (errno) return E_BAD_TYPE;
+        if (*endptr) return E_BAD_TYPE;
+    }
+    if (x < -180.0) return E_2LOW;
+    if (x > 180.0) return E_2HIGH;
+    Longitude = x;
+    set_components_from_lat_and_long();
+    return OK;
+}
+static int latitude_func(int do_set, Value *val)
+{
+    char buf[64];
+    double x;
+    char *endptr;
+
+    if (!do_set) {
+        snprintf(buf, sizeof(buf), "%f", Latitude);
+        val->v.str = malloc(strlen(buf)+1);
+        if (!val->v.str) return E_NO_MEM;
+        strcpy(val->v.str, buf);
+        val->type = STR_TYPE;
+        return OK;
+    }
+    if (val->type == INT_TYPE) {
+        x = (double) val->v.val;
+    } else {
+        if (val->type != STR_TYPE) return E_BAD_TYPE;
+        errno = 0;
+        x = strtod(val->v.str, &endptr);
+        if (errno) return E_BAD_TYPE;
+        if (*endptr) return E_BAD_TYPE;
+    }
+    if (x < -90.0) return E_2LOW;
+    if (x > 90.0) return E_2HIGH;
+    Latitude = x;
+    set_components_from_lat_and_long();
+    return OK;
+}
+
 
 static int trig_date_func(int do_set, Value *val)
 {
@@ -177,15 +328,15 @@ static int default_color_func(int do_set, Value *val)
     int col_r, col_g, col_b;
     if (!do_set) {
     /* 12 = strlen("255 255 255\0") */
- val->v.str = malloc(12);
- if (!val->v.str) return E_NO_MEM;
-    snprintf(val->v.str, 12, "%d %d %d",
-        DefaultColorR,
-        DefaultColorG,
-        DefaultColorB
-        );
- val->type = STR_TYPE;
- return OK;
+        val->v.str = malloc(12);
+        if (!val->v.str) return E_NO_MEM;
+        snprintf(val->v.str, 12, "%d %d %d",
+                 DefaultColorR,
+                 DefaultColorG,
+                 DefaultColorB
+            );
+        val->type = STR_TYPE;
+        return OK;
     }
     if (val->type != STR_TYPE) return E_BAD_TYPE;
     if (sscanf(val->v.str, "%d %d %d", &col_r, &col_g, &col_b) != 3) {
@@ -667,13 +818,15 @@ static SysVar SysVarArr[] = {
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },
     {"IntMax",         0,  INT_TYPE,     &IntMax,             0,      0   },
     {"IntMin",         0,  INT_TYPE,     &IntMin,             0,      0   },
-    {"LatDeg",         1,  INT_TYPE,     &LatDeg,             -90,    90  },
-    {"LatMin",         1,  INT_TYPE,     &LatMin,             -59,    59  },
-    {"LatSec",         1,  INT_TYPE,     &LatSec,             -59,    59  },
+    {"LatDeg",         1,  SPECIAL_TYPE, latdeg_func,         0,      0   },
+    {"Latitude",       1,  SPECIAL_TYPE, latitude_func,       0,      0   },
+    {"LatMin",         1,  SPECIAL_TYPE, latmin_func,         0,      0   },
+    {"LatSec",         1,  SPECIAL_TYPE, latsec_func,         0,      0   },
     {"Location",       1,  STR_TYPE,     &Location,           0,      0   },
-    {"LongDeg",        1,  INT_TYPE,     &LongDeg,            -180,   180 },
-    {"LongMin",        1,  INT_TYPE,     &LongMin,            -59,    59  },
-    {"LongSec",        1,  INT_TYPE,     &LongSec,            -59,    59  },
+    {"LongDeg",        1,  SPECIAL_TYPE, longdeg_func,        0,      0   },
+    {"Longitude",      1,  SPECIAL_TYPE, longitude_func,      0,      0   },
+    {"LongMin",        1,  SPECIAL_TYPE, longmin_func,        0,      0   },
+    {"LongSec",        1,  SPECIAL_TYPE, longsec_func,        0,      0   },
     {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,         10,     ANY },
     {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,       -1,     ANY },
     {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,        -780,   780 },
@@ -885,3 +1038,48 @@ static void DumpSysVar(char const *name, const SysVar *v)
 
     return;
 }
+
+void
+set_lat_and_long_from_components(void)
+{
+    Latitude = (double) LatDeg + ((double) LatMin) / 60.0 + ((double) LatSec) / 3600.0;
+    Longitude = - ( (double) LongDeg + ((double) LongMin) / 60.0 + ((double) LongSec) / 3600.0);
+}
+
+void
+set_components_from_lat_and_long(void)
+{
+    double x;
+
+    x = (Latitude < 0.0 ? -Latitude : Latitude);
+    LatDeg = (int) x;
+    x -= (double) LatDeg;
+    x *= 60;
+    LatMin = (int) x;
+    x -= (double) LatMin;
+    x *= 60;
+    LatSec = (int) x;
+    if (Latitude < 0.0) {
+        LatDeg = -LatDeg;
+        LatMin = -LatMin;
+        LatSec = -LatSec;
+    }
+
+    x = (Longitude < 0.0 ? -Longitude : Longitude);
+    LongDeg = (int) x;
+    x -= (double) LongDeg;
+    x *= 60;
+    LongMin = (int) x;
+    x -= (double) LongMin;
+    x *= 60;
+    LongSec = (int) x;
+
+    /* Use STANDARD sign for $Longitude even if $LongDeg, $LongMin and
+     * $LongSec are messed up */
+    if (Longitude > 0.0) {
+        LongDeg = -LongDeg;
+        LongMin = -LongMin;
+        LongSec = -LongSec;
+    }
+}
+

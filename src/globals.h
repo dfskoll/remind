@@ -123,6 +123,9 @@ EXTERN  INIT(	int	  LatSec, LAT_SEC);
 EXTERN  INIT(	int	  LongDeg, LON_DEG);
 EXTERN  INIT(	int	  LongMin, LON_MIN);
 EXTERN  INIT(	int	  LongSec, LON_SEC);
+EXTERN  INIT(   double    Longitude, -999.0);
+EXTERN  INIT(   double    Latitude, -999.0);
+
 EXTERN	INIT(	char	  *Location, LOCATION);
 
 /* UTC calculation stuff */

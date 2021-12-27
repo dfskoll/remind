@@ -646,6 +646,8 @@ void InitRemind(int argc, char const *argv[])
 	}
 
     }
+
+    set_lat_and_long_from_components();
 /* Figure out the offset from UTC */
     if (CalculateUTC)
 	(void) CalcMinsFromUTC(JulianToday, SystemTime(0)/60,

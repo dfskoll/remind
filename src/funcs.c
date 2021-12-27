@@ -2145,12 +2145,8 @@ static int SunStuff(int rise, double cosz, int jul)
     } else mins = MinsFromUTC;
 
 /* Get latitude and longitude */
-    longdeg = (double) LongDeg + (double) LongMin / 60.0
-	+ (double) LongSec / 3600.0;
-
-    latitude = DEGRAD * ((double) LatDeg + (double) LatMin / 60.0
-			 + (double) LatSec / 3600.0);
-
+    longdeg = -Longitude;
+    latitude = DEGRAD * Latitude;
 
     FromJulian(jul, &year, &mon, &day);
 

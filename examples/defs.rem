@@ -14,7 +14,6 @@
 #  "#USHOLS" for U.S. holidays						    #
 #  "#JHOLS"  for Jewish holidays					    #
 #  "#PSSTUFF" for nifty PostScript examples				    #
-#  "#COLORS" for examples of ANSI color escape sequences.                   #
 # 									    #
 # This file is part of REMIND.						    #
 # Copyright (C) 1992-2018 Dianne Skoll                                      #
@@ -26,8 +25,8 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.01.09"
-   ERRMSG This file requires at least version 03.01.09 of Remind.%
+IF version() < "03.01.10"
+   ERRMSG This file requires at least version 03.01.10 of Remind.%
    ERRMSG This version is version [version()].
    EXIT
 ENDIF
@@ -221,13 +220,12 @@ REM  [easter+49] MSG %"Pentecost%"
 # You'll need the _back() function and the Week_n variables defined
 # way up in the file.
 
-OMIT     Jan  1		MSG %"New Year's%" Day
-REM  Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
-REM      Feb  2		MSG %"Ground Hog Day%"
-REM      Feb 14		MSG %"Valentine's%" Day
-REM  Mon Feb [Week_3]	SCANFROM [_back(7)] SATISFY 1
-OMIT [$T] MSG %"President's Day%"
-REM      Mar 17		MSG %"St. Patrick's%" Day
+OMIT    Jan  1		MSG %"New Year's%" Day
+REM Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
+REM     Feb  2		MSG %"Ground Hog Day%"
+REM     Feb 14		MSG %"Valentine's%" Day
+REM Mon Feb [Week_3]	SCANFROM [_back(7)] ADDOMIT MSG %"President's Day%"
+REM     Mar 17		MSG %"St. Patrick's%" Day
 
 # The DST rules are accurate for most locations in
 # North America
@@ -237,38 +235,31 @@ REM Sun Mar 8 ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST starts%" %b
 REM Sun [_last(Oct)] ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
 REM Sun 1 Nov ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
 
-REM      Apr  1		MSG %"April Fool's%" Day
-REM  Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
-REM      May  5		MSG %"Cinco de Mayo%"
-REM  Sat May [Week_1]	MSG %"Kentucky Derby%"
-REM  Sun May [Week_2]	MSG %"Mother's Day%"
-REM  Sat May [Week_3]	MSG %"Armed Forces Day%"
-REM  Mon [_last(May)]	SCANFROM [_back(7)] SATISFY 1
-OMIT [$T] MSG %"Memorial Day%"
-REM      Jun 14		MSG %"Flag Day%"
-REM  Sun Jun [Week_3]	MSG %"Father's Day%"
-REM  Mon Sep [Week_1]	SCANFROM [_back(7)] SATISFY 1
-OMIT [$T] MSG %"Labor Day%"
-REM  Mon Oct [Week_2]	MSG %"Columbus Day%"
-REM      Nov 11		MSG %"Veterans Day%"
+REM     Apr  1		MSG %"April Fool's%" Day
+REM Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
+REM     May  5		MSG %"Cinco de Mayo%"
+REM Sat May [Week_1]	MSG %"Kentucky Derby%"
+REM Sun May [Week_2]	MSG %"Mother's Day%"
+REM Sat May [Week_3]	MSG %"Armed Forces Day%"
+REM Mon [_last(May)]	SCANFROM [_back(7)] ADDOMIT MSG %"Memorial Day%"
+REM     Jun 14		MSG %"Flag Day%"
+REM Sun Jun [Week_3]	MSG %"Father's Day%"
+REM Mon Sep [Week_1]	SCANFROM [_back(7)] ADDOMIT MSG %"Labor Day%"
+REM Mon Oct [Week_2]	MSG %"Columbus Day%"
+REM     Nov 11		MSG %"Veterans Day%"
 
-REM      Oct 30		MSG %"Mischief Night%"
-REM      Oct 31		MSG %"Halloween%"
-REM  Tue Nov  2		SCANFROM [_back(7)] \
-	SATISFY [($Ty % 4) == 0] \
-	MSG %"Election%" Day
-REM  Thu Nov [Week_4]	SCANFROM [_back(7)] SATISFY 1
-OMIT [$T] MSG %"Thanksgiving%" Day
-REM  Fri Nov [Week_4+1]	SCANFROM [_back(7)] SATISFY 1
-OMIT [$T] MSG %"Thanksgiving%" (cont.)
-OMIT     Dec 24		MSG %"Christmas Eve%"
-OMIT     Dec 25		MSG %"Christmas%" Day
+REM     Oct 30		MSG %"Mischief Night%"
+REM     Oct 31		MSG %"Halloween%"
+REM Tue Nov  2 SCANFROM [_back(7)] SATISFY [($Ty % 4) == 0] MSG %"Election Day%"
+REM Thu Nov [Week_4]	SCANFROM [_back(7)] ADDOMIT MSG %"Thanksgiving Day%"
+REM Fri Nov [Week_4+1]	SCANFROM [_back(7)] ADDOMIT MSG %"Thanksgiving (cont.)%"
+OMIT    Dec 24		MSG %"Christmas Eve%"
+OMIT    Dec 25		MSG %"Christmas%" Day
 
 ##########################################################################
 #								         #
 # If any US holidays were triggered above, shade in the calendar         #
-# entry in PostScript.  This is not quite correct, as it blots out any   #
-# other PostScript stuff above.  I was too lazy to do it properly :-)    #
+# entry in PostScript.                                                   #
 #								         #
 ##########################################################################
 if $NumTrig > SaveTrig
@@ -495,48 +486,10 @@ REM Friday   CAL Candle lighting at [sunset($T)-18]
 REM Saturday CAL Havdalah at [sunset($T)+42]
 
 #COLORS
-##########################################################################
-#								         #
-# This contains sample ANSI escape sequences for coloring messages.      #
-# It should work on an IBM PC with the ANSI.SYS driver, and on           #
-# other terminals which use the ANSI sequences.                          #
-#								         #
-# This information was provided by Gail Gurman.
-#								         #
-##########################################################################
-# Colors - use Nrm to reset to normal text.
-SET Esc   CHAR(27)
-
-SET Nrm   Esc + "[0m"
-SET Blk   Esc + "[0;30m"
-SET Red   Esc + "[0;31m"
-SET Grn   Esc + "[0;32m"
-SET Ylw   Esc + "[0;33m"
-SET Blu   Esc + "[0;34m"
-SET Mag   Esc + "[0;35m"
-SET Cyn   Esc + "[0;36m"
-SET Wht   Esc + "[0;37m"
-SET Gry   Esc + "[30;1m"
-SET BrRed Esc + "[31;1m"
-SET BrGrn Esc + "[32;1m"
-SET BrYlw Esc + "[33;1m"
-SET BrBlu Esc + "[34;1m"
-SET BrMag Esc + "[35;1m"
-SET BrCyn Esc + "[36;1m"
-SET BrWht Esc + "[37;1m"
 
 # Examples
-REM MSG A [Blu]blue[Nrm] reminder.
-REM MSG [Red]%"A red reminder%" safe to use in the calendar mode.[Nrm]
-
-# Here is an example of how to use msgprefix() and msgsuffix().  These
-# will highlight priority-0 reminders in bright red,
-# priority-2500 in red, and priority-7500 in blue.  All others
-# will be in the normal colors
-FSET msgprefix(x) iif(x==0, BrRed, x==2500, Red, x==7500, Blu, Nrm)
-
-# Don't forget to return to normal color set at the end of reminder!
-FSET msgsuffix(x) Nrm
+REM 1 SPECIAL COLOR 0 0 255 A blue reminder.
+REM 2 SPECIAL COLOR 255 0 0 %"A red reminder%" safe to use in the calendar mode.
 
 # The next examples are great for putting right at the end of the reminder
 # file.  They make queued reminders more eye-catching when they pop up.

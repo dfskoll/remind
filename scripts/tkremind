@@ -3156,7 +3156,18 @@ proc EditableEnter { w } {
 	return
     }
     set tag [lindex $tags $index]
-    $w tag configure $tag -underline 1
+
+    set c ""
+    set index [lsearch -glob $tags "clr*"]
+    if {$index >= 0} {
+        set ctag [lindex $tags $index]
+        set c [$w tag cget $ctag -foreground]
+    }
+    if {"$c" != ""} {
+        $w tag configure $tag -underline 1 -underlinefg $c
+    } else {
+        $w tag configure $tag -underline 1
+    }
 }
 proc EditableLeave { w } {
     set tags [$w tag names current]

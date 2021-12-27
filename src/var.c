@@ -40,6 +40,14 @@ static Var *VHashTbl[VAR_HASH_SIZE];
 
 typedef int (*SysVarFunc)(int, Value *);
 
+static void deprecated_var(char const *var, char const *instead)
+{
+    if (DebugFlag & DB_PRTLINE) {
+        Eprint("%s is deprecated; use %s instead", var, instead);
+        FreshLine = 1;
+    }
+}
+
 static int latdeg_func(int do_set, Value *val)
 {
     if (!do_set) {
@@ -47,6 +55,7 @@ static int latdeg_func(int do_set, Value *val)
         val->v.val = LatDeg;
         return OK;
     }
+    deprecated_var("$LatDeg", "$Latitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -90) return E_2LOW;
     if (val->v.val > 90)  return E_2HIGH;
@@ -62,6 +71,7 @@ static int latmin_func(int do_set, Value *val)
         val->v.val = LatMin;
         return OK;
     }
+    deprecated_var("$LatMin", "$Latitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -59) return E_2LOW;
     if (val->v.val > 59)  return E_2HIGH;
@@ -77,6 +87,7 @@ static int latsec_func(int do_set, Value *val)
         val->v.val = LatSec;
         return OK;
     }
+    deprecated_var("$LatSec", "$Latitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -59) return E_2LOW;
     if (val->v.val > 59)  return E_2HIGH;
@@ -92,6 +103,7 @@ static int longdeg_func(int do_set, Value *val)
         val->v.val = LongDeg;
         return OK;
     }
+    deprecated_var("$LongDeg", "$Longitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -180) return E_2LOW;
     if (val->v.val > 180)  return E_2HIGH;
@@ -107,6 +119,7 @@ static int longmin_func(int do_set, Value *val)
         val->v.val = LongMin;
         return OK;
     }
+    deprecated_var("$LongMin", "$Longitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -59) return E_2LOW;
     if (val->v.val > 59)  return E_2HIGH;
@@ -122,6 +135,7 @@ static int longsec_func(int do_set, Value *val)
         val->v.val = LongSec;
         return OK;
     }
+    deprecated_var("$LongSec", "$Longitude");
     if (val->type != INT_TYPE) return E_BAD_TYPE;
     if (val->v.val < -59) return E_2LOW;
     if (val->v.val > 59)  return E_2HIGH;
@@ -920,7 +934,7 @@ int GetSysVar(char const *name, Value *val)
     /* In "verbose" mode, print attempts to test $RunOff */
     if (DebugFlag & DB_PRTLINE) {
 	if (v->value == (void *) &RunDisabled) {
-	    Eprint("(Security note: $RunOff variable tested.)\n");
+	    Eprint("(Security note: $RunOff variable tested.)");
 	    /* Allow further messages from this line */
 	    FreshLine = 1;
 	}

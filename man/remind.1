@@ -2156,11 +2156,35 @@ using twos-complement representation, this will be 2147483647.
 The smallest representable \fBINT\fR.  On a machine with 32-bit signed integers
 using twos-complement representation, this will be -2147483648.
 .TP
-.B $LatDeg, $LatMin, $LatSec
+.B $Latitude (STRING type)
+The latitude of your location, expressed as a string that is a floating-point
+number.  Because \fBRemind\fR does not have a native floating-point type,
+we need to express it as a string.  $Latitude can range from "-90.0" to
+"90.0", with positive numbers representing points north of the equator
+and negative numbers representing south.
+.TP
+.B $Longitude (STRING type)
+The longitude of your location, expressed as a string that is a floating-point
+number.  Because \fBRemind\fR does not have a native floating-point type,
+we need to express it as a string.  $Longitude can range from "-180.0" to
+"180.0", with positive numbers representing points east of the Greenwich
+Meridian and negative numbers representing west.
+.RS
+.PP
+For example, the coordinates of the Statue of Liberty in New York City
+are approximately set by:
+.nf
+        SET $Latitude   "40.68933"
+        SET $Longitude "-74.04454"
+.fi
+.RE
+.TP
+.B $LatDeg, $LatMin, $LatSec (DEPRECATED)
 These specify the latitude of your location.  \fB$LatDeg\fR can
 range from \-90 to 90, and the others from \-59 to 59.  Northern latitudes
 are positive; southern ones are negative.  For southern latitudes, all
-three components should be negative.
+three components should be negative.  These three variables
+are deprecated; you should use \fB$Latitude\fR instead.
 .TP
 .B $Location (STRING type)
 This is a string specifying the name of your location.  It is usually
@@ -2168,23 +2192,30 @@ the name of your town or city.  It can be set to whatever you like,
 but good style indicates that it should be kept consistent with
 the latitude and longitude system variables.
 .TP
-.B $LongDeg, $LongMin, $LongSec
+.B $LongDeg, $LongMin, $LongSec (DEPRECATED)
 These specify the longitude of your location.  \fB$LongDeg\fR can
 range from \-180 to 180.  Western longitudes are positive; eastern
 ones are negative.  Note that all three components should have the
-same sign: All positive for Western longitudes and all negative for
-Eastern longitudes.  Note that for historical reasons, the sign for
+same sign: All positive for western longitudes and all negative for
+eastern longitudes.  Note that for historical reasons, the sign for
 longitude is \fIdifferent\fR from the usual convention!  If you find
 the longitude of your location from a search engine, you will most
 likely \fIneed to invert the sign to have it work correctly with
-Remind.\fR
-
+Remind.\fR These three variables are deprecated; you should use
+\fB$Longitude\fR instead.  Note also that \fB$Longitude\fR uses the
+standard convention of negative for western longitudes and positive
+for eastern ones.
 .RS
 .PP
 The latitude and longitude information is required for the functions
 \fBsunrise()\fR and \fBsunset()\fR.  Default values can be compiled
 into \fBRemind\fR, or you can \fBSET\fR the correct values at the
 start of your reminder scripts.
+.PP
+Note that setting any of \fB$LongDec\fR, \fB$LongMin\fR and \fB$LongSec\fR
+updates \fB$Longitude\fR correspondingly, and setting \fB$Longitude\fR
+updates \fB$LongDeg\fR, \fB$LongMin\fR and \fB$LongSec\fR.  Similar
+rules apply to \fB$Latitude\fR, \fB$LatDeg\fR, \fB$LatMin\fR and \fB$LatSec\fR.
 .RE
 .TP
 .B $MaxSatIter

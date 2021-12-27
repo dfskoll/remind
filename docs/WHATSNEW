@@ -1,5 +1,34 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 11 - 2021-12-30
+
+- IMPROVEMENT: TkRemind: Show queue in sorted order.
+
+- NEW FUNCTION: Remind: Add the isany() built-in function.
+
+- IMPROVEMENT: rem2html: Add class names indicating number of rows in calendar
+
+- IMPROVEMENT: rem2html: Coalesce table.rem-cal CSS into one block.  Thanks
+  to Ian! D. Allen for pointing this out.
+
+- IMPROVEMENT: TkRemind: Pass "-r" flag to inotifywait
+
+- IMPROVEMENT: TkRemind: Draw moon phases with Tk canvas items rather than
+  using PNG images.  This lets them change color along with other TkRemind
+  preferences.
+
+- IMPROVEMENT: TkRemind: Underline editable reminders when the pointer enters
+  them; fire up the editor with either Button-1 or Button-3 for
+  non-TkRemind-generated reminders.
+
+- IMPROVEMENT: examples/defs.rem: Modernize the examples and get rid of some
+  cruft.
+
+- CHANGE: Add $Latitude and $Longitude system variables.  Deprecate
+  $LatDeg, $LatMin, $LatSec, $LongDeg, $LongMin and $LongSec.
+
+- CHANGE: Test: Add "dump $" to test.rem.
+
 * VERSION 3.3 Patch 10 - 2021-11-30
 
 - IMPROVEMENT: TkRemind: Apply window and text colors to all GUI elements

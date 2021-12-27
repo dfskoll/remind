@@ -233,6 +233,29 @@ REM Mon 15 Feb ADDOMIT MSG Family Day
 REM Feb 18 AFTER MSG Should trigger on Feb 19
 OMIT DUMP
 
+set $CalcUTC 0
+set $DateTimeSep "@"
+set $DefaultColor "-1 -1 -1"
+set $DefaultPrio 5000
+set $EndSent  ".?!"
+set $EndSentIg  "" + char(34) + "')]}>"
+set $FirstIndent 0
+set $FoldYear 0
+set $FormWidth 72
+set $Location "Ottawa"
+set $MaxSatIter 150
+set $MaxStringLen 65535
+set $MinsFromUTC -300
+set $SubsIndent 0
+set $TimeSep ":"
+
+set $LatDeg 30
+set $LatMin 30
+set $LatSec 0
+set $LongDeg -25
+set $LongMin 15
+set $LongSec 0
+
 set a000 abs(1)
 set a001 abs(-1)
 set a002 asc("foo")
@@ -423,6 +446,7 @@ REM MAYBE-UNCOMPUTABLE Mon OMIT Mon SKIP MSG Never ever ever...
 REM MAYBE-UNCOMPUTABLE Mon SATISFY [wkdaynum($T) == 3] MSG Nope nope...
 
 dump
+dump $
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X

@@ -842,6 +842,34 @@ Global Full OMITs (1 of maximum allowed 500):
 Global Partial OMITs (0 of maximum allowed 366):
 	None.
 
+set $CalcUTC 0
+set $DateTimeSep "@"
+set $DefaultColor "-1 -1 -1"
+set $DefaultPrio 5000
+set $EndSent  ".?!"
+set $EndSentIg  "" + char(34) + "')]}>"
+char(34) => """
+"" + """ => """
+""" + "')]}>" => ""')]}>"
+set $FirstIndent 0
+set $FoldYear 0
+set $FormWidth 72
+set $Location "Ottawa"
+set $MaxSatIter 150
+set $MaxStringLen 65535
+set $MinsFromUTC -300
+- 300 => -300
+set $SubsIndent 0
+set $TimeSep ":"
+
+set $LatDeg 30
+set $LatMin 30
+set $LatSec 0
+set $LongDeg -25
+- 25 => -25
+set $LongMin 15
+set $LongSec 0
+
 set a000 abs(1)
 abs(1) => 1
 set a001 abs(-1)
@@ -864,7 +892,7 @@ set a008 coerce("string", 11:44)
 coerce("string", 11:44) => "11:44"
 set a009 coerce("int", "badnews")
 coerce("int", "badnews") => Can't coerce
-../tests/test.rem(245): Can't coerce
+../tests/test.rem(268): Can't coerce
 set a010 coerce("int", "12")
 coerce("int", "12") => 12
 set a011 coerce("int", 11:44)
@@ -876,7 +904,7 @@ set a013 date(1992, 2, 2)
 date(1992, 2, 2) => 1992-02-02
 set a014 date(1993, 2, 29)
 date(1993, 2, 29) => Bad date specification
-../tests/test.rem(250): Bad date specification
+../tests/test.rem(273): Bad date specification
 set a015 day(today())
 today() => 1991-02-16
 day(1991-02-16) => 16
@@ -971,15 +999,15 @@ strlen("sadjflkhsldkfhsdlfjhk") => 21
 set a050 substr(a049, 2)
 a049 => 21
 substr(21, 2) => Type mismatch
-../tests/test.rem(288): Type mismatch
+../tests/test.rem(311): Type mismatch
 set a051 substr(a050, 2, 6)
-a050 => ../tests/test.rem(289): Undefined variable: a050
+a050 => ../tests/test.rem(312): Undefined variable: a050
 set a052 time(1+2, 3+4)
 1 + 2 => 3
 3 + 4 => 7
 time(3, 7) => 03:07
 rem 10 jan 1992 AT 11:22 CAL
-../tests/test.rem(291): Trig = Friday, 10 January, 1992 AT 11:22
+../tests/test.rem(314): Trig = Friday, 10 January, 1992 AT 11:22
 set a053 trigdate()
 trigdate() => 1992-01-10
 set a054 trigtime()
@@ -1071,101 +1099,101 @@ y => 11:33
 x => "foo"
 y => 11:33
 "foo" * 11:33 => Type mismatch
-../tests/test.rem(314): `*': Type mismatch
+../tests/test.rem(337): `*': Type mismatch
 Leaving UserFN h() => Type mismatch
 set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
 dosubst("%a %b %c %d %e %f %g %h", 1992-05-05) => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 msg [a074]%
-../tests/test.rem(316): Trig = Saturday, 16 February, 1991
+../tests/test.rem(339): Trig = Saturday, 16 February, 1991
 a074 => "on Tuesday, 5 May, 1992 in 444 days' tim"...
 on Tuesday, 5 May, 1992 in 444 days' time on Tuesday 5 on 05-05-1992 on 05-05-1992 on Tuesday, 5 May on 05-05
 set a075 dosubst("%i %j %k %l %m %n %o %p", '1992/5/5')
 dosubst("%i %j %k %l %m %n %o %p", 1992-05-05) => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 msg [a075]%
-../tests/test.rem(318): Trig = Saturday, 16 February, 1991
+../tests/test.rem(341): Trig = Saturday, 16 February, 1991
 a075 => "on 05-05 on Tuesday, May 5th, 1992 on Tu"...
 on 05-05 on Tuesday, May 5th, 1992 on Tuesday, May 5th on 1992-05-05 May 5  s
 set a076 dosubst("%q %r %s %t %u %v %w %x", '1992/5/5')
 dosubst("%q %r %s %t %u %v %w %x", 1992-05-05) => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 msg [a076]%
-../tests/test.rem(320): Trig = Saturday, 16 February, 1991
+../tests/test.rem(343): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 on Tuesday, 5th May, 1992 on"...
 s' 05 th 05 on Tuesday, 5th May, 1992 on Tuesday, 5th May Tuesday 444
 set a074 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", '1992/5/5')
 dosubst("%*a %*b %*c %*d %*e %*f %*g %*h", 1992-05-05) => "Tuesday, 5 May, 1992 in 444 days' time T"...
 msg [a074]%
-../tests/test.rem(322): Trig = Saturday, 16 February, 1991
+../tests/test.rem(345): Trig = Saturday, 16 February, 1991
 a074 => "Tuesday, 5 May, 1992 in 444 days' time T"...
 Tuesday, 5 May, 1992 in 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
 set a075 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", '1992/5/5')
 dosubst("%*i %*j %*k %*l %*m %*n %*o %*p", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 msg [a075]%
-../tests/test.rem(324): Trig = Saturday, 16 February, 1991
+../tests/test.rem(347): Trig = Saturday, 16 February, 1991
 a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  s
 set a076 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", '1992/5/5')
 dosubst("%*q %*r %*s %*t %*u %*v %*w %*x", 1992-05-05) => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
 msg [a076]%
-../tests/test.rem(326): Trig = Saturday, 16 February, 1991
+../tests/test.rem(349): Trig = Saturday, 16 February, 1991
 a076 => "s' 05 th 05 Tuesday, 5th May, 1992 Tuesd"...
 s' 05 th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
 set a077 dosubst("%*y %*z", '1992/5/5')
 dosubst("%*y %*z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(328): Trig = Saturday, 16 February, 1991
+../tests/test.rem(351): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
 set a074 dosubst("%A %B %C %D %E %F %G %H", '1992/5/5')
 dosubst("%A %B %C %D %E %F %G %H", 1992-05-05) => "On Tuesday, 5 May, 1992 In 444 days' tim"...
 msg [a074]%
-../tests/test.rem(330): Trig = Saturday, 16 February, 1991
+../tests/test.rem(353): Trig = Saturday, 16 February, 1991
 a074 => "On Tuesday, 5 May, 1992 In 444 days' tim"...
 On Tuesday, 5 May, 1992 In 444 days' time On Tuesday 5 On 05-05-1992 On 05-05-1992 On Tuesday, 5 May On 05-05
 set a075 dosubst("%I %J %K %L %M %N %O %P", '1992/5/5')
 dosubst("%I %J %K %L %M %N %O %P", 1992-05-05) => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
 msg [a075]%
-../tests/test.rem(332): Trig = Saturday, 16 February, 1991
+../tests/test.rem(355): Trig = Saturday, 16 February, 1991
 a075 => "On 05-05 On Tuesday, May 5th, 1992 On Tu"...
 On 05-05 On Tuesday, May 5th, 1992 On Tuesday, May 5th On 1992-05-05 May 5  S
 set a076 dosubst("%Q %R %S %T %U %V %W %X", '1992/5/5')
 dosubst("%Q %R %S %T %U %V %W %X", 1992-05-05) => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
 msg [a076]%
-../tests/test.rem(334): Trig = Saturday, 16 February, 1991
+../tests/test.rem(357): Trig = Saturday, 16 February, 1991
 a076 => "S' 05 Th 05 On Tuesday, 5th May, 1992 On"...
 S' 05 Th 05 On Tuesday, 5th May, 1992 On Tuesday, 5th May Tuesday 444
 set a077 dosubst("%Y %Z", '1992/5/5')
 dosubst("%Y %Z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(336): Trig = Saturday, 16 February, 1991
+../tests/test.rem(359): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
 set a074 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", '1992/5/5')
 dosubst("%*A %*B %*C %*D %*E %*F %*G %*H", 1992-05-05) => "Tuesday, 5 May, 1992 In 444 days' time T"...
 msg [a074]%
-../tests/test.rem(338): Trig = Saturday, 16 February, 1991
+../tests/test.rem(361): Trig = Saturday, 16 February, 1991
 a074 => "Tuesday, 5 May, 1992 In 444 days' time T"...
 Tuesday, 5 May, 1992 In 444 days' time Tuesday 5 05-05-1992 05-05-1992 Tuesday, 5 May 05-05
 set a075 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", '1992/5/5')
 dosubst("%*I %*J %*K %*L %*M %*N %*O %*P", 1992-05-05) => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 msg [a075]%
-../tests/test.rem(340): Trig = Saturday, 16 February, 1991
+../tests/test.rem(363): Trig = Saturday, 16 February, 1991
 a075 => "05-05 Tuesday, May 5th, 1992 Tuesday, Ma"...
 05-05 Tuesday, May 5th, 1992 Tuesday, May 5th 1992-05-05 May 5  S
 set a076 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", '1992/5/5')
 dosubst("%*Q %*R %*S %*T %*U %*V %*W %*X", 1992-05-05) => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
 msg [a076]%
-../tests/test.rem(342): Trig = Saturday, 16 February, 1991
+../tests/test.rem(365): Trig = Saturday, 16 February, 1991
 a076 => "S' 05 Th 05 Tuesday, 5th May, 1992 Tuesd"...
 S' 05 Th 05 Tuesday, 5th May, 1992 Tuesday, 5th May Tuesday 444
 set a077 dosubst("%*Y %*Z", '1992/5/5')
 dosubst("%*Y %*Z", 1992-05-05) => "1992 92
 "
 msg [a077]%
-../tests/test.rem(344): Trig = Saturday, 16 February, 1991
+../tests/test.rem(367): Trig = Saturday, 16 February, 1991
 a077 => "1992 92
 "
 1992 92
@@ -1188,7 +1216,7 @@ nonomitted(1991-03-01, 1991-03-13, "Sat", "Sun") => 7
 set a085 nonomitted('1991-03-24', '1991-04-01', "Sat")
 nonomitted(1991-03-24, 1991-04-01, "Sat") => 7
 REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 MSG foo
-../tests/test.rem(354): Trig = Monday, 30 August, 2010
+../tests/test.rem(377): Trig = Monday, 30 August, 2010
 set a086 trigback()
 trigback() => 4
 set a087 trigdelta()
@@ -1211,7 +1239,7 @@ set a095 trigduration()
 trigduration() => -1
 
 REM Mon Wed FROM 2010-09-03 ++3 --4 MSG foo
-../tests/test.rem(366): Trig = Saturday, 4 September, 2010
+../tests/test.rem(389): Trig = Saturday, 4 September, 2010
 set a096 trigback()
 trigback() => -4
 set a097 trigdelta()
@@ -1234,7 +1262,7 @@ set a105 trigduration()
 trigduration() => -1
 
 REM 2010-09-03 +3 -4 UNTIL 2012-01-01 PRIORITY 7 *14 AT 14:41 +15 *2 DURATION 213 MSG foo
-../tests/test.rem(378): Trig = Monday, 30 August, 2010 AT 14:41 DURATION 03:33
+../tests/test.rem(401): Trig = Monday, 30 August, 2010 AT 14:41 DURATION 03:33
 set a106 trigback()
 trigback() => 4
 set a107 trigdelta()
@@ -1257,7 +1285,7 @@ set a115 trigduration()
 trigduration() => 03:33
 
 REM Mon Wed FROM 2010-09-03 ++3 --4 AT 14:44 MSG foo
-../tests/test.rem(390): Trig = Saturday, 4 September, 2010 AT 14:44
+../tests/test.rem(413): Trig = Saturday, 4 September, 2010 AT 14:44
 set a116 trigback()
 trigback() => -4
 set a117 trigdelta()
@@ -1291,9 +1319,9 @@ set a129 23:30 + '2019-02-02@16:44'
 
 # Multi-day reminder
 REM 13 AT 16:00 DURATION 72:00 MSG 72-hour event
-../tests/test.rem(409): Trig = Wednesday, 13 March, 1991 AT 16:00 DURATION 72:00
-../tests/test.rem(409): Trig = Wednesday, 13 February, 1991 AT 16:00 DURATION 72:00
-../tests/test.rem(409): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 16:00
+../tests/test.rem(432): Trig = Wednesday, 13 March, 1991 AT 16:00 DURATION 72:00
+../tests/test.rem(432): Trig = Wednesday, 13 February, 1991 AT 16:00 DURATION 72:00
+../tests/test.rem(432): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 16:00
 72-hour event
 
 set a130 trigdate()
@@ -1311,1210 +1339,1210 @@ trigeventduration() => 72:00
 
 # These will issue errors
 REM Mon OMIT Mon SKIP MSG Never ever ever...
-../tests/test.rem(418): Can't compute trigger
+../tests/test.rem(441): Can't compute trigger
 REM Mon SATISFY [wkdaynum($T) == 3] MSG Nope nope...
-../tests/test.rem(419): Trig = Monday, 18 February, 1991
+../tests/test.rem(442): Trig = Monday, 18 February, 1991
 $T => 1991-02-18
 wkdaynum(1991-02-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 February, 1991
+../tests/test.rem(442): Trig = Monday, 25 February, 1991
 $T => 1991-02-25
 wkdaynum(1991-02-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 4 March, 1991
+../tests/test.rem(442): Trig = Monday, 4 March, 1991
 $T => 1991-03-04
 wkdaynum(1991-03-04) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 11 March, 1991
+../tests/test.rem(442): Trig = Monday, 11 March, 1991
 $T => 1991-03-11
 wkdaynum(1991-03-11) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 18 March, 1991
+../tests/test.rem(442): Trig = Monday, 18 March, 1991
 $T => 1991-03-18
 wkdaynum(1991-03-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 March, 1991
+../tests/test.rem(442): Trig = Monday, 25 March, 1991
 $T => 1991-03-25
 wkdaynum(1991-03-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 April, 1991
+../tests/test.rem(442): Trig = Monday, 1 April, 1991
 $T => 1991-04-01
 wkdaynum(1991-04-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 April, 1991
+../tests/test.rem(442): Trig = Monday, 8 April, 1991
 $T => 1991-04-08
 wkdaynum(1991-04-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 April, 1991
+../tests/test.rem(442): Trig = Monday, 15 April, 1991
 $T => 1991-04-15
 wkdaynum(1991-04-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 April, 1991
+../tests/test.rem(442): Trig = Monday, 22 April, 1991
 $T => 1991-04-22
 wkdaynum(1991-04-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 29 April, 1991
+../tests/test.rem(442): Trig = Monday, 29 April, 1991
 $T => 1991-04-29
 wkdaynum(1991-04-29) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 May, 1991
+../tests/test.rem(442): Trig = Monday, 6 May, 1991
 $T => 1991-05-06
 wkdaynum(1991-05-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 May, 1991
+../tests/test.rem(442): Trig = Monday, 13 May, 1991
 $T => 1991-05-13
 wkdaynum(1991-05-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 May, 1991
+../tests/test.rem(442): Trig = Monday, 20 May, 1991
 $T => 1991-05-20
 wkdaynum(1991-05-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 May, 1991
+../tests/test.rem(442): Trig = Monday, 27 May, 1991
 $T => 1991-05-27
 wkdaynum(1991-05-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 3 June, 1991
+../tests/test.rem(442): Trig = Monday, 3 June, 1991
 $T => 1991-06-03
 wkdaynum(1991-06-03) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 10 June, 1991
+../tests/test.rem(442): Trig = Monday, 10 June, 1991
 $T => 1991-06-10
 wkdaynum(1991-06-10) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 17 June, 1991
+../tests/test.rem(442): Trig = Monday, 17 June, 1991
 $T => 1991-06-17
 wkdaynum(1991-06-17) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 24 June, 1991
+../tests/test.rem(442): Trig = Monday, 24 June, 1991
 $T => 1991-06-24
 wkdaynum(1991-06-24) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 July, 1991
+../tests/test.rem(442): Trig = Monday, 1 July, 1991
 $T => 1991-07-01
 wkdaynum(1991-07-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 July, 1991
+../tests/test.rem(442): Trig = Monday, 8 July, 1991
 $T => 1991-07-08
 wkdaynum(1991-07-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 July, 1991
+../tests/test.rem(442): Trig = Monday, 15 July, 1991
 $T => 1991-07-15
 wkdaynum(1991-07-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 July, 1991
+../tests/test.rem(442): Trig = Monday, 22 July, 1991
 $T => 1991-07-22
 wkdaynum(1991-07-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 29 July, 1991
+../tests/test.rem(442): Trig = Monday, 29 July, 1991
 $T => 1991-07-29
 wkdaynum(1991-07-29) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 5 August, 1991
+../tests/test.rem(442): Trig = Monday, 5 August, 1991
 $T => 1991-08-05
 wkdaynum(1991-08-05) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 12 August, 1991
+../tests/test.rem(442): Trig = Monday, 12 August, 1991
 $T => 1991-08-12
 wkdaynum(1991-08-12) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 19 August, 1991
+../tests/test.rem(442): Trig = Monday, 19 August, 1991
 $T => 1991-08-19
 wkdaynum(1991-08-19) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 26 August, 1991
+../tests/test.rem(442): Trig = Monday, 26 August, 1991
 $T => 1991-08-26
 wkdaynum(1991-08-26) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 2 September, 1991
+../tests/test.rem(442): Trig = Monday, 2 September, 1991
 $T => 1991-09-02
 wkdaynum(1991-09-02) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 9 September, 1991
+../tests/test.rem(442): Trig = Monday, 9 September, 1991
 $T => 1991-09-09
 wkdaynum(1991-09-09) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 16 September, 1991
+../tests/test.rem(442): Trig = Monday, 16 September, 1991
 $T => 1991-09-16
 wkdaynum(1991-09-16) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 23 September, 1991
+../tests/test.rem(442): Trig = Monday, 23 September, 1991
 $T => 1991-09-23
 wkdaynum(1991-09-23) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 30 September, 1991
+../tests/test.rem(442): Trig = Monday, 30 September, 1991
 $T => 1991-09-30
 wkdaynum(1991-09-30) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 7 October, 1991
+../tests/test.rem(442): Trig = Monday, 7 October, 1991
 $T => 1991-10-07
 wkdaynum(1991-10-07) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 14 October, 1991
+../tests/test.rem(442): Trig = Monday, 14 October, 1991
 $T => 1991-10-14
 wkdaynum(1991-10-14) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 21 October, 1991
+../tests/test.rem(442): Trig = Monday, 21 October, 1991
 $T => 1991-10-21
 wkdaynum(1991-10-21) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 28 October, 1991
+../tests/test.rem(442): Trig = Monday, 28 October, 1991
 $T => 1991-10-28
 wkdaynum(1991-10-28) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 4 November, 1991
+../tests/test.rem(442): Trig = Monday, 4 November, 1991
 $T => 1991-11-04
 wkdaynum(1991-11-04) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 11 November, 1991
+../tests/test.rem(442): Trig = Monday, 11 November, 1991
 $T => 1991-11-11
 wkdaynum(1991-11-11) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 18 November, 1991
+../tests/test.rem(442): Trig = Monday, 18 November, 1991
 $T => 1991-11-18
 wkdaynum(1991-11-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 November, 1991
+../tests/test.rem(442): Trig = Monday, 25 November, 1991
 $T => 1991-11-25
 wkdaynum(1991-11-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 2 December, 1991
+../tests/test.rem(442): Trig = Monday, 2 December, 1991
 $T => 1991-12-02
 wkdaynum(1991-12-02) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 9 December, 1991
+../tests/test.rem(442): Trig = Monday, 9 December, 1991
 $T => 1991-12-09
 wkdaynum(1991-12-09) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 16 December, 1991
+../tests/test.rem(442): Trig = Monday, 16 December, 1991
 $T => 1991-12-16
 wkdaynum(1991-12-16) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 23 December, 1991
+../tests/test.rem(442): Trig = Monday, 23 December, 1991
 $T => 1991-12-23
 wkdaynum(1991-12-23) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 30 December, 1991
+../tests/test.rem(442): Trig = Monday, 30 December, 1991
 $T => 1991-12-30
 wkdaynum(1991-12-30) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 January, 1992
+../tests/test.rem(442): Trig = Monday, 6 January, 1992
 $T => 1992-01-06
 wkdaynum(1992-01-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 January, 1992
+../tests/test.rem(442): Trig = Monday, 13 January, 1992
 $T => 1992-01-13
 wkdaynum(1992-01-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 January, 1992
+../tests/test.rem(442): Trig = Monday, 20 January, 1992
 $T => 1992-01-20
 wkdaynum(1992-01-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 January, 1992
+../tests/test.rem(442): Trig = Monday, 27 January, 1992
 $T => 1992-01-27
 wkdaynum(1992-01-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 3 February, 1992
+../tests/test.rem(442): Trig = Monday, 3 February, 1992
 $T => 1992-02-03
 wkdaynum(1992-02-03) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 10 February, 1992
+../tests/test.rem(442): Trig = Monday, 10 February, 1992
 $T => 1992-02-10
 wkdaynum(1992-02-10) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 17 February, 1992
+../tests/test.rem(442): Trig = Monday, 17 February, 1992
 $T => 1992-02-17
 wkdaynum(1992-02-17) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 24 February, 1992
+../tests/test.rem(442): Trig = Monday, 24 February, 1992
 $T => 1992-02-24
 wkdaynum(1992-02-24) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 2 March, 1992
+../tests/test.rem(442): Trig = Monday, 2 March, 1992
 $T => 1992-03-02
 wkdaynum(1992-03-02) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 9 March, 1992
+../tests/test.rem(442): Trig = Monday, 9 March, 1992
 $T => 1992-03-09
 wkdaynum(1992-03-09) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 16 March, 1992
+../tests/test.rem(442): Trig = Monday, 16 March, 1992
 $T => 1992-03-16
 wkdaynum(1992-03-16) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 23 March, 1992
+../tests/test.rem(442): Trig = Monday, 23 March, 1992
 $T => 1992-03-23
 wkdaynum(1992-03-23) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 30 March, 1992
+../tests/test.rem(442): Trig = Monday, 30 March, 1992
 $T => 1992-03-30
 wkdaynum(1992-03-30) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 April, 1992
+../tests/test.rem(442): Trig = Monday, 6 April, 1992
 $T => 1992-04-06
 wkdaynum(1992-04-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 April, 1992
+../tests/test.rem(442): Trig = Monday, 13 April, 1992
 $T => 1992-04-13
 wkdaynum(1992-04-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 April, 1992
+../tests/test.rem(442): Trig = Monday, 20 April, 1992
 $T => 1992-04-20
 wkdaynum(1992-04-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 April, 1992
+../tests/test.rem(442): Trig = Monday, 27 April, 1992
 $T => 1992-04-27
 wkdaynum(1992-04-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 4 May, 1992
+../tests/test.rem(442): Trig = Monday, 4 May, 1992
 $T => 1992-05-04
 wkdaynum(1992-05-04) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 11 May, 1992
+../tests/test.rem(442): Trig = Monday, 11 May, 1992
 $T => 1992-05-11
 wkdaynum(1992-05-11) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 18 May, 1992
+../tests/test.rem(442): Trig = Monday, 18 May, 1992
 $T => 1992-05-18
 wkdaynum(1992-05-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 May, 1992
+../tests/test.rem(442): Trig = Monday, 25 May, 1992
 $T => 1992-05-25
 wkdaynum(1992-05-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 June, 1992
+../tests/test.rem(442): Trig = Monday, 1 June, 1992
 $T => 1992-06-01
 wkdaynum(1992-06-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 June, 1992
+../tests/test.rem(442): Trig = Monday, 8 June, 1992
 $T => 1992-06-08
 wkdaynum(1992-06-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 June, 1992
+../tests/test.rem(442): Trig = Monday, 15 June, 1992
 $T => 1992-06-15
 wkdaynum(1992-06-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 June, 1992
+../tests/test.rem(442): Trig = Monday, 22 June, 1992
 $T => 1992-06-22
 wkdaynum(1992-06-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 29 June, 1992
+../tests/test.rem(442): Trig = Monday, 29 June, 1992
 $T => 1992-06-29
 wkdaynum(1992-06-29) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 July, 1992
+../tests/test.rem(442): Trig = Monday, 6 July, 1992
 $T => 1992-07-06
 wkdaynum(1992-07-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 July, 1992
+../tests/test.rem(442): Trig = Monday, 13 July, 1992
 $T => 1992-07-13
 wkdaynum(1992-07-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 July, 1992
+../tests/test.rem(442): Trig = Monday, 20 July, 1992
 $T => 1992-07-20
 wkdaynum(1992-07-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 July, 1992
+../tests/test.rem(442): Trig = Monday, 27 July, 1992
 $T => 1992-07-27
 wkdaynum(1992-07-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 3 August, 1992
+../tests/test.rem(442): Trig = Monday, 3 August, 1992
 $T => 1992-08-03
 wkdaynum(1992-08-03) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 10 August, 1992
+../tests/test.rem(442): Trig = Monday, 10 August, 1992
 $T => 1992-08-10
 wkdaynum(1992-08-10) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 17 August, 1992
+../tests/test.rem(442): Trig = Monday, 17 August, 1992
 $T => 1992-08-17
 wkdaynum(1992-08-17) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 24 August, 1992
+../tests/test.rem(442): Trig = Monday, 24 August, 1992
 $T => 1992-08-24
 wkdaynum(1992-08-24) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 31 August, 1992
+../tests/test.rem(442): Trig = Monday, 31 August, 1992
 $T => 1992-08-31
 wkdaynum(1992-08-31) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 7 September, 1992
+../tests/test.rem(442): Trig = Monday, 7 September, 1992
 $T => 1992-09-07
 wkdaynum(1992-09-07) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 14 September, 1992
+../tests/test.rem(442): Trig = Monday, 14 September, 1992
 $T => 1992-09-14
 wkdaynum(1992-09-14) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 21 September, 1992
+../tests/test.rem(442): Trig = Monday, 21 September, 1992
 $T => 1992-09-21
 wkdaynum(1992-09-21) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 28 September, 1992
+../tests/test.rem(442): Trig = Monday, 28 September, 1992
 $T => 1992-09-28
 wkdaynum(1992-09-28) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 5 October, 1992
+../tests/test.rem(442): Trig = Monday, 5 October, 1992
 $T => 1992-10-05
 wkdaynum(1992-10-05) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 12 October, 1992
+../tests/test.rem(442): Trig = Monday, 12 October, 1992
 $T => 1992-10-12
 wkdaynum(1992-10-12) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 19 October, 1992
+../tests/test.rem(442): Trig = Monday, 19 October, 1992
 $T => 1992-10-19
 wkdaynum(1992-10-19) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 26 October, 1992
+../tests/test.rem(442): Trig = Monday, 26 October, 1992
 $T => 1992-10-26
 wkdaynum(1992-10-26) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 2 November, 1992
+../tests/test.rem(442): Trig = Monday, 2 November, 1992
 $T => 1992-11-02
 wkdaynum(1992-11-02) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 9 November, 1992
+../tests/test.rem(442): Trig = Monday, 9 November, 1992
 $T => 1992-11-09
 wkdaynum(1992-11-09) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 16 November, 1992
+../tests/test.rem(442): Trig = Monday, 16 November, 1992
 $T => 1992-11-16
 wkdaynum(1992-11-16) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 23 November, 1992
+../tests/test.rem(442): Trig = Monday, 23 November, 1992
 $T => 1992-11-23
 wkdaynum(1992-11-23) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 30 November, 1992
+../tests/test.rem(442): Trig = Monday, 30 November, 1992
 $T => 1992-11-30
 wkdaynum(1992-11-30) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 7 December, 1992
+../tests/test.rem(442): Trig = Monday, 7 December, 1992
 $T => 1992-12-07
 wkdaynum(1992-12-07) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 14 December, 1992
+../tests/test.rem(442): Trig = Monday, 14 December, 1992
 $T => 1992-12-14
 wkdaynum(1992-12-14) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 21 December, 1992
+../tests/test.rem(442): Trig = Monday, 21 December, 1992
 $T => 1992-12-21
 wkdaynum(1992-12-21) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 28 December, 1992
+../tests/test.rem(442): Trig = Monday, 28 December, 1992
 $T => 1992-12-28
 wkdaynum(1992-12-28) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 4 January, 1993
+../tests/test.rem(442): Trig = Monday, 4 January, 1993
 $T => 1993-01-04
 wkdaynum(1993-01-04) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 11 January, 1993
+../tests/test.rem(442): Trig = Monday, 11 January, 1993
 $T => 1993-01-11
 wkdaynum(1993-01-11) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 18 January, 1993
+../tests/test.rem(442): Trig = Monday, 18 January, 1993
 $T => 1993-01-18
 wkdaynum(1993-01-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 January, 1993
+../tests/test.rem(442): Trig = Monday, 25 January, 1993
 $T => 1993-01-25
 wkdaynum(1993-01-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 February, 1993
+../tests/test.rem(442): Trig = Monday, 1 February, 1993
 $T => 1993-02-01
 wkdaynum(1993-02-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 February, 1993
+../tests/test.rem(442): Trig = Monday, 8 February, 1993
 $T => 1993-02-08
 wkdaynum(1993-02-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 February, 1993
+../tests/test.rem(442): Trig = Monday, 15 February, 1993
 $T => 1993-02-15
 wkdaynum(1993-02-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 February, 1993
+../tests/test.rem(442): Trig = Monday, 22 February, 1993
 $T => 1993-02-22
 wkdaynum(1993-02-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 March, 1993
+../tests/test.rem(442): Trig = Monday, 1 March, 1993
 $T => 1993-03-01
 wkdaynum(1993-03-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 March, 1993
+../tests/test.rem(442): Trig = Monday, 8 March, 1993
 $T => 1993-03-08
 wkdaynum(1993-03-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 March, 1993
+../tests/test.rem(442): Trig = Monday, 15 March, 1993
 $T => 1993-03-15
 wkdaynum(1993-03-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 March, 1993
+../tests/test.rem(442): Trig = Monday, 22 March, 1993
 $T => 1993-03-22
 wkdaynum(1993-03-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 29 March, 1993
+../tests/test.rem(442): Trig = Monday, 29 March, 1993
 $T => 1993-03-29
 wkdaynum(1993-03-29) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 5 April, 1993
+../tests/test.rem(442): Trig = Monday, 5 April, 1993
 $T => 1993-04-05
 wkdaynum(1993-04-05) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 12 April, 1993
+../tests/test.rem(442): Trig = Monday, 12 April, 1993
 $T => 1993-04-12
 wkdaynum(1993-04-12) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 19 April, 1993
+../tests/test.rem(442): Trig = Monday, 19 April, 1993
 $T => 1993-04-19
 wkdaynum(1993-04-19) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 26 April, 1993
+../tests/test.rem(442): Trig = Monday, 26 April, 1993
 $T => 1993-04-26
 wkdaynum(1993-04-26) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 3 May, 1993
+../tests/test.rem(442): Trig = Monday, 3 May, 1993
 $T => 1993-05-03
 wkdaynum(1993-05-03) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 10 May, 1993
+../tests/test.rem(442): Trig = Monday, 10 May, 1993
 $T => 1993-05-10
 wkdaynum(1993-05-10) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 17 May, 1993
+../tests/test.rem(442): Trig = Monday, 17 May, 1993
 $T => 1993-05-17
 wkdaynum(1993-05-17) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 24 May, 1993
+../tests/test.rem(442): Trig = Monday, 24 May, 1993
 $T => 1993-05-24
 wkdaynum(1993-05-24) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 31 May, 1993
+../tests/test.rem(442): Trig = Monday, 31 May, 1993
 $T => 1993-05-31
 wkdaynum(1993-05-31) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 7 June, 1993
+../tests/test.rem(442): Trig = Monday, 7 June, 1993
 $T => 1993-06-07
 wkdaynum(1993-06-07) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 14 June, 1993
+../tests/test.rem(442): Trig = Monday, 14 June, 1993
 $T => 1993-06-14
 wkdaynum(1993-06-14) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 21 June, 1993
+../tests/test.rem(442): Trig = Monday, 21 June, 1993
 $T => 1993-06-21
 wkdaynum(1993-06-21) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 28 June, 1993
+../tests/test.rem(442): Trig = Monday, 28 June, 1993
 $T => 1993-06-28
 wkdaynum(1993-06-28) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 5 July, 1993
+../tests/test.rem(442): Trig = Monday, 5 July, 1993
 $T => 1993-07-05
 wkdaynum(1993-07-05) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 12 July, 1993
+../tests/test.rem(442): Trig = Monday, 12 July, 1993
 $T => 1993-07-12
 wkdaynum(1993-07-12) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 19 July, 1993
+../tests/test.rem(442): Trig = Monday, 19 July, 1993
 $T => 1993-07-19
 wkdaynum(1993-07-19) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 26 July, 1993
+../tests/test.rem(442): Trig = Monday, 26 July, 1993
 $T => 1993-07-26
 wkdaynum(1993-07-26) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 2 August, 1993
+../tests/test.rem(442): Trig = Monday, 2 August, 1993
 $T => 1993-08-02
 wkdaynum(1993-08-02) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 9 August, 1993
+../tests/test.rem(442): Trig = Monday, 9 August, 1993
 $T => 1993-08-09
 wkdaynum(1993-08-09) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 16 August, 1993
+../tests/test.rem(442): Trig = Monday, 16 August, 1993
 $T => 1993-08-16
 wkdaynum(1993-08-16) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 23 August, 1993
+../tests/test.rem(442): Trig = Monday, 23 August, 1993
 $T => 1993-08-23
 wkdaynum(1993-08-23) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 30 August, 1993
+../tests/test.rem(442): Trig = Monday, 30 August, 1993
 $T => 1993-08-30
 wkdaynum(1993-08-30) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 September, 1993
+../tests/test.rem(442): Trig = Monday, 6 September, 1993
 $T => 1993-09-06
 wkdaynum(1993-09-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 September, 1993
+../tests/test.rem(442): Trig = Monday, 13 September, 1993
 $T => 1993-09-13
 wkdaynum(1993-09-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 September, 1993
+../tests/test.rem(442): Trig = Monday, 20 September, 1993
 $T => 1993-09-20
 wkdaynum(1993-09-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 September, 1993
+../tests/test.rem(442): Trig = Monday, 27 September, 1993
 $T => 1993-09-27
 wkdaynum(1993-09-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 4 October, 1993
+../tests/test.rem(442): Trig = Monday, 4 October, 1993
 $T => 1993-10-04
 wkdaynum(1993-10-04) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 11 October, 1993
+../tests/test.rem(442): Trig = Monday, 11 October, 1993
 $T => 1993-10-11
 wkdaynum(1993-10-11) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 18 October, 1993
+../tests/test.rem(442): Trig = Monday, 18 October, 1993
 $T => 1993-10-18
 wkdaynum(1993-10-18) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 25 October, 1993
+../tests/test.rem(442): Trig = Monday, 25 October, 1993
 $T => 1993-10-25
 wkdaynum(1993-10-25) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 1 November, 1993
+../tests/test.rem(442): Trig = Monday, 1 November, 1993
 $T => 1993-11-01
 wkdaynum(1993-11-01) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 8 November, 1993
+../tests/test.rem(442): Trig = Monday, 8 November, 1993
 $T => 1993-11-08
 wkdaynum(1993-11-08) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 15 November, 1993
+../tests/test.rem(442): Trig = Monday, 15 November, 1993
 $T => 1993-11-15
 wkdaynum(1993-11-15) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 22 November, 1993
+../tests/test.rem(442): Trig = Monday, 22 November, 1993
 $T => 1993-11-22
 wkdaynum(1993-11-22) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 29 November, 1993
+../tests/test.rem(442): Trig = Monday, 29 November, 1993
 $T => 1993-11-29
 wkdaynum(1993-11-29) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 6 December, 1993
+../tests/test.rem(442): Trig = Monday, 6 December, 1993
 $T => 1993-12-06
 wkdaynum(1993-12-06) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 13 December, 1993
+../tests/test.rem(442): Trig = Monday, 13 December, 1993
 $T => 1993-12-13
 wkdaynum(1993-12-13) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 20 December, 1993
+../tests/test.rem(442): Trig = Monday, 20 December, 1993
 $T => 1993-12-20
 wkdaynum(1993-12-20) => 1
 1 == 3 => 0
-../tests/test.rem(419): Trig = Monday, 27 December, 1993
+../tests/test.rem(442): Trig = Monday, 27 December, 1993
 $T => 1993-12-27
 wkdaynum(1993-12-27) => 1
 1 == 3 => 0
-../tests/test.rem(419): Can't compute trigger
+../tests/test.rem(442): Can't compute trigger
 
 # These will just silently not trigger
 REM MAYBE-UNCOMPUTABLE Mon OMIT Mon SKIP MSG Never ever ever...
 REM MAYBE-UNCOMPUTABLE Mon SATISFY [wkdaynum($T) == 3] MSG Nope nope...
-../tests/test.rem(423): Trig = Monday, 18 February, 1991
+../tests/test.rem(446): Trig = Monday, 18 February, 1991
 $T => 1991-02-18
 wkdaynum(1991-02-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 February, 1991
+../tests/test.rem(446): Trig = Monday, 25 February, 1991
 $T => 1991-02-25
 wkdaynum(1991-02-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 4 March, 1991
+../tests/test.rem(446): Trig = Monday, 4 March, 1991
 $T => 1991-03-04
 wkdaynum(1991-03-04) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 11 March, 1991
+../tests/test.rem(446): Trig = Monday, 11 March, 1991
 $T => 1991-03-11
 wkdaynum(1991-03-11) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 18 March, 1991
+../tests/test.rem(446): Trig = Monday, 18 March, 1991
 $T => 1991-03-18
 wkdaynum(1991-03-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 March, 1991
+../tests/test.rem(446): Trig = Monday, 25 March, 1991
 $T => 1991-03-25
 wkdaynum(1991-03-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 April, 1991
+../tests/test.rem(446): Trig = Monday, 1 April, 1991
 $T => 1991-04-01
 wkdaynum(1991-04-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 April, 1991
+../tests/test.rem(446): Trig = Monday, 8 April, 1991
 $T => 1991-04-08
 wkdaynum(1991-04-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 April, 1991
+../tests/test.rem(446): Trig = Monday, 15 April, 1991
 $T => 1991-04-15
 wkdaynum(1991-04-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 April, 1991
+../tests/test.rem(446): Trig = Monday, 22 April, 1991
 $T => 1991-04-22
 wkdaynum(1991-04-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 29 April, 1991
+../tests/test.rem(446): Trig = Monday, 29 April, 1991
 $T => 1991-04-29
 wkdaynum(1991-04-29) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 May, 1991
+../tests/test.rem(446): Trig = Monday, 6 May, 1991
 $T => 1991-05-06
 wkdaynum(1991-05-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 May, 1991
+../tests/test.rem(446): Trig = Monday, 13 May, 1991
 $T => 1991-05-13
 wkdaynum(1991-05-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 May, 1991
+../tests/test.rem(446): Trig = Monday, 20 May, 1991
 $T => 1991-05-20
 wkdaynum(1991-05-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 May, 1991
+../tests/test.rem(446): Trig = Monday, 27 May, 1991
 $T => 1991-05-27
 wkdaynum(1991-05-27) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 3 June, 1991
+../tests/test.rem(446): Trig = Monday, 3 June, 1991
 $T => 1991-06-03
 wkdaynum(1991-06-03) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 10 June, 1991
+../tests/test.rem(446): Trig = Monday, 10 June, 1991
 $T => 1991-06-10
 wkdaynum(1991-06-10) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 17 June, 1991
+../tests/test.rem(446): Trig = Monday, 17 June, 1991
 $T => 1991-06-17
 wkdaynum(1991-06-17) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 24 June, 1991
+../tests/test.rem(446): Trig = Monday, 24 June, 1991
 $T => 1991-06-24
 wkdaynum(1991-06-24) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 July, 1991
+../tests/test.rem(446): Trig = Monday, 1 July, 1991
 $T => 1991-07-01
 wkdaynum(1991-07-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 July, 1991
+../tests/test.rem(446): Trig = Monday, 8 July, 1991
 $T => 1991-07-08
 wkdaynum(1991-07-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 July, 1991
+../tests/test.rem(446): Trig = Monday, 15 July, 1991
 $T => 1991-07-15
 wkdaynum(1991-07-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 July, 1991
+../tests/test.rem(446): Trig = Monday, 22 July, 1991
 $T => 1991-07-22
 wkdaynum(1991-07-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 29 July, 1991
+../tests/test.rem(446): Trig = Monday, 29 July, 1991
 $T => 1991-07-29
 wkdaynum(1991-07-29) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 5 August, 1991
+../tests/test.rem(446): Trig = Monday, 5 August, 1991
 $T => 1991-08-05
 wkdaynum(1991-08-05) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 12 August, 1991
+../tests/test.rem(446): Trig = Monday, 12 August, 1991
 $T => 1991-08-12
 wkdaynum(1991-08-12) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 19 August, 1991
+../tests/test.rem(446): Trig = Monday, 19 August, 1991
 $T => 1991-08-19
 wkdaynum(1991-08-19) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 26 August, 1991
+../tests/test.rem(446): Trig = Monday, 26 August, 1991
 $T => 1991-08-26
 wkdaynum(1991-08-26) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 2 September, 1991
+../tests/test.rem(446): Trig = Monday, 2 September, 1991
 $T => 1991-09-02
 wkdaynum(1991-09-02) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 9 September, 1991
+../tests/test.rem(446): Trig = Monday, 9 September, 1991
 $T => 1991-09-09
 wkdaynum(1991-09-09) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 16 September, 1991
+../tests/test.rem(446): Trig = Monday, 16 September, 1991
 $T => 1991-09-16
 wkdaynum(1991-09-16) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 23 September, 1991
+../tests/test.rem(446): Trig = Monday, 23 September, 1991
 $T => 1991-09-23
 wkdaynum(1991-09-23) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 30 September, 1991
+../tests/test.rem(446): Trig = Monday, 30 September, 1991
 $T => 1991-09-30
 wkdaynum(1991-09-30) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 7 October, 1991
+../tests/test.rem(446): Trig = Monday, 7 October, 1991
 $T => 1991-10-07
 wkdaynum(1991-10-07) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 14 October, 1991
+../tests/test.rem(446): Trig = Monday, 14 October, 1991
 $T => 1991-10-14
 wkdaynum(1991-10-14) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 21 October, 1991
+../tests/test.rem(446): Trig = Monday, 21 October, 1991
 $T => 1991-10-21
 wkdaynum(1991-10-21) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 28 October, 1991
+../tests/test.rem(446): Trig = Monday, 28 October, 1991
 $T => 1991-10-28
 wkdaynum(1991-10-28) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 4 November, 1991
+../tests/test.rem(446): Trig = Monday, 4 November, 1991
 $T => 1991-11-04
 wkdaynum(1991-11-04) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 11 November, 1991
+../tests/test.rem(446): Trig = Monday, 11 November, 1991
 $T => 1991-11-11
 wkdaynum(1991-11-11) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 18 November, 1991
+../tests/test.rem(446): Trig = Monday, 18 November, 1991
 $T => 1991-11-18
 wkdaynum(1991-11-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 November, 1991
+../tests/test.rem(446): Trig = Monday, 25 November, 1991
 $T => 1991-11-25
 wkdaynum(1991-11-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 2 December, 1991
+../tests/test.rem(446): Trig = Monday, 2 December, 1991
 $T => 1991-12-02
 wkdaynum(1991-12-02) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 9 December, 1991
+../tests/test.rem(446): Trig = Monday, 9 December, 1991
 $T => 1991-12-09
 wkdaynum(1991-12-09) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 16 December, 1991
+../tests/test.rem(446): Trig = Monday, 16 December, 1991
 $T => 1991-12-16
 wkdaynum(1991-12-16) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 23 December, 1991
+../tests/test.rem(446): Trig = Monday, 23 December, 1991
 $T => 1991-12-23
 wkdaynum(1991-12-23) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 30 December, 1991
+../tests/test.rem(446): Trig = Monday, 30 December, 1991
 $T => 1991-12-30
 wkdaynum(1991-12-30) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 January, 1992
+../tests/test.rem(446): Trig = Monday, 6 January, 1992
 $T => 1992-01-06
 wkdaynum(1992-01-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 January, 1992
+../tests/test.rem(446): Trig = Monday, 13 January, 1992
 $T => 1992-01-13
 wkdaynum(1992-01-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 January, 1992
+../tests/test.rem(446): Trig = Monday, 20 January, 1992
 $T => 1992-01-20
 wkdaynum(1992-01-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 January, 1992
+../tests/test.rem(446): Trig = Monday, 27 January, 1992
 $T => 1992-01-27
 wkdaynum(1992-01-27) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 3 February, 1992
+../tests/test.rem(446): Trig = Monday, 3 February, 1992
 $T => 1992-02-03
 wkdaynum(1992-02-03) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 10 February, 1992
+../tests/test.rem(446): Trig = Monday, 10 February, 1992
 $T => 1992-02-10
 wkdaynum(1992-02-10) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 17 February, 1992
+../tests/test.rem(446): Trig = Monday, 17 February, 1992
 $T => 1992-02-17
 wkdaynum(1992-02-17) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 24 February, 1992
+../tests/test.rem(446): Trig = Monday, 24 February, 1992
 $T => 1992-02-24
 wkdaynum(1992-02-24) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 2 March, 1992
+../tests/test.rem(446): Trig = Monday, 2 March, 1992
 $T => 1992-03-02
 wkdaynum(1992-03-02) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 9 March, 1992
+../tests/test.rem(446): Trig = Monday, 9 March, 1992
 $T => 1992-03-09
 wkdaynum(1992-03-09) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 16 March, 1992
+../tests/test.rem(446): Trig = Monday, 16 March, 1992
 $T => 1992-03-16
 wkdaynum(1992-03-16) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 23 March, 1992
+../tests/test.rem(446): Trig = Monday, 23 March, 1992
 $T => 1992-03-23
 wkdaynum(1992-03-23) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 30 March, 1992
+../tests/test.rem(446): Trig = Monday, 30 March, 1992
 $T => 1992-03-30
 wkdaynum(1992-03-30) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 April, 1992
+../tests/test.rem(446): Trig = Monday, 6 April, 1992
 $T => 1992-04-06
 wkdaynum(1992-04-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 April, 1992
+../tests/test.rem(446): Trig = Monday, 13 April, 1992
 $T => 1992-04-13
 wkdaynum(1992-04-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 April, 1992
+../tests/test.rem(446): Trig = Monday, 20 April, 1992
 $T => 1992-04-20
 wkdaynum(1992-04-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 April, 1992
+../tests/test.rem(446): Trig = Monday, 27 April, 1992
 $T => 1992-04-27
 wkdaynum(1992-04-27) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 4 May, 1992
+../tests/test.rem(446): Trig = Monday, 4 May, 1992
 $T => 1992-05-04
 wkdaynum(1992-05-04) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 11 May, 1992
+../tests/test.rem(446): Trig = Monday, 11 May, 1992
 $T => 1992-05-11
 wkdaynum(1992-05-11) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 18 May, 1992
+../tests/test.rem(446): Trig = Monday, 18 May, 1992
 $T => 1992-05-18
 wkdaynum(1992-05-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 May, 1992
+../tests/test.rem(446): Trig = Monday, 25 May, 1992
 $T => 1992-05-25
 wkdaynum(1992-05-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 June, 1992
+../tests/test.rem(446): Trig = Monday, 1 June, 1992
 $T => 1992-06-01
 wkdaynum(1992-06-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 June, 1992
+../tests/test.rem(446): Trig = Monday, 8 June, 1992
 $T => 1992-06-08
 wkdaynum(1992-06-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 June, 1992
+../tests/test.rem(446): Trig = Monday, 15 June, 1992
 $T => 1992-06-15
 wkdaynum(1992-06-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 June, 1992
+../tests/test.rem(446): Trig = Monday, 22 June, 1992
 $T => 1992-06-22
 wkdaynum(1992-06-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 29 June, 1992
+../tests/test.rem(446): Trig = Monday, 29 June, 1992
 $T => 1992-06-29
 wkdaynum(1992-06-29) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 July, 1992
+../tests/test.rem(446): Trig = Monday, 6 July, 1992
 $T => 1992-07-06
 wkdaynum(1992-07-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 July, 1992
+../tests/test.rem(446): Trig = Monday, 13 July, 1992
 $T => 1992-07-13
 wkdaynum(1992-07-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 July, 1992
+../tests/test.rem(446): Trig = Monday, 20 July, 1992
 $T => 1992-07-20
 wkdaynum(1992-07-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 July, 1992
+../tests/test.rem(446): Trig = Monday, 27 July, 1992
 $T => 1992-07-27
 wkdaynum(1992-07-27) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 3 August, 1992
+../tests/test.rem(446): Trig = Monday, 3 August, 1992
 $T => 1992-08-03
 wkdaynum(1992-08-03) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 10 August, 1992
+../tests/test.rem(446): Trig = Monday, 10 August, 1992
 $T => 1992-08-10
 wkdaynum(1992-08-10) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 17 August, 1992
+../tests/test.rem(446): Trig = Monday, 17 August, 1992
 $T => 1992-08-17
 wkdaynum(1992-08-17) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 24 August, 1992
+../tests/test.rem(446): Trig = Monday, 24 August, 1992
 $T => 1992-08-24
 wkdaynum(1992-08-24) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 31 August, 1992
+../tests/test.rem(446): Trig = Monday, 31 August, 1992
 $T => 1992-08-31
 wkdaynum(1992-08-31) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 7 September, 1992
+../tests/test.rem(446): Trig = Monday, 7 September, 1992
 $T => 1992-09-07
 wkdaynum(1992-09-07) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 14 September, 1992
+../tests/test.rem(446): Trig = Monday, 14 September, 1992
 $T => 1992-09-14
 wkdaynum(1992-09-14) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 21 September, 1992
+../tests/test.rem(446): Trig = Monday, 21 September, 1992
 $T => 1992-09-21
 wkdaynum(1992-09-21) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 28 September, 1992
+../tests/test.rem(446): Trig = Monday, 28 September, 1992
 $T => 1992-09-28
 wkdaynum(1992-09-28) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 5 October, 1992
+../tests/test.rem(446): Trig = Monday, 5 October, 1992
 $T => 1992-10-05
 wkdaynum(1992-10-05) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 12 October, 1992
+../tests/test.rem(446): Trig = Monday, 12 October, 1992
 $T => 1992-10-12
 wkdaynum(1992-10-12) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 19 October, 1992
+../tests/test.rem(446): Trig = Monday, 19 October, 1992
 $T => 1992-10-19
 wkdaynum(1992-10-19) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 26 October, 1992
+../tests/test.rem(446): Trig = Monday, 26 October, 1992
 $T => 1992-10-26
 wkdaynum(1992-10-26) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 2 November, 1992
+../tests/test.rem(446): Trig = Monday, 2 November, 1992
 $T => 1992-11-02
 wkdaynum(1992-11-02) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 9 November, 1992
+../tests/test.rem(446): Trig = Monday, 9 November, 1992
 $T => 1992-11-09
 wkdaynum(1992-11-09) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 16 November, 1992
+../tests/test.rem(446): Trig = Monday, 16 November, 1992
 $T => 1992-11-16
 wkdaynum(1992-11-16) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 23 November, 1992
+../tests/test.rem(446): Trig = Monday, 23 November, 1992
 $T => 1992-11-23
 wkdaynum(1992-11-23) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 30 November, 1992
+../tests/test.rem(446): Trig = Monday, 30 November, 1992
 $T => 1992-11-30
 wkdaynum(1992-11-30) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 7 December, 1992
+../tests/test.rem(446): Trig = Monday, 7 December, 1992
 $T => 1992-12-07
 wkdaynum(1992-12-07) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 14 December, 1992
+../tests/test.rem(446): Trig = Monday, 14 December, 1992
 $T => 1992-12-14
 wkdaynum(1992-12-14) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 21 December, 1992
+../tests/test.rem(446): Trig = Monday, 21 December, 1992
 $T => 1992-12-21
 wkdaynum(1992-12-21) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 28 December, 1992
+../tests/test.rem(446): Trig = Monday, 28 December, 1992
 $T => 1992-12-28
 wkdaynum(1992-12-28) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 4 January, 1993
+../tests/test.rem(446): Trig = Monday, 4 January, 1993
 $T => 1993-01-04
 wkdaynum(1993-01-04) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 11 January, 1993
+../tests/test.rem(446): Trig = Monday, 11 January, 1993
 $T => 1993-01-11
 wkdaynum(1993-01-11) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 18 January, 1993
+../tests/test.rem(446): Trig = Monday, 18 January, 1993
 $T => 1993-01-18
 wkdaynum(1993-01-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 January, 1993
+../tests/test.rem(446): Trig = Monday, 25 January, 1993
 $T => 1993-01-25
 wkdaynum(1993-01-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 February, 1993
+../tests/test.rem(446): Trig = Monday, 1 February, 1993
 $T => 1993-02-01
 wkdaynum(1993-02-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 February, 1993
+../tests/test.rem(446): Trig = Monday, 8 February, 1993
 $T => 1993-02-08
 wkdaynum(1993-02-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 February, 1993
+../tests/test.rem(446): Trig = Monday, 15 February, 1993
 $T => 1993-02-15
 wkdaynum(1993-02-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 February, 1993
+../tests/test.rem(446): Trig = Monday, 22 February, 1993
 $T => 1993-02-22
 wkdaynum(1993-02-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 March, 1993
+../tests/test.rem(446): Trig = Monday, 1 March, 1993
 $T => 1993-03-01
 wkdaynum(1993-03-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 March, 1993
+../tests/test.rem(446): Trig = Monday, 8 March, 1993
 $T => 1993-03-08
 wkdaynum(1993-03-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 March, 1993
+../tests/test.rem(446): Trig = Monday, 15 March, 1993
 $T => 1993-03-15
 wkdaynum(1993-03-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 March, 1993
+../tests/test.rem(446): Trig = Monday, 22 March, 1993
 $T => 1993-03-22
 wkdaynum(1993-03-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 29 March, 1993
+../tests/test.rem(446): Trig = Monday, 29 March, 1993
 $T => 1993-03-29
 wkdaynum(1993-03-29) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 5 April, 1993
+../tests/test.rem(446): Trig = Monday, 5 April, 1993
 $T => 1993-04-05
 wkdaynum(1993-04-05) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 12 April, 1993
+../tests/test.rem(446): Trig = Monday, 12 April, 1993
 $T => 1993-04-12
 wkdaynum(1993-04-12) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 19 April, 1993
+../tests/test.rem(446): Trig = Monday, 19 April, 1993
 $T => 1993-04-19
 wkdaynum(1993-04-19) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 26 April, 1993
+../tests/test.rem(446): Trig = Monday, 26 April, 1993
 $T => 1993-04-26
 wkdaynum(1993-04-26) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 3 May, 1993
+../tests/test.rem(446): Trig = Monday, 3 May, 1993
 $T => 1993-05-03
 wkdaynum(1993-05-03) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 10 May, 1993
+../tests/test.rem(446): Trig = Monday, 10 May, 1993
 $T => 1993-05-10
 wkdaynum(1993-05-10) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 17 May, 1993
+../tests/test.rem(446): Trig = Monday, 17 May, 1993
 $T => 1993-05-17
 wkdaynum(1993-05-17) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 24 May, 1993
+../tests/test.rem(446): Trig = Monday, 24 May, 1993
 $T => 1993-05-24
 wkdaynum(1993-05-24) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 31 May, 1993
+../tests/test.rem(446): Trig = Monday, 31 May, 1993
 $T => 1993-05-31
 wkdaynum(1993-05-31) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 7 June, 1993
+../tests/test.rem(446): Trig = Monday, 7 June, 1993
 $T => 1993-06-07
 wkdaynum(1993-06-07) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 14 June, 1993
+../tests/test.rem(446): Trig = Monday, 14 June, 1993
 $T => 1993-06-14
 wkdaynum(1993-06-14) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 21 June, 1993
+../tests/test.rem(446): Trig = Monday, 21 June, 1993
 $T => 1993-06-21
 wkdaynum(1993-06-21) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 28 June, 1993
+../tests/test.rem(446): Trig = Monday, 28 June, 1993
 $T => 1993-06-28
 wkdaynum(1993-06-28) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 5 July, 1993
+../tests/test.rem(446): Trig = Monday, 5 July, 1993
 $T => 1993-07-05
 wkdaynum(1993-07-05) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 12 July, 1993
+../tests/test.rem(446): Trig = Monday, 12 July, 1993
 $T => 1993-07-12
 wkdaynum(1993-07-12) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 19 July, 1993
+../tests/test.rem(446): Trig = Monday, 19 July, 1993
 $T => 1993-07-19
 wkdaynum(1993-07-19) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 26 July, 1993
+../tests/test.rem(446): Trig = Monday, 26 July, 1993
 $T => 1993-07-26
 wkdaynum(1993-07-26) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 2 August, 1993
+../tests/test.rem(446): Trig = Monday, 2 August, 1993
 $T => 1993-08-02
 wkdaynum(1993-08-02) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 9 August, 1993
+../tests/test.rem(446): Trig = Monday, 9 August, 1993
 $T => 1993-08-09
 wkdaynum(1993-08-09) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 16 August, 1993
+../tests/test.rem(446): Trig = Monday, 16 August, 1993
 $T => 1993-08-16
 wkdaynum(1993-08-16) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 23 August, 1993
+../tests/test.rem(446): Trig = Monday, 23 August, 1993
 $T => 1993-08-23
 wkdaynum(1993-08-23) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 30 August, 1993
+../tests/test.rem(446): Trig = Monday, 30 August, 1993
 $T => 1993-08-30
 wkdaynum(1993-08-30) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 September, 1993
+../tests/test.rem(446): Trig = Monday, 6 September, 1993
 $T => 1993-09-06
 wkdaynum(1993-09-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 September, 1993
+../tests/test.rem(446): Trig = Monday, 13 September, 1993
 $T => 1993-09-13
 wkdaynum(1993-09-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 September, 1993
+../tests/test.rem(446): Trig = Monday, 20 September, 1993
 $T => 1993-09-20
 wkdaynum(1993-09-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 September, 1993
+../tests/test.rem(446): Trig = Monday, 27 September, 1993
 $T => 1993-09-27
 wkdaynum(1993-09-27) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 4 October, 1993
+../tests/test.rem(446): Trig = Monday, 4 October, 1993
 $T => 1993-10-04
 wkdaynum(1993-10-04) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 11 October, 1993
+../tests/test.rem(446): Trig = Monday, 11 October, 1993
 $T => 1993-10-11
 wkdaynum(1993-10-11) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 18 October, 1993
+../tests/test.rem(446): Trig = Monday, 18 October, 1993
 $T => 1993-10-18
 wkdaynum(1993-10-18) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 25 October, 1993
+../tests/test.rem(446): Trig = Monday, 25 October, 1993
 $T => 1993-10-25
 wkdaynum(1993-10-25) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 1 November, 1993
+../tests/test.rem(446): Trig = Monday, 1 November, 1993
 $T => 1993-11-01
 wkdaynum(1993-11-01) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 8 November, 1993
+../tests/test.rem(446): Trig = Monday, 8 November, 1993
 $T => 1993-11-08
 wkdaynum(1993-11-08) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 15 November, 1993
+../tests/test.rem(446): Trig = Monday, 15 November, 1993
 $T => 1993-11-15
 wkdaynum(1993-11-15) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 22 November, 1993
+../tests/test.rem(446): Trig = Monday, 22 November, 1993
 $T => 1993-11-22
 wkdaynum(1993-11-22) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 29 November, 1993
+../tests/test.rem(446): Trig = Monday, 29 November, 1993
 $T => 1993-11-29
 wkdaynum(1993-11-29) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 6 December, 1993
+../tests/test.rem(446): Trig = Monday, 6 December, 1993
 $T => 1993-12-06
 wkdaynum(1993-12-06) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 13 December, 1993
+../tests/test.rem(446): Trig = Monday, 13 December, 1993
 $T => 1993-12-13
 wkdaynum(1993-12-13) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 20 December, 1993
+../tests/test.rem(446): Trig = Monday, 20 December, 1993
 $T => 1993-12-20
 wkdaynum(1993-12-20) => 1
 1 == 3 => 0
-../tests/test.rem(423): Trig = Monday, 27 December, 1993
+../tests/test.rem(446): Trig = Monday, 27 December, 1993
 $T => 1993-12-27
 wkdaynum(1993-12-27) => 1
 1 == 3 => 0
@@ -2655,16 +2683,75 @@ a064  1
 a083  1991-03-24
 a106  4
 a125  -1
+dump $
+Variable  Value
+
+        $CalcUTC  0           [0, 1]
+        $CalMode  0
+         $Daemon  0
+        $DateSep  "-"
+    $DateTimeSep  "@"
+   $DefaultColor  "-1 -1 -1"
+    $DefaultPrio  5000        [0, 9999]
+    $DeltaOffset  0
+       $DontFork  0
+      $DontQueue  0
+    $DontTrigAts  0
+        $EndSent  ".?!"
+      $EndSentIg  "" + char(34) + "')]}>"
+    $FirstIndent  0           [0, 132]
+       $FoldYear  0           [0, 1]
+      $FormWidth  72          [20, 500]
+       $HushMode  0
+     $IgnoreOnce  1
+       $InfDelta  0
+         $IntMax  2147483647
+         $IntMin  -2147483648
+         $LatDeg  30
+       $Latitude  "30.500000"
+         $LatMin  30
+         $LatSec  0
+       $Location  "Ottawa"
+        $LongDeg  -25
+      $Longitude  "24.750000"
+        $LongMin  15
+        $LongSec  0
+     $MaxSatIter  150         [10, Inf)
+   $MaxStringLen  65535       [-1, Inf)
+    $MinsFromUTC  -300        [-780, 780]
+       $NextMode  0
+      $NumQueued  0
+        $NumTrig  37
+   $PrefixLineNo  0
+          $PSCal  0
+         $RunOff  0
+      $SimpleCal  0
+     $SortByDate  0
+     $SortByPrio  0
+     $SortByTime  0
+     $SubsIndent  0           [0, 132]
+              $T  1990-01-01
+             $Td  -1
+        $TimeSep  ":"
+             $Tm  -1
+             $Tw  -1
+             $Ty  -1
+              $U  1991-02-16
+             $Ud  16
+             $Um  2
+   $UntimedFirst  0
+             $Uw  6
+             $Uy  1991
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Variable  Value
 
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(428): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(452): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(430): Trig = Sunday, 26 December, 2010
+../tests/test.rem(454): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 500):
 	1991-03-11
@@ -2696,287 +2783,287 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(433): Trig = Thursday, 28 February, 1991
+../tests/test.rem(457): Trig = Thursday, 28 February, 1991
 
 # Regression test for bug found by Larry Hynes
 REM SATISFY [day(trigdate()-25) == 14] MSG Foo
-../tests/test.rem(436): Trig = Saturday, 16 February, 1991
+../tests/test.rem(460): Trig = Saturday, 16 February, 1991
 trigdate() => 1991-02-16
 1991-02-16 - 25 => 1991-01-22
 day(1991-01-22) => 22
 22 == 14 => 0
-../tests/test.rem(436): Trig = Sunday, 17 February, 1991
+../tests/test.rem(460): Trig = Sunday, 17 February, 1991
 trigdate() => 1991-02-17
 1991-02-17 - 25 => 1991-01-23
 day(1991-01-23) => 23
 23 == 14 => 0
-../tests/test.rem(436): Trig = Monday, 18 February, 1991
+../tests/test.rem(460): Trig = Monday, 18 February, 1991
 trigdate() => 1991-02-18
 1991-02-18 - 25 => 1991-01-24
 day(1991-01-24) => 24
 24 == 14 => 0
-../tests/test.rem(436): Trig = Tuesday, 19 February, 1991
+../tests/test.rem(460): Trig = Tuesday, 19 February, 1991
 trigdate() => 1991-02-19
 1991-02-19 - 25 => 1991-01-25
 day(1991-01-25) => 25
 25 == 14 => 0
-../tests/test.rem(436): Trig = Wednesday, 20 February, 1991
+../tests/test.rem(460): Trig = Wednesday, 20 February, 1991
 trigdate() => 1991-02-20
 1991-02-20 - 25 => 1991-01-26
 day(1991-01-26) => 26
 26 == 14 => 0
-../tests/test.rem(436): Trig = Thursday, 21 February, 1991
+../tests/test.rem(460): Trig = Thursday, 21 February, 1991
 trigdate() => 1991-02-21
 1991-02-21 - 25 => 1991-01-27
 day(1991-01-27) => 27
 27 == 14 => 0
-../tests/test.rem(436): Trig = Friday, 22 February, 1991
+../tests/test.rem(460): Trig = Friday, 22 February, 1991
 trigdate() => 1991-02-22
 1991-02-22 - 25 => 1991-01-28
 day(1991-01-28) => 28
 28 == 14 => 0
-../tests/test.rem(436): Trig = Saturday, 23 February, 1991
+../tests/test.rem(460): Trig = Saturday, 23 February, 1991
 trigdate() => 1991-02-23
 1991-02-23 - 25 => 1991-01-29
 day(1991-01-29) => 29
 29 == 14 => 0
-../tests/test.rem(436): Trig = Sunday, 24 February, 1991
+../tests/test.rem(460): Trig = Sunday, 24 February, 1991
 trigdate() => 1991-02-24
 1991-02-24 - 25 => 1991-01-30
 day(1991-01-30) => 30
 30 == 14 => 0
-../tests/test.rem(436): Trig = Monday, 25 February, 1991
+../tests/test.rem(460): Trig = Monday, 25 February, 1991
 trigdate() => 1991-02-25
 1991-02-25 - 25 => 1991-01-31
 day(1991-01-31) => 31
 31 == 14 => 0
-../tests/test.rem(436): Trig = Tuesday, 26 February, 1991
+../tests/test.rem(460): Trig = Tuesday, 26 February, 1991
 trigdate() => 1991-02-26
 1991-02-26 - 25 => 1991-02-01
 day(1991-02-01) => 1
 1 == 14 => 0
-../tests/test.rem(436): Trig = Wednesday, 27 February, 1991
+../tests/test.rem(460): Trig = Wednesday, 27 February, 1991
 trigdate() => 1991-02-27
 1991-02-27 - 25 => 1991-02-02
 day(1991-02-02) => 2
 2 == 14 => 0
-../tests/test.rem(436): Trig = Thursday, 28 February, 1991
+../tests/test.rem(460): Trig = Thursday, 28 February, 1991
 trigdate() => 1991-02-28
 1991-02-28 - 25 => 1991-02-03
 day(1991-02-03) => 3
 3 == 14 => 0
-../tests/test.rem(436): Trig = Friday, 1 March, 1991
+../tests/test.rem(460): Trig = Friday, 1 March, 1991
 trigdate() => 1991-03-01
 1991-03-01 - 25 => 1991-02-04
 day(1991-02-04) => 4
 4 == 14 => 0
-../tests/test.rem(436): Trig = Saturday, 2 March, 1991
+../tests/test.rem(460): Trig = Saturday, 2 March, 1991
 trigdate() => 1991-03-02
 1991-03-02 - 25 => 1991-02-05
 day(1991-02-05) => 5
 5 == 14 => 0
-../tests/test.rem(436): Trig = Sunday, 3 March, 1991
+../tests/test.rem(460): Trig = Sunday, 3 March, 1991
 trigdate() => 1991-03-03
 1991-03-03 - 25 => 1991-02-06
 day(1991-02-06) => 6
 6 == 14 => 0
-../tests/test.rem(436): Trig = Monday, 4 March, 1991
+../tests/test.rem(460): Trig = Monday, 4 March, 1991
 trigdate() => 1991-03-04
 1991-03-04 - 25 => 1991-02-07
 day(1991-02-07) => 7
 7 == 14 => 0
-../tests/test.rem(436): Trig = Tuesday, 5 March, 1991
+../tests/test.rem(460): Trig = Tuesday, 5 March, 1991
 trigdate() => 1991-03-05
 1991-03-05 - 25 => 1991-02-08
 day(1991-02-08) => 8
 8 == 14 => 0
-../tests/test.rem(436): Trig = Wednesday, 6 March, 1991
+../tests/test.rem(460): Trig = Wednesday, 6 March, 1991
 trigdate() => 1991-03-06
 1991-03-06 - 25 => 1991-02-09
 day(1991-02-09) => 9
 9 == 14 => 0
-../tests/test.rem(436): Trig = Thursday, 7 March, 1991
+../tests/test.rem(460): Trig = Thursday, 7 March, 1991
 trigdate() => 1991-03-07
 1991-03-07 - 25 => 1991-02-10
 day(1991-02-10) => 10
 10 == 14 => 0
-../tests/test.rem(436): Trig = Friday, 8 March, 1991
+../tests/test.rem(460): Trig = Friday, 8 March, 1991
 trigdate() => 1991-03-08
 1991-03-08 - 25 => 1991-02-11
 day(1991-02-11) => 11
 11 == 14 => 0
-../tests/test.rem(436): Trig = Saturday, 9 March, 1991
+../tests/test.rem(460): Trig = Saturday, 9 March, 1991
 trigdate() => 1991-03-09
 1991-03-09 - 25 => 1991-02-12
 day(1991-02-12) => 12
 12 == 14 => 0
-../tests/test.rem(436): Trig = Sunday, 10 March, 1991
+../tests/test.rem(460): Trig = Sunday, 10 March, 1991
 trigdate() => 1991-03-10
 1991-03-10 - 25 => 1991-02-13
 day(1991-02-13) => 13
 13 == 14 => 0
-../tests/test.rem(436): Trig = Monday, 11 March, 1991
+../tests/test.rem(460): Trig = Monday, 11 March, 1991
 trigdate() => 1991-03-11
 1991-03-11 - 25 => 1991-02-14
 day(1991-02-14) => 14
 14 == 14 => 1
-../tests/test.rem(436): Trig(satisfied) = Monday, 11 March, 1991
+../tests/test.rem(460): Trig(satisfied) = Monday, 11 March, 1991
 
 # Check combo of SATISFY and long-duration events
 REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(439): Trig = Thursday, 14 March, 1991
+../tests/test.rem(463): Trig = Thursday, 14 March, 1991
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(439): Trig(satisfied) = Thursday, 14 March, 1991
+../tests/test.rem(463): Trig(satisfied) = Thursday, 14 March, 1991
 REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(440): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(464): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(440): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(464): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 REM 14 AT 16:00 DURATION 8:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(441): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
-../tests/test.rem(441): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(465): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(465): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(441): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(465): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
 REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(442): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
-../tests/test.rem(442): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(466): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(466): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(442): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(466): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
 REM 14 AT 16:00 DURATION 32:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(443): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:01
-../tests/test.rem(443): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:01
+../tests/test.rem(467): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:01
+../tests/test.rem(467): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:01
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(443): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
-../tests/test.rem(443): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
+../tests/test.rem(467): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
+../tests/test.rem(467): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
 Thursday, the 14th
 
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(444): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 40:00
-../tests/test.rem(444): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(468): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(468): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(444): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
-../tests/test.rem(444): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(468): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(468): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
 Thursday, the 14th
 
 
 # This is now an error
 REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
-../tests/test.rem(447): Cannot specify DURATION without specifying AT
+../tests/test.rem(471): Cannot specify DURATION without specifying AT
 
 # Parsing of AM/PM times
 REM AT 0:00am MSG foo 0a
-../tests/test.rem(450): Expecting time after AT
+../tests/test.rem(474): Expecting time after AT
 REM AT 1:00AM MSG foo 1a
-../tests/test.rem(451): Trig = Saturday, 16 February, 1991 AT 01:00
+../tests/test.rem(475): Trig = Saturday, 16 February, 1991 AT 01:00
 foo 1a
 
 REM AT 2:00am MSG foo 2a
-../tests/test.rem(452): Trig = Saturday, 16 February, 1991 AT 02:00
+../tests/test.rem(476): Trig = Saturday, 16 February, 1991 AT 02:00
 foo 2a
 
 REM AT 3:00AM MSG foo 3a
-../tests/test.rem(453): Trig = Saturday, 16 February, 1991 AT 03:00
+../tests/test.rem(477): Trig = Saturday, 16 February, 1991 AT 03:00
 foo 3a
 
 REM AT 4:00am MSG foo 4a
-../tests/test.rem(454): Trig = Saturday, 16 February, 1991 AT 04:00
+../tests/test.rem(478): Trig = Saturday, 16 February, 1991 AT 04:00
 foo 4a
 
 REM AT 5:00AM MSG foo 5a
-../tests/test.rem(455): Trig = Saturday, 16 February, 1991 AT 05:00
+../tests/test.rem(479): Trig = Saturday, 16 February, 1991 AT 05:00
 foo 5a
 
 REM AT 6:00am MSG foo 6a
-../tests/test.rem(456): Trig = Saturday, 16 February, 1991 AT 06:00
+../tests/test.rem(480): Trig = Saturday, 16 February, 1991 AT 06:00
 foo 6a
 
 REM AT 7:00AM MSG foo 7a
-../tests/test.rem(457): Trig = Saturday, 16 February, 1991 AT 07:00
+../tests/test.rem(481): Trig = Saturday, 16 February, 1991 AT 07:00
 foo 7a
 
 REM AT 8:00am MSG foo 8a
-../tests/test.rem(458): Trig = Saturday, 16 February, 1991 AT 08:00
+../tests/test.rem(482): Trig = Saturday, 16 February, 1991 AT 08:00
 foo 8a
 
 REM AT 9:00AM MSG foo 9a
-../tests/test.rem(459): Trig = Saturday, 16 February, 1991 AT 09:00
+../tests/test.rem(483): Trig = Saturday, 16 February, 1991 AT 09:00
 foo 9a
 
 REM AT 10:00am MSG foo 10a
-../tests/test.rem(460): Trig = Saturday, 16 February, 1991 AT 10:00
+../tests/test.rem(484): Trig = Saturday, 16 February, 1991 AT 10:00
 foo 10a
 
 REM AT 11:00AM MSG foo 11a
-../tests/test.rem(461): Trig = Saturday, 16 February, 1991 AT 11:00
+../tests/test.rem(485): Trig = Saturday, 16 February, 1991 AT 11:00
 foo 11a
 
 REM AT 12:00am MSG foo 12a
-../tests/test.rem(462): Trig = Saturday, 16 February, 1991 AT 00:00
+../tests/test.rem(486): Trig = Saturday, 16 February, 1991 AT 00:00
 foo 12a
 
 REM AT 13:00AM MSG foo 13a
-../tests/test.rem(463): Expecting time after AT
+../tests/test.rem(487): Expecting time after AT
 REM AT 0:00pm MSG foo 0p
-../tests/test.rem(464): Expecting time after AT
+../tests/test.rem(488): Expecting time after AT
 REM AT 1:00PM MSG foo 1p
-../tests/test.rem(465): Trig = Saturday, 16 February, 1991 AT 13:00
+../tests/test.rem(489): Trig = Saturday, 16 February, 1991 AT 13:00
 foo 1p
 
 REM AT 2:00pm MSG foo 2p
-../tests/test.rem(466): Trig = Saturday, 16 February, 1991 AT 14:00
+../tests/test.rem(490): Trig = Saturday, 16 February, 1991 AT 14:00
 foo 2p
 
 REM AT 3:00PM MSG foo 3p
-../tests/test.rem(467): Trig = Saturday, 16 February, 1991 AT 15:00
+../tests/test.rem(491): Trig = Saturday, 16 February, 1991 AT 15:00
 foo 3p
 
 REM AT 4:00pm MSG foo 4p
-../tests/test.rem(468): Trig = Saturday, 16 February, 1991 AT 16:00
+../tests/test.rem(492): Trig = Saturday, 16 February, 1991 AT 16:00
 foo 4p
 
 REM AT 5:00PM MSG foo 5p
-../tests/test.rem(469): Trig = Saturday, 16 February, 1991 AT 17:00
+../tests/test.rem(493): Trig = Saturday, 16 February, 1991 AT 17:00
 foo 5p
 
 REM AT 6:00pm MSG foo 6p
-../tests/test.rem(470): Trig = Saturday, 16 February, 1991 AT 18:00
+../tests/test.rem(494): Trig = Saturday, 16 February, 1991 AT 18:00
 foo 6p
 
 REM AT 7:00PM MSG foo 7p
-../tests/test.rem(471): Trig = Saturday, 16 February, 1991 AT 19:00
+../tests/test.rem(495): Trig = Saturday, 16 February, 1991 AT 19:00
 foo 7p
 
 REM AT 8:00pm MSG foo 8p
-../tests/test.rem(472): Trig = Saturday, 16 February, 1991 AT 20:00
+../tests/test.rem(496): Trig = Saturday, 16 February, 1991 AT 20:00
 foo 8p
 
 REM AT 9:00PM MSG foo 9p
-../tests/test.rem(473): Trig = Saturday, 16 February, 1991 AT 21:00
+../tests/test.rem(497): Trig = Saturday, 16 February, 1991 AT 21:00
 foo 9p
 
 REM AT 10:00pm MSG foo 10p
-../tests/test.rem(474): Trig = Saturday, 16 February, 1991 AT 22:00
+../tests/test.rem(498): Trig = Saturday, 16 February, 1991 AT 22:00
 foo 10p
 
 REM AT 11:00PM MSG foo 11p
-../tests/test.rem(475): Trig = Saturday, 16 February, 1991 AT 23:00
+../tests/test.rem(499): Trig = Saturday, 16 February, 1991 AT 23:00
 foo 11p
 
 REM AT 12:00pm MSG foo 12p
-../tests/test.rem(476): Trig = Saturday, 16 February, 1991 AT 12:00
+../tests/test.rem(500): Trig = Saturday, 16 February, 1991 AT 12:00
 foo 12p
 
 REM AT 13:00PM MSG foo 13p
-../tests/test.rem(477): Expecting time after AT
+../tests/test.rem(501): Expecting time after AT
 
 DEBUG +x
 SET x 0:00am + 0
-../tests/test.rem(480): Ill-formed time
+../tests/test.rem(504): Ill-formed time
 SET x 1:00AM + 0
 01:00 + 0 => 01:00
 SET x 2:00am + 0
@@ -3002,10 +3089,10 @@ SET x 11:00AM + 0
 SET x 12:00am + 0
 00:00 + 0 => 00:00
 SET x 13:00AM + 0
-../tests/test.rem(493): Ill-formed time
+../tests/test.rem(517): Ill-formed time
 
 SET x 0:00pm + 0
-../tests/test.rem(495): Ill-formed time
+../tests/test.rem(519): Ill-formed time
 SET x 1:00PM + 0
 13:00 + 0 => 13:00
 SET x 2:00pm + 0
@@ -3031,10 +3118,10 @@ SET x 11:00PM + 0
 SET x 12:00pm + 0
 12:00 + 0 => 12:00
 SET x 13:00PM + 0
-../tests/test.rem(508): Ill-formed time
+../tests/test.rem(532): Ill-formed time
 
 SET x '2015-02-03@0:00am' + 0
-../tests/test.rem(510): Ill-formed time
+../tests/test.rem(534): Ill-formed time
 SET x '2015-02-03@1:00AM' + 0
 2015-02-03@01:00 + 0 => 2015-02-03@01:00
 SET x '2015-02-03@2:00am' + 0
@@ -3060,10 +3147,10 @@ SET x '2015-02-03@11:00AM' + 0
 SET x '2015-02-03@12:00am' + 0
 2015-02-03@00:00 + 0 => 2015-02-03@00:00
 SET x '2015-02-03@13:00AM' + 0
-../tests/test.rem(523): Ill-formed time
+../tests/test.rem(547): Ill-formed time
 
 SET x '2015-02-03@0:00pm' + 0
-../tests/test.rem(525): Ill-formed time
+../tests/test.rem(549): Ill-formed time
 SET x '2015-02-03@1:00PM' + 0
 2015-02-03@13:00 + 0 => 2015-02-03@13:00
 SET x '2015-02-03@2:00pm' + 0
@@ -3089,7 +3176,7 @@ SET x '2015-02-03@11:00PM' + 0
 SET x '2015-02-03@12:00pm' + 0
 2015-02-03@12:00 + 0 => 2015-02-03@12:00
 SET x '2015-02-03@13:00PM' + 0
-../tests/test.rem(538): Ill-formed time
+../tests/test.rem(562): Ill-formed time
 
 # Test the ampm function
 set x ampm(0:12) + ""
@@ -3185,88 +3272,88 @@ coerce("DATETIME", "2020-05-05@1:45pm") => 2020-05-05@13:45
 set a $IntMin - 1
 $IntMin => -2147483648
 -2147483648 - 1 => Number too high
-../tests/test.rem(577): `-': Number too high
+../tests/test.rem(601): `-': Number too high
 set a $IntMin - $IntMax
 $IntMin => -2147483648
 $IntMax => 2147483647
 -2147483648 - 2147483647 => Number too high
-../tests/test.rem(578): `-': Number too high
+../tests/test.rem(602): `-': Number too high
 set a $IntMax - $IntMin
 $IntMax => 2147483647
 $IntMin => -2147483648
 2147483647 - -2147483648 => Number too high
-../tests/test.rem(579): `-': Number too high
+../tests/test.rem(603): `-': Number too high
 set a $IntMax - (-1)
 $IntMax => 2147483647
 - 1 => -1
 2147483647 - -1 => Number too high
-../tests/test.rem(580): `-': Number too high
+../tests/test.rem(604): `-': Number too high
 set a $IntMax + 1
 $IntMax => 2147483647
 2147483647 + 1 => Number too high
-../tests/test.rem(581): `+': Number too high
+../tests/test.rem(605): `+': Number too high
 set a $IntMax + $IntMax
 $IntMax => 2147483647
 $IntMax => 2147483647
 2147483647 + 2147483647 => Number too high
-../tests/test.rem(582): `+': Number too high
+../tests/test.rem(606): `+': Number too high
 set a $IntMin + (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 + -1 => Number too high
-../tests/test.rem(583): `+': Number too high
+../tests/test.rem(607): `+': Number too high
 set a $IntMin + $IntMin
 $IntMin => -2147483648
 $IntMin => -2147483648
 -2147483648 + -2147483648 => Number too high
-../tests/test.rem(584): `+': Number too high
+../tests/test.rem(608): `+': Number too high
 set a $IntMax * 2
 $IntMax => 2147483647
 2147483647 * 2 => Number too high
-../tests/test.rem(585): `*': Number too high
+../tests/test.rem(609): `*': Number too high
 set a $IntMax * $IntMax
 $IntMax => 2147483647
 $IntMax => 2147483647
 2147483647 * 2147483647 => Number too high
-../tests/test.rem(586): `*': Number too high
+../tests/test.rem(610): `*': Number too high
 set a $IntMax * $IntMin
 $IntMax => 2147483647
 $IntMin => -2147483648
 2147483647 * -2147483648 => Number too high
-../tests/test.rem(587): `*': Number too high
+../tests/test.rem(611): `*': Number too high
 set a $IntMin * 2
 $IntMin => -2147483648
 -2147483648 * 2 => Number too high
-../tests/test.rem(588): `*': Number too high
+../tests/test.rem(612): `*': Number too high
 set a $IntMin * $IntMin
 $IntMin => -2147483648
 $IntMin => -2147483648
 -2147483648 * -2147483648 => Number too high
-../tests/test.rem(589): `*': Number too high
+../tests/test.rem(613): `*': Number too high
 set a $IntMin * $IntMax
 $IntMin => -2147483648
 $IntMax => 2147483647
 -2147483648 * 2147483647 => Number too high
-../tests/test.rem(590): `*': Number too high
+../tests/test.rem(614): `*': Number too high
 set a $IntMin / (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 / -1 => Number too high
-../tests/test.rem(591): `/': Number too high
+../tests/test.rem(615): `/': Number too high
 set a $IntMin * (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 * -1 => Number too high
-../tests/test.rem(592): `*': Number too high
+../tests/test.rem(616): `*': Number too high
 set a (-1) * $IntMin
 - 1 => -1
 $IntMin => -2147483648
 -1 * -2147483648 => Number too high
-../tests/test.rem(593): `*': Number too high
+../tests/test.rem(617): `*': Number too high
 set a abs($IntMin)
 $IntMin => -2147483648
 abs(-2147483648) => Number too high
-../tests/test.rem(594): Number too high
+../tests/test.rem(618): Number too high
 
 # The "isany" function
 set a isany(1)
@@ -3293,7 +3380,7 @@ set a shellescape(" !\"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
 shellescape(" !"#$%%&'()*+,-./0123456789:;<=>?@ABCDEF"...) => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
 
 msg [a]
-../tests/test.rem(610): Trig = Saturday, 16 February, 1991
+../tests/test.rem(634): Trig = Saturday, 16 February, 1991
 a => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
 \ \!\"\#\$\\\&\'\(\)\*+,-./0123456789\:\;\<=\>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\[\\\]\^_\`abcdefghijklmnopqrstuvwxyz\{\|\}\~
 

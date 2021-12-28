@@ -193,6 +193,9 @@ void InitRemind(int argc, char const *argv[])
     JulianToday = RealToday;
     FromJulian(JulianToday, &CurYear, &CurMon, &CurDay);
 
+    /* Initialize Latitude and Longitude */
+    set_lat_and_long_from_components();
+
     /* See if we were invoked as "rem" rather than "remind" */
     if (argv[0]) {
 	s = strrchr(argv[0], '/');
@@ -647,7 +650,6 @@ void InitRemind(int argc, char const *argv[])
 
     }
 
-    set_lat_and_long_from_components();
 /* Figure out the offset from UTC */
     if (CalculateUTC)
 	(void) CalcMinsFromUTC(JulianToday, SystemTime(0)/60,
@@ -848,6 +850,7 @@ static void InitializeVar(char const *str)
 
     if (*varname == '$') {
 	r=SetSysVar(varname+1, &val);
+        DestroyValue(val);
 	if (r) fprintf(ErrFp, ErrMsg[M_I_OPTION], ErrMsg[r]);
 	return;
     }

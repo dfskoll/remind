@@ -8,6 +8,9 @@ CHANGES TO REMIND
 
 - IMPROVEMENT: rem2html: Add class names indicating number of rows in calendar
 
+- IMPROVEMENT: remind: In -z0 mode, sleep with higher precision to ensure we
+  wake as close to possible to each 1-minute boundary.
+
 - IMPROVEMENT: rem2html: Coalesce table.rem-cal CSS into one block.  Thanks
   to Ian! D. Allen for pointing this out.
 

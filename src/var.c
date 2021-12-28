@@ -810,6 +810,7 @@ static void DumpSysVar (char const *name, const SysVar *v);
 /***************************************************************/
 int SetSysVar(char const *name, Value *value)
 {
+    int r;
     SysVar *v = FindSysVar(name);
     if (!v) return E_NOSUCH_VAR;
     if (v->type != SPECIAL_TYPE &&
@@ -821,7 +822,9 @@ int SetSysVar(char const *name, Value *value)
 
     if (v->type == SPECIAL_TYPE) {
 	SysVarFunc f = (SysVarFunc) v->value;
-	return f(1, value);
+	r = f(1, value);
+        DestroyValue(*value);
+        return r;
     } else if (v->type == STR_TYPE) {
         /* If it's a string variable, special measures must be taken */
 	if (v->been_malloced) free(*((char **)(v->value)));

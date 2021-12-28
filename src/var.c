@@ -48,159 +48,88 @@ static void deprecated_var(char const *var, char const *instead)
     }
 }
 
-static int latdeg_func(int do_set, Value *val)
+static int latlong_component_func(int do_set, Value *val, int *var, int min, int max, char const *varname, char const *newvarname)
 {
     if (!do_set) {
         val->type = INT_TYPE;
-        val->v.val = LatDeg;
+        val->v.val = *var;
         return OK;
     }
-    deprecated_var("$LatDeg", "$Latitude");
+    deprecated_var(varname, newvarname);
     if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -90) return E_2LOW;
-    if (val->v.val > 90)  return E_2HIGH;
-    LatDeg = val->v.val;
+    if (val->v.val < min) return E_2LOW;
+    if (val->v.val > max) return E_2HIGH;
+    *var = val->v.val;
     set_lat_and_long_from_components();
     return OK;
+}
+static int latdeg_func(int do_set, Value *val)
+{
+    return latlong_component_func(do_set, val, &LatDeg, -90, 90, "$LatDeg", "$Latitude");
 }
 
 static int latmin_func(int do_set, Value *val)
 {
-    if (!do_set) {
-        val->type = INT_TYPE;
-        val->v.val = LatMin;
-        return OK;
-    }
-    deprecated_var("$LatMin", "$Latitude");
-    if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -59) return E_2LOW;
-    if (val->v.val > 59)  return E_2HIGH;
-    LatMin = val->v.val;
-    set_lat_and_long_from_components();
-    return OK;
+    return latlong_component_func(do_set, val, &LatMin, -59, 59, "$LatMin", "$Latitude");
 }
 
 static int latsec_func(int do_set, Value *val)
 {
-    if (!do_set) {
-        val->type = INT_TYPE;
-        val->v.val = LatSec;
-        return OK;
-    }
-    deprecated_var("$LatSec", "$Latitude");
-    if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -59) return E_2LOW;
-    if (val->v.val > 59)  return E_2HIGH;
-    LatSec = val->v.val;
-    set_lat_and_long_from_components();
-    return OK;
+    return latlong_component_func(do_set, val, &LatSec, -59, 59, "$LatSec", "$Latitude");
 }
 
 static int longdeg_func(int do_set, Value *val)
 {
-    if (!do_set) {
-        val->type = INT_TYPE;
-        val->v.val = LongDeg;
-        return OK;
-    }
-    deprecated_var("$LongDeg", "$Longitude");
-    if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -180) return E_2LOW;
-    if (val->v.val > 180)  return E_2HIGH;
-    LongDeg = val->v.val;
-    set_lat_and_long_from_components();
-    return OK;
+    return latlong_component_func(do_set, val, &LongDeg, -180, 180, "$LongDeg", "$Longitude");
 }
 
 static int longmin_func(int do_set, Value *val)
 {
-    if (!do_set) {
-        val->type = INT_TYPE;
-        val->v.val = LongMin;
-        return OK;
-    }
-    deprecated_var("$LongMin", "$Longitude");
-    if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -59) return E_2LOW;
-    if (val->v.val > 59)  return E_2HIGH;
-    LongMin = val->v.val;
-    set_lat_and_long_from_components();
-    return OK;
+    return latlong_component_func(do_set, val, &LongMin, -59, 59, "$LongMin", "$Longitude");
 }
 
 static int longsec_func(int do_set, Value *val)
 {
+    return latlong_component_func(do_set, val, &LongSec, -59, 59, "$LongSec", "$Longitude");
+}
+
+static int latitude_longitude_func(int do_set, Value *val, double *var, double min, double max) {
+    char buf[64];
+    double x;
+    char *endptr;
+
     if (!do_set) {
-        val->type = INT_TYPE;
-        val->v.val = LongSec;
+        snprintf(buf, sizeof(buf), "%f", *var);
+        val->v.str = malloc(strlen(buf)+1);
+        if (!val->v.str) return E_NO_MEM;
+        strcpy(val->v.str, buf);
+        val->type = STR_TYPE;
         return OK;
     }
-    deprecated_var("$LongSec", "$Longitude");
-    if (val->type != INT_TYPE) return E_BAD_TYPE;
-    if (val->v.val < -59) return E_2LOW;
-    if (val->v.val > 59)  return E_2HIGH;
-    LongSec = val->v.val;
-    set_lat_and_long_from_components();
+    if (val->type == INT_TYPE) {
+        x = (double) val->v.val;
+    } else {
+        if (val->type != STR_TYPE) return E_BAD_TYPE;
+        errno = 0;
+        x = strtod(val->v.str, &endptr);
+        if (errno) return E_BAD_TYPE;
+        if (*endptr) return E_BAD_TYPE;
+    }
+    if (x < min) return E_2LOW;
+    if (x > max) return E_2HIGH;
+    *var = x;
+    set_components_from_lat_and_long();
     return OK;
 }
 
 static int longitude_func(int do_set, Value *val)
 {
-    char buf[64];
-    double x;
-    char *endptr;
-
-    if (!do_set) {
-        snprintf(buf, sizeof(buf), "%f", Longitude);
-        val->v.str = malloc(strlen(buf)+1);
-        if (!val->v.str) return E_NO_MEM;
-        strcpy(val->v.str, buf);
-        val->type = STR_TYPE;
-        return OK;
-    }
-    if (val->type == INT_TYPE) {
-        x = (double) val->v.val;
-    } else {
-        if (val->type != STR_TYPE) return E_BAD_TYPE;
-        errno = 0;
-        x = strtod(val->v.str, &endptr);
-        if (errno) return E_BAD_TYPE;
-        if (*endptr) return E_BAD_TYPE;
-    }
-    if (x < -180.0) return E_2LOW;
-    if (x > 180.0) return E_2HIGH;
-    Longitude = x;
-    set_components_from_lat_and_long();
-    return OK;
+    return latitude_longitude_func(do_set, val, &Longitude, -180.0, 180.0);
 }
+
 static int latitude_func(int do_set, Value *val)
 {
-    char buf[64];
-    double x;
-    char *endptr;
-
-    if (!do_set) {
-        snprintf(buf, sizeof(buf), "%f", Latitude);
-        val->v.str = malloc(strlen(buf)+1);
-        if (!val->v.str) return E_NO_MEM;
-        strcpy(val->v.str, buf);
-        val->type = STR_TYPE;
-        return OK;
-    }
-    if (val->type == INT_TYPE) {
-        x = (double) val->v.val;
-    } else {
-        if (val->type != STR_TYPE) return E_BAD_TYPE;
-        errno = 0;
-        x = strtod(val->v.str, &endptr);
-        if (errno) return E_BAD_TYPE;
-        if (*endptr) return E_BAD_TYPE;
-    }
-    if (x < -90.0) return E_2LOW;
-    if (x > 90.0) return E_2HIGH;
-    Latitude = x;
-    set_components_from_lat_and_long();
-    return OK;
+    return latitude_longitude_func(do_set, val, &Latitude, -90.0, 90.0);
 }
 
 

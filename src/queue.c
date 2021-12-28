@@ -57,7 +57,7 @@ static void CheckInitialFile (void);
 static int CalculateNextTime (QueuedRem *q);
 static QueuedRem *FindNextReminder (void);
 static int CalculateNextTimeUsingSched (QueuedRem *q);
-static void DaemonWait (unsigned int sleeptime);
+static void DaemonWait (struct timeval *sleep_tv);
 static void reread (void);
 
 /***************************************************************/
@@ -121,6 +121,8 @@ void HandleQueuedReminders(void)
     unsigned SleepTime;
     Parser p;
     Trigger trig;
+    struct timeval tv;
+    struct timeval sleep_tv;
 
     /* Suppress the BANNER from being issued */
     NumTriggered = 1;
@@ -186,16 +188,20 @@ void HandleQueuedReminders(void)
 
 	    /* Wake up once a minute to recalibrate sleep time in
 	       case of laptop hibernation */
-	    if (Daemon <= 0) {
+	    if (Daemon < 0) {
 		/* Wake up on the next exact minute */
-		SleepTime = 60 - (SystemTime(1)%60);
-	    }
-
-	    if (Daemon >= 0) {
-		sleep(SleepTime);
+                gettimeofday(&tv, NULL);
+                sleep_tv.tv_sec = 60 - (tv.tv_sec % 60);
+                if (tv.tv_usec != 0 && sleep_tv.tv_sec != 0) {
+                    sleep_tv.tv_sec--;
+                    sleep_tv.tv_usec = 1000000 - tv.tv_usec;
+                } else {
+                    sleep_tv.tv_usec = 0;
+                }
+		DaemonWait(&sleep_tv);
 	    } else {
-		DaemonWait(SleepTime);
-	    }
+		sleep(SleepTime);
+            }
 
 	    /* If not in daemon mode and day has rolled around,
 	       exit -- not much we can do. */
@@ -519,19 +525,16 @@ json_queue(QueuedRem const *q)
 /*  Sleep or read command from stdin in "daemon -1" mode       */
 /*                                                             */
 /***************************************************************/
-static void DaemonWait(unsigned int sleeptime)
+static void DaemonWait(struct timeval *sleep_tv)
 {
     fd_set readSet;
-    struct timeval timeout;
     int retval;
     int y, m, d;
     char cmdLine[256];
 
     FD_ZERO(&readSet);
     FD_SET(0, &readSet);
-    timeout.tv_sec = sleeptime;
-    timeout.tv_usec = 0;
-    retval = select(1, &readSet, NULL, NULL, &timeout);
+    retval = select(1, &readSet, NULL, NULL, sleep_tv);
 
     /* If date has rolled around, restart */
     if (RealToday != SystemDate(&y, &m, &d)) {

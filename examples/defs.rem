@@ -92,9 +92,6 @@ SET  Week_3		15
 SET  Week_4		22
 FSET _last(mo)		"1 " + MON((mo%12)+1) + " --7"
 
-# Handy function to provide SCANFROM dates...
-FSET _back(days)	$U-days
-
 #################################################################
 # Function that removes a single leading zero from a string...  #
 #################################################################
@@ -134,7 +131,7 @@ REM 1 MSG John's [_mo_num(11, 1984)] 'monthly' anniversary
 ############################################################################
 
 # Calculate the weekday of the holiday.
-REM 4 July SCANFROM [_back(7)] SATISFY 1
+REM 4 July SCANFROM -7 SATISFY 1
 
 SET iday $T
 IF WKDAYNUM(iday) == Sat
@@ -216,15 +213,14 @@ REM  [easter+39] MSG %"Ascension Day%"
 REM  [easter+49] MSG %"Pentecost%"
 
 # Some holidays are omitted, some are not.  You may want to change
-# which ones are omitted - use the general forms shown below.
-# You'll need the _back() function and the Week_n variables defined
-# way up in the file.
+# which ones are omitted - use the general forms shown below.  You'll
+# need the Week_n variables defined way up in the file.
 
 OMIT    Jan  1		MSG %"New Year's%" Day
 REM Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
 REM     Feb  2		MSG %"Ground Hog Day%"
 REM     Feb 14		MSG %"Valentine's%" Day
-REM Mon Feb [Week_3]	SCANFROM [_back(7)] ADDOMIT MSG %"President's Day%"
+REM Mon Feb [Week_3]	SCANFROM -7 ADDOMIT MSG %"President's Day%"
 REM     Mar 17		MSG %"St. Patrick's%" Day
 
 # The DST rules are accurate for most locations in
@@ -241,18 +237,18 @@ REM     May  5		MSG %"Cinco de Mayo%"
 REM Sat May [Week_1]	MSG %"Kentucky Derby%"
 REM Sun May [Week_2]	MSG %"Mother's Day%"
 REM Sat May [Week_3]	MSG %"Armed Forces Day%"
-REM Mon [_last(May)]	SCANFROM [_back(7)] ADDOMIT MSG %"Memorial Day%"
+REM Mon [_last(May)]	SCANFROM -7 ADDOMIT MSG %"Memorial Day%"
 REM     Jun 14		MSG %"Flag Day%"
 REM Sun Jun [Week_3]	MSG %"Father's Day%"
-REM Mon Sep [Week_1]	SCANFROM [_back(7)] ADDOMIT MSG %"Labor Day%"
+REM Mon Sep [Week_1]	SCANFROM -7 ADDOMIT MSG %"Labor Day%"
 REM Mon Oct [Week_2]	MSG %"Columbus Day%"
 REM     Nov 11		MSG %"Veterans Day%"
 
 REM     Oct 30		MSG %"Mischief Night%"
 REM     Oct 31		MSG %"Halloween%"
-REM Tue Nov  2 SCANFROM [_back(7)] SATISFY [($Ty % 4) == 0] MSG %"Election Day%"
-REM Thu Nov [Week_4]	SCANFROM [_back(7)] ADDOMIT MSG %"Thanksgiving Day%"
-REM Fri Nov [Week_4+1]	SCANFROM [_back(7)] ADDOMIT MSG %"Thanksgiving (cont.)%"
+REM Tue Nov  2 SCANFROM -7 SATISFY [($Ty % 4) == 0] MSG %"Election Day%"
+REM Thu Nov [Week_4]	SCANFROM -7 ADDOMIT MSG %"Thanksgiving Day%"
+REM Fri Nov [Week_4+1]	SCANFROM -7 ADDOMIT MSG %"Thanksgiving (cont.)%"
 OMIT    Dec 24		MSG %"Christmas Eve%"
 OMIT    Dec 25		MSG %"Christmas%" Day
 

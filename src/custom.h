@@ -22,11 +22,11 @@
 /* The default values are initially set to Ottawa, Ontario, Canada.    */
 /*---------------------------------------------------------------------*/
 #define LAT_DEG 45
-#define LAT_MIN 24
-#define LAT_SEC  0
+#define LAT_MIN 25
+#define LAT_SEC 30
 #define LON_DEG 75
-#define LON_MIN 39
-#define LON_SEC  0
+#define LON_MIN 41
+#define LON_SEC 59
 #define LOCATION "Ottawa"
 
 /*---------------------------------------------------------------------*/

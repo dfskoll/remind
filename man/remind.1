@@ -2389,21 +2389,6 @@ $TimeSep and $DateTimeSep when formatting its output.  For example:
 .PP
 .RE
 .TP
-.B isany(arg1 [,arg2, ..., argN]);
-Returns 1 if the first argument \fIarg1\fR is equal to any of the
-subsequent arguments \fIarg2\fR through \fIargN\fR; returns 0 otherwise.
-Also returns 0 if called with only one argument.
-.RS
-.PP
-As an example, the following two expressions are equivalent:
-.PP
-.nf
-        (a == b) || (a == c) || (a == d) || (a == e)
-
-        isany(a, b, c, d, e)
-.fi
-.RE
-.TP
 .B args(s_fname)
 Returns the number of arguments expected by the user-defined function
 \fIfname\fR, or \-1 if no such user-defined function exists.  Note that
@@ -2681,6 +2666,21 @@ If \fItarget\fR does not exist in \fIsearch\fR, then 0 is returned.
 .PP
 The optional parameter \fIstart\fR specifies the position in
 \fIsearch\fR at which to start looking for \fItarget\fR.
+.RE
+.TP
+.B isany(arg1 [,arg2, ..., argN]);
+Returns 1 if the first argument \fIarg1\fR is equal to any of the
+subsequent arguments \fIarg2\fR through \fIargN\fR; returns 0 otherwise.
+Also returns 0 if called with only one argument.
+.RS
+.PP
+As an example, the following two expressions are equivalent:
+.PP
+.nf
+        (a == b) || (a == c) || (a == d) || (a == e)
+
+        isany(a, b, c, d, e)
+.fi
 .RE
 .TP
 .B isdst([d_date [,t_time]]) \fRor\fB isdst(q_datetime)

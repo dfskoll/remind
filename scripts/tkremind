@@ -200,7 +200,7 @@ set PSCmd {}
 
 # Print options -- destination file; letter-size; landscape; fill page; default
 # encoding; 36pt margins; print small calendars
-set OptDescr(PrintDest) "Print destination: file or printer"
+set OptDescr(PrintDest) "Print destination: file or command"
 set Option(PrintDest) file
 
 set OptDescr(PrintSize) "Page size: a4 or letter"

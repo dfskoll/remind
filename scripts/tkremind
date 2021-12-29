@@ -868,9 +868,9 @@ proc SaveOptions { w } {
 proc WriteOptionsToFile {} {
     global ConfigFile
     global Option OptDescr
-    set problem [catch {set f [open $ConfigFile "w"]} err]
+    set problem [catch {set f [open "$ConfigFile.tmp" "w"]} err]
     if {$problem} {
-	tk_dialog .error Error "Can't write $ConfigFile: $err" 0 OK
+	tk_dialog .error Error "Can't write $ConfigFile.tmp: $err" 0 OK
 	return
     }
 
@@ -886,6 +886,7 @@ proc WriteOptionsToFile {} {
     }
     puts $f ""
     close $f
+    file rename -force "$ConfigFile.tmp" $ConfigFile
 }
 
 #***********************************************************************

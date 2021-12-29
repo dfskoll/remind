@@ -2,17 +2,9 @@ CHANGES TO REMIND
 
 * VERSION 3.3 Patch 11 - 2021-12-30
 
+- IMPROVEMENT: TkRemind: Save the print dialog settings so they persist.
+
 - IMPROVEMENT: TkRemind: Show queue in sorted order.
-
-- NEW FUNCTION: Remind: Add the isany() built-in function.
-
-- IMPROVEMENT: rem2html: Add class names indicating number of rows in calendar
-
-- IMPROVEMENT: remind: In -z0 mode, sleep with higher precision to ensure we
-  wake as close to possible to each 1-minute boundary.
-
-- IMPROVEMENT: rem2html: Coalesce table.rem-cal CSS into one block.  Thanks
-  to Ian! D. Allen for pointing this out.
 
 - IMPROVEMENT: TkRemind: Pass "-r" flag to inotifywait
 
@@ -23,6 +15,16 @@ CHANGES TO REMIND
 - IMPROVEMENT: TkRemind: Underline editable reminders when the pointer enters
   them; fire up the editor with either Button-1 or Button-3 for
   non-TkRemind-generated reminders.
+
+- NEW FUNCTION: Remind: Add the isany() built-in function.
+
+- IMPROVEMENT: rem2html: Add class names indicating number of rows in calendar
+
+- IMPROVEMENT: remind: In -z0 mode, sleep with higher precision to ensure we
+  wake as close to possible to each 1-minute boundary.
+
+- IMPROVEMENT: rem2html: Coalesce table.rem-cal CSS into one block.  Thanks
+  to Ian! D. Allen for pointing this out.
 
 - IMPROVEMENT: examples/defs.rem: Modernize the examples and get rid of some
   cruft.

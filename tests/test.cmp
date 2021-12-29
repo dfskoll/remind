@@ -3385,6 +3385,14 @@ a => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
 \ \!\"\#\$\\\&\'\(\)\*+,-./0123456789\:\;\<=\>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\[\\\]\^_\`abcdefghijklmnopqrstuvwxyz\{\|\}\~
 
 
+# Deprecated functions
+set x psshade(50)
+psshade(50) => ../tests/test.rem(637): psshade() is deprecated; use SPECIAL SHADE instead.
+"/_A LineWidth 2 div def _A _A moveto Box"...
+set x psmoon(0)
+psmoon(0) => ../tests/test.rem(638): psmoon() is deprecated; use SPECIAL MOON instead.
+"gsave 0 setgray newpath Border DaySize 2"...
+
 # Don't want Remind to queue reminders
 EXIT
 

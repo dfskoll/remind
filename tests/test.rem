@@ -633,6 +633,10 @@ set a shellescape(" !\"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 msg [a]
 
+# Deprecated functions
+set x psshade(50)
+set x psmoon(0)
+
 # Don't want Remind to queue reminders
 EXIT
 

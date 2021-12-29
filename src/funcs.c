@@ -2400,6 +2400,7 @@ static int FPsshade(func_info *info)
     if (!psshade_warned) {
 	psshade_warned = 1;
 	Eprint("psshade() is deprecated; use SPECIAL SHADE instead.");
+        FreshLine = 1;
     }
 
     sprintf(s, "/_A LineWidth 2 div def ");
@@ -2455,6 +2456,7 @@ static int FPsmoon(func_info *info)
     if (!psmoon_warned) {
 	psmoon_warned = 1;
 	Eprint("psmoon() is deprecated; use SPECIAL MOON instead.");
+        FreshLine = 1;
     }
     if (size > 0) {
 	sprintf(sizebuf, "%d", size);

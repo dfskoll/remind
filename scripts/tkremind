@@ -200,14 +200,29 @@ set PSCmd {}
 
 # Print options -- destination file; letter-size; landscape; fill page; default
 # encoding; 36pt margins; print small calendars
-set PrintDest file
-set PrintSize letter
-set PrintOrient landscape
-set PrintFill 1
-set PrintDaysRight 1
-set PrintEncoding 0
-set PrintMargins 36pt
-set PrintSmallCalendars 1
+set OptDescr(PrintDest) "Print destination: file or printer"
+set Option(PrintDest) file
+
+set OptDescr(PrintSize) "Page size: a4 or letter"
+set Option(PrintSize) letter
+
+set OptDescr(PrintOrient) "Page orientation: portrait or landscape"
+set Option(PrintOrient) landscape
+
+set OptDescr(PrintFill) "(0/1) If 1, fill entire page when printing"
+set Option(PrintFill) 1
+
+set OptDescr(PrintDaysRight) "(0/1) If 1, put day numbers in the top-right of each calendar box"
+set Option(PrintDaysRight) 1
+
+set OptDescr(PrintEncoding) "(0/1) If 1, apply ISO-8859-1 encoding to PostScript output"
+set Option(PrintEncoding) 0
+
+set OptDescr(PrintMargins) "Print margins: One of 24pt, 36pt or 48pt"
+set Option(PrintMargins) 36pt
+
+set OptDescr(PrintSmallCalendars) "(0/1) If 1, print small calendars in PostScript output"
+set Option(PrintSmallCalendars) 1
 
 set WarningHeaders [list "# Lines staring with REM TAG TKTAGnnn ... were created by tkremind" "# Do not edit them by hand or results may be unpredictable."]
 
@@ -829,9 +844,30 @@ proc ApplyOptions { w } {
 #  Saves options in specified config file
 #***********************************************************************
 proc SaveOptions { w } {
-    global Option OptDescr ConfigFile
+    global Option OptDescr
     ApplyOptions $w
+    WriteOptionsToFile
+    FillCalWindow
+    .h.title configure -background $Option(WinBackground) -foreground $Option(LabelColor)
+    for {set i 0} {$i < 7} {incr i} {
+        .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
+    }
+    .b.status configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.nqueued configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b configure -background $Option(WinBackground)
+    .b.prev configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.this configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.next configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.goto configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.print configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.queue configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.quit configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    .b.options configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+}
 
+proc WriteOptionsToFile {} {
+    global ConfigFile
+    global Option OptDescr
     set problem [catch {set f [open $ConfigFile "w"]} err]
     if {$problem} {
 	tk_dialog .error Error "Can't write $ConfigFile: $err" 0 OK
@@ -850,22 +886,6 @@ proc SaveOptions { w } {
     }
     puts $f ""
     close $f
-    FillCalWindow
-    .h.title configure -background $Option(WinBackground) -foreground $Option(LabelColor)
-    for {set i 0} {$i < 7} {incr i} {
-        .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
-    }
-    .b.status configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.nqueued configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b configure -background $Option(WinBackground)
-    .b.prev configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.this configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.next configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.goto configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.print configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.queue configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.quit configure -foreground $Option(LabelColor) -background $Option(WinBackground)
-    .b.options configure -foreground $Option(LabelColor) -background $Option(WinBackground)
 }
 
 #***********************************************************************
@@ -1130,7 +1150,7 @@ proc Status { stuff } {
 #   None
 #---------------------------------------------------------------------------
 proc DoPrint {} {
-    global PrintDest PrintSize PrintMargins PrintOrient PrintFill PrintDaysRight PrintEncoding PrintSmallCalendars PrintStatus Rem2PS PSCmd Option
+    global Rem2PS PSCmd Option PrintStatus
     global CurMonth CurYear MonthNames
     catch {destroy .p}
     toplevel .p
@@ -1145,30 +1165,30 @@ proc DoPrint {} {
     frame .p.f3a -relief sunken -border 2
     frame .p.f4
 
-    radiobutton .p.tofile -text "To file: " -variable PrintDest -value file
+    radiobutton .p.tofile -text "To file: " -variable Option(PrintDest) -value file
     entry .p.filename
     button .p.browse -text "Browse..." -command PrintFileBrowse
-    radiobutton .p.tocmd -text "To command: " -variable PrintDest -value command
+    radiobutton .p.tocmd -text "To command: " -variable Option(PrintDest) -value command
     entry .p.command
     .p.command insert end "lpr"
 
     label .p.size -text "Paper Size:"
-    radiobutton .p.letter -text "Letter" -variable PrintSize -value letter
-    radiobutton .p.a4 -text "A4" -variable PrintSize -value a4
+    radiobutton .p.letter -text "Letter" -variable Option(PrintSize) -value letter
+    radiobutton .p.a4 -text "A4" -variable Option(PrintSize) -value a4
 
     label .p.margin -text "Margins:"
-    radiobutton .p.24pt -text "24pt margins" -variable PrintMargins -value 24pt
-    radiobutton .p.36pt -text "36pt margins" -variable PrintMargins -value 36pt
-    radiobutton .p.48pt -text "48pt margins" -variable PrintMargins -value 48pt
+    radiobutton .p.24pt -text "24pt margins" -variable Option(PrintMargins) -value 24pt
+    radiobutton .p.36pt -text "36pt margins" -variable Option(PrintMargins) -value 36pt
+    radiobutton .p.48pt -text "48pt margins" -variable Option(PrintMargins) -value 48pt
 
     label .p.orient -text "Orientation:"
-    radiobutton .p.landscape -text "Landscape" -variable PrintOrient -value landscape
-    radiobutton .p.portrait -text "Portrait" -variable PrintOrient -value portrait
+    radiobutton .p.landscape -text "Landscape" -variable Option(PrintOrient) -value landscape
+    radiobutton .p.portrait -text "Portrait" -variable Option(PrintOrient) -value portrait
 
-    checkbutton .p.fill -text "Fill page" -variable PrintFill
-    checkbutton .p.right -text "Day numbers at top-right" -variable PrintDaysRight
-    checkbutton .p.encoding -text "ISO 8859-1 PostScript encoding" -variable PrintEncoding
-    checkbutton .p.calendars -text "Print small calendars" -variable PrintSmallCalendars
+    checkbutton .p.fill -text "Fill page" -variable Option(PrintFill)
+    checkbutton .p.right -text "Day numbers at top-right" -variable Option(PrintDaysRight)
+    checkbutton .p.encoding -text "ISO 8859-1 PostScript encoding" -variable Option(PrintEncoding)
+    checkbutton .p.calendars -text "Print small calendars" -variable Option(PrintSmallCalendars)
 
     button .p.print -text "Print" -command {set PrintStatus print}
     button .p.cancel -text "Cancel" -command {set PrintStatus cancel}
@@ -1202,7 +1222,8 @@ proc DoPrint {} {
     if {$PrintStatus == "cancel"} {
 	return
     }
-    if {$PrintDest == "file"} {
+    WriteOptionsToFile
+    if {$Option(PrintDest) == "file"} {
 	if {$fname == ""} {
 	    tk_dialog .error Error "No filename specified" error 0 Ok
 	    return
@@ -1225,36 +1246,36 @@ proc DoPrint {} {
     # Build the command line
     set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
     set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
-    if {$PrintSize == "letter"} {
+    if {$Option(PrintSize) == "letter"} {
 	append cmd " -m Letter"
     } else {
 	append cmd " -m A4"
     }
 
-    if {$PrintMargins == "24pt"} {
+    if {$Option(PrintMargins) == "24pt"} {
 	append cmd " -or 24 -ol 24 -ot 24 -ob 24"
-    } elseif {$PrintMargins == "36pt"} {
+    } elseif {$Option(PrintMargins) == "36pt"} {
 	append cmd " -or 36 -ol 36 -ot 36 -ob 36"
     } else {
 	append cmd " -or 48 -ol 48 -ot 48 -ob 48"
     }
 
-    if {$PrintOrient == "landscape"} {
+    if {$Option(PrintOrient) == "landscape"} {
 	append cmd " -l"
     }
 
-    if {$PrintFill} {
+    if {$Option(PrintFill)} {
 	append cmd " -e"
     }
 
-    if {!$PrintDaysRight} {
+    if {!$Option(PrintDaysRight)} {
         append cmd " -x"
     }
-    if {$PrintEncoding} {
+    if {$Option(PrintEncoding)} {
 	append cmd " -i"
     }
 
-    if {$PrintSmallCalendars} {
+    if {$Option(PrintSmallCalendars)} {
 	append cmd " -c3"
     } else {
 	append cmd " -c0"

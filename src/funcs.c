@@ -411,8 +411,9 @@ static int RetStrVal(char const *s, func_info *info)
     if (!s) {
 	RetVal.v.str = malloc(1);
 	if (RetVal.v.str) *RetVal.v.str = 0;
-    } else
+    } else {
 	RetVal.v.str = StrDup(s);
+    }
 
     if (!RetVal.v.str) {
 	RetVal.type = ERR_TYPE;

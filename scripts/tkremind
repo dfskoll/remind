@@ -137,7 +137,6 @@ set TimerUpdateForChanges ""
 
 # Remind program to execute -- supply full path if you want
 set Remind "remind"
-#set Remind "/home/dfs/Remind/src/remind"
 
 # Rem2PS program to execute -- supply full path if you want
 set Rem2PS "rem2ps"

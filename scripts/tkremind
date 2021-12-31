@@ -146,7 +146,7 @@ set ReminderFile {NOSUCHFILE}
 set ReminderFile [file nativename "~/.reminders"]
 
 # Default options file
-set ConfigFile ~/.tkremindrc
+set ConfigFile ""
 
 set EditorPid -1
 
@@ -2731,6 +2731,7 @@ proc main {} {
 	    close $f
 	}
     }
+    FindConfigFile
     LoadOptions
     ShowTodaysReminders
     ScanForTags $AppendFile
@@ -3911,6 +3912,49 @@ proc PickColor {index button} {
         $button configure -background $x
     }
     raise .opt
+}
+
+proc FindConfigFile {} {
+    global ConfigFile
+
+    # If it was set on the command line, use that
+    if {"$ConfigFile" != ""} {
+        return
+    }
+
+    set confighome ""
+    if {[info exists env(XDG_CONFIG_HOME)]} {
+        set confighome $env(XDG_CONFIG_HOME)
+    }
+    if {"$confighome" == ""} {
+        set confighome "~/.config"
+    }
+
+    # If $confighome does not exist, attempt to
+    # create it
+    if {![file exists $confighome]} {
+        catch { file mkdir $confighome }
+    }
+
+    if {[file isdirectory $confighome]} {
+        # Migrate .tkremindrc to $confighome/tkremindrc
+        if {[file exists "~/.tkremindrc"]} {
+            if {![file exists "$confighome/tkreminderc"]} {
+                puts "Migrating ~/.tkremindrc to $confighome/tkremindrc"
+                if {[catch { file copy "~/.tkremindrc" "$confighome/tkremindrc"}]} {
+                    puts "FAILED!\n"
+                    set ConfigFile "~/.tkremindrc"
+                    return
+                }
+                catch { file delete "~/.tkremindrc" }
+            }
+            set ConfigFile "$confighome/tkremindrc"
+            return
+        }
+        set ConfigFile "$confighome/tkremindrc"
+        return
+    }
+    set ConfigFile "~/.tkremindrc"
 }
 
 main

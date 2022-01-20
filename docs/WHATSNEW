@@ -1,5 +1,11 @@
 CHANGES TO REMIND
 
+* VERSION 3.3 Patch 12 - 2021-??-??
+
+- NEW FEATURE: Add the $DefaultTDelta system variable and associated
+  -tt[N] command-line option to set a default time delta for timed
+  reminder without an explicit +N delta.
+
 * VERSION 3.3 Patch 11 - 2021-12-30
 
 - IMPROVEMENT: TkRemind: Save the print dialog settings so they persist.

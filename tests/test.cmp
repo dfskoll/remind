@@ -2693,6 +2693,7 @@ Variable  Value
     $DateTimeSep  "@"
    $DefaultColor  "-1 -1 -1"
     $DefaultPrio  5000        [0, 9999]
+  $DefaultTDelta  0           [0, 1440]
     $DeltaOffset  0
        $DontFork  0
       $DontQueue  0

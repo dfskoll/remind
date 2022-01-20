@@ -489,7 +489,7 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 {
     Token tok;
     int r;
-
+    int seen_delta = 0;
     DynamicBuffer buf;
     DBufInit(&buf);
 
@@ -506,8 +506,9 @@ static int ParseTimeTrig(ParsePtr s, TimeTrig *tim, int save_in_globals)
 
 	case T_Delta:
 	    DBufFree(&buf);
-	    if (tim->delta != NO_DELTA) return E_DELTA_TWICE;
-	    tim->delta = (tok.val > 0) ? tok.val : -tok.val;
+            if (seen_delta) return E_DELTA_TWICE;
+            seen_delta = 1;
+	    tim->delta = (tok.val >= 0) ? tok.val : -tok.val;
 	    break;
 
 	case T_Rep:

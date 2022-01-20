@@ -284,7 +284,19 @@ void InitRemind(int argc, char const *argv[])
 
 	    case 't':
 	    case 'T':
-		if (!*arg) {
+                if (*arg == 'T' || *arg == 't') {
+                    arg++;
+                    if (!*arg) {
+                        DefaultTDelta = 5;
+                    } else {
+                        PARSENUM(DefaultTDelta, arg);
+                        if (DefaultTDelta < 0) {
+                            DefaultTDelta = 0;
+                        } else if (DefaultTDelta > 1440) {
+                            DefaultTDelta = 1440;
+                        }
+                    }
+                } else if (!*arg) {
 		    InfiniteDelta = 1;
 		} else {
 		    PARSENUM(DeltaOffset, arg);

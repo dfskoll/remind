@@ -234,7 +234,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     DBufInit(&(trig->tags));
     trig->passthru[0] = 0;
     tim->ttime = NO_TIME;
-    tim->delta = NO_DELTA;
+    tim->delta = DefaultTDelta;
     tim->rep   = NO_REP;
     tim->duration = NO_TIME;
     if (save_in_globals) {

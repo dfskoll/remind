@@ -190,6 +190,11 @@ If you supply a number \fIn\fR after the \fB\-t\fR option, then
 \fBRemind\fR pretends that each non-expired reminder has a \fIdelta\fR
 of \fIn\fR days and triggers reminders accordingly.
 .TP
+.B \-tt\fR[\fIn\fR]
+The \fB-tt\fR option causes \fBRemind\fR to assume a default delta of
+\fIn\fR minutes for all timed reminders.  If \fB\-tt\fR is given with
+no \fIn\fR, a default delta of 5 minutes is used.
+.TP
 .B \-h
 The \fB\-h\fR option ("hush...") suppresses certain warning and information
 messages.  In particular, if no reminders are triggered, this mode
@@ -2079,6 +2084,12 @@ clause.  You can set this as required to adjust the priorities of
 blocks of reminders without having to type priorities for individual
 reminders.  At startup, \fB$DefaultPrio\fR is set to 5000; it can range
 from 0 to 9999.
+.TP
+.B $DefaultTDelta
+The default time delta used if no +N is given in an AT clause.  This
+is normally 0, but can be set with the \fB\-tt\fR option or explicitly
+set in your script.  If \fB$DefaultDelta\fR is non-zero, you can use an
+explicit delta of +0 in an AT clause to countermand the default delta.
 .TP
 .B $DontFork (read-only)
 If non-zero, then the \fB\-c\fR option was supplied on the command line.

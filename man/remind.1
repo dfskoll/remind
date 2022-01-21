@@ -1587,8 +1587,14 @@ working directory is \fB/home/user\fR, then:
     # Read /home/user/.reminders/bar.rem
     DO bar.rem
 
+    # Read /usr/share/bar.rem - absolute path
+    DO /usr/share/bar.rem
+
     # Read /home/user/bar.rem
     INCLUDE bar.rem
+
+    # Read /usr/share/bar.rem - absolute path
+    INCLUDE /usr/share/bar.rem
 .fi
 .PP
 Arguably, the \fBINCLUDE\fR command should have worked the way \fBDO\fR

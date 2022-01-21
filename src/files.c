@@ -572,7 +572,7 @@ int DoInclude(ParsePtr p, enum TokTypes tok)
     e = VerifyEoln(p);
     if (e) Eprint("%s", ErrMsg[e]);
 
-    if (tok == T_IncludeR) {
+    if (tok == T_IncludeR && *(DBufValue(&buf)) != '/') {
         /* Relative include: Include relative to dir
            containing current file */
         if (DBufPuts(&path, FileName) != OK) return E_NO_MEM;

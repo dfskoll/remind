@@ -48,6 +48,7 @@ Token TokArray[] = {
     { "clear-omit-context", 5,   T_Clr,         0 },
     { "debug",          5,      T_Debug,       0 },
     { "december",	3,	T_Month,       11 },
+    { "do",     	2,	T_IncludeR,	0 },
     { "dumpvars",       4,      T_Dumpvars,    0 },
     { "duration",       3,      T_Duration,     0 },
     { "else",		4,	T_Else,	0 },

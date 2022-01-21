@@ -1238,7 +1238,10 @@ static void GenerateCalEntries(int col)
 	    case T_IfTrig:  r=DoIfTrig(&p);  break;
 	    case T_Else:    r=DoElse(&p);    break;
 	    case T_EndIf:   r=DoEndif(&p);   break;
-	    case T_Include: r=DoInclude(&p); break;
+
+	    case T_Include:
+	    case T_IncludeR: r=DoInclude(&p, tok.type); break;
+
 	    case T_IncludeCmd: r=DoIncludeCmd(&p); break;
 	    case T_Exit:    DoExit(&p);	     break;
 	    case T_Set:     r=DoSet(&p);     break;

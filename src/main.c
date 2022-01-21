@@ -235,12 +235,13 @@ static void DoReminders(void)
 	    case T_Else:    r=DoElse(&p);    break;
 	    case T_EndIf:   r=DoEndif(&p);   break;
 	    case T_Include:
+            case T_IncludeR:
 		/* In purge mode, include closes file, so we
 		   need to echo it here! */
 		if (PurgeMode) {
 		    PurgeEchoLine("%s\n", CurLine);
 		}
-		r=DoInclude(&p);
+		r=DoInclude(&p, tok.type);
 		purge_handled = 1;
 		break;
 	    case T_IncludeCmd:

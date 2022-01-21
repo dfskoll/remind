@@ -557,20 +557,52 @@ static int PopFile(void)
 /*  The INCLUDE command.                                       */
 /*                                                             */
 /***************************************************************/
-int DoInclude(ParsePtr p)
+int DoInclude(ParsePtr p, enum TokTypes tok)
 {
     DynamicBuffer buf;
+    DynamicBuffer fullname;
+    DynamicBuffer path;
     int r, e;
 
+    char const *s;
     DBufInit(&buf);
+    DBufInit(&fullname);
+    DBufInit(&path);
     if ( (r=ParseToken(p, &buf)) ) return r;
     e = VerifyEoln(p);
     if (e) Eprint("%s", ErrMsg[e]);
-    if ( (r=IncludeFile(DBufValue(&buf))) ) {
+
+    if (tok == T_IncludeR) {
+        /* Relative include: Include relative to dir
+           containing current file */
+        if (DBufPuts(&path, FileName) != OK) return E_NO_MEM;
+        if (DBufLen(&path) == 0) {
+            s = DBufValue(&buf);
+        } else {
+            char *t = DBufValue(&path) + DBufLen(&path) - 1;
+            while (t > DBufValue(&path) && *t != '/') t--;
+            if (*t == '/') {
+                *t = 0;
+                if (DBufPuts(&fullname, DBufValue(&path)) != OK) return E_NO_MEM;
+                if (DBufPuts(&fullname, "/") != OK) return E_NO_MEM;
+                if (DBufPuts(&fullname, DBufValue(&buf)) != OK) return E_NO_MEM;
+                s = DBufValue(&fullname);
+            } else {
+                s = DBufValue(&buf);
+            }
+        }
+    } else {
+        s = DBufValue(&buf);
+    }
+    if ( (r=IncludeFile(s)) ) {
 	DBufFree(&buf);
+	DBufFree(&path);
+        DBufFree(&fullname);
 	return r;
     }
     DBufFree(&buf);
+    DBufFree(&path);
+    DBufFree(&fullname);
     NumIfs = 0;
     IfFlags = 0;
     return OK;

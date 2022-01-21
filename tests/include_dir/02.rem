@@ -1,1 +1,3 @@
 REM 15 MSG 02
+DO subdir/04.rem
+INCLUDE subdir/04.rem

@@ -151,7 +151,7 @@ typedef Parser *ParsePtr;  /* Pointer to parser structure */
 enum TokTypes
 { T_Illegal,
   /* Commands first */
-  T_Rem, T_Push, T_Pop, T_Preserve, T_Include, T_IncludeCmd, T_If, T_Else, T_EndIf,
+  T_Rem, T_Push, T_Pop, T_Preserve, T_Include, T_IncludeR, T_IncludeCmd, T_If, T_Else, T_EndIf,
   T_IfTrig, T_ErrMsg,
   T_Set, T_UnSet, T_Fset, T_Omit, T_Banner, T_Exit,
   T_AddOmit,

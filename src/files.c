@@ -564,6 +564,7 @@ int DoInclude(ParsePtr p, enum TokTypes tok)
     DynamicBuffer path;
     int r, e;
 
+    r = OK;
     char const *s;
     DBufInit(&buf);
     DBufInit(&fullname);
@@ -575,7 +576,10 @@ int DoInclude(ParsePtr p, enum TokTypes tok)
     if (tok == T_IncludeR && *(DBufValue(&buf)) != '/') {
         /* Relative include: Include relative to dir
            containing current file */
-        if (DBufPuts(&path, FileName) != OK) return E_NO_MEM;
+        if (DBufPuts(&path, FileName) != OK) {
+            r = E_NO_MEM;
+            goto bailout;
+        }
         if (DBufLen(&path) == 0) {
             s = DBufValue(&buf);
         } else {
@@ -583,9 +587,18 @@ int DoInclude(ParsePtr p, enum TokTypes tok)
             while (t > DBufValue(&path) && *t != '/') t--;
             if (*t == '/') {
                 *t = 0;
-                if (DBufPuts(&fullname, DBufValue(&path)) != OK) return E_NO_MEM;
-                if (DBufPuts(&fullname, "/") != OK) return E_NO_MEM;
-                if (DBufPuts(&fullname, DBufValue(&buf)) != OK) return E_NO_MEM;
+                if (DBufPuts(&fullname, DBufValue(&path)) != OK) {
+                    r = E_NO_MEM;
+                    goto bailout;
+                }
+                if (DBufPuts(&fullname, "/") != OK) {
+                    r = E_NO_MEM;
+                    goto bailout;
+                }
+                if (DBufPuts(&fullname, DBufValue(&buf)) != OK) {
+                    r = E_NO_MEM;
+                    goto bailout;
+                }
                 s = DBufValue(&fullname);
             } else {
                 s = DBufValue(&buf);
@@ -595,17 +608,17 @@ int DoInclude(ParsePtr p, enum TokTypes tok)
         s = DBufValue(&buf);
     }
     if ( (r=IncludeFile(s)) ) {
-	DBufFree(&buf);
-	DBufFree(&path);
-        DBufFree(&fullname);
-	return r;
+        goto bailout;
     }
+
+    NumIfs = 0;
+    IfFlags = 0;
+
+  bailout:
     DBufFree(&buf);
     DBufFree(&path);
     DBufFree(&fullname);
-    NumIfs = 0;
-    IfFlags = 0;
-    return OK;
+    return r;
 }
 
 /***************************************************************/

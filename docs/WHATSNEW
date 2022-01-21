@@ -2,6 +2,16 @@ CHANGES TO REMIND
 
 * VERSION 3.3 Patch 12 - 2021-??-??
 
+- NEW FEATURE: Add a DO command.  This is just like INCLUDE, but relative
+  paths are interpreted relative to the directory containing the current
+  file.  That is:
+
+      DO somefile.rem
+
+  is equivalent to:
+
+      INCLUDE [filedir()]/somefile.rem
+
 - NEW FEATURE: Add the $DefaultTDelta system variable and associated
   -tt[N] command-line option to set a default time delta for timed
   reminder without an explicit +N delta.

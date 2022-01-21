@@ -1551,7 +1551,7 @@ the first day of the month.  The local \fBOMIT\fR keyword causes the
 Finally, the \fBAFTER\fR keyword will keep moving the reminder forward
 until it has passed any holidays specified with global \fBOMIT\fR
 commands.
-.SH THE INCLUDE COMMAND
+.SH THE DO AND INCLUDE COMMANDS
 .PP
 \fBRemind\fR allows you to include other files in your reminder script,
 similar to the C preprocessor #include directive.  For example, your
@@ -1575,7 +1575,26 @@ If you specify a \fIdirectory\fR as the argument to \fBINCLUDE\fR, then
 \fBRemind\fR will process all files in that directory that match the shell
 patterm "*.rem".  The files are processed in sorted order; the sort order
 matches that used by the shell when it expands "*.rem".
+.PP
+Note that the file specified by an \fBINCLUDE\fR command is interpreted
+relative to the \fIcurrent working directory of the Remind process\fR.
+If you want to include a file relative to the directory containing the
+currently-processing file, use \fBDO\fR instead.  For example,
+if the current file is \fB/home/user/.reminders/foo.rem\fR and Remind's
+working directory is \fB/home/user\fR, then:
+.PP
+.nf
+    # Read /home/user/.reminders/bar.rem
+    DO bar.rem
 
+    # Read /home/user/bar.rem
+    INCLUDE bar.rem
+.fi
+.PP
+Arguably, the \fBINCLUDE\fR command should have worked the way \fBDO\fR
+does right from the start, but changing it would have broken
+backward-compatibility, hence the introduction of \fBDO\fR.
+.PP
 .SH THE RUN COMMAND
 .PP
 If you include other files in your reminder script, you may not always
@@ -2630,7 +2649,9 @@ follows:
 .PP
 .RS
 This includes the file "stuff" in the same directory as the
-current file being processed.
+current file being processed.  Note that this workaround is
+no longer necessary because \fBDO stuff\fR will achieve the
+same goal.
 .RE
 .TP
 .B filename()

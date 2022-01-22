@@ -2,6 +2,11 @@ CHANGES TO REMIND
 
 * VERSION 3.3 Patch 12 - 2022-??-??
 
+- UPDATE: rem2html: Use JSON::MaybeXS instead of JSON::Any, since JSON::Any
+  is deprecated.  NOTE INCOMPATIBILITY: If you don't have JSON::MaybeXS
+  installed, you'll need to install it before trying to install or update
+  rem2html
+
 - NEW FEATURE: Add a DO command.  This is just like INCLUDE, but relative
   paths are interpreted relative to the directory containing the current
   file.  That is:

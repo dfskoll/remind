@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 3.3 Patch 12 - 2021-??-??
+* VERSION 3.3 Patch 12 - 2022-??-??
 
 - NEW FEATURE: Add a DO command.  This is just like INCLUDE, but relative
   paths are interpreted relative to the directory containing the current

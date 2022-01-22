@@ -2260,7 +2260,9 @@ The maximum number of iterations for the \fBSATISFY\fR clause
 .TP
 .B $MaxStringLen
 A limit on the longest string that \fBRemind\fR will allow you
-to create.  The default is 65535.
+to create.  The default is 65535.  If you set \fB$MaxStringLen\fR to 0
+or to -1, then \fBremind\fR will allow you to create arbitrarily-long
+strings, at least until it runs out of memory.
 .TP
 .B $MinsFromUTC
 The number of minutes between Universal Time Coordinated and local time.  If
@@ -3015,8 +3017,8 @@ not be executed.
 .PP
 If \fImaxlen\fR is specified, then \fBshell()\fR returns the first
 \fImaxlen\fR characters of output (rather than the first 511).  If
-\fImaxlen\fR is specified as a negative number, then \fIall\fR the
-output from \fIcmd\fR is returned.
+\fImaxlen\fR is specified as a negative number, then it defaults to
+the value of the system variable \fB$MaxStringLen\fR.
 .RE
 .TP
 .B shellescape(s_str)

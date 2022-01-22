@@ -1572,6 +1572,15 @@ static int FShell(func_info *info)
 	ASSERT_TYPE(1, INT_TYPE);
 	maxlen = ARGV(1);
     }
+
+    /* Don't allow maxlen to exceed the maximum length of
+       a string variable */
+    if (MaxStringLen > 0) {
+        if (maxlen <= 0 || maxlen > MaxStringLen) {
+            maxlen = MaxStringLen;
+        }
+    }
+
     fp = popen(ARGSTR(0), "r");
     if (!fp) return E_IO_ERR;
     while (1) {

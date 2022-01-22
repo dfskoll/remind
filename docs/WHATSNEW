@@ -24,6 +24,9 @@ CHANGES TO REMIND
 - IMPROVEMENT: TkRemind: Store .tkremindrc in $XDG_CONFIG_HOME/tkremindrc
   or $HOME/.config/tkremindrc as per the XDG Base Directory Specification.
 
+- BUG FIX: remind: Make the shell() built-in function respect
+  $MaxStringLen
+
 * VERSION 3.3 Patch 11 - 2021-12-30
 
 - IMPROVEMENT: TkRemind: Save the print dialog settings so they persist.

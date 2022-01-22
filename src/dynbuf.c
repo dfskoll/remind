@@ -27,11 +27,11 @@
  Doubles the size of dynamic buffer until it has room for at least
  'n' characters, not including trailing '\0'
 **********************************************************************/
-static int DBufMakeRoom(DynamicBuffer *dbuf, int n)
+static int DBufMakeRoom(DynamicBuffer *dbuf, size_t n)
 {
     /* Double size until it's greater than n (strictly > to leave room
        for trailing '\0' */
-    int size = dbuf->allocatedLen;
+    size_t size = dbuf->allocatedLen;
     char *buf;
 
     if (size > n) return OK;

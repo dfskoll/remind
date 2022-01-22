@@ -433,7 +433,9 @@ static int FStrlen(func_info *info)
     Value *v = &ARG(0);
     if (v->type != STR_TYPE) return E_BAD_TYPE;
     RetVal.type = INT_TYPE;
-    RETVAL = strlen(v->v.str);
+    size_t l = strlen(v->v.str);
+    if (l > INT_MAX) return E_2HIGH;
+    RETVAL = (int) l;
     return OK;
 }
 
@@ -1594,7 +1596,7 @@ static int FShell(func_info *info)
 	    DBufFree(&buf);
 	    return E_NO_MEM;
 	}
-	if (maxlen > 0 && DBufLen(&buf) >= maxlen) {
+	if (maxlen > 0 && DBufLen(&buf) >= (size_t) maxlen) {
 	    break;
 	}
     }

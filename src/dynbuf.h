@@ -17,8 +17,8 @@
 #define DBUF_STATIC_SIZE 128
 typedef struct {
     char *buffer;
-    int len;
-    int allocatedLen;
+    size_t len;
+    size_t allocatedLen;
     char staticBuf[DBUF_STATIC_SIZE];
 } DynamicBuffer;
 

@@ -1336,7 +1336,7 @@ static void WriteCalTrailer(void)
 /***************************************************************/
 static int DoCalRem(ParsePtr p, int col)
 {
-    int oldLen;
+    size_t oldLen;
     Trigger trig;
     TimeTrig tim;
     Value v;

@@ -3064,7 +3064,8 @@ takes \fIa\fR back to 2009-05-13.
 .RE
 .TP
 .B strlen(s_str)
-Returns the length of \fIstr\fR.
+Returns the length of \fIstr\fR.  If the length of \fIstr\fR is too large
+to represent as an integers, emits a "Number too high" error.
 .TP
 .B substr(s_str, i_start [,i_end])
 Returns a \fBSTRING\fR consisting of all characters in \fIstr\fR from

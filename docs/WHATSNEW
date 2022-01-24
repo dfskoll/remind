@@ -27,6 +27,12 @@ CHANGES TO REMIND
 - BUG FIX: remind: Make the shell() built-in function respect
   $MaxStringLen
 
+- BUG FIX: Use size_t to track the size of dynamic buffers rather than int.
+  This permits Remind to read in files with lines longer than 1GB and to
+  consume more than 1GB of output from the shell() command, both of which
+  will surely be massively useful.  (The old limit was 1GB rather than 2GB
+  because of details of the dynamic buffer resizing algorithm.)
+
 * VERSION 3.3 Patch 11 - 2021-12-30
 
 - IMPROVEMENT: TkRemind: Save the print dialog settings so they persist.

@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 3.3 Patch 12 - 2022-??-??
+* VERSION 3.3 Patch 12 - 2022-01-24
 
 - UPDATE: rem2html: Use JSON::MaybeXS instead of JSON::Any, since JSON::Any
   is deprecated.  NOTE INCOMPATIBILITY: If you don't have JSON::MaybeXS

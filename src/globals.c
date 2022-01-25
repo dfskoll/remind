@@ -17,6 +17,6 @@
 #include <stdio.h>   /* For defintion of FILE - sigh! */
 #include "types.h"
 #include "custom.h"
-#define MK_GLOBALS
+#define MK_GLOBALS 1
 #include "globals.h"
 #include "err.h"

@@ -442,9 +442,9 @@ AdjustTriggerForDuration(int today, int r, Trigger *trig, TimeTrig *tim, int sav
 	    FromJulian(r, &y, &m, &d);
 	    fprintf(ErrFp, "%s(%d): Trig(adj) = %s, %d %s, %d",
 		    FileName, LineNo,
-		    DayName[r % 7],
+		    get_day_name(r % 7),
 		    d,
-		    MonthName[m],
+		    get_month_name(m),
 		    y);
 	    if (tim->ttime != NO_TIME) {
 		fprintf(ErrFp, " AT %02d:%02d",
@@ -593,9 +593,9 @@ int ComputeTriggerNoAdjustDuration(int today, Trigger *trig, TimeTrig *tim,
 		FromJulian(result, &y, &m, &d);
 		fprintf(ErrFp, "%s(%d): Trig = %s, %d %s, %d",
 			FileName, LineNo,
-			DayName[result % 7],
+			get_day_name(result % 7),
 			d,
-			MonthName[m],
+			get_month_name(m),
 			y);
 		if (tim->ttime != NO_TIME) {
 		    fprintf(ErrFp, " AT %02d:%02d",

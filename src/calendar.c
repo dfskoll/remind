@@ -612,8 +612,12 @@ static void DoCalendarOneWeek(int nleft)
     goff();
     for (i=0; i<7; i++) {
 	FromJulian(OrigJul+i, &y, &m, &d);
-	sprintf(buf, "%d %c%c%c ", d, MonthName[m][0], MonthName[m][1],
-		MonthName[m][2]);
+        char const *mon = get_month_name(m);
+        if (strlen(mon) >= 3) {
+            sprintf(buf, "%d %c%c%c ", d, mon[0], mon[1], mon[2]);
+        } else {
+            sprintf(buf, "%d %s ", d, mon);
+        }
 	if (OrigJul+i == RealToday)
 	    PrintLeft(buf, ColSpaces, '*');
 	else
@@ -694,20 +698,20 @@ static void DoCalendarOneMonth(void)
 	}
 	if (PsCal < PSCAL_LEVEL3) {
 	    printf("%s %d %d %d %d\n",
-		   MonthName[m], y, DaysInMonth(m, y), (JulianToday+1) % 7,
+		   get_month_name(m), y, DaysInMonth(m, y), (JulianToday+1) % 7,
 		   MondayFirst);
 	    printf("%s %s %s %s %s %s %s\n",
-		   DayName[6], DayName[0], DayName[1], DayName[2],
-		   DayName[3], DayName[4], DayName[5]);
+		   get_day_name(6), get_day_name(0), get_day_name(1), get_day_name(2),
+		   get_day_name(3), get_day_name(4), get_day_name(5));
 	} else {
-	    PrintJSONKeyPairString("monthname", MonthName[m]);
+	    PrintJSONKeyPairString("monthname", get_month_name(m));
 	    PrintJSONKeyPairInt("year", y);
 	    PrintJSONKeyPairInt("daysinmonth", DaysInMonth(m, y));
 	    PrintJSONKeyPairInt("firstwkday", (JulianToday+1) % 7);
 	    PrintJSONKeyPairInt("mondayfirst", MondayFirst);
 	    printf("\"daynames\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"],",
-		   DayName[6], DayName[0], DayName[1], DayName[2],
-		   DayName[3], DayName[4], DayName[5]);
+		   get_day_name(6), get_day_name(0), get_day_name(1), get_day_name(2),
+		   get_day_name(3), get_day_name(4), get_day_name(5));
 	}
 	mm = m-1;
 	if (mm<0) {
@@ -715,9 +719,9 @@ static void DoCalendarOneMonth(void)
 	} else yy=y;
 
 	if (PsCal < PSCAL_LEVEL3) {
-	    printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	    printf("%s %d\n", get_month_name(mm), DaysInMonth(mm,yy));
 	} else {
-	    PrintJSONKeyPairString("prevmonthname", MonthName[mm]);
+	    PrintJSONKeyPairString("prevmonthname", get_month_name(mm));
 	    PrintJSONKeyPairInt("daysinprevmonth", DaysInMonth(mm, yy));
 	    PrintJSONKeyPairInt("prevmonthyear", yy);
 	}
@@ -726,9 +730,9 @@ static void DoCalendarOneMonth(void)
 	    mm = 0; yy = y+1;
 	} else yy=y;
 	if (PsCal < PSCAL_LEVEL3) {
-	    printf("%s %d\n", MonthName[mm], DaysInMonth(mm,yy));
+	    printf("%s %d\n", get_month_name(mm), DaysInMonth(mm,yy));
 	} else {
-	    PrintJSONKeyPairString("nextmonthname", MonthName[mm]);
+	    PrintJSONKeyPairString("nextmonthname", get_month_name(mm));
 	    PrintJSONKeyPairInt("daysinnextmonth", DaysInMonth(mm, yy));
 	    PrintJSONKeyPairInt("nextmonthyear", yy);
 	    printf("\"entries\":[\n");
@@ -1299,7 +1303,7 @@ static void WriteCalHeader(void)
     int y, m, d;
 
     FromJulian(JulianToday, &y, &m, &d);
-    sprintf(buf, "%s %d", MonthName[m], y);
+    sprintf(buf, "%s %d", get_month_name(m), y);
 
     WriteTopCalLine();
 
@@ -2007,9 +2011,9 @@ static void WriteCalDays(void)
     goff();
     for (i=0; i<7; i++) {
 	if (!MondayFirst)
-	    PrintCentered(DayName[(i+6)%7], ColSpaces, " ");
+	    PrintCentered(get_day_name((i+6)%7), ColSpaces, " ");
 	else
-	    PrintCentered(DayName[i%7], ColSpaces, " ");
+	    PrintCentered(get_day_name(i%7), ColSpaces, " ");
 	gon();
 	DRAW(tb);
 	goff();

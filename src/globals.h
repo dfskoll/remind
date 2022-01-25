@@ -168,6 +168,13 @@ EXTERN	char	*MonthName[]
 ;
 #endif
 
+EXTERN char *DynamicMonthName[]
+#ifdef MK_GLOBALS
+= {NULL, NULL, NULL, NULL, NULL, NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL}
+#endif
+;
+
 EXTERN  char	*EnglishDayName[]
 #ifdef MK_GLOBALS
 = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
@@ -185,6 +192,12 @@ EXTERN	char	*DayName[]
 #endif
 ;
 #endif
+
+EXTERN char *DynamicDayName []
+#ifdef MK_GLOBALS
+= {NULL, NULL, NULL, NULL, NULL, NULL, NULL}
+#endif
+;
 
 EXTERN	int	MonthDays[]
 #ifdef MK_GLOBALS

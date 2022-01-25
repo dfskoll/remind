@@ -166,3 +166,6 @@ int ShellEscape(char const *in, DynamicBuffer *out);
 int AddGlobalOmit(int jul);
 void set_lat_and_long_from_components(void);
 void set_components_from_lat_and_long(void);
+
+char const *get_day_name(int wkday);
+char const *get_month_name(int mon);

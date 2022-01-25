@@ -791,8 +791,8 @@ static int FWkday(func_info *info)
 	/* Convert 0=Sun to 0=Mon */
 	ARGV(0)--;
 	if (ARGV(0) < 0) ARGV(0) = 6;
-	s = DayName[ARGV(0)];
-    } else s = DayName[DATEPART(ARG(0)) % 7];
+	s = get_day_name(ARGV(0));
+    } else s = get_day_name(DATEPART(ARG(0)) % 7);
     return RetStrVal(s, info);
 }
 
@@ -819,7 +819,7 @@ static int FMon(func_info *info)
 	    CacheDay = d;
 	}
     }
-    s = MonthName[m];
+    s = get_month_name(m);
     return RetStrVal(s, info);
 }
 

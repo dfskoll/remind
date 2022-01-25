@@ -1159,9 +1159,9 @@ int DoSatRemind(Trigger *trig, TimeTrig *tt, ParsePtr p)
 		FromJulian(LastTriggerDate, &y, &m, &d);
 		fprintf(ErrFp, "%s(%d): Trig(satisfied) = %s, %d %s, %d",
 			FileName, LineNo,
-			DayName[LastTriggerDate % 7],
+			get_day_name(LastTriggerDate % 7),
 			d,
-			MonthName[m],
+			get_month_name(m),
 			y);
 		if (tt->ttime != NO_TIME) {
 		    fprintf(ErrFp, " AT %02d:%02d",

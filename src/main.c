@@ -1415,3 +1415,23 @@ System(char const *cmd)
 	r = 1;
     }
 }
+
+char const *
+get_day_name(int wkday)
+{
+    if (wkday < 0 || wkday > 6) {
+        return "INVALID_WKDAY";
+    }
+    if (DynamicDayName[wkday]) return DynamicDayName[wkday];
+    return DayName[wkday];
+}
+
+char const *
+get_month_name(int mon)
+{
+    if (mon < 0 || mon > 11) {
+        return "INVALID_MON";
+    }
+    if (DynamicMonthName[mon]) return DynamicMonthName[mon];
+    return MonthName[mon];
+}

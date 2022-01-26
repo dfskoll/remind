@@ -740,11 +740,14 @@ typedef struct {
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
     /*  name          mod  type              value         min/mal   max */
-    {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,       0,      1   },
+    {"April",          1,  STR_TYPE,     &DynamicMonthName[3],0,      0   },
+    {"August",         1,  STR_TYPE,     &DynamicMonthName[7],0,      0   },
     {"CalMode",        0,  INT_TYPE,     &DoCalendar,         0,      0   },
+    {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,       0,      1   },
     {"Daemon",         0,  INT_TYPE,     &Daemon,             0,      0   },
     {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,       0,      0   },
     {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,   0,      0   },
+    {"December",       1,  STR_TYPE,     &DynamicMonthName[11],0,      0   },
     {"DefaultColor",   1,  SPECIAL_TYPE, default_color_func,  0,      0   },
     {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,        0,      9999},
     {"DefaultTDelta",  1,  INT_TYPE,     &DefaultTDelta,      0,      1440},
@@ -754,14 +757,19 @@ static SysVar SysVarArr[] = {
     {"DontTrigAts",    0,  INT_TYPE,     &DontIssueAts,       0,      0   },
     {"EndSent",        1,  STR_TYPE,     &EndSent,            0,      0   },
     {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,          0,      0   },
+    {"February",       1,  STR_TYPE,     &DynamicMonthName[1],0,      0   },
     {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,        0,      132 },
     {"FoldYear",       1,  INT_TYPE,     &FoldYear,           0,      1   },
     {"FormWidth",      1,  INT_TYPE,     &FormWidth,          20,     500 },
+    {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],  0,      0   },
     {"HushMode",       0,  INT_TYPE,     &Hush,               0,      0   },
     {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,         0,      0   },
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },
     {"IntMax",         0,  INT_TYPE,     &IntMax,             0,      0   },
     {"IntMin",         0,  INT_TYPE,     &IntMin,             0,      0   },
+    {"January",        1,  STR_TYPE,     &DynamicMonthName[0],0,      0   },
+    {"July",           1,  STR_TYPE,     &DynamicMonthName[6],0,      0   },
+    {"June",           1,  STR_TYPE,     &DynamicMonthName[5],0,      0   },
     {"LatDeg",         1,  SPECIAL_TYPE, latdeg_func,         0,      0   },
     {"Latitude",       1,  SPECIAL_TYPE, latitude_func,       0,      0   },
     {"LatMin",         1,  SPECIAL_TYPE, latmin_func,         0,      0   },
@@ -771,24 +779,34 @@ static SysVar SysVarArr[] = {
     {"Longitude",      1,  SPECIAL_TYPE, longitude_func,      0,      0   },
     {"LongMin",        1,  SPECIAL_TYPE, longmin_func,        0,      0   },
     {"LongSec",        1,  SPECIAL_TYPE, longsec_func,        0,      0   },
+    {"March",          1,  STR_TYPE,     &DynamicMonthName[2],0,      0   },
     {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,         10,     ANY },
     {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,       -1,     ANY },
+    {"May",            1,  STR_TYPE,     &DynamicMonthName[4],0,      0   },
     {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,        -780,   780 },
+    {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],  0,      0   },
     {"NextMode",       0,  INT_TYPE,     &NextMode,           0,      0   },
+    {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0   },
     {"NumQueued",      0,  INT_TYPE,     &NumQueued,          0,      0   },
     {"NumTrig",        0,  INT_TYPE,     &NumTriggered,       0,      0   },
+    {"October",        1,  STR_TYPE,     &DynamicMonthName[9],0,      0   },
     {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,     0,      0   },
     {"PSCal",          0,  INT_TYPE,     &PsCal,              0,      0   },
     {"RunOff",         0,  INT_TYPE,     &RunDisabled,        0,      0   },
+    {"Saturday",       1,  STR_TYPE,     &DynamicDayName[5],  0,      0   },
+    {"September",      1,  STR_TYPE,     &DynamicMonthName[8],0,      0   },
     {"SimpleCal",      0,  INT_TYPE,     &DoSimpleCalendar,   0,      0   },
     {"SortByDate",     0,  INT_TYPE,     &SortByDate,         0,      0   },
     {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,         0,      0   },
     {"SortByTime",     0,  INT_TYPE,     &SortByTime,         0,      0   },
     {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,         0,      132 },
+    {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],  0,      0   },
     {"T",              0,  SPECIAL_TYPE, trig_date_func,      0,      0   },
     {"Td",             0,  SPECIAL_TYPE, trig_day_func,       0,      0   },
+    {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],  0,      0   },
     {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,       0,      0   },
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
+    {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],  0,      0   },
     {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,      0,      0   },
     {"Ty",             0,  SPECIAL_TYPE, trig_year_func,      0,      0   },
     {"U",              0,  SPECIAL_TYPE, today_date_func,     0,      0   },
@@ -796,7 +814,8 @@ static SysVar SysVarArr[] = {
     {"Um",             0,  SPECIAL_TYPE, today_mon_func,      0,      0   },
     {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed, 0,      0   },
     {"Uw",             0,  SPECIAL_TYPE, today_wday_func,     0,      0   },
-    {"Uy",             0,  SPECIAL_TYPE, today_year_func,     0,      0   }
+    {"Uy",             0,  SPECIAL_TYPE, today_year_func,     0,      0   },
+    {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],  0,      0   }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
@@ -857,7 +876,11 @@ int GetSysVar(char const *name, Value *val)
 	SysVarFunc f = (SysVarFunc) v->value;
 	return f(0, val);
     } else if (v->type == STR_TYPE) {
-	val->v.str = StrDup(*((char **) v->value));
+        if (! * (char **) v->value) {
+            val->v.str = StrDup("");
+        } else {
+            val->v.str = StrDup(*((char **) v->value));
+        }
 	if (!val->v.str) return E_NO_MEM;
     } else {
 	val->v.val = *((int *) v->value);

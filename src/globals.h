@@ -170,8 +170,8 @@ EXTERN	char	*MonthName[]
 
 EXTERN char *DynamicMonthName[]
 #ifdef MK_GLOBALS
-= {NULL, NULL, NULL, NULL, NULL, NULL,
-   NULL, NULL, NULL, NULL, NULL, NULL}
+= {"January", "February", "March", "April", "May", "June",
+   "July", "August", "September", "October", "November", "December"}
 #endif
 ;
 
@@ -195,7 +195,8 @@ EXTERN	char	*DayName[]
 
 EXTERN char *DynamicDayName []
 #ifdef MK_GLOBALS
-= {NULL, NULL, NULL, NULL, NULL, NULL, NULL}
+= {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+   "Saturday", "Sunday"}
 #endif
 ;
 

@@ -2686,11 +2686,14 @@ a125  -1
 dump $
 Variable  Value
 
-        $CalcUTC  0           [0, 1]
+          $April  "April"
+         $August  "August"
         $CalMode  0
+        $CalcUTC  0           [0, 1]
          $Daemon  0
         $DateSep  "-"
     $DateTimeSep  "@"
+       $December  "December"
    $DefaultColor  "-1 -1 -1"
     $DefaultPrio  5000        [0, 9999]
   $DefaultTDelta  0           [0, 1440]
@@ -2700,14 +2703,19 @@ Variable  Value
     $DontTrigAts  0
         $EndSent  ".?!"
       $EndSentIg  "" + char(34) + "')]}>"
+       $February  "February"
     $FirstIndent  0           [0, 132]
        $FoldYear  0           [0, 1]
       $FormWidth  72          [20, 500]
+         $Friday  "Friday"
        $HushMode  0
      $IgnoreOnce  1
        $InfDelta  0
          $IntMax  2147483647
          $IntMin  -2147483648
+        $January  "January"
+           $July  "July"
+           $June  "June"
          $LatDeg  30
        $Latitude  "30.500000"
          $LatMin  30
@@ -2717,24 +2725,34 @@ Variable  Value
       $Longitude  "24.750000"
         $LongMin  15
         $LongSec  0
+          $March  "March"
      $MaxSatIter  150         [10, Inf)
    $MaxStringLen  65535       [-1, Inf)
+            $May  "May"
     $MinsFromUTC  -300        [-780, 780]
+         $Monday  "Monday"
        $NextMode  0
+       $November  "November"
       $NumQueued  0
         $NumTrig  37
+        $October  "October"
    $PrefixLineNo  0
           $PSCal  0
          $RunOff  0
+       $Saturday  "Saturday"
+      $September  "September"
       $SimpleCal  0
      $SortByDate  0
      $SortByPrio  0
      $SortByTime  0
      $SubsIndent  0           [0, 132]
+         $Sunday  "Sunday"
               $T  1990-01-01
              $Td  -1
+       $Thursday  "Thursday"
         $TimeSep  ":"
              $Tm  -1
+        $Tuesday  "Tuesday"
              $Tw  -1
              $Ty  -1
               $U  1991-02-16
@@ -2743,6 +2761,7 @@ Variable  Value
    $UntimedFirst  0
              $Uw  6
              $Uy  1991
+      $Wednesday  "Wednesday"
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Variable  Value
 
@@ -4219,6 +4238,13 @@ Reading `../tests/include_dir/subdir/04.rem': Found in cache
 Reading `subdir/04.rem': Opening file on disk
 ../tests/include_dir/02.rem(3): Can't open file: subdir/04.rem
 Reading `../tests/include_dir/04cantread.rem': Opening file on disk
+Found cached directory listing for `../tests/include_dir'
+Reading `../tests/include_dir/01.rem': Found in cache
+Reading `../tests/include_dir/02.rem': Found in cache
+Reading `../tests/include_dir/subdir/04.rem': Found in cache
+Reading `subdir/04.rem': Opening file on disk
+../tests/include_dir/02.rem(3): Can't open file: subdir/04.rem
+Reading `../tests/include_dir/04cantread.rem': Opening file on disk
 # rem2ps begin
 August 2007 31 3 0
 Sunday Monday Tuesday Wednesday Thursday Friday Saturday
@@ -4236,20 +4262,10 @@ Test 9
 Reading `../tests/nonexistent_include_dir': Opening file on disk
 Can't open file: ../tests/nonexistent_include_dir
 Error reading ../tests/nonexistent_include_dir: Can't open file
-# rem2ps begin
-August 2007 31 3 0
-Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-July 31
-September 30
 Scanning directory `../tests/include_dir_no_rems' for *.rem files
 Caching directory `../tests/include_dir_no_rems' listing
 ../tests/include_dir_no_rems: No files matching *.rem
 Error reading ../tests/include_dir_no_rems: No files matching *.rem
-# rem2ps begin
-August 2007 31 3 0
-Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-July 31
-September 30
 Reading `../tests/include_test.rem': Opening file on disk
 Caching file `../tests/include_test.rem' in memory
 Scanning directory `include_dir' for *.rem files
@@ -4265,6 +4281,18 @@ include_dir/02.rem(3): Can't open file: subdir/04.rem
 Reading `include_dir/04cantread.rem': Opening file on disk
 Scanning directory `include_dir_no_rems' for *.rem files
 Caching directory `include_dir_no_rems' listing
+../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
+Reading `nonexistent_include_dir': Opening file on disk
+../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
+Reading `../tests/include_test.rem': Found in cache
+Found cached directory listing for `include_dir'
+Reading `include_dir/01.rem': Found in cache
+Reading `include_dir/02.rem': Found in cache
+Reading `include_dir/subdir/04.rem': Found in cache
+Reading `subdir/04.rem': Opening file on disk
+include_dir/02.rem(3): Can't open file: subdir/04.rem
+Reading `include_dir/04cantread.rem': Opening file on disk
+Found cached directory listing for `include_dir_no_rems'
 ../tests/include_test.rem(2): include_dir_no_rems: No files matching *.rem
 Reading `nonexistent_include_dir': Opening file on disk
 ../tests/include_test.rem(3): Can't open file: nonexistent_include_dir
@@ -7104,6 +7132,7 @@ February 29
 {"date":"2012-01-23","filename":"-","lineno":1,"wd":["Monday"],"nonconst_expr":1,"priority":5000,"body":"bar"}
 {"date":"2012-01-30","filename":"-","lineno":1,"wd":["Monday"],"nonconst_expr":1,"priority":5000,"body":"bar"}
 # rem2ps2 end
+-stdin-(7): Number too high
 -stdin-(7): Number too high
 -stdin-(7): Number too high
 -stdin-(7): Number too high

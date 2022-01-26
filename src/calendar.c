@@ -543,9 +543,11 @@ void ProduceCalendar(void)
     ColSpaces = (CalWidth - 9) / 7;
     CalWidth = 7*ColSpaces + 8;
 
+    /* Run the file once to get potentially-overridden day names */
     if (CalMonths) {
-	FromJulian(JulianToday, &y, &m, &d);
-	JulianToday = Julian(y, m, 1);
+        FromJulian(JulianToday, &y, &m, &d);
+        JulianToday = Julian(y, m, 1);
+        GenerateCalEntries(-1);
 	DidAMonth = 0;
 	if (PsCal == PSCAL_LEVEL3) {
 	    printf("[\n");
@@ -561,6 +563,8 @@ void ProduceCalendar(void)
     } else {
 	if (MondayFirst) JulianToday -= (JulianToday%7);
 	else             JulianToday -= ((JulianToday+1)%7);
+
+        GenerateCalEntries(-1);
 
 	if (!DoSimpleCalendar) {
   	    WriteWeekHeaderLine();
@@ -1346,7 +1350,7 @@ static int DoCalRem(ParsePtr p, int col)
     Value v;
     int r, err;
     int jul;
-    CalEntry *CurCol = CalColumn[col];
+    CalEntry *CurCol;
     CalEntry *e;
     char const *s, *s2;
     DynamicBuffer buf, obuf, pre_buf, raw_buf;
@@ -1355,6 +1359,11 @@ static int DoCalRem(ParsePtr p, int col)
 
     int is_color, col_r, col_g, col_b;
 
+    if (col >= 0) {
+        CurCol = CalColumn[col];
+    } else {
+        CurCol = NULL;
+    }
     is_color = 0;
     DBufInit(&buf);
     DBufInit(&pre_buf);
@@ -1449,6 +1458,12 @@ static int DoCalRem(ParsePtr p, int col)
 	    FreeTrig(&trig);
             return r;
         }
+    }
+
+    /* If we're not actually generating any calendar entries, we're done */
+    if (col < 0) {
+	FreeTrig(&trig);
+        return OK;
     }
 
     /* Don't include timed reminders in calendar if -a option supplied. */

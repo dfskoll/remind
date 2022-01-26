@@ -14,21 +14,13 @@
 #define L_LANGNAME "Norwegian"
 
 /* Day names */
-#if ISOLATIN1
-#  define L_SUNDAY "S\370ndag"
-#else
-#  define L_SUNDAY "Soendag"
-#endif
+#define L_SUNDAY "Søndag"
 #define L_MONDAY "Mandag"
 #define L_TUESDAY "Tirsdag"
 #define L_WEDNESDAY "Onsdag"
 #define L_THURSDAY "Torsdag"
 #define L_FRIDAY "Fredag"
-#if ISOLATIN1
-#  define L_SATURDAY "L\370rdag"
-#else
-#  define L_SATURDAY "Loerdag"
-#endif
+#define L_SATURDAY "Lørdag"
 
 /* Month names */
 #define L_JAN "Januar"
@@ -49,11 +41,7 @@
 #define L_TOMORROW "i morgen"
 
 /* The default banner */
-#if ISOLATIN1
-#  define L_BANNER "P\345minnelse for %w, %d. %m, %y%o:"
-#else
-#  define L_BANNER "Paaminnelse for %w, %d. %m, %y%o:"
-#endif
+#define L_BANNER "Påminnelse for %w, %d. %m, %y%o:"
 
 /* "am" and "pm" */
 #define L_AM "am"
@@ -64,11 +52,7 @@
 
 /* Ago and from now */
 #define L_AGO "siden"
-#if ISOLATIN1
-#  define L_FROMNOW "fra n\345"
-#else
-#  define L_FROMNOW "fra naa"
-#endif
+#define L_FROMNOW "fra nå"
 
 /* "in %d days' time" */
 #define L_INXDAYS "om %d dager"
@@ -81,11 +65,7 @@
 #define L_PLURAL "er"
 
 /* Minutes, hours, at, etc */
-#if ISOLATIN1
-#  define L_NOW "n\345"
-#else
-#  define L_NOW "naa"
-#endif
+#define L_NOW "nå"
 #define L_AT "kl."
 #define L_MINUTE "minutt"
 #define L_HOUR "time"
@@ -93,7 +73,7 @@
 #define L_WAS "var"
 #define L_AND "og"
 /* What to add to make "hour" plural */
-#define L_HPLU "r"  
+#define L_HPLU "r"
 /* What to add to make "minute" plural */
 #define L_MPLU "er"
 

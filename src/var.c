@@ -93,6 +93,18 @@ static int longsec_func(int do_set, Value *val)
     return latlong_component_func(do_set, val, &LongSec, -59, 59, "$LongSec", "$Longitude");
 }
 
+static int validate_nonspace(void const *val)
+{
+    char const *s = (char const *) val;
+    while(*s) {
+        if (isspace(*s)) {
+            return E_BAD_TYPE;
+        }
+        s++;
+    }
+    return OK;
+}
+
 static int latitude_longitude_func(int do_set, Value *val, double *var, double min, double max) {
     char buf[64];
     double x;
@@ -728,6 +740,7 @@ typedef struct {
     void *value;
     int min;
     int max;
+    int (*validate)(void const *newvalue);
 } SysVar;
 
 /* If the type of a sys variable is STR_TYPE, then min is redefined
@@ -739,83 +752,83 @@ typedef struct {
 
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
-    /*  name          mod  type              value         min/mal   max */
-    {"April",          1,  STR_TYPE,     &DynamicMonthName[3],0,      0   },
-    {"August",         1,  STR_TYPE,     &DynamicMonthName[7],0,      0   },
-    {"CalMode",        0,  INT_TYPE,     &DoCalendar,         0,      0   },
-    {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,       0,      1   },
-    {"Daemon",         0,  INT_TYPE,     &Daemon,             0,      0   },
-    {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,       0,      0   },
-    {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,   0,      0   },
-    {"December",       1,  STR_TYPE,     &DynamicMonthName[11],0,      0   },
-    {"DefaultColor",   1,  SPECIAL_TYPE, default_color_func,  0,      0   },
-    {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,        0,      9999},
-    {"DefaultTDelta",  1,  INT_TYPE,     &DefaultTDelta,      0,      1440},
-    {"DeltaOffset",    0,  INT_TYPE,     &DeltaOffset,        0,      0   },
-    {"DontFork",       0,  INT_TYPE,     &DontFork,           0,      0   },
-    {"DontQueue",      0,  INT_TYPE,     &DontQueue,          0,      0   },
-    {"DontTrigAts",    0,  INT_TYPE,     &DontIssueAts,       0,      0   },
-    {"EndSent",        1,  STR_TYPE,     &EndSent,            0,      0   },
-    {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,          0,      0   },
-    {"February",       1,  STR_TYPE,     &DynamicMonthName[1],0,      0   },
-    {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,        0,      132 },
-    {"FoldYear",       1,  INT_TYPE,     &FoldYear,           0,      1   },
-    {"FormWidth",      1,  INT_TYPE,     &FormWidth,          20,     500 },
-    {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],  0,      0   },
-    {"HushMode",       0,  INT_TYPE,     &Hush,               0,      0   },
-    {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,         0,      0   },
-    {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,      0,      0   },
-    {"IntMax",         0,  INT_TYPE,     &IntMax,             0,      0   },
-    {"IntMin",         0,  INT_TYPE,     &IntMin,             0,      0   },
-    {"January",        1,  STR_TYPE,     &DynamicMonthName[0],0,      0   },
-    {"July",           1,  STR_TYPE,     &DynamicMonthName[6],0,      0   },
-    {"June",           1,  STR_TYPE,     &DynamicMonthName[5],0,      0   },
-    {"LatDeg",         1,  SPECIAL_TYPE, latdeg_func,         0,      0   },
-    {"Latitude",       1,  SPECIAL_TYPE, latitude_func,       0,      0   },
-    {"LatMin",         1,  SPECIAL_TYPE, latmin_func,         0,      0   },
-    {"LatSec",         1,  SPECIAL_TYPE, latsec_func,         0,      0   },
-    {"Location",       1,  STR_TYPE,     &Location,           0,      0   },
-    {"LongDeg",        1,  SPECIAL_TYPE, longdeg_func,        0,      0   },
-    {"Longitude",      1,  SPECIAL_TYPE, longitude_func,      0,      0   },
-    {"LongMin",        1,  SPECIAL_TYPE, longmin_func,        0,      0   },
-    {"LongSec",        1,  SPECIAL_TYPE, longsec_func,        0,      0   },
-    {"March",          1,  STR_TYPE,     &DynamicMonthName[2],0,      0   },
-    {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,         10,     ANY },
-    {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,       -1,     ANY },
-    {"May",            1,  STR_TYPE,     &DynamicMonthName[4],0,      0   },
-    {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,        -780,   780 },
-    {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],  0,      0   },
-    {"NextMode",       0,  INT_TYPE,     &NextMode,           0,      0   },
-    {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0   },
-    {"NumQueued",      0,  INT_TYPE,     &NumQueued,          0,      0   },
-    {"NumTrig",        0,  INT_TYPE,     &NumTriggered,       0,      0   },
-    {"October",        1,  STR_TYPE,     &DynamicMonthName[9],0,      0   },
-    {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,     0,      0   },
-    {"PSCal",          0,  INT_TYPE,     &PsCal,              0,      0   },
-    {"RunOff",         0,  INT_TYPE,     &RunDisabled,        0,      0   },
-    {"Saturday",       1,  STR_TYPE,     &DynamicDayName[5],  0,      0   },
-    {"September",      1,  STR_TYPE,     &DynamicMonthName[8],0,      0   },
-    {"SimpleCal",      0,  INT_TYPE,     &DoSimpleCalendar,   0,      0   },
-    {"SortByDate",     0,  INT_TYPE,     &SortByDate,         0,      0   },
-    {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,         0,      0   },
-    {"SortByTime",     0,  INT_TYPE,     &SortByTime,         0,      0   },
-    {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,         0,      132 },
-    {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],  0,      0   },
-    {"T",              0,  SPECIAL_TYPE, trig_date_func,      0,      0   },
-    {"Td",             0,  SPECIAL_TYPE, trig_day_func,       0,      0   },
-    {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],  0,      0   },
-    {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,       0,      0   },
-    {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,       0,      0   },
-    {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],  0,      0   },
-    {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,      0,      0   },
-    {"Ty",             0,  SPECIAL_TYPE, trig_year_func,      0,      0   },
-    {"U",              0,  SPECIAL_TYPE, today_date_func,     0,      0   },
-    {"Ud",             0,  SPECIAL_TYPE, today_day_func,      0,      0   },
-    {"Um",             0,  SPECIAL_TYPE, today_mon_func,      0,      0   },
-    {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed, 0,      0   },
-    {"Uw",             0,  SPECIAL_TYPE, today_wday_func,     0,      0   },
-    {"Uy",             0,  SPECIAL_TYPE, today_year_func,     0,      0   },
-    {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],  0,      0   }
+    /*  name          mod  type              value          min/mal   max  validate*/
+    {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    validate_nonspace },
+    {"August",         1,  STR_TYPE,     &DynamicMonthName[7], 0,      0,    validate_nonspace },
+    {"CalMode",        0,  INT_TYPE,     &DoCalendar,          0,      0,    NULL },
+    {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,        0,      1,    NULL },
+    {"Daemon",         0,  INT_TYPE,     &Daemon,              0,      0,    NULL },
+    {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,        0,      0,    NULL },
+    {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,    0,      0,    NULL },
+    {"December",       1,  STR_TYPE,     &DynamicMonthName[11],0,      0,    validate_nonspace },
+    {"DefaultColor",   1,  SPECIAL_TYPE, default_color_func,   0,      0,    NULL },
+    {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,         0,      9999, NULL },
+    {"DefaultTDelta",  1,  INT_TYPE,     &DefaultTDelta,       0,      1440, NULL },
+    {"DeltaOffset",    0,  INT_TYPE,     &DeltaOffset,         0,      0,    NULL },
+    {"DontFork",       0,  INT_TYPE,     &DontFork,            0,      0,    NULL },
+    {"DontQueue",      0,  INT_TYPE,     &DontQueue,           0,      0,    NULL },
+    {"DontTrigAts",    0,  INT_TYPE,     &DontIssueAts,        0,      0,    NULL },
+    {"EndSent",        1,  STR_TYPE,     &EndSent,             0,      0,    NULL },
+    {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,           0,      0,    NULL },
+    {"February",       1,  STR_TYPE,     &DynamicMonthName[1], 0,      0,    validate_nonspace },
+    {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,         0,      132,  NULL },
+    {"FoldYear",       1,  INT_TYPE,     &FoldYear,            0,      1,    NULL },
+    {"FormWidth",      1,  INT_TYPE,     &FormWidth,           20,     500,  NULL },
+    {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],   0,      0,    validate_nonspace },
+    {"HushMode",       0,  INT_TYPE,     &Hush,                0,      0,    NULL },
+    {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,          0,      0,    NULL },
+    {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,       0,      0,    NULL },
+    {"IntMax",         0,  INT_TYPE,     &IntMax,              0,      0,    NULL },
+    {"IntMin",         0,  INT_TYPE,     &IntMin,              0,      0,    NULL },
+    {"January",        1,  STR_TYPE,     &DynamicMonthName[0], 0,      0,    validate_nonspace },
+    {"July",           1,  STR_TYPE,     &DynamicMonthName[6], 0,      0,    validate_nonspace },
+    {"June",           1,  STR_TYPE,     &DynamicMonthName[5], 0,      0,    validate_nonspace },
+    {"LatDeg",         1,  SPECIAL_TYPE, latdeg_func,          0,      0,    NULL },
+    {"Latitude",       1,  SPECIAL_TYPE, latitude_func,        0,      0,    NULL },
+    {"LatMin",         1,  SPECIAL_TYPE, latmin_func,          0,      0,    NULL },
+    {"LatSec",         1,  SPECIAL_TYPE, latsec_func,          0,      0,    NULL },
+    {"Location",       1,  STR_TYPE,     &Location,            0,      0,    NULL },
+    {"LongDeg",        1,  SPECIAL_TYPE, longdeg_func,         0,      0,    NULL },
+    {"Longitude",      1,  SPECIAL_TYPE, longitude_func,       0,      0,    NULL },
+    {"LongMin",        1,  SPECIAL_TYPE, longmin_func,         0,      0,    NULL },
+    {"LongSec",        1,  SPECIAL_TYPE, longsec_func,         0,      0,    NULL },
+    {"March",          1,  STR_TYPE,     &DynamicMonthName[2], 0,      0,    validate_nonspace },
+    {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,          10,     ANY,  NULL },
+    {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,        -1,     ANY,  NULL },
+    {"May",            1,  STR_TYPE,     &DynamicMonthName[4], 0,      0,    validate_nonspace },
+    {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,         -780,   780,  NULL },
+    {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],   0,      0,    validate_nonspace },
+    {"NextMode",       0,  INT_TYPE,     &NextMode,            0,      0,    NULL },
+    {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0,    validate_nonspace },
+    {"NumQueued",      0,  INT_TYPE,     &NumQueued,           0,      0,    NULL },
+    {"NumTrig",        0,  INT_TYPE,     &NumTriggered,        0,      0,    NULL },
+    {"October",        1,  STR_TYPE,     &DynamicMonthName[9], 0,      0,    validate_nonspace },
+    {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,      0,      0,    NULL },
+    {"PSCal",          0,  INT_TYPE,     &PsCal,               0,      0,    NULL },
+    {"RunOff",         0,  INT_TYPE,     &RunDisabled,         0,      0,    NULL },
+    {"Saturday",       1,  STR_TYPE,     &DynamicDayName[5],   0,      0,    validate_nonspace },
+    {"September",      1,  STR_TYPE,     &DynamicMonthName[8], 0,      0,    validate_nonspace },
+    {"SimpleCal",      0,  INT_TYPE,     &DoSimpleCalendar,    0,      0,    NULL },
+    {"SortByDate",     0,  INT_TYPE,     &SortByDate,          0,      0,    NULL },
+    {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,          0,      0,    NULL },
+    {"SortByTime",     0,  INT_TYPE,     &SortByTime,          0,      0,    NULL },
+    {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,          0,      132,  NULL },
+    {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],   0,      0,    validate_nonspace },
+    {"T",              0,  SPECIAL_TYPE, trig_date_func,       0,      0,    NULL },
+    {"Td",             0,  SPECIAL_TYPE, trig_day_func,        0,      0,    NULL },
+    {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],   0,      0,    validate_nonspace },
+    {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,        0,      0,    NULL },
+    {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,        0,      0,    NULL },
+    {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],   0,      0,    validate_nonspace },
+    {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,       0,      0,    NULL },
+    {"Ty",             0,  SPECIAL_TYPE, trig_year_func,       0,      0,    NULL },
+    {"U",              0,  SPECIAL_TYPE, today_date_func,      0,      0,    NULL },
+    {"Ud",             0,  SPECIAL_TYPE, today_day_func,       0,      0,    NULL },
+    {"Um",             0,  SPECIAL_TYPE, today_mon_func,       0,      0,    NULL },
+    {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed,  0,      0,    NULL },
+    {"Uw",             0,  SPECIAL_TYPE, today_wday_func,      0,      0,    NULL },
+    {"Uy",             0,  SPECIAL_TYPE, today_year_func,      0,      0,    NULL },
+    {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],   0,      0,    validate_nonspace }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )
@@ -845,7 +858,18 @@ int SetSysVar(char const *name, Value *value)
 	r = f(1, value);
         DestroyValue(*value);
         return r;
-    } else if (v->type == STR_TYPE) {
+    }
+    if (v->validate) {
+        if (v->type == STR_TYPE) {
+            r = (v->validate)((void *) value->v.str);
+        } else {
+            r = (v->validate)((void *) &(value->v.val));
+        }
+        if (r != OK) {
+            return r;
+        }
+    }
+    if (v->type == STR_TYPE) {
         /* If it's a string variable, special measures must be taken */
 	if (v->been_malloced) free(*((char **)(v->value)));
 	v->been_malloced = 1;

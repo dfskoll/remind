@@ -17,7 +17,7 @@
 #define L_SUNDAY "Domingo"
 #define L_MONDAY "Lunes"
 #define L_TUESDAY "Martes"
-#define L_WEDNESDAY "miércoles"
+#define L_WEDNESDAY "Miércoles"
 #define L_THURSDAY "Jueves"
 #define L_FRIDAY "Viernes"
 #define L_SATURDAY "Sábado"

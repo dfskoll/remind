@@ -170,11 +170,15 @@ EXTERN	char	*MonthName[]
 
 EXTERN char *DynamicMonthName[]
 #ifdef MK_GLOBALS
+#if LANG == ENGLISH
 = {"January", "February", "March", "April", "May", "June",
    "July", "August", "September", "October", "November", "December"}
+#else
+= {L_JAN, L_FEB, L_MAR, L_APR, L_MAY, L_JUN,
+   L_JUL, L_AUG, L_SEP, L_OCT, L_NOV, L_DEC}
+#endif
 #endif
 ;
-
 EXTERN  char	*EnglishDayName[]
 #ifdef MK_GLOBALS
 = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
@@ -195,8 +199,13 @@ EXTERN	char	*DayName[]
 
 EXTERN char *DynamicDayName []
 #ifdef MK_GLOBALS
+#if LANG == ENGLISH
 = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
    "Saturday", "Sunday"}
+#else
+= {L_MONDAY, L_TUESDAY, L_WEDNESDAY, L_THURSDAY, L_FRIDAY,
+   L_SATURDAY, L_SUNDAY}
+#endif
 #endif
 ;
 

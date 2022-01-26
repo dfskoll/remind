@@ -24,7 +24,6 @@
 #  define L_THURSDAY "Joi"
 #  define L_FRIDAY "Vineri"
 #  define L_SATURDAY "Sâmbătă"
-#endif
 
 /* Month names */
 #define L_JAN "Ianuarie"

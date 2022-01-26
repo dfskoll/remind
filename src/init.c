@@ -198,6 +198,9 @@ void InitRemind(int argc, char const *argv[])
 	if (!strcmp(s, "rem")) {
 	    InvokedAsRem = 1;
 	}
+    } else {
+        fprintf(stderr, "Invoked with a NULL argv[0]; bailing because that's just plain bizarre.\n");
+        exit(1);
     }
 
     /* Parse the command-line options */

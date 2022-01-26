@@ -4005,7 +4005,7 @@ done
 VERSION=03.03.12
 
 
-ac_config_files="$ac_config_files src/Makefile www/Makefile src/version.h rem2html/Makefile"
+ac_config_files="$ac_config_files src/Makefile www/Makefile src/version.h rem2html/Makefile rem2pdf/Makefile.PL"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4702,6 +4702,7 @@ do
     "www/Makefile") CONFIG_FILES="$CONFIG_FILES www/Makefile" ;;
     "src/version.h") CONFIG_FILES="$CONFIG_FILES src/version.h" ;;
     "rem2html/Makefile") CONFIG_FILES="$CONFIG_FILES rem2html/Makefile" ;;
+    "rem2pdf/Makefile.PL") CONFIG_FILES="$CONFIG_FILES rem2pdf/Makefile.PL" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

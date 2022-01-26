@@ -1,0 +1,76 @@
+#!/bin/env perl
+use strict;
+use warnings;
+
+use Encode;
+use Cairo;
+use Pango;
+
+use Getopt::Long;
+
+my $media_to_size = {
+    "Letter"    => [ 612,  792],
+    "Tabloid"   => [ 792, 1224],
+    "Ledger"    => [1224,  792],
+    "Legal"     => [ 612, 1008],
+    "Statement" => [ 396,  612],
+    "Executive" => [ 540,  720],
+    "A3"        => [ 842, 1190],
+    "A4"        => [ 595,  842],
+    "A5"        => [ 420,  595],
+    "B4"        => [ 729, 1032],
+    "B5"        => [ 519,  729],
+    "Folio"     => [ 612,  936],
+    "Quarto"    => [ 612,  780],
+    "10x14"     => [ 720, 1008],
+};
+
+my $landscape = 0;
+my $numbers_on_left = 0;
+my $small_calendars = 0;
+my $fill_entire_page = 0;
+
+my $media = 'Letter';
+
+my $title_font = 'Sans 14';
+my $small_cal_font = 'Sans';
+my $header_font = 'Sans 14';
+my $entry_font = 'Sans 8';
+my $daynum_font = 'Sans Bold Oblique 14';
+
+my $border_size = 6;
+my $line_thickness = 1;
+
+my $margin_top = 36;
+my $margin_bottom = 36;
+my $margin_left = 36;
+my $margin_right = 36;
+
+sub read_one_month
+{
+}
+
+__END__
+
+my $surface = Cairo::PdfSurface->create('/tmp/x.pdf', 612, 792);
+
+my $cr = Cairo::Context->create($surface);
+
+$cr->set_line_width($line_thickness);
+for (my $x=36; $x < 612-36; $x += 72) {
+        $cr->move_to($x, 0);
+        $cr->line_to($x, 792);
+        $cr->stroke;
+}
+
+$cr->set_source_rgb(0,0.5,0);
+$cr->arc(612/2, 792/2, 36, 0, 2*3.1415926535);
+$cr->stroke_preserve;
+$cr->fill;
+$cr->move_to(612/2, 792/2);
+$cr->set_source_rgb(0,0,0);
+$cr->set_font_size(36);
+$cr->show_text(Encode::decode('UTF-8', "מֵם סוֹפִית‎çédo"));
+
+$surface->finish();
+

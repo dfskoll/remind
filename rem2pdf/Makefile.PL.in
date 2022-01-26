@@ -1,0 +1,12 @@
+use ExtUtils::MakeMaker;
+WriteMakefile(
+	NAME               => 'Remind::PDF',
+	AUTHOR             => q{Dianne Skoll <dianne@skoll.ca>},
+	VERSION            => '@VERSION@',
+	PREREQ_PM          => {
+		'Getopt::Long' => 0,
+                'Cairo' => 0,
+                'Pango' => 0,
+	},
+	EXE_FILES => [ 'bin/rem2pdf' ]
+    );

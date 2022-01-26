@@ -28,11 +28,7 @@
 /* Month names */
 #define L_JAN "Januar"
 #define L_FEB "Februar"
-#if ISOLATIN1
-#  define L_MAR "M\344rz"
-#else
-#  define L_MAR "Maerz"
-#endif
+#define L_MAR "März"
 #define L_APR "April"
 #define L_MAY "Mai"
 #define L_JUN "Juni"
@@ -48,11 +44,7 @@
 #define L_TOMORROW "morgen"
 
 /* The default banner */
-#if ISOLATIN1
-#  define L_BANNER "Termine f\374r %w, den %d. %m %y%o:"
-#else
-#  define L_BANNER "Termine fuer %w, den %d. %m %y%o:"
-#endif
+#define L_BANNER "Termine für %w, den %d. %m %y%o:"
 
 /* "am" and "pm" */
 #define L_AM "am"

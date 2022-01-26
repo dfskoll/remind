@@ -172,11 +172,11 @@ set MondayFirst 0
 # Month names in English
 set MonthNames {January February March April May June July August September October November December}
 
-# Day names in Remind's pre-selected language
-set DayNames {}
-
 # Day name in English
 set EnglishDayNames {Sunday Monday Tuesday Wednesday Thursday Friday Saturday}
+
+# Day names in Remind's pre-selected language - will be overwritten
+set DayNames $EnglishDayNames
 
 # Current month and year -- will be set by Initialize procedure
 set CurMonth -1
@@ -186,9 +186,13 @@ set CurYear -1
 set BgCounter 0
 
 # Absolutely today -- unlike the CurMonth and CurYear, these won't change
-set TodayMonth -1
-set TodayYear -1
-set TodayDay -1
+set now [clock seconds]
+
+set TodayMonth [expr [string trim [clock format $now -format %N]] - 1]
+set TodayYear [clock format $now -format %Y]
+set TodayDay [string trim [clock format $now -format %e]]
+set CurMonth $TodayMonth
+set CurYear $TodayYear
 
 # Reminder option types and skip types
 set OptionType 1
@@ -261,7 +265,6 @@ proc is_warning_header { line } {
 #  MondayFirst flag, current date, etc.
 #***********************************************************************
 proc Initialize {} {
-
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst TwentyFourHourMode ReminderFileModTime
     global Option ConfigFile
@@ -340,7 +343,6 @@ proc Initialize {} {
 
     append CommandLine " $ReminderFile"
     append PSCmd " $ReminderFile"
-    set DayNames [GetWeekdayNames]
 
     # Get modification time of ReminderFile
     set ReminderFileModTime -1
@@ -382,40 +384,6 @@ proc MonitorReminderFile {} {
 	set ReminderFileModTime $mtime
         ScheduleUpdateForChanges
     }
-}
-#---------------------------------------------------------------------------
-# GetWeekdayNames - Spawn a remind process and get the names of the weekdays
-# Also sets CurMonth and CurYear.
-#---------------------------------------------------------------------------
-proc GetWeekdayNames {} {
-    global CurMonth CurYear TodayYear TodayMonth TodayDay Remind
-    set f [open "|$Remind - 2>/dev/null" r+]
-    puts $f "banner %"
-    set i 0
-    while { $i < 7 } {
-	puts $f "msg \[wkday($i)\]%"
-	incr i
-    }
-
-    # Get current month and year as long as we're running Remind
-    puts $f "msg %n%"
-    puts $f "msg %y%"
-    puts $f "msg %d%"
-    puts $f "FLUSH"
-    flush $f
-    set ans {}
-    set i 0
-    while { $i < 7 } {
-	lappend ans [gets $f]
-	incr i
-    }
-    set CurMonth [expr [gets $f] - 1]
-    set CurYear [gets $f]
-    set TodayDay [gets $f]
-    set TodayMonth $CurMonth
-    set TodayYear $CurYear
-    close $f
-    return $ans
 }
 
 #***********************************************************************
@@ -981,9 +949,16 @@ proc FillCalWindow {} {
     gets $file line
     regexp {^([^ ]*) ([0-9][0-9][0-9][0-9]) ([0-9][0-9]?) ([0-9]) ([0-9])} $line dummy monthName year daysInMonth firstWkday mondayFirst
 
-    # Skip day names -- we already have them
+    # Get the day names
     gets $file line
+    set DayNames $line
+
     ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
+
+    # Update the day names in the calendar window
+    for {set i 0} {$i < 7} {incr i} {
+        .cal.day$i configure -text [lindex $DayNames $i]
+    }
     set offset [CalEntryOffset $firstWkday]
 
     while { [gets $file line] >= 0 } {

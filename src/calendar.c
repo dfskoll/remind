@@ -11,6 +11,7 @@
 
 #define _XOPEN_SOURCE
 #include "config.h"
+#include "custom.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -346,6 +347,41 @@ static void PutWideChar(wchar_t const wc)
 }
 #endif
 
+static char const *
+get_month_abbrev(char const *mon)
+{
+    static char buf[80];
+#ifndef REM_USE_WCHAR
+    sprintf(buf, "%.3s", mon);
+    return buf;
+#else
+    char *s;
+    wchar_t tmp_buf[128];
+    wchar_t *ws;
+    int i;
+    int len;
+
+    *buf = 0;
+    (void) mbstowcs(tmp_buf, mon, 127);
+    ws = tmp_buf;
+    s = buf;
+    for (i=0; i<3; i++) {
+        if (*ws) {
+            len = wctomb(s, *ws);
+            s += len;
+            if (wcwidth(*ws) == 0) {
+                i--;
+            }
+            ws++;
+        } else {
+            break;
+        }
+    }
+    *s = 0;
+    return buf;
+#endif
+}
+
 static int make_wchar_versions(CalEntry *e)
 {
 #ifdef REM_USE_WCHAR
@@ -588,7 +624,7 @@ void ProduceCalendar(void)
 static void DoCalendarOneWeek(int nleft)
 {
     int y, m, d, done, i, l, wd;
-    char buf[81];
+    char buf[128];
     int LinesWritten = 0;
     int OrigJul = JulianToday;
 
@@ -617,11 +653,7 @@ static void DoCalendarOneWeek(int nleft)
     for (i=0; i<7; i++) {
 	FromJulian(OrigJul+i, &y, &m, &d);
         char const *mon = get_month_name(m);
-        if (strlen(mon) >= 3) {
-            sprintf(buf, "%d %c%c%c ", d, mon[0], mon[1], mon[2]);
-        } else {
-            sprintf(buf, "%d %s ", d, mon);
-        }
+        snprintf(buf, sizeof(buf), "%d %s ", d, get_month_abbrev(mon));
 	if (OrigJul+i == RealToday)
 	    PrintLeft(buf, ColSpaces, '*');
 	else
@@ -871,9 +903,54 @@ static int WriteCalendarRow(void)
 /***************************************************************/
 static void PrintLeft(char const *s, int width, char pad)
 {
+#ifndef REM_USE_WCHAR
     int len = strlen(s);
     printf("%s", s);
     while (len++ < width) PutChar(pad);
+#else
+    size_t len = mbstowcs(NULL, s, 0);
+    int i;
+    wchar_t static_buf[128];
+    wchar_t *buf;
+    wchar_t *ws;
+
+    if (!len) {
+	for (i=0; i<width; i++) {
+	    fputc(pad, stdout);
+	}
+	return;
+    }
+    if (len + 1 <= 128) {
+	buf = static_buf;
+    } else {
+	buf = calloc(len+1, sizeof(wchar_t));
+	if (!buf) {
+	    /* Uh-oh... cannot recover */
+	    fprintf(stderr, "%s\n", ErrMsg[E_NO_MEM]);
+	    exit(1);
+	}
+    }
+    (void) mbstowcs(buf, s, len+1);
+    ws = buf;
+    for (i=0; i<width; i++) {
+	if (*ws) {
+            PutWideChar(*ws++);
+            if (wcwidth(*ws) == 0) {
+                /* Don't count this character... it's zero-width */
+                i--;
+            }
+        } else {
+            break;
+        }
+    }
+    /* Mop up any potential combining characters */
+    while (*ws && wcwidth(*ws) == 0) {
+        PutWideChar(*ws++);
+    }
+    for (i=len; i<width; i++) fputc(pad, stdout);
+    if (buf != static_buf) free(buf);
+#endif
+
 }
 
 /***************************************************************/

@@ -17,38 +17,13 @@
 #define L_LANGNAME "Romanian"
 
 /* Day names */
-#if ISOLATIN1
-#  define L_SUNDAY "Duminica"
+#  define L_SUNDAY "Duminică"
 #  define L_MONDAY "Luni"
-#  define L_TUESDAY "Marti"
+#  define L_TUESDAY "Marți"
 #  define L_WEDNESDAY "Miercuri"
 #  define L_THURSDAY "Joi"
 #  define L_FRIDAY "Vineri"
-#  define L_SATURDAY "S\342mbata"
-#elif ISOLATIN2
-#  define L_SUNDAY "Duminic\343"
-#  define L_MONDAY "Luni"
-#  define L_TUESDAY "Mar\376i"
-#  define L_WEDNESDAY "Miercuri"
-#  define L_THURSDAY "Joi"
-#  define L_FRIDAY "Vineri"
-#  define L_SATURDAY "S\342mb\343t\343"
-#elif IBM852
-#  define L_SUNDAY "Duminic\307"
-#  define L_MONDAY "Luni"
-#  define L_TUESDAY "Mar\316i"
-#  define L_WEDNESDAY "Miercuri"
-#  define L_THURSDAY "Joi"
-#  define L_FRIDAY "Vineri"
-#  define L_SATURDAY "S\203mb\307t\307"
-#else
-#  define L_SUNDAY "Duminica"
-#  define L_MONDAY "Luni"
-#  define L_TUESDAY "Marti"
-#  define L_WEDNESDAY "Miercuri"
-#  define L_THURSDAY "Joi"
-#  define L_FRIDAY "Vineri"
-#  define L_SATURDAY "Sambata"
+#  define L_SATURDAY "Sâmbătă"
 #endif
 
 /* Month names */
@@ -66,19 +41,8 @@
 #define L_DEC "Decembrie"
 
 /* Today and tomorrow */
-#if ISOLATIN1
-#  define L_TODAY "astazi"
-#  define L_TOMORROW "m\342ine"
-#elif ISOLATIN2
-#  define L_TODAY "ast\343zi"
-#  define L_TOMORROW "m\342ine"
-#elif IBM852
-#  define L_TODAY "ast\307zi"
-#  define L_TOMORROW "m\203ine"
-#else
-#  define L_TODAY "astazi"
-#  define L_TOMORROW "maine"
-#endif
+#  define L_TODAY "astăzi"
+#  define L_TOMORROW "mâine"
 
 /* The default banner */
 #define L_BANNER "Reamintiri pentru %w, %d %m %y%o:"
@@ -114,30 +78,13 @@
 /* What to add to make "minute" plural */
 #define L_MPLU "e"
 
-#if ISOLATIN2
-   /* What to add to make "hour" plural */
-#  define L_HPLU_OVER hplu = (hdiff == 1 ? "\343" : "e");
-#  define L_AND "\272i"
-#elif IBM852
-   /* What to add to make "hour" plural */
-#  define L_HPLU_OVER hplu = (hdiff == 1 ? "\307" : "e");
-#  define L_AND "\255i"
-#else
-   /* What to add to make "hour" plural */
-#  define L_HPLU_OVER hplu = (hdiff == 1 ? "a" : "e");
-#  define L_AND "si"
-#endif
+/* What to add to make "hour" plural */
+#define L_HPLU_OVER hplu = (hdiff == 1 ? "ă" : "e");
+#define L_AND "şi"
 
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
-#if ISOLATIN2
-#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " diminea\376a" : (hour > 17) ? " seara" : " dup\343-amiaza";
-#elif IBM852
-#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " diminea\316a" : (hour > 17) ? " seara" : " dup\307-amiaza";
-#else
-#  define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " dimineata" : (hour > 17) ? " seara" : " dupa-amiaza";
-#endif
-
+#define L_AMPM_OVERRIDE(ampm, hour)	ampm = (hour < 12) ? (hour<4) ? " noaptea" : " dimineaţa" : (hour > 17) ? " seara" : " după-amiaza";
 #define L_ORDINAL_OVERRIDE		plu = "";
 
 #define L_A_OVER sprintf(s, "%s, %d %s %d", DayName[jul%7], d, MonthName[m], y);

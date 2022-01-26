@@ -17,19 +17,10 @@
 #define L_SUNDAY "Domingo"
 #define L_MONDAY "Lunes"
 #define L_TUESDAY "Martes"
-#if ISOLATIN1
-#define L_WEDNESDAY "Mi\351rcoles"
-#else
-#define L_WEDNESDAY "Miercoles"
-#endif
-
+#define L_WEDNESDAY "miércoles"
 #define L_THURSDAY "Jueves"
 #define L_FRIDAY "Viernes"
-#if ISOLATIN1
-#define L_SATURDAY "S\341bado"
-#else
-#define L_SATURDAY "Sabado"
-#endif
+#define L_SATURDAY "Sábado"
 
 /* Nombres de los meses */
 #define L_JAN "Enero"
@@ -47,11 +38,7 @@
 
 /* Hoy y man~ana */
 #define L_TODAY "hoy"
-#if ISOLATIN1
-#define L_TOMORROW "ma\361ana"
-#else
-#define L_TOMORROW "manana"
-#endif
+#define L_TOMORROW "mañana"
 
 /* El titular habitual */
 #define L_BANNER "Agenda para el %w, %d%s %m, %y%o:"
@@ -68,13 +55,8 @@
 #define L_FROMNOW "desde hoy"
 
 /* "dentro de %d di'as" */
-#if ISOLATIN1
-#define L_INXDAYS "dentro de %d d\355as"
-#define L_ON "el d\355a"
-#else
-#define L_INXDAYS "dentro de %d di'as"
-#define L_ON "el di'a"
-#endif
+#define L_INXDAYS "dentro de %d días"
+#define L_ON "el día"
 
 /* "el di'a..." */
 

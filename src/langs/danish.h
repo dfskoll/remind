@@ -15,21 +15,13 @@
 #define L_LANGNAME "Danish"
 
 /* Day names */
-#if ISOLATIN1
-#  define L_SUNDAY "S\370ndag"
-#else
-#  define L_SUNDAY "Soendag"
-#endif
+#define L_SUNDAY "Søndag"
 #define L_MONDAY "Mandag"
 #define L_TUESDAY "Tirsdag"
 #define L_WEDNESDAY "Onsdag"
 #define L_THURSDAY "Torsdag"
 #define L_FRIDAY "Fredag"
-#if ISOLATIN1
-#  define L_SATURDAY "L\370rdag"
-#else
-#  define L_SATURDAY "Loerdag"
-#endif
+#define L_SATURDAY "Lørdag"
 
 /* Month names */
 #define L_JAN "Januar"
@@ -50,11 +42,7 @@
 #define L_TOMORROW "i morgen"
 
 /* The default banner */
-#if ISOLATIN1
-#  define L_BANNER "P\345mindelse for %w, %d. %m, %y%o:"
-#else
-#  define L_BANNER "Paamindelse for %w, %d. %m, %y%o:"
-#endif
+#define L_BANNER "Påmindelse for %w, %d. %m, %y%o:"
 
 /* "am" and "pm" */
 #define L_AM "am"
@@ -71,11 +59,7 @@
 #define L_INXDAYS "om %d dage"
 
 /* "on" as in "on date..." */
-#if ISOLATIN1
-#  define L_ON "p\345"
-#else
-#  define L_ON "paa"
-#endif 
+#define L_ON "på"
 
 /* Pluralizing - this is a problem for many languages and may require
    a more drastic fix */

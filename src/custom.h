@@ -59,39 +59,6 @@
 /* #define DATETIMESEP '/' */
 
 /*---------------------------------------------------------------------*/
-/* ISOLATIN1: define it to 1 if you use the                            */
-/* ISO 8859-1 character set instead of ASCII.                          */
-/*---------------------------------------------------------------------*/
-#define ISOLATIN1 1
-
-/*---------------------------------------------------------------------*/
-/* ISOLATIN2: define it to 1 if you use the                            */
-/* ISO 8859-2 character set instead of ASCII.                          */
-/* NOT ALL LANGUAGE MODULES SUPPORT THIS.  Note that at most one of    */
-/* ISOLATIN1, ISOLATIN2, IBMEXTENDED and IBM852 should be 1; if more   */
-/* then one are defined as 1, the results are unspecified.             */
-/*---------------------------------------------------------------------*/
-#define ISOLATIN2 0
-
-/*---------------------------------------------------------------------*/
-/* IBMEXTENDED: define as 1 if your system uses the  IBM extended      */
-/* character set.                                                      */
-/* NOT ALL LANGUAGE MODULES SUPPORT THIS.  Note that at most one of    */
-/* ISOLATIN1, ISOLATIN2, IBMEXTENDED and IBM852 should be 1; if more   */
-/* then one are defined as 1, the results are unspecified.             */
-/*---------------------------------------------------------------------*/
-#define IBMEXTENDED 0
-
-/*---------------------------------------------------------------------*/
-/* IBM852: define as 1 if your system uses the IBM CPI-852 extended    */
-/* character set.                                                      */
-/* NOT ALL LANGUAGE MODULES SUPPORT THIS.  Note that at most one of    */
-/* ISOLATIN1, ISOLATIN2, IBMEXTENDED and IBM852 should be 1; if more   */
-/* then one are defined as 1, the results are unspecified.             */
-/*---------------------------------------------------------------------*/
-#define IBM852 0
-
-/*---------------------------------------------------------------------*/
 /* WANT_U_OPTION: Comment out the next define to permanently disable   */
 /* the -u option.                                                      */
 /*---------------------------------------------------------------------*/

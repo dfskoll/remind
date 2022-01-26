@@ -33,10 +33,6 @@ proc SetConfigDefaults {} {
     set Config(DEFAULT_PAGE) "Letter"
     set Config(DATESEP) "-"
     set Config(TIMESEP) ":"
-    set Config(ISOLATIN1) 0
-    set Config(IBMEXTENDED) 0
-    set Config(ISOLATIN2) 0
-    set Config(IBM852) 0
     set Config(NORTHERN_HEMISPHERE) 1
     set Config(WESTERN_HEMISPHERE) 1
     set Config(LANGUAGE) "English"
@@ -233,19 +229,6 @@ proc CreateOptionsDialog { w } {
     grid configure $w.timelabel -row 2 -column 0 -sticky e
     grid configure $w.time -row 2 -column 1 -sticky nsew
 
-    label $w.charlabel -text "Character set: "
-    menubutton $w.char -text "ISO 8859-1" -indicatoron 1 -relief raised \
-	    -menu $w.char.menu
-    menu $w.char.menu -tearoff 0
-    $w.char.menu add command -label "ISO 8859-1" -command "$w.char configure -text {ISO 8859-1}"
-    $w.char.menu add command -label "ISO 8859-2" -command "$w.char configure -text {ISO 8859-2}"
-    $w.char.menu add command -label "IBM Extended" -command "$w.char configure -text {IBM Extended}"
-    $w.char.menu add command -label "IBM CPI-852" -command "$w.char configure -text {ISO 8859-2}"
-    $w.char.menu add command -label "Plain ASCII" -command "$w.char configure -text {Plain ASCII}"
-
-    grid configure $w.charlabel -row 3 -column 0 -sticky e
-    grid configure $w.char -row 3 -column 1 -sticky nsew
-
     label $w.langlabel -text "Language: "
     menubutton $w.lang -text $Config(LANGUAGE) -indicatoron 1 -relief raised \
 	    -menu $w.lang.menu
@@ -268,8 +251,8 @@ proc CreateOptionsDialog { w } {
 	$w.lang.menu add command -label $lang -command [list $w.lang configure -text $lang]
     }
 
-    grid configure $w.langlabel -row 4 -column 0 -sticky e
-    grid configure $w.lang -row 4 -column 1 -sticky nsew
+    grid configure $w.langlabel -row 3 -column 0 -sticky e
+    grid configure $w.lang -row 3 -column 1 -sticky nsew
 
 }
 
@@ -446,21 +429,6 @@ proc CreateCustomH {} {
     set Config(DATESEP) [$Options.date cget -text]
     set Config(TIMESEP) [$Options.time cget -text]
 
-    switch -- [$Options.char cget -text] {
-	"ISO 8859-1" {
-	    set Config(ISOLATIN1) 1
-	}
-	"ISO 8859-2" {
-	    set Config(ISOLATIN2) 1
-	}
-	"IBM CPI-852" {
-	    set Config(IBM852) 1
-	}
-	"IBM Extended" {
-	    set Config(IBMEXTENDED) 1
-	}
-    }
-
     while {[gets $in line] != -1} {
 	switch -glob -- $line {
 	    "#define LAT_DEG *" {
@@ -494,22 +462,6 @@ proc CreateCustomH {} {
 	    "#define TIMESEP *" {
 		puts $out "#define TIMESEP '$Config(TIMESEP)'"
 		.msgs insert end "#define TIMESEP '$Config(TIMESEP)'\n"
-	    }
-	    "#define ISOLATIN1 *" {
-		puts $out "#define ISOLATIN1 $Config(ISOLATIN1)"
-		.msgs insert end "#define ISOLATIN1 $Config(ISOLATIN1)\n"
-	    }
-	    "#define ISOLATIN2 *" {
-		puts $out "#define ISOLATIN2 $Config(ISOLATIN2)"
-		.msgs insert end "#define ISOLATIN2 $Config(ISOLATIN2)\n"
-	    }
-	    "#define IBM852 *" {
-		puts $out "#define IBM852 $Config(IBM852)"
-		.msgs insert end "#define IBM852 $Config(IBM852)\n"
-	    }
-	    "#define IBMEXTENDED *" {
-		puts $out "#define IBMEXTENDED $Config(IBMEXTENDED)"
-		.msgs insert end "#define IBMEXTENDED $Config(IBMEXTENDED)\n"
 	    }
 	    default {
 		puts $out $line

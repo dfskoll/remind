@@ -1,5 +1,5 @@
 REM 1 MSG Përkujtues
-REM 2 SPECIAL SHADE 128 128 255
+REM 2 SPECIAL SHADE 192 192 255
 REM 2 MSG تذكير
 REM 3 MSG 提醒
 REM 4 MSG રીમાઇન્ડર
@@ -7,18 +7,25 @@ REM 5 MSG Emlékeztető
 REM 6 MSG Áminning
 REM 7 MSG תִזכּוֹרֶת
 REM 8 MSG अनुस्मारक
-REM 9 SPECIAL COLOR 0 0 128 Эскертүү
-REM 10 SPECIAL COLOR 0 128 0 Напоминание
-REM 11 SPECIAL COLOR 128 0 0 Υπενθύμιση
+REM 9 SPECIAL COLOR 0 0 192 Эскертүү
+REM 10 SPECIAL COLOR 0 192 0 Напоминание
+REM 11 SPECIAL COLOR 192 0 0 Υπενθύμιση
 REM 12 SPECIAL PANGO <b>Bold</b> <small>and</small> <i>Italic</i> <big>and</big> <span bgcolor="#C0C0C0" foreground="red"><u>underline</u></span>
 REM 12 MSG Hello
-REM 12 SPECIAL PANGO <span face="zapf chancery">Very Fancy</span>
+REM 12 SPECIAL PANGO <big><span face="zapf chancery">Very Fancy</span></big>
 
 REM 13 SPECIAL PANGO <bad>Invalid
 REM 13 MSG Hello Again
 
 REM 15 SPECIAL PANGO @1,-1 <small><small>[hebday($U)] [hebmon($U)]  Rise [sunrise($U)] Set [sunset($U)]</small></small>
-REM 1 SPECIAL SHADE 128 255 128
+
+REM 16 MSG یادآور
+REM 17 MSG Lời nhắc nhở
+REM 18 MSG Påminnelse
+REM 19 MSG דערמאָנונג
+REM 20 MSG Hatırlatma
+REM 21 SPECIAL PANGO <big><big> Нагадування</big></big>
+REM 1 SPECIAL SHADE 192 255 192
 
 REM [moondate(0)] SPECIAL MOON 0
 REM [moondate(1)] SPECIAL MOON 1

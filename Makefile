@@ -23,10 +23,11 @@ install:
 	@$(MAKE) -C rem2pdf -f Makefile.top install
 clean:
 	find . -name '*~' -exec rm {} \;
-	cd src && $(MAKE) clean
+	$(MAKE) -C src clean
+	-$(MAKE) -C rem2pdf clean
 
 test:
-	@cd src && $(MAKE) -s test
+	@$(MAKE) -C src -s test
 
 distclean: clean
 	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out www/Makefile

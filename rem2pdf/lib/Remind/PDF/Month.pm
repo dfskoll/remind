@@ -261,7 +261,21 @@ sub draw_day
         }
         Pango::Cairo::show_layout($cr, $layout);
         $cr->restore();
-        return $h + $settings->{border_size};
+
+        my $layout = Pango::Cairo::create_layout($cr);
+        $layout->set_width(($cell - 2 * $settings->{border_size}) * 1024);
+        $layout->set_wrap('word');
+        $layout->set_text("Bobby snorkle flump chump twinkle");
+        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size});
+
+        $layout->set_font_description($desc);
+        my ($wid2, $h2) = $layout->get_pixel_size();
+        $cr->save;
+        $cr->move_to($settings->{margin_left} + ($col * $cell) + $settings->{border_size}, $so_far + 2* $settings->{border_size} + $h);
+        Pango::Cairo::show_layout($cr, $layout);
+        $cr->restore();
+
+        return $h + $h2 + 2 * $settings->{border_size};
 }
 
 sub draw_daynames

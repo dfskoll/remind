@@ -33,8 +33,8 @@ my $settings = {
         fill_entire_page => 0,
 
         media => 'Letter',
-        width => 612,
-        height => 792,
+        width => 0,
+        height => 0,
 
         title_font => 'Helvetica',
         header_font => 'Helvetica',
@@ -47,7 +47,7 @@ my $settings = {
         daynum_size => 14,
         entry_size => 8,
 
-        border_size => 6,
+        border_size => 4,
         line_thickness => 1,
 
         margin_top => 36,
@@ -56,10 +56,62 @@ my $settings = {
         margin_right => 36,
 };
 
+my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
+                     'small-calendars|c' =>  \$settings->{small_calendars},
+                     'left-numbers|x' =>     \$settings->{numbers_on_left},
+                     'fill-entire-page|e' => \$settings->{fill_entire_page},
+                     'fill-page|e' =>        \$settings->{fill_entire_page},
+                     'media|m=s' =>          \$settings->{media},
+                     'width|w=i' =>          \$settings->{width},
+                     'height|h=i' =>         \$settings->{height},
+                     'title-font=s' =>       \$settings->{title_font},
+                     'header-font=s' =>      \$settings->{header_font},
+                     'daynum-font=s' =>      \$settings->{daynum_font},
+                     'entry-font=s' =>       \$settings->{entry_font},
+                     'small-cal-font=s' =>   \$settings->{small_cal_font},
+                     'title-size=f' =>       \$settings->{title_size},
+                     'header-size=f' =>      \$settings->{header_size},
+                     'daynum-size=f' =>      \$settings->{daynum_size},
+                     'entry-size=f' =>       \$settings->{entry_size},
+                     'border-size=f' =>      \$settings->{border_size},
+                     'line-thickness=f' =>   \$settings->{line_thickness},
+                     'margin-top=f' =>       \$settings->{margin_top},
+                     'margin-bottom=f' =>    \$settings->{margin_bottom},
+                     'margin-left=f' =>      \$settings->{margin_left},
+                     'margin-right=f' =>     \$settings->{margin_right},
+    );
+if (!$ret) {
+        usage();
+        exit(1);
+}
+
+if ($settings->{width} <= 0 ||
+    $settings->{height} <= 0) {
+        my $size = $media_to_size->{ucfirst($settings->{media})};
+        if (!$size) {
+                print STDERR "Unknown media " . $settings->{media} . "\n";
+                exit(1);
+        }
+        $settings->{width} = $size->[0];
+        $settings->{height} = $size->[1];
+}
+
+if ($settings->{landscape}) {
+        my $tmp = $settings->{width};
+        $settings->{width} = $settings->{height};
+        $settings->{height} = $tmp;
+}
+
 my $done_one = 0;
 
 my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1]; }, undef,
                                                    $settings->{width}, $settings->{height});
+
+$surface->set_metadata('title', 'Calendar');
+$surface->set_metadata('author', 'Remind (https://dianne.skoll.ca/projects/remind/)');
+$surface->set_metadata('creator', 'rem2pdf (https://dianne.skoll.ca/projects/remind/)');
+$surface->set_metadata('subject', 'Calendar');
+
 my $cr = Cairo::Context->create($surface);
 $cr->set_line_width($settings->{line_thickness});
 

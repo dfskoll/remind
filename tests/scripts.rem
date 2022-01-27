@@ -12,9 +12,12 @@ REM 10 SPECIAL COLOR 0 128 0 Напоминание
 REM 11 SPECIAL COLOR 128 0 0 Υπενθύμιση
 REM 12 SPECIAL PANGO <b>Bold</b> <small>and</small> <i>Italic</i> <big>and</big> <span bgcolor="#C0C0C0" foreground="red"><u>underline</u></span>
 REM 12 MSG Hello
+REM 12 SPECIAL PANGO <span face="zapf chancery">Very Fancy</span>
 
-REM 13 SPECIAL PANGO Invalid
+REM 13 SPECIAL PANGO <bad>Invalid
+REM 13 MSG Hello Again
 
+REM 15 SPECIAL PANGO @1,-1 <small><small>[hebday($U)] [hebmon($U)]  Rise [sunrise($U)] Set [sunset($U)]</small></small>
 REM 1 SPECIAL SHADE 128 255 128
 
 REM [moondate(0)] SPECIAL MOON 0
@@ -22,4 +25,4 @@ REM [moondate(1)] SPECIAL MOON 1
 REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]
 REM [moondate(3)] SPECIAL MOON 3 -1 -1 [moontime(3)]
 
-REM Mon SPECIAL WEEK [weekno(today())]
+REM Mon SPECIAL WEEK (W[weekno(today())])

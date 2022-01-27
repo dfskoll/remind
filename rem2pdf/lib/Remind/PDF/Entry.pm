@@ -70,6 +70,22 @@ sub render
         my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
         # Do nothing in pre-render mode
         return 0 unless $height;
+
+        # Render in small text at bottom-right
+        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my $layout = Pango::Cairo::create_layout($cr);
+
+        $layout->set_text($self->{body});
+        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . int(0.75 * $settings->{entry_size}) . 'px');
+        $layout->set_font_description($desc);
+        my ($wid, $h) = $layout->get_pixel_size();
+
+        $cr->save();
+        $cr->move_to($x2 - $settings->{border_size}/4 - $wid, $y2 - $settings->{border_size}/4 - $h);
+        Pango::Cairo::show_layout($cr, $layout);
+        $cr->restore();
+
+        return 0;
 }
 
 package Remind::PDF::Entry::moon;
@@ -191,6 +207,16 @@ package Remind::PDF::Entry::psfile;
 use base 'Remind::PDF::Entry';
 package Remind::PDF::Entry::pango;
 use base 'Remind::PDF::Entry';
+sub adjust
+{
+        my ($self) = @_;
+        if ($self->{body} =~ /^@([-0-9.]+),\s*([-0-9.]+)\s*(.*)/) {
+                $self->{atx} = $1;
+                $self->{aty} = $2;
+                $self->{body} = $3;
+        }
+}
+
 sub render
 {
         my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
@@ -201,13 +227,33 @@ sub render
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
         $layout->set_wrap('word-char');
         $layout->set_markup($self->{body});
+
+        if (($layout->get_text() // '') eq '') {
+                # Invalid markup
+                return 0;
+        }
         my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size} . 'px');
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
 
         if ($height) {
                 $cr->save();
-                $cr->move_to($x1 + $settings->{border_size}, $so_far);
+                if (defined($self->{atx}) && defined($self->{aty})) {
+                        my ($x, $y);
+                        if ($self->{atx} < 0) {
+                                $x = $x2 + $self->{atx} - $wid;
+                        } else {
+                                $x = $x1 + $self->{atx};
+                        }
+                        if ($self->{aty} < 0) {
+                                $y = $y2 + $self->{aty} - $h;
+                        } else {
+                                $y = $y1 + $self->{aty};
+                        }
+                        $cr->move_to($x, $y);
+                } else {
+                        $cr->move_to($x1 + $settings->{border_size}, $so_far);
+                }
                 Pango::Cairo::show_layout($cr, $layout);
                 $cr->restore();
         }

@@ -172,6 +172,7 @@ sub render
         # Remaining space on page
         $self->{remaining_space} = $settings->{height} - $settings->{margin_bottom} - $so_far;
 
+        $self->{minimum_row_height} = $self->{remaining_space} / 9;
         # First column
         my $first_col = $self->{firstwkday};
         if ($self->{mondayfirst}) {
@@ -213,6 +214,9 @@ sub render
                 push(@{$self->{horiz_lines}}, $so_far);
         }
 
+        if ($so_far > $settings->{height} - $settings->{margin_bottom}) {
+                print STDERR "WARNING: overfull calendar box\n";
+        }
         # The vertical lines
         my $cell = ($settings->{width} - $settings->{margin_left} - $settings->{margin_right}) / 7;
         for (my $i=0; $i<=7; $i++) {
@@ -227,6 +231,9 @@ sub render
                 $cr->line_to($settings->{width} - $settings->{margin_right}, $y);
                 $cr->stroke();
         }
+
+        # Done this page
+        $cr->show_page();
 }
 
 sub draw_row
@@ -252,6 +259,9 @@ sub draw_row
                 $height = $self->{row_height} - $settings->{border_size};
         }
 
+        if ($height < $self->{minimum_row_height}) {
+                $height = $self->{minimum_row_height};
+        }
         # Now draw for real
         while ($col < 7) {
                 $self->draw_day($cr, $settings, $so_far, $day, $col, $height);
@@ -328,6 +338,15 @@ sub draw_day
                         $entry->render($self, $cr, $settings, $top, $day, $col, $height);
                         next;
                 }
+
+                # An absolutely-positioned Pango markup should not adjust height
+                # either
+                if ($entry->isa('Remind::PDF::Entry::pango') &&
+                    defined($entry->{atx}) && defined($entry->{aty})) {
+                        $entry->render($self, $cr, $settings, $top, $day, $col, $height);
+                        next;
+                }
+
                 # Shade is done already
                 if ($entry->isa('Remind::PDF::Entry::shade')) {
                         next;
@@ -340,6 +359,12 @@ sub draw_day
                 my $h2 = $entry->render($self, $cr, $settings, $so_far, $day, $col, $height);
                 $entry_height += $h2;
                 $so_far += $h2;
+        }
+        if ($height) {
+                if ($entry_height > $height) {
+                        print STDERR "WARNING: overfull box at $day " . $self->{monthname} . ' ' . $self->{year} . "\n";
+                        $entry_height = $height;
+                }
         }
         return $h + $entry_height + 2 * $settings->{border_size};
 }
@@ -375,7 +400,7 @@ sub draw_daynames
                         $height = $h;
                 }
         }
-        return $so_far + $height + $settings->{border_size};
+        return $so_far + $height + $settings->{border_size} * .75;
 }
 
 sub draw_title
@@ -383,6 +408,7 @@ sub draw_title
         my ($self, $cr, $settings) = @_;
         my $title = $self->{monthname} . ' ' . $self->{year};
 
+        $cr->get_target()->set_page_label($title);
         my $layout = Pango::Cairo::create_layout($cr);
         $layout->set_text(Encode::decode('UTF-8', $title));
         my $desc = Pango::FontDescription->from_string($settings->{title_font} . ' ' . $settings->{title_size} . 'px');

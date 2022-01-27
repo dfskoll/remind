@@ -7,7 +7,7 @@ use Cairo;
 use Pango;
 use Getopt::Long;
 
-use Remind::PDF::Month;
+use Remind::PDF;
 
 my $media_to_size = {
     "Letter"    => [ 612,  792],
@@ -116,12 +116,12 @@ my $cr = Cairo::Context->create($surface);
 $cr->set_line_width($settings->{line_thickness});
 
 while(1) {
-        my ($obj, $err) = Remind::PDF::Month->create_from_stream(*STDIN,
-                                                                 {color => 1,
-                                                                  shade => 1,
-                                                                  moon => 1,
-                                                                  pango => 1,
-                                                                  week => 1,});
+        my ($obj, $err) = Remind::PDF->create_from_stream(*STDIN,
+                                                          {color => 1,
+                                                           shade => 1,
+                                                           moon => 1,
+                                                           pango => 1,
+                                                           week => 1,});
 
         if (!$obj) {
                 if (!$done_one) {

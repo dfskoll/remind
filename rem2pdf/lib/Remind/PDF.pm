@@ -1,4 +1,4 @@
-package Remind::PDF::Month;
+package Remind::PDF;
 use strict;
 use warnings;
 
@@ -12,7 +12,7 @@ use JSON::MaybeXS;
 
 =head1 NAME
 
-Remind::Month - hold one month's worth of calendar data
+Remind::PDF - Render a month's worth of Remind data to PDF
 
 =cut
 

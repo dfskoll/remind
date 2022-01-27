@@ -34,9 +34,9 @@ sub adjust
 
 sub render
 {
-        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+        my ($self, $pdf, $cr, $settings, $so_far, $day, $col, $height) = @_;
 
-        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my ($x1, $y1, $x2, $y2) = $pdf->col_box_coordinates($so_far, $col, $height, $settings);
         my $layout = Pango::Cairo::create_layout($cr);
 
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
@@ -67,12 +67,12 @@ use base 'Remind::PDF::Entry';
 
 sub render
 {
-        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+        my ($self, $pdf, $cr, $settings, $so_far, $day, $col, $height) = @_;
         # Do nothing in pre-render mode
         return 0 unless $height;
 
         # Render in small text at bottom-right
-        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my ($x1, $y1, $x2, $y2) = $pdf->col_box_coordinates($so_far, $col, $height, $settings);
         my $layout = Pango::Cairo::create_layout($cr);
 
         $layout->set_text($self->{body});
@@ -105,12 +105,12 @@ sub adjust {
 }
 sub render
 {
-        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+        my ($self, $pdf, $cr, $settings, $so_far, $day, $col, $height) = @_;
 
         # Do nothing in pre-render mode
         return 0 unless $height;
 
-        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my ($x1, $y1, $x2, $y2) = $pdf->col_box_coordinates($so_far, $col, $height, $settings);
 
         my $layout;
         my $bodywidth = 0;
@@ -219,9 +219,9 @@ sub adjust
 
 sub render
 {
-        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+        my ($self, $pdf, $cr, $settings, $so_far, $day, $col, $height) = @_;
 
-        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my ($x1, $y1, $x2, $y2) = $pdf->col_box_coordinates($so_far, $col, $height, $settings);
         my $layout = Pango::Cairo::create_layout($cr);
 
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));

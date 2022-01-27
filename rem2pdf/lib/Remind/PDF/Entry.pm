@@ -14,7 +14,18 @@ sub new_from_hash
                         $class = 'Remind::PDF::Entry::UNKNOWN';
                 }
         }
-        return bless($hash, $class);
+        bless($hash, $class);
+        $hash->adjust();
+        return $hash;
+}
+
+# Base class: Set the color to black
+sub adjust
+{
+        my ($self) = @_;
+        $self->{r} = 0;
+        $self->{g} = 0;
+        $self->{b} = 0;
 }
 
 package Remind::PDF::Entry::html;
@@ -27,8 +38,26 @@ package Remind::PDF::Entry::moon;
 use base 'Remind::PDF::Entry';
 package Remind::PDF::Entry::shade;
 use base 'Remind::PDF::Entry';
+sub adjust
+{
+        my ($self) = @_;
+        if ($self->{body} =~ /^(\d+)\s+(\d+)\s+(\d+)/) {
+                $self->{r} = $1;
+                $self->{g} = $2;
+                $self->{b} = $3;
+        }
+}
+
 package Remind::PDF::Entry::color;
 use base 'Remind::PDF::Entry';
+
+# Strip the RGB prefix from body
+sub adjust
+{
+        my ($self) = @_;
+        $self->{body} =~ s/^\d+\s+\d+\s+\d+\s+//;
+}
+
 package Remind::PDF::Entry::postscript;
 use base 'Remind::PDF::Entry';
 package Remind::PDF::Entry::psfile;

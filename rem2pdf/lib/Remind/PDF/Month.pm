@@ -155,22 +155,19 @@ sub render
 {
         my ($self, $cr, $settings) = @_;
 
+        $self->{horiz_lines} = [];
         $cr->set_line_cap('square');
         my $so_far = $self->draw_title($cr, $settings);
 
         # Top line
-        $cr->move_to($settings->{margin_left}, $so_far);
-        $cr->line_to($settings->{width} - $settings->{margin_right}, $so_far);
-        $cr->stroke();
+        push(@{$self->{horiz_lines}}, $so_far);
 
         my $top_line = $so_far;
 
         $so_far = $self->draw_daynames($cr, $settings, $so_far);
 
         # Line under the days
-        $cr->move_to($settings->{margin_left}, $so_far);
-        $cr->line_to($settings->{width} - $settings->{margin_right}, $so_far);
-        $cr->stroke();
+        push(@{$self->{horiz_lines}}, $so_far);
 
         # First column
         my $first_col = $self->{firstwkday};
@@ -209,9 +206,7 @@ sub render
                 print STDERR "Drawing row $row $start_day $start_col\n";
                 $so_far = $self->draw_row($cr, $settings, $so_far, $row, $start_day, $start_col);
                 $start_day += 7 - $start_col;
-                $cr->move_to($settings->{margin_left}, $so_far);
-                $cr->line_to($settings->{width} - $settings->{margin_right}, $so_far);
-                $cr->stroke();
+                push(@{$self->{horiz_lines}}, $so_far);
         }
 
         # The vertical lines
@@ -219,6 +214,13 @@ sub render
         for (my $i=0; $i<=7; $i++) {
                 $cr->move_to($settings->{margin_left} + $i * $cell, $top_line);
                 $cr->line_to($settings->{margin_left} + $i * $cell, $so_far);
+                $cr->stroke();
+        }
+
+        # And the horizontal lines
+        foreach my $y (@{$self->{horiz_lines}}) {
+                $cr->move_to($settings->{margin_left}, $y);
+                $cr->line_to($settings->{width} - $settings->{margin_right}, $y);
                 $cr->stroke();
         }
 }
@@ -230,20 +232,61 @@ sub draw_row
         my $col = $start_col;
         my $day = $start_day;
         my $height = 0;
+
+        # Preview them to figure out the row height...
         while ($col < 7) {
-                my $h = $self->draw_day($cr, $settings, $so_far, $day, $col);
+                my $h = $self->draw_day($cr, $settings, $so_far, $day, $col, 0);
                 $height = $h if ($h > $height);
                 $day++;
                 $col++;
                 last if ($day > $self->{daysinmonth});
         }
+
+        # Now draw for real
+        $col = $start_col;
+        $day = $start_day;
+        while ($col < 7) {
+                $self->draw_day($cr, $settings, $so_far, $day, $col, $height);
+                $day++;
+                $col++;
+                last if ($day > $self->{daysinmonth});
+        }
+
         return $so_far + $height + $settings->{border_size};
+}
+
+sub col_box_coordinates
+{
+        my ($self, $so_far, $col, $height, $settings) = @_;
+        my $cell = ($settings->{width} - $settings->{margin_left} - $settings->{margin_right}) / 7;
+
+        return (
+                $settings->{margin_left} + $cell * $col,
+                $so_far,
+                $settings->{margin_left} + $cell * ($col + 1),
+                $so_far + $height + $settings->{border_size},
+            );
 }
 
 sub draw_day
 {
-        my ($self, $cr, $settings, $so_far, $day, $col) = @_;
+        my ($self, $cr, $settings, $so_far, $day, $col, $height) = @_;
 
+        my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($so_far, $col, $height, $settings);
+
+        # Do shading if we're in "for real" mode
+        if ($height) {
+                my $shade = $self->find_last_special('shade', $self->{entries}->[$day]);
+                if ($shade) {
+                        $cr->save;
+                        $cr->set_source_rgb($shade->{r} / 255,
+                                            $shade->{g} / 255,
+                                            $shade->{b} / 255);
+                        $cr->rectangle($x1, $y1, $x2 - $x1, $y2 - $y1);
+                        $cr->fill();
+                        $cr->restore;
+                }
+        }
         # Draw the day number
         my $layout = Pango::Cairo::create_layout($cr);
         $layout->set_text($day);
@@ -252,28 +295,34 @@ sub draw_day
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
 
-        my $cell = ($settings->{width} - $settings->{margin_left} - $settings->{margin_right}) / 7;
-        $cr->save;
-        if ($settings->{numbers_on_left}) {
-                $cr->move_to($settings->{margin_left} + ($col * $cell) + $settings->{border_size}, $so_far + $settings->{border_size});
-        } else {
-                $cr->move_to($settings->{margin_left} + ($col * $cell) + $cell - $settings->{border_size} - $wid, $so_far + $settings->{border_size});
-        }
-        Pango::Cairo::show_layout($cr, $layout);
-        $cr->restore();
 
-        my $layout = Pango::Cairo::create_layout($cr);
-        $layout->set_width(($cell - 2 * $settings->{border_size}) * 1024);
+        # Don't actually draw if we're just previewing to get the cell height
+        if ($height) {
+                $cr->save;
+                if ($settings->{numbers_on_left}) {
+                        $cr->move_to($x1 + $settings->{border_size}, $so_far + $settings->{border_size});
+                } else {
+                        $cr->move_to($x2 - $settings->{border_size} - $wid, $so_far + $settings->{border_size});
+                }
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+        }
+
+        $layout = Pango::Cairo::create_layout($cr);
+        $layout->set_width(($x2 - $x1 - 2 * $settings->{border_size}) * 1024);
         $layout->set_wrap('word');
         $layout->set_text("Bobby snorkle flump chump twinkle");
-        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size});
+        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size});
 
         $layout->set_font_description($desc);
         my ($wid2, $h2) = $layout->get_pixel_size();
-        $cr->save;
-        $cr->move_to($settings->{margin_left} + ($col * $cell) + $settings->{border_size}, $so_far + 2* $settings->{border_size} + $h);
-        Pango::Cairo::show_layout($cr, $layout);
-        $cr->restore();
+
+        if ($height) {
+                $cr->save;
+                $cr->move_to($x1 + $settings->{border_size}, $so_far + 2* $settings->{border_size} + $h);
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+        }
 
         return $h + $h2 + 2 * $settings->{border_size};
 }

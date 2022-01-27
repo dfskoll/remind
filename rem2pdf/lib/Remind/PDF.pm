@@ -511,7 +511,7 @@ sub draw_small_calendar
                 $rows++;
         }
         my $layout = Pango::Cairo::create_layout($cr);
-        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . '10px');
+        my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . '10px');
         $layout->set_font_description($desc);
         $layout->set_text('88 ');
         my ($wid, $h) = $layout->get_pixel_size();
@@ -525,7 +525,7 @@ sub draw_small_calendar
         }
         my $font_size = int($scale * 10);
         $layout = Pango::Cairo::create_layout($cr);
-        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+        $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
         $layout->set_font_description($desc);
         $layout->set_text('88 ');
         ($wid, $h) = $layout->get_pixel_size();
@@ -533,7 +533,7 @@ sub draw_small_calendar
 
         # Month name
         $layout = Pango::Cairo::create_layout($cr);
-        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+        $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
         $layout->set_font_description($desc);
         $layout->set_text(Encode::decode('UTF-8', $month));
         my ($mw, $mh) = $layout->get_pixel_size();
@@ -554,7 +554,7 @@ sub draw_small_calendar
                 my $day = $self->{daynames}->[$j];
                 my $l = substr($day, 0, 1);
                 $layout = Pango::Cairo::create_layout($cr);
-                $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+                $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
                 $layout->set_font_description($desc);
                 $layout->set_text(Encode::decode('UTF-8', $l));
                 $cr->save();
@@ -567,7 +567,7 @@ sub draw_small_calendar
         my $col = $start_wkday;
 
         for (my $d=1; $d <= $days; $d++) {
-                $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+                $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
                 $layout->set_font_description($desc);
                 $layout->set_text($d);
                 $cr->save();

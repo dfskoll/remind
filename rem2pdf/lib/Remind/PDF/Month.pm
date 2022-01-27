@@ -169,6 +169,9 @@ sub render
         # Line under the days
         push(@{$self->{horiz_lines}}, $so_far);
 
+        # Remaining space on page
+        $self->{remaining_space} = $settings->{height} - $settings->{margin_bottom} - $so_far;
+
         # First column
         my $first_col = $self->{firstwkday};
         if ($self->{mondayfirst}) {
@@ -185,7 +188,6 @@ sub render
         my $rows = 1;
         my $last_day_on_row = 7 - $first_col;
         while ($last_day_on_row < $self->{daysinmonth}) {
-                print STDERR "$rows $last_day_on_row\n";
                 $last_day_on_row += 7;
                 $rows++;
         }
@@ -195,6 +197,9 @@ sub render
                 $rows++;
         }
 
+        # Row height if we are filling the page
+        $self->{row_height} = $self->{remaining_space} / $rows;
+
         my ($start_col, $start_day);
         for (my $row = 0; $row < $rows; $row++) {
                 if ($row == 0) {
@@ -203,7 +208,6 @@ sub render
                 } else {
                         $start_col = 0;
                 }
-                print STDERR "Drawing row $row $start_day $start_col\n";
                 $so_far = $self->draw_row($cr, $settings, $so_far, $row, $start_day, $start_col);
                 $start_day += 7 - $start_col;
                 push(@{$self->{horiz_lines}}, $so_far);
@@ -234,17 +238,21 @@ sub draw_row
         my $height = 0;
 
         # Preview them to figure out the row height...
-        while ($col < 7) {
-                my $h = $self->draw_day($cr, $settings, $so_far, $day, $col, 0);
-                $height = $h if ($h > $height);
-                $day++;
-                $col++;
-                last if ($day > $self->{daysinmonth});
+        if (!$settings->{fill_entire_page}) {
+                while ($col < 7) {
+                        my $h = $self->draw_day($cr, $settings, $so_far, $day, $col, 0);
+                        $height = $h if ($h > $height);
+                        $day++;
+                        $col++;
+                        last if ($day > $self->{daysinmonth});
+                }
+                $col = $start_col;
+                $day = $start_day;
+        } else {
+                $height = $self->{row_height} - $settings->{border_size};
         }
 
         # Now draw for real
-        $col = $start_col;
-        $day = $start_day;
         while ($col < 7) {
                 $self->draw_day($cr, $settings, $so_far, $day, $col, $height);
                 $day++;
@@ -314,9 +322,14 @@ sub draw_day
         my $entry_height = 0;
         my $done = 0;
         foreach my $entry (@{$self->{entries}->[$day]}) {
-                # Moon should not adjust height
-                if ($entry->isa('Remind::PDF::Entry::moon')) {
+                # Moon and week should not adjust height
+                if ($entry->isa('Remind::PDF::Entry::moon') ||
+                    $entry->isa('Remind::PDF::Entry::week')) {
                         $entry->render($self, $cr, $settings, $top, $day, $col, $height);
+                        next;
+                }
+                # Shade is done already
+                if ($entry->isa('Remind::PDF::Entry::shade')) {
                         next;
                 }
                 if ($done) {

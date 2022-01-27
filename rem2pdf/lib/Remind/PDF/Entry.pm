@@ -64,6 +64,14 @@ package Remind::PDF::Entry::htmlclass;
 use base 'Remind::PDF::Entry';
 package Remind::PDF::Entry::week;
 use base 'Remind::PDF::Entry';
+
+sub render
+{
+        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+        # Do nothing in pre-render mode
+        return 0 unless $height;
+}
+
 package Remind::PDF::Entry::moon;
 use base 'Remind::PDF::Entry';
 

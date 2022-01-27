@@ -523,13 +523,13 @@ sub draw_small_calendar
         if (($height / $h) < $scale) {
                 $scale = $height / $h;
         }
-        my $font_size = int($scale * 10 + 0.5);
+        my $font_size = int($scale * 10);
         $layout = Pango::Cairo::create_layout($cr);
         $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
         $layout->set_font_description($desc);
         $layout->set_text('88 ');
         ($wid, $h) = $layout->get_pixel_size();
-        $h += 2;
+        $h += 1;
 
         # Month name
         $layout = Pango::Cairo::create_layout($cr);

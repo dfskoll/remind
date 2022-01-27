@@ -308,23 +308,25 @@ sub draw_day
                 $cr->restore();
         }
 
-        $layout = Pango::Cairo::create_layout($cr);
-        $layout->set_width(($x2 - $x1 - 2 * $settings->{border_size}) * 1024);
-        $layout->set_wrap('word');
-        $layout->set_text("Bobby snorkle flump chump twinkle");
-        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size});
-
-        $layout->set_font_description($desc);
-        my ($wid2, $h2) = $layout->get_pixel_size();
-
-        if ($height) {
-                $cr->save;
-                $cr->move_to($x1 + $settings->{border_size}, $so_far + 2* $settings->{border_size} + $h);
-                Pango::Cairo::show_layout($cr, $layout);
-                $cr->restore();
+        $so_far += $h + 2 * $settings->{border_size};
+        my $entry_height = 0;
+        my $done = 0;
+        foreach my $entry (@{$self->{entries}->[$day]}) {
+                # Moon should not adjust height
+                if ($entry->isa('Remind::PDF::Entry::moon')) {
+                        $entry->render($self, $cr, $settings, $so_far, $day, $col, $height);
+                        next;
+                }
+                if ($done) {
+                        $so_far += $settings->{border_size};
+                        $entry_height += $settings->{border_size};
+                }
+                $done = 1;
+                my $h2 = $entry->render($self, $cr, $settings, $so_far, $day, $col, $height);
+                $entry_height += $h2;
+                $so_far += $h2;
         }
-
-        return $h + $h2 + 2 * $settings->{border_size};
+        return $h + $entry_height + 2 * $settings->{border_size};
 }
 
 sub draw_daynames

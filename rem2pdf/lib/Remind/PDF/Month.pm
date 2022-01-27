@@ -185,6 +185,43 @@ sub render
         # Last column
         my $last_col = ($first_col + $self->{daysinmonth} - 1) % 7;
 
+        # Figure out where to draw the small calendars
+        my $prevcal_top = 0;
+        my $nextcal_top = 0;
+        my $prevcal_bottom = 0;
+        my $nextcal_bottom = 0;
+
+        if ($settings->{small_calendars} == 1) {
+                if ($last_col <= 4) {
+                        $prevcal_bottom = 1;
+                        $nextcal_bottom = 1;
+                } else {
+                        $prevcal_top = 1;
+                        $nextcal_top = 1;
+                }
+        } elsif ($settings->{small_calendars} == 2) {
+                if ($first_col >= 2) {
+                        $prevcal_top = 1;
+                        $nextcal_top = 1;
+                } else {
+                        $prevcal_bottom = 1;
+                        $nextcal_bottom = 1;
+                }
+        } elsif ($settings->{small_calendars} == 3) {
+                if ($first_col >= 1 && $last_col <= 5) {
+                        $prevcal_top = 1;
+                        $nextcal_bottom = 1;
+                } else {
+                        if ($last_col <= 4) {
+                                $prevcal_bottom = 1;
+                                $nextcal_bottom = 1;
+                        } else {
+                                $prevcal_top = 1;
+                                $nextcal_top = 1;
+                        }
+                }
+        }
+
         # Number of rows
         my $rows = 1;
         my $last_day_on_row = 7 - $first_col;
@@ -209,9 +246,37 @@ sub render
                 } else {
                         $start_col = 0;
                 }
+                my $old_so_far = $so_far;
                 $so_far = $self->draw_row($cr, $settings, $so_far, $row, $start_day, $start_col);
                 $start_day += 7 - $start_col;
                 push(@{$self->{horiz_lines}}, $so_far);
+                if ($row == 0) {
+                        if ($prevcal_top) {
+                                my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($old_so_far, 0, $so_far - $old_so_far, $settings);
+                                $self->draw_small_calendar($cr, $x1 + $settings->{border_size}, $y1 + $settings->{border_size},
+                                                           $x2 - $x1 - 2*$settings->{border_size}, $y2 - $y1 - 2*$settings->{border_size},
+                                                           $settings, $self->{prevmonthname}, $self->{daysinprevmonth}, ($first_col + 35 - $self->{daysinprevmonth}) % 7);
+                        }
+                        if ($nextcal_top) {
+                                my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($old_so_far, 1, $so_far - $old_so_far, $settings);
+                                $self->draw_small_calendar($cr, $x1 + $settings->{border_size}, $y1 + $settings->{border_size},
+                                                           $x2 - $x1 - 2*$settings->{border_size}, $y2 - $y1 - 2*$settings->{border_size},
+                                                           $settings, $self->{nextmonthname}, $self->{daysinnextmonth}, ($last_col + 1) % 7);
+                        }
+                } elsif ($row == $rows-1) {
+                        if ($prevcal_bottom) {
+                                my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($old_so_far, 5, $so_far - $old_so_far, $settings);
+                                $self->draw_small_calendar($cr, $x1 + $settings->{border_size}, $y1 + $settings->{border_size},
+                                                           $x2 - $x1 - 2*$settings->{border_size}, $y2 - $y1 - 2*$settings->{border_size},
+                                                           $settings, $self->{prevmonthname}, $self->{daysinprevmonth}, ($first_col + 35 - $self->{daysinprevmonth}) % 7);
+                        }
+                        if ($nextcal_bottom) {
+                                my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($old_so_far, 6, $so_far - $old_so_far, $settings);
+                                $self->draw_small_calendar($cr, $x1 + $settings->{border_size}, $y1 + $settings->{border_size},
+                                                           $x2 - $x1 - 2*$settings->{border_size}, $y2 - $y1 - 2*$settings->{border_size},
+                                                           $settings, $self->{nextmonthname}, $self->{daysinnextmonth}, ($last_col + 1) % 7);
+                        }
+                }
         }
 
         if ($so_far > $settings->{height} - $settings->{margin_bottom}) {
@@ -421,6 +486,100 @@ sub draw_title
         Pango::Cairo::show_layout($cr, $layout);
         $cr->restore();
         return $h + $settings->{margin_top} + $settings->{border_size};
+}
+
+sub draw_small_calendar
+{
+        my ($self, $cr, $x, $y, $width, $height, $settings, $month, $days, $start_wkday) = @_;
+
+        my $first_col = $start_wkday;
+        if ($self->{mondayfirst}) {
+                $first_col--;
+                if ($first_col < 0) {
+                        $first_col = 6;
+                }
+        }
+
+        # Last column
+        my $last_col = ($first_col + $days - 1) % 7;
+
+        # Number of rows
+        my $rows = 1;
+        my $last_day_on_row = 7 - $first_col;
+        while ($last_day_on_row < $days) {
+                $last_day_on_row += 7;
+                $rows++;
+        }
+        my $layout = Pango::Cairo::create_layout($cr);
+        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . '10px');
+        $layout->set_font_description($desc);
+        $layout->set_text('88 ');
+        my ($wid, $h) = $layout->get_pixel_size();
+        $h += 1;
+        $wid *= 7;  # 7 columns;
+        $h *= ($rows + 2); # row for month name; row for day names
+
+        my $scale = $width / $wid;
+        if (($height / $h) < $scale) {
+                $scale = $height / $h;
+        }
+        my $font_size = int($scale * 10 + 0.5);
+        $layout = Pango::Cairo::create_layout($cr);
+        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+        $layout->set_font_description($desc);
+        $layout->set_text('88 ');
+        ($wid, $h) = $layout->get_pixel_size();
+        $h += 2;
+
+        # Month name
+        $layout = Pango::Cairo::create_layout($cr);
+        $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+        $layout->set_font_description($desc);
+        $layout->set_text(Encode::decode('UTF-8', $month));
+        my ($mw, $mh) = $layout->get_pixel_size();
+        $cr->save();
+        $cr->move_to($x + $width/2 - $mw/2, $y);
+        Pango::Cairo::show_layout($cr, $layout);
+        $cr->restore();
+
+        $y += $h;
+        # Day names
+        for (my $col=0; $col <7; $col++) {
+                my $j;
+                if ($self->{mondayfirst}) {
+                        $j = ($col + 1) % 7;
+                } else {
+                        $j = $col;
+                }
+                my $day = $self->{daynames}->[$j];
+                my $l = substr($day, 0, 1);
+                $layout = Pango::Cairo::create_layout($cr);
+                $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+                $layout->set_font_description($desc);
+                $layout->set_text(Encode::decode('UTF-8', $l));
+                $cr->save();
+                $cr->move_to($x + $col*$wid, $y);
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+        }
+        $y += $h;
+
+        my $col = $start_wkday;
+
+        for (my $d=1; $d <= $days; $d++) {
+                $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $font_size . 'px');
+                $layout->set_font_description($desc);
+                $layout->set_text($d);
+                $cr->save();
+                $cr->move_to($x + $col*$wid, $y);
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+                $col++;
+                if ($col > 6) {
+                        $col = 0;
+                        $y += $h;
+                }
+        }
 }
 
 1;

@@ -57,7 +57,7 @@ my $settings = {
 };
 
 my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
-                     'small-calendars|c' =>  \$settings->{small_calendars},
+                     'small-calendars|c=i' =>  \$settings->{small_calendars},
                      'left-numbers|x' =>     \$settings->{numbers_on_left},
                      'fill-entire-page|e' => \$settings->{fill_entire_page},
                      'fill-page|e' =>        \$settings->{fill_entire_page},

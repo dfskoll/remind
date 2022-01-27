@@ -102,6 +102,13 @@ if ($settings->{landscape}) {
         $settings->{height} = $tmp;
 }
 
+# Don't read from a terminal
+if (-t STDIN) {
+        print STDERR "I can't read data from a terminal.  Please run like this:\n";
+        print STDERR "  remind -pp [options] filename | $0 [options] > out.pdf\n";
+        exit(1);
+}
+
 my $done_one = 0;
 
 my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1]; }, undef,

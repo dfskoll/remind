@@ -5,8 +5,9 @@ use warnings;
 use Encode;
 use Cairo;
 use Pango;
-
 use Getopt::Long;
+
+use Remind::PDF::Month;
 
 my $media_to_size = {
     "Letter"    => [ 612,  792],
@@ -25,38 +26,67 @@ my $media_to_size = {
     "10x14"     => [ 720, 1008],
 };
 
-my $landscape = 0;
-my $numbers_on_left = 0;
-my $small_calendars = 0;
-my $fill_entire_page = 0;
+my $settings = {
+        landscape => 0,
+        numbers_on_left => 0,
+        small_calendars => 0,
+        fill_entire_page => 0,
 
-my $media = 'Letter';
+        media => 'Letter',
+        width => 612,
+        height => 792,
 
-my $title_font = 'Sans 14';
-my $small_cal_font = 'Sans';
-my $header_font = 'Sans 14';
-my $entry_font = 'Sans 8';
-my $daynum_font = 'Sans Bold Oblique 14';
+        title_font => 'Helvetica',
+        header_font => 'Helvetica',
+        daynum_font => 'Helvetica Bold Oblique',
+        entry_font => 'Helvetica',
+        small_cal_font => 'Helvetica',
 
-my $border_size = 6;
-my $line_thickness = 1;
+        title_size => '14px',
+        header_size => '14px',
+        daynum_size => '14px',
+        entry_size => '8px',
 
-my $margin_top = 36;
-my $margin_bottom = 36;
-my $margin_left = 36;
-my $margin_right = 36;
+        border_size => 6,
+        line_thickness => 1,
 
-sub read_one_month
-{
+        margin_top => 36,
+        margin_bottom => 36,
+        margin_left => 36,
+        margin_right => 36,
+};
+
+my $done_one = 0;
+
+my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1]; }, undef,
+                                                   $settings->{width}, $settings->{height});
+my $cr = Cairo::Context->create($surface);
+$cr->set_line_width($settings->{line_thickness});
+
+while(1) {
+        my ($obj, $err) = Remind::PDF::Month->create_from_stream(*STDIN,
+                                                                 {color => 1,
+                                                                  shade => 1,
+                                                                  moon => 1,
+                                                                  week => 1,});
+
+        if (!$obj) {
+                if (!$done_one) {
+                        print STDERR "$err\n";
+                        exit(1);
+                }
+                last;
+        }
+        $done_one = 1;
+        $obj->render($cr, $settings);
 }
+
+$surface->finish();
+
 
 __END__
 
-my $surface = Cairo::PdfSurface->create('/tmp/x.pdf', 612, 792);
 
-my $cr = Cairo::Context->create($surface);
-
-$cr->set_line_width($line_thickness);
 for (my $x=36; $x < 612-36; $x += 72) {
         $cr->move_to($x, 0);
         $cr->line_to($x, 792);
@@ -71,6 +101,4 @@ $cr->move_to(612/2, 792/2);
 $cr->set_source_rgb(0,0,0);
 $cr->set_font_size(36);
 $cr->show_text(Encode::decode('UTF-8', "מֵם סוֹפִית‎çédo"));
-
-$surface->finish();
 

@@ -42,10 +42,10 @@ my $settings = {
         entry_font => 'Helvetica',
         small_cal_font => 'Helvetica',
 
-        title_size => '14px',
-        header_size => '14px',
-        daynum_size => '14px',
-        entry_size => '8px',
+        title_size => 14,
+        header_size => 14,
+        daynum_size => 14,
+        entry_size => 8,
 
         border_size => 6,
         line_thickness => 1,

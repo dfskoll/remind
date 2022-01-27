@@ -41,8 +41,8 @@ sub render
 
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
         $layout->set_wrap('word-char');
-        $layout->set_text(Encode::decode('UTF-8', $self->{body}));
-        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size});
+        $layout->set_text($self->{body});
+        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size} . 'px');
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
 
@@ -81,9 +81,80 @@ sub adjust {
 }
 sub render
 {
-        my ($self) = @_;
-        return 0;
+        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+
+        # Do nothing in pre-render mode
+        return 0 unless $height;
+
+        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+
+        my $layout;
+        my $bodywidth = 0;
+        if ($self->{fontsize} <= 0) {
+                $self->{fontsize} = $settings->{entry_size};
+        }
+        if ($self->{size} <= 0) {
+                $self->{size} = $settings->{daynum_size};
+        }
+
+        if ($self->{phase} !~ /^[0123]$/) {
+                # Invalid phase
+                return 0;
+        }
+
+        if ($self->{body} ne '') {
+                $layout = Pango::Cairo::create_layout($cr);
+                $layout->set_text($self->{body});
+                my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $self->{fontsize} . 'px');
+                $layout->set_font_description($desc);
+                ($bodywidth, undef) = $layout->get_pixel_size();
+        }
+        my ($xc, $yc);
+        if ($settings->{numbers_on_left}) {
+                $yc = $so_far + $settings->{border_size} + ($self->{size} / 2);
+                $xc = $x2 - $settings->{border_size} - ($self->{size} / 2);
+                if ($bodywidth) {
+                        $xc -= ($bodywidth + $settings->{border_size});
+                }
+        } else {
+                $xc = $x1 + $settings->{border_size} + ($self->{size} / 2);
+                $yc = $so_far + $settings->{border_size} + ($self->{size} / 2);
+        }
+        $self->draw_moon($xc, $yc, $cr);
+        if ($layout) {
+                $cr->save();
+                $cr->move_to ($xc + ($self->{size}/2) + $settings->{border_size},
+                              $yc + ($self->{size}/2) - $self->{fontsize} );
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+        }
 }
+
+sub draw_moon
+{
+        my ($self, $xc, $yc, $cr) = @_;
+        $cr->save();
+        $cr->new_path();
+        $cr->arc($xc, $yc, $self->{size}/2, 0, 2*3.1415926535);
+        if ($self->{phase} == 0) {
+                $cr->stroke_preserve();
+                $cr->fill();
+        } elsif ($self->{phase} == 1) {
+                $cr->stroke();
+                $cr->arc($xc, $yc, $self->{size}/2, 3.1415926535/2, 3 * 3.1415926535/2);
+                $cr->stroke_preserve();
+                $cr->fill();
+        } elsif ($self->{phase} == 2) {
+                $cr->stroke();
+        } elsif ($self->{phase} == 3) {
+                $cr->stroke();
+                $cr->arc($xc, $yc, $self->{size}/2, 3 * 3.1415926535/2, 3.1415926535/2);
+                $cr->stroke_preserve();
+                $cr->fill();
+        }
+        $cr->restore();
+}
+
 package Remind::PDF::Entry::shade;
 use base 'Remind::PDF::Entry';
 sub adjust

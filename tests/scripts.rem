@@ -1,0 +1,16 @@
+REM 1 MSG Përkujtues
+REM 2 MSG تذكير
+REM 3 MSG 提醒
+REM 4 MSG રીમાઇન્ડર
+REM 5 MSG Emlékeztető
+REM 6 MSG Áminning
+REM 7 MSG תִזכּוֹרֶת
+REM 8 MSG अनुस्मारक
+REM 9 MSG Эскертүү
+REM 10 MSG Напоминание
+REM 11 MSG Υπενθύμιση
+
+REM [moondate(0)] SPECIAL MOON 0
+REM [moondate(1)] SPECIAL MOON 1
+REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]
+REM [moondate(3)] SPECIAL MOON 3 -1 -1 [moontime(3)]

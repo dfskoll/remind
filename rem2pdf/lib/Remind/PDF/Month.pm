@@ -272,6 +272,8 @@ sub draw_day
 {
         my ($self, $cr, $settings, $so_far, $day, $col, $height) = @_;
 
+        my $top = $so_far;
+
         my ($x1, $y1, $x2, $y2) = $self->col_box_coordinates($so_far, $col, $height, $settings);
 
         # Do shading if we're in "for real" mode
@@ -290,7 +292,7 @@ sub draw_day
         # Draw the day number
         my $layout = Pango::Cairo::create_layout($cr);
         $layout->set_text($day);
-        my $desc = Pango::FontDescription->from_string($settings->{daynum_font} . ' ' . $settings->{daynum_size});
+        my $desc = Pango::FontDescription->from_string($settings->{daynum_font} . ' ' . $settings->{daynum_size} . 'px');
 
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
@@ -314,7 +316,7 @@ sub draw_day
         foreach my $entry (@{$self->{entries}->[$day]}) {
                 # Moon should not adjust height
                 if ($entry->isa('Remind::PDF::Entry::moon')) {
-                        $entry->render($self, $cr, $settings, $so_far, $day, $col, $height);
+                        $entry->render($self, $cr, $settings, $top, $day, $col, $height);
                         next;
                 }
                 if ($done) {
@@ -347,7 +349,7 @@ sub draw_daynames
                 }
                 my $layout = Pango::Cairo::create_layout($cr);
                 $layout->set_text(Encode::decode('UTF-8', $self->{daynames}->[$j]));
-                my $desc = Pango::FontDescription->from_string($settings->{header_font} . ' ' . $settings->{header_size});
+                my $desc = Pango::FontDescription->from_string($settings->{header_font} . ' ' . $settings->{header_size} . 'px');
 
                 $layout->set_font_description($desc);
 
@@ -370,7 +372,7 @@ sub draw_title
 
         my $layout = Pango::Cairo::create_layout($cr);
         $layout->set_text(Encode::decode('UTF-8', $title));
-        my $desc = Pango::FontDescription->from_string($settings->{title_font} . ' ' . $settings->{title_size});
+        my $desc = Pango::FontDescription->from_string($settings->{title_font} . ' ' . $settings->{title_size} . 'px');
 
         $layout->set_font_description($desc);
 

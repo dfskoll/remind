@@ -9,7 +9,7 @@ all: src/Makefile
 	@echo "*******************"
 	@echo ""
 	@cd src && $(MAKE) all LANGDEF=$(LANGDEF)
-
+	@$(MAKE) -C rem2pdf -f Makefile.top
 install:
 	@echo ""
 	@echo "*********************"
@@ -20,7 +20,7 @@ install:
 	@echo ""
 	@$(MAKE) -C src install
 	@$(MAKE) -C rem2html install
-
+	@$(MAKE) -C rem2pdf -f Makefile.top install
 clean:
 	find . -name '*~' -exec rm {} \;
 	cd src && $(MAKE) clean

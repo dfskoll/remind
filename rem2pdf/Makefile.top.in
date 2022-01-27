@@ -1,0 +1,38 @@
+# Set by configure - don't touch.
+srcdir=@srcdir@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+mandir=@mandir@
+bindir=@bindir@
+datadir=@datadir@
+datarootdir=@datarootdir@
+PERL=@PERL@
+PERLMODS_NEEDED=Getopt::Long Cairo Pango
+all:
+	$(PERL) Makefile.PL && make all
+	@if test "$(PERL)" = "" ; then \
+	    echo "Not building rem2pdf; Perl is required"; exit 0; fi; \
+	 for m in $(PERLMODS_NEEDED) ; \
+	do \
+	    $(PERL) -M$$m -e 1 > /dev/null 2>&1; \
+	    if test $$? != 0 ; then echo "Not building rem2pdf; missing $$m"; exit 0; fi; \
+	done; \
+	$(MAKE) all && exit 0; \
+	exit 1;
+
+install:
+	@if test "$(PERL)" = "" ; then \
+	    echo "Not installing rem2pdf; Perl is required"; exit 0; fi; \
+	 for m in $(PERLMODS_NEEDED) ; \
+         do \
+	    $(PERL) -M$$m -e 1 > /dev/null 2>&1; \
+	    if test $$? != 0 ; then echo "Not installing rem2pdf; missing $$m"; exit 0; fi; \
+	done; \
+	echo "Installing rem2pdf"; \
+        $(MAKE) install DESTDIR=$(DESTDIR) && exit 0; \
+	exit 1;
+
+
+
+
+

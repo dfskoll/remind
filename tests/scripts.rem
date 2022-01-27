@@ -10,6 +10,10 @@ REM 8 MSG अनुस्मारक
 REM 9 SPECIAL COLOR 0 0 128 Эскертүү
 REM 10 SPECIAL COLOR 0 128 0 Напоминание
 REM 11 SPECIAL COLOR 128 0 0 Υπενθύμιση
+REM 12 SPECIAL PANGO <b>Bold</b> <small>and</small> <i>Italic</i> <big>and</big> <span bgcolor="#C0C0C0" foreground="red"><u>underline</u></span>
+REM 12 MSG Hello
+
+REM 13 SPECIAL PANGO Invalid
 
 REM 1 SPECIAL SHADE 128 255 128
 

@@ -11,7 +11,7 @@ sub new_from_hash
         my ($class, $hash) = @_;
         if (exists($hash->{passthru})) {
                 my $special = lc($hash->{passthru});
-                if ($special =~ /^(html|htmlclass|week|moon|shade|color|colour|postscript|psfile)$/) {
+                if ($special =~ /^(html|htmlclass|week|moon|shade|color|colour|postscript|psfile|pango)$/) {
                         $special = 'color' if $special eq 'colour';
                         $class = 'Remind::PDF::Entry::' . $special;
                 } else {
@@ -189,6 +189,31 @@ package Remind::PDF::Entry::postscript;
 use base 'Remind::PDF::Entry';
 package Remind::PDF::Entry::psfile;
 use base 'Remind::PDF::Entry';
+package Remind::PDF::Entry::pango;
+use base 'Remind::PDF::Entry';
+sub render
+{
+        my ($self, $month, $cr, $settings, $so_far, $day, $col, $height) = @_;
+
+        my ($x1, $y1, $x2, $y2) = $month->col_box_coordinates($so_far, $col, $height, $settings);
+        my $layout = Pango::Cairo::create_layout($cr);
+
+        $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
+        $layout->set_wrap('word-char');
+        $layout->set_markup($self->{body});
+        my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size} . 'px');
+        $layout->set_font_description($desc);
+        my ($wid, $h) = $layout->get_pixel_size();
+
+        if ($height) {
+                $cr->save();
+                $cr->move_to($x1 + $settings->{border_size}, $so_far);
+                Pango::Cairo::show_layout($cr, $layout);
+                $cr->restore();
+        }
+        return $h;
+}
+
 package Remind::PDF::Entry::UNKNOWN;
 use base 'Remind::PDF::Entry';
 

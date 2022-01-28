@@ -100,7 +100,7 @@ sub read_one_month
 
         # Old-style "remind -p"
         # TODO: Eventually support this?
-        return (undef, "Format not supported: Use -pp or -ppp, not plain -p");
+        return (undef, "Format not supported: Use 'remind -pp', not plain -p");
 }
 
 sub read_one_month_pp

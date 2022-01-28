@@ -102,10 +102,13 @@ if ($settings->{landscape}) {
         $settings->{height} = $tmp;
 }
 
+my $me = $0;
+$me =~ s/^.*\///;
+
 # Don't read from a terminal
 if (-t STDIN) {
         print STDERR "I can't read data from a terminal.  Please run like this:\n";
-        print STDERR "  remind -pp [options] filename | $0 [options] > out.pdf\n";
+        print STDERR "  remind -pp [options] filename | $me [options] > out.pdf\n";
         exit(1);
 }
 
@@ -135,7 +138,7 @@ while(1) {
         if (!$obj) {
                 if (!$done_one) {
                         $errored_out = 1;
-                        print STDERR "$err\n";
+                        print STDERR "$me: $err\n";
                         exit(1);
                 }
                 last;

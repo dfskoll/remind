@@ -1,3 +1,8 @@
+# This is a test file that tests the
+# rendering of various Unicode characters.
+# It also tests some of the features of
+# the Pango/Cairo-based rem2pdf program.
+
 REM 1 MSG Përkujtues
 REM 2 SPECIAL SHADE 192 192 255
 REM 2 MSG تذكير
@@ -25,8 +30,15 @@ REM 18 MSG Påminnelse
 REM 19 MSG דערמאָנונג
 REM 20 MSG Hatırlatma
 REM 21 SPECIAL PANGO <big><big> Нагадування</big></big>
+REM 22 MSG შეხსენება
+REM 23 MSG เตือนความจำ
+REM 24 MSG リマインダー
+REM 25 MSG Искә төшерү
+REM 26 MSG Напомняне
+REM 27 MSG ഓർമ്മപ്പെടുത്തൽ
 REM 1 SPECIAL SHADE 192 255 192
-
+REM 14 SPECIAL SHADE 255 192 192
+REM 14 SPECIAL PANGO <span face="Zapf Chancery" size="xx-large">This is so <span foreground="blue">fancy</span></span>
 REM [moondate(0)] SPECIAL MOON 0
 REM [moondate(1)] SPECIAL MOON 1
 REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]

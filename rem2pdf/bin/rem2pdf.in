@@ -1,4 +1,4 @@
-#!/bin/env perl
+#!@PERL@
 use strict;
 use warnings;
 
@@ -6,6 +6,8 @@ use Encode;
 use Cairo;
 use Pango;
 use Getopt::Long;
+
+my $VERSION = '@VERSION@';
 
 use Remind::PDF;
 
@@ -62,7 +64,7 @@ $me =~ s/^.*\///;
 sub usage
 {
         print <<"EOF";
-$me: Convert Remind -pp output to a PDF calendar.
+$me (version $VERSION): Convert Remind -pp output to a PDF calendar.
 
 Usage: remind -pp [options] filename | $me [options] > out.pdf
 

@@ -3,6 +3,14 @@
 # It also tests some of the features of
 # the Pango/Cairo-based rem2pdf program.
 
+SET $Sunday "እሁድ"
+SET $Monday "一"
+SET $Tuesday "mardi"
+SET $Wednesday "水曜日"
+SET $Thursday "четвер"
+SET $Friday "piątek"
+Set $Saturday "שבת"
+
 REM 1 MSG Përkujtues
 REM 2 SPECIAL SHADE 192 192 255
 REM 2 MSG تذكير

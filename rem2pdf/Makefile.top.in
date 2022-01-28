@@ -8,8 +8,8 @@ datadir=@datadir@
 datarootdir=@datarootdir@
 PERL=@PERL@
 PERLMODS_NEEDED=Getopt::Long Cairo Pango
-all:
-	$(PERL) Makefile.PL && make all
+
+all: Makefile
 	@if test "$(PERL)" = "" ; then \
 	    echo "Not building rem2pdf; Perl is required"; exit 0; fi; \
 	 for m in $(PERLMODS_NEEDED) ; \
@@ -39,4 +39,5 @@ install:
 
 
 
-
+Makefile: Makefile.PL
+	$(PERL) Makefile.PL || true

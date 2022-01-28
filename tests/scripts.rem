@@ -25,7 +25,7 @@ REM 10 SPECIAL COLOR 0 192 0 Напоминание
 REM 11 SPECIAL COLOR 192 0 0 Υπενθύμιση
 REM 12 SPECIAL PANGO <b>Bold</b> <small>and</small> <i>Italic</i> <big>and</big> <span bgcolor="#C0C0C0" foreground="red"><u>underline</u></span>
 REM 12 MSG Hello
-REM 12 SPECIAL PANGO <big><span face="zapf chancery">Very Fancy</span></big>
+REM 12 SPECIAL PANGO <span face="zapf chancery" size="10000">Very Fancy</span>
 
 REM 13 SPECIAL PANGO <bad>Invalid
 REM 13 MSG Hello Again
@@ -46,7 +46,7 @@ REM 26 MSG Напомняне
 REM 27 MSG ഓർമ്മപ്പെടുത്തൽ
 REM 1 SPECIAL SHADE 192 255 192
 REM 14 SPECIAL SHADE 255 192 192
-REM 14 SPECIAL PANGO <span face="Zapf Chancery" size="xx-large">This is so <span foreground="blue">fancy</span></span>
+REM 14 SPECIAL PANGO <span face="Zapf Chancery" size="15000">This is so <span foreground="blue">fancy</span></span>
 REM [moondate(0)] SPECIAL MOON 0
 REM [moondate(1)] SPECIAL MOON 1
 REM [moondate(2)] SPECIAL MOON 2 -1 -1 [moontime(2)]

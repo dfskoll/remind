@@ -56,10 +56,47 @@ my $settings = {
         margin_right => 36,
 };
 
+my $me = $0;
+$me =~ s/^.*\///;
+
+sub usage
+{
+        print <<"EOF";
+$me: Convert Remind -pp output to a PDF calendar.
+
+Usage: remind -pp [options] filename | $me [options] > out.pdf
+
+Options:
+
+--landscape, -l         Print in landscape orientation
+--small-calendars=N     Choose location for small calendars
+-c=N                    Synonym for --small-calendars=N
+--left-numbers, -x      Print day numbers on the left
+--fill-page, -e         Fill the entire page
+--media=MEDIA, -m=MEDIA Size for specified media
+--witdh=W, -w=W         Specify media width in 1/72nds of an inch
+--height=H, -h=H        Specify media height in 1/72nds of an inch
+--title-font=FONT       Specify font for calendar title
+--header-font=FONT      Specify font for weekday names
+--daynum-font=FONT      Specify font for day numbers
+--entry-font=FONT       Specify font for calendar entries
+--small-cal-font=FONT   Specify font for small calendars
+--title-size=S          Specify size of font for calendar title in points
+--header-size=S         Specify size of font for weekday names
+--daynum-size=S         Specify size of font for day numbers
+--entry-size=S          Specify size of font for calendar entries
+--border-size=S         Specify size of gaps between items in 1/72nds of an inch
+--line-thickness=S      Specify line thickness in 1/72nds of an inch
+--margin-top=S          Specify top margin size in 1/72nds of an inch
+--margin-bottom=S       Specify bottom margin size in 1/72nds of an inch
+--margin-left=S         Specify left margin size in 1/72nds of an inch
+--margin-right=S        Specify right margin size in 1/72nds of an inch
+EOF
+}
+
 my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
                      'small-calendars|c=i' =>  \$settings->{small_calendars},
                      'left-numbers|x' =>     \$settings->{numbers_on_left},
-                     'fill-entire-page|e' => \$settings->{fill_entire_page},
                      'fill-page|e' =>        \$settings->{fill_entire_page},
                      'media|m=s' =>          \$settings->{media},
                      'width|w=i' =>          \$settings->{width},
@@ -101,9 +138,6 @@ if ($settings->{landscape}) {
         $settings->{width} = $settings->{height};
         $settings->{height} = $tmp;
 }
-
-my $me = $0;
-$me =~ s/^.*\///;
 
 # Don't read from a terminal
 if (-t STDIN) {

@@ -50,3 +50,4 @@ VERSION=03.03.12
 AC_SUBST(VERSION)
 AC_SUBST(PERL)
 AC_OUTPUT(src/Makefile www/Makefile src/version.h rem2html/Makefile rem2pdf/Makefile.PL rem2pdf/Makefile.top rem2pdf/bin/rem2pdf)
+chmod a+x rem2pdf/bin/rem2pdf

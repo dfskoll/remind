@@ -111,7 +111,9 @@ if (-t STDIN) {
 
 my $done_one = 0;
 
-my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1]; }, undef,
+my $errored_out = 0;
+
+my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1] unless $errored_out; }, undef,
                                                    $settings->{width}, $settings->{height});
 
 $surface->set_metadata('title', 'Calendar');
@@ -132,6 +134,7 @@ while(1) {
 
         if (!$obj) {
                 if (!$done_one) {
+                        $errored_out = 1;
                         print STDERR "$err\n";
                         exit(1);
                 }

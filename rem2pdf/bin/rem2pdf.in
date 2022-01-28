@@ -28,6 +28,8 @@ my $media_to_size = {
     "10x14"     => [ 720, 1008],
 };
 
+my $help = 0;
+
 my $settings = {
         landscape => 0,
         numbers_on_left => 0,
@@ -93,6 +95,7 @@ Options:
 --margin-bottom=S       Specify bottom margin size in 1/72nds of an inch
 --margin-left=S         Specify left margin size in 1/72nds of an inch
 --margin-right=S        Specify right margin size in 1/72nds of an inch
+--help                  Display this help
 EOF
 }
 
@@ -118,10 +121,16 @@ my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
                      'margin-bottom=f' =>    \$settings->{margin_bottom},
                      'margin-left=f' =>      \$settings->{margin_left},
                      'margin-right=f' =>     \$settings->{margin_right},
+                     'help' =>               \$help
     );
 if (!$ret) {
         usage();
         exit(1);
+}
+
+if ($help) {
+        usage();
+        exit(0);
 }
 
 if ($settings->{width} <= 0 ||

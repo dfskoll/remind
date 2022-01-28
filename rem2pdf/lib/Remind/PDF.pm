@@ -553,11 +553,11 @@ sub draw_small_calendar
                         $j = $col;
                 }
                 my $day = $self->{daynames}->[$j];
-                my $l = substr($day, 0, 1);
+                my $l = substr(Encode::decode('UTF-8', $day), 0, 1);
                 $layout = Pango::Cairo::create_layout($cr);
                 $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
                 $layout->set_font_description($desc);
-                $layout->set_text(Encode::decode('UTF-8', $l));
+                $layout->set_text($l);
                 $cr->save();
                 $cr->move_to($x + $col*$wid, $y);
                 Pango::Cairo::show_layout($cr, $layout);

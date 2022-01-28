@@ -323,10 +323,10 @@ sub draw_row
                 $col = $start_col;
                 $day = $start_day;
         } else {
-                $height = $self->{row_height} - $settings->{border_size};
+                $height = $self->{row_height} - $settings->{border_size} * 2;
         }
 
-        if ($height < $self->{minimum_row_height}) {
+        if (!$settings->{fill_entire_page} && $height < $self->{minimum_row_height}) {
                 $height = $self->{minimum_row_height};
         }
         # Now draw for real
@@ -514,10 +514,9 @@ sub draw_small_calendar
         my $layout = Pango::Cairo::create_layout($cr);
         my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . '10px');
         $layout->set_font_description($desc);
-        $layout->set_text('88 ');
+        $layout->set_text('88 88 88 88 88 88 88');
         my ($wid, $h) = $layout->get_pixel_size();
         $h += 1;
-        $wid *= 7;  # 7 columns;
         $h *= ($rows + 2); # row for month name; row for day names
 
         my $scale = $width / $wid;

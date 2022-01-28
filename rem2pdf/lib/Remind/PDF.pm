@@ -185,6 +185,21 @@ sub render
         # Last column
         my $last_col = ($first_col + $self->{daysinmonth} - 1) % 7;
 
+        # Number of rows
+        my $rows = 1;
+        my $last_day_on_row = 7 - $first_col;
+        while ($last_day_on_row < $self->{daysinmonth}) {
+                $last_day_on_row += 7;
+                $rows++;
+        }
+
+        my $extra_row = 0;
+        # Add a row for small calendars if necessary
+        if (($settings->{small_calendars} != 0) && ($first_col == 0) && ($last_col == 6)) {
+                $rows++;
+                $extra_row++;
+        }
+
         # Figure out where to draw the small calendars
         my $prevcal_top = 0;
         my $nextcal_top = 0;
@@ -192,7 +207,7 @@ sub render
         my $nextcal_bottom = 0;
 
         if ($settings->{small_calendars} == 1) {
-                if ($last_col <= 4) {
+                if ($last_col <= 4 || ($last_col == 6 && $extra_row)) {
                         $prevcal_bottom = 1;
                         $nextcal_bottom = 1;
                 } else {
@@ -212,7 +227,7 @@ sub render
                         $prevcal_top = 1;
                         $nextcal_bottom = 1;
                 } else {
-                        if ($last_col <= 4) {
+                        if ($last_col <= 4 || ($last_col == 6 && $extra_row)) {
                                 $prevcal_bottom = 1;
                                 $nextcal_bottom = 1;
                         } else {
@@ -220,19 +235,6 @@ sub render
                                 $nextcal_top = 1;
                         }
                 }
-        }
-
-        # Number of rows
-        my $rows = 1;
-        my $last_day_on_row = 7 - $first_col;
-        while ($last_day_on_row < $self->{daysinmonth}) {
-                $last_day_on_row += 7;
-                $rows++;
-        }
-
-        # Add a row for small calendars if necessary
-        if (($settings->{small_calendars} != 0) && ($first_col == 0) && ($last_col == 6)) {
-                $rows++;
         }
 
         # Row height if we are filling the page
@@ -328,11 +330,10 @@ sub draw_row
                 $height = $self->{minimum_row_height};
         }
         # Now draw for real
-        while ($col < 7) {
+        while ($col < 7 && $day <= $self->{daysinmonth}) {
                 $self->draw_day($cr, $settings, $so_far, $day, $col, $height);
                 $day++;
                 $col++;
-                last if ($day > $self->{daysinmonth});
         }
 
         return $so_far + $height + $settings->{border_size};

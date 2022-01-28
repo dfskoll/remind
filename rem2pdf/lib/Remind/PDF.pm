@@ -26,7 +26,7 @@ sub create_from_stream
                         my $self = bless {}, $class;
                         return $self->read_one_month($in, $_, $specials_accepted);
                 } elsif ($_ eq '[') {
-                        return (undef, "Unsupported format: Use remind -pp, not remind -ppp");
+                        return (undef, "Format not supported: Use 'remind -pp', not 'remind -ppp'");
                 }
         }
         return (undef, "Could not find any remind -p output anywhere");
@@ -100,7 +100,7 @@ sub read_one_month
 
         # Old-style "remind -p"
         # TODO: Eventually support this?
-        return (undef, "Format not supported: Use 'remind -pp', not plain -p");
+        return (undef, "Format not supported: Use 'remind -pp', not 'remind -p'");
 }
 
 sub read_one_month_pp

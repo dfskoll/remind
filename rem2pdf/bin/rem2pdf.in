@@ -63,6 +63,8 @@ my $settings = {
 my $me = $0;
 $me =~ s/^.*\///;
 
+set_default_media();
+
 sub usage
 {
         print <<"EOF";
@@ -137,7 +139,19 @@ if ($settings->{width} <= 0 ||
     $settings->{height} <= 0) {
         my $size = $media_to_size->{ucfirst($settings->{media})};
         if (!$size) {
+                set_default_media();
                 print STDERR "Unknown media " . $settings->{media} . "\n";
+                printf("%-12s   Size in 1/72 in\n", "Valid media:");
+                foreach my $m (sort { $a cmp $b } (keys(%$media_to_size))) {
+                        if ($m eq $settings->{media}) {
+                                print "* ";
+                        } else {
+                                print "  ";
+                        }
+                        printf("%-12s   %4d x %4d\n", $m,
+                               $media_to_size->{$m}->[0],
+                               $media_to_size->{$m}->[1]);
+                }
                 exit(1);
         }
         $settings->{width} = $size->[0];
@@ -194,6 +208,52 @@ while(1) {
 
 $surface->finish();
 
+sub set_default_media
+{
+        my $paper;
+        $paper = $ENV{PAPERSIZE};
+        if ($paper && set_media(ucfirst($paper))) {
+                return 1;
+        }
+        if ($ENV{PAPERCONF}) {
+                if (set_media_from_file($ENV{PAPERCONF})) {
+                        return 1;
+                }
+        }
+        if (set_media_from_file('/etc/papersize')) {
+                return 1;
+        }
+        return set_media('Letter');
+}
+
+sub set_media
+{
+        my ($m) = @_;
+
+        return 0 unless $media_to_size->{$m};
+        $settings->{media} = $m;
+        return 1;
+}
+
+sub set_media_from_file
+{
+        my ($fn) = @_;
+        if (!open(IN, '<', $fn)) {
+                return 0;
+        }
+        while(<IN>) {
+                chomp;
+                s/^\s+//;
+                s/\s+$//;
+                next if ($_ eq '');
+                next if ($_ =~ /^#/);
+                my $m = $_;
+                close(IN);
+                return set_media($m);
+        }
+        close(IN);
+        return 0;
+}
 
 __END__
 

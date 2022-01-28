@@ -80,7 +80,7 @@ Options:
 --left-numbers, -x      Print day numbers on the left
 --fill-page, -e         Fill the entire page
 --media=MEDIA, -m=MEDIA Size for specified media
---witdh=W, -w=W         Specify media width in 1/72nds of an inch
+--width=W, -w=W         Specify media width in 1/72nds of an inch
 --height=H, -h=H        Specify media height in 1/72nds of an inch
 --title-font=FONT       Specify font for calendar title
 --header-font=FONT      Specify font for weekday names
@@ -139,8 +139,10 @@ if ($settings->{width} <= 0 ||
     $settings->{height} <= 0) {
         my $size = $media_to_size->{ucfirst($settings->{media})};
         if (!$size) {
+                if (lc($settings->{media}) ne 'help') {
+                        print STDERR "Unknown media " . $settings->{media} . "\n";
+                }
                 set_default_media();
-                print STDERR "Unknown media " . $settings->{media} . "\n";
                 printf("%-12s   Size in 1/72 in\n", "Valid media:");
                 foreach my $m (sort { $a cmp $b } (keys(%$media_to_size))) {
                         if ($m eq $settings->{media}) {
@@ -257,19 +259,165 @@ sub set_media_from_file
 
 __END__
 
+=head1 NAME
 
-for (my $x=36; $x < 612-36; $x += 72) {
-        $cr->move_to($x, 0);
-        $cr->line_to($x, 792);
-        $cr->stroke;
-}
+rem2pdf - draw a PDF calendar from Remind output
 
-$cr->set_source_rgb(0,0.5,0);
-$cr->arc(612/2, 792/2, 36, 0, 2*3.1415926535);
-$cr->stroke_preserve;
-$cr->fill;
-$cr->move_to(612/2, 792/2);
-$cr->set_source_rgb(0,0,0);
-$cr->set_font_size(36);
-$cr->show_text(Encode::decode('UTF-8', "מֵם סוֹפִית‎çédo"));
+=head1 SYNOPSIS
 
+    remind -pp [options] file | rem2pdf [options] > output.pdf
+
+=head1 DESCRIPTION
+
+B<rem2pdf> reads the standard input, which should be the results of
+running B<remind> with the B<-pp> option.  It emits PDF code that draws
+a calendar to standard output.
+
+=head1 OPTIONS
+
+=over
+
+=item --landscape, -l
+
+Print the calendar in landscape orientation.  Essentially, this swaps
+the width and height of the output media.
+
+=item --small-calendars=I<n>, -c=I<n>
+
+Control the inclusion of small calendars for the previous and next
+month.  Possible values for I<n> are:
+
+=over
+
+=item Z<>0
+
+Do not draw any small calendares
+
+=item Z<>1
+
+Place the small calendars at the bottom-right if there is room;
+otherwise, place them at the top-left.
+
+=item Z<>2
+
+Place the small calendars at the top-left if there is room; otherwise,
+place them at the bottom-right.
+
+=item Z<>3
+
+Place the previous month's small calendar at the top-left and the next
+month's at the bottom-right if there is room; otherwise, follow
+I<n>=1.  A moment's thought reveals that an option which splits the
+calendars if there is room and otherwise follows I<n>=2 yields the
+same results.
+
+=back
+
+=item --left-numbers, -x
+
+Draw the day numbers in the top-left corner of each day's box rather than
+the default top-right.
+
+=item --fill-page, -e
+
+Make the calendar fill the available space on the page.
+
+=item --media=I<media>, -m=I<media>
+
+Specify the paper size (Letter, A4, etc.)  For a list of valid media sizes,
+run:
+
+    rem2pdf --media=help
+
+The default media size will be marked with an asterisk.
+
+=item --width=I<n>, -w=I<n>, --height=I<m>, -h=I<m>
+
+Rather than specifying a named media size, directly specify the width
+and height of the output in 1/72ths of an inch.  You must specify both
+width and height for the options to be respected.
+
+=item --title-font=I<font>
+
+Specify the font used for the calendar title.  It can be any font that
+the Pango library on your system can use.  The default is Helvetica.  If
+you choose a font with spaces in its name, you may need to quote this
+argument.
+
+=item --header-font=I<font>
+
+Specify the font used for the weekday names.  The default is Helvetica.
+
+=item --daynum-font=I<font>
+
+Specify the font used for the day numbers.  The default is
+Helvetica Bold Oblique.
+
+=item --entry-font=I<font>
+
+Specify the font used for calendar entries.  The default is Helvetica.
+
+=item --small-cal-font=I<font>
+
+Specify the font used for the small next- and previous-month
+calendars.  The default is Helvetica.
+
+=item --title-size=I<n>
+
+Specify the size of the title font in 1/72ths of an inch.  The default
+is 14.  This size, and indeed all following sizes, may be specified as
+floating-point numbers.
+
+=item --header-size=I<n>
+
+Specify the size of the header font in 1/72ths of an inch.  The default is 14.
+
+=item --daynum-size=I<n>
+
+Specify the size of the day number font in 1/72ths of an inch.  The
+default is 14.
+
+=item --entry-size=I<n>
+
+Specify the size of the calendar entry font in 1/72ths of an inch.
+The default is 8.
+
+=item --border-size=I<n>
+
+Specify the size of the blank border between the contents of a calendar
+box and the centre of the lines surrounding it, in 1/72ths of an inch.
+The default is 4.
+
+=item --line-thickness=I<n>
+
+Specify the thickness of the lines drawn on the calendar.  The default is 1.
+
+=item --margin-top=I<n>
+
+The size of the margin at the top of the page in 1/72ths of an inch.
+The default is 36.
+
+=item --margin-bottom=I<n>
+
+The size of the margin at the bottom of the page in 1/72ths of an inch.
+The default is 36.
+
+=item --margin-left=I<n>
+
+The size of the margin at the left of the page in 1/72ths of an inch.
+The default is 36.
+
+=item --margin-right=I<n>
+
+The size of the margin at the right of the page in 1/72ths of an inch.
+The default is 36.
+
+=back
+
+=head1 AUTHOR
+
+B<Rem2PDF> was written by Dianne Skoll <dianne@skoll.ca>
+
+=head1 SEE ALSO
+
+B<remind>, B<rem2ps>, B<rem2html>

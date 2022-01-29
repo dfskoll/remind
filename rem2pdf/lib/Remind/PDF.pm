@@ -100,7 +100,59 @@ sub read_one_month
 
         # Old-style "remind -p"
         # TODO: Eventually support this?
-        return (undef, "Format not supported: Use 'remind -pp', not 'remind -p'");
+        return $self->read_one_month_p($in, $specials_accepted);
+}
+
+sub read_one_month_p
+{
+        my ($self, $in, $specials_accepted) = @_;
+        my $line;
+        while ($line = $in->getline()) {
+                chomp($line);
+                if ($line eq '# rem2ps end') {
+                        return ($self, undef);
+                }
+                # Ignore comments
+                next if $line =~ /^#/;
+                my $hash = $self->parse_oldstyle_line($line);
+                next unless $hash;
+
+                my $day = $hash->{date};
+                $day =~ s/^\d\d\d\d-\d\d-//;
+                $day =~ s/^0//;
+                if ($self->accept_special($hash, $specials_accepted)) {
+                        push(@{$self->{entries}->[$day]}, Remind::PDF::Entry->new_from_hash($hash));
+                }
+        }
+        return (undef, "Missing # rem2ps end marker");
+}
+
+sub parse_oldstyle_line
+{
+        my ($self, $line) = @_;
+        return undef unless $line =~ m|^(\d+)/(\d+)/(\d+) (\S+) (\S+) (\S+) (\S+) (.*)$|;
+
+        my $hash = {
+                date => "$1-$2-$3",
+                passthru => $4,
+                tags => $5,
+                duration => $6,
+                time => $7,
+                body => $8};
+        foreach my $key (qw(passthru tags time duration)) {
+                delete $hash->{$key} if $hash->{$key} eq '*';
+        }
+
+        if ($hash->{passthru}) {
+                if ($hash->{passthru} =~ /^(shade|color|colour)$/i) {
+                        if ($hash->{body} =~ /^\s*(\d+)\s+(\d+)\s+(\d+)/) {
+                                $hash->{r} = $1;
+                                $hash->{g} = $2;
+                                $hash->{b} = $3;
+                        }
+                }
+        }
+        return $hash;
 }
 
 sub read_one_month_pp

@@ -1055,7 +1055,7 @@ static void PrintCentered(char const *s, int width, char *pad)
     while (*ws && wcwidth(*ws) == 0) {
         PutWideChar(*ws++);
     }
-    for (i=d+len; i<width; i++) fputs(pad, stdout);
+    for (i=d+display_len; i<width; i++) fputs(pad, stdout);
     if (buf != static_buf) free(buf);
 #endif
 }

@@ -451,6 +451,11 @@ examples:
 Other back-ends such as B<rem2ps> and B<rem2html> will ignore PANGO
 special reminders.
 
+Neither B<remind> nor B<rem2pdf> will check the markup to ensure
+it is syntactically correct.  If you use invalid Pango markup, the
+Pango library will print a warning and B<rem2pdf> will not render any
+output for the invalid reminder.
+
 =head1 ABSOLUTELY-POSITIONED TEXT
 
 If your B<PANGO> special reminder starts with C<@I<x>,I<y>> where I<x>

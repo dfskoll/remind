@@ -58,6 +58,8 @@ my $settings = {
         margin_bottom => 36,
         margin_left => 36,
         margin_right => 36,
+
+        verbose => 0,
 };
 
 my $me = $0;
@@ -97,6 +99,7 @@ Options:
 --margin-bottom=S       Specify bottom margin size in 1/72nds of an inch
 --margin-left=S         Specify left margin size in 1/72nds of an inch
 --margin-right=S        Specify right margin size in 1/72nds of an inch
+--verbose, -v           Print progress messages
 --help                  Display this help
 EOF
 }
@@ -125,6 +128,7 @@ my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
                      'margin-bottom=f' =>    \$settings->{margin_bottom},
                      'margin-left=f' =>      \$settings->{margin_left},
                      'margin-right=f' =>     \$settings->{margin_right},
+                     'verbose|v' =>          \$settings->{verbose},
                      'help' =>               \$help
     );
 if (!$ret) {
@@ -422,6 +426,11 @@ The default is 36.
 
 The size of the margin at the right of the page in 1/72ths of an inch.
 The default is 36.
+
+=item --verbose, -v
+
+Print (on STDERR) the name of the month and year for each month that
+is rendered.
 
 =back
 

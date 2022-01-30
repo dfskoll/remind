@@ -6,6 +6,24 @@ use Cairo;
 use Pango;
 use Encode;
 
+=head1 NAME
+
+Remind::PDF::Entry - Representation of one calendar entry
+
+=head1 DESCRIPTION
+
+C<Remind::PDF::Entry> and its subclasses represent one calendar
+entry.  They can be normal reminder-type entries or SPECIAL reminders.
+
+=head1 CLASS METHODS
+
+=head2 Remind::PDF::Entry->new_from_hash($hash)
+
+Create and return a new C<Remind::PDF::Entry> based on one reminder's
+worth of data from C<remind -p>.  Returns a C<Remind::PDF::Entry> object,
+or in the case of SPECIAL reminders, a subclass of C<Remind::PDF::Entry>.
+
+=cut
 sub new_from_hash
 {
         my ($class, $hash) = @_;
@@ -19,12 +37,12 @@ sub new_from_hash
                 }
         }
         bless $hash, $class;
-        $hash->adjust();
+        $hash->_adjust();
         return $hash;
 }
 
 # Base class: Set the color to black
-sub adjust
+sub _adjust
 {
         my ($self) = @_;
         $self->{r} = 0;
@@ -32,6 +50,23 @@ sub adjust
         $self->{b} = 0;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 render($pdf, $cr, $settings, $so_far, $day, $col, $height)
+
+Render a single entry.  C<$pdf> is the parent C<Remind::PDF>
+object.  C<$cr> is a Cairo drawing context and C<$settings> is the
+usual settings hash.  C<$so_far> is the Y-coordinate at which
+to start drawing.  C<$day> is the month day and C<$col> is
+the calendar column.  C<$height> is the height of the calendar
+box.
+
+If C<$height> is zero, then nothing should actually be drawn,
+but the height of the calendar entry should be computed.
+
+Returns the height of the calendar entry.
+
+=cut
 sub render
 {
         my ($self, $pdf, $cr, $settings, $so_far, $day, $col, $height) = @_;
@@ -60,8 +95,12 @@ sub render
 
 package Remind::PDF::Entry::html;
 use base 'Remind::PDF::Entry';
+sub render {}
+
 package Remind::PDF::Entry::htmlclass;
 use base 'Remind::PDF::Entry';
+sub render {}
+
 package Remind::PDF::Entry::week;
 use base 'Remind::PDF::Entry';
 
@@ -91,7 +130,7 @@ sub render
 package Remind::PDF::Entry::moon;
 use base 'Remind::PDF::Entry';
 
-sub adjust {
+sub _adjust {
         my ($self) = @_;
         my ($phase, $size, $fontsize, $msg) = split(/\s+/, $self->{body}, 4);
         $phase = '' unless defined($phase);
@@ -181,7 +220,7 @@ sub draw_moon
 
 package Remind::PDF::Entry::shade;
 use base 'Remind::PDF::Entry';
-sub adjust
+sub _adjust
 {
         my ($self) = @_;
         if ($self->{body} =~ /^(\d+)\s+(\d+)\s+(\d+)/) {
@@ -195,7 +234,7 @@ package Remind::PDF::Entry::color;
 use base 'Remind::PDF::Entry';
 
 # Strip the RGB prefix from body
-sub adjust
+sub _adjust
 {
         my ($self) = @_;
         $self->{body} =~ s/^\d+\s+\d+\s+\d+\s+//;
@@ -203,11 +242,15 @@ sub adjust
 
 package Remind::PDF::Entry::postscript;
 use base 'Remind::PDF::Entry';
+sub render {}
+
 package Remind::PDF::Entry::psfile;
 use base 'Remind::PDF::Entry';
+sub render {}
+
 package Remind::PDF::Entry::pango;
 use base 'Remind::PDF::Entry';
-sub adjust
+sub _adjust
 {
         my ($self) = @_;
         if ($self->{body} =~ /^@([-0-9.]+),\s*([-0-9.]+)\s*(.*)/) {
@@ -262,6 +305,7 @@ sub render
 
 package Remind::PDF::Entry::UNKNOWN;
 use base 'Remind::PDF::Entry';
+sub render {}
 
 1;
 

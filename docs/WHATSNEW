@@ -11,7 +11,10 @@ CHANGES TO REMIND
   type that lets you format the text in the PDF calendar (by changing the
   font size, color, underlining, etc.)
 
-  rem2pdf requires the Pango and Cairo Perl modules.
+  rem2pdf requires the Pango and Cairo Perl modules.  On Debian or
+  Debian-derived systems, these may be installed with:
+
+      apt install libpango-perl libcairo-perl
 
 - NEW FEATURE: remind:  New system variables $Sunday through $Saturday
   and $January through $December let you set weekday and month names

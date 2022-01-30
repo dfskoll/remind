@@ -941,6 +941,7 @@ static void PrintLeft(char const *s, int width, char pad)
     wchar_t static_buf[128];
     wchar_t *buf;
     wchar_t *ws;
+    int display_len;
 
     if (!len) {
 	for (i=0; i<width; i++) {
@@ -959,14 +960,13 @@ static void PrintLeft(char const *s, int width, char pad)
 	}
     }
     (void) mbstowcs(buf, s, len+1);
+    display_len = wcswidth(buf, len+1);
+
     ws = buf;
-    for (i=0; i<width; i++) {
+    for (i=0; i<width;) {
 	if (*ws) {
             PutWideChar(*ws++);
-            if (wcwidth(*ws) == 0) {
-                /* Don't count this character... it's zero-width */
-                i--;
-            }
+            i+= wcwidth(*ws);
         } else {
             break;
         }
@@ -975,7 +975,7 @@ static void PrintLeft(char const *s, int width, char pad)
     while (*ws && wcwidth(*ws) == 0) {
         PutWideChar(*ws++);
     }
-    for (i=len; i<width; i++) fputc(pad, stdout);
+    for (i=display_len; i<width; i++) fputc(pad, stdout);
     if (buf != static_buf) free(buf);
 #endif
 

@@ -232,11 +232,16 @@ sub parse_input
     chomp($line);
     ($Month, $Year, $Numdays, $Firstwkday, $Mondayfirst) = split(' ', $line);
 
+    $Month =~ s/_/ /g;
     # Day names
     $line = <STDIN>;
     return 0 unless $line;
     chomp($line);
     @Daynames = split(' ', $line);
+
+    for (my $i=0; $i<7; $i++) {
+            $Daynames[$i] =~ s/_/ /g;
+    }
 
     # Prevmon prevlen
     $line = <STDIN>;

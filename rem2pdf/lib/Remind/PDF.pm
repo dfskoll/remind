@@ -120,6 +120,7 @@ sub read_one_month
         # Month Year Days FirstWkday MondayFirst
         if ($line =~ /^(\S+) (\d+) (\d+) (\d+) (\d+)/) {
                 $self->{monthname} = $1;
+                $self->{monthname} =~ s/_/ /g;
                 $self->{year} = $2;
                 $self->{daysinmonth} = $3;
                 $self->{firstwkday} = $4;
@@ -132,7 +133,7 @@ sub read_one_month
         $line = $in->getline();
         chomp($line);
         if ($line =~ /^\S+ \S+ \S+ \S+ \S+ \S+ \S+$/) {
-                @{$self->{daynames}} = split(/ /, $line);
+                @{$self->{daynames}} = map { s/_/ /g; $_; } (split(/ /, $line));
         } else {
                 return (undef, "Cannot interpret line: $line");
         }

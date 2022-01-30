@@ -964,9 +964,14 @@ proc FillCalWindow {} {
     gets $file line
     regexp {^([^ ]*) ([0-9][0-9][0-9][0-9]) ([0-9][0-9]?) ([0-9]) ([0-9])} $line dummy monthName year daysInMonth firstWkday mondayFirst
 
+    set monthName [regsub -all {_} $monthName " "]
     # Get the day names
     gets $file line
-    set DayNames $line
+    set DayNames {}
+    foreach day $line {
+        set day [regsub -all {_} $day " "];
+        lappend DayNames $day
+    }
 
     ConfigureCalWindow $monthName $year $firstWkday $daysInMonth
 

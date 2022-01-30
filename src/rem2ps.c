@@ -383,6 +383,7 @@ void DoPsCal(void)
     int firstcol;
     DynamicBuffer buf;
     CalEntry *c, *d, *p;
+    char *s;
 
 /* Read the month and year name, followed by # days in month and 1st day of
    month */
@@ -391,11 +392,27 @@ void DoPsCal(void)
     sscanf(DBufValue(&buf), "%s %s %d %d %d", month, year, &days, &wkday,
 	   &MondayFirst);
 
+    /* Replace underscores in month name with spaces */
+    s = month;
+    while(*s) {
+        if (*s == '_') *s = ' ';
+        s++;
+    }
+
     /* Get day names */
     DBufGets(&buf, stdin);
     sscanf(DBufValue(&buf), "%32s %32s %32s %32s %32s %32s %32s",
 	   DayName[0], DayName[1], DayName[2], DayName[3],
 	   DayName[4], DayName[5], DayName[6]);
+
+    /* Replace underscores in day names with spaces */
+    for (i=0; i<7; i++) {
+        s = DayName[i];
+        while(*s) {
+            if (*s == '_') *s = ' ';
+            s++;
+        }
+    }
 
     /* We write the prolog here because it's only at this point that
        MondayFirst is set correctly. */

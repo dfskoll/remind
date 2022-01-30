@@ -30,7 +30,7 @@ test:
 	@$(MAKE) -C src -s test
 
 distclean: clean
-	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out www/Makefile rem2pdf/Makefile.top rem2pdf/Makefile.old rem2pdf/Makefile rem2pdf/Makefile.PL
+	rm -f config.cache config.log config.status src/Makefile src/config.h tests/test.out www/Makefile rem2pdf/Makefile.top rem2pdf/Makefile.old rem2pdf/Makefile rem2pdf/Makefile.PL rem2pdf/bin/rem2pdf
 
 src/Makefile: src/Makefile.in
 	./configure

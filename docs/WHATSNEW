@@ -1,5 +1,39 @@
 CHANGES TO REMIND
 
+* VERSION 3.4 Patch 0 - 2022-??-??
+
+- MAJOR CHANGE: Remind and its helpers (except for rem2ps) fully support
+  UTF-8.  If your system locale is a UTF-8 locale and your terminal
+  can handle UTF-8 encoding, you can enjoy full Unicode support in Remind.
+
+- NEW FEATURE: Added a rem2pdf Remind-to-PDF converter.  It can handle
+  the full UTF-8 character set and features a new PANGO special reminder
+  type that lets you format the text in the PDF calendar (by changing the
+  font size, color, underlining, etc.)
+
+  rem2pdf requires the Pango and Cairo Perl modules.
+
+- NEW FEATURE: remind:  New system variables $Sunday through $Saturday
+  and $January through $December let you set weekday and month names
+  to whatever you like, permitting you to produce calendars in your
+  local language, even if it's not one of the languages Remind supports
+  by default.
+
+- NEW FEATURE: tkremind: If rem2pdf installed, TkRemind offers you the
+  choice of PDF or PostScript output in the Print dialog.
+
+- BUG FIX: Properly support formatting of double-wide characters in the
+  terminal mode "remind -c" calendar.
+
+- IMPROVEMENT: All localized languages now use UTF-8 exclusively.
+  Support for old character encodings like ISO-8859-1 and ISO-8859-2
+  has been dropped since modern UNIXes have pretty much standardized
+  on UTF-8.
+
+- CHANGE: remind: Non-English versions of remind *no longer* accept
+  non-English month- and weekday-names in trigger specifications.  This
+  was a misfeature.  NOTE INCOMPATIBILITY.
+
 * VERSION 3.3 Patch 12 - 2022-01-24
 
 - UPDATE: rem2html: Use JSON::MaybeXS instead of JSON::Any, since JSON::Any

@@ -12,6 +12,10 @@ emits PostScript code (which draws a calendar) to the standard output.
 See the section "Rem2PS Input Format" for details about the \fB\-p\fR
 data.  This may be useful if you wish to create other \fBRemind\fR
 back-ends.
+.PP
+Note that \fBRem2PS\fR does not handle UTF-8 input.  If you need to
+render characters outside the ASCII character set, see
+\fBrem2pdf\fR instead.
 
 .SH OPTIONS
 .TP
@@ -61,7 +65,9 @@ there is room and otherwise follows \fIn\fR=2 yields the same results as
 .TP
 .B \-i
 Use ISO 8859-1 standard encoding for the PostScript fonts.  If you do
-not use this option, the default encoding is used.
+not use this option, the default encoding is used.  If you use this option,
+you probably also need to convert Remind's output (typically UTF-8)
+to ISO-8859-1 using \fBiconv\fR(1).
 .TP
 .B \-e
 Make the calendar fill the entire page.  By default, the calendar is

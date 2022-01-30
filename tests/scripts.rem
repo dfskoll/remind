@@ -54,4 +54,4 @@ REM [moondate(3)] SPECIAL MOON 3 -1 -1 [moontime(3)]
 
 REM Mon SPECIAL WEEK (W[weekno(today())])
 
-REM SPECIAL PANGO @1,-1 <span size="4800"><i>Rise [sunrise($U)] Set [sunset($U)]</i></span>
+REM SATISFY [$Td != 15] SPECIAL PANGO @1,-1 <span size="4800"><i>Rise [sunrise($U)] Set [sunset($U)]</i></span>

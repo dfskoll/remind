@@ -657,13 +657,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    break;
 
 	case '"':
-	    if (PsCal != PSCAL_LEVEL3) {
-		if (DBufPutc(dbuf, QUOTE_MARKER) != OK) return E_NO_MEM;
-		has_quote = 1;
-	    } else {
-		if (DBufPutc(dbuf, '%') != OK) return E_NO_MEM;
-		if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
-	    }
+            if (DBufPutc(dbuf, QUOTE_MARKER) != OK) return E_NO_MEM;
+            has_quote = 1;
 	    break;
 
 	default:

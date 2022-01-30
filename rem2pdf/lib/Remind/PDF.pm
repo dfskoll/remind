@@ -15,7 +15,6 @@ use JSON::MaybeXS;
 Remind::PDF - Render a month's worth of Remind data to PDF
 
 =cut
-
 sub create_from_stream
 {
         my ($class, $in, $specials_accepted) = @_;
@@ -26,10 +25,29 @@ sub create_from_stream
                         my $self = bless {}, $class;
                         return $self->read_one_month($in, $_, $specials_accepted);
                 } elsif ($_ eq '[') {
-                        return (undef, "Format not supported: Use 'remind -pp', not 'remind -ppp'");
+                        return Remind::PDF::Multi->create_from_stream($in, $specials_accepted);
                 }
         }
         return (undef, "Could not find any remind -p output anywhere");
+}
+
+sub create_from_hash
+{
+        my ($class, $hash, $specials_accepted) = @_;
+
+        bless $hash, $class;
+
+        my $filtered_entries = [];
+        foreach my $e (@{$hash->{entries}}) {
+                if ($hash->accept_special($e, $specials_accepted)) {
+                        my $day = $e->{date};
+                        $day =~ s/^\d\d\d\d-\d\d-//;
+                        $day =~ s/^0//;
+                        push(@{$filtered_entries->[$day]}, Remind::PDF::Entry->new_from_hash($e));
+                }
+        }
+        $hash->{entries} = $filtered_entries;
+        return $hash;
 }
 
 sub read_one_month
@@ -631,6 +649,68 @@ sub draw_small_calendar
                         $col = 0;
                         $y += $h;
                 }
+        }
+}
+
+package Remind::PDF::Multi;
+
+sub create_from_stream
+{
+        my ($class, $in, $specials_accepted) = @_;
+        my $json = "[\n";
+        my $right_bracket = 0;
+        my $right_curly = 0;
+
+        while(<$in>) {
+                $json .= $_;
+                chomp;
+                if ($_ eq ']') {
+                        $right_bracket++;
+                        if ($right_bracket == 2 && $right_curly == 1) {
+                                return $class->create_from_json($json, $specials_accepted);
+                        }
+                } elsif($_ eq '}') {
+                        $right_curly++;
+                } else {
+                        $right_bracket = 0;
+                        $right_curly = 0;
+                }
+        }
+        return(undef, 'Unable to parse JSON stream');
+}
+
+sub create_from_json
+{
+        my ($class, $json, $specials_accepted) = @_;
+        my $parser = JSON::MaybeXS->new(utf8 => 1);
+
+        my $array;
+        eval {
+                $array = $parser->decode($json);
+        };
+        if (!$array) {
+                return (undef, "Unable to decode JSON: $@");
+        }
+        if (ref($array) ne 'ARRAY') {
+                return (undef, "Expecting array; found " . ref($array));
+        }
+
+        my $self = bless { months => []}, $class;
+        foreach my $m (@$array) {
+                my ($e, $error) = Remind::PDF->create_from_hash($m, $specials_accepted);
+                if (!$e) {
+                        return (undef, $error);
+                }
+                push(@{$self->{entries}}, $e);
+        }
+        return ($self, undef);
+}
+
+sub render
+{
+        my ($self, $cr, $settings) = @_;
+        foreach my $e (@{$self->{entries}}) {
+                $e->render($cr, $settings);
         }
 }
 

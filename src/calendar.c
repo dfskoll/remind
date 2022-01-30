@@ -248,6 +248,28 @@ static void WriteBottomCalLine (void);
 static void WriteIntermediateCalLine (void);
 static void WriteCalDays (void);
 
+static char const *
+despace(char const *s)
+{
+    static char buf[256];
+
+    char *t = buf;
+    if (strlen(s) > sizeof(buf)-1) {
+        /* Punt. :( */
+        return s;
+    }
+    while (*s) {
+        if (isspace(*s)) {
+            *t++ = '_';
+        } else {
+            *t++ = *s;
+        }
+        s++;
+    }
+    *t = 0;
+    return buf;
+}
+
 void PrintJSONString(char const *s)
 {
     while (*s) {
@@ -714,7 +736,7 @@ static void DoCalendarOneWeek(int nleft)
 /***************************************************************/
 static void DoCalendarOneMonth(void)
 {
-    int y, m, d, mm, yy;
+    int y, m, d, mm, yy, i, j;
 
     if (!DoSimpleCalendar) WriteCalHeader();
 
@@ -734,11 +756,17 @@ static void DoCalendarOneMonth(void)
 	}
 	if (PsCal < PSCAL_LEVEL3) {
 	    printf("%s %d %d %d %d\n",
-		   get_month_name(m), y, DaysInMonth(m, y), (JulianToday+1) % 7,
+		   despace(get_month_name(m)), y, DaysInMonth(m, y), (JulianToday+1) % 7,
 		   MondayFirst);
-	    printf("%s %s %s %s %s %s %s\n",
-		   get_day_name(6), get_day_name(0), get_day_name(1), get_day_name(2),
-		   get_day_name(3), get_day_name(4), get_day_name(5));
+            for (i=0; i<7; i++) {
+                j=(i+6)%7;
+                if (i) {
+                    printf(" %s", despace(get_day_name(j)));
+                } else {
+                    printf("%s", despace(get_day_name(j)));
+                }
+            }
+            printf("\n");
 	} else {
 	    PrintJSONKeyPairString("monthname", get_month_name(m));
 	    PrintJSONKeyPairInt("year", y);

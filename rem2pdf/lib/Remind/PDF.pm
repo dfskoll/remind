@@ -14,6 +14,19 @@ use JSON::MaybeXS;
 
 Remind::PDF - Render a month's worth of Remind data to PDF
 
+=head1 CLASS METHODS
+
+=head2 Remind::PDF->create_from_stream($in, $specials_accepted)
+
+This method reads data from an open file handle C<$in>.  C<$specials_accepted>
+is a hashref of SPECIAL reminder types to accept; the key is the name of the
+SPECIAL (all lower-case) and the value should be 1.  Any SPECIAL reminders
+not in the hash are ignored.
+
+This function returns a two-element array: C<($obj, $err)>.  On success,
+C<$obj> will be a C<Remind::PDF> object and C<$err> will be undef.  On
+failure, C<$obj> will be undef and C<$err> will be an error message.
+
 =cut
 sub create_from_stream
 {
@@ -31,6 +44,19 @@ sub create_from_stream
         return (undef, "Could not find any remind -p output anywhere");
 }
 
+=head2 Remind::PDF->create_from_hash($hash, $specials_accepted)
+
+This method takes data from a hash C<$hash>, which must be one month's
+worth of data from C<remind -ppp> output.  C<$specials_accepted> is a
+hashref of SPECIAL reminder types to accept; the key is the name of
+the SPECIAL (all lower-case) and the value should be 1.  Any SPECIAL
+reminders not in the hash are ignored.
+
+This function returns a two-element array: C<($obj, $err)>.  On success,
+C<$obj> will be a C<Remind::PDF> object and C<$err> will be undef.  On
+failure, C<$obj> will be undef and C<$err> will be an error message.
+
+=cut
 sub create_from_hash
 {
         my ($class, $hash, $specials_accepted) = @_;
@@ -38,6 +64,10 @@ sub create_from_hash
         bless $hash, $class;
 
         my $filtered_entries = [];
+        for (my $i=0; $i<=31; $i++) {
+                $filtered_entries->[$i] = [];
+        }
+
         foreach my $e (@{$hash->{entries}}) {
                 if ($hash->accept_special($e, $specials_accepted)) {
                         my $day = $e->{date};
@@ -50,6 +80,19 @@ sub create_from_hash
         return $hash;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 read_one_month($in, $first_line, $specials_accepted)
+
+This function reads one month's worth of data from the file handle
+C<$in>.  C<$first_line> is the line that was read from C<$in>
+just before calling this function.  C<$specials_accepted> is a
+hashref as documented above.
+
+The return value is the same C<($obj, $err)> two-element array
+as C<create_from_stream> returns.
+
+=cut
 sub read_one_month
 {
         my ($self, $in, $first_line, $specials_accepted) = @_;
@@ -121,6 +164,16 @@ sub read_one_month
         return $self->read_one_month_p($in, $specials_accepted);
 }
 
+=head2 read_one_month_p($in, $specials_accepted)
+
+This function reads one month's worth of data from the file handle
+C<$in>, assuming the original "remind -p" format.
+C<$specials_accepted> is a hashref as documented above.
+
+The return value is the same C<($obj, $err)> two-element array
+as C<create_from_stream> returns.
+
+=cut
 sub read_one_month_p
 {
         my ($self, $in, $specials_accepted) = @_;
@@ -145,6 +198,13 @@ sub read_one_month_p
         return (undef, "Missing # rem2ps end marker");
 }
 
+=head2 parse_oldstyle_line ($line)
+
+This method parses an old-style "remind -p" line
+and returns a hashref containing some or all of the
+hash keys found in the newer "remind -pp" JSON output.
+
+=cut
 sub parse_oldstyle_line
 {
         my ($self, $line) = @_;
@@ -173,6 +233,16 @@ sub parse_oldstyle_line
         return $hash;
 }
 
+=head2 read_one_month_pp($in, $specials_accepted)
+
+This function reads one month's worth of data from the file handle
+C<$in>, assuming the "remind -pp" partial-JSON format.
+C<$specials_accepted> is a hashref as documented above.
+
+The return value is the same C<($obj, $err)> two-element array
+as C<create_from_stream> returns.
+
+=cut
 sub read_one_month_pp
 {
         my ($self, $in, $specials_accepted) = @_;
@@ -202,6 +272,14 @@ sub read_one_month_pp
         return (undef, "Missing # rem2ps2 end marker");
 }
 
+=head2 accept_special($hash, $specials_accepted)
+
+Given a hashref C<$hash> consisting of one entry parsed
+from the "remind -p" stream and a C<$specials_accepted> hash,
+return 1 if we should include this entry in the calendar or
+0 if mot.
+
+=cut
 sub accept_special
 {
         my ($self, $hash, $specials_accepted) = @_;
@@ -210,6 +288,13 @@ sub accept_special
         return 0;
 }
 
+=head2 find_last_special($special, $entries)
+
+Given an array of Reminder entries, find the last
+C<$special>-type SPECIAL in the array.  Return
+the entry if one was found or undef if not.
+
+=cut
 sub find_last_special
 {
         my ($self, $special, $entries) = @_;
@@ -221,6 +306,14 @@ sub find_last_special
         return $found;
 }
 
+=head2 render($cr, $settings)
+
+Render a calendar for one month.  C<$cr> is a Cairo
+drawing context, and C<$settings> is a settings hash
+passed in by the caller.  See the source code of
+C<rem2pdf> for the contents of C<$settings>
+
+=cut
 sub render
 {
         my ($self, $cr, $settings) = @_;
@@ -373,6 +466,19 @@ sub render
         $cr->show_page();
 }
 
+=head2 draw_row($cr, $settings, $so_far, $row, $start_day, $start_col)
+
+Draw a single row in the calendar.  C<$cr> is a Cairo drawing context
+and C<$settings> is the settings hash passed to C<render>.  C<$so_far>
+is the Y-coordinate of the top of the row; drawing starts at this
+coordinate.  C<$start_day> is the day of the month at which the
+row starts and C<$start> col is the column number (0-6) at which
+to start drawing from C<$start_day>
+
+Returns the Y coordinate at which to start drawing the I<next>
+calendar row.
+
+=cut
 sub draw_row
 {
         my ($self, $cr, $settings, $so_far, $row, $start_day, $start_col) = @_;
@@ -409,6 +515,14 @@ sub draw_row
         return $so_far + $height + $settings->{border_size};
 }
 
+=head2 col_box_coordinates($so_far, $col, $height, $settings)
+
+Returns a four-element array C<($x1, $y1, $x2, $y2)> representing
+the bounding box of the calendar box at column C<$col> (0-6).  C<$height>
+is the height of the box and C<$settings> is the settings hashref
+passed to C<render>.
+
+=cut
 sub col_box_coordinates
 {
         my ($self, $so_far, $col, $height, $settings) = @_;
@@ -422,6 +536,21 @@ sub col_box_coordinates
             );
 }
 
+=head2 draw_day($cr, $settings, $so_far, $day, $col, $height)
+
+Renders a single day's worth of reminders.  C<$cr> is a Cairo
+drawing context and C<$settings> is the settings hash passed
+to C<render>.  C<$so_far> is the Y-coordinate of the top
+of the box and C<$col> is the column number.
+
+C<$height> is the height of the box.  If C<$height> is passed
+in as zero, then do not actually render anything... instead,
+compute how high the box should be.  If C<$height> is non-zero,
+then it is the height of the box.
+
+Returns the height required for the calendar box.
+
+=cut
 sub draw_day
 {
         my ($self, $cr, $settings, $so_far, $day, $col, $height) = @_;
@@ -505,6 +634,17 @@ sub draw_day
         return $h + $entry_height + 2 * $settings->{border_size};
 }
 
+=head2 draw_daynames($cr, $settings, $so_far)
+
+Draw the weekday names heading.  C<$cr> is a Cairo drawing context
+and C<$settings> is the settings hash passed to C<render>.  C<$so_far>
+is the Y-coordinate of the top of the row; drawing starts at this
+coordinate.
+
+Returns the Y coordinate at which to start drawing the first
+calendar row.
+
+=cut
 sub draw_daynames
 {
         my ($self, $cr, $settings, $so_far) = @_;
@@ -539,6 +679,16 @@ sub draw_daynames
         return $so_far + $height + $settings->{border_size} * .75;
 }
 
+=head2 draw_title($cr, $settings)
+
+Draw the title ("Monthname Year") at the top of the calendar.
+C<$cr> is a Cairo drawing context
+and C<$settings> is the settings hash passed to C<render>.
+
+Returns the Y coordinate at which to start drawing the row
+containing the weekday names.
+
+=cut
 sub draw_title
 {
         my ($self, $cr, $settings) = @_;
@@ -559,6 +709,16 @@ sub draw_title
         return $h + $settings->{margin_top} + $settings->{border_size};
 }
 
+=head2 draw_small_calendar($cr, $x, $y, $width, $height, $settings, $month, $days, $start_wkday)
+
+Draw a small calendar on the Cairo context C<$cr>.  The top left-hand
+corner of the box is at C<($x, $y)> and the size of the box is
+C<($width, $height>).  $settings is the settings hashref passed to
+C<render>.  C<$month> is the name of the month to draw and C<$days> is
+the number of days in the month.  Finally, C<$start_wkday> is the
+weekday (0=Sunday, 6=Saturday) on which the month starts
+
+=cut
 sub draw_small_calendar
 {
         my ($self, $cr, $x, $y, $width, $height, $settings, $month, $days, $start_wkday) = @_;
@@ -654,6 +814,34 @@ sub draw_small_calendar
 
 package Remind::PDF::Multi;
 
+=head1 NAME
+
+Remind::PDF::Multi - A container for multiple months' worth of calendar data
+
+=head1 DESCRIPTION
+
+The C<remind -ppp> output consists of a JSON array with each element
+representing one month's worth of reminders.  C<Remind::PDF::Multi>
+reads this output and returns an instance of itself containing
+an array of C<Remind::PDF> objects, one object for each month.
+
+=head1 CLASS METHODS
+
+=head2 Remind::PDF::Multi->create_from_stream($in, $specials_accepted)
+
+This method reads data from an open file handle C<$in>.  C<$specials_accepted>
+is a hashref of SPECIAL reminder types to accept; the key is the name of the
+SPECIAL (all lower-case) and the value should be 1.  Any SPECIAL reminders
+not in the hash are ignored.
+
+This function returns a two-element array: C<($obj, $err)>.  On
+success, C<$obj> will be a C<Remind::PDF::Multi> object and C<$err>
+will be undef.  On failure, C<$obj> will be undef and C<$err> will be
+an error message.
+
+=cut
+
+
 sub create_from_stream
 {
         my ($class, $in, $specials_accepted) = @_;
@@ -678,6 +866,20 @@ sub create_from_stream
         }
         return(undef, 'Unable to parse JSON stream');
 }
+
+=head2 Remind::PDF::Multi->create_from_stream($json, $specials_accepted)
+
+This method takes data from a JSON string <$json>.  C<$specials_accepted>
+is a hashref of SPECIAL reminder types to accept; the key is the name of the
+SPECIAL (all lower-case) and the value should be 1.  Any SPECIAL reminders
+not in the hash are ignored.
+
+This function returns a two-element array: C<($obj, $err)>.  On
+success, C<$obj> will be a C<Remind::PDF::Multi> object and C<$err>
+will be undef.  On failure, C<$obj> will be undef and C<$err> will be
+an error message.
+
+=cut
 
 sub create_from_json
 {
@@ -712,6 +914,16 @@ sub create_from_json
         return ($self, undef);
 }
 
+=head1 INSTANCE METHODS
+
+=head2 render($cr, $settings)
+
+Iterate through all the C<Remind::PDF> objects
+and call their C<render> methods.  This method
+renders as many months worth of calendar data
+as were read from the C<remind -ppp> stream
+
+=cut
 sub render
 {
         my ($self, $cr, $settings) = @_;

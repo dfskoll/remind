@@ -1,0 +1,22 @@
+rem2pdf is a Perl program that takes the output of "remind -p" and
+produces a PDF calendar.  See "man rem2pdf" for details.
+
+rem2pdf has the following Perl modules as prerequisites:
+
+        Pango - https://metacpan.org/pod/Pango
+        Cairo - https://metacpan.org/pod/Cairo
+
+On Debian or Debian-derived systems, these can be installed with:
+
+        apt install libpango-perl libcairo-perl
+
+On Red Hat or Red Hat-derived systems, you need to install the perl-Pango
+and perl-Cairo RPMs, which may require adding other repos to your list of
+RPM sources.
+
+rem2pdf is built and installed in the usual Perl program way:
+
+        perl Makefile.PL && make && sudo make install
+
+--
+Dianne Skoll - <dianne@skoll.ca>

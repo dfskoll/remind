@@ -141,6 +141,18 @@ set Remind "remind"
 # Rem2PS program to execute -- supply full path if you want
 set Rem2PS "rem2ps"
 
+# Rem2PDF program to execute -- supply full path if you want
+set Rem2PDF "rem2pdf"
+
+# Check if we have Rem2PDF
+set HaveRem2PDF 0
+
+set a [exec sh -c "$Rem2PDF < /dev/null 2>&1 || true"]
+
+if {[string match "rem2pdf:*" "$a"]} {
+    set HaveRem2PDF 1
+}
+
 # Reminder file to source -- default
 set ReminderFile {NOSUCHFILE}
 set ReminderFile [file nativename "~/.reminders"]
@@ -226,6 +238,9 @@ set Option(PrintMargins) 36pt
 
 set OptDescr(PrintSmallCalendars) "(0/1) If 1, print small calendars in PostScript output"
 set Option(PrintSmallCalendars) 1
+
+set OptDescr(PrintFormat) "Print format: pdf or ps"
+set Option(PrintFormat) ps
 
 set WarningHeaders [list "# Lines staring with REM TAG TKTAGnnn ... were created by tkremind" "# Do not edit them by hand or results may be unpredictable."]
 
@@ -1125,8 +1140,9 @@ proc Status { stuff } {
 #   None
 #---------------------------------------------------------------------------
 proc DoPrint {} {
-    global Rem2PS PSCmd Option PrintStatus
+    global Rem2PS Rem2PDF HaveRem2PDF PSCmd Option PrintStatus
     global CurMonth CurYear MonthNames
+
     catch {destroy .p}
     toplevel .p
     wm title .p "TkRemind Print..."
@@ -1146,6 +1162,13 @@ proc DoPrint {} {
     radiobutton .p.tocmd -text "To command: " -variable Option(PrintDest) -value command
     entry .p.command
     .p.command insert end "lpr"
+
+    if { $HaveRem2PDF } {
+        frame .p.ff -relief sunken -border 2
+        label .p.format -text "Output Format:"
+        radiobutton .p.pdf -text "PDF" -variable Option(PrintFormat) -value pdf
+        radiobutton .p.ps -text "PostScript" -variable Option(PrintFormat) -value ps
+    }
 
     label .p.size -text "Paper Size:"
     radiobutton .p.letter -text "Letter" -variable Option(PrintSize) -value letter
@@ -1168,14 +1191,22 @@ proc DoPrint {} {
     button .p.print -text "Print" -command {set PrintStatus print}
     button .p.cancel -text "Cancel" -command {set PrintStatus cancel}
 
-    pack .p.f1 .p.f2 .p.f2a .p.f3 .p.f3a \
-	    -side top -fill both -expand 1 -anchor w
+    if {$HaveRem2PDF} {
+        pack .p.f1 .p.ff .p.f2 .p.f2a .p.f3 .p.f3a \
+            -side top -fill both -expand 1 -anchor w
+    } else {
+        pack .p.f1 .p.f2 .p.f2a .p.f3 .p.f3a \
+            -side top -fill both -expand 1 -anchor w
+    }
     pack .p.fill .p.right .p.encoding .p.calendars -in .p.f3a \
 	    -side top -anchor w -fill none -expand 0
     pack .p.f4 -side top -fill both -expand 1 -anchor w
     pack .p.f11 .p.f12 -in .p.f1 -side top -fill none -expand 0 -anchor w
     pack .p.tofile .p.filename .p.browse -in .p.f11 -side left -fill none -expand 0 -anchor w
     pack .p.tocmd .p.command -in .p.f12 -side left -fill none -expand 0 -anchor w
+    if { $HaveRem2PDF } {
+        pack .p.format .p.pdf .p.ps -in .p.ff -side top -fill none -expand 0 -anchor w
+    }
     pack .p.size .p.letter .p.a4 -in .p.f2 -side top -fill none -expand 0 -anchor w
     pack .p.margin .p.24pt .p.36pt .p.48pt -in .p.f2a -side top -anchor w -fill none -expand 0
     pack .p.orient .p.landscape .p.portrait -in .p.f3 -side top -fill none -expand 0 -anchor w
@@ -1218,21 +1249,47 @@ proc DoPrint {} {
 	set fname "| $cmd"
     }
 
-    # Build the command line
-    set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
-    set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
-    if {$Option(PrintSize) == "letter"} {
-	append cmd " -m Letter"
+    if {$HaveRem2PDF && $Option(PrintFormat) == "pdf"} {
+        set p [regsub EXTRA $PSCmd "-itkpdf=1 $Option(ExtraRemindArgs)"]
+        set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PDF"
     } else {
-	append cmd " -m A4"
+        set p [regsub EXTRA $PSCmd $Option(ExtraRemindArgs)]
+        set cmd "$p 1 [lindex $MonthNames $CurMonth] $CurYear | $Rem2PS"
+        set Option(PrintFormat) ps
+    }
+
+    if {$Option(PrintSize) == "letter"} {
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -m Letter"
+        } else {
+            append cmd " --media=Letter"
+        }
+    } else {
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -m A4"
+        } else {
+            append cmd " --media=A4"
+        }
     }
 
     if {$Option(PrintMargins) == "24pt"} {
-	append cmd " -or 24 -ol 24 -ot 24 -ob 24"
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -or 24 -ol 24 -ot 24 -ob 24"
+        } else {
+            append cmd " --margin-right=24 --margin-left=24 --margin-top=24 --margin-bottom=24"
+        }
     } elseif {$Option(PrintMargins) == "36pt"} {
-	append cmd " -or 36 -ol 36 -ot 36 -ob 36"
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -or 36 -ol 36 -ot 36 -ob 36"
+        } else {
+            append cmd " --margin-right=36 --margin-left=36 --margin-top=36 --margin-bottom=36"
+        }
     } else {
-	append cmd " -or 48 -ol 48 -ot 48 -ob 48"
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -or 48 -ol 48 -ot 48 -ob 48"
+        } else {
+            append cmd " --margin-right=48 --margin-left=48 --margin-top=48 --margin-bottom=48"
+        }
     }
 
     if {$Option(PrintOrient) == "landscape"} {
@@ -1247,7 +1304,9 @@ proc DoPrint {} {
         append cmd " -x"
     }
     if {$Option(PrintEncoding)} {
-	append cmd " -i"
+        if {$Option(PrintFormat) == "ps"} {
+            append cmd " -i"
+        }
     }
 
     if {$Option(PrintSmallCalendars)} {

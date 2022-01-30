@@ -248,12 +248,14 @@ sub parse_input
     return 0 unless $line;
     chomp($line);
     ($Prevmon, $Prevlen) = split(' ', $line);
+    $Prevmon =~ s/_/ /g;
 
     # Nextmon nextlen
     $line = <STDIN>;
     return 0 unless $line;
     chomp($line);
     ($Nextmon, $Nextlen) = split(' ', $line);
+    $Nextmon =~ s/_/ /g;
 
     $found_data = 1;
     my $class;

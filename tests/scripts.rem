@@ -9,7 +9,20 @@ SET $Tuesday "mardi"
 SET $Wednesday "水曜日"
 SET $Thursday "четвер"
 SET $Friday "piątek"
-Set $Saturday "שבת"
+SET $Saturday "יום שבת"
+
+SET $January "January"
+SET $February "février"
+SET $March "März"
+SET $April "אַפּרִיל"
+SET $May "ግንቦት"
+SET $June "Чэрвень"
+SET $July "تموز"
+SET $August "Наймдугаар сар"
+SET $September "Вересень"
+SET $October "październik"
+SET $November "נאוועמבער"
+SET $December "दिसंबर"
 
 REM 1 MSG Përkujtues
 REM 2 SPECIAL SHADE 192 192 255
@@ -18,7 +31,7 @@ REM 3 MSG 提醒
 REM 4 MSG રીમાઇન્ડર
 REM 5 MSG Emlékeztető
 REM 6 MSG Áminning
-REM 7 MSG תִזכּוֹרֶת
+REM 7 SPECIAL PANGO <u>תִזכּוֹרֶת</u>
 REM 8 MSG अनुस्मारक
 REM 9 SPECIAL COLOR 0 0 192 Эскертүү
 REM 10 SPECIAL COLOR 0 192 0 Напоминание

@@ -783,7 +783,7 @@ static void DoCalendarOneMonth(void)
 	} else yy=y;
 
 	if (PsCal < PSCAL_LEVEL3) {
-	    printf("%s %d\n", get_month_name(mm), DaysInMonth(mm,yy));
+	    printf("%s %d\n", despace(get_month_name(mm)), DaysInMonth(mm,yy));
 	} else {
 	    PrintJSONKeyPairString("prevmonthname", get_month_name(mm));
 	    PrintJSONKeyPairInt("daysinprevmonth", DaysInMonth(mm, yy));
@@ -794,7 +794,7 @@ static void DoCalendarOneMonth(void)
 	    mm = 0; yy = y+1;
 	} else yy=y;
 	if (PsCal < PSCAL_LEVEL3) {
-	    printf("%s %d\n", get_month_name(mm), DaysInMonth(mm,yy));
+	    printf("%s %d\n", despace(get_month_name(mm)), DaysInMonth(mm,yy));
 	} else {
 	    PrintJSONKeyPairString("nextmonthname", get_month_name(mm));
 	    PrintJSONKeyPairInt("daysinnextmonth", DaysInMonth(mm, yy));

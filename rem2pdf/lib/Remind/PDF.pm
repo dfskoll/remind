@@ -120,7 +120,6 @@ sub read_one_month
         # Month Year Days FirstWkday MondayFirst
         if ($line =~ /^(\S+) (\d+) (\d+) (\d+) (\d+)/) {
                 $self->{monthname} = $1;
-                $self->{monthname} =~ s/_/ /g;
                 $self->{year} = $2;
                 $self->{daysinmonth} = $3;
                 $self->{firstwkday} = $4;
@@ -129,6 +128,7 @@ sub read_one_month
                 return (undef, "Cannot interpret line: $line");
         }
 
+        $self->{monthname} =~ s/_/ /g;
         # Day names
         $line = $in->getline();
         chomp($line);
@@ -154,6 +154,9 @@ sub read_one_month
         } else {
                 return (undef, "Cannot interpret line: $line");
         }
+
+        $self->{prevmonthname} =~ s/_/ /g;
+        $self->{nextmonthname} =~ s/_/ /g;
 
         if ($first_line eq '# rem2ps2 begin') {
                 # remind -pp format
@@ -248,7 +251,7 @@ sub read_one_month_pp
 {
         my ($self, $in, $specials_accepted) = @_;
 
-        my $json = JSON::MaybeXS->new(utf8 => 1);
+        my $json = JSON::MaybeXS->new(utf8 => 0);
         my $line;
         while ($line = $in->getline()) {
                 chomp($line);
@@ -885,7 +888,7 @@ an error message.
 sub create_from_json
 {
         my ($class, $json, $specials_accepted) = @_;
-        my $parser = JSON::MaybeXS->new(utf8 => 1);
+        my $parser = JSON::MaybeXS->new(utf8 => 0);
 
         my $array;
         eval {
@@ -904,12 +907,6 @@ sub create_from_json
                 if (!$e) {
                         return (undef, $error);
                 }
-                # Re-encode our day names as utf-8
-                my $new_day_names = [];
-                foreach my $d (@{$e->{daynames}}) {
-                        push(@$new_day_names, Encode::encode('UTF-8', $d));
-                }
-                $e->{daynames} = $new_day_names;
                 push(@{$self->{entries}}, $e);
         }
         return ($self, undef);

@@ -340,6 +340,10 @@ month (0 = Sunday, 1 = Monday, 6 = Saturday.)  And \fImonday_first\fR is
 1 if the \fB\-m\fR flag was supplied to \fBRemind\fR, or 0 if it was not.
 All this information is supplied so back-ends don't need any date calculation
 facilities.
+
+Note that all spaces in \fImonth_name\fR will be replaced with
+underscores.  Back-ends should undo this replacement.
+
 .TP
 \fIsun mon tue wed thu fri sat\fR
 This line consists of
@@ -347,6 +351,9 @@ space-separated names of days in whatever language \fBRemind\fR was
 compiled for.  This information can be used by back-ends to annotate
 calendars, and means they don't have to be created for a specific
 language.
+
+Note that all spaces in day names will be replaced with
+underscores.  Back-ends should undo this replacement.
 .TP
 \fInext_mon next_days\fR
 The name of the next month and the number of days in it.

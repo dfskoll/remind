@@ -424,6 +424,19 @@ void DoPsCal(void)
     sscanf(DBufValue(&buf), "%s %d", prevm, &prevdays);
     DBufGets(&buf, stdin);
     sscanf(DBufValue(&buf), "%s %d", nextm, &nextdays);
+
+    /* Replace underscores with spaces in names of next/prev month */
+    s = prevm;
+    while(*s) {
+        if (*s == '_') *s = ' ';
+        s++;
+    }
+    s = nextm;
+    while(*s) {
+        if (*s == '_') *s = ' ';
+        s++;
+    }
+
     DBufFree(&buf);
     MaxDay = days;
     FirstWkDay = wkday;

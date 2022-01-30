@@ -76,7 +76,7 @@ sub render
 
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
         $layout->set_wrap('word-char');
-        $layout->set_text($self->{body});
+        $layout->set_text(Encode::decode('UTF-8', $self->{body}));
         my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $settings->{entry_size} . 'px');
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
@@ -114,7 +114,7 @@ sub render
         my ($x1, $y1, $x2, $y2) = $pdf->col_box_coordinates($so_far, $col, $height, $settings);
         my $layout = Pango::Cairo::create_layout($cr);
 
-        $layout->set_text($self->{body});
+        $layout->set_text(Encode::decode('UTF-8', $self->{body}));
         my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . int(0.75 * $settings->{entry_size}) . 'px');
         $layout->set_font_description($desc);
         my ($wid, $h) = $layout->get_pixel_size();
@@ -167,7 +167,7 @@ sub render
 
         if ($self->{body} ne '') {
                 $layout = Pango::Cairo::create_layout($cr);
-                $layout->set_text($self->{body});
+                $layout->set_text(Encode::decode('UTF-8', $self->{body}));
                 my $desc = Pango::FontDescription->from_string($settings->{entry_font} . ' ' . $self->{fontsize} . 'px');
                 $layout->set_font_description($desc);
                 ($bodywidth, undef) = $layout->get_pixel_size();
@@ -269,7 +269,7 @@ sub render
 
         $layout->set_width(1024 * ($x2 - $x1 - 2 * $settings->{border_size}));
         $layout->set_wrap('word-char');
-        $layout->set_markup($self->{body});
+        $layout->set_markup(Encode::decode('UTF-8', $self->{body}));
 
         if (($layout->get_text() // '') eq '') {
                 # Invalid markup

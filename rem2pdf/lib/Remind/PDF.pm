@@ -701,6 +701,12 @@ sub create_from_json
                 if (!$e) {
                         return (undef, $error);
                 }
+                # Re-encode our day names as utf-8
+                my $new_day_names = [];
+                foreach my $d (@{$e->{daynames}}) {
+                        push(@$new_day_names, Encode::encode('UTF-8', $d));
+                }
+                $e->{daynames} = $new_day_names;
                 push(@{$self->{entries}}, $e);
         }
         return ($self, undef);

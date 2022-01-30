@@ -25,7 +25,7 @@ REM 10 SPECIAL COLOR 0 192 0 Напоминание
 REM 11 SPECIAL COLOR 192 0 0 Υπενθύμιση
 REM 12 SPECIAL PANGO <b>Bold</b> <small>and</small> <i>Italic</i> <big>and</big> <span bgcolor="#C0C0C0" foreground="red"><u>underline</u></span>
 REM 12 MSG Hello
-REM 12 SPECIAL PANGO <span face="zapf chancery" size="10000">Very Fancy</span>
+REM 28 SPECIAL PANGO <span face="zapf chancery" size="10000">Very Fancy</span>
 
 REM 13 SPECIAL PANGO <bad>Invalid
 REM 13 MSG Hello Again

@@ -115,6 +115,8 @@ edit the reminder, thereby gaining access to advanced features of
 To print the current month's calendar, click \fBPrint...\fR on the
 main calendar window.  This brings up the print dialog.  Printing
 either produces a PostScript file or sends PostScript to a UNIX command.
+(If you have \fBrem2pdf\fR installed, you can choose to produce
+PDF output rather than PostScript.)
 
 Select the print destination by choosing either \fBTo file:\fR or
 \fBTo command:\fR in the print dialog.  Press \fBBrowse...\fR to bring
@@ -131,12 +133,13 @@ the directory.
 Select the appropriate paper size and orientation.  Activate
 \fBFill page\fR if you want the calendar to fill the page.  This should
 be the normal case unless you have many reminders in a particular
-day.  (See the \fBRem2PS\fR documentation.)
+day.  (See the \fBRem2PS\fR or \fBrem2pdf\fR documentation.)
 
 Finally, click \fBPrint\fR to print or \fBCancel\fR to cancel.  Note
 that during printing, \fBRemind\fR is called with the
 \fB-itkremind=1\fR option and also an additional \fB-itkprint=1\fR
-option.
+option.  If you are producing PDF output, then the option \fB-itkpdf=1\fR
+is also supplied to \fBRemind\fR.
 
 
 .SH EDITING REMINDERS

@@ -69,6 +69,8 @@ know!  Here are the basic guidelines:
 
 - You can test your language file with the script "tests/tstlang.rem"
 
+- Your localized strings must be encoded using UTF-8.
+
 RELEASE NOTES -- miscellaneous info that couldn't go anywhere else!
 
 1. POPUP REMINDERS

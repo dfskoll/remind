@@ -105,33 +105,6 @@ Token TokArray[] = {
     { "wednesday",	3,	T_WkDay,	2 }
 };
 
-/* If language != English, we must also search the following... */
-#if LANG != ENGLISH
-Token NonEnglishToks[] = {
-    /* NAME          MINLEN      TYPE           VALUE */
-
-    { L_MONDAY,	       3,       T_WkDay,        0 },
-    { L_TUESDAY,       3,       T_WkDay,        1 },
-    { L_WEDNESDAY,     3,       T_WkDay,        2 },
-    { L_THURSDAY,      3,       T_WkDay,        3 },
-    { L_FRIDAY,	       3,       T_WkDay,        4 },
-    { L_SATURDAY,      3,       T_WkDay,        5 },
-    { L_SUNDAY,	       3,       T_WkDay,        6 },
-    { L_JAN,           3,       T_Month,        0 },
-    { L_FEB,           3,       T_Month,        1 },
-    { L_MAR,           3,       T_Month,        2 },
-    { L_APR,           3,       T_Month,        3 },
-    { L_MAY,           3,       T_Month,        4 },
-    { L_JUN,           3,       T_Month,        5 },
-    { L_JUL,           3,       T_Month,        6 },
-    { L_AUG,           3,       T_Month,        7 },
-    { L_SEP,           3,       T_Month,        8 },
-    { L_OCT,           3,       T_Month,        9 },
-    { L_NOV,           3,       T_Month,        10 },
-    { L_DEC,           3,       T_Month,        11 }
-};
-#endif
-
 static int TokStrCmp (Token const *t, char const *s);
 
 /***************************************************************/
@@ -231,19 +204,6 @@ void FindToken(char const *s, Token *tok)
 	}
 	if (r > 0) top = mid-1; else bot=mid+1;
     }
-
-/* If language is other than English, search the DayNames[] and MonthNames[]
-   array. */
-#if LANG != ENGLISH
-    for (i=0; i<(sizeof(NonEnglishToks) / sizeof(Token)); i++) {
-	if (l >= NonEnglishToks[i].MinLen &&
-	    !TokStrCmp(&NonEnglishToks[i], s)) {
-	    tok->type = NonEnglishToks[i].type;
-	    tok->val = NonEnglishToks[i].val;
-	    return;
-	}
-    }
-#endif
 
     return;
 }

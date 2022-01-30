@@ -2752,7 +2752,7 @@ clauses are \fInot\fR taken into account by this function.
 .TP
 .B language()
 Returns a \fBSTRING\fR naming the language supported by \fBRemind\fR.
-(See "Foreign Language Support.") By default, \fBRemind\fR is compiled
+(See "SUPPORT FOR OTHER LANGUAGES") By default, \fBRemind\fR is compiled
 to support English messages, so this function returns "English".  For
 other languages, this function will return the English name of the
 language (e.g. "German") Note that \fBlanguage()\fR is not available
@@ -3197,18 +3197,17 @@ Returns (as a \fBDATE\fR type) the \fBFROM\fR parameter of the last \fBREM\fR or
 
 .TP
 .B trigger(d_date [,t_time [,i_utcflag]]) \fRor\fB trigger(q_datetime [,i_utcflag])
-Returns a string suitable for use in a \fBREM\fR command or a \fBSCANFROM\fR
-or UNTIL clause, allowing you to calculate trigger dates in advance.
-Note that in earlier versions of \fBRemind\fR, \fBtrigger\fR was
-required to convert a date into something the \fBREM\fR command could
-consume.  However, in this version of \fBRemind\fR, you can omit it.
-Note that \fBtrigger()\fR \fIalways\fR returns its result in English,
-even for foreign-language versions of \fBRemind\fR.  This is to avoid
-problems with certain C libraries that do not handle accented
-characters properly.  Normally, the \fIdate\fR and \fItime\fR are the
-local date and time; however, if \fIutcflag\fR is non-zero, the
-\fIdate\fR and \fItime\fR are interpreted as UTC times, and are
-converted to local time.  Examples:
+Returns a string suitable for use in a \fBREM\fR command or a
+\fBSCANFROM\fR or UNTIL clause, allowing you to calculate trigger
+dates in advance.  Note that in earlier versions of \fBRemind\fR,
+\fBtrigger\fR was required to convert a date into something the
+\fBREM\fR command could consume.  However, in this version of
+\fBRemind\fR, you can omit it.  Note that \fBtrigger()\fR \fIalways\fR
+returns its result in English, even for non-English versions of
+\fBRemind\fR.  Normally, the \fIdate\fR and \fItime\fR are the local
+date and time; however, if \fIutcflag\fR is non-zero, the \fIdate\fR
+and \fItime\fR are interpreted as UTC times, and are converted to
+local time.  Examples:
 .RS
 .PP
      trigger('1993/04/01')
@@ -4457,23 +4456,42 @@ error messages.  For an example of this, define the following:
 	fset msgprefix(x) x/0
 .fi
 .PP
-.SH FOREIGN LANGUAGE SUPPORT
+.SH SUPPORT FOR OTHER LANGUAGES
 .PP
 Your version of \fBRemind\fR may have been compiled to support a
 language other than English.  This support may or may not be complete -
 for example, all error and usage messages may still be in English.
-However, at a minimum, foreign-language versions of \fBRemind\fR will
-output names of months and weekdays in the foreign language.  Also,
+However, at a minimum, non-English versions of \fBRemind\fR will
+output names of months and weekdays in the selected language.  Also,
 the substitution mechanism will substitute constructs suitable for the
-foreign language rather than for English.
+selected language rather than for English.
 .PP
-A foreign-language version of \fBRemind\fR will accept either the English
-or foreign-language names of weekdays and months in a reminder script.
-However, for compatibility between versions of \fBRemind\fR, you should
-use only the English names in your scripts.  Also, if your C compiler or
-run-time libraries are not "8-bit clean" or don't understand the ISO-Latin
-character set, month or day names with accented letters may not be
-recognized.
+Note that a non-English version of \fBRemind\fR will accept \fIonly\fR
+English names of weekdays and months in a reminder script.
+.PP
+If there is no support for your particular language, you can set
+\fBRemind\fR system variables so that calendars are printed using
+your language's day and month names.  The system variables that you
+can set are:
+.PP
+.TP
+.B $Monday, $Tuesday, $Wednesday, $Thursday, $Friday, $Saturday
+Set each of these system variables to a string representing the corresponding
+day's name in your language.  Strings must be valid UTF-8 strings.
+.TP
+.B $January, $February, $March, $April, $May, $June, $July, $August, $September, $October, $November, $December
+Set each of these system variables to a string representing the corresponding
+month's name in your language.  Strings must be valid UTF-8 strings.
+.PP
+Note that if you set the day- or month-name system variables, they
+should be set in a section of your script that always is evaluated.
+If you set them inside an \fBIF\fR statement, for example, results
+are unpredictable.
+.PP
+Note also that the \fBRem2PS\fR back-end does not support the full
+range of UTF-8 characters.  The \fBTkRemind\fR, \fBrem2html\fR and
+\fBrem2pdf\fR back-ends all do support the full UTF-8 range.
+
 .PP
 .SH THE HEBREW CALENDAR
 .PP
@@ -4963,7 +4981,7 @@ was copied largely unmodified from "moontool" by John Walker.  The
 sunrise and sunset functions use ideas from programs by Michael
 Schwartz and Marc T. Kaufman.  The Hebrew calendar support was taken
 from "hdate" by Amos Shapir.  OS/2 support was done by Darrel
-Hankerson, Russ Herman, and Norman Walsh.  The supported foreign
+Hankerson, Russ Herman, and Norman Walsh.  The supported
 languages and their translators are listed below.  Languages marked
 "complete" support error messages and usage instructions in that
 language; all others only support the substitution filter mechanism
@@ -5032,4 +5050,4 @@ Catalog\fR, Jewish Publication Society of America.
 .PP
 .SH SEE ALSO
 .PP
-rem, rem2ps, tkremind
+\fBrem\fR(1), \fBrem2ps\fR(1), \fBrem2pdf\fR(1), \fBtkremind\fR(1)

@@ -280,6 +280,10 @@ and the Cairo graphics library (L<https://www.cairographics.org/>) to produce
 its output.  The CPAN modules Pango (L<https://metacpan.org/pod/Pango>)
 and Cairo (L<https://metacpan.org/pod/Cairo>) are prerequisites.
 
+B<rem2pdf> assumes that its input stream is valid UTF-8.  If this is not
+the case, it may render output incorrectly or even fail to render
+output at all.
+
 =head1 OPTIONS
 
 =over

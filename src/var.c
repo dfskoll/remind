@@ -93,18 +93,6 @@ static int longsec_func(int do_set, Value *val)
     return latlong_component_func(do_set, val, &LongSec, -59, 59, "$LongSec", "$Longitude");
 }
 
-static int validate_nonspace(void const *val)
-{
-    char const *s = (char const *) val;
-    while(*s) {
-        if (isspace(*s)) {
-            return E_BAD_TYPE;
-        }
-        s++;
-    }
-    return OK;
-}
-
 static int latitude_longitude_func(int do_set, Value *val, double *var, double min, double max) {
     char buf[64];
     double x;
@@ -753,14 +741,14 @@ typedef struct {
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
     /*  name          mod  type              value          min/mal   max  validate*/
-    {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    validate_nonspace },
-    {"August",         1,  STR_TYPE,     &DynamicMonthName[7], 0,      0,    validate_nonspace },
+    {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    NULL },
+    {"August",         1,  STR_TYPE,     &DynamicMonthName[7], 0,      0,    NULL },
     {"CalMode",        0,  INT_TYPE,     &DoCalendar,          0,      0,    NULL },
     {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,        0,      1,    NULL },
     {"Daemon",         0,  INT_TYPE,     &Daemon,              0,      0,    NULL },
     {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,        0,      0,    NULL },
     {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,    0,      0,    NULL },
-    {"December",       1,  STR_TYPE,     &DynamicMonthName[11],0,      0,    validate_nonspace },
+    {"December",       1,  STR_TYPE,     &DynamicMonthName[11],0,      0,    NULL },
     {"DefaultColor",   1,  SPECIAL_TYPE, default_color_func,   0,      0,    NULL },
     {"DefaultPrio",    1,  INT_TYPE,     &DefaultPrio,         0,      9999, NULL },
     {"DefaultTDelta",  1,  INT_TYPE,     &DefaultTDelta,       0,      1440, NULL },
@@ -770,19 +758,19 @@ static SysVar SysVarArr[] = {
     {"DontTrigAts",    0,  INT_TYPE,     &DontIssueAts,        0,      0,    NULL },
     {"EndSent",        1,  STR_TYPE,     &EndSent,             0,      0,    NULL },
     {"EndSentIg",      1,  STR_TYPE,     &EndSentIg,           0,      0,    NULL },
-    {"February",       1,  STR_TYPE,     &DynamicMonthName[1], 0,      0,    validate_nonspace },
+    {"February",       1,  STR_TYPE,     &DynamicMonthName[1], 0,      0,    NULL },
     {"FirstIndent",    1,  INT_TYPE,     &FirstIndent,         0,      132,  NULL },
     {"FoldYear",       1,  INT_TYPE,     &FoldYear,            0,      1,    NULL },
     {"FormWidth",      1,  INT_TYPE,     &FormWidth,           20,     500,  NULL },
-    {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],   0,      0,    validate_nonspace },
+    {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],   0,      0,    NULL },
     {"HushMode",       0,  INT_TYPE,     &Hush,                0,      0,    NULL },
     {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,          0,      0,    NULL },
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,       0,      0,    NULL },
     {"IntMax",         0,  INT_TYPE,     &IntMax,              0,      0,    NULL },
     {"IntMin",         0,  INT_TYPE,     &IntMin,              0,      0,    NULL },
-    {"January",        1,  STR_TYPE,     &DynamicMonthName[0], 0,      0,    validate_nonspace },
-    {"July",           1,  STR_TYPE,     &DynamicMonthName[6], 0,      0,    validate_nonspace },
-    {"June",           1,  STR_TYPE,     &DynamicMonthName[5], 0,      0,    validate_nonspace },
+    {"January",        1,  STR_TYPE,     &DynamicMonthName[0], 0,      0,    NULL },
+    {"July",           1,  STR_TYPE,     &DynamicMonthName[6], 0,      0,    NULL },
+    {"June",           1,  STR_TYPE,     &DynamicMonthName[5], 0,      0,    NULL },
     {"LatDeg",         1,  SPECIAL_TYPE, latdeg_func,          0,      0,    NULL },
     {"Latitude",       1,  SPECIAL_TYPE, latitude_func,        0,      0,    NULL },
     {"LatMin",         1,  SPECIAL_TYPE, latmin_func,          0,      0,    NULL },
@@ -792,34 +780,34 @@ static SysVar SysVarArr[] = {
     {"Longitude",      1,  SPECIAL_TYPE, longitude_func,       0,      0,    NULL },
     {"LongMin",        1,  SPECIAL_TYPE, longmin_func,         0,      0,    NULL },
     {"LongSec",        1,  SPECIAL_TYPE, longsec_func,         0,      0,    NULL },
-    {"March",          1,  STR_TYPE,     &DynamicMonthName[2], 0,      0,    validate_nonspace },
+    {"March",          1,  STR_TYPE,     &DynamicMonthName[2], 0,      0,    NULL },
     {"MaxSatIter",     1,  INT_TYPE,     &MaxSatIter,          10,     ANY,  NULL },
     {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,        -1,     ANY,  NULL },
-    {"May",            1,  STR_TYPE,     &DynamicMonthName[4], 0,      0,    validate_nonspace },
+    {"May",            1,  STR_TYPE,     &DynamicMonthName[4], 0,      0,    NULL },
     {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,         -780,   780,  NULL },
-    {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],   0,      0,    validate_nonspace },
+    {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],   0,      0,    NULL },
     {"NextMode",       0,  INT_TYPE,     &NextMode,            0,      0,    NULL },
-    {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0,    validate_nonspace },
+    {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0,    NULL },
     {"NumQueued",      0,  INT_TYPE,     &NumQueued,           0,      0,    NULL },
     {"NumTrig",        0,  INT_TYPE,     &NumTriggered,        0,      0,    NULL },
-    {"October",        1,  STR_TYPE,     &DynamicMonthName[9], 0,      0,    validate_nonspace },
+    {"October",        1,  STR_TYPE,     &DynamicMonthName[9], 0,      0,    NULL },
     {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,      0,      0,    NULL },
     {"PSCal",          0,  INT_TYPE,     &PsCal,               0,      0,    NULL },
     {"RunOff",         0,  INT_TYPE,     &RunDisabled,         0,      0,    NULL },
-    {"Saturday",       1,  STR_TYPE,     &DynamicDayName[5],   0,      0,    validate_nonspace },
-    {"September",      1,  STR_TYPE,     &DynamicMonthName[8], 0,      0,    validate_nonspace },
+    {"Saturday",       1,  STR_TYPE,     &DynamicDayName[5],   0,      0,    NULL },
+    {"September",      1,  STR_TYPE,     &DynamicMonthName[8], 0,      0,    NULL },
     {"SimpleCal",      0,  INT_TYPE,     &DoSimpleCalendar,    0,      0,    NULL },
     {"SortByDate",     0,  INT_TYPE,     &SortByDate,          0,      0,    NULL },
     {"SortByPrio",     0,  INT_TYPE,     &SortByPrio,          0,      0,    NULL },
     {"SortByTime",     0,  INT_TYPE,     &SortByTime,          0,      0,    NULL },
     {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,          0,      132,  NULL },
-    {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],   0,      0,    validate_nonspace },
+    {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],   0,      0,    NULL },
     {"T",              0,  SPECIAL_TYPE, trig_date_func,       0,      0,    NULL },
     {"Td",             0,  SPECIAL_TYPE, trig_day_func,        0,      0,    NULL },
-    {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],   0,      0,    validate_nonspace },
+    {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],   0,      0,    NULL },
     {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,        0,      0,    NULL },
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,        0,      0,    NULL },
-    {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],   0,      0,    validate_nonspace },
+    {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],   0,      0,    NULL },
     {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,       0,      0,    NULL },
     {"Ty",             0,  SPECIAL_TYPE, trig_year_func,       0,      0,    NULL },
     {"U",              0,  SPECIAL_TYPE, today_date_func,      0,      0,    NULL },
@@ -828,7 +816,7 @@ static SysVar SysVarArr[] = {
     {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed,  0,      0,    NULL },
     {"Uw",             0,  SPECIAL_TYPE, today_wday_func,      0,      0,    NULL },
     {"Uy",             0,  SPECIAL_TYPE, today_year_func,      0,      0,    NULL },
-    {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],   0,      0,    validate_nonspace }
+    {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],   0,      0,    NULL }
 };
 
 #define NUMSYSVARS ( sizeof(SysVarArr) / sizeof(SysVar) )

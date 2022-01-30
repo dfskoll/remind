@@ -76,12 +76,12 @@ Options:
 
 --landscape, -l         Print in landscape orientation
 --small-calendars=N     Choose location for small calendars
--c=N                    Synonym for --small-calendars=N
+-cN                     Synonym for --small-calendars=N
 --left-numbers, -x      Print day numbers on the left
 --fill-page, -e         Fill the entire page
---media=MEDIA, -m=MEDIA Size for specified media
---width=W, -w=W         Specify media width in 1/72nds of an inch
---height=H, -h=H        Specify media height in 1/72nds of an inch
+--media=MEDIA, -mMEDIA  Size for specified media
+--width=W, -wW          Specify media width in 1/72nds of an inch
+--height=H, -hH         Specify media height in 1/72nds of an inch
 --title-font=FONT       Specify font for calendar title
 --header-font=FONT      Specify font for weekday names
 --daynum-font=FONT      Specify font for day numbers
@@ -100,6 +100,8 @@ Options:
 --help                  Display this help
 EOF
 }
+
+Getopt::Long::Configure('bundling_values');
 
 my $ret = GetOptions('landscape|l' =>        \$settings->{landscape},
                      'small-calendars|c=i' =>  \$settings->{small_calendars},
@@ -270,8 +272,13 @@ rem2pdf - draw a PDF calendar from Remind output
 =head1 DESCRIPTION
 
 B<rem2pdf> reads the standard input, which should be the results of
-running B<remind> with the B<-pp> option.  It emits PDF code that draws
-a calendar to standard output.
+running B<remind> with the B<-p>, B<-pp> or B<-ppp> options.  It emits
+PDF code that draws a calendar to standard output.
+
+B<rem2pdf> uses the Pango text formatting library (L<https://pango.gnome.org/>)
+and the Cairo graphics library (L<https://www.cairographics.org/>) to produce
+its output.  The CPAN modules Pango (L<https://metacpan.org/pod/Pango>)
+and Cairo (L<https://metacpan.org/pod/Cairo>) are prerequisites.
 
 =head1 OPTIONS
 
@@ -282,7 +289,7 @@ a calendar to standard output.
 Print the calendar in landscape orientation.  Essentially, this swaps
 the width and height of the output media.
 
-=item --small-calendars=I<n>, -c=I<n>
+=item --small-calendars=I<n>, -cI<n>
 
 Control the inclusion of small calendars for the previous and next
 month.  Possible values for I<n> are:
@@ -322,7 +329,7 @@ the default top-right.
 
 Make the calendar fill the available space on the page.
 
-=item --media=I<media>, -m=I<media>
+=item --media=I<media>, -mI<media>
 
 Specify the paper size (Letter, A4, etc.)  For a list of valid media sizes,
 run:
@@ -331,7 +338,7 @@ run:
 
 The default media size will be marked with an asterisk.
 
-=item --width=I<n>, -w=I<n>, --height=I<m>, -h=I<m>
+=item --width=I<n>, -wI<n>, --height=I<m>, -hI<m>
 
 Rather than specifying a named media size, directly specify the width
 and height of the output in 1/72ths of an inch.  You must specify both
@@ -413,6 +420,65 @@ The size of the margin at the right of the page in 1/72ths of an inch.
 The default is 36.
 
 =back
+
+=head1 USAGE
+
+To use B<rem2df>, pipe the output of B<remind> with one of the
+B<-p>, B<-pp> or B<-ppp> options into B<rem2pdf>.  The PDF output
+will be sent to standard output.  So for example, to print a 12-month
+calendar for the year 2030, use:
+
+  remind -pp12 /dev/null Jan 2030 | rem2pdf -e -l -c=3 | lpr
+
+You can concatenate multiple B<remind> runs.  For example, the following
+will produce a PDF calendar for January through March of 2023, and
+June of 2023 (for a total of four pages);
+
+  (remind -pp3 Jan 2023 /dev/null ; \
+   remind -p June 2023 /dev/null) | rem2pdf -e -l -c=3 > cal.pdf
+
+=head1 FORMATTED TEXT
+
+B<rem2pdf> supports a B<SPECIAL> reminder type called B<PANGO>.  This
+lets you format text using the Pango markup language, described at
+L<https://docs.gtk.org/Pango/pango_markup.html>.  Here are some
+examples:
+
+  REM Mon SPECIAL PANGO <b>Bold</b> and <i>italic</i>
+  REM Tue SPECIAL PANGO <span face="zapf chancery">Fancy</span>
+  REM Wed SPECIAL PANGO <span foreground="red"><b>Bold red</b></span>
+
+Other back-ends such as B<rem2ps> and B<rem2html> will ignore PANGO
+special reminders.
+
+=head1 ABSOLUTELY-POSITIONED TEXT
+
+If your B<PANGO> special reminder starts with C<@I<x>,I<y>> where I<x>
+and I<y> are floating-point numbers, then the Pango marked-up test is
+positioned absolutely with respect to the day's box (and is not
+counted when calculating the box's height.)
+
+A positive I<x> value positions the left edge of the text I<x> points
+to the right of the left side of the calender box, while a negative
+I<x> value positions the right edge of the text I<x> points to the left
+of the right side of the calender box.
+
+A positive I<y> value positions the top edge of the text I<y> points
+below the top of the calender box, while a negative I<y> value
+positions the bottom edge of the text I<y> points above the bottom of
+the calender box.
+
+If you use absolutely-positioned text, it's up to you to make sure it
+doesn't overlap other text; B<rem2pdf> takes no special precautions to
+prevent this.
+
+As an example, this places Sunrise and Sunset times at the bottom left
+of each calendar box:
+
+  REM SPECIAL PANGO @1,-1 <span size="4800"><i>Rise [sunrise($U)] Set [sunset($U)]</i></span>
+
+(Note that Pango expresses font sizes in 1024's of a point, so a size of
+4800 works out to about 4.6 points.)
 
 =head1 AUTHOR
 

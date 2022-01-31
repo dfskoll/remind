@@ -36,8 +36,5 @@ install:
         fi; \
 	exit 1;
 
-
-
-
 Makefile: Makefile.PL
 	$(PERL) Makefile.PL || true

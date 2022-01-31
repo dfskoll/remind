@@ -185,7 +185,7 @@ void InitRemind(int argc, char const *argv[])
     FromJulian(JulianToday, &CurYear, &CurMon, &CurDay);
 
     /* Initialize Latitude and Longitude */
-    set_lat_and_long_from_components();
+    set_components_from_lat_and_long();
 
     /* See if we were invoked as "rem" rather than "remind" */
     if (argv[0]) {

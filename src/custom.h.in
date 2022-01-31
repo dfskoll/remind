@@ -11,22 +11,18 @@
 /***************************************************************/
 
 /*---------------------------------------------------------------------*/
-/* LAT_DEG, LAT_MIN and LAT_SEC: Latitude of your location             */
-/* LON_DEG, LON_MIN and LON_SEC: Longitude of your location            */
+/* DEFAULT_LATITUDE: Latitude of your location                         */
+/* DEFAULT_LONGITUDE: Longitude of your location                       */
 /* LOCATION: A string identifying your location.                       */
-/* All latitude and longitude numbers should be positive for the       */
-/* northern and western hemisphere.  If you live in the southern       */
-/* hemisphere, ALL latitude values should be negative.  If you live    */
-/* in the eastern hemisphere, ALL longitude values should be negative. */
+/* Latitude and longitude should be positive for the                   */
+/* northern and eastern hemisphere and negative for the southern and   */
+/* western hemisphere.                                                 */
 /*                                                                     */
-/* The default values are initially set to Ottawa, Ontario, Canada.    */
+/* The default values are initially set to the city hall in Ottawa,    */
+/* Ontario, Canada.    */
 /*---------------------------------------------------------------------*/
-#define LAT_DEG 45
-#define LAT_MIN 25
-#define LAT_SEC 30
-#define LON_DEG 75
-#define LON_MIN 41
-#define LON_SEC 59
+#define DEFAULT_LATITUDE 45.42068680485393
+#define DEFAULT_LONGITUDE -75.68996754768028
 #define LOCATION "Ottawa"
 
 /*---------------------------------------------------------------------*/

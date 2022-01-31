@@ -118,14 +118,14 @@ EXTERN  INIT(   int     UseTrueColors, 0);
 EXTERN  INIT(   int     TerminalBackground, TERMINAL_BACKGROUND_UNKNOWN);
 
 /* Latitude and longitude */
-EXTERN  INIT(	int	  LatDeg, LAT_DEG);
-EXTERN  INIT(	int	  LatMin, LAT_MIN);
-EXTERN  INIT(	int	  LatSec, LAT_SEC);
-EXTERN  INIT(	int	  LongDeg, LON_DEG);
-EXTERN  INIT(	int	  LongMin, LON_MIN);
-EXTERN  INIT(	int	  LongSec, LON_SEC);
-EXTERN  INIT(   double    Longitude, -999.0);
-EXTERN  INIT(   double    Latitude, -999.0);
+EXTERN  INIT(	int	  LatDeg, 0);
+EXTERN  INIT(	int	  LatMin, 0);
+EXTERN  INIT(	int	  LatSec, 0);
+EXTERN  INIT(	int	  LongDeg, 0);
+EXTERN  INIT(	int	  LongMin, 0);
+EXTERN  INIT(	int	  LongSec, 0);
+EXTERN  INIT(   double    Longitude, DEFAULT_LONGITUDE);
+EXTERN  INIT(   double    Latitude, DEFAULT_LATITUDE);
 
 EXTERN	INIT(	char	  *Location, LOCATION);
 

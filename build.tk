@@ -431,21 +431,15 @@ proc CreateCustomH {} {
 
     while {[gets $in line] != -1} {
 	switch -glob -- $line {
-	    "#define LAT_DEG *" {
-		puts $out "#define LAT_DEG $LAT_DEG"
-		.msgs insert end "#define LAT_DEG $LAT_DEG\n"
+	    "#define DEFAULT_LATITUDE *" {
+                set $lat [expr $LAT_DEG + ($LAT_MIN/60) + ($LAT_SEC/3600)]
+		puts $out "#define DEFAULT_LATITUDE $lat"
+		.msgs insert end "#define DEFAULT_LATITUDE $lat"
 	    }
-	    "#define LAT_MIN *" {
-		puts $out "#define LAT_MIN $LAT_MIN"
-		.msgs insert end "#define LAT_MIN $LAT_MIN\n"
-	    }
-	    "#define LON_DEG *" {
-		puts $out "#define LON_DEG $LON_DEG"
-		.msgs insert end "#define LON_DEG $LON_DEG\n"
-	    }
-	    "#define LON_MIN *" {
-		puts $out "#define LON_MIN $LON_MIN"
-		.msgs insert end "#define LON_MIN $LON_MIN\n"
+	    "#define DEFAULT_LONGITUDE *" {
+                set $lon [expr -1 * ($LAT_DEG + ($LAT_MIN/60) + ($LAT_SEC/3600))]
+		puts $out "#define DEFAULT_LONGITUDE $lat"
+		.msgs insert end "#define DEFAULT_LONGITUDE $lat"
 	    }
 	    "#define LOCATION *" {
 		puts $out "#define LOCATION \"$Config(LOCATION)\""

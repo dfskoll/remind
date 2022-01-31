@@ -837,7 +837,7 @@ REM Mon 15 Feb ADDOMIT MSG Family Day
 REM Feb 18 AFTER MSG Should trigger on Feb 19
 ../tests/test.rem(233): Trig = Tuesday, 19 February, 1991
 OMIT DUMP
-Global Full OMITs (1 of maximum allowed 500):
+Global Full OMITs (1 of maximum allowed 1000):
 	1991-02-18
 Global Partial OMITs (0 of maximum allowed 366):
 	None.
@@ -2773,7 +2773,7 @@ OMIT December 25 MSG X
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
 ../tests/test.rem(454): Trig = Sunday, 26 December, 2010
 OMIT DUMP
-Global Full OMITs (16 of maximum allowed 500):
+Global Full OMITs (16 of maximum allowed 1000):
 	1991-03-11
 	2010-09-03
 	2010-09-04

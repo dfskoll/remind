@@ -77,16 +77,7 @@
 /* WANT_SHELL_ESCAPING:  Define this if you want special shell         */
 /* characters to be escaped with a backslash for the -k option.        */
 /*---------------------------------------------------------------------*/
-#if defined(UNIX)
 #define WANT_SHELL_ESCAPING 1
-#endif
-
-/*---------------------------------------------------------------------*/
-/* Some implementations have a broken 'putc' and 'putchar'.            */
-/*---------------------------------------------------------------------*/
-#ifdef __SASC_60
-#define BROKEN_PUTC
-#endif
 
 /*---------------------------------------------------------------------*/
 /* BASE: The base year for date calculation.  NOTE!  January 1 of the  */
@@ -152,7 +143,7 @@
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form YYYY MM DD do we handle?          */
 /*---------------------------------------------------------------------*/
-#define MAX_FULL_OMITS 500
+#define MAX_FULL_OMITS 1000
 
 /*---------------------------------------------------------------------*/
 /* How many global omits of the form MM DD do we handle?               */
@@ -186,13 +177,8 @@
 #define PSBEGIN2 "# rem2ps2 begin"
 #define PSEND2   "# rem2ps2 end"
 
-#ifdef BROKEN_PUTC
-#define Putc SafePutc
-#define PutChar SafePutChar
-#else
 #define Putc putc
 #define PutChar putchar
-#endif
 
 #if defined(HAVE_MBSTOWCS) && defined(HAVE_WCTYPE_H)
 #define REM_USE_WCHAR 1

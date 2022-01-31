@@ -27,8 +27,10 @@ proc SetConfigDefaults {} {
     global Config
     set Config(LAT_DEG) 45
     set Config(LAT_MIN) 24
+    set Config(LAT_SEC) 14
     set Config(LON_DEG) 75
     set Config(LON_MIN) 39
+    set Config(LON_SEC) 23
     set Config(LOCATION) "Ottawa"
     set Config(DEFAULT_PAGE) "Letter"
     set Config(DATESEP) "-"
@@ -157,10 +159,14 @@ proc CreateLocationDialog { w } {
 	    -from 0 -to 89 -length 300 -variable Config(LAT_DEG)
     scale $w.latmin -label "Latitude (minutes)" -orient horizontal \
 	    -from 0 -to 59 -length 300 -variable Config(LAT_MIN)
+    scale $w.latsec -label "Latitude (seconds)" -orient horizontal \
+	    -from 0 -to 59 -length 300 -variable Config(LAT_SEC)
     scale $w.londeg -label "Longitude (degrees)" -orient horizontal \
 	    -from 0 -to 179 -length 300 -variable Config(LON_DEG)
     scale $w.lonmin -label "Longtude (minutes)" -orient horizontal \
 	    -from 0 -to 59 -length 300 -variable Config(LON_MIN)
+    scale $w.lonsec -label "Longitude (seconds)" -orient horizontal \
+	    -from 0 -to 59 -length 300 -variable Config(LON_SEC)
 
     radiobutton $w.north -text "Northern Hemisphere" \
 	    -variable Config(NORTHERN_HEMISPHERE) -value 1
@@ -176,8 +182,10 @@ proc CreateLocationDialog { w } {
     $w.location insert end $Config(LOCATION)
     grid $w.latdeg -
     grid $w.latmin -
+    grid $w.latsec -
     grid $w.londeg -
     grid $w.lonmin -
+    grid $w.lonsec -
 
     grid $w.north $w.west
     grid $w.south $w.east
@@ -406,15 +414,19 @@ proc CreateCustomH {} {
     # modify them willy-nilly
     set LAT_DEG $Config(LAT_DEG)
     set LAT_MIN $Config(LAT_MIN)
+    set LAT_SEC $Config(LAT_SEC)
     set LON_DEG $Config(LON_DEG)
     set LON_MIN $Config(LON_MIN)
+    set LON_SEC $Config(LON_SEC)
     if {!$Config(NORTHERN_HEMISPHERE)} {
 	set LAT_DEG "-$LAT_DEG"
 	set LAT_MIN "-$LAT_MIN"
+	set LAT_SEC "-$LAT_SEC"
     }
     if {!$Config(WESTERN_HEMISPHERE)} {
 	set LON_DEG "-$LON_DEG"
 	set LON_MIN "-$LON_MIN"
+	set LON_SEC "-$LON_SEC"
     }
     set Config(LOCATION) [$Loc.location get]
 
@@ -432,12 +444,12 @@ proc CreateCustomH {} {
     while {[gets $in line] != -1} {
 	switch -glob -- $line {
 	    "#define DEFAULT_LATITUDE *" {
-                set lat [expr $LAT_DEG + ($LAT_MIN/60.0)];
+                set lat [expr $LAT_DEG + ($LAT_MIN/60.0) + ($LAT_SEC/3600.0)];
 		puts $out "#define DEFAULT_LATITUDE $lat"
 		.msgs insert end "#define DEFAULT_LATITUDE $lat"
 	    }
 	    "#define DEFAULT_LONGITUDE *" {
-                set lon [expr -1.0 * ($LON_DEG + ($LON_MIN/60.0))]
+                set lon [expr -1.0 * ($LON_DEG + ($LON_MIN/60.0) + ($LAT_SEC/3600.0))]
 		puts $out "#define DEFAULT_LONGITUDE $lon"
 		.msgs insert end "#define DEFAULT_LONGITUDE $lon"
 	    }
@@ -752,14 +764,17 @@ proc SetConfigFromRemind {} {
     # Query Remind for the rest
     QueryRemind $rem LAT_DEG {$LatDeg}
     QueryRemind $rem LAT_MIN {$LatMin}
+    QueryRemind $rem LAT_SEC {$LatSec}
     QueryRemind $rem LON_DEG {$LongDeg}
     QueryRemind $rem LON_MIN {$LongMin}
+    QueryRemind $rem LON_SEC {$LongSec}
     QueryRemind $rem LOCATION {$Location}
     QueryRemind $rem DATESEP {$DateSep}
     QueryRemind $rem TIMESEP {$TimeSep}
     QueryRemind $rem LANGUAGE {language()}
 
     set $Config(LAT_MIN) [expr abs($Config(LAT_MIN))]
+    set $Config(LAT_SEC) [expr abs($Config(LAT_SEC))]
     if {$Config(LAT_DEG) >= 0} {
 	set Config(NORTHERN_HEMISPHERE) 1
     } else {
@@ -768,6 +783,7 @@ proc SetConfigFromRemind {} {
     }
 
     set $Config(LON_MIN) [expr abs($Config(LON_MIN))]
+    set $Config(LON_SEC) [expr abs($Config(LON_SEC))]
     if {$Config(LON_DEG) >= 0} {
 	set Config(WESTERN_HEMISPHERE) 1
     } else {

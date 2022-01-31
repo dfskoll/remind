@@ -28,6 +28,10 @@ CHANGES TO REMIND
 - BUG FIX: Properly support formatting of double-wide characters in the
   terminal mode "remind -c" calendar.
 
+- BUG FIX: remind: Get rid of LAT_DEG/LAT_MIN/LAT_SEC and
+  LON_DEG/LON_MIN/LON_SEC macros in favour of DEFAULT_LATITUDE and
+  DEFAULT_LONGITUDE.
+
 - IMPROVEMENT: All localized languages now use UTF-8 exclusively.
   Support for old character encodings like ISO-8859-1 and ISO-8859-2
   has been dropped since modern UNIXes have pretty much standardized

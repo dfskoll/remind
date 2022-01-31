@@ -449,7 +449,7 @@ proc CreateCustomH {} {
 		.msgs insert end "#define DEFAULT_LATITUDE $lat"
 	    }
 	    "#define DEFAULT_LONGITUDE *" {
-                set lon [expr -1.0 * ($LON_DEG + ($LON_MIN/60.0) + ($LAT_SEC/3600.0))]
+                set lon [expr -1.0 * ($LON_DEG + ($LON_MIN/60.0) + ($LON_SEC/3600.0))]
 		puts $out "#define DEFAULT_LONGITUDE $lon"
 		.msgs insert end "#define DEFAULT_LONGITUDE $lon"
 	    }

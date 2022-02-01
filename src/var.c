@@ -989,29 +989,29 @@ static void DumpSysVar(char const *name, const SysVar *v)
 	    SysVarFunc f = (SysVarFunc) v->value;
 	    f(0, &val);
 	    PrintValue(&val, ErrFp);
-	    Putc('\n', ErrFp);
+	    putc('\n', ErrFp);
 	    DestroyValue(val);
 	} else if (v->type == STR_TYPE) {
 	    char const *s = *((char **)v->value);
 	    int y;
-	    Putc('"', ErrFp);
+	    putc('"', ErrFp);
 	    for (y=0; y<MAX_PRT_LEN && *s; y++) {
 		if (*s == '"') {
 		    fprintf(ErrFp, "\" + char(34) + \"");
 		    s++;
 		} else {
-		    Putc(*s++, ErrFp);
+		    putc(*s++, ErrFp);
 		}
 	    }
-	    Putc('"', ErrFp);
+	    putc('"', ErrFp);
 	    if (*s) fprintf(ErrFp, "...");
-	    Putc('\n', ErrFp);
+	    putc('\n', ErrFp);
 	} else if (v->type == DATE_TYPE) {
 	    Value val;
 	    val.type = DATE_TYPE;
 	    val.v.val = * (int *) v->value;
 	    PrintValue(&val, ErrFp);
-	    Putc('\n', ErrFp);
+	    putc('\n', ErrFp);
 	} else {
 	    if (!v->modifiable) fprintf(ErrFp, "%d\n", *((int *)v->value));
 	    else {

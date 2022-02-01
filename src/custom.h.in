@@ -177,9 +177,6 @@
 #define PSBEGIN2 "# rem2ps2 begin"
 #define PSEND2   "# rem2ps2 end"
 
-#define Putc putc
-#define PutChar putchar
-
 #if defined(HAVE_MBSTOWCS) && defined(HAVE_WCTYPE_H)
 #define REM_USE_WCHAR 1
 #else

@@ -44,10 +44,6 @@
 
 static void DoReminders(void);
 
-/* Whooo... the putchar/Putchar/PutChar macros are a mess...
-   my apologies... */
-#define Putchar(c) PutChar(c)
-
 /***************************************************************/
 /***************************************************************/
 /**                                                           **/
@@ -616,11 +612,11 @@ void OutputLine(FILE *fp)
     char c = 0;
 
     while (*s) {
-	if (*s == '\n') Putc('\\', fp);
-	Putc(*s, fp);
+	if (*s == '\n') putc('\\', fp);
+	putc(*s, fp);
 	c = *s++;
     }
-    if (c != '\n') Putc('\n', fp);
+    if (c != '\n') putc('\n', fp);
 }
 
 /***************************************************************/
@@ -1212,7 +1208,7 @@ void FillParagraph(char const *s)
 
 	/* If it's a carriage return, output it and start new paragraph */
 	if (*s == '\n') {
-	    Putchar('\n');
+	    putchar('\n');
 	    s++;
 	    line = 0;
 	    while(ISBLANK(*s)) s++;
@@ -1225,7 +1221,7 @@ void FillParagraph(char const *s)
 	   number of spaces */
 	j = line ? SubsIndent : FirstIndent;
 	for (i=0; i<j; i++) {
-	    Putchar(' ');
+	    putchar(' ');
 	}
 
 	/* Calculate the amount of room left on this line */
@@ -1244,17 +1240,17 @@ void FillParagraph(char const *s)
 	    }
 	    if (!pendspace || len+pendspace <= roomleft) {
 		for (i=0; i<pendspace; i++) {
-		    Putchar(' ');
+		    putchar(' ');
 		}
 		while(t < s) {
-		    Putchar(*t);
+		    putchar(*t);
 		    if (strchr(EndSent, *t)) doublespace = 2;
 		    else if (!strchr(EndSentIg, *t)) doublespace = 1;
 		    t++;
 		}
 	    } else {
 		s = t;
-		Putchar('\n');
+		putchar('\n');
 		line++;
 		break;
 	    }

@@ -684,7 +684,7 @@ static void DoCalendarOneWeek(int nleft)
 	DRAW(tb);
 	goff();
     }
-    PutChar('\n');
+    putchar('\n');
     for (l=0; l<CalPad; l++) {
 	gon();
 	DRAW(tb);
@@ -695,7 +695,7 @@ static void DoCalendarOneWeek(int nleft)
 	    DRAW(tb);
 	    goff();
 	}
-	PutChar('\n');
+	putchar('\n');
     }
 
 /* Write the body lines */
@@ -716,7 +716,7 @@ static void DoCalendarOneWeek(int nleft)
 	    DRAW(tb);
 	    goff();
 	}
-	PutChar('\n');
+	putchar('\n');
     }
 
 /* Write the final line */
@@ -867,7 +867,7 @@ static int WriteCalendarRow(void)
 	    sprintf(buf, "%d ", d+i-wd);
 	    if (Julian(y, m, d+i-wd) == RealToday) {
 		PrintLeft(buf, ColSpaces-1, '*');
-		PutChar(' ');
+		putchar(' ');
 	    } else {
 		PrintLeft(buf, ColSpaces, ' ');
 	    }
@@ -876,7 +876,7 @@ static int WriteCalendarRow(void)
 	DRAW(tb);
 	goff();
     }
-    PutChar('\n');
+    putchar('\n');
     for (l=0; l<CalPad; l++) {
         gon();
 	DRAW(tb);
@@ -887,7 +887,7 @@ static int WriteCalendarRow(void)
 	    DRAW(tb);
 	    goff();
 	}
-	PutChar('\n');
+	putchar('\n');
     }
 
 /* Write the body lines */
@@ -908,7 +908,7 @@ static int WriteCalendarRow(void)
 	    DRAW(tb);
 	    goff();
 	}
-	PutChar('\n');
+	putchar('\n');
     }
 
     moreleft = (d+7-wd <= DaysInMonth(m, y));
@@ -934,7 +934,7 @@ static void PrintLeft(char const *s, int width, char pad)
 #ifndef REM_USE_WCHAR
     int len = strlen(s);
     printf("%s", s);
-    while (len++ < width) PutChar(pad);
+    while (len++ < width) putchar(pad);
 #else
     size_t len = mbstowcs(NULL, s, 0);
     int i;
@@ -999,10 +999,10 @@ static void PrintCentered(char const *s, int width, char *pad)
     for (i=0; i<width; i++) {
 	if (*s) {
             if (isspace(*s)) {
-                PutChar(' ');
+                putchar(' ');
                 s++;
             } else {
-                PutChar(*s++);
+                putchar(*s++);
             }
         } else {
             break;
@@ -1084,7 +1084,7 @@ static int WriteOneCalLine(void)
 	DRAW(tb);
 	goff();
     }
-    PutChar('\n');
+    putchar('\n');
 
     return done;
 }
@@ -1157,7 +1157,7 @@ static int WriteOneColLine(int col)
 	    for (ws = e->wc_pos; ws - e->wc_pos < ColSpaces; ws++) {
 		if (!*ws) break;
                 if (iswspace(*ws)) {
-                    PutChar(' ');
+                    putchar(' ');
                     numwritten++;
                 } else {
                     if (wcwidth(*ws) > 0) {
@@ -1172,7 +1172,7 @@ static int WriteOneColLine(int col)
 	    for (ws = e->wc_pos; ws<wspace; ws++) {
 		if (!*ws) break;
                 if (iswspace(*ws)) {
-                    PutChar(' ');
+                    putchar(' ');
                     numwritten++;
                 } else {
                     if (wcwidth(*ws) > 0) {
@@ -1189,7 +1189,7 @@ static int WriteOneColLine(int col)
 	}
 
 	/* Flesh out the rest of the column */
-	while(numwritten++ < ColSpaces) PutChar(' ');
+	while(numwritten++ < ColSpaces) putchar(' ');
 
 	/* Skip any spaces before next word */
 	while (iswspace(*ws)) ws++;
@@ -1244,9 +1244,9 @@ static int WriteOneColLine(int col)
 		if (!*s) break;
 		numwritten++;
                 if (isspace(*s)) {
-                    PutChar(' ');
+                    putchar(' ');
                 } else {
-                    PutChar(*s);
+                    putchar(*s);
                 }
 	    }
 	    e->pos = s;
@@ -1256,9 +1256,9 @@ static int WriteOneColLine(int col)
 		if (!*s) break;
 		numwritten++;
                 if (isspace(*s)) {
-                    PutChar(' ');
+                    putchar(' ');
                 } else {
-                    PutChar(*s);
+                    putchar(*s);
                 }
 	    }
 	}
@@ -1269,7 +1269,7 @@ static int WriteOneColLine(int col)
 	}
 
 	/* Flesh out the rest of the column */
-	while(numwritten++ < ColSpaces) PutChar(' ');
+	while(numwritten++ < ColSpaces) putchar(' ');
 
 	/* Skip any spaces before next word */
 	while (isspace(*s)) s++;
@@ -1423,7 +1423,7 @@ static void WriteCalHeader(void)
     gon();
     DRAW(tb);
     goff();
-    PutChar('\n');
+    putchar('\n');
 
     WritePostHeaderLine();
     WriteCalDays();
@@ -1437,7 +1437,7 @@ static void WriteCalHeader(void)
 /***************************************************************/
 static void WriteCalTrailer(void)
 {
-    PutChar('\f');
+    putchar('\f');
 }
 
 /***************************************************************/
@@ -2051,7 +2051,7 @@ static void WriteTopCalLine(void)
     PrintCentered("", CalWidth-2, linestruct->lr);
     DRAW(bl);
     goff();
-    PutChar('\n');
+    putchar('\n');
 }
 
 static void WriteBottomCalLine(void)
@@ -2068,7 +2068,7 @@ static void WriteBottomCalLine(void)
 	}
     }
     goff();
-    PutChar('\n');
+    putchar('\n');
 }
 
 static void WritePostHeaderLine(void)
@@ -2085,7 +2085,7 @@ static void WritePostHeaderLine(void)
 	}
     }
     goff();
-    PutChar('\n');
+    putchar('\n');
 }
 
 static void WriteWeekHeaderLine(void)
@@ -2102,7 +2102,7 @@ static void WriteWeekHeaderLine(void)
 	}
     }
     goff();
-    PutChar('\n');
+    putchar('\n');
 }
 
 static void WriteIntermediateCalLine(void)
@@ -2120,7 +2120,7 @@ static void WriteIntermediateCalLine(void)
 	}
     }
     goff();
-    PutChar('\n');
+    putchar('\n');
 }
 
 static void WriteCalDays(void)
@@ -2138,7 +2138,7 @@ static void WriteCalDays(void)
 	DRAW(tb);
 	goff();
     }
-    PutChar('\n');
+    putchar('\n');
 }
 
 /***************************************************************/

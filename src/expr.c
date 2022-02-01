@@ -101,7 +101,7 @@ static int DebugPerform(Operator *op)
     fprintf(ErrFp, " => ");
     if (!r) {
 	PrintValue(&ValStack[ValStackPtr-1], ErrFp);
-	Putc('\n', ErrFp);
+	putc('\n', ErrFp);
     } else {
 	fprintf(ErrFp, "%s\n", ErrMsg[r]);
     }
@@ -580,7 +580,7 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
 	if (! (DebugFlag & DB_PRTEXPR)) return r;
 	if (r == OK) {
 	    PrintValue(v, ErrFp);
-	    Putc('\n', ErrFp);
+	    putc('\n', ErrFp);
 	}
 	return r;
     } else { /* Must be a symbol */
@@ -591,7 +591,7 @@ static int MakeValue(char const *s, Value *v, Var *locals, ParsePtr p)
     if (! (DebugFlag & DB_PRTEXPR)) return r;
     if (r == OK) {
 	PrintValue(v, ErrFp);
-	Putc('\n', ErrFp);
+	putc('\n', ErrFp);
     }
     return r;
 }
@@ -1232,9 +1232,9 @@ void PrintValue (Value *v, FILE *fp)
 
     if (v->type == STR_TYPE) {
 	s=v->v.str;
-	Putc('"', fp);
-	for (y=0; y<MAX_PRT_LEN && *s; y++) Putc(*s++, fp);
-	Putc('"',fp);
+	putc('"', fp);
+	for (y=0; y<MAX_PRT_LEN && *s; y++) putc(*s++, fp);
+	putc('"',fp);
 	if (*s) fprintf(fp, "...");
     }
     else if (v->type == INT_TYPE) fprintf(fp, "%d", v->v.val);

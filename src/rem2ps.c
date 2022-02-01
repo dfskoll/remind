@@ -146,9 +146,9 @@ put_escaped_string(char const *s)
 {
     while(*s) {
         if (*s == '\\' || *s == '(' || *s == ')') {
-            PutChar('\\');
+            putchar('\\');
         }
-        PutChar(*s);
+        putchar(*s);
         s++;
     }
 }
@@ -625,7 +625,7 @@ void WriteProlog(void)
 	strcmp(SmallFont, DayFont)  &&
 	strcmp(TitleFont, SmallFont) &&
 	strcmp(SmallFont, EntryFont)) printf(" %s", SmallFont);
-    PutChar('\n');
+    putchar('\n');
     printf("%%%%Creator: Rem2PS\n");
     printf("%%%%Pages: (atend)\n");
     printf("%%%%Orientation: %s\n", PortraitMode ? "Portrait" : "Landscape");
@@ -805,20 +805,20 @@ void WriteOneEntry(CalEntry *c)
 	}
     }
 
-    PutChar('(');
+    putchar('(');
     while(*s) {
 	/* Use the "unsigned char" cast to fix problem on Solaris 2.5 */
 	/* which treated some latin1 characters as white space.       */
 	ch = (unsigned char) *s++;
-	if (ch == '\\' || ch == '(' || ch == ')') PutChar('\\');
-	if (!isspace(ch)) PutChar(ch);
+	if (ch == '\\' || ch == '(' || ch == ')') putchar('\\');
+	if (!isspace(ch)) putchar(ch);
 	else {
-	    PutChar(')');
+	    putchar(')');
 	    while(isspace((unsigned char)*s)) s++;
 	    if (!*s) {
 		goto finish;
 	    }
-	    PutChar('(');
+	    putchar('(');
 	}
     }
     printf(")\n");

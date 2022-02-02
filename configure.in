@@ -27,7 +27,6 @@ dnl Replace `main' with a function in -lm:
 AC_CHECK_LIB(m, sqrt)
 
 dnl Integer sizes
-AC_CHECK_SIZEOF(unsigned short)
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(unsigned long)
 

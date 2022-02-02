@@ -40,11 +40,11 @@ my $settings = {
         width => 0,
         height => 0,
 
-        title_font => 'Helvetica',
-        header_font => 'Helvetica',
-        daynum_font => 'Helvetica Bold Oblique',
-        entry_font => 'Helvetica',
-        small_cal_font => 'Helvetica',
+        title_font => 'Sans',
+        header_font => 'Sans',
+        daynum_font => 'Sans Bold Oblique',
+        entry_font => 'Sans',
+        small_cal_font => 'Sans',
 
         title_size => 14,
         header_size => 14,
@@ -355,27 +355,27 @@ width and height for the options to be respected.
 =item --title-font=I<font>
 
 Specify the font used for the calendar title.  It can be any font that
-the Pango library on your system can use.  The default is Helvetica.  If
+the Pango library on your system can use.  The default is Sans.  If
 you choose a font with spaces in its name, you may need to quote this
 argument.
 
 =item --header-font=I<font>
 
-Specify the font used for the weekday names.  The default is Helvetica.
+Specify the font used for the weekday names.  The default is Sans.
 
 =item --daynum-font=I<font>
 
 Specify the font used for the day numbers.  The default is
-Helvetica Bold Oblique.
+Sans Bold Oblique.
 
 =item --entry-font=I<font>
 
-Specify the font used for calendar entries.  The default is Helvetica.
+Specify the font used for calendar entries.  The default is Sans.
 
 =item --small-cal-font=I<font>
 
 Specify the font used for the small next- and previous-month
-calendars.  The default is Helvetica.
+calendars.  The default is Sans.
 
 =item --title-size=I<n>
 

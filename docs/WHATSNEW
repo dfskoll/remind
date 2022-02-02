@@ -25,6 +25,15 @@ CHANGES TO REMIND
 - NEW FEATURE: tkremind: If rem2pdf installed, TkRemind offers you the
   choice of PDF or PostScript output in the Print dialog.
 
+- CHANGE: remind: Increase the number of allowed "full OMITs" from 500
+  to 1000.
+
+- CLEANUP: remind: C source code: Replace the LAT_DEG, LAT_MIN,
+  LAT_SEC and LON_DEG, LON_MIN, LON_SEC macros with DEFAULT_LATITUDE
+  and DEFAULT_LONGITUDE.
+
+- CLEANUP: remind: C source code: Remove various unused or obsolete macros.
+
 - BUG FIX: Properly support formatting of double-wide characters in the
   terminal mode "remind -c" calendar.
 

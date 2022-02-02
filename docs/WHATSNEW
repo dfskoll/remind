@@ -16,6 +16,9 @@ CHANGES TO REMIND
 
       apt install libpango-perl libcairo-perl
 
+  Unlike rem2ps, the default font in rem2pdf is "Sans" rather than
+  "Helvetica", as Sans seems to be typeset better by the Pango library.
+
 - NEW FEATURE: remind:  New system variables $Sunday through $Saturday
   and $January through $December let you set weekday and month names
   to whatever you like, permitting you to produce calendars in your

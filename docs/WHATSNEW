@@ -31,6 +31,11 @@ CHANGES TO REMIND
 - CHANGE: remind: Increase the number of allowed "full OMITs" from 500
   to 1000.
 
+- CHANGE: Remove the annoying code that slowed compilation and running
+  on Windows and Mac OS X.  I believe the point has been made and free
+  OSes have enough of a critical mass that the annoyances are
+  counter-productive.
+
 - CLEANUP: remind: C source code: Replace the LAT_DEG, LAT_MIN,
   LAT_SEC and LON_DEG, LON_MIN, LON_SEC macros with DEFAULT_LATITUDE
   and DEFAULT_LONGITUDE.

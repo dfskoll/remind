@@ -47,7 +47,7 @@ my $settings = {
         small_cal_font => 'Sans',
 
         title_size => 14,
-        header_size => 14,
+        header_size => 12,
         daynum_size => 14,
         entry_size => 8,
 

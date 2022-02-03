@@ -186,10 +186,11 @@ my $errored_out = 0;
 my $surface = Cairo::PdfSurface->create_for_stream(sub { print $_[1] unless $errored_out; }, undef,
                                                    $settings->{width}, $settings->{height});
 
-$surface->set_metadata('title', 'Calendar');
-$surface->set_metadata('author', 'Remind (https://dianne.skoll.ca/projects/remind/)');
-$surface->set_metadata('creator', 'rem2pdf (https://dianne.skoll.ca/projects/remind/)');
-$surface->set_metadata('subject', 'Calendar');
+# set_metadata not available in older versions of Cairo
+eval { $surface->set_metadata('title', 'Calendar'); };
+eval { $surface->set_metadata('author', 'Remind (https://dianne.skoll.ca/projects/remind/)'); };
+eval { $surface->set_metadata('creator', 'rem2pdf (https://dianne.skoll.ca/projects/remind/)'); };
+eval { $surface->set_metadata('subject', 'Calendar'); };
 
 my $cr = Cairo::Context->create($surface);
 $cr->set_line_width($settings->{line_thickness});

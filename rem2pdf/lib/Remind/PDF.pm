@@ -701,7 +701,8 @@ sub draw_title
         my ($self, $cr, $settings) = @_;
         my $title = $self->{monthname} . ' ' . $self->{year};
 
-        $cr->get_target()->set_page_label($title);
+        # set_page_label not available in older versions of Cairo
+        eval { $cr->get_target()->set_page_label($title); };
         my $layout = Pango::Cairo::create_layout($cr);
         $layout->set_text(Encode::decode('UTF-8', $title));
         my $desc = Pango::FontDescription->from_string($settings->{title_font} . ' ' . $settings->{title_size} . 'px');

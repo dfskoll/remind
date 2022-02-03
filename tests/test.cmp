@@ -2688,8 +2688,8 @@ Variable  Value
 
           $April  "April"
          $August  "August"
-        $CalMode  0
         $CalcUTC  0           [0, 1]
+        $CalMode  0
          $Daemon  0
         $DateSep  "-"
     $DateTimeSep  "@"

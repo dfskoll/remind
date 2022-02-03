@@ -743,8 +743,8 @@ static SysVar SysVarArr[] = {
     /*  name          mod  type              value          min/mal   max  validate*/
     {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    NULL },
     {"August",         1,  STR_TYPE,     &DynamicMonthName[7], 0,      0,    NULL },
-    {"CalMode",        0,  INT_TYPE,     &DoCalendar,          0,      0,    NULL },
     {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,        0,      1,    NULL },
+    {"CalMode",        0,  INT_TYPE,     &DoCalendar,          0,      0,    NULL },
     {"Daemon",         0,  INT_TYPE,     &Daemon,              0,      0,    NULL },
     {"DateSep",        1,  SPECIAL_TYPE, date_sep_func,        0,      0,    NULL },
     {"DateTimeSep",    1,  SPECIAL_TYPE, datetime_sep_func,    0,      0,    NULL },

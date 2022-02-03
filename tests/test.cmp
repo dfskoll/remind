@@ -2762,16 +2762,321 @@ Variable  Value
              $Uw  6
              $Uy  1991
       $Wednesday  "Wednesday"
+msg [$April]%
+../tests/test.rem(450): Trig = Saturday, 16 February, 1991
+$April => "April"
+April
+msg [$August]%
+../tests/test.rem(451): Trig = Saturday, 16 February, 1991
+$August => "August"
+August
+msg [$CalcUTC]%
+../tests/test.rem(452): Trig = Saturday, 16 February, 1991
+$CalcUTC => 0
+0
+msg [$CalMode]%
+../tests/test.rem(453): Trig = Saturday, 16 February, 1991
+$CalMode => 0
+0
+msg [$Daemon]%
+../tests/test.rem(454): Trig = Saturday, 16 February, 1991
+$Daemon => 0
+0
+msg [$DateSep]%
+../tests/test.rem(455): Trig = Saturday, 16 February, 1991
+$DateSep => "-"
+-
+msg [$DateTimeSep]%
+../tests/test.rem(456): Trig = Saturday, 16 February, 1991
+$DateTimeSep => "@"
+@
+msg [$December]%
+../tests/test.rem(457): Trig = Saturday, 16 February, 1991
+$December => "December"
+December
+msg [$DefaultColor]%
+../tests/test.rem(458): Trig = Saturday, 16 February, 1991
+$DefaultColor => "-1 -1 -1"
+-1 -1 -1
+msg [$DefaultPrio]%
+../tests/test.rem(459): Trig = Saturday, 16 February, 1991
+$DefaultPrio => 5000
+5000
+msg [$DefaultTDelta]%
+../tests/test.rem(460): Trig = Saturday, 16 February, 1991
+$DefaultTDelta => 0
+0
+msg [$DeltaOffset]%
+../tests/test.rem(461): Trig = Saturday, 16 February, 1991
+$DeltaOffset => 0
+0
+msg [$DontFork]%
+../tests/test.rem(462): Trig = Saturday, 16 February, 1991
+$DontFork => 0
+0
+msg [$DontQueue]%
+../tests/test.rem(463): Trig = Saturday, 16 February, 1991
+$DontQueue => 0
+0
+msg [$DontTrigAts]%
+../tests/test.rem(464): Trig = Saturday, 16 February, 1991
+$DontTrigAts => 0
+0
+msg [$EndSent]%
+../tests/test.rem(465): Trig = Saturday, 16 February, 1991
+$EndSent => ".?!"
+.?!
+msg [$EndSentIg]%
+../tests/test.rem(466): Trig = Saturday, 16 February, 1991
+$EndSentIg => ""')]}>"
+"')]}>
+msg [$February]%
+../tests/test.rem(467): Trig = Saturday, 16 February, 1991
+$February => "February"
+February
+msg [$FirstIndent]%
+../tests/test.rem(468): Trig = Saturday, 16 February, 1991
+$FirstIndent => 0
+0
+msg [$FoldYear]%
+../tests/test.rem(469): Trig = Saturday, 16 February, 1991
+$FoldYear => 0
+0
+msg [$FormWidth]%
+../tests/test.rem(470): Trig = Saturday, 16 February, 1991
+$FormWidth => 72
+72
+msg [$Friday]%
+../tests/test.rem(471): Trig = Saturday, 16 February, 1991
+$Friday => "Friday"
+Friday
+msg [$HushMode]%
+../tests/test.rem(472): Trig = Saturday, 16 February, 1991
+$HushMode => 0
+0
+msg [$IgnoreOnce]%
+../tests/test.rem(473): Trig = Saturday, 16 February, 1991
+$IgnoreOnce => 1
+1
+msg [$InfDelta]%
+../tests/test.rem(474): Trig = Saturday, 16 February, 1991
+$InfDelta => 0
+0
+msg [$IntMax]%
+../tests/test.rem(475): Trig = Saturday, 16 February, 1991
+$IntMax => 2147483647
+2147483647
+msg [$IntMin]%
+../tests/test.rem(476): Trig = Saturday, 16 February, 1991
+$IntMin => -2147483648
+-2147483648
+msg [$January]%
+../tests/test.rem(477): Trig = Saturday, 16 February, 1991
+$January => "January"
+January
+msg [$July]%
+../tests/test.rem(478): Trig = Saturday, 16 February, 1991
+$July => "July"
+July
+msg [$June]%
+../tests/test.rem(479): Trig = Saturday, 16 February, 1991
+$June => "June"
+June
+msg [$LatDeg]%
+../tests/test.rem(480): Trig = Saturday, 16 February, 1991
+$LatDeg => 30
+30
+msg [$Latitude]%
+../tests/test.rem(481): Trig = Saturday, 16 February, 1991
+$Latitude => "30.500000"
+30.500000
+msg [$LatMin]%
+../tests/test.rem(482): Trig = Saturday, 16 February, 1991
+$LatMin => 30
+30
+msg [$LatSec]%
+../tests/test.rem(483): Trig = Saturday, 16 February, 1991
+$LatSec => 0
+0
+msg [$Location]%
+../tests/test.rem(484): Trig = Saturday, 16 February, 1991
+$Location => "Ottawa"
+Ottawa
+msg [$LongDeg]%
+../tests/test.rem(485): Trig = Saturday, 16 February, 1991
+$LongDeg => -25
+-25
+msg [$Longitude]%
+../tests/test.rem(486): Trig = Saturday, 16 February, 1991
+$Longitude => "24.750000"
+24.750000
+msg [$LongMin]%
+../tests/test.rem(487): Trig = Saturday, 16 February, 1991
+$LongMin => 15
+15
+msg [$LongSec]%
+../tests/test.rem(488): Trig = Saturday, 16 February, 1991
+$LongSec => 0
+0
+msg [$March]%
+../tests/test.rem(489): Trig = Saturday, 16 February, 1991
+$March => "March"
+March
+msg [$MaxSatIter]%
+../tests/test.rem(490): Trig = Saturday, 16 February, 1991
+$MaxSatIter => 150
+150
+msg [$MaxStringLen]%
+../tests/test.rem(491): Trig = Saturday, 16 February, 1991
+$MaxStringLen => 65535
+65535
+msg [$May]%
+../tests/test.rem(492): Trig = Saturday, 16 February, 1991
+$May => "May"
+May
+msg [$MinsFromUTC]%
+../tests/test.rem(493): Trig = Saturday, 16 February, 1991
+$MinsFromUTC => -300
+-300
+msg [$Monday]%
+../tests/test.rem(494): Trig = Saturday, 16 February, 1991
+$Monday => "Monday"
+Monday
+msg [$NextMode]%
+../tests/test.rem(495): Trig = Saturday, 16 February, 1991
+$NextMode => 0
+0
+msg [$November]%
+../tests/test.rem(496): Trig = Saturday, 16 February, 1991
+$November => "November"
+November
+msg [$NumQueued]%
+../tests/test.rem(497): Trig = Saturday, 16 February, 1991
+$NumQueued => 0
+0
+msg [$NumTrig]%
+../tests/test.rem(498): Trig = Saturday, 16 February, 1991
+$NumTrig => 85
+85
+msg [$October]%
+../tests/test.rem(499): Trig = Saturday, 16 February, 1991
+$October => "October"
+October
+msg [$PrefixLineNo]%
+../tests/test.rem(500): Trig = Saturday, 16 February, 1991
+$PrefixLineNo => 0
+0
+msg [$PSCal]%
+../tests/test.rem(501): Trig = Saturday, 16 February, 1991
+$PSCal => 0
+0
+msg [$RunOff]%
+../tests/test.rem(502): Trig = Saturday, 16 February, 1991
+$RunOff => 0
+0
+msg [$Saturday]%
+../tests/test.rem(503): Trig = Saturday, 16 February, 1991
+$Saturday => "Saturday"
+Saturday
+msg [$September]%
+../tests/test.rem(504): Trig = Saturday, 16 February, 1991
+$September => "September"
+September
+msg [$SimpleCal]%
+../tests/test.rem(505): Trig = Saturday, 16 February, 1991
+$SimpleCal => 0
+0
+msg [$SortByDate]%
+../tests/test.rem(506): Trig = Saturday, 16 February, 1991
+$SortByDate => 0
+0
+msg [$SortByPrio]%
+../tests/test.rem(507): Trig = Saturday, 16 February, 1991
+$SortByPrio => 0
+0
+msg [$SortByTime]%
+../tests/test.rem(508): Trig = Saturday, 16 February, 1991
+$SortByTime => 0
+0
+msg [$SubsIndent]%
+../tests/test.rem(509): Trig = Saturday, 16 February, 1991
+$SubsIndent => 0
+0
+msg [$Sunday]%
+../tests/test.rem(510): Trig = Saturday, 16 February, 1991
+$Sunday => "Sunday"
+Sunday
+msg [$T]%
+../tests/test.rem(511): Trig = Saturday, 16 February, 1991
+$T => 1991-02-16
+1991-02-16
+msg [$Td]%
+../tests/test.rem(512): Trig = Saturday, 16 February, 1991
+$Td => 16
+16
+msg [$Thursday]%
+../tests/test.rem(513): Trig = Saturday, 16 February, 1991
+$Thursday => "Thursday"
+Thursday
+msg [$TimeSep]%
+../tests/test.rem(514): Trig = Saturday, 16 February, 1991
+$TimeSep => ":"
+:
+msg [$Tm]%
+../tests/test.rem(515): Trig = Saturday, 16 February, 1991
+$Tm => 2
+2
+msg [$Tuesday]%
+../tests/test.rem(516): Trig = Saturday, 16 February, 1991
+$Tuesday => "Tuesday"
+Tuesday
+msg [$Tw]%
+../tests/test.rem(517): Trig = Saturday, 16 February, 1991
+$Tw => 6
+6
+msg [$Ty]%
+../tests/test.rem(518): Trig = Saturday, 16 February, 1991
+$Ty => 1991
+1991
+msg [$U]%
+../tests/test.rem(519): Trig = Saturday, 16 February, 1991
+$U => 1991-02-16
+1991-02-16
+msg [$Ud]%
+../tests/test.rem(520): Trig = Saturday, 16 February, 1991
+$Ud => 16
+16
+msg [$Um]%
+../tests/test.rem(521): Trig = Saturday, 16 February, 1991
+$Um => 2
+2
+msg [$UntimedFirst]%
+../tests/test.rem(522): Trig = Saturday, 16 February, 1991
+$UntimedFirst => 0
+0
+msg [$Uw]%
+../tests/test.rem(523): Trig = Saturday, 16 February, 1991
+$Uw => 6
+6
+msg [$Uy]%
+../tests/test.rem(524): Trig = Saturday, 16 February, 1991
+$Uy => 1991
+1991
+msg [$Wednesday]%
+../tests/test.rem(525): Trig = Saturday, 16 February, 1991
+$Wednesday => "Wednesday"
+Wednesday
+
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 Variable  Value
 
 $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: Name too long
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X
-../tests/test.rem(452): Trig = Wednesday, 25 December, 1991
+../tests/test.rem(529): Trig = Wednesday, 25 December, 1991
 # Next should give a parse error
 OMIT 26 Dec 2010 THROUGH 27 Dec 2010 MSG This is not legal
-../tests/test.rem(454): Trig = Sunday, 26 December, 2010
+../tests/test.rem(531): Trig = Sunday, 26 December, 2010
 OMIT DUMP
 Global Full OMITs (16 of maximum allowed 1000):
 	1991-03-11
@@ -2803,287 +3108,287 @@ a => 5761
 hebdate(14, "Adar", 1991-02-16, 5761) => 1991-02-28
 trigger(1991-02-28) => "28 February 1991"
 Leaving UserFN _i() => "28 February 1991"
-../tests/test.rem(457): Trig = Thursday, 28 February, 1991
+../tests/test.rem(534): Trig = Thursday, 28 February, 1991
 
 # Regression test for bug found by Larry Hynes
 REM SATISFY [day(trigdate()-25) == 14] MSG Foo
-../tests/test.rem(460): Trig = Saturday, 16 February, 1991
+../tests/test.rem(537): Trig = Saturday, 16 February, 1991
 trigdate() => 1991-02-16
 1991-02-16 - 25 => 1991-01-22
 day(1991-01-22) => 22
 22 == 14 => 0
-../tests/test.rem(460): Trig = Sunday, 17 February, 1991
+../tests/test.rem(537): Trig = Sunday, 17 February, 1991
 trigdate() => 1991-02-17
 1991-02-17 - 25 => 1991-01-23
 day(1991-01-23) => 23
 23 == 14 => 0
-../tests/test.rem(460): Trig = Monday, 18 February, 1991
+../tests/test.rem(537): Trig = Monday, 18 February, 1991
 trigdate() => 1991-02-18
 1991-02-18 - 25 => 1991-01-24
 day(1991-01-24) => 24
 24 == 14 => 0
-../tests/test.rem(460): Trig = Tuesday, 19 February, 1991
+../tests/test.rem(537): Trig = Tuesday, 19 February, 1991
 trigdate() => 1991-02-19
 1991-02-19 - 25 => 1991-01-25
 day(1991-01-25) => 25
 25 == 14 => 0
-../tests/test.rem(460): Trig = Wednesday, 20 February, 1991
+../tests/test.rem(537): Trig = Wednesday, 20 February, 1991
 trigdate() => 1991-02-20
 1991-02-20 - 25 => 1991-01-26
 day(1991-01-26) => 26
 26 == 14 => 0
-../tests/test.rem(460): Trig = Thursday, 21 February, 1991
+../tests/test.rem(537): Trig = Thursday, 21 February, 1991
 trigdate() => 1991-02-21
 1991-02-21 - 25 => 1991-01-27
 day(1991-01-27) => 27
 27 == 14 => 0
-../tests/test.rem(460): Trig = Friday, 22 February, 1991
+../tests/test.rem(537): Trig = Friday, 22 February, 1991
 trigdate() => 1991-02-22
 1991-02-22 - 25 => 1991-01-28
 day(1991-01-28) => 28
 28 == 14 => 0
-../tests/test.rem(460): Trig = Saturday, 23 February, 1991
+../tests/test.rem(537): Trig = Saturday, 23 February, 1991
 trigdate() => 1991-02-23
 1991-02-23 - 25 => 1991-01-29
 day(1991-01-29) => 29
 29 == 14 => 0
-../tests/test.rem(460): Trig = Sunday, 24 February, 1991
+../tests/test.rem(537): Trig = Sunday, 24 February, 1991
 trigdate() => 1991-02-24
 1991-02-24 - 25 => 1991-01-30
 day(1991-01-30) => 30
 30 == 14 => 0
-../tests/test.rem(460): Trig = Monday, 25 February, 1991
+../tests/test.rem(537): Trig = Monday, 25 February, 1991
 trigdate() => 1991-02-25
 1991-02-25 - 25 => 1991-01-31
 day(1991-01-31) => 31
 31 == 14 => 0
-../tests/test.rem(460): Trig = Tuesday, 26 February, 1991
+../tests/test.rem(537): Trig = Tuesday, 26 February, 1991
 trigdate() => 1991-02-26
 1991-02-26 - 25 => 1991-02-01
 day(1991-02-01) => 1
 1 == 14 => 0
-../tests/test.rem(460): Trig = Wednesday, 27 February, 1991
+../tests/test.rem(537): Trig = Wednesday, 27 February, 1991
 trigdate() => 1991-02-27
 1991-02-27 - 25 => 1991-02-02
 day(1991-02-02) => 2
 2 == 14 => 0
-../tests/test.rem(460): Trig = Thursday, 28 February, 1991
+../tests/test.rem(537): Trig = Thursday, 28 February, 1991
 trigdate() => 1991-02-28
 1991-02-28 - 25 => 1991-02-03
 day(1991-02-03) => 3
 3 == 14 => 0
-../tests/test.rem(460): Trig = Friday, 1 March, 1991
+../tests/test.rem(537): Trig = Friday, 1 March, 1991
 trigdate() => 1991-03-01
 1991-03-01 - 25 => 1991-02-04
 day(1991-02-04) => 4
 4 == 14 => 0
-../tests/test.rem(460): Trig = Saturday, 2 March, 1991
+../tests/test.rem(537): Trig = Saturday, 2 March, 1991
 trigdate() => 1991-03-02
 1991-03-02 - 25 => 1991-02-05
 day(1991-02-05) => 5
 5 == 14 => 0
-../tests/test.rem(460): Trig = Sunday, 3 March, 1991
+../tests/test.rem(537): Trig = Sunday, 3 March, 1991
 trigdate() => 1991-03-03
 1991-03-03 - 25 => 1991-02-06
 day(1991-02-06) => 6
 6 == 14 => 0
-../tests/test.rem(460): Trig = Monday, 4 March, 1991
+../tests/test.rem(537): Trig = Monday, 4 March, 1991
 trigdate() => 1991-03-04
 1991-03-04 - 25 => 1991-02-07
 day(1991-02-07) => 7
 7 == 14 => 0
-../tests/test.rem(460): Trig = Tuesday, 5 March, 1991
+../tests/test.rem(537): Trig = Tuesday, 5 March, 1991
 trigdate() => 1991-03-05
 1991-03-05 - 25 => 1991-02-08
 day(1991-02-08) => 8
 8 == 14 => 0
-../tests/test.rem(460): Trig = Wednesday, 6 March, 1991
+../tests/test.rem(537): Trig = Wednesday, 6 March, 1991
 trigdate() => 1991-03-06
 1991-03-06 - 25 => 1991-02-09
 day(1991-02-09) => 9
 9 == 14 => 0
-../tests/test.rem(460): Trig = Thursday, 7 March, 1991
+../tests/test.rem(537): Trig = Thursday, 7 March, 1991
 trigdate() => 1991-03-07
 1991-03-07 - 25 => 1991-02-10
 day(1991-02-10) => 10
 10 == 14 => 0
-../tests/test.rem(460): Trig = Friday, 8 March, 1991
+../tests/test.rem(537): Trig = Friday, 8 March, 1991
 trigdate() => 1991-03-08
 1991-03-08 - 25 => 1991-02-11
 day(1991-02-11) => 11
 11 == 14 => 0
-../tests/test.rem(460): Trig = Saturday, 9 March, 1991
+../tests/test.rem(537): Trig = Saturday, 9 March, 1991
 trigdate() => 1991-03-09
 1991-03-09 - 25 => 1991-02-12
 day(1991-02-12) => 12
 12 == 14 => 0
-../tests/test.rem(460): Trig = Sunday, 10 March, 1991
+../tests/test.rem(537): Trig = Sunday, 10 March, 1991
 trigdate() => 1991-03-10
 1991-03-10 - 25 => 1991-02-13
 day(1991-02-13) => 13
 13 == 14 => 0
-../tests/test.rem(460): Trig = Monday, 11 March, 1991
+../tests/test.rem(537): Trig = Monday, 11 March, 1991
 trigdate() => 1991-03-11
 1991-03-11 - 25 => 1991-02-14
 day(1991-02-14) => 14
 14 == 14 => 1
-../tests/test.rem(460): Trig(satisfied) = Monday, 11 March, 1991
+../tests/test.rem(537): Trig(satisfied) = Monday, 11 March, 1991
 
 # Check combo of SATISFY and long-duration events
 REM 14 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(463): Trig = Thursday, 14 March, 1991
+../tests/test.rem(540): Trig = Thursday, 14 March, 1991
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(463): Trig(satisfied) = Thursday, 14 March, 1991
+../tests/test.rem(540): Trig(satisfied) = Thursday, 14 March, 1991
 REM 14 AT 16:00 DURATION 8:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(464): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(541): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(464): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
+../tests/test.rem(541): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:00
 REM 14 AT 16:00 DURATION 8:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(465): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
-../tests/test.rem(465): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(542): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(542): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(465): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
+../tests/test.rem(542): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 08:01
 REM 14 AT 16:00 DURATION 32:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(466): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
-../tests/test.rem(466): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(543): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(543): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(466): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
+../tests/test.rem(543): Trig(satisfied) = Thursday, 14 March, 1991 AT 16:00 DURATION 32:00
 REM 14 AT 16:00 DURATION 32:01 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(467): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:01
-../tests/test.rem(467): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:01
+../tests/test.rem(544): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 32:01
+../tests/test.rem(544): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 32:01
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(467): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
-../tests/test.rem(467): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
+../tests/test.rem(544): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
+../tests/test.rem(544): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 00:01
 Thursday, the 14th
 
 REM 14 AT 16:00 DURATION 40:00 SATISFY [$Tw == 4] MSG Thursday, the 14th
-../tests/test.rem(468): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 40:00
-../tests/test.rem(468): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(545): Trig = Thursday, 14 March, 1991 AT 16:00 DURATION 40:00
+../tests/test.rem(545): Trig = Thursday, 14 February, 1991 AT 16:00 DURATION 40:00
 $Tw => 4
 4 == 4 => 1
-../tests/test.rem(468): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
-../tests/test.rem(468): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(545): Trig(adj) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
+../tests/test.rem(545): Trig(satisfied) = Saturday, 16 February, 1991 AT 00:00 DURATION 08:00
 Thursday, the 14th
 
 
 # This is now an error
 REM DURATION 15:00 MSG Should fail... need AT if you have DURATION.
-../tests/test.rem(471): Cannot specify DURATION without specifying AT
+../tests/test.rem(548): Cannot specify DURATION without specifying AT
 
 # Parsing of AM/PM times
 REM AT 0:00am MSG foo 0a
-../tests/test.rem(474): Expecting time after AT
+../tests/test.rem(551): Expecting time after AT
 REM AT 1:00AM MSG foo 1a
-../tests/test.rem(475): Trig = Saturday, 16 February, 1991 AT 01:00
+../tests/test.rem(552): Trig = Saturday, 16 February, 1991 AT 01:00
 foo 1a
 
 REM AT 2:00am MSG foo 2a
-../tests/test.rem(476): Trig = Saturday, 16 February, 1991 AT 02:00
+../tests/test.rem(553): Trig = Saturday, 16 February, 1991 AT 02:00
 foo 2a
 
 REM AT 3:00AM MSG foo 3a
-../tests/test.rem(477): Trig = Saturday, 16 February, 1991 AT 03:00
+../tests/test.rem(554): Trig = Saturday, 16 February, 1991 AT 03:00
 foo 3a
 
 REM AT 4:00am MSG foo 4a
-../tests/test.rem(478): Trig = Saturday, 16 February, 1991 AT 04:00
+../tests/test.rem(555): Trig = Saturday, 16 February, 1991 AT 04:00
 foo 4a
 
 REM AT 5:00AM MSG foo 5a
-../tests/test.rem(479): Trig = Saturday, 16 February, 1991 AT 05:00
+../tests/test.rem(556): Trig = Saturday, 16 February, 1991 AT 05:00
 foo 5a
 
 REM AT 6:00am MSG foo 6a
-../tests/test.rem(480): Trig = Saturday, 16 February, 1991 AT 06:00
+../tests/test.rem(557): Trig = Saturday, 16 February, 1991 AT 06:00
 foo 6a
 
 REM AT 7:00AM MSG foo 7a
-../tests/test.rem(481): Trig = Saturday, 16 February, 1991 AT 07:00
+../tests/test.rem(558): Trig = Saturday, 16 February, 1991 AT 07:00
 foo 7a
 
 REM AT 8:00am MSG foo 8a
-../tests/test.rem(482): Trig = Saturday, 16 February, 1991 AT 08:00
+../tests/test.rem(559): Trig = Saturday, 16 February, 1991 AT 08:00
 foo 8a
 
 REM AT 9:00AM MSG foo 9a
-../tests/test.rem(483): Trig = Saturday, 16 February, 1991 AT 09:00
+../tests/test.rem(560): Trig = Saturday, 16 February, 1991 AT 09:00
 foo 9a
 
 REM AT 10:00am MSG foo 10a
-../tests/test.rem(484): Trig = Saturday, 16 February, 1991 AT 10:00
+../tests/test.rem(561): Trig = Saturday, 16 February, 1991 AT 10:00
 foo 10a
 
 REM AT 11:00AM MSG foo 11a
-../tests/test.rem(485): Trig = Saturday, 16 February, 1991 AT 11:00
+../tests/test.rem(562): Trig = Saturday, 16 February, 1991 AT 11:00
 foo 11a
 
 REM AT 12:00am MSG foo 12a
-../tests/test.rem(486): Trig = Saturday, 16 February, 1991 AT 00:00
+../tests/test.rem(563): Trig = Saturday, 16 February, 1991 AT 00:00
 foo 12a
 
 REM AT 13:00AM MSG foo 13a
-../tests/test.rem(487): Expecting time after AT
+../tests/test.rem(564): Expecting time after AT
 REM AT 0:00pm MSG foo 0p
-../tests/test.rem(488): Expecting time after AT
+../tests/test.rem(565): Expecting time after AT
 REM AT 1:00PM MSG foo 1p
-../tests/test.rem(489): Trig = Saturday, 16 February, 1991 AT 13:00
+../tests/test.rem(566): Trig = Saturday, 16 February, 1991 AT 13:00
 foo 1p
 
 REM AT 2:00pm MSG foo 2p
-../tests/test.rem(490): Trig = Saturday, 16 February, 1991 AT 14:00
+../tests/test.rem(567): Trig = Saturday, 16 February, 1991 AT 14:00
 foo 2p
 
 REM AT 3:00PM MSG foo 3p
-../tests/test.rem(491): Trig = Saturday, 16 February, 1991 AT 15:00
+../tests/test.rem(568): Trig = Saturday, 16 February, 1991 AT 15:00
 foo 3p
 
 REM AT 4:00pm MSG foo 4p
-../tests/test.rem(492): Trig = Saturday, 16 February, 1991 AT 16:00
+../tests/test.rem(569): Trig = Saturday, 16 February, 1991 AT 16:00
 foo 4p
 
 REM AT 5:00PM MSG foo 5p
-../tests/test.rem(493): Trig = Saturday, 16 February, 1991 AT 17:00
+../tests/test.rem(570): Trig = Saturday, 16 February, 1991 AT 17:00
 foo 5p
 
 REM AT 6:00pm MSG foo 6p
-../tests/test.rem(494): Trig = Saturday, 16 February, 1991 AT 18:00
+../tests/test.rem(571): Trig = Saturday, 16 February, 1991 AT 18:00
 foo 6p
 
 REM AT 7:00PM MSG foo 7p
-../tests/test.rem(495): Trig = Saturday, 16 February, 1991 AT 19:00
+../tests/test.rem(572): Trig = Saturday, 16 February, 1991 AT 19:00
 foo 7p
 
 REM AT 8:00pm MSG foo 8p
-../tests/test.rem(496): Trig = Saturday, 16 February, 1991 AT 20:00
+../tests/test.rem(573): Trig = Saturday, 16 February, 1991 AT 20:00
 foo 8p
 
 REM AT 9:00PM MSG foo 9p
-../tests/test.rem(497): Trig = Saturday, 16 February, 1991 AT 21:00
+../tests/test.rem(574): Trig = Saturday, 16 February, 1991 AT 21:00
 foo 9p
 
 REM AT 10:00pm MSG foo 10p
-../tests/test.rem(498): Trig = Saturday, 16 February, 1991 AT 22:00
+../tests/test.rem(575): Trig = Saturday, 16 February, 1991 AT 22:00
 foo 10p
 
 REM AT 11:00PM MSG foo 11p
-../tests/test.rem(499): Trig = Saturday, 16 February, 1991 AT 23:00
+../tests/test.rem(576): Trig = Saturday, 16 February, 1991 AT 23:00
 foo 11p
 
 REM AT 12:00pm MSG foo 12p
-../tests/test.rem(500): Trig = Saturday, 16 February, 1991 AT 12:00
+../tests/test.rem(577): Trig = Saturday, 16 February, 1991 AT 12:00
 foo 12p
 
 REM AT 13:00PM MSG foo 13p
-../tests/test.rem(501): Expecting time after AT
+../tests/test.rem(578): Expecting time after AT
 
 DEBUG +x
 SET x 0:00am + 0
-../tests/test.rem(504): Ill-formed time
+../tests/test.rem(581): Ill-formed time
 SET x 1:00AM + 0
 01:00 + 0 => 01:00
 SET x 2:00am + 0
@@ -3109,10 +3414,10 @@ SET x 11:00AM + 0
 SET x 12:00am + 0
 00:00 + 0 => 00:00
 SET x 13:00AM + 0
-../tests/test.rem(517): Ill-formed time
+../tests/test.rem(594): Ill-formed time
 
 SET x 0:00pm + 0
-../tests/test.rem(519): Ill-formed time
+../tests/test.rem(596): Ill-formed time
 SET x 1:00PM + 0
 13:00 + 0 => 13:00
 SET x 2:00pm + 0
@@ -3138,10 +3443,10 @@ SET x 11:00PM + 0
 SET x 12:00pm + 0
 12:00 + 0 => 12:00
 SET x 13:00PM + 0
-../tests/test.rem(532): Ill-formed time
+../tests/test.rem(609): Ill-formed time
 
 SET x '2015-02-03@0:00am' + 0
-../tests/test.rem(534): Ill-formed time
+../tests/test.rem(611): Ill-formed time
 SET x '2015-02-03@1:00AM' + 0
 2015-02-03@01:00 + 0 => 2015-02-03@01:00
 SET x '2015-02-03@2:00am' + 0
@@ -3167,10 +3472,10 @@ SET x '2015-02-03@11:00AM' + 0
 SET x '2015-02-03@12:00am' + 0
 2015-02-03@00:00 + 0 => 2015-02-03@00:00
 SET x '2015-02-03@13:00AM' + 0
-../tests/test.rem(547): Ill-formed time
+../tests/test.rem(624): Ill-formed time
 
 SET x '2015-02-03@0:00pm' + 0
-../tests/test.rem(549): Ill-formed time
+../tests/test.rem(626): Ill-formed time
 SET x '2015-02-03@1:00PM' + 0
 2015-02-03@13:00 + 0 => 2015-02-03@13:00
 SET x '2015-02-03@2:00pm' + 0
@@ -3196,7 +3501,7 @@ SET x '2015-02-03@11:00PM' + 0
 SET x '2015-02-03@12:00pm' + 0
 2015-02-03@12:00 + 0 => 2015-02-03@12:00
 SET x '2015-02-03@13:00PM' + 0
-../tests/test.rem(562): Ill-formed time
+../tests/test.rem(639): Ill-formed time
 
 # Test the ampm function
 set x ampm(0:12) + ""
@@ -3292,88 +3597,88 @@ coerce("DATETIME", "2020-05-05@1:45pm") => 2020-05-05@13:45
 set a $IntMin - 1
 $IntMin => -2147483648
 -2147483648 - 1 => Number too high
-../tests/test.rem(601): `-': Number too high
+../tests/test.rem(678): `-': Number too high
 set a $IntMin - $IntMax
 $IntMin => -2147483648
 $IntMax => 2147483647
 -2147483648 - 2147483647 => Number too high
-../tests/test.rem(602): `-': Number too high
+../tests/test.rem(679): `-': Number too high
 set a $IntMax - $IntMin
 $IntMax => 2147483647
 $IntMin => -2147483648
 2147483647 - -2147483648 => Number too high
-../tests/test.rem(603): `-': Number too high
+../tests/test.rem(680): `-': Number too high
 set a $IntMax - (-1)
 $IntMax => 2147483647
 - 1 => -1
 2147483647 - -1 => Number too high
-../tests/test.rem(604): `-': Number too high
+../tests/test.rem(681): `-': Number too high
 set a $IntMax + 1
 $IntMax => 2147483647
 2147483647 + 1 => Number too high
-../tests/test.rem(605): `+': Number too high
+../tests/test.rem(682): `+': Number too high
 set a $IntMax + $IntMax
 $IntMax => 2147483647
 $IntMax => 2147483647
 2147483647 + 2147483647 => Number too high
-../tests/test.rem(606): `+': Number too high
+../tests/test.rem(683): `+': Number too high
 set a $IntMin + (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 + -1 => Number too high
-../tests/test.rem(607): `+': Number too high
+../tests/test.rem(684): `+': Number too high
 set a $IntMin + $IntMin
 $IntMin => -2147483648
 $IntMin => -2147483648
 -2147483648 + -2147483648 => Number too high
-../tests/test.rem(608): `+': Number too high
+../tests/test.rem(685): `+': Number too high
 set a $IntMax * 2
 $IntMax => 2147483647
 2147483647 * 2 => Number too high
-../tests/test.rem(609): `*': Number too high
+../tests/test.rem(686): `*': Number too high
 set a $IntMax * $IntMax
 $IntMax => 2147483647
 $IntMax => 2147483647
 2147483647 * 2147483647 => Number too high
-../tests/test.rem(610): `*': Number too high
+../tests/test.rem(687): `*': Number too high
 set a $IntMax * $IntMin
 $IntMax => 2147483647
 $IntMin => -2147483648
 2147483647 * -2147483648 => Number too high
-../tests/test.rem(611): `*': Number too high
+../tests/test.rem(688): `*': Number too high
 set a $IntMin * 2
 $IntMin => -2147483648
 -2147483648 * 2 => Number too high
-../tests/test.rem(612): `*': Number too high
+../tests/test.rem(689): `*': Number too high
 set a $IntMin * $IntMin
 $IntMin => -2147483648
 $IntMin => -2147483648
 -2147483648 * -2147483648 => Number too high
-../tests/test.rem(613): `*': Number too high
+../tests/test.rem(690): `*': Number too high
 set a $IntMin * $IntMax
 $IntMin => -2147483648
 $IntMax => 2147483647
 -2147483648 * 2147483647 => Number too high
-../tests/test.rem(614): `*': Number too high
+../tests/test.rem(691): `*': Number too high
 set a $IntMin / (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 / -1 => Number too high
-../tests/test.rem(615): `/': Number too high
+../tests/test.rem(692): `/': Number too high
 set a $IntMin * (-1)
 $IntMin => -2147483648
 - 1 => -1
 -2147483648 * -1 => Number too high
-../tests/test.rem(616): `*': Number too high
+../tests/test.rem(693): `*': Number too high
 set a (-1) * $IntMin
 - 1 => -1
 $IntMin => -2147483648
 -1 * -2147483648 => Number too high
-../tests/test.rem(617): `*': Number too high
+../tests/test.rem(694): `*': Number too high
 set a abs($IntMin)
 $IntMin => -2147483648
 abs(-2147483648) => Number too high
-../tests/test.rem(618): Number too high
+../tests/test.rem(695): Number too high
 
 # The "isany" function
 set a isany(1)
@@ -3400,17 +3705,17 @@ set a shellescape(" !\"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
 shellescape(" !"#$%%&'()*+,-./0123456789:;<=>?@ABCDEF"...) => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
 
 msg [a]
-../tests/test.rem(634): Trig = Saturday, 16 February, 1991
+../tests/test.rem(711): Trig = Saturday, 16 February, 1991
 a => "\ \!\"\#\$\%\%\&\'\(\)\*+,-./0123456789\"...
 \ \!\"\#\$\\\&\'\(\)\*+,-./0123456789\:\;\<=\>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\[\\\]\^_\`abcdefghijklmnopqrstuvwxyz\{\|\}\~
 
 
 # Deprecated functions
 set x psshade(50)
-psshade(50) => ../tests/test.rem(637): psshade() is deprecated; use SPECIAL SHADE instead.
+psshade(50) => ../tests/test.rem(714): psshade() is deprecated; use SPECIAL SHADE instead.
 "/_A LineWidth 2 div def _A _A moveto Box"...
 set x psmoon(0)
-psmoon(0) => ../tests/test.rem(638): psmoon() is deprecated; use SPECIAL MOON instead.
+psmoon(0) => ../tests/test.rem(715): psmoon() is deprecated; use SPECIAL MOON instead.
 "gsave 0 setgray newpath Border DaySize 2"...
 
 # Don't want Remind to queue reminders

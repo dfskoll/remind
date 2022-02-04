@@ -231,6 +231,10 @@ sub parse_oldstyle_line
                                 $hash->{r} = $1;
                                 $hash->{g} = $2;
                                 $hash->{b} = $3;
+                        } elsif ($hash->{body} =~ /^\s*(\d+)/) {
+                                $hash->{r} = $1;
+                                $hash->{g} = $1;
+                                $hash->{b} = $1;
                         }
                 }
         }

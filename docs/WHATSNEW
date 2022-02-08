@@ -45,6 +45,10 @@ CHANGES TO REMIND
 - BUG FIX: Properly support formatting of double-wide characters in the
   terminal mode "remind -c" calendar.
 
+- BUG FIX: rem2html: Document how to highlight today with a red border
+
+- BUG FIX: rem2html: Generate and install a man page for rem2html
+
 - BUG FIX: remind: Get rid of LAT_DEG/LAT_MIN/LAT_SEC and
   LON_DEG/LON_MIN/LON_SEC macros in favour of DEFAULT_LATITUDE and
   DEFAULT_LONGITUDE.

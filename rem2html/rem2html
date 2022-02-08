@@ -96,6 +96,14 @@ Insert I<html_text> right before the E<lt>/bodyE<gt> tag.
 
 =back
 
+=head1 HIGHLIGHTING TODAY
+
+Older versions of rem2html used to highlight today's date with a red outline.
+The current version does not do that by default.  If you wish to highlight
+today's date, add the following reminder to your reminders file:
+
+    REM [realtoday()] SPECIAL HTMLCLASS rem-today
+
 =head1 AUTHOR
 
 rem2html was written by Dianne Skoll with much inspiration from an
@@ -487,7 +495,7 @@ sub output_calendar
     }
 
     for (my $day=1; $day<=$Numdays; $day++) {
-	draw_day_cell($day, $number_of_rows);
+        draw_day_cell($day, $number_of_rows);
 	$col++;
 	if ($col == 7) {
 	    $col = 0;

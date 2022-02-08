@@ -96,6 +96,27 @@ Insert I<html_text> right before the E<lt>/bodyE<gt> tag.
 
 =back
 
+=head1 SPECIALS SUPPORTED
+
+The rem2html back-end supports the following SPECIAL reminders:
+
+=over
+
+=item HTML
+
+Add an HTML reminder to the calendar.  All HTML tags are available.
+
+=item HTMLCLASS
+
+Add a CSS class to the box representing the trigger date.  See
+"HIGHLIGHTING TODAY" for an example
+
+=item WEEK, MOON, SHARE, COLOR
+
+The standard SPECIALs supported by all back-ends
+
+=back
+
 =head1 HIGHLIGHTING TODAY
 
 Older versions of rem2html used to highlight today's date with a red outline.
@@ -109,6 +130,9 @@ today's date, add the following reminder to your reminders file:
 rem2html was written by Dianne Skoll with much inspiration from an
 earlier version by Don Schwarz.
 
+=head1 SEE ALSO
+
+B<remind>, B<rem2ps>, B<rem2pdf>
 =cut
 
 sub usage

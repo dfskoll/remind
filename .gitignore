@@ -24,3 +24,4 @@ blib/
 pm_to_blib
 rem2pdf/Makefile.top
 rem2pdf/bin/rem2pdf
+rem2html/rem2html.1

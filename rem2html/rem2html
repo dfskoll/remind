@@ -132,7 +132,7 @@ earlier version by Don Schwarz.
 
 =head1 SEE ALSO
 
-B<remind>, B<rem2ps>, B<rem2pdf>
+B<remind>, B<rem2ps>, B<rem2pdf>, B<tkremind>
 =cut
 
 sub usage

@@ -1828,7 +1828,7 @@ quotes \fImust\fR be supplied.  This distinguishes date constants
 from division or subtraction of integers.  Examples:
 .PP
 .RS
-\'1993/02/22', '1992-12-25', '1999/01/01'
+\(aq1993/02/22', '1992-12-25', '1999/01/01'
 .PP
 Note that \fBDATE\fR values are \fIprinted\fR
 without the quotes.  Although either '-' or '/' is accepted as a date
@@ -1846,7 +1846,7 @@ constants with the addition of an "@HH:MM" part, optionally followed
 by "am" or "pm".  For example:
 .PP
 .RS
-\'2008-04-05@23:11', '1999/02/03@14:06', '2001-04-07@08:30', '2020-01-01@3:20pm'
+\(aq2008-04-05@23:11', '1999/02/03@14:06', '2001-04-07@08:30', '2020-01-01@3:20pm'
 .PP
 \fBDATETIME\fR values are printed without the quotes.  Notes about date
 and time separator characters for \fBDATE\fR and \fBTIME\fR constants apply
@@ -2418,7 +2418,7 @@ Returns the time of "astronomical twilight" on the specified \fIdate\fR.  If
 .TP
 .B ampm(tq_time [,s_am [,s_pm]])
 Returns a \fBSTRING\fR that is the result of converting \fItime\fR
-(which is either a \fBTIME\R or a \fBDATETIME\fR object) to "AM/PM"
+(which is either a \fBTIME\fR or a \fBDATETIME\fR object) to "AM/PM"
 format.  The optional arguments \fIam\fR and \fIpm\fR are the strings
 to append in the AM and PM case, respectively; they default to "AM"
 and "PM".  The function obeys the system variables $DateSep,

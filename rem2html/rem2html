@@ -68,7 +68,7 @@ and newmoon.png, which are expected to live in C<--imgbase>.
 =item --stylesheet I<url.css>
 
 Use I<url.css> as the stylesheet.  If this option is used,
-I<url.css> is interpreted relative to B<imgbase> I<unless> it start
+I<url.css> is interpreted relative to B<imgbase> I<unless> it starts
 with a "/".
 
 =item --nostyle

@@ -23,7 +23,7 @@ install:
 	@$(MAKE) -C rem2pdf -f Makefile.top install
 clean:
 	find . -name '*~' -exec rm {} \;
-	$(MAKE) -C src clean
+	-$(MAKE) -C src clean
 	-$(MAKE) -C rem2pdf clean
 
 test:

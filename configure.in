@@ -13,6 +13,7 @@ cat <<'EOF'
 EOF
 
 AC_CONFIG_HEADER(src/config.h)
+AH_BOTTOM([#include <custom.h>])
 
 dnl Checks for programs.
 AC_PROG_CC

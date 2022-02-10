@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 3.4 Patch 0 - 2022-??-??
+* VERSION 3.4 Patch 0 - 2022-02-10
 
 - MAJOR CHANGE: Remind and its helpers (except for rem2ps) fully support
   UTF-8.  If your system locale is a UTF-8 locale and your terminal
@@ -41,6 +41,9 @@ CHANGES TO REMIND
   and DEFAULT_LONGITUDE.
 
 - CLEANUP: remind: C source code: Remove various unused or obsolete macros.
+
+- BUG FIXES: Minor fixups to groff source and Makefiles courtesy of
+  Jochen Sprickerhof.
 
 - BUG FIX: Properly support formatting of double-wide characters in the
   terminal mode "remind -c" calendar.

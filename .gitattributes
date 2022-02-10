@@ -2,3 +2,4 @@
 .gitattributes		export-ignore
 remind.php		export-ignore
 sync-to-dianne-git	export-ignore
+php                     export-ignore

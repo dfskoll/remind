@@ -20,7 +20,7 @@ install:
 	@echo ""
 	@$(MAKE) -C src install
 	@$(MAKE) -C rem2html install
-	@$(MAKE) -C rem2pdf -f Makefile.top install
+	@$(MAKE) -C rem2pdf -f Makefile.top install INSTALL_BASE=$(INSTALL_BASE)
 clean:
 	find . -name '*~' -exec rm {} \;
 	-$(MAKE) -C src clean

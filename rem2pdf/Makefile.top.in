@@ -29,8 +29,8 @@ install:
 	    if test $$? != 0 ; then echo "Not installing rem2pdf; missing $$m"; exit 0; fi; \
 	done; \
 	echo "Installing rem2pdf"; \
-        if test "$$INSTALL_BASE" != "" ; then \
-                $(MAKE) install DESTDIR=$(DESTDIR) "INSTALL_BASE=$$INSTALLBASE" && exit 0; \
+        if test "$(INSTALL_BASE)" != "" ; then \
+                $(MAKE) install DESTDIR=$(DESTDIR) "INSTALL_BASE=$(INSTALL_BASE)" && exit 0; \
         elif test "$(prefix)" = "/usr" ; then \
 		$(MAKE) install DESTDIR=$(DESTDIR) INSTALLDIRS=vendor && exit 0; \
         else \
@@ -39,4 +39,4 @@ install:
 	exit 1;
 
 Makefile: Makefile.PL
-	$(PERL) Makefile.PL || true
+	$(PERL) Makefile.PL INSTALL_BASE=$(INSTALL_BASE) || true

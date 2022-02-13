@@ -753,24 +753,13 @@ sub draw_small_calendar
                 $last_day_on_row += 7;
                 $rows++;
         }
-        my $layout = Pango::Cairo::create_layout($cr);
-        my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . '10px');
-        $layout->set_font_description($desc);
-        $layout->set_text('88 88 88 88 88 88 88 88');
-        my ($wid, $h) = $layout->get_pixel_size();
-        $h += 1;
-        $h *= ($rows + 2); # row for month name; row for day names
+        my $font_size = $self->calculate_small_calendar_font_size($cr, $width, $height, $settings, $rows);
 
-        my $scale = $width / $wid;
-        if (($height / $h) < $scale) {
-                $scale = $height / $h;
-        }
-        my $font_size = int($scale * 10);
-        $layout = Pango::Cairo::create_layout($cr);
-        $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
+        my $layout = Pango::Cairo::create_layout($cr);
+        my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
         $layout->set_font_description($desc);
         $layout->set_text('88 ');
-        ($wid, $h) = $layout->get_pixel_size();
+        my ($wid, $h) = $layout->get_pixel_size();
         $h += 1;
 
         # Month name
@@ -822,6 +811,43 @@ sub draw_small_calendar
                         $y += $h;
                 }
         }
+}
+
+sub calculate_small_calendar_font_size
+{
+        my ($self, $cr, $width, $height, $settings, $rows) = @_;
+
+        my $layout = Pango::Cairo::create_layout($cr);
+        my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . '10px');
+        $layout->set_font_description($desc);
+        $layout->set_text('88 88 88 88 88 88 88');
+        my ($wid, $h) = $layout->get_pixel_size();
+        $h += 1;
+        $h *= ($rows + 2); # row for month name; row for day names
+
+        my $scale = $width / $wid;
+        if (($height / $h) < $scale) {
+                $scale = $height / $h;
+        }
+        my $font_size = int($scale * 10);
+
+        # Check
+        $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . $font_size . 'px');
+        $layout->set_font_description($desc);
+        $layout->set_text('88 88 88 88 88 88 88');
+        ($wid, $h) = $layout->get_pixel_size();
+        $h += 1;
+        $h *= ($rows + 2); # row for month name; row for day names
+
+        $scale = $width / $wid;
+        if (($height / $h) < $scale) {
+                $scale = $height / $h;
+        }
+
+        if ($scale < 1) { # Font size is too big
+                $font_size--;
+        }
+        return $font_size;
 }
 
 package Remind::PDF::Multi;

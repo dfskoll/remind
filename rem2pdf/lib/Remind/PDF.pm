@@ -756,7 +756,7 @@ sub draw_small_calendar
         my $layout = Pango::Cairo::create_layout($cr);
         my $desc = Pango::FontDescription->from_string($settings->{small_cal_font} . ' ' . '10px');
         $layout->set_font_description($desc);
-        $layout->set_text('88 88 88 88 88 88 88');
+        $layout->set_text('88 88 88 88 88 88 88 88');
         my ($wid, $h) = $layout->get_pixel_size();
         $h += 1;
         $h *= ($rows + 2); # row for month name; row for day names

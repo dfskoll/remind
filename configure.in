@@ -13,6 +13,11 @@ cat <<'EOF'
 EOF
 
 AC_CONFIG_HEADER(src/config.h)
+
+AC_ARG_ENABLE(perl-build-artifacts,
+[  --disable-perl-build-artifacts
+                          Disable perllocal.pod and .packlist generation], ac_cv_perlartifacts=$enableval, ac_cv_perlartifacts=yes)
+
 AH_BOTTOM([#include <custom.h>])
 
 dnl Checks for programs.
@@ -45,9 +50,16 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
 fi
 
+if test "$ac_cv_perlartifacts" = "yes" ; then
+    PERLARTIFACTS=
+else
+    PERLARTIFACTS='NO_PACKLIST=1 NO_PERLLOCAL=1'
+fi
+
 AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale initgroups)
 VERSION=03.04.00
 AC_SUBST(VERSION)
 AC_SUBST(PERL)
+AC_SUBST(PERLARTIFACTS)
 AC_OUTPUT(src/Makefile www/Makefile src/version.h rem2html/Makefile rem2pdf/Makefile.PL rem2pdf/Makefile.top rem2pdf/bin/rem2pdf)
 chmod a+x rem2pdf/bin/rem2pdf

@@ -39,4 +39,4 @@ install:
 	exit 1;
 
 Makefile: Makefile.PL
-	$(PERL) Makefile.PL INSTALL_BASE=$(INSTALL_BASE) || true
+	$(PERL) Makefile.PL @PERLARTIFACTS@ INSTALL_BASE=$(INSTALL_BASE) || true

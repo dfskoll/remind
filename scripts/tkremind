@@ -282,7 +282,17 @@ proc is_warning_header { line } {
 proc Initialize {} {
     global DayNames argc argv CommandLine ReminderFile AppendFile Remind PSCmd
     global MondayFirst TwentyFourHourMode ReminderFileModTime
+    global TodayDay TodayMonth TodayYear
+
     global Option ConfigFile
+
+    # In case date has rolled over, recalculate Today* values
+    set now [clock seconds]
+
+    set TodayMonth [expr [string trim [clock format $now -format %N]] - 1]
+    set TodayYear [clock format $now -format %Y]
+    set TodayDay [string trim [clock format $now -format %e]]
+
     set CommandLine "|$Remind -itkremind=1 -pp -y -l EXTRA"
     set PSCmd "$Remind -itkremind=1 -itkprint=1 -pp -l EXTRA"
     set i 0

@@ -1,5 +1,22 @@
 CHANGES TO REMIND
 
+* VERSION 3.4 Patch 1 - 2022-02-23
+
+- MINOR IMPROVEMENT: Support the INSTALL_BASE environment variable for
+  installing rem2pdf in a non-standard location like your home directory.
+  This is passed in to rem2pdf's Makefile at build and install time.
+
+- MINOR IMPROVEMENT: ./configure: Add --disable-perl-build-artifacts flag
+  to avoid installation of perllocal.pod and .packlist files.
+
+- BUG FIX: tkremind: If the system date rolls over, update the display
+  to correctly highlight the current date.  This worked in older versions
+  of Remind, but was broken by 03.04.00.
+
+- BUG FIX: rem2pdf: The small calendar font would sometimes be scaled
+  incorrectly so the small calendar overflowed the box.  This has been
+  fixed.
+
 * VERSION 3.4 Patch 0 - 2022-02-10
 
 - MAJOR CHANGE: Remind and its helpers (except for rem2ps) fully support

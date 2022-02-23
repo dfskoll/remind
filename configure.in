@@ -57,7 +57,7 @@ else
 fi
 
 AC_CHECK_FUNCS(setenv unsetenv glob mbstowcs setlocale initgroups)
-VERSION=03.04.00
+VERSION=03.04.01
 AC_SUBST(VERSION)
 AC_SUBST(PERL)
 AC_SUBST(PERLARTIFACTS)

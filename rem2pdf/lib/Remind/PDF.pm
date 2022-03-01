@@ -637,7 +637,7 @@ sub draw_day
                 $so_far += $h2;
         }
         if ($height) {
-                if ($entry_height + 2 * $settings->{border_size} > $height) {
+                if ($h + $entry_height + 2 * $settings->{border_size} > $height) {
                         print STDERR "WARNING: overfull box at $day " . $self->{monthname} . ' ' . $self->{year} . "\n";
                         $entry_height = $height;
                 }

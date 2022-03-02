@@ -537,6 +537,9 @@ REM MON SCANFROM 1992-01-01 UNTIL 1991-12-31 Diagnosed
 REM MON FROM [x] UNTIL 1991-12-31 Not diagnosed
 REM MON SCANFROM [x] UNTIL 1991-12-31 Not diagnosed
 
+REM 1992-01-01 UNTIL 1992-02-02 MSG Diagnosed
+REM [x] UNTIL 1992-02-02 MSG Diagnosed
+
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X

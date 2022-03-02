@@ -499,6 +499,10 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
         }
     }
 
+    if (trig->y != NO_YR && trig->m != NO_MON && trig->d != NO_DAY && trig->until != NO_UNTIL && trig->rep == NO_REP) {
+        Eprint("Warning: Useless use of UNTIL with fully-specified date and no *rep");
+    }
+
     /* Set scanfrom to default if not set explicitly */
     if (trig->scanfrom == NO_DATE) {
         trig->scanfrom = JulianToday;

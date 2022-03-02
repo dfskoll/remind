@@ -480,7 +480,6 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	}
     }
 
-    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
 
     /* Check for some warning conditions */
     if (!s->nonconst_expr) {
@@ -489,6 +488,20 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
                 Eprint("Warning: UNTIL/THROUGH date earlier than start date");
             }
         }
+        if (trig->from != NO_DATE) {
+            if (trig->until != NO_UNTIL && trig->until < trig->from) {
+                Eprint("Warning: UNTIL/THROUGH date earlier than FROM date");
+            }
+        } else if (trig->scanfrom != NO_DATE) {
+            if (trig->until != NO_UNTIL && trig->until < trig->scanfrom) {
+                Eprint("Warning: UNTIL/THROUGH date earlier than SCANFROM date");
+            }
+        }
+    }
+
+    /* Set scanfrom to default if not set explicitly */
+    if (trig->scanfrom == NO_DATE) {
+        trig->scanfrom = JulianToday;
     }
 
     return OK;

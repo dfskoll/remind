@@ -531,6 +531,12 @@ REM 1992-01-01 *1 UNTIL 1991-12-31 MSG Diagnosed
 set x '1992-01-01'
 REM [x] *1 UNTIL 1991-12-31 MSG Not diagnosed - nonconst expression
 
+REM MON FROM 1992-01-01 UNTIL 1991-12-31 Diagnosed
+REM MON SCANFROM 1992-01-01 UNTIL 1991-12-31 Diagnosed
+
+REM MON FROM [x] UNTIL 1991-12-31 Not diagnosed
+REM MON SCANFROM [x] UNTIL 1991-12-31 Not diagnosed
+
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X

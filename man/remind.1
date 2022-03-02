@@ -814,7 +814,8 @@ could be specified as:
 However, events that do not repeat daily, weekly, monthly or yearly require
 another approach.  The \fIrepeat\fR component of the \fBREM\fR command
 fills this need.  To use it, you must completely specify a date (year, month
-and day, and optionally weekday.)  The \fIrepeat\fR component is an asterisk
+and day, and optionally weekday); this is the start date of the
+repetition period.  The \fIrepeat\fR component is an asterisk
 followed by a number specifying the repetition period in days.
 .PP
 For example, suppose you get paid every second Wednesday, and your
@@ -824,12 +825,12 @@ last payday was Wednesday, 28 October, 1992.  You can use:
 	REM 28 Oct 1992 *14 MSG Payday
 .fi
 .PP
-This issues the reminder every 14 days, starting from the calculated trigger
-date.  You can use \fIdelta\fR and \fIback\fR with \fIrepeat.\fR  Note,
-however, that the \fIback\fR is used only to compute the initial
-trigger date; thereafter, the reminder repeats with the specified
+This issues the reminder every 14 days, starting from 28 Oct 1992.
+You can use \fIdelta\fR and \fIback\fR with \fIrepeat.\fR  Note,
+however, that the \fIback\fR is used only to compute the starting
+date; thereafter, the reminder repeats with the specified
 period.  Similarly, if you specify a weekday, it is used only to calculate
-the initial date, and does not affect the repetition period.
+the starting date, and does not affect the repetition period.
 .PP
 .B SCANFROM \fRand\fB FROM
 .PP

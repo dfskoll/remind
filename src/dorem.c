@@ -241,7 +241,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	LastTriggerTime = NO_TIME;
     }
 
-    while(1) {
+    int parsing = 1;
+    while(parsing) {
 	/* Read space-delimited string */
 	r = ParseToken(s, &buf);
 	if (r) return r;
@@ -332,7 +333,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 		}
 		StrnCpy(trig->passthru, DBufValue(&buf), PASSTHRU_LEN);
 	    }
-	    return OK;
+            parsing = 0;
+            break;
 
 	case T_Through:
 	    DBufFree(&buf);
@@ -402,7 +404,8 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	case T_Empty:
 	    DBufFree(&buf);
 	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
-	    return OK;
+            parsing = 0;
+            break;
 
 	case T_OmitFunc:
 	    if (trig->localomit) {
@@ -475,9 +478,11 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    trig->typ = MSG_TYPE;
 	    if (s->isnested) return E_CANT_NEST_RTYPE;
 	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
-	    return OK;
+            parsing = 0;
+            break;
 	}
     }
+    return OK;
 }
 
 /***************************************************************/

@@ -323,7 +323,6 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    DBufFree(&buf);
 	    trig->typ = tok.val;
 	    if (s->isnested) return E_CANT_NEST_RTYPE;
-	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
 	    if (trig->typ == PASSTHRU_TYPE) {
 		r = ParseToken(s, &buf);
 		if (r) return r;
@@ -403,7 +402,6 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 
 	case T_Empty:
 	    DBufFree(&buf);
-	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
             parsing = 0;
             break;
 
@@ -477,11 +475,22 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    DBufFree(&buf);
 	    trig->typ = MSG_TYPE;
 	    if (s->isnested) return E_CANT_NEST_RTYPE;
-	    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
             parsing = 0;
             break;
 	}
     }
+
+    if (trig->scanfrom == NO_DATE) trig->scanfrom = JulianToday;
+
+    /* Check for some warning conditions */
+    if (!s->nonconst_expr) {
+        if (trig->y != NO_YR && trig->m != NO_MON && trig->d != NO_DAY && trig->until != NO_UNTIL) {
+            if (Julian(trig->y, trig->m, trig->d) > trig->until) {
+                Eprint("Warning: UNTIL/THROUGH date earlier than start date");
+            }
+        }
+    }
+
     return OK;
 }
 

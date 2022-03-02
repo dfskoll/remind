@@ -524,6 +524,13 @@ msg [$Uw]%
 msg [$Uy]%
 msg [$Wednesday]%
 
+# Diagnose until before start date, only for non-constant expressions and
+# fully-specified start date
+REM Mon 1992 UNTIL 1991-01-01 MSG Not diagnosed - not fully-specified start
+REM 1992-01-01 *1 UNTIL 1991-12-31 MSG Diagnosed
+set x '1992-01-01'
+REM [x] *1 UNTIL 1991-12-31 MSG Not diagnosed - nonconst expression
+
 dump $aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 OMIT 2010-09-03 THROUGH 2010-09-15
 OMIT December 25 MSG X

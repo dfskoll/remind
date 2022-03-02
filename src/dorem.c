@@ -28,7 +28,7 @@ static int ParseTimeTrig (ParsePtr s, TimeTrig *tim, int save_in_globals);
 static int ParseLocalOmit (ParsePtr s, Trigger *t);
 static int ParseScanFrom (ParsePtr s, Trigger *t, int type);
 static int ParsePriority (ParsePtr s, Trigger *t);
-static int ParseUntil (ParsePtr s, Trigger *t);
+static int ParseUntil (ParsePtr s, Trigger *t, int type);
 static int ShouldTriggerBasedOnWarn (Trigger *t, int jul, int *err);
 static int ComputeTrigDuration(TimeTrig *t);
 
@@ -339,13 +339,13 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    DBufFree(&buf);
 	    if (trig->rep != NO_REP) return E_REP_TWICE;
 	    trig->rep = 1;
-	    r = ParseUntil(s, trig);
+	    r = ParseUntil(s, trig, tok.type);
 	    if (r) return r;
 	    break;
 
 	case T_Until:
 	    DBufFree(&buf);
-	    r=ParseUntil(s, trig);
+	    r=ParseUntil(s, trig, tok.type);
 	    if (r) return r;
 	    break;
 
@@ -582,12 +582,18 @@ static int ParseLocalOmit(ParsePtr s, Trigger *t)
 /*  ParseUntil - parse the UNTIL portion of a reminder         */
 /*                                                             */
 /***************************************************************/
-static int ParseUntil(ParsePtr s, Trigger *t)
+static int ParseUntil(ParsePtr s, Trigger *t, int type)
 {
     int y = NO_YR,
 	m = NO_MON,
 	d = NO_DAY;
 
+    char const *which;
+    if (type == T_Until) {
+        which = "UNTIL";
+    } else {
+        which = "THROUGH";
+    }
     Token tok;
     int r;
     DynamicBuffer buf;
@@ -603,7 +609,7 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 	case T_Year:
 	    DBufFree(&buf);
 	    if (y != NO_YR) {
-		Eprint("UNTIL: %s", ErrMsg[E_YR_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_YR_TWICE]);
 		return E_YR_TWICE;
 	    }
 	    y = tok.val;
@@ -612,7 +618,7 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 	case T_Month:
 	    DBufFree(&buf);
 	    if (m != NO_MON) {
-		Eprint("UNTIL: %s", ErrMsg[E_MON_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_MON_TWICE]);
 		return E_MON_TWICE;
 	    }
 	    m = tok.val;
@@ -621,7 +627,7 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 	case T_Day:
 	    DBufFree(&buf);
 	    if (d != NO_DAY) {
-		Eprint("UNTIL: %s", ErrMsg[E_DAY_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_DAY_TWICE]);
 		return E_DAY_TWICE;
 	    }
 	    d = tok.val;
@@ -630,15 +636,15 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 	case T_Date:
 	    DBufFree(&buf);
 	    if (y != NO_YR) {
-		Eprint("UNTIL: %s", ErrMsg[E_YR_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_YR_TWICE]);
 		return E_YR_TWICE;
 	    }
 	    if (m != NO_MON) {
-		Eprint("UNTIL: %s", ErrMsg[E_MON_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_MON_TWICE]);
 		return E_MON_TWICE;
 	    }
 	    if (d != NO_DAY) {
-		Eprint("UNTIL: %s", ErrMsg[E_DAY_TWICE]);
+		Eprint("%s: %s", which, ErrMsg[E_DAY_TWICE]);
 		return E_DAY_TWICE;
 	    }
 	    FromJulian(tok.val, &y, &m, &d);
@@ -646,7 +652,7 @@ static int ParseUntil(ParsePtr s, Trigger *t)
 
 	default:
 	    if (y == NO_YR || m == NO_MON || d == NO_DAY) {
-		Eprint("UNTIL: %s", ErrMsg[E_INCOMPLETE]);
+		Eprint("%s: %s", which, ErrMsg[E_INCOMPLETE]);
 		DBufFree(&buf);
 		return E_INCOMPLETE;
 	    }

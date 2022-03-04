@@ -151,6 +151,7 @@ static int FVersion        (func_info *);
 static int FWeekno         (func_info *);
 static int FWkday          (func_info *);
 static int FWkdaynum       (func_info *);
+static int FWouldTrig      (func_info *);
 static int FYear           (func_info *);
 static int FShellescape    (func_info *);
 
@@ -304,6 +305,7 @@ BuiltinFunc Func[] = {
     {   "weekno",       0,      3,      1,          FWeekno },
     {   "wkday",        1,      1,      1,          FWkday  },
     {   "wkdaynum",     1,      1,      1,          FWkdaynum },
+    {   "wouldtrig",    1,      2,      0,          FWouldTrig },
     {   "year",         1,      1,      1,          FYear   }
 };
 
@@ -2971,8 +2973,12 @@ FEvalTrig(func_info *info)
     CreateParser(ARGSTR(0), &p);
     p.allownested = 0;
     r = ParseRem(&p, &trig, &tim, 0);
-    if (r) return r;
+    if (r) {
+        DestroyParser(&p);
+        return r;
+    }
     if (trig.typ != NO_TYPE) {
+        DestroyParser(&p);
 	FreeTrig(&trig);
 	return E_PARSE_ERR;
     }
@@ -2990,6 +2996,7 @@ FEvalTrig(func_info *info)
         jul = -1;
     }
     FreeTrig(&trig);
+    DestroyParser(&p);
     if (r) return r;
     if (jul < 0) {
 	RetVal.type = INT_TYPE;
@@ -3001,5 +3008,58 @@ FEvalTrig(func_info *info)
 	RetVal.type = DATETIME_TYPE;
 	RETVAL = (MINUTES_PER_DAY * jul) + tim.ttime;
     }
+    return OK;
+}
+static int
+FWouldTrig(func_info *info)
+{
+    Parser p;
+    Trigger trig;
+    TimeTrig tim;
+    int jul, scanfrom;
+    int r;
+
+    ASSERT_TYPE(0, STR_TYPE);
+    if (Nargs >= 2) {
+	if (!HASDATE(ARG(1))) return E_BAD_TYPE;
+	scanfrom = DATEPART(ARG(1));
+    } else {
+	scanfrom = NO_DATE;
+    }
+
+    RetVal.type = INT_TYPE;
+    RETVAL = 0;
+
+    CreateParser(ARGSTR(0), &p);
+    p.allownested = 0;
+    r = ParseRem(&p, &trig, &tim, 0);
+    if (r) {
+        DestroyParser(&p);
+        return r;
+    }
+    if (trig.typ != NO_TYPE) {
+        DestroyParser(&p);
+	FreeTrig(&trig);
+	return E_PARSE_ERR;
+    }
+    if (scanfrom == NO_DATE) {
+	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 0);
+    } else {
+	/* Hokey... */
+	if (trig.scanfrom != JulianToday) {
+	    Eprint("Warning: SCANFROM is ignored in two-argument form of wouldtrig()");
+	}
+	jul = ComputeTrigger(scanfrom, &trig, &tim, &r, 0);
+    }
+    if (r == E_CANT_TRIG) {
+        DestroyParser(&p);
+        FreeTrig(&trig);
+        return OK;
+    }
+    if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
+        RETVAL = 1;
+    }
+    DestroyParser(&p);
+    FreeTrig(&trig);
     return OK;
 }

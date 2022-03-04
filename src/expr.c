@@ -86,7 +86,8 @@ extern BuiltinFunc Func[];
 
 Operator OpStack[OP_STACK_SIZE];
 Value    ValStack[VAL_STACK_SIZE];
-int OpStackPtr, ValStackPtr;
+int      OpStackPtr = 0;
+int      ValStackPtr = 0;
 
 /***************************************************************/
 /*                                                             */
@@ -126,12 +127,13 @@ static int DebugPerform(Operator *op)
 /*  Clean the stack after an error occurs.                     */
 /*                                                             */
 /***************************************************************/
-static void CleanStack(void)
+static void CleanStack(int old_op_stack_ptr, int old_val_stack_ptr)
 {
     int i;
 
-    for (i=0; i<ValStackPtr; i++) DestroyValue(ValStack[i]);
-    ValStackPtr = 0;
+    for (i=old_val_stack_ptr; i<ValStackPtr; i++) DestroyValue(ValStack[i]);
+    ValStackPtr = old_val_stack_ptr;
+    OpStackPtr = old_op_stack_ptr;
 }
 
 /***************************************************************/
@@ -317,8 +319,8 @@ int EvalExpr(char const **e, Value *v, ParsePtr p)
 {
     int r;
 
-    OpStackPtr = 0;
-    ValStackPtr = 0;
+    int old_op_stack_ptr = OpStackPtr;
+    int old_val_stack_ptr = ValStackPtr;
 
     r = Evaluate(e, NULL, p);
 
@@ -327,11 +329,15 @@ int EvalExpr(char const **e, Value *v, ParsePtr p)
     DBufFree(&ExprBuf);
 
     if (r) {
-	CleanStack();
+	CleanStack(old_op_stack_ptr, old_val_stack_ptr);
+        /* fprintf(stderr, "O=%d V=%d\n", OpStackPtr, ValStackPtr); */
 	return r;
     }
-    *v = *ValStack;
-    ValStack[0].type = ERR_TYPE;
+    OpStackPtr = old_op_stack_ptr;
+    ValStackPtr = old_val_stack_ptr;
+    *v = ValStack[old_val_stack_ptr];
+    ValStack[old_val_stack_ptr].type = ERR_TYPE;
+    /* fprintf(stderr, "O=%d V=%d\n", OpStackPtr, ValStackPtr); */
     return r;
 }
 

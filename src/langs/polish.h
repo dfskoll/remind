@@ -270,7 +270,7 @@ void Usage(void)
     fprintf(ErrFp, " -d...  Odpluskwianie: e=echo x=expr-eval t=trig v=dumpvars l=showline\n");
     fprintf(ErrFp, " -e     Komunikaty o błędach skieruj na stdout\n");
     fprintf(ErrFp, " -b[n]  Format czasu: 0=am/pm, 1=24godz., 2=żaden\n");
-    fprintf(ErrFp, " -x[n]  Limit powtórzeń klauzuli SATISFY (domyślnie=150)\n");
+    fprintf(ErrFp, " -x[n]  Limit powtórzeń klauzuli SATISFY (domyślnie=1000)\n");
     fprintf(ErrFp, " -kcmd  Wywołaj 'cmd' dla przypomnień typu MSG\n");
     fprintf(ErrFp, " -g[ddd] Sortuj przypomnienia według daty, czasu i priorytetu\n");
     fprintf(ErrFp, " -ivar=val Zainicjuj zmienną var wartościa val i zachowaj ja\n");

@@ -283,7 +283,7 @@ void Usage(void)
     fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trigger v=dumpvars l=showline\n");
     fprintf(ErrFp, " -e     Desvia mensagens normalmente enviadas a stderr para stdout\n");
     fprintf(ErrFp, " -b[n]  Formato da hora para o cal: 0=am/pm, 1=24hr, 2=nenhum\n");
-    fprintf(ErrFp, " -x[n]  Limite de iteracoes para a clausula SATISFY (default=150)\n");
+    fprintf(ErrFp, " -x[n]  Limite de iteracoes para a clausula SATISFY (default=1000)\n");
     fprintf(ErrFp, " -kcmd  Executa `cmd' para os compromissos com MSG\n");
     fprintf(ErrFp, " -g[ddd] Classifica compromissos por data, hora e prioridade antes de exibir\n");
     fprintf(ErrFp, " -ivar=val Inicializa (e preserva) variavel var com val\n");

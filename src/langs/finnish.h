@@ -283,7 +283,7 @@ void Usage(void)
     fprintf(ErrFp, " -d...  Virheenetsintä: e=echo x=expr-eval t=trig v=dumpvars l=showline\n");
     fprintf(ErrFp, " -e     Ohjaa virhetulostus stdout-vuohon\n");
     fprintf(ErrFp, " -b[n]  Ajan ilmaisu: 0=ap/ip, 1=24 tuntia, 2=ei aikoja\n");
-    fprintf(ErrFp, " -x[n]  SATISFY-lauseen toistoraja (oletus 150)\n");
+    fprintf(ErrFp, " -x[n]  SATISFY-lauseen toistoraja (oletus 1000)\n");
     fprintf(ErrFp, " -kcmd  Suorita 'cmd' MSG-tyyppisille viesteille\n");
     fprintf(ErrFp, " -g[ddd] Lajittele viestit päiväyksen, ajan ja tärkeyden mukaan\n");
     fprintf(ErrFp, " -ivar=val Alusta muuttuja var arvolla val ja säilytä var\n");

@@ -698,7 +698,7 @@ void Usage(void)
     fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline f=tracefiles\n");
     fprintf(ErrFp, " -e     Divert messages normally sent to stderr to stdout\n");
     fprintf(ErrFp, " -b[n]  Time format for cal: 0=am/pm, 1=24hr, 2=none\n");
-    fprintf(ErrFp, " -x[n]  Iteration limit for SATISFY clause (def=150)\n");
+    fprintf(ErrFp, " -x[n]  Iteration limit for SATISFY clause (def=1000)\n");
     fprintf(ErrFp, " -kcmd  Run `cmd' for MSG-type reminders\n");
     fprintf(ErrFp, " -g[dddd] Sort reminders by date, time, priority, and 'timedness'\n");
     fprintf(ErrFp, " -ivar=val Initialize var to val and preserve var\n");

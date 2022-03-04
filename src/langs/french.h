@@ -258,7 +258,7 @@ void Usage(void)
     fprintf(ErrFp, " -d...  Debug: e=echo x=expr-eval t=trig v=dumpvars l=showline\n");
     fprintf(ErrFp, " -e     Envoyer les messages de stderr à stdout\n");
     fprintf(ErrFp, " -b[n]  Formats de l'heure pour le calendrier: 0=am/pm, 1=24hr, 2=aucun\n");
-    fprintf(ErrFp, " -x[n]  Limite d'itérations pour la clause SATISFY (def=150)\n");
+    fprintf(ErrFp, " -x[n]  Limite d'itérations pour la clause SATISFY (def=1000)\n");
     fprintf(ErrFp, " -kcmd  Exécuter 'cmd' pour les rappels de type MSG\n");
     fprintf(ErrFp, " -g[ddd] Trier les rappels par date, heure et priorité avant d'émettre\n");
     fprintf(ErrFp, " -ivar=val Initialiser var à val et conserver var\n");

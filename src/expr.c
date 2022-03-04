@@ -44,6 +44,17 @@ static int MakeValue (char const *s, Value *v, Var *locals, ParsePtr p);
 
 /* Binary operators - all left-associative */
 
+/* Operator precedence:
+ *   Highest:    Unary -    Unary !
+ *               /   %
+ *               +   -
+ *               <   <=   >   >=
+ *               ==   !=
+ *               &&
+ *    Lowest:    ||
+ *
+ */
+
 /* Make SURE they are sorted lexically... this may die on an EBCDIC
    system... */
 

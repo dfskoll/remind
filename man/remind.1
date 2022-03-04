@@ -3337,6 +3337,18 @@ Notice how we use the zero-argument form of \fBwouldtrig\fR to preserve
 the correct trigger date so that %b uses the correct substitution
 date, and that we need to repeat the +3 to make sure the reminder is
 triggered.
+.PP
+Note that because \fBRemind\fR does not have short-circuit logical
+operators, something like:
+.nf
+    SET a wouldtrig("Mon +7") || wouldtrig("Thu +7")
+.fi
+
+would set the value of wouldtrig() to the date of the following
+Thursday.  Even though wouldtrig("Mon +7") always returns true,
+the logical-OR operator still evaluates wouldtrig("Thu +7") which
+\fIalso\fR returns true and sets \fBwouldtrig()\fR.
+
 .RE
 .TP
 .B year(dq_date)

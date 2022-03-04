@@ -305,7 +305,7 @@ BuiltinFunc Func[] = {
     {   "weekno",       0,      3,      1,          FWeekno },
     {   "wkday",        1,      1,      1,          FWkday  },
     {   "wkdaynum",     1,      1,      1,          FWkdaynum },
-    {   "wouldtrig",    1,      2,      0,          FWouldTrig },
+    {   "wouldtrig",    0,      2,      0,          FWouldTrig },
     {   "year",         1,      1,      1,          FYear   }
 };
 
@@ -3010,6 +3010,8 @@ FEvalTrig(func_info *info)
     }
     return OK;
 }
+
+static int LastWouldTrig = 0;
 static int
 FWouldTrig(func_info *info)
 {
@@ -3018,6 +3020,12 @@ FWouldTrig(func_info *info)
     TimeTrig tim;
     int jul, scanfrom;
     int r;
+
+    if (Nargs == 0) {
+        RetVal.type = DATE_TYPE;
+        RETVAL = LastWouldTrig;
+        return OK;
+    }
 
     ASSERT_TYPE(0, STR_TYPE);
     if (Nargs >= 2) {
@@ -3057,6 +3065,7 @@ FWouldTrig(func_info *info)
         return OK;
     }
     if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
+        LastWouldTrig = jul;
         RETVAL = 1;
     }
     DestroyParser(&p);

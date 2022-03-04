@@ -1125,15 +1125,16 @@ static int LogOR(void)
 	return r;
     }
 
-    if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
-        if (v1.v.val == 0) {
-            v1.v.val = v2.v.val;
-        }
-	PushValStack(v1);
-	return OK;
+    if (v1.type != v2.type || v1.type == STR_TYPE || v2.type == STR_TYPE) {
+        DestroyValue(v1); DestroyValue(v2);
+        return E_BAD_TYPE;
     }
-    DestroyValue(v1); DestroyValue(v2);
-    return E_BAD_TYPE;
+
+    if (v1.v.val == 0) {
+        v1.v.val = v2.v.val;
+    }
+    PushValStack(v1);
+    return OK;
 }
 
 /***************************************************************/
@@ -1154,15 +1155,15 @@ static int LogAND(void)
 	return r;
     }
 
-    if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
-        if (v1.v.val != 0) {
-            v1.v.val = v2.v.val;
-        }
-	PushValStack(v1);
-	return OK;
+    if (v1.type != v2.type || v1.type == STR_TYPE || v2.type == STR_TYPE) {
+        DestroyValue(v1); DestroyValue(v2);
+        return E_BAD_TYPE;
     }
-    DestroyValue(v1); DestroyValue(v2);
-    return E_BAD_TYPE;
+    if (v1.v.val != 0) {
+        v1.v.val = v2.v.val;
+    }
+    PushValStack(v1);
+    return OK;
 }
 
 /***************************************************************/

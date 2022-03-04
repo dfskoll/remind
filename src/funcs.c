@@ -3021,8 +3021,8 @@ FWouldTrig(func_info *info)
     int jul, scanfrom;
     int r;
 
+    RetVal.type = DATE_TYPE;
     if (Nargs == 0) {
-        RetVal.type = DATE_TYPE;
         RETVAL = LastWouldTrig;
         return OK;
     }
@@ -3035,7 +3035,6 @@ FWouldTrig(func_info *info)
 	scanfrom = NO_DATE;
     }
 
-    RetVal.type = INT_TYPE;
     RETVAL = 0;
 
     CreateParser(ARGSTR(0), &p);

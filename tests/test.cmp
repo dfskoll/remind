@@ -3755,10 +3755,10 @@ psmoon(0) => ../tests/test.rem(731): psmoon() is deprecated; use SPECIAL MOON in
 # Wouldtrig
 IF wouldtrig("sun +1") || wouldtrig("thu +1")
 wouldtrig("sun +1") => ../tests/test.rem(734): Trig = Sunday, 17 February, 1991
-412
+1991-02-17
 wouldtrig("thu +1") => ../tests/test.rem(734): Trig = Thursday, 21 February, 1991
-0
-412 || 0 => 412
+1990-01-01
+1991-02-17 || 1990-01-01 => 1991-02-17
     REM [wouldtrig()] +1 MSG Foo %b
 wouldtrig() => 1991-02-17
 ../tests/test.rem(735): Trig = Sunday, 17 February, 1991
@@ -3775,14 +3775,14 @@ x => 1
 1 / 0 => Division by zero
 ../tests/test.rem(740): `/': Division by zero
 Leaving UserFN w() => Division by zero
-0
+1990-01-01
 wouldtrig("thu warn w") => ../tests/test.rem(740): Trig = Thursday, 21 February, 1991
 Entering UserFN w(1)
 x => 1
 1 / 0 => Division by zero
 Leaving UserFN w() => Division by zero
-0
-0 || 0 => 0
+1990-01-01
+1990-01-01 || 1990-01-01 => 1990-01-01
     REM [wouldtrig()] +1 MSG Foo %b
 ENDIF
 
@@ -3805,14 +3805,14 @@ Entering UserFN w(3)
 x => 3
 choose(3, 5, 3, 1, 0) => 1
 Leaving UserFN w() => 1
-412
+1991-02-17
 wouldtrig("thu warn w") => ../tests/test.rem(749): Trig = Thursday, 21 February, 1991
 Entering UserFN w(1)
 x => 1
 choose(1, 5, 3, 1, 0) => 5
 Leaving UserFN w() => 5
-416
-412 || 416 => 412
+1991-02-21
+1991-02-17 || 1991-02-21 => 1991-02-17
     REM [wouldtrig()] +5 MSG Foo %b
 wouldtrig() => 1991-02-21
 ../tests/test.rem(750): Trig = Thursday, 21 February, 1991

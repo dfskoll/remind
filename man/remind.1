@@ -1978,13 +1978,12 @@ If the operands are not of the same type, == returns 0 and != returns
 .TP
 .B &&
 This is the logical AND operator.  Both of its operands must be of
-type \fBINT\fR.  It returns 1 if both operands are non-zero, and 0
-otherwise.
+type \fBINT\fR.  It returns the value of the second operand if both
+operands are non-zero, and 0 otherwise.
 .TP
 .B ||
 This is the logical OR operator.  Both of its operands must be of
-type \fBINT\fR.  It returns 1 if either operand is non-zero, and 0
-otherwise.
+type \fBINT\fR.  It returns the value of the first non-zero operand.
 .PP
 .B NOTES
 .PP

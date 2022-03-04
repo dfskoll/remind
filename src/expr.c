@@ -1126,7 +1126,9 @@ static int LogOR(void)
     }
 
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
-	v1.v.val = (v1.v.val || v2.v.val) ? 1 : 0;
+        if (v1.v.val == 0) {
+            v1.v.val = v2.v.val;
+        }
 	PushValStack(v1);
 	return OK;
     }
@@ -1153,7 +1155,9 @@ static int LogAND(void)
     }
 
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
-	v1.v.val = (v1.v.val && v2.v.val) ? 1 : 0;
+        if (v1.v.val != 0) {
+            v1.v.val = v2.v.val;
+        }
 	PushValStack(v1);
 	return OK;
     }

@@ -3820,6 +3820,22 @@ Foo in 5 days' time
 
 ENDIF
 
+REM [trig("Mon", "Tue", "Wed", "Sat")] MSG foo
+trig("Mon", "Tue", "Wed", "Sat") => ../tests/test.rem(753): Trig = Monday, 18 February, 1991
+../tests/test.rem(753): Trig = Tuesday, 19 February, 1991
+../tests/test.rem(753): Trig = Wednesday, 20 February, 1991
+../tests/test.rem(753): Trig = Saturday, 16 February, 1991
+1991-02-16
+../tests/test.rem(753): Trig = Saturday, 16 February, 1991
+foo
+
+REM [trig("Mon", "Tue", "Wed")] MSG bar
+trig("Mon", "Tue", "Wed") => ../tests/test.rem(754): Trig = Monday, 18 February, 1991
+../tests/test.rem(754): Trig = Tuesday, 19 February, 1991
+../tests/test.rem(754): Trig = Wednesday, 20 February, 1991
+1990-01-01
+../tests/test.rem(754): Expired
+
 # Don't want Remind to queue reminders
 EXIT
 

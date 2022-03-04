@@ -750,6 +750,9 @@ IF trig("sun warn w") || trig("thu warn w")
     REM [trig()] +5 MSG Foo %b
 ENDIF
 
+REM [trig("Mon", "Tue", "Wed", "Sat")] MSG foo
+REM [trig("Mon", "Tue", "Wed")] MSG bar
+
 # Don't want Remind to queue reminders
 EXIT
 

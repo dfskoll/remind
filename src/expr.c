@@ -60,16 +60,16 @@ static int MakeValue (char const *s, Value *v, Var *locals, ParsePtr p);
 
 Operator BinOp[] = {
     { "!=", 15, BIN_OP, NotEqual },
-    { "%", 20, BIN_OP, Mod },
+    { "%",  20, BIN_OP, Mod },
     { "&&", 14, BIN_OP, LogAND },
-    { "*", 20, BIN_OP, Multiply },
-    { "+", 18, BIN_OP, Add },
-    { "-", 18, BIN_OP, Subtract },
-    { "/", 20, BIN_OP, Divide },
-    { "<", 16, BIN_OP, LessThan },
+    { "*",  20, BIN_OP, Multiply },
+    { "+",  18, BIN_OP, Add },
+    { "-",  18, BIN_OP, Subtract },
+    { "/",  20, BIN_OP, Divide },
+    { "<",  16, BIN_OP, LessThan },
     { "<=", 16, BIN_OP, LessOrEqual },
     { "==", 15, BIN_OP, EqualTo },
-    { ">", 16, BIN_OP, GreaterThan },
+    { ">",  16, BIN_OP, GreaterThan },
     { ">=", 16, BIN_OP, GreaterOrEqual },
     { "||", 12, BIN_OP, LogOR },
 };
@@ -77,8 +77,8 @@ Operator BinOp[] = {
 
 /* These ones must be sorted too. */
 Operator UnOp[] = {
-    { "!", 22, UN_OP, LogNot },
-    { "-", 22, UN_OP, UnMinus },
+    { "!",  22, UN_OP, LogNot },
+    { "-",  22, UN_OP, UnMinus },
 };
 #define NUM_UN_OPS (sizeof(UnOp) / sizeof(Operator))
 

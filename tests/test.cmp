@@ -1020,7 +1020,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "03.04.01"
+version() => "03.04.02"
 set a059 wkday(today())
 today() => 1991-02-16
 wkday(1991-02-16) => "Saturday"
@@ -2589,7 +2589,7 @@ a086  4
 a109  2012-01-01
 a128  2018-02-03@16:45
 a039  "February"
-a058  "03.04.01"
+a058  "03.04.02"
 a077  "1992 92
 "
 a096  -4
@@ -3752,47 +3752,47 @@ set x psmoon(0)
 psmoon(0) => ../tests/test.rem(731): psmoon() is deprecated; use SPECIAL MOON instead.
 "gsave 0 setgray newpath Border DaySize 2"...
 
-# Wouldtrig
-IF wouldtrig("sun +1") || wouldtrig("thu +1")
-wouldtrig("sun +1") => ../tests/test.rem(734): Trig = Sunday, 17 February, 1991
+# Trig
+IF trig("sun +1") || trig("thu +1")
+trig("sun +1") => ../tests/test.rem(734): Trig = Sunday, 17 February, 1991
 1991-02-17
-wouldtrig("thu +1") => ../tests/test.rem(734): Trig = Thursday, 21 February, 1991
+trig("thu +1") => ../tests/test.rem(734): Trig = Thursday, 21 February, 1991
 1990-01-01
 1991-02-17 || 1990-01-01 => 1991-02-17
-    REM [wouldtrig()] +1 MSG Foo %b
-wouldtrig() => 1991-02-17
+    REM [trig()] +1 MSG Foo %b
+trig() => 1991-02-17
 ../tests/test.rem(735): Trig = Sunday, 17 February, 1991
 Foo tomorrow
 
 ENDIF
 
-# Wouldtrig with a bad warnfunc
+# Trig with a bad warnfunc
 FSET w(x) x/0
-IF wouldtrig("sun warn w") || wouldtrig("thu warn w")
-wouldtrig("sun warn w") => ../tests/test.rem(740): Trig = Sunday, 17 February, 1991
+IF trig("sun warn w") || trig("thu warn w")
+trig("sun warn w") => ../tests/test.rem(740): Trig = Sunday, 17 February, 1991
 Entering UserFN w(1)
 x => 1
 1 / 0 => Division by zero
 ../tests/test.rem(740): `/': Division by zero
 Leaving UserFN w() => Division by zero
 1990-01-01
-wouldtrig("thu warn w") => ../tests/test.rem(740): Trig = Thursday, 21 February, 1991
+trig("thu warn w") => ../tests/test.rem(740): Trig = Thursday, 21 February, 1991
 Entering UserFN w(1)
 x => 1
 1 / 0 => Division by zero
 Leaving UserFN w() => Division by zero
 1990-01-01
 1990-01-01 || 1990-01-01 => 1990-01-01
-    REM [wouldtrig()] +1 MSG Foo %b
+    REM [trig()] +1 MSG Foo %b
 ENDIF
 
-# Wouldtrig with a good warnfunc
+# Trig with a good warnfunc
 FSET w(x) choose(x, 5, 3, 1, 0)
 
 # Ugh.  This is where short-circuit logical operators
 # would really come in handy.
-IF wouldtrig("sun warn w") || wouldtrig("thu warn w")
-wouldtrig("sun warn w") => ../tests/test.rem(749): Trig = Sunday, 17 February, 1991
+IF trig("sun warn w") || trig("thu warn w")
+trig("sun warn w") => ../tests/test.rem(749): Trig = Sunday, 17 February, 1991
 Entering UserFN w(1)
 x => 1
 choose(1, 5, 3, 1, 0) => 5
@@ -3806,15 +3806,15 @@ x => 3
 choose(3, 5, 3, 1, 0) => 1
 Leaving UserFN w() => 1
 1991-02-17
-wouldtrig("thu warn w") => ../tests/test.rem(749): Trig = Thursday, 21 February, 1991
+trig("thu warn w") => ../tests/test.rem(749): Trig = Thursday, 21 February, 1991
 Entering UserFN w(1)
 x => 1
 choose(1, 5, 3, 1, 0) => 5
 Leaving UserFN w() => 5
 1991-02-21
 1991-02-17 || 1991-02-21 => 1991-02-17
-    REM [wouldtrig()] +5 MSG Foo %b
-wouldtrig() => 1991-02-21
+    REM [trig()] +5 MSG Foo %b
+trig() => 1991-02-21
 ../tests/test.rem(750): Trig = Thursday, 21 February, 1991
 Foo in 5 days' time
 

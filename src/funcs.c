@@ -58,6 +58,7 @@ static int FADusk          (func_info *);
 static int FAbs            (func_info *);
 static int FAccess         (func_info *);
 static int FAmpm           (func_info *);
+static int FTrig           (func_info *);
 static int FIsAny          (func_info *);
 static int FArgs           (func_info *);
 static int FAsc            (func_info *);
@@ -126,6 +127,7 @@ static int FSunset         (func_info *);
 static int FTime           (func_info *);
 static int FTimepart       (func_info *);
 static int FToday          (func_info *);
+static int FTrig           (func_info *);
 static int FTrigback       (func_info *);
 static int FTrigdate       (func_info *);
 static int FTrigdatetime   (func_info *);
@@ -151,7 +153,6 @@ static int FVersion        (func_info *);
 static int FWeekno         (func_info *);
 static int FWkday          (func_info *);
 static int FWkdaynum       (func_info *);
-static int FWouldTrig      (func_info *);
 static int FYear           (func_info *);
 static int FShellescape    (func_info *);
 
@@ -280,6 +281,7 @@ BuiltinFunc Func[] = {
     {   "time",         2,      2,      1,          FTime   },
     {   "timepart",     1,      1,      1,          FTimepart },
     {   "today",        0,      0,      0,          FToday  },
+    {   "trig",         0,      NO_MAX, 0,          FTrig },
     {   "trigback",     0,      0,      0,          FTrigback },
     {   "trigdate",     0,      0,      0,          FTrigdate },
     {   "trigdatetime", 0,      0,      0,          FTrigdatetime },
@@ -305,7 +307,6 @@ BuiltinFunc Func[] = {
     {   "weekno",       0,      3,      1,          FWeekno },
     {   "wkday",        1,      1,      1,          FWkday  },
     {   "wkdaynum",     1,      1,      1,          FWkdaynum },
-    {   "wouldtrig",    0,      NO_MAX, 0,          FWouldTrig },
     {   "year",         1,      1,      1,          FYear   }
 };
 
@@ -3011,9 +3012,9 @@ FEvalTrig(func_info *info)
     return OK;
 }
 
-static int LastWouldTrig = 0;
+static int LastTrig = 0;
 static int
-FWouldTrig(func_info *info)
+FTrig(func_info *info)
 {
     Parser p;
     Trigger trig;
@@ -3024,7 +3025,7 @@ FWouldTrig(func_info *info)
 
     RetVal.type = DATE_TYPE;
     if (Nargs == 0) {
-        RETVAL = LastWouldTrig;
+        RETVAL = LastTrig;
         return OK;
     }
 
@@ -3055,7 +3056,7 @@ FWouldTrig(func_info *info)
             continue;
         }
         if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
-            LastWouldTrig = jul;
+            LastTrig = jul;
             RETVAL = jul;
             DestroyParser(&p);
             FreeTrig(&trig);

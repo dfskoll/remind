@@ -730,24 +730,24 @@ msg [a]
 set x psshade(50)
 set x psmoon(0)
 
-# Wouldtrig
-IF wouldtrig("sun +1") || wouldtrig("thu +1")
-    REM [wouldtrig()] +1 MSG Foo %b
+# Trig
+IF trig("sun +1") || trig("thu +1")
+    REM [trig()] +1 MSG Foo %b
 ENDIF
 
-# Wouldtrig with a bad warnfunc
+# Trig with a bad warnfunc
 FSET w(x) x/0
-IF wouldtrig("sun warn w") || wouldtrig("thu warn w")
-    REM [wouldtrig()] +1 MSG Foo %b
+IF trig("sun warn w") || trig("thu warn w")
+    REM [trig()] +1 MSG Foo %b
 ENDIF
 
-# Wouldtrig with a good warnfunc
+# Trig with a good warnfunc
 FSET w(x) choose(x, 5, 3, 1, 0)
 
 # Ugh.  This is where short-circuit logical operators
 # would really come in handy.
-IF wouldtrig("sun warn w") || wouldtrig("thu warn w")
-    REM [wouldtrig()] +5 MSG Foo %b
+IF trig("sun warn w") || trig("thu warn w")
+    REM [trig()] +5 MSG Foo %b
 ENDIF
 
 # Don't want Remind to queue reminders

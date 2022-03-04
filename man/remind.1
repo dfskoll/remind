@@ -3312,6 +3312,33 @@ representing the day of the week of the date.  If \fIarg\fR is an
 Returns a number from 0 to 6 representing the day-of-week of the specified
 \fIdate\fR.  (0 represents Sunday, and 6 represents Saturday.)
 .TP
+.B wouldtrig(s_trigger [,dq_start])
+Evaluates \fItrigger\fR as if it were a REM or IFTRIG trigger specification
+and returns 1 if the reminder would be triggered today or 0 if not.
+.RS
+.PP
+Normally, \fBwouldtrig\fR finds a trigger date on or after today.  If
+you supply the \fIstart\fR argument, then it scans starting from there.
+.PP
+\fBwouldtrig\fR also has a zero-argument form; this returns the trigger
+date of the \fImost recent\fR \fBwouldtrig\fR function that returned 1.
+.PP
+\fBwouldtrig\fR can be used to make more sophisticated versions of
+\fBIFTRIG\fR.  For example, if you have meetings every Monday in
+June and July, and you want warnings 3 days in advance, you
+could use:
+.nf
+    IF wouldtrig("Mon June +3") || wouldtrig("Mon July +3")
+        REM [wouldtrig()] +3 MSG Meeting %b.
+    ENDIF
+.fi
+.PP
+Notice how we use the zero-argument form of \fBwouldtrig\fR to preserve
+the correct trigger date so that %b uses the correct substitution
+date, and that we need to repeat the +3 to make sure the reminder is
+triggered.
+.RE
+.TP
 .B year(dq_date)
 Returns a \fBINT\fR that is the year component of \fIdate\fR.
 

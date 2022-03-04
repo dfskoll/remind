@@ -1854,6 +1854,26 @@ and time separator characters for \fBDATE\fR and \fBTIME\fR constants apply
 also to \fBDATETIME\fR constants.
 .RE
 .PP
+.B ZERO VALUES
+.PP
+The non-string types all have an associated \fIzero\fR value, which is
+treated as "false" by the IF command and the logical operators.  The
+zero values are:
+.PP
+.RS
+.PP
+\fBINT\fR - 0
+.PP
+\fBDATE\fR - '1990-01-01'
+.PP
+\fBTIME\fR - 00:00
+.PP
+\fBDATETIME\fR - '1990-01-01@00:00'
+.RE
+.PP
+Additionally, for the purpose of the IF command (but \fInot\fR the
+logical operators) the empty string "" is considered a false value.
+.PP
 .B OPERATORS
 .PP
 \fBRemind\fR has the following operators.  Operators on the same line
@@ -1977,13 +1997,16 @@ If the operands are not of the same type, == returns 0 and != returns
 .RE
 .TP
 .B &&
-This is the logical AND operator.  Both of its operands must be of
-type \fBINT\fR.  It returns the value of the second operand if both
-operands are non-zero, and 0 otherwise.
+This is the logical AND operator.  Both of its operands must be of the
+same type and must not be \fBSTRING\fR type.  Returns the second
+operand if both operands are non-zero.  Otherwise, returns a zero
+of the same type as the operands.
 .TP
 .B ||
 This is the logical OR operator.  Both of its operands must be of
-type \fBINT\fR.  It returns the value of the first non-zero operand.
+the same type and must not be of \fBSTRING\fR type.  It returns
+the first operand that is non-zero; if both operands are zero, then
+returns a zero of the same type as the operands.
 .PP
 .B NOTES
 .PP
@@ -3311,32 +3334,30 @@ representing the day of the week of the date.  If \fIarg\fR is an
 Returns a number from 0 to 6 representing the day-of-week of the specified
 \fIdate\fR.  (0 represents Sunday, and 6 represents Saturday.)
 .TP
-.B wouldtrig(s_trigger [,dq_start])
-Evaluates \fItrigger\fR as if it were a REM or IFTRIG trigger
-specification and returns a non-zero value if the reminder would be
-triggered today or 0 if not.
+.B wouldtrig(s_1 [,s_2, ...])
+For each string argument s_\fIn\fR, \fBwouldtrig\fR evaluates s_\fIn\fR
+as if it were a REM or IFTRIG trigger
+specification.  If the trigger would trigger today, then the trigger
+date is returned and no further triggers are evaluated.  If none
+of the triggers would trigger today, then the zero date
+'1990-01-01' is returned.
 .RS
-.PP
-Normally, \fBwouldtrig\fR finds a trigger date on or after today.  If
-you supply the \fIstart\fR argument, then it scans starting from there.
-.PP
 \fBwouldtrig\fR also has a zero-argument form; this returns the trigger
-date of the \fImost recent\fR \fBwouldtrig\fR function that returned 1.
+date of the \fImost recent\fR \fBwouldtrig\fR function that returned a
+non-zero trigger date.
 .PP
 \fBwouldtrig\fR can be used to make more sophisticated versions of
 \fBIFTRIG\fR.  For example, if you have meetings every Monday in
 June and July, and you want warnings 3 days in advance, you
 could use:
 .nf
-    IF wouldtrig("Mon June +3") || wouldtrig("Mon July +3")
-        REM [wouldtrig()] +3 MSG Meeting %b.
-    ENDIF
+    REM [wouldtrig("Mon Jun +3", "Mon July +3")] +3 MSG Meeting %b
 .fi
 .PP
-Notice how we use the zero-argument form of \fBwouldtrig\fR to preserve
-the correct trigger date so that %b uses the correct substitution
-date, and that we need to repeat the +3 to make sure the reminder is
-triggered.
+NOTE: We need to repeat the +3 delta outside of the \fBwouldtrig\fR
+function for advance warning to work properly.  This is because
+\fBwouldtrig\fR returns a date constant (the trigger date) and the
+REM command does not know the details of \fBwouldtrig\fR's arguments.
 .PP
 Note that because \fBRemind\fR does not have short-circuit logical
 operators, something like:
@@ -3357,7 +3378,7 @@ can be coerced to a DATE which is the trigger date.  So the following code:
 .nf
     SET a wouldtrig("Mon +4") || wouldtrig("Fri +4")
     IF a
-        REM [coerce("DATE", a)] +4 MSG [wkday($T)] %b.
+        REM [a] +4 MSG [wkday($T)] %b.
     ENDIF
 .fi
 .PP

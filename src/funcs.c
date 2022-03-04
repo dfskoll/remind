@@ -305,7 +305,7 @@ BuiltinFunc Func[] = {
     {   "weekno",       0,      3,      1,          FWeekno },
     {   "wkday",        1,      1,      1,          FWkday  },
     {   "wkdaynum",     1,      1,      1,          FWkdaynum },
-    {   "wouldtrig",    0,      2,      0,          FWouldTrig },
+    {   "wouldtrig",    0,      NO_MAX, 0,          FWouldTrig },
     {   "year",         1,      1,      1,          FYear   }
 };
 
@@ -3018,8 +3018,9 @@ FWouldTrig(func_info *info)
     Parser p;
     Trigger trig;
     TimeTrig tim;
-    int jul, scanfrom;
+    int jul;
     int r;
+    int i;
 
     RetVal.type = DATE_TYPE;
     if (Nargs == 0) {
@@ -3027,47 +3028,41 @@ FWouldTrig(func_info *info)
         return OK;
     }
 
-    ASSERT_TYPE(0, STR_TYPE);
-    if (Nargs >= 2) {
-	if (!HASDATE(ARG(1))) return E_BAD_TYPE;
-	scanfrom = DATEPART(ARG(1));
-    } else {
-	scanfrom = NO_DATE;
+    for (i=0; i<Nargs; i++) {
+        ASSERT_TYPE(i, STR_TYPE);
     }
 
     RETVAL = 0;
 
-    CreateParser(ARGSTR(0), &p);
-    p.allownested = 0;
-    r = ParseRem(&p, &trig, &tim, 0);
-    if (r) {
-        DestroyParser(&p);
-        return r;
-    }
-    if (trig.typ != NO_TYPE) {
-        DestroyParser(&p);
-	FreeTrig(&trig);
-	return E_PARSE_ERR;
-    }
-    if (scanfrom == NO_DATE) {
+    for (i=0; i<Nargs; i++) {
+        CreateParser(ARGSTR(i), &p);
+        p.allownested = 0;
+        r = ParseRem(&p, &trig, &tim, 0);
+        if (r) {
+            DestroyParser(&p);
+            return r;
+        }
+        if (trig.typ != NO_TYPE) {
+            DestroyParser(&p);
+            FreeTrig(&trig);
+            return E_PARSE_ERR;
+        }
 	jul = ComputeTrigger(trig.scanfrom, &trig, &tim, &r, 0);
-    } else {
-	/* Hokey... */
-	if (trig.scanfrom != JulianToday) {
-	    Eprint("Warning: SCANFROM is ignored in two-argument form of wouldtrig()");
-	}
-	jul = ComputeTrigger(scanfrom, &trig, &tim, &r, 0);
-    }
-    if (r == E_CANT_TRIG) {
+
+        if (r == E_CANT_TRIG) {
+            DestroyParser(&p);
+            FreeTrig(&trig);
+            continue;
+        }
+        if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
+            LastWouldTrig = jul;
+            RETVAL = jul;
+            DestroyParser(&p);
+            FreeTrig(&trig);
+            return OK;
+        }
         DestroyParser(&p);
         FreeTrig(&trig);
-        return OK;
     }
-    if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
-        LastWouldTrig = jul;
-        RETVAL = jul;
-    }
-    DestroyParser(&p);
-    FreeTrig(&trig);
     return OK;
 }

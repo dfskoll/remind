@@ -3066,7 +3066,7 @@ FWouldTrig(func_info *info)
     }
     if (ShouldTriggerReminder(&trig, &tim, jul, &r)) {
         LastWouldTrig = jul;
-        RETVAL = 1;
+        RETVAL = jul;
     }
     DestroyParser(&p);
     FreeTrig(&trig);

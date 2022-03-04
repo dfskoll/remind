@@ -3621,12 +3621,12 @@ Note that the commands are shown indented for clarity.  Also, the \fBELSE\fR
 portion can be omitted.  \fBIF\fR commands can be nested up to a small limit,
 probably around 8 or 16 levels of nesting, depending on your system.
 .PP
-If the \fIexpr\fR evaluates to a non-zero \fBINT\fR, or a non-null
-\fBSTRING\fR, then the \fBIF\fR portion is considered true, and the
-\fIt-commands\fR are executed.  If \fIexpr\fR evaluates to zero or
-null, then the \fIf-commands\fR (if the \fBELSE\fR portion is present)
-are executed.  If \fIexpr\fR is not of type \fBINT\fR or \fBSTRING\fR,
-then it is an error.
+If the \fIexpr\fR evaluates to a non-zero \fBINT\fR, a \fBDATE\fR that
+is not 1990-01-01, a \fBTIME\fR that is not 00:00, a \fBDATETIME\fR
+that is not 1990-01-01@00:00, or a non-null \fBSTRING\fR, then the
+\fBIF\fR portion is considered true, and the \fIt-commands\fR are
+executed.  If \fIexpr\fR evaluates to zero or null, then the
+\fIf-commands\fR (if the \fBELSE\fR portion is present) are executed.
 .PP
 Examples:
 .PP

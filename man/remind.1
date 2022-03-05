@@ -3224,6 +3224,27 @@ That is because \fBtrig()\fR returns the trigger date of
 the \fIlast\fR trig function that returns true,
 whereas the value of \fBa\fR is the trigger date of the \fIfirst\fR
 trig function that returns true.
+.PP
+\fBImportant Note\fR:  Because \fBtrig()\fR always returns an absolute
+date, it will \fBnot\fR work properly with a \fBSATISFY\fR clause.
+Consider this reminder:
+.PP
+.nf
+    REM [trig("Mar", "Apr")] SATISFY [$Td == 15] MSG 15 Mar or April
+.fi
+.PP
+If we run \fBRemind\fR on 5 March 2022, we might expect the trigger
+date to be calculated as 15 March 2022... but that's not what happens.
+Instead, the \fBtrig\fR function is evaluated first, and it returns
+2022-03-05.  So as far as \fBRemind\fR is concerned, the REM statement
+becomes:
+.PP
+.nf
+    REM 2022-03-05 SATISFY [$Td == 15] MSG 15 Mar or April
+.fi
+.PP
+and the SATISFY expression is never true.  So: \fIDo not mix
+trig() and SATISFY\fR.
 .RE
 .TP
 .B trigdate()

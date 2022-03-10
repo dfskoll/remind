@@ -127,6 +127,9 @@ set OptDescr(BackgroundColor) "Default background color of calendar boxes"
 set Option(TextColor) "#000000"
 set OptDescr(TextColor) "Default text color in calendar boxes"
 
+set Option(TodayColor) "#00C0C0"
+set OptDescr(TodayColor) "Background color for today heading"
+
 set Option(LabelColor) "#000000"
 set OptDescr(LabelColor) "Default label color for headings"
 
@@ -570,7 +573,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
     }
     if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
 	set n [expr $TodayDay + $offset]
-	$w.l$n configure -background "#00c0c0"
+	$w.l$n configure -background $Option(TodayColor)
     }
 }
 
@@ -743,6 +746,8 @@ proc EditOptions {} {
     button $w.btextcolor -background $Option(TextColor) -command [list PickColor TextColor $w.btextcolor] -text ...
     label $w.bgcolor -text "  Background color:"
     button $w.bbgcolor -background $Option(BackgroundColor) -command [list PickColor BackgroundColor $w.bbgcolor] -text ...
+    label $w.tbgcolor -text "Today BG color:"
+    button $w.tbbgcolor -background $Option(TodayColor) -command [list PickColor TodayColor $w.tbbgcolor] -text ...
 
     grid $w.textcolor $w.btextcolor $w.bgcolor $w.bbgcolor -in $w.colors1
     grid $w.bgcolor $w.bbgcolor -in $w.colors1
@@ -752,7 +757,8 @@ proc EditOptions {} {
     label $w.wincolor -text "  Window color:"
     button $w.bwincolor -background $Option(WinBackground) -command [list PickColor WinBackground $w.bwincolor] -text ...
     grid $w.headcolor $w.bheadcolor $w.wincolor $w.bwincolor -in $w.colors1
-
+    grid $w.tbgcolor $w.tbbgcolor -in $w.colors1
+    
     grid columnconfigure $w.colors1 0 -weight 1
     grid columnconfigure $w.colors1 2 -weight 1
     frame $w.sep1 -border 1 -relief sunken

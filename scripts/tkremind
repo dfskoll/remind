@@ -608,11 +608,11 @@ proc DoQueue {} {
 #---------------------------------------------------------------------------
 proc CreateCalWindow { dayNames } {
     global Option
-    frame .h -background $Option(WinBackground);
+    frame .h -background $Option(LineColor)
     label .h.title -text "" -justify center -pady 2 -bd 0 -relief flat -font HeadingFont -background $Option(WinBackground) -foreground $Option(LabelColor)
-    pack .h.title -side top -fill x
+    pack .h.title -side top -fill x -pady 1 -padx 1
     pack .h -side top -expand 0 -fill x
-    . configure -background $Option(LineColor);
+    . configure -background $Option(LineColor)
     CreateCalFrame .cal $dayNames
 
     frame .b -background $Option(LineColor)

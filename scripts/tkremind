@@ -765,7 +765,7 @@ proc EditOptions {} {
     label $w.bgcolor -text "  Background color:"
     button $w.bbgcolor -background $Option(BackgroundColor) -command [list PickColor BackgroundColor $w.bbgcolor] -text ...
 
-    label $w.tbgcolor -text "Today BG color:"
+    label $w.tbgcolor -text "Color for highlighting \"today\":"
     button $w.tbbgcolor -background $Option(TodayColor) -command [list PickColor TodayColor $w.tbbgcolor] -text ...
 
     label $w.gridcolor -text "  Gridline color:"

@@ -481,7 +481,7 @@ proc CreateCalFrame { w dayNames } {
 	for {set j 0} {$j < 7} {incr j} {
 	    set f [expr $n+$j]
 	    button $w.l$f -text "" -justify center -command "" \
-		-state disabled -relief flat -bd 0 -padx 0 -pady 0 -font HeadingFont -highlightthickness 0
+		-state disabled -relief flat -bd 0 -padx 0 -pady 0 -font HeadingFont -highlightthickness 1
 	    text $w.t$f -width 12 -height $h -bd 0 -spacing3 3 -wrap word -relief flat \
 		-state disabled -takefocus 0 -cursor {} -font CalboxFont -foreground $Option(TextColor) -background $Option(BackgroundColor) \
                 -highlightthickness 0
@@ -528,7 +528,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
         pack $w.t$i -in $w.f$i -side top -expand 1 -fill both
         raise $w.l$i
         raise $w.t$i
-	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
         $w.l$i configure -state disabled
 	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal -background $Option(WinBackground)
@@ -538,7 +538,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	}
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
-	$w.t$i configure -state disabled
+	$w.t$i configure -state disabled -takefocus 0
     }
     for {set i $first} {$i <= $last} {incr i} {
 	grid $w.f$i
@@ -548,7 +548,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
         raise $w.t$i
 	set d [expr $i-$first+1]
 	$w.l$i configure -text $d -state normal -relief flat \
-		-command "ModifyDay $d $firstDay" -foreground $Option(LabelColor) -background $Option(WinBackground)
+		-command "ModifyDay $d $firstDay" -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
 	balloon_add_help $w.l$i "Add a reminder..."
 	$w.t$i configure -relief sunken -takefocus 1 -state normal -foreground $Option(TextColor) -background $Option(BackgroundColor)
 	$w.t$i delete 1.0 end
@@ -557,7 +557,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	}
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
-	$w.t$i configure -state disabled
+	$w.t$i configure -state disabled -takefocus 0
     }
     set forgetIt 0
     for {set i [expr $last+1]} {$i < 42} {incr i} {
@@ -577,7 +577,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
             raise $w.t$i
 	    grid rowconfigure $w [expr $row+1] -weight 1
 	}
-	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground)
+	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
         $w.l$i configure -state disabled
 	balloon_add_help $w.l$i ""
 	$w.t$i configure -relief flat -takefocus 0 -state normal -background $Option(WinBackground)
@@ -587,7 +587,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	}
 	$w.t$i tag bind TAGGED <ButtonPress-1> "EditTaggedReminder $w.t$i"
 	$w.t$i tag bind REM <ButtonPress-3> "FireEditor $w.t$i"
-	$w.t$i configure -state disabled
+	$w.t$i configure -state disabled -takefocus 0
     }
     if { $CurMonth == $TodayMonth && $CurYear == $TodayYear } {
 	set n [expr $TodayDay + $offset]
@@ -612,32 +612,32 @@ proc CreateCalWindow { dayNames } {
     label .h.title -text "" -justify center -pady 2 -bd 0 -relief flat -font HeadingFont -background $Option(WinBackground) -foreground $Option(LabelColor)
     pack .h.title -side top -fill x
     pack .h -side top -expand 0 -fill x
-
+    . configure -background $Option(LineColor);
     CreateCalFrame .cal $dayNames
 
-    frame .b -background $Option(WinBackground);
-    button .b.prev -text "\u2b9c" -command {MoveMonth -1} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    frame .b -background $Option(LineColor)
+    button .b.prev -text "\u2b9c" -command {MoveMonth -1} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
     balloon_add_help .b.prev "Go to previous month"
-    button .b.this -text {Today} -command {ThisMonth} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.this -text {Today} -command {ThisMonth} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
     balloon_add_help .b.this "Go to this month"
-    button .b.next -text "\u2b9e" -command {MoveMonth 1} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.next -text "\u2b9e" -command {MoveMonth 1} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
     balloon_add_help .b.next "Go to next month"
-    button .b.goto -text {Go To Date...} -command {GotoDialog} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.goto -text {Go To Date...} -command {GotoDialog} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
     balloon_add_help .b.goto "Go to a specific date"
-    button .b.print -text {Print...} -command {DoPrint} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    balloon_add_help .b.print "Print a PostScript calendar"
-    button .b.queue -text {Queue...} -command {DoQueue} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    balloon_add_help .b.queue "See the queue of pending reminders (debugging purposes only)"
-    button .b.quit -text {Quit} -command {Quit} -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    balloon_add_help .b.quit "Quit TkRemind"
-    button .b.options -text {Options...} -command EditOptions -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
+    button .b.print -text {Print...} -command {DoPrint} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
+    balloon_add_help .b.print "Print a PostScript or PDF calendar"
+    button .b.options -text {Options...} -command EditOptions -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
     balloon_add_help .b.options "Set TkRemind options"
-    label .b.status -text "" -width 25 -relief sunken -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    label .b.nqueued -text "" -width 20 -relief sunken -bd 1 -foreground $Option(LabelColor) -background $Option(WinBackground)
-    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both
-    pack .b.status -side left -fill both -expand 1
-    pack .b.nqueued -side left -fill both
-    pack .b -side bottom -fill x -expand 0
+    button .b.queue -text {Queue...} -command {DoQueue} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
+    balloon_add_help .b.queue "See the queue of pending reminders (debugging purposes only)"
+    button .b.quit -text {Quit} -command {Quit} -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 1 -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
+    balloon_add_help .b.quit "Quit TkRemind"
+    label .b.status -text "" -width 25 -relief flat -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 0
+    label .b.nqueued -text "" -width 20 -relief flat -bd 0 -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightthickness 0
+    pack .b.prev .b.this .b.next .b.goto .b.print .b.options .b.queue .b.quit -side left -fill both -padx 1
+    pack .b.status -side left -fill both -expand 1 -padx 1
+    pack .b.nqueued -side left -fill both -padx 1
+    pack .b -side bottom -fill x -expand 0 -pady 1
     pack .cal -side top -fill both -expand 1
     wm title . "TkRemind"
     wm iconname . ""
@@ -870,6 +870,7 @@ proc SaveOptions { w } {
     FillCalWindow
     .h.title configure -background $Option(WinBackground) -foreground $Option(LabelColor)
     .cal configure -background $Option(LineColor)
+    . configure -background $Option(LineColor);
     for {set i 0} {$i < 7} {incr i} {
         .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
     }
@@ -1096,7 +1097,7 @@ proc FillCalWindow {} {
 		    set extratags "clr$color"
 		    .cal.t$n configure -state normal
 		    .cal.t$n tag configure $extratags -foreground "#$color"
-		    .cal.t$n configure -state disabled
+		    .cal.t$n configure -state disabled -takefocus 0
 		    set stuff $rest
 		    set type "COLOR"
 		}
@@ -1122,7 +1123,7 @@ proc FillCalWindow {} {
             }
 	}
 	.cal.t$n insert end "\n"
-	.cal.t$n configure -state disabled
+	.cal.t$n configure -state disabled -takefocus 0
 
     }
     set problem [catch { close $file } errmsg]
@@ -3608,7 +3609,7 @@ proc DoMoonSpecial { n stuff fntag } {
             .cal.t$n tag bind $fntag <ButtonPress-1> "FireEditor .cal.t$n $fntag"
         }
     }
-    .cal.t$n configure -state disabled
+    .cal.t$n configure -state disabled -takefocus 0
 }
 #***********************************************************************
 # %PROCEDURE: DisplayTime

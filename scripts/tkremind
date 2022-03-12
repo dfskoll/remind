@@ -871,8 +871,6 @@ proc SaveOptions { w } {
     WriteOptionsToFile
     FillCalWindow
     .h.title configure -background $Option(WinBackground) -foreground $Option(LabelColor)
-    .cal configure -background $Option(LineColor)
-    . configure -background $Option(LineColor);
     for {set i 0} {$i < 7} {incr i} {
         .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
     }
@@ -887,6 +885,10 @@ proc SaveOptions { w } {
     .b.queue configure -foreground $Option(LabelColor) -background $Option(WinBackground)
     .b.quit configure -foreground $Option(LabelColor) -background $Option(WinBackground)
     .b.options configure -foreground $Option(LabelColor) -background $Option(WinBackground)
+    . configure -background $Option(LineColor);
+    .h configure -background $Option(LineColor);
+    .cal configure -background $Option(LineColor)
+    .b configure -background $Option(LineColor)
 }
 
 proc WriteOptionsToFile {} {

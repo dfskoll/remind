@@ -321,7 +321,8 @@ if test -z "$LC_ALL" ; then
 fi
 
 if test "$OK" = 0 ; then
-    export LC_ALL=en_US.utf-8
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
 fi
 
 ../src/remind -w128 -c ../tests/utf-8.rem 1 Nov 2019 >> ../tests/test.out

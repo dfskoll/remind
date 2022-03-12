@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 
 #include <stdlib.h>
@@ -24,6 +25,10 @@
 #ifdef REM_USE_WCHAR
 #include <wctype.h>
 #include <wchar.h>
+#endif
+
+#ifdef HAVE_LANGINFO_H
+#include <langinfo.h>
 #endif
 
 #include "types.h"
@@ -74,6 +79,8 @@ static struct line_drawing VT100Drawing = {
   "\x76", "\x6b", "\x75", "\x77", "\x6e", "\x6d", "\x78",
   "\x6c", "\x74", "\x6a", "\x71"
 };
+
+static int encoding_is_utf8 = 0;
 
 static struct line_drawing UTF8Drawing = {
     "", "",
@@ -587,6 +594,14 @@ void ProduceCalendar(void)
 {
     int y, m, d;
 
+    /* Check if current locale is UTF-8, if we have langinfo.h */
+#ifdef HAVE_LANGINFO_H
+    char const *encoding = nl_langinfo(CODESET);
+    if (!strcasecmp(encoding, "utf-8")) {
+        encoding_is_utf8 = 1;
+    }
+
+#endif
     if (UseUTF8Chars) {
 	linestruct = &UTF8Drawing;
     } else if (UseVTChars) {
@@ -1196,8 +1211,10 @@ static int WriteOneColLine(int col)
 	    printf("%s", Decolorize(e->r, e->g, e->b));
 	}
 
-        /* Send a lrm control sequence if UseUTF8Chars is enabled */
-        if (UseUTF8Chars) {
+        /* Send a lrm control sequence if UseUTF8Chars is enabled
+           or char encoding is UTF-8
+        */
+        if (UseUTF8Chars || encoding_is_utf8) {
             printf("\xE2\x80\x8E");
         }
 	/* Flesh out the rest of the column */

@@ -6,12 +6,21 @@ CHANGES TO REMIND
   types of reminders.  See "SYNTACTIC SUGAR FOR REM" in the remind
   man page.  Based on suggestions from Ian! D. Allen.
 
+- CHANGE: examples/defs.rem: The examples file has been updated to use
+  the newer syntactic sugar.
+
 - NEW FEATURE: remind: Add the "trig" function to allow more
   expressiveness when creating triggers.  See man page for details.
 
 - IMPROVEMENT: tkremind: Tweak the calendar display; improve ability to
   customize colors, including supplying two built-in themes.  Based on
   patch and suggestion from Paulo (last name unknown).
+
+- IMPROVEMENT: tkremind: TkRemind handles errors in reminders scripts
+  much more unobtrusively.  Instead of popping up a modal dialog box
+  with almost-unreadable error output, it discreetly notifies you of
+  errors with a button that lets you view the specific error messages
+  in a more readable format.
 
 - CHANGE: remind: Increase $MaxSatIter default to 1000 instead of 150.
   Computers are much faster than when I first wrote remind and they
@@ -53,6 +62,12 @@ CHANGES TO REMIND
 
 - BUG FIX: rem2pdf: Correct the calculation that warns about an over-full
   calendar box.  Problem noted by Jonathan Kamens.
+
+- BUG FIX: remind: The "remind -c" output would sometimes be incorrect if
+  scripts with double-wide characters were used.  This has been fixed.
+
+- BUG FIX: remind: The "remind -c" output would sometimes be incorrect
+  if right-to-left scripts were used in reminders.  This has been fixed.
 
 * VERSION 3.4 Patch 1 - 2022-02-23
 

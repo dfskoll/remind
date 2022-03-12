@@ -25,7 +25,7 @@ RUN OFF
 ################################################
 # Ensure required version of remind is used... #
 ################################################
-IF version() < "03.01.10"
+IF version() < "03.04.02"
    ERRMSG This file requires at least version 03.01.10 of Remind.%
    ERRMSG This version is version [version()].
    EXIT

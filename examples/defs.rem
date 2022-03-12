@@ -140,12 +140,12 @@ REM  [easter+49] MSG %"Pentecost%"
 # which ones are omitted - use the general forms shown below.  You'll
 # need the Week_n variables defined way up in the file.
 
-OMIT    Jan  1		MSG %"New Year's%" Day
+OMIT    Jan  1		MSG %"New Year's Day%"
 REM Third Monday in Jan MSG Martin Luther King - %"MLK Day%"
 REM     Feb  2		MSG %"Ground Hog Day%"
-REM     Feb 14		MSG %"Valentine's%" Day
+REM     Feb 14		MSG %"Valentine's Day%"
 REM Third Monday in Feb SCANFROM -7 ADDOMIT MSG %"President's Day%"
-REM     Mar 17		MSG %"St. Patrick's%" Day
+REM     Mar 17		MSG %"St. Patrick's Day%"
 
 # The DST rules are accurate for most locations in
 # North America

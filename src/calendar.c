@@ -1142,7 +1142,10 @@ static int WriteOneColLine(int col)
                 wspace = ws;
             }
             if (wcwidth(*ws)) {
-                width++;
+                width += wcwidth(*ws);
+                if (width > ColSpaces) {
+                    break;
+                }
             }
 	    ws++;
 	}
@@ -1154,7 +1157,7 @@ static int WriteOneColLine(int col)
 
 	/* If we couldn't find a space char, print what we have. */
 	if (!wspace) {
-	    for (ws = e->wc_pos; ws - e->wc_pos < ColSpaces; ws++) {
+	    for (ws = e->wc_pos; numwritten < ColSpaces; ws++) {
 		if (!*ws) break;
                 if (iswspace(*ws)) {
                     putchar(' ');

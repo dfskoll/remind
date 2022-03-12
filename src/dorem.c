@@ -424,7 +424,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	case T_Omit:
 	    DBufFree(&buf);
 	    if (trig->omitfunc[0]) {
-		Eprint("Warning: OMIT is ignored if you use OMITFUNC");
+		Wprint("Warning: OMIT is ignored if you use OMITFUNC");
 	    }
 
 	    r = ParseLocalOmit(s, trig);
@@ -438,7 +438,7 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 
 	case T_OmitFunc:
 	    if (trig->localomit) {
-		Eprint("Warning: OMIT is ignored if you use OMITFUNC");
+		Wprint("Warning: OMIT is ignored if you use OMITFUNC");
 	    }
 	    r=ParseToken(s, &buf);
 	    if (r) return r;
@@ -534,22 +534,22 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     if (!s->nonconst_expr) {
         if (trig->y != NO_YR && trig->m != NO_MON && trig->d != NO_DAY && trig->until != NO_UNTIL) {
             if (Julian(trig->y, trig->m, trig->d) > trig->until) {
-                Eprint("Warning: UNTIL/THROUGH date earlier than start date");
+                Wprint("Warning: UNTIL/THROUGH date earlier than start date");
             }
         }
         if (trig->from != NO_DATE) {
             if (trig->until != NO_UNTIL && trig->until < trig->from) {
-                Eprint("Warning: UNTIL/THROUGH date earlier than FROM date");
+                Wprint("Warning: UNTIL/THROUGH date earlier than FROM date");
             }
         } else if (trig->scanfrom != NO_DATE) {
             if (trig->until != NO_UNTIL && trig->until < trig->scanfrom) {
-                Eprint("Warning: UNTIL/THROUGH date earlier than SCANFROM date");
+                Wprint("Warning: UNTIL/THROUGH date earlier than SCANFROM date");
             }
         }
     }
 
     if (trig->y != NO_YR && trig->m != NO_MON && trig->d != NO_DAY && trig->until != NO_UNTIL && trig->rep == NO_REP) {
-        Eprint("Warning: Useless use of UNTIL with fully-specified date and no *rep");
+        Wprint("Warning: Useless use of UNTIL with fully-specified date and no *rep");
     }
 
     /* Set scanfrom to default if not set explicitly */

@@ -570,6 +570,29 @@ int EvaluateExpr(ParsePtr p, Value *v)
 
 /***************************************************************/
 /*                                                             */
+/*  Wprint - print a warning message.                          */
+/*                                                             */
+/***************************************************************/
+void Wprint(char const *fmt, ...)
+{
+    va_list argptr;
+
+
+    if (FileName) {
+	if (strcmp(FileName, "-"))
+	    (void) fprintf(ErrFp, "%s(%d): ", FileName, LineNo);
+	else
+	    (void) fprintf(ErrFp, "-stdin-(%d): ", LineNo);
+    }
+
+    va_start(argptr, fmt);
+    (void) vfprintf(ErrFp, fmt, argptr);
+    (void) fputc('\n', ErrFp);
+    va_end(argptr);
+    return;
+}
+/***************************************************************/
+/*                                                             */
 /*  Eprint - print an error message.                           */
 /*                                                             */
 /***************************************************************/

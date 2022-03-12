@@ -43,8 +43,7 @@ typedef int (*SysVarFunc)(int, Value *);
 static void deprecated_var(char const *var, char const *instead)
 {
     if (DebugFlag & DB_PRTLINE) {
-        Eprint("%s is deprecated; use %s instead", var, instead);
-        FreshLine = 1;
+        Wprint("%s is deprecated; use %s instead", var, instead);
     }
 }
 
@@ -508,7 +507,7 @@ int DoSet (Parser *p)
     if (*DBufValue(&buf) == '$') r = SetSysVar(DBufValue(&buf)+1, &v);
     else r = SetVar(DBufValue(&buf), &v);
     if (buf.len > VAR_NAME_LEN) {
-	Eprint("Warning: Variable name `%.*s...' truncated to `%.*s'",
+	Wprint("Warning: Variable name `%.*s...' truncated to `%.*s'",
 	       VAR_NAME_LEN, DBufValue(&buf), VAR_NAME_LEN, DBufValue(&buf));
     }
     DBufFree(&buf);
@@ -908,9 +907,7 @@ int GetSysVar(char const *name, Value *val)
     /* In "verbose" mode, print attempts to test $RunOff */
     if (DebugFlag & DB_PRTLINE) {
 	if (v->value == (void *) &RunDisabled) {
-	    Eprint("(Security note: $RunOff variable tested.)");
-	    /* Allow further messages from this line */
-	    FreshLine = 1;
+	    Wprint("(Security note: $RunOff variable tested.)");
 	}
     }
     return OK;

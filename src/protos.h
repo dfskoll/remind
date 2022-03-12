@@ -62,6 +62,7 @@ int EvaluateExpr (ParsePtr p, Value *v);
 int Evaluate (char const **s, Var *locals, ParsePtr p);
 int FnPopValStack (Value *val);
 void Eprint (char const *fmt, ...);
+void Wprint (char const *fmt, ...);
 void OutputLine (FILE *fp);
 void CreateParser (char const *s, ParsePtr p);
 void DestroyParser (ParsePtr p);

@@ -2414,8 +2414,7 @@ static int FPsshade(func_info *info)
 
     if (!psshade_warned) {
 	psshade_warned = 1;
-	Eprint("psshade() is deprecated; use SPECIAL SHADE instead.");
-        FreshLine = 1;
+	Wprint("psshade() is deprecated; use SPECIAL SHADE instead.");
     }
 
     sprintf(s, "/_A LineWidth 2 div def ");
@@ -2470,8 +2469,7 @@ static int FPsmoon(func_info *info)
     }
     if (!psmoon_warned) {
 	psmoon_warned = 1;
-	Eprint("psmoon() is deprecated; use SPECIAL MOON instead.");
-        FreshLine = 1;
+	Wprint("psmoon() is deprecated; use SPECIAL MOON instead.");
     }
     if (size > 0) {
 	sprintf(sizebuf, "%d", size);
@@ -2988,7 +2986,7 @@ FEvalTrig(func_info *info)
     } else {
 	/* Hokey... */
 	if (trig.scanfrom != JulianToday) {
-	    Eprint("Warning: SCANFROM is ignored in two-argument form of evaltrig()");
+	    Wprint("Warning: SCANFROM is ignored in two-argument form of evaltrig()");
 	}
 	jul = ComputeTrigger(scanfrom, &trig, &tim, &r, 0);
     }

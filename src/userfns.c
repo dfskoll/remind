@@ -167,7 +167,7 @@ int DoFset(ParsePtr p)
     /* Add the function definition */
     FSet(func);
     if (orig_namelen > VAR_NAME_LEN) {
-	Eprint("Warning: Function name `%s...' truncated to `%s'",
+	Wprint("Warning: Function name `%s...' truncated to `%s'",
 	       func->name, func->name);
     }
     return OK;

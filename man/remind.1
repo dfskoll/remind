@@ -1193,19 +1193,23 @@ The keyword \fBIN\fR is completely ignored, so you can write (for example):
 .fi
 .PP
 An alternate form of \fIback\fR makes writing reminders easier.
-The following pairs of reminders are equivalent:
+The following groups of reminders are equivalent:
 .PP
 .nf
     REM ~~1 MSG Last day of every month
+    REM Lastday MSG  Last day of every month
     REM 1 --1 MSG Last day of every month
 
     REM May ~~1 MSG Last day of May
+    REM Lastday May MSG Last day of May
     REM 1 June --1 MSG Last day of May
 
     REM Dec 2025 ~~1 MSG Last day of December 2025
+    REM Lastday Dec 2025 MSG Last day of December 2025
     REM 1 Jan 2026 --1 MSG Last day of December 2025
 
     REM Apr ~1 OMIT SAT SUN MSG Last workday of April
+    REM Lastworkday April OMIT SAT SUN MSG Last workday of April
     REM 1 May -1 OMIT SAT SUN MSG Last workday of April
 
     REM Apr ~~7 MSG Seventh-last day of April
@@ -1214,6 +1218,8 @@ The following pairs of reminders are equivalent:
     REM Apr ~2 OMIT SAT SUN MSG Second-last workday of April
     REM 1 May -2 OMIT SAT SUN MSG Second-last workday of April
 .fi
+.PP
+As we see, "Lastday" is equivalent to ~~1 and "Lastworkday" to ~1.
 .PP
 Note that the First/Second/Third/Fourth/Last keywords and the ~ and ~~ form
 of \fIback\fR imply a value for the day of the month; as such, they cannot

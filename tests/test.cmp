@@ -3881,17 +3881,26 @@ REM March ~1 MSG y
 ../tests/test.rem(779): Trig = Saturday, 30 March, 1991
 REM March ~~1 MSG y
 ../tests/test.rem(780): Trig = Sunday, 31 March, 1991
+REM Lastday March MSG y
+../tests/test.rem(781): Trig = Sunday, 31 March, 1991
+REM Lastworkday March MSG y
+../tests/test.rem(782): Trig = Saturday, 30 March, 1991
 POP
 REM Dec 2000 ~~1 MSG y
-../tests/test.rem(782): Trig = Sunday, 31 December, 2000
+../tests/test.rem(784): Trig = Sunday, 31 December, 2000
 REM Dec 2000 ~~2 MSG y
-../tests/test.rem(783): Trig = Saturday, 30 December, 2000
+../tests/test.rem(785): Trig = Saturday, 30 December, 2000
 REM Dec 2000 ~~3 MSG y
-../tests/test.rem(784): Trig = Friday, 29 December, 2000
+../tests/test.rem(786): Trig = Friday, 29 December, 2000
 REM Dec 2000 ~~7 MSG y
-../tests/test.rem(785): Trig = Monday, 25 December, 2000
+../tests/test.rem(787): Trig = Monday, 25 December, 2000
 REM Jan 2001 ~~1 MSG y
-../tests/test.rem(786): Trig = Wednesday, 31 January, 2001
+../tests/test.rem(788): Trig = Wednesday, 31 January, 2001
+
+REM Lastday April 2022 OMIT SAT SUN MSG foo
+../tests/test.rem(790): Trig = Saturday, 30 April, 2022
+REM Lastworkday April 2022 OMIT SAT SUN MSG foo
+../tests/test.rem(791): Trig = Friday, 29 April, 2022
 
 # Don't want Remind to queue reminders
 EXIT

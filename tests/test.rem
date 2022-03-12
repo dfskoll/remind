@@ -778,12 +778,17 @@ PUSH
 OMIT 31 March
 REM March ~1 MSG y
 REM March ~~1 MSG y
+REM Lastday March MSG y
+REM Lastworkday March MSG y
 POP
 REM Dec 2000 ~~1 MSG y
 REM Dec 2000 ~~2 MSG y
 REM Dec 2000 ~~3 MSG y
 REM Dec 2000 ~~7 MSG y
 REM Jan 2001 ~~1 MSG y
+
+REM Lastday April 2022 OMIT SAT SUN MSG foo
+REM Lastworkday April 2022 OMIT SAT SUN MSG foo
 
 # Don't want Remind to queue reminders
 EXIT

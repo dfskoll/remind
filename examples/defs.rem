@@ -153,10 +153,10 @@ ENDIF
 
 # First, the normal meeting.  However, the SKIP keyword means this
 # one won't be triggered if the first Monday is a holiday
-REM Mon 1 SKIP MSG Meeting
+REM First Monday SKIP MSG Meeting
 
 # Now, calculate the "potential" delayed meeting
-REM Mon 8 SATISFY 1
+REM Second Monday SATISFY 1
 
 # But only actually trigger the delayed meeting if the previous
 # Monday was a holiday
@@ -217,10 +217,10 @@ REM  [easter+49] MSG %"Pentecost%"
 # need the Week_n variables defined way up in the file.
 
 OMIT    Jan  1		MSG %"New Year's%" Day
-REM Mon Jan [Week_3]	MSG Martin Luther King - %"MLK Day%"
+REM Third Monday in Jan MSG Martin Luther King - %"MLK Day%"
 REM     Feb  2		MSG %"Ground Hog Day%"
 REM     Feb 14		MSG %"Valentine's%" Day
-REM Mon Feb [Week_3]	SCANFROM -7 ADDOMIT MSG %"President's Day%"
+REM Third Monday in Feb SCANFROM -7 ADDOMIT MSG %"President's Day%"
 REM     Mar 17		MSG %"St. Patrick's%" Day
 
 # The DST rules are accurate for most locations in
@@ -228,26 +228,26 @@ REM     Mar 17		MSG %"St. Patrick's%" Day
 REM Sun Apr 1 ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST starts%" %b
 REM Sun Mar 8 ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST starts%" %b
 
-REM Sun [_last(Oct)] ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
-REM Sun 1 Nov ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
+REM Last Sunday in October ++2 UNTIL 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
+REM First Sunday in November ++2 FROM 1 Jan 2007 MSG Daylight Saving Time - %"DST ends%" %b
 
 REM     Apr  1		MSG %"April Fool's%" Day
 REM Mon Tue Wed Thu Fri Sat 15 Apr MSG %"Income tax%" due
 REM     May  5		MSG %"Cinco de Mayo%"
-REM Sat May [Week_1]	MSG %"Kentucky Derby%"
-REM Sun May [Week_2]	MSG %"Mother's Day%"
-REM Sat May [Week_3]	MSG %"Armed Forces Day%"
-REM Mon [_last(May)]	SCANFROM -7 ADDOMIT MSG %"Memorial Day%"
+REM First Sat in May 	MSG %"Kentucky Derby%"
+REM Second Sun in May	MSG %"Mother's Day%"
+REM Third Sat in May	MSG %"Armed Forces Day%"
+REM Last Monday in May	SCANFROM -7 ADDOMIT MSG %"Memorial Day%"
 REM     Jun 14		MSG %"Flag Day%"
-REM Sun Jun [Week_3]	MSG %"Father's Day%"
-REM Mon Sep [Week_1]	SCANFROM -7 ADDOMIT MSG %"Labor Day%"
-REM Mon Oct [Week_2]	MSG %"Columbus Day%"
+REM Third Sun in June	MSG %"Father's Day%"
+REM First Mon in Sep	SCANFROM -7 ADDOMIT MSG %"Labor Day%"
+REM Second Mon in Oct	MSG %"Columbus Day%"
 REM     Nov 11		MSG %"Veterans Day%"
 
 REM     Oct 30		MSG %"Mischief Night%"
 REM     Oct 31		MSG %"Halloween%"
 REM Tue Nov  2 SCANFROM -7 SATISFY [($Ty % 4) == 0] MSG %"Election Day%"
-REM Thu Nov [Week_4]	SCANFROM -7 ADDOMIT MSG %"Thanksgiving Day%"
+REM Last Thu in Nov 	SCANFROM -7 ADDOMIT MSG %"Thanksgiving Day%"
 REM Fri Nov [Week_4+1]	SCANFROM -7 ADDOMIT MSG %"Thanksgiving (cont.)%"
 OMIT    Dec 24		MSG %"Christmas Eve%"
 OMIT    Dec 25		MSG %"Christmas%" Day
@@ -278,10 +278,10 @@ REM PS Border Border moveto \
    ([hebday($U)] [hebmon($U)]) show
 
 # Fill in the phases of the moon on the PostScript calendar
-[moondate(0)] SPECIAL MOON 0
-[moondate(1)] SPECIAL MOON 1
-[moondate(2)] SPECIAL MOON 2
-[moondate(3)] SPECIAL MOON 3
+REM [moondate(0)] SPECIAL MOON 0
+REM [moondate(1)] SPECIAL MOON 1
+REM [moondate(2)] SPECIAL MOON 2
+REM [moondate(3)] SPECIAL MOON 3
 
 # The following example puts sunrise and sunset times in PostScript in the
 # calendar - the sizes are hard-coded, however, and work best in landscape.

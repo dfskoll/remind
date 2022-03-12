@@ -1136,10 +1136,20 @@ proc FillCalWindow {} {
     }
     set problem [catch { close $file } errmsg]
     if {$problem} {
-        set RemindErrors $errmsg
+        set RemindErrors [unique_lines $errmsg]
         set_button_to_errors
     }
     DisplayTime
+}
+
+proc unique_lines { s } {
+    set l [split $s "\n"]
+    foreach line $l {
+        if {"$line" != ""} {
+            dict set d $line 1
+        }
+    }
+    return [join [dict keys $d] "\n"]
 }
 
 #---------------------------------------------------------------------------

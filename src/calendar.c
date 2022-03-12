@@ -1140,11 +1140,13 @@ static int WriteOneColLine(int col)
             }
 	    if (iswspace(*ws)) {
                 wspace = ws;
-            }
-            if (wcwidth(*ws)) {
-                width += wcwidth(*ws);
-                if (width > ColSpaces) {
-                    break;
+                width++;
+            } else {
+                if (wcwidth(*ws)) {
+                    width += wcwidth(*ws);
+                    if (width > ColSpaces) {
+                        break;
+                    }
                 }
             }
 	    ws++;

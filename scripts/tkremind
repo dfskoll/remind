@@ -3583,6 +3583,13 @@ proc DoMoonSpecial { n stuff fntag day } {
     if {$phase < 0 || $phase > 3} {
 	return
     }
+
+    # We need two sets of moon phase windows.  There can be
+    # two of a given phase in the same month, but Tk does
+    # not allow the same embedded window in two separate
+    # text boxes.  So we use this hack to make sure
+    # we use a different window if the same moon phase
+    # happens twice in a month.
     if { $day < 16 } {
         switch -exact -- $phase {
             0 { set win .moon_new }

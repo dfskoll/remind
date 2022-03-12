@@ -70,25 +70,23 @@ REM 1 MSG John's [_mo_num(11, 1984)] 'monthly' anniversary
 # Here's a tricky problem:  The 4th of July is a holiday in the U.S.
 # However, if it falls on a Saturday, the previous Friday is a holiday.
 # If it falls on a Sunday, the next Monday is a holiday.  Here's how
-# to do it.  NOTE that the following procedure makes the OMIT context
-# dependent upon the current date.  SInce it only depends on the current
-# year, which is not likely to change while producing a calendar, we
-# are fairly safe.  However, reminders with huge DELTA or BACK components
-# may not operate as expected.  In general, any time you make OMIT
-# dependent upon the current date, it's tricky and results may not be
-# what you expect.  You should try to make sure that the OMIT context
-# "near" any current reminders will not change during a calendar run.
-# The SCANFROM clause will make these OMITs safe.
+# to do it.
+#
+# For those reminders that update the OMIT context with ADDOMIT, we use
+# SCANFROM -7 for safety; see the man page about moveable OMITs.
 ############################################################################
 
 # If it falls on a Saturday, bump to previous Friday
-REM 4 July OMIT SAT BEFORE SATISFY [$Td != 4] MSG Independence day (observed)
+REM 4 July OMIT SAT SCANFROM -1 BEFORE ADDOMIT SATISFY [$Td != 4] MSG Independence day (observed)
 
 # If it falls on a Sunday, bump to following Monday
-REM 4 July OMIT SUN AFTER SATISFY [$Td != 4] MSG  Independence day (observed)
+REM 4 July OMIT SUN SCANFROM -7 AFTER ADDOMIT SATISFY [$Td != 4] MSG Independence day (observed)
 
-# Otherwise observe on the 4th
-REM 4 July OMIT SAT SUN SKIP MSG Independence Day
+# If it falls on Sat or Sun, note the actual day
+REM 4 July SATISFY [$Tw == 0 || $Tw == 6] MSG Independence day (actual)
+
+# Otherwise observed and actual is on the 4th
+REM 4 July OMIT SAT SUN SKIP SCANFROM -7 ADDOMIT MSG Independence Day
 
 ##########################################################################
 #								         #

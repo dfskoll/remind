@@ -70,7 +70,10 @@ on terminals that emulate the VT00 line-drawing character set.
 .B 'u'
 is similar to 'l', but causes \fBRemind\fR to use UNICODE line-drawing
 characters to draw the calendar.  The characters are hard-coded and will
-only work on terminals that are set to UTF-8 character encoding.
+only work on terminals that are set to UTF-8 character encoding.  This
+flag also enables the use of the UNICODE "left-to-right" mark that
+can fix up formatting problems with right-to-left languages in the calendar
+display.
 .TP
 .B 'c'
 causes \fBRemind\fR to use VT100 escape sequences to approximate

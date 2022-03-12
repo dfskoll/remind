@@ -1196,6 +1196,10 @@ static int WriteOneColLine(int col)
 	    printf("%s", Decolorize(e->r, e->g, e->b));
 	}
 
+        /* Send a lrm control sequence if UseUTF8Chars is enabled */
+        if (UseUTF8Chars) {
+            printf("\xE2\x80\x8E");
+        }
 	/* Flesh out the rest of the column */
 	while(numwritten++ < ColSpaces) putchar(' ');
 

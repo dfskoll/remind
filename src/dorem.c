@@ -237,6 +237,9 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
     tim->delta = DefaultTDelta;
     tim->rep   = NO_REP;
     tim->duration = NO_TIME;
+    trig->need_wkday = 0;
+    trig->adj_for_last = 0;
+
     if (save_in_globals) {
 	LastTriggerTime = NO_TIME;
     }
@@ -250,6 +253,25 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	/* Figure out what we've got */
 	FindToken(DBufValue(&buf), &tok);
 	switch(tok.type) {
+        case T_In:
+            /* Completely ignored */
+	    DBufFree(&buf);
+            break;
+
+        case T_Ordinal:
+            DBufFree(&buf);
+            if (trig->d != NO_DAY)     return E_DAY_TWICE;
+            if (tok.val < 0) {
+                if (trig->back != NO_BACK) return E_BACK_TWICE;
+                trig->back = -7;
+                trig->d = 1;
+                trig->adj_for_last = 1;
+            } else {
+                trig->d = 1 + 7 * tok.val;
+            }
+            trig->need_wkday = 1;
+            break;
+
 	case T_Date:
 	    DBufFree(&buf);
 	    if (trig->d != NO_DAY) return E_DAY_TWICE;
@@ -379,6 +401,15 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	    trig->back = tok.val;
 	    break;
 
+	case T_BackAdj:
+	    DBufFree(&buf);
+	    if (trig->back != NO_BACK) return E_BACK_TWICE;
+	    if (trig->d != NO_DAY) return E_DAY_TWICE;
+	    trig->back = tok.val;
+            trig->d = 1;
+            trig->adj_for_last = 1;
+	    break;
+
 	case T_Once:
 	    DBufFree(&buf);
 	    if (trig->once != NO_ONCE) return E_ONCE_TWICE;
@@ -480,6 +511,24 @@ int ParseRem(ParsePtr s, Trigger *trig, TimeTrig *tim, int save_in_globals)
 	}
     }
 
+    if (trig->need_wkday && trig->wd == NO_WD) {
+        Eprint("Weekday name(s) required");
+        return E_PARSE_ERR;
+    }
+
+    /* Adjust month and possibly year */
+    if (trig->adj_for_last) {
+        if (trig->m != NO_MON) {
+            trig->m++;
+            if (trig->m >= 12) {
+                trig->m = 0;
+                if (trig->y != NO_YR) {
+                    trig->y++;
+                }
+            }
+        }
+        trig->adj_for_last = 0;
+    }
 
     /* Check for some warning conditions */
     if (!s->nonconst_expr) {

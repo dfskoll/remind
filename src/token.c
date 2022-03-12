@@ -43,30 +43,34 @@ Token TokArray[] = {
     { "at",		2,	T_At,		0 },
     { "august",		3,	T_Month,	7 },
     { "banner",		3,	T_Banner,	0 },
-    { "before",	3,	T_Skip,	BEFORE_SKIP },
+    { "before",	        3,	T_Skip,	        BEFORE_SKIP },
     { "cal",		3,	T_RemType,	CAL_TYPE },
     { "clear-omit-context", 5,   T_Clr,         0 },
-    { "debug",          5,      T_Debug,       0 },
+    { "debug",          5,      T_Debug,        0 },
     { "december",	3,	T_Month,       11 },
     { "do",     	2,	T_IncludeR,	0 },
-    { "dumpvars",       4,      T_Dumpvars,    0 },
+    { "dumpvars",       4,      T_Dumpvars,     0 },
     { "duration",       3,      T_Duration,     0 },
-    { "else",		4,	T_Else,	0 },
+    { "else",		4,	T_Else,	        0 },
     { "endif",		5,	T_EndIf,	0 },
-    { "errmsg",         6,      T_ErrMsg,      0 },
+    { "errmsg",         6,      T_ErrMsg,       0 },
     { "exit",		4,	T_Exit,		0 },
     { "february",	3,	T_Month,	1 },
+    { "first",          5,      T_Ordinal,      0 },
     { "flush",		5,	T_Flush,	0 },
+    { "fourth",         6,      T_Ordinal,      3 },
     { "friday",		3,	T_WkDay,	4 },
     { "from",		4,	T_Scanfrom,	FROM_TYPE },
     { "fset",		4,	T_Fset,		0 },
     { "if",		2,	T_If,		0 },
     { "iftrig",		6,	T_IfTrig,	0 },
+    { "in",             2,      T_In,           0 },
     { "include",	3,	T_Include,	0 },
     { "includecmd",     10,     T_IncludeCmd,   0 },
     { "january",	3,	T_Month,	0 },
     { "july",		3,	T_Month,	6 },
     { "june",		3,	T_Month,	5 },
+    { "last",           4,      T_Ordinal,      -1 },
     { "march",		3,	T_Month,	2 },
     { "may",		3,	T_Month,	4 },
     { "maybe-uncomputable", 5,  T_MaybeUncomputable, 0},
@@ -90,12 +94,14 @@ Token TokArray[] = {
     { "saturday",	3,	T_WkDay,	5 },
     { "scanfrom",	4,	T_Scanfrom,	SCANFROM_TYPE },
     { "sched",		5,	T_Sched,	0 },
+    { "second",         6,      T_Ordinal,      1 },
     { "september",	3,	T_Month,	8 },
     { "set",		3,	T_Set,		0 },
     { "skip",		3,	T_Skip,	SKIP_SKIP },
     { "special",        7,      T_RemType,      PASSTHRU_TYPE },
     { "sunday",		3,	T_WkDay,	6 },
     { "tag",            3,      T_Tag,          0 },
+    { "third",          5,      T_Ordinal,      2 },
     { "through",        7,      T_Through,      0 },
     { "thursday",	3,	T_WkDay,	3 },
     { "tuesday",	3,	T_WkDay,	1 },
@@ -323,6 +329,14 @@ void FindNumericToken(char const *s, Token *t)
 	PARSENUM(t->val, s);
 	if (*s) return;  /* Illegal token if followed by non-numeric char */
 	t->type = T_Back;
+	t->val *= mult;
+	return;
+    } else if (*s == '~') {
+	s++;
+	if (*s == '~') { mult = -1; s++; }
+	PARSENUM(t->val, s);
+	if (*s) return;  /* Illegal token if followed by non-numeric char */
+	t->type = T_BackAdj;
 	t->val *= mult;
 	return;
     }

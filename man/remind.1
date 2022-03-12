@@ -1154,6 +1154,78 @@ duration of 00:00 or 0, then \fBRemind\fR behaves exactly as if no
 \fBDURATION\fR at all had been present.
 
 .PP
+.SH SYNTACTIC SUGAR FOR REM
+.PP
+The REM command has syntactic sugar to let you express common
+reminders.  The following pairs of reminders are equivalent:
+.PP
+.nf
+    REM First Monday April MSG Foo
+    REM Mon 1 April        MSG Foo
+
+    REM Second Monday May  MSG Bar
+    REM Mon 8 May          MSG Bar
+
+    REM Third Monday MSG Third Monday of every month
+    REM Mon 15 MSG Third Monday of every month
+
+    REM Fourth Sunday June 2025 MSG Fourth Sunday in June 2025
+    REM Sun 22 June 2025 MSG Fourth Sunday in June 2025
+
+    REM Last Monday MSG Last Monday of every month
+    REM Mon 1 --7 MSG Last Monday of every month
+
+    REM Last Monday April MSG Last Monday of every April
+    REM Mon 1 May --7 MSG  Last Monday of every April
+
+    REM Last Monday December 2025 MSG Last Monday of Dec 2025
+    REM Monday 1 Jan 2026 --7 MSG Last Monday of Dec 2025
+.fi
+.PP
+Note that \fBLast\fR effectively adjusts the month and year, if necessary, to
+make the reminder trigger on the correct date.
+.PP
+The keyword \fBIN\fR is completely ignored, so you can write (for example):
+.PP
+.nf
+    REM Second Monday in May MSG foo
+    REM Last Monday in December 2025 MSG Bar
+.fi
+.PP
+An alternate form of \fIback\fR makes writing reminders easier.
+The following pairs of reminders are equivalent:
+.PP
+.nf
+    REM ~~1 MSG Last day of every month
+    REM 1 --1 MSG Last day of every month
+
+    REM May ~~1 MSG Last day of May
+    REM 1 June --1 MSG Last day of May
+
+    REM Dec 2025 ~~1 MSG Last day of December 2025
+    REM 1 Jan 2026 --1 MSG Last day of December 2025
+
+    REM Apr ~1 OMIT SAT SUN MSG Last workday of April
+    REM 1 May -1 OMIT SAT SUN MSG Last workday of April
+
+    REM Apr ~~7 MSG Seventh-last day of April
+    REM 1 May --7 MSG Seventh-last day of April
+
+    REM Apr ~2 OMIT SAT SUN MSG Second-last workday of April
+    REM 1 May -2 OMIT SAT SUN MSG Second-last workday of April
+.fi
+.PP
+Note that the First/Second/Third/Fourth/Last keywords and the ~ and ~~ form
+of \fIback\fR imply a value for the day of the month; as such, they cannot
+be combined with a day.  Additionally, First/Second/Third/Fourth/Last
+must have at least one weekday name.  The following are illegal:
+.PP
+.nf
+    REM First Monday 3 June MSG Huh?
+    REM April 3 ~~1 MSG What?
+    REM Second June MSG Where's the weekday???
+.fi
+.PP
 .SH THE SUBSTITUTION FILTER
 .PP
 Before being processed, the body of a

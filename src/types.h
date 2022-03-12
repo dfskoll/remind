@@ -69,6 +69,8 @@ typedef struct {
     int once;
     int scanfrom;
     int from;
+    int adj_for_last;            /* Adjust month/year for use of LAST */
+    int need_wkday;              /* Set if we *need* a weekday */
     int priority;
     int duration_days;           /* Duration converted to days to search */
     int eventstart;              /* Original event start (datetime) */
@@ -157,7 +159,8 @@ enum TokTypes
   T_AddOmit,
   T_WkDay,
   T_Month, T_Time, T_Date, T_DateTime,
-  T_Skip, T_At, T_RemType, T_Until, T_Year, T_Day, T_Rep, T_Delta, T_Back,
+  T_Skip, T_At, T_RemType, T_Until, T_Year, T_Day, T_Rep, T_Delta,
+  T_Back, T_BackAdj,
   T_Once,
   T_Empty,
   T_Comment,
@@ -175,7 +178,10 @@ enum TokTypes
   T_LongTime,
   T_OmitFunc,
   T_Through,
-  T_MaybeUncomputable
+  T_MaybeUncomputable,
+  T_Ordinal,
+  T_In,
+  T_LastBack
 };
 
 /* The structure of a token */

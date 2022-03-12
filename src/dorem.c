@@ -168,27 +168,37 @@ int DoRem(ParsePtr p)
 	FreeTrig(&trig);
 	return OK;
     }
-/* Queue the reminder, if necessary */
+
+    /* Queue the reminder, if necessary */
     if (jul == JulianToday &&
 	!(!IgnoreOnce &&
 	  trig.once != NO_ONCE &&
 	  FileAccessDate == JulianToday))
 	QueueReminder(p, &trig, &tim, trig.sched);
-/* If we're in daemon mode, do nothing over here */
+    /* If we're in daemon mode, do nothing over here */
     if (Daemon) {
 	FreeTrig(&trig);
 	return OK;
     }
 
+    r = OK;
     if (ShouldTriggerReminder(&trig, &tim, jul, &err)) {
 	if ( (r=TriggerReminder(p, &trig, &tim, jul)) ) {
 	    FreeTrig(&trig);
 	    return r;
 	}
+    } else {
+        /* Parse the rest of the line to catch any potential
+           expression-pasting errors */
+        while (ParseChar(p, &r, 0)) {
+            if (r != 0) {
+                break;
+            }
+        }
     }
 
     FreeTrig(&trig);
-    return OK;
+    return r;
 }
 
 /***************************************************************/

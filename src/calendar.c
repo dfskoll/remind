@@ -1164,6 +1164,9 @@ static int WriteOneColLine(int col)
                     numwritten++;
                 } else {
                     if (wcwidth(*ws) > 0) {
+                        if (numwritten + wcwidth(*ws) > ColSpaces) {
+                            break;
+                        }
                         numwritten += wcwidth(*ws);
                     }
                     PutWideChar(*ws);

@@ -808,10 +808,12 @@ proc EditOptions {} {
     pack $w.colors1 -in $w.f -side top -expand 0 -fill x
     pack $w.sep2 -in $w.f -side top -expand 0 -fill x -ipady 1
 
+    button $w.default -text "Light Theme" -command [list set_default_colors $w]
+    button $w.dark -text "Dark Theme" -command [list set_dark_colors $w]
     button $w.save -text "Save Options" -command "SaveOptions $w; destroy $w"
     button $w.cancel -text "Cancel" -command "CancelOptions; destroy $w"
     wm protocol $w WM_DELETE_WINDOW "CancelOptions; destroy $w"
-    pack $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
+    pack $w.default $w.dark $w.save $w.cancel -in $w.b -side left -expand 0 -fill x
     CenterWindow $w .
 }
 
@@ -4035,5 +4037,39 @@ proc FindConfigFile {} {
     }
     set ConfigFile "~/.tkremindrc"
 }
+
+proc set_default_colors { w } {
+    global tmpOpt
+    set tmpOpt(BackgroundColor) "#d9d9d9"
+    set tmpOpt(LabelColor) "#000000"
+    set tmpOpt(LineColor) "#000000"
+    set tmpOpt(TextColor) "#000000"
+    set tmpOpt(TodayColor) "#00C0C0"
+    set tmpOpt(WinBackground) "#d9d9d9"
+    update_color_buttons $w
+}
+
+proc set_dark_colors { w } {
+    global tmpOpt
+    set tmpOpt(BackgroundColor) "#000000"
+    set tmpOpt(LabelColor) "#00ffff"
+    set tmpOpt(LineColor) "#0080fc"
+    set tmpOpt(TextColor) "#ffffff"
+    set tmpOpt(TodayColor) "#b000b6"
+    set tmpOpt(WinBackground) "#000000"
+    update_color_buttons $w
+}
+
+proc update_color_buttons { w } {
+    global tmpOpt
+    $w.bbgcolor configure -background $tmpOpt(BackgroundColor)
+    $w.bheadcolor configure -background $tmpOpt(LabelColor)
+    $w.gridbcolor configure -background $tmpOpt(LineColor)
+    $w.btextcolor configure -background $tmpOpt(TextColor)
+    $w.tbbgcolor configure -background $tmpOpt(TodayColor)
+    $w.bwincolor configure -background $tmpOpt(WinBackground)
+}
+
+# Rem2PS program to execute -- supply full path if you want
 
 main

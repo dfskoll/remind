@@ -146,24 +146,6 @@ ELSE
 	ENDIF
 ENDIF
 
-############################################################################
-# A meeting on the first Monday of every month which is moved to the       #
-# second Monday in the event of a holiday.                                 #
-############################################################################
-
-# First, the normal meeting.  However, the SKIP keyword means this
-# one won't be triggered if the first Monday is a holiday
-REM First Monday SKIP MSG Meeting
-
-# Now, calculate the "potential" delayed meeting
-REM Second Monday SATISFY 1
-
-# But only actually trigger the delayed meeting if the previous
-# Monday was a holiday
-IF ISOMITTED($T-7)
-   REM [$T] MSG Delayed meeting
-ENDIF
-
 ##########################################################################
 #								         #
 # On our UNIX system, I run a program that queries the university       #
@@ -261,6 +243,24 @@ OMIT    Dec 25		MSG %"Christmas%" Day
 if $NumTrig > SaveTrig
 	REM SPECIAL SHADE 220
 endif
+
+############################################################################
+# A meeting on the first Monday of every month which is moved to the       #
+# second Monday in the event of a holiday.                                 #
+############################################################################
+
+# First, the normal meeting.  However, the SKIP keyword means this
+# one won't be triggered if the first Monday is a holiday
+REM First Monday SKIP MSG Meeting
+
+# Now, calculate the "potential" delayed meeting
+REM Second Monday SATISFY 1
+
+# But only actually trigger the delayed meeting if the previous
+# Monday was a holiday
+IF ISOMITTED($T-7)
+   REM [$T] MSG Delayed meeting
+ENDIF
 
 #PSSTUFF2
 ##########################################################################

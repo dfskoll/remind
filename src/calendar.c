@@ -255,6 +255,17 @@ static void WriteBottomCalLine (void);
 static void WriteIntermediateCalLine (void);
 static void WriteCalDays (void);
 
+static void
+send_lrm(void)
+{
+    /* Send a lrm control sequence if UseUTF8Chars is enabled
+       or char encoding is UTF-8
+    */
+    if (UseUTF8Chars || encoding_is_utf8) {
+        printf("\xE2\x80\x8E");
+    }
+}
+
 static char const *
 despace(char const *s)
 {
@@ -990,6 +1001,10 @@ static void PrintLeft(char const *s, int width, char pad)
     while (*ws && wcwidth(*ws) == 0) {
         PutWideChar(*ws++);
     }
+
+    /* Possibly send lrm control sequence */
+    send_lrm();
+
     for (i=display_len; i<width; i++) fputc(pad, stdout);
     if (buf != static_buf) free(buf);
 #endif
@@ -1070,6 +1085,9 @@ static void PrintCentered(char const *s, int width, char *pad)
     while (*ws && wcwidth(*ws) == 0) {
         PutWideChar(*ws++);
     }
+    /* Possibly send lrm control sequence */
+    send_lrm();
+
     for (i=d+display_len; i<width; i++) fputs(pad, stdout);
     if (buf != static_buf) free(buf);
 #endif
@@ -1103,7 +1121,6 @@ static int WriteOneCalLine(void)
 
     return done;
 }
-
 
 /***************************************************************/
 /*                                                             */
@@ -1211,12 +1228,9 @@ static int WriteOneColLine(int col)
 	    printf("%s", Decolorize(e->r, e->g, e->b));
 	}
 
-        /* Send a lrm control sequence if UseUTF8Chars is enabled
-           or char encoding is UTF-8
-        */
-        if (UseUTF8Chars || encoding_is_utf8) {
-            printf("\xE2\x80\x8E");
-        }
+        /* Possibly send lrm control sequence */
+        send_lrm();
+
 	/* Flesh out the rest of the column */
 	while(numwritten++ < ColSpaces) putchar(' ');
 

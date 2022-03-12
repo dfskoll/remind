@@ -31,57 +31,8 @@ IF version() < "03.04.02"
    EXIT
 ENDIF
 
-######################################
-# Symbolic constants for weekdays... #
-######################################
-SET Sunday    0
-SET Monday    1
-SET Tuesday   2
-SET Wednesday 3
-SET Thursday  4
-SET Friday    5
-SET Saturday  6
-
-SET Sun 0
-SET Mon 1
-SET Tue 2
-SET Wed 3
-SET Thu 4
-SET Fri 5
-SET Sat 6
-
-#########################################
-# Symbolic constants for month names... #
-#########################################
-
-SET Jan 1
-SET Feb 2
-SET Mar 3
-SET Apr 4
-SET May 5
-SET Jun 6
-SET Jul 7
-SET Aug 8
-SET Sep 9
-SET Oct 10
-SET Nov 11
-SET Dec 12
-
-SET January   1
-SET February  2
-SET March     3
-SET April     4
-SET May       5
-SET June      6
-SET July      7
-SET August    8
-SET September 9
-SET October   10
-SET November  11
-SET December  12
-
 ###########################################################
-# Other symbolic constants and functions for "pasting"... #
+# Symbolic constants and functions for "pasting"...       #
 ###########################################################
 SET Quote CHAR(34)
 
@@ -130,21 +81,14 @@ REM 1 MSG John's [_mo_num(11, 1984)] 'monthly' anniversary
 # The SCANFROM clause will make these OMITs safe.
 ############################################################################
 
-# Calculate the weekday of the holiday.
-REM 4 July SCANFROM -7 SATISFY 1
+# If it falls on a Saturday, bump to previous Friday
+REM 4 July OMIT SAT BEFORE SATISFY [$Td != 4] MSG Independence day (observed)
 
-SET iday $T
-IF WKDAYNUM(iday) == Sat
-	REM [iday] MSG Independence day (actual)
-	OMIT [iday-1] MSG Independence day (observed)
-ELSE
-	IF WKDAYNUM(iday) == Sun
-		REM [iday] MSG Independence day (actual)
-		OMIT [iday+1] MSG Independence day (observed)
-	ELSE
-		OMIT [iday] MSG Independence day
-	ENDIF
-ENDIF
+# If it falls on a Sunday, bump to following Monday
+REM 4 July OMIT SUN AFTER SATISFY [$Td != 4] MSG  Independence day (observed)
+
+# Otherwise observe on the 4th
+REM 4 July OMIT SAT SUN SKIP MSG Independence Day
 
 ##########################################################################
 #								         #

@@ -1,5 +1,59 @@
 CHANGES TO REMIND
 
+* VERSION 3.4 Patch 2 - 2022-??-??
+
+- NEW FEATURE: remind: Add syntactic sugar to simplify some common
+  types of reminders.  See "SYNTACTIC SUGAR FOR REM" in the remind
+  man page.  Based on suggestions from Ian! D. Allen.
+
+- NEW FEATURE: remind: Add the "trig" function to allow more
+  expressiveness when creating triggers.  See man page for details.
+
+- IMPROVEMENT: tkremind: Tweak the calendar display; improve ability to
+  customize colors, including supplying two built-in themes.  Based on
+  patch and suggestion from Paulo (last name unknown).
+
+- CHANGE: remind: Increase $MaxSatIter default to 1000 instead of 150.
+  Computers are much faster than when I first wrote remind and they
+  can handle this higher limit easily.  The higher limit also enables
+  certain reasonable reminders that failed in the past because of the
+  low SATISFY iteration limit.
+
+- CHANGE: remind: The "||" operator now returns the value of the first
+  non-zero operand rather than just returning 1 or 0.  Similarly, "&&"
+  returns 0 if either operand is false or the value of the last
+  operand if both operands are true.
+
+     NOTE POTENTIAL INCOMPATIBILITY: Remind scripts that depend on ||
+     and && always returning exactly one of 1 or 0 may need
+     adjustment.
+
+- CHANGE: The || and && operators can accept any non-STRING type as long
+  as both operands have the same type.  The "false" values are defined
+  as follows; true values are any other value:
+
+     INT:      0
+     TIME:     00:00
+     DATE:     '1990-01-01'             (the Remind epoch)
+     DATETIME: '1990-01-01@00:00'       (the Remind epoch)
+
+- IMPROVEMENT: remind: Issue diagnostics if an UNTIL or THROUGH date
+  is earlier than any possible trigger date, as well as an UNTIL date
+  with a fully-specified date and no repeat ("*N").  Suggestion from
+  Ian! D. Allen.
+
+- BUG FIX: tkremind: If the same moon phase appeared twice in a month,
+  TkRemind would not display the first occurrence correctly.  This has
+  been fixed.
+
+- BUG FIX: remind: The IF command documentation didn't reflect how it
+  actually worked; now it does.
+
+- BUG FIX: remind: Use correct UNTIL/THROUGH keyword in error message.
+
+- BUG FIX: rem2pdf: Correct the calculation that warns about an over-full
+  calendar box.  Problem noted by Jonathan Kamens.
+
 * VERSION 3.4 Patch 1 - 2022-02-23
 
 - MINOR IMPROVEMENT: Support the INSTALL_BASE environment variable for

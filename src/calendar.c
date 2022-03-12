@@ -1867,6 +1867,13 @@ static int DoCalRem(ParsePtr p, int col)
 	e->next = CurCol;
 	CalColumn[col] = e;
 	SortCol(&CalColumn[col]);
+    } else {
+        /* Parse the rest of the line to catch expression-pasting errors */
+        while (ParseChar(p, &r, 0)) {
+            if (r != 0) {
+                return r;
+            }
+        }
     }
     return OK;
 }

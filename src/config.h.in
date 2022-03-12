@@ -20,6 +20,8 @@
 
 #undef HAVE_LOCALE_H
 
+#undef HAVE_LANGINFO_H
+
 #undef HAVE_GLOB
 
 #undef HAVE_SETENV

@@ -506,7 +506,7 @@ Acts on the region or places point where it needs to be."
 ;; finally the derived mode.
 
 ;;;###autoload
-(define-derived-mode remind-conf-mode text-mode "REM"
+(define-derived-mode remind-conf-mode text-mode "Remind Conf Mode"
   "Major mode for editing remind calendar configuration files.
 
 \\{remind-conf-mode-map}"

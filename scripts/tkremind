@@ -3599,27 +3599,23 @@ proc DoMoonSpecial { n stuff fntag day } {
 	return
     }
 
+    switch -exact -- $phase {
+        0 { set win .moon_new }
+        1 { set win .moon_first }
+        2 { set win .moon_full }
+        3 { set win .moon_last }
+    }
+
     # We need two sets of moon phase windows.  There can be
     # two of a given phase in the same month, but Tk does
     # not allow the same embedded window in two separate
     # text boxes.  So we use this hack to make sure
     # we use a different window if the same moon phase
     # happens twice in a month.
-    if { $day < 16 } {
-        switch -exact -- $phase {
-            0 { set win .moon_new }
-            1 { set win .moon_first }
-            2 { set win .moon_full }
-            3 { set win .moon_last }
-        }
-    } else {
-        switch -exact -- $phase {
-            0 { set win .moon_new2 }
-            1 { set win .moon_first2 }
-            2 { set win .moon_full2 }
-            3 { set win .moon_last2 }
-        }
+    if {$day > 16} {
+        append win "2"
     }
+
     .cal.t$n configure -state normal
     .cal.t$n window create 1.0 -window $win
 
@@ -3688,7 +3684,6 @@ proc CreateMoonWindows {} {
     catch { destroy .moon_last2 }
 
     set extra 1
-    #set wid [font measure CalboxFont 0]
     set wid [font metrics CalboxFont -ascent]
     set orig_wid $wid
     incr wid $extra
@@ -3699,43 +3694,32 @@ proc CreateMoonWindows {} {
     incr orig_wid $extra
 
     set w [expr $extra+$orig_wid]
-    canvas .moon_new -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_new create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
 
-    canvas .moon_first -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_first create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_first create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180 -outline {}
+    foreach win {.moon_new .moon_new2 } {
+        canvas $win -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+        $win create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+        balloon_add_help $win "New Moon"
+    }
 
-    canvas .moon_full -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_full create oval $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -width 1
+    foreach win {.moon_first .moon_first2 } {
+        canvas $win -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+        $win create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+        $win create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180 -outline {}
+        balloon_add_help $win "First Quarter"
+    }
 
-    canvas .moon_last -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_last create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_last create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180 -outline {}
+    foreach win {.moon_full .moon_full2 } {
+        canvas $win -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+        $win create oval $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -width 1
+        balloon_add_help $win  "Full Moon"
+    }
 
-    canvas .moon_new2 -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_new2 create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-
-    canvas .moon_first2 -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_first2 create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_first2 create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 90 -extent 180 -outline {}
-
-    canvas .moon_full2 -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_full2 create oval $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -width 1
-
-    canvas .moon_last2 -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
-    .moon_last2 create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
-    .moon_last2 create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180 -outline {}
-
-    balloon_add_help .moon_new   "New Moon"
-    balloon_add_help .moon_first "First Quarter"
-    balloon_add_help .moon_full  "Full Moon"
-    balloon_add_help .moon_last  "Last Quarter"
-
-    balloon_add_help .moon_new2   "New Moon"
-    balloon_add_help .moon_first2 "First Quarter"
-    balloon_add_help .moon_full2  "Full Moon"
-    balloon_add_help .moon_last2  "Last Quarter"
+    foreach win {.moon_last .moon_last2 } {
+        canvas $win -background $Option(BackgroundColor) -width $wid -height $wid -borderwidth 0 -highlightthickness 0
+        $win create oval $extra $extra $w $w -outline $Option(TextColor) -width 1
+        $win create arc $extra $extra $w $w -outline $Option(TextColor) -fill $Option(TextColor) -start 270 -extent 180 -outline {}
+        balloon_add_help $win  "Last Quarter"
+    }
 }
 
 #***********************************************************************

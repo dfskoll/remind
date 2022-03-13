@@ -5,7 +5,7 @@
 ;; Author: Shelagh Manton <shelagh.manton@gmail.com> with help from
 ;; Dianne Skoll
 ;; Keywords: remind configure convenience
-;; Version: 0.14
+;; Version: 0.15
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License

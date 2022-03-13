@@ -265,12 +265,35 @@
 :group 'remind-conf
 )
 
+(defconst remind-keywords-regex (regexp-opt remind-keywords 'words))
+(defconst remind-type-keywords-regex (regexp-opt remind-type-keywords 'words))
+(defconst remind-builtin-variables-regex (regexp-opt remind-builtin-variables 'words))
+(defconst remind-builtin-functions-regex (regexp-opt remind-builtin-functions 'words))
+(defconst remind-time-words-regex (regexp-opt remind-time-words 'words))
+
+;; Case-insensitive matching functions
+(defun remind-keywords-matcher (limit)
+  (let ((case-fold-search t))
+    (re-search-forward remind-keywords-regex limit 'no-error)))
+(defun remind-type-keywords-matcher (limit)
+  (let ((case-fold-search t))
+    (re-search-forward remind-type-keywords-regex limit 'no-error)))
+(defun remind-builtin-variables-matcher (limit)
+  (let ((case-fold-search t))
+    (re-search-forward remind-builtin-variables-regex limit 'no-error)))
+(defun remind-builtin-functions-matcher (limit)
+  (let ((case-fold-search t))
+    (re-search-forward remind-builtin-functions-regex limit 'no-error)))
+(defun remind-time-words-matcher (limit)
+  (let ((case-fold-search t))
+    (re-search-forward remind-time-words-regex limit 'no-error)))
+
 ;; keywords
 
 (defconst remind-conf-font-lock-keywords-1
   (list
    '("^[\;\#]\\s-+.*$" . remind-comment-face)
-   (cons (regexp-opt remind-keywords 'words) remind-conf-keyword-face)
+   '(remind-keywords-matcher . remind-conf-keyword-face)
    '("%[\"_]" . font-lock-warning-face)
    '("\\(%[a-mops-w]\\)" . remind-conf-substitutes-face)
    '("\"[^\"]*\"" . remind-string-face))
@@ -279,15 +302,15 @@
 (defconst remind-conf-font-lock-keywords-2
   (append remind-conf-font-lock-keywords-1
 	  (list
-	   (cons (regexp-opt remind-time-words 'words) remind-time-face)
-	   (cons (regexp-opt remind-builtin-functions 'words) remind-conf-command-face)
+           '(remind-time-words-matcher . remind-time-face)
+           '(remind-builtin-functions-matcher . remind-conf-command-face)
 	   '("%$" . remind-conf-endline-face)))
   "Additional commands to highlight in `remind-conf-mode'.")
 
 (defconst remind-conf-font-lock-keywords-3
   (append remind-conf-font-lock-keywords-2
 	  (list
-	   (cons (regexp-opt remind-type-keywords 'words) remind-conf-type-face)
+           '(remind-type-keywords-matcher . remind-conf-type-face)
 	   '("\[[a-zA-Z]\\{3,6\\}\]" . remind-conf-color-face)
 	   '("\\s-+\\([12][0-9]\\|3[01]\\|0?[0-9]\\)\\s-+" . remind-conf-substitutes-face);better date regexp
 	   '("\\s-+\\([12][09][0-9][0-9][-/]\\(0[1-9]\\|1[0-2]\\)[-/]\\([12][0-9]\\|0[1-9]\\|3[01]\\)\\)\\s-+" . remind-time-face) ;; pseudo ISO 8601 date format.
@@ -295,7 +318,7 @@
 	   '("\\s-+\\(\\(?:20\\|19\\)[0-9][0-9]\\)\\s-+" . remind-conf-substitutes-face);years
 	   '("\\s-+\\(2[0-4]\\|[01]?[0-9][.:][0-5][0-9]\\)\\s-+" . remind-conf-substitutes-face);24hour clock, more precise
 	   '("\\s-+\\([+-][+-]?[1-9][0-9]*\\)\\s-+" 1 remind-conf-delta-face prepend)
-	   (cons (regexp-opt remind-builtin-variables 'words) remind-conf-variable-face)))
+           '(remind-builtin-variables-matcher . remind-conf-variable-face)))
   "The ultimate in highlighting experiences for `remind-conf-mode'.")
 
 ;;YYYY-MM-DD@hh:mm, YYYY-MM-DD@hh.mm, YYYY/MM/DD@hh:mm and YYYY/MM/DD@hh.mm
@@ -488,7 +511,6 @@ Acts on the region or places point where it needs to be."
 
 \\{remind-conf-mode-map}"
   :syntax-table remind-conf-syntax-table
-  (set (make-local-variable 'font-lock-keywords-case-fold-search) t) ;this is not working atm 2009-04-13
   (set (make-local-variable 'font-lock-defaults) '(remind-conf-font-lock-keywords))
   (set (make-local-variable 'comment-start) ";")
   (set (make-local-variable 'comment-start) "#")

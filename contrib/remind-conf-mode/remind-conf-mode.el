@@ -111,12 +111,18 @@
 
 (defconst remind-keywords
   (sort
-   (list "RUN" "REM" "ONCE" "SATISFY" "BEFORE" "UNSET" "OMIT" "FIRST" "SATISFY"
-	 "OMIT" "DATE" "SKIP" "ONCE" "AFTER" "WARN" "PRIORITY" "AT" "SCHED" "IF" "ELSE" "ENDIF"
-	 "WARN" "UNTIL" "THROUGH" "SCANFROM" "DURATION" "TAG" "MSG" "MSF" "CAL" "SPECIAL" "IFTRIG"
-	 "PS" "PSFILE" "BANNER" "INCLUDE" "PUSH-OMIT-CONTEXT" "DEBUG" "DUMPVARS" "PUSH" "CLEAR" "POP"
-	 "CLEAR-OMIT-CONTEXT" "POP-OMIT-CONTEXT"  "SET" "ERRMSG" "FSET" "DUMP" "BAN" "INC" "SCAN"
-	 "EXIT" "FLUSH" "PRESERVE" "MOON" "COLOR" "UNSET")
+   (list "ADDOMIT" "AFTER" "AT" "BANNER" "BEFORE"
+         "CAL" "CLEAR-OMIT-CONTEXT" "DEBUG" "DO" "DUMPVARS"
+         "DURATION" "ELSE" "ENDIF" "ERRMSG" "EXIT" "FIRST"
+         "FLUSH" "FOURTH" "FROM" "FSET" "IF" "IFTRIG" "IN"
+         "INCLUDE" "INCLUDECMD" "LAST" "LASTDAY"
+         "LASTWORKDAY" "MAYBE-UNCOMPUTABLE" "MSF"
+         "MSG" "OMIT" "OMITFUNC" "ONCE"
+         "POP-OMIT-CONTEXT" "PRESERVE" "PRIORITY" "PS" "PSFILE"
+         "PUSH-OMIT-CONTEXT" "REM" "RUN" "SATISFY" "SCANFROM"
+         "SCHED" "SECOND" "SET" "SKIP" "SPECIAL"
+         "TAG" "THIRD" "THROUGH" "UNSET" "UNTIL"
+         "WARN")
    #'(lambda (a b) (> (length a) (length b)))))
 
 
@@ -127,12 +133,20 @@
 
 (defconst remind-builtin-variables
   (sort
-   (list "$CalcUTC" "$CalMode" "$Daemon" "$DateSep" "$DefaultPrio" "$DontFork" "$DontTrigAts" "$DontQueue"
-	 "$EndSent" "$EndSentIg" "$NumTrig" "$FirstIndent" "$FoldYear" "$FormWidth" "$HushMode"
-	 "$IgnoreOnce" "$InfDelta" "$NextMode" "$NumQueued" "$NumTrig" "$PrefixLineNo" "$PSCal" "$RunOff"
-	 "$SimpleCal" "$SortByDate" "$SortByPrio" "$MinsFromUTC" "$LatDeg" "$LatMin" "$LatSec" "$EndSent"
-	 "$EndSentIg" "$Location" "$LongDeg" "$LongMin" "$LongSec" "$MaxSatIter" "$SubsIndent" "$T" "$Td"
-	 "$Tm" "$Tw" "$Ty" "$TimeSep" "$UntimedFirst" "$U" "$Ud" "$Um" "$Uw" "$Uy")
+   (list "$April" "$August" "$CalcUTC" "$CalMode" "$Daemon" "$DateSep"
+         "$DateTimeSep" "$December" "$DefaultColor" "$DefaultPrio"
+         "$DefaultTDelta" "$DeltaOffset" "$DontFork" "$DontQueue"
+         "$DontTrigAts" "$EndSent" "$EndSentIg" "$February" "$FirstIndent"
+         "$FoldYear" "$FormWidth" "$Friday" "$HushMode" "$IgnoreOnce"
+         "$InfDelta" "$IntMax" "$IntMin" "$January" "$July" "$June" "$LatDeg"
+         "$Latitude" "$LatMin" "$LatSec" "$Location" "$LongDeg" "$Longitude"
+         "$LongMin" "$LongSec" "$March" "$MaxSatIter" "$MaxStringLen" "$May"
+         "$MinsFromUTC" "$Monday" "$NextMode" "$November" "$NumQueued"
+         "$NumTrig" "$October" "$PrefixLineNo" "$PSCal" "$RunOff" "$Saturday"
+         "$September" "$SimpleCal" "$SortByDate" "$SortByPrio" "$SortByTime"
+         "$SubsIndent" "$Sunday" "$T" "$Td" "$Thursday" "$TimeSep" "$Tm"
+         "$Tuesday" "$Tw" "$Ty" "$U" "$Ud" "$Um" "$UntimedFirst" "$Uw" "$Uy"
+         "$Wednesday")
    #'(lambda (a b) (> (length a) (length b)))))
 
 
@@ -147,15 +161,22 @@
 
 (defconst remind-builtin-functions
   (sort
-   (list "abs" "access" "args" "asc" "baseyr" "char" "choose" "coerce" "current" "date" "datetime" "datepart" 
-	 "dawn" "day" "daysinmon" "defined" "dosubst" "dusk" "easter" "easterdate" "evaltrig" "filedate" 
-	 "filedatetime" "filedir" "filename" "getenv" "hebdate" "hebday" "hebmon" "hebyear" "hour" "iif" "index" "isdst" 
-	 "isleap" "isomitted" "language" "lower" "max" "min" "minute" "minsfromutc" "mon" "monnum" "moondate" "moondatetime"
-	 "moonphase" "moontime" "msgprefix" "msgsuffix" "nonomitted" "now" "ord" "ostype" "plural" 
-	 "psmoon" "psshade" "realcurrent" "realnow" "realtoday" "sgn" "shell" "slide" "strlen" "substr" "sunrise" "sunset" "time" "timepart" 
-	 "thisyear" "today" "trigdate" "trigdatetime" "trigger" "trigger" "trigtime" "trigvalid" "typeof" "tzconvert" "upper" "value" 
-	 "version" "weekno" "wkday" "wkdaynum" "year"
-	 )
+   (list "abs" "access" "adawn" "adusk" "ampm" "args" "asc" "baseyr" "char"
+         "choose" "coerce" "current" "date" "datepart" "datetime" "dawn" "day"
+         "daysinmon" "defined" "dosubst" "dusk" "easterdate" "evaltrig"
+         "filedate" "filedatetime" "filedir" "filename" "getenv" "hebdate"
+         "hebday" "hebmon" "hebyear" "hour" "iif" "index" "isany" "isdst"
+         "isleap" "isomitted" "language" "lower" "max" "min" "minsfromutc"
+         "minute" "mon" "monnum" "moondate" "moondatetime" "moonphase"
+         "moontime" "ndawn" "ndusk" "nonomitted" "now" "ord" "ostype" "plural"
+         "psmoon" "psshade" "realcurrent" "realnow" "realtoday" "sgn" "shell"
+         "shellescape" "slide" "strlen" "substr" "sunrise" "sunset" "time"
+         "timepart" "today" "trig" "trigback" "trigdate" "trigdatetime"
+         "trigdelta" "trigduration" "trigeventduration" "trigeventstart"
+         "trigfrom" "trigger" "trigpriority" "trigrep" "trigscanfrom"
+         "trigtime" "trigtimedelta" "trigtimerep" "triguntil" "trigvalid"
+         "typeof" "tzconvert" "upper" "value" "version" "weekno" "wkday"
+         "wkdaynum" "year")
    #'(lambda (a b) (> (length a) (length b)))))
 
 ;;; faces

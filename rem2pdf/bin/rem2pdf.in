@@ -478,14 +478,14 @@ positioned absolutely with respect to the day's box (and is not
 counted when calculating the box's height.)
 
 A positive I<x> value positions the left edge of the text I<x> points
-to the right of the left side of the calender box, while a negative
+to the right of the left side of the calendar box, while a negative
 I<x> value positions the right edge of the text I<x> points to the left
-of the right side of the calender box.
+of the right side of the calendar box.
 
 A positive I<y> value positions the top edge of the text I<y> points
-below the top of the calender box, while a negative I<y> value
+below the top of the calendar box, while a negative I<y> value
 positions the bottom edge of the text I<y> points above the bottom of
-the calender box.
+the calendar box.
 
 If you use absolutely-positioned text, it's up to you to make sure it
 doesn't overlap other text; B<rem2pdf> takes no special precautions to

@@ -1,9 +1,9 @@
 " Vim syntax file
 " Language:	Remind
-" Maintainer:	Davide Alberani <alberanid@libero.it>
-" Last Change:	18 Sep 2009
-" Version:	0.5
-" URL:		http://erlug.linux.it/~da/vim/syntax/remind.vim
+" Maintainer:	Davide Alberani <da@erlug.linux.it>
+" Last Change:	02 Nov 2015 + 13 Mar 2021 by Dianne Skoll <dianne@skoll.ca>
+" Version:	0.7+dianne1
+" URL:		http://ismito.it/vim/syntax/remind.vim
 "
 " remind is a sophisticated reminder service
 " you can download remind from:
@@ -23,7 +23,7 @@ syn keyword remindExpiry	UNTIL FROM SCANFROM SCAN WARN SCHED THROUGH
 syn keyword remindTag		PRIORITY TAG
 syn keyword remindTimed		AT DURATION
 syn keyword remindMove		ONCE SKIP BEFORE AFTER
-syn keyword remindSpecial	INCLUDE INC BANNER PUSH-OMIT-CONTEXT PUSH CLEAR-OMIT-CONTEXT CLEAR POP-OMIT-CONTEXT POP COLOR COLOUR
+syn keyword remindSpecial	INCLUDE INC BANNER PUSH-OMIT-CONTEXT PUSH CLEAR-OMIT-CONTEXT CLEAR POP-OMIT-CONTEXT POP COLOR COLOUR DO
 syn keyword remindRun		MSG MSF RUN CAL SATISFY SPECIAL PS PSFILE SHADE MOON
 syn keyword remindConditional	IF ELSE ENDIF IFTRIG
 syn keyword remindDebug		DEBUG DUMPVARS DUMP ERRMSG FLUSH PRESERVE

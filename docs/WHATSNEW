@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 3.4 Patch 2 - 2022-??-??
+* VERSION 3.4 Patch 2 - 2022-03-14
 
 - NEW FEATURE: remind: Add syntactic sugar to simplify some common
   types of reminders.  See "SYNTACTIC SUGAR FOR REM" in the remind

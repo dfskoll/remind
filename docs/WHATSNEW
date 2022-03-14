@@ -9,6 +9,16 @@ CHANGES TO REMIND
 - CHANGE: examples/defs.rem: The examples file has been updated to use
   the newer syntactic sugar.
 
+- CHANGE: remind: Always parse the body of REM statements to catch
+  expression errors.  In the past, something like:
+
+      REM 2025-01-02 MSG [1/0]
+
+  would not cause a division-by-zero error except on 2025-01-02.  Now,
+  the error is always caught.  NOTE POTENTIAL INCOMPATIBILITY: There may
+  be edge-cases when formerly-valid remind scripts now trigger errors.
+  However, this is pretty unlikely.
+
 - NEW FEATURE: remind: Add the "trig" function to allow more
   expressiveness when creating triggers.  See man page for details.
 
@@ -21,6 +31,13 @@ CHANGES TO REMIND
   with almost-unreadable error output, it discreetly notifies you of
   errors with a button that lets you view the specific error messages
   in a more readable format.
+
+- IMPROVEMENT: examples/remind.vim: Update list of keywords in vim syntax
+  highlighting file.
+
+- IMPROVEMENT: contrib/remind-conf-mode: Update the list of keywords,
+  functions and variables in the Emacs syntax-highlighting file.  Also make
+  it match them case-insensitively.
 
 - CHANGE: remind: Increase $MaxSatIter default to 1000 instead of 150.
   Computers are much faster than when I first wrote remind and they
@@ -54,6 +71,8 @@ CHANGES TO REMIND
 - BUG FIX: tkremind: If the same moon phase appeared twice in a month,
   TkRemind would not display the first occurrence correctly.  This has
   been fixed.
+
+- BUG FIX: rem2pdf: Fix typos in the man page.
 
 - BUG FIX: remind: The IF command documentation didn't reflect how it
   actually worked; now it does.

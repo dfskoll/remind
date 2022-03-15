@@ -2237,10 +2237,10 @@ static int SunStuff(int rise, double cosz, int jul)
     /* Sometimes, we get roundoff error.  Check for "reasonableness" of
        answer. */
     if (rise) {
-	/* Sunrise so close to midnight it wrapped around -- permament light */
+	/* Sunrise so close to midnight it wrapped around -- permanent light */
 	if (hours >= 23) return NO_TIME;
     } else {
-	/* Sunset so close to midnight it wrapped around -- permament light */
+	/* Sunset so close to midnight it wrapped around -- permanent light */
 	if (hours <= 1) return -NO_TIME;
     }
     return hours*60 + mins;

@@ -129,7 +129,7 @@ set e a + " at " + tu
 [a] msg [show("y")]
 [a] msg [show("z")]
 
-msg %_Time substititions for a time in the future:%
+msg %_Time substitutions for a time in the future:%
 [d] msg [show("1")]
 [d] msg [show("2")]
 [d] msg [show("3")]
@@ -143,7 +143,7 @@ msg %_Time substititions for a time in the future:%
 [d] msg [show("!")]
 [d] msg [show("@")]
 [d] msg [show("#")]
-msg %_Time substititions for a time in the past:%
+msg %_Time substitutions for a time in the past:%
 [e] msg [show("1")]
 [e] msg [show("2")]
 [e] msg [show("3")]
@@ -158,7 +158,7 @@ msg %_Time substititions for a time in the past:%
 [e] msg [show("@")]
 [e] msg [show("#")]
 
-msg %_Time substititions for the current time:%
+msg %_Time substitutions for the current time:%
 set e a + " at " + now()
 [e] msg [show("1")]
 [e] msg [show("2")]

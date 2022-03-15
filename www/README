@@ -10,7 +10,7 @@ it should work on any UNIX web server.
 
 To install it, you need the Remind package, available via ftp from
 https://dianne.skoll.ca/projects/remind/  You should install Remind,
-setting the lattitude, longitude, location and time zone as appropriate
+setting the latitude, longitude, location and time zone as appropriate
 for your machine.
 
 Once you have Remind installed, follow these steps to set up your WWW

@@ -230,7 +230,7 @@ void HandleQueuedReminders(void)
 	/* Do NOT trigger the reminder if tt.nexttime is more than a
 	   minute in the past.  This can happen if the clock is
 	   changed or a laptop awakes from hibernation.
-	   However, DO triger if tt.nexttime == tt.ttime so all
+	   However, DO trigger if tt.nexttime == tt.ttime so all
 	   queued reminders are triggered at least once. */
 	if ((SystemTime(1) - (q->tt.nexttime * 60) <= 60) ||
 	    (q->tt.nexttime == q->tt.ttime)) {

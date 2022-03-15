@@ -141,7 +141,7 @@ appear with exactly the text and exactly the same duration (including
 one VEVENT object, that will have a RFC2445 C<RDATE> property.
 
 B<rem2ics> is not yet smart enough to derive an C<RRULE> based
-recurrance.  If you really want that feature, either implement it and
+recurrence.  If you really want that feature, either implement it and
 send in a patch, or contact the author and convince him to do it.
 
 =head2 Other iCalendar Properties
@@ -164,7 +164,7 @@ runs.
 
 =head2 Other iCalendar Perl objects
 
-Why does't B<rem2ics> use any of the iCalendar Perl stuff in CPAN?
+Why doesn't B<rem2ics> use any of the iCalendar Perl stuff in CPAN?
 Because I don't trust them, and they are too big for this app.  One
 links to a binary library. Another hasn't been maintained since 1991,
 and is full of notes as to how buggy and incomplete it is.  And so
@@ -218,7 +218,7 @@ Bug fix, error message for non-recurring events
 Bug fix, 
  rem2ics 0.91 chokes on timed reminders with
  duration using `remind -s` as it functions in remind-03.01.03.
- Remind 3.01 changed how the -s data is formated for events that have a duration
+ Remind 3.01 changed how the -s data is formatted for events that have a duration
  Patch by Paul Hinze E<lt>paul dot t dot hinze at gmail dot comE<gt>
   and Michael Schultz E<lt>mjschultz at gmail dot comE<gt>
 
@@ -376,7 +376,7 @@ foreach $v (@events) {
 
 my(%grovel);
 
-# if the user doesnt want recurrance detection
+# if the user doesn't want recurrence detection
 unless ($options{norecurr}) {
 
     # then dont put events in the grovel hash
@@ -393,7 +393,7 @@ unless ($options{norecurr}) {
 	    $v = ${$grovel{$k}}[0];
 	    $v->{recurlist} = \@{$grovel{$k}};
 	    foreach my $v0 (@{$grovel{$k}}) {
-		$v0->{is_recurrance} = $v;
+		$v0->{is_recurrence} = $v;
 	    }
 	}
     }
@@ -409,12 +409,12 @@ unless ($options{norecurr}) {
 # might have a problem if a recurring event has two instances both on
 # the first day.
 
-# Every event that is recurring has a "is_recurrance" property.
+# Every event that is recurring has a "is_recurrence" property.
 # Additionally, (hopefully) the first/earliest event in a set of
-# recurrances has a "recurlist" property.  The "recurlist" is a
+# recurrences has a "recurlist" property.  The "recurlist" is a
 # reference to a list of references to each of the events.  The first
 # one on that list will be the same event that has the "recurlist"
-# property.  The "is_recurrance" property is a reference back to the
+# property.  The "is_recurrence" property is a reference back to the
 # event that has the "recurlist" property.
 
 foreach my $k (keys %grovel) {
@@ -466,8 +466,8 @@ foreach my $k (keys %grovel) {
 }
 
 foreach $v (@events) {
-    # for recurrant events, skip those that arnt the "head"
-    next if ($v->{is_recurrance} and (not $v->{recurlist}));
+    # for recurrent events, skip those that arnt the "head"
+    next if ($v->{is_recurrence} and (not $v->{recurlist}));
 
     if (${$v->{sf}}[4] eq "*") {  # no time was given
 	$v->{i_dtstart} = sprintf("DTSTART:%s", $v->{dts});
@@ -485,7 +485,7 @@ foreach $v (@events) {
     }
 
     if (${$v->{sf}}[3] ne "*") {  # a duration was given
-	# It's convienient that RFC2445 defines DURATION, thus we
+	# It's convenient that RFC2445 defines DURATION, thus we
 	# don't need to calculate DTEND, with awkward figuring out
 	# crossing hours, days, months, year, etc.  Instead we
 	# will let the iCalendar consuming application worry about it.
@@ -501,8 +501,8 @@ print "BEGIN:VCALENDAR\015\012"
 
 # output each vevent
 foreach $v (@events) {
-    # for recurrant events, only output the "head", skip the others
-    next if ($v->{is_recurrance} and (not $v->{recurlist}));
+    # for recurrent events, only output the "head", skip the others
+    next if ($v->{is_recurrence} and (not $v->{recurlist}));
 
     print "BEGIN:VEVENT\015\012";
     my $tag = ${$v->{sf}}[2];

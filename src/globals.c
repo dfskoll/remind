@@ -14,7 +14,7 @@
 
 #include "config.h"
 
-#include <stdio.h>   /* For defintion of FILE - sigh! */
+#include <stdio.h>   /* For definition of FILE - sigh! */
 #include "types.h"
 #include "custom.h"
 #define MK_GLOBALS 1

@@ -1135,8 +1135,8 @@ int DoErrMsg(ParsePtr p)
 
 /* The array FoldArray[2][7] contains sample years which begin
    on the specified weekday.  For example, FoldArray[0][2] is a
-   non-leapyear beginning on Wednesday, and FoldArray[1][5] is a
-   leapyear beginning on Saturday.  Used to fold back dates which
+   non-leap year beginning on Wednesday, and FoldArray[1][5] is a
+   leap year beginning on Saturday.  Used to fold back dates which
    are too high for the standard Unix representation.
    NOTE:  This implies that you cannot set BASE > 2001!!!!! */
 static int FoldArray[2][7] = {

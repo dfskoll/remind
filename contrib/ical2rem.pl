@@ -32,7 +32,7 @@
 # version 0.5 2007-03-21
 #	- Add more help options
 #	- --project-lead-time option
-#	- Supress printing of heading if there are no todos to print
+#	- Suppress printing of heading if there are no todos to print
 # version 0.4
 #	- Version 0.4 changes all written or inspired by, and thanks to Mark Stosberg
 #	- Change to GetOptions
@@ -84,7 +84,7 @@ How may days in advance to start getting reminders about the events. Defaults to
 
   ical2rem.pl --no-todos
 
-If you don't care about the ToDos the calendar, this will surpress
+If you don't care about the ToDos the calendar, this will suppress
 printing of the ToDo heading, as well as skipping ToDo processing. 
 
 =head2 --heading

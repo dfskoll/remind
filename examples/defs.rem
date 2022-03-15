@@ -36,7 +36,7 @@ ENDIF
 ###########################################################
 SET Quote CHAR(34)
 
-# Handy constants/function for specifing week of month...
+# Handy constants/function for specifying week of month...
 SET  Week_1		 1
 SET  Week_2		 8
 SET  Week_3		15

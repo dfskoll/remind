@@ -355,7 +355,7 @@ proc RunCommand { cmd } {
 # %RETURNS:
 #  Nothing
 # %DESCRIPTION:
-#  Reads characters from command pipelin and appends them to .msg.
+#  Reads characters from command pipeline and appends them to .msg.
 #***********************************************************************
 proc CommandReadable { f } {
     global CmdDone

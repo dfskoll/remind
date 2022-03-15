@@ -8,7 +8,7 @@
 /*  globals.h and err.h                                        */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2021 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2022 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 

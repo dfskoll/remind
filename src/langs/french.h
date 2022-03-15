@@ -8,7 +8,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-2021 by Dianne Skoll          */
+/*  REMIND is Copyright (C) 1992-2022 by Dianne Skoll          */
 /*  This file is Copyright (C) 1993 by Laurent Duperval and    */
 /*  Dianne Skoll.                                              */
 /*                                                             */
@@ -232,7 +232,7 @@ EXTERN char *ErrMsg[] =
 #define L_USAGE_OVERRIDE 1
 void Usage(void)
 {
-    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-2021 Dianne Skoll\n", VERSION, L_LANGNAME);
+    fprintf(ErrFp, "\nREMIND %s (%s version) Copyright 1992-2022 Dianne Skoll\n", VERSION, L_LANGNAME);
 #ifdef BETA
     fprintf(ErrFp, ">>>> BETA VERSION <<<<\n");
 #endif

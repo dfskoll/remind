@@ -8,7 +8,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*                                                             */
-/*  REMIND is Copyright (C) 1992-2021 by Dianne Skoll          */
+/*  REMIND is Copyright (C) 1992-2022 by Dianne Skoll          */
 /*  This file is Copyright (C) 1996-1998 by Liviu Daia         */
 /*                                                             */
 /***************************************************************/

@@ -5,7 +5,7 @@
 /*  Print a PostScript calendar.                               */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2021 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2022 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
 
@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
 	    !strcmp(DBufValue(&buf), PSBEGIN2)) {
 	    if (!validfile) {
 		if (Verbose) {
-		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-2021 by Dianne Skoll\n\n", VERSION);
+		    fprintf(stderr, "Rem2PS: Version %s Copyright 1992-2022 by Dianne Skoll\n\n", VERSION);
 		    fprintf(stderr, "Generating PostScript calendar\n");
 		}
 	    }

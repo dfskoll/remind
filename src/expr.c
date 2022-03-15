@@ -5,7 +5,7 @@
 /*  This file contains routines to parse and evaluate          */
 /*  expressions.                                               */
 /*                                                             */
-/*  Copyright 1992-2021 by Dianne Skoll                        */
+/*  Copyright 1992-2022 by Dianne Skoll                        */
 /*                                                             */
 /***************************************************************/
 

@@ -103,6 +103,9 @@ set OptDescr(RunCmd) "(String) If non-blank, run specified command when a pop-up
 set Option(FeedReminder) 0
 set OptDescr(FeedReminder) "(0/1) If 1, feed the reminder to RunCmd on standard input (see RunCmd option)"
 
+set Option(DayAnchor) "center"
+set OptDescr(DayAnchor) "(w/center/e) Anchor the day number to the left (w), center or right (e) of its container"
+
 set Option(Editor) "emacs +%d %s"
 set OptDescr(Editor) "(String) Specify command to edit a file.  %d is replaced with line number and %s with filename"
 
@@ -483,7 +486,7 @@ proc CreateCalFrame { w dayNames } {
 	set n [expr $i*7]
 	for {set j 0} {$j < 7} {incr j} {
 	    set f [expr $n+$j]
-	    button $w.l$f -text "" -justify center -command "" \
+	    button $w.l$f -text "" -justify center -command "" -anchor $Option(DayAnchor) \
 		-state disabled -relief flat -bd 0 -padx 0 -pady 0 -font HeadingFont -highlightthickness 1
 	    text $w.t$f -width 12 -height $h -bd 0 -spacing3 3 -wrap word -relief flat \
 		-state disabled -takefocus 0 -cursor {} -font CalboxFont -foreground $Option(TextColor) -background $Option(BackgroundColor) \
@@ -793,12 +796,26 @@ proc EditOptions {} {
 	    -text "Feed popped-up reminder to command's standard input" \
 	    -variable tmpOpt(FeedReminder) -anchor w -justify left
 
+    frame $w.ancFrame
+    label $w.ancLabel -text "Anchor day numbers to:"
+    radiobutton $w.ancLeft \
+	    -text "Left" \
+	    -variable tmpOpt(DayAnchor) -value "w" -anchor w -justify left
+    radiobutton $w.ancCenter \
+	    -text "Center" \
+	    -variable tmpOpt(DayAnchor) -value "center" -anchor w -justify left
+    radiobutton $w.ancRight \
+	    -text "Right" \
+	    -variable tmpOpt(DayAnchor) -value "e" -anchor w -justify left
+    pack $w.ancLabel $w.ancLeft $w.ancCenter $w.ancRight -in $w.ancFrame -side left
+
     pack $w.startIconified -in $w.f -side top -expand 0 -fill x
     pack $w.showTodays -in $w.f -side top -expand 0 -fill x
     pack $w.confirmQuit -in $w.f -side top -expand 0 -fill x
     pack $w.bringDown -in $w.f -side top -expand 0 -fill x
     pack $w.ring -in $w.f -side top -expand 0 -fill x
     pack $w.deic -in $w.f -side top -expand 0 -fill x
+    pack $w.ancFrame -in $w.f -side top -expand 0 -fill x
     pack $w.sep1 -in $w.f -side top -expand 0 -fill x -ipady 1
     pack $w.rf -in $w.f -side top -expand 0 -fill x
     pack $w.feed -in $w.f -side top -expand 0 -fill x
@@ -876,6 +893,13 @@ proc SaveOptions { w } {
     .h.title configure -background $Option(WinBackground) -foreground $Option(LabelColor)
     for {set i 0} {$i < 7} {incr i} {
         .cal.day$i configure  -foreground $Option(LabelColor) -background $Option(WinBackground)
+    }
+    for {set i 0} {$i < 6} {incr i} {
+	set n [expr $i*7]
+	for {set j 0} {$j < 7} {incr j} {
+	    set f [expr $n+$j]
+            .cal.l$f configure -anchor $Option(DayAnchor);
+        }
     }
     .b.status configure -foreground $Option(LabelColor) -background $Option(WinBackground)
     .b.nqueued configure -foreground $Option(LabelColor) -background $Option(WinBackground)

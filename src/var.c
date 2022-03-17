@@ -19,12 +19,12 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
+#include <locale.h>
 #include "types.h"
 #include "expr.h"
 #include "globals.h"
 #include "protos.h"
 #include "err.h"
-
 #define UPPER(c) (islower(c) ? toupper(c) : c)
 
 /* The variable hash table */
@@ -39,6 +39,28 @@ static int IntMax = INT_MAX;
 static Var *VHashTbl[VAR_HASH_SIZE];
 
 typedef int (*SysVarFunc)(int, Value *);
+
+static double
+strtod_in_c_locale(char const *str, char **endptr)
+{
+    /* Get current locale */
+    char const *loc = setlocale(LC_NUMERIC, NULL);
+    double x;
+
+    /* If it failed, punt */
+    if (!loc) {
+        return strtod(str, endptr);
+    }
+
+    /* Set locale to C */
+    setlocale(LC_NUMERIC, "C");
+
+    x = strtod(str, endptr);
+
+    /* Back to original locale */
+    setlocale(LC_NUMERIC, loc);
+    return x;
+}
 
 static void deprecated_var(char const *var, char const *instead)
 {
@@ -96,9 +118,16 @@ static int latitude_longitude_func(int do_set, Value *val, double *var, double m
     char buf[64];
     double x;
     char *endptr;
+    char const *loc = setlocale(LC_NUMERIC, NULL);
 
     if (!do_set) {
+        if (loc) {
+            setlocale(LC_NUMERIC, "C");
+        }
         snprintf(buf, sizeof(buf), "%f", *var);
+        if (loc) {
+            setlocale(LC_NUMERIC, loc);
+        }
         val->v.str = malloc(strlen(buf)+1);
         if (!val->v.str) return E_NO_MEM;
         strcpy(val->v.str, buf);
@@ -110,7 +139,7 @@ static int latitude_longitude_func(int do_set, Value *val, double *var, double m
     } else {
         if (val->type != STR_TYPE) return E_BAD_TYPE;
         errno = 0;
-        x = strtod(val->v.str, &endptr);
+        x = strtod_in_c_locale(val->v.str, &endptr);
         if (errno) return E_BAD_TYPE;
         if (*endptr) return E_BAD_TYPE;
     }

@@ -47,6 +47,8 @@ strtod_in_c_locale(char const *str, char **endptr)
     char const *loc = setlocale(LC_NUMERIC, NULL);
     double x;
 
+    errno = 0;
+
     /* If it failed, punt */
     if (!loc) {
         return strtod(str, endptr);
@@ -59,6 +61,15 @@ strtod_in_c_locale(char const *str, char **endptr)
 
     /* Back to original locale */
     setlocale(LC_NUMERIC, loc);
+
+    /* If we got an error, try in original locale, but issue a warning */
+    if (errno || **endptr) {
+        errno = 0;
+        x = strtod(str, endptr);
+        if (!errno && !**endptr) {
+            Wprint("Accepting \"%s\" for $Latitude/$Longitude, but you should use the \"C\" locale decimal separator \".\" instead", str);
+        }
+    }
     return x;
 }
 

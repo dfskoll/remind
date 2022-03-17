@@ -91,7 +91,6 @@
 (define-key remind-conf-mode-map "\C-c\C-x" 'rem-tomorrow)
 (define-key remind-conf-mode-map "\C-c\C-a" 'rem-days-away)
 (define-key remind-conf-mode-map "\M-j" 'remind-indent-line)
-(define-key remind-conf-mode-map (kbd "RET") 'remind-indent-line)
 (define-key remind-conf-mode-map "\C-c\C-c" 'rem-save-file)
 
 ;; syntax-table

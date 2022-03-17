@@ -2307,14 +2307,18 @@ The latitude of your location, expressed as a string that is a floating-point
 number.  Because \fBRemind\fR does not have a native floating-point type,
 we need to express it as a string.  $Latitude can range from "-90.0" to
 "90.0", with positive numbers representing points north of the equator
-and negative numbers representing south.
+and negative numbers representing south.  Note that regardless of your
+locale, $Latitude is always interpreted in the "C" locale and as such,
+the decimal point must be a period (".").
 .TP
 .B $Longitude (STRING type)
 The longitude of your location, expressed as a string that is a floating-point
 number.  Because \fBRemind\fR does not have a native floating-point type,
 we need to express it as a string.  $Longitude can range from "-180.0" to
 "180.0", with positive numbers representing points east of the Greenwich
-Meridian and negative numbers representing west.
+Meridian and negative numbers representing west.  Note that regardless of your
+locale, $Longitude is always interpreted in the "C" locale and as such,
+the decimal point must be a period (".").
 .RS
 .PP
 For example, the coordinates of the Statue of Liberty in New York City

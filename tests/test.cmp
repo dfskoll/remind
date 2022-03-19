@@ -2752,6 +2752,8 @@ Variable  Value
        $Thursday  "Thursday"
         $TimeSep  ":"
              $Tm  -1
+          $Today  "today"
+       $Tomorrow  "tomorrow"
         $Tuesday  "Tuesday"
              $Tw  -1
              $Ty  -1

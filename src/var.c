@@ -841,6 +841,8 @@ static SysVar SysVarArr[] = {
     {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],   0,      0,    NULL },
     {"TimeSep",        1,  SPECIAL_TYPE, time_sep_func,        0,      0,    NULL },
     {"Tm",             0,  SPECIAL_TYPE, trig_mon_func,        0,      0,    NULL },
+    {"Today",          1,  STR_TYPE,     &DynamicToday,        0,      0,    NULL },
+    {"Tomorrow",       1,  STR_TYPE,     &DynamicTomorrow,     0,      0,    NULL },
     {"Tuesday",        1,  STR_TYPE,     &DynamicDayName[1],   0,      0,    NULL },
     {"Tw",             0,  SPECIAL_TYPE, trig_wday_func,       0,      0,    NULL },
     {"Ty",             0,  SPECIAL_TYPE, trig_year_func,       0,      0,    NULL },

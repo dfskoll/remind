@@ -197,6 +197,18 @@ EXTERN	char	*DayName[]
 ;
 #endif
 
+EXTERN char *DynamicToday
+#ifdef MK_GLOBALS
+= L_TODAY
+#endif
+;
+
+EXTERN char *DynamicTomorrow
+#ifdef MK_GLOBALS
+= L_TOMORROW
+#endif
+;
+
 EXTERN char *DynamicDayName []
 #ifdef MK_GLOBALS
 #if LANG == ENGLISH

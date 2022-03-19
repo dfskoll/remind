@@ -29,9 +29,6 @@
 #define NL "\n"
 #endif
 
-static char TODAY[] = L_TODAY;
-static char TOMORROW[] = L_TOMORROW;
-
 #define SHIP_OUT(s) if(DBufPuts(dbuf, s) != OK) return E_NO_MEM
 
 /***************************************************************/
@@ -204,7 +201,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifndef L_NOTOMORROW_V
 	    case 'V':
 #endif
-		sprintf(s, "%s", (diff ? TOMORROW : TODAY));
+		sprintf(s, "%s", (diff ? DynamicTomorrow: DynamicToday));
 		SHIP_OUT(s);
 		done = 1;
 		break;
@@ -392,7 +389,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_O_OVER
 	    L_O_OVER
 #else
-	    if (RealToday == JulianToday) sprintf(s, " (%s)", L_TODAY);
+            if (RealToday == JulianToday) sprintf(s, " (%s)", DynamicToday);
 	    else *s = 0;
 #endif
 	    SHIP_OUT(s);

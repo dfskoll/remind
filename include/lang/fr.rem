@@ -34,6 +34,9 @@ SET $Hplu "s"
 SET $Mplu "s"
 
 BANNER Rappels pour %w, %d%s %m, %y%o:
+
+FSET subst_ordinal(d) iif(d == 1, "er", "")
+
 FSET subst_fr_plu(num, str) plural(num, str)
 
 FSET subst_fr_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, $Now, \

@@ -60,6 +60,9 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
     char *os;
     char s[256];
     char uf[32];
+    char mypm[64];
+    char mycpm[64];
+    char myplu[64];
     int origLen = DBufLen(dbuf);
     int altmode;
     int r;
@@ -93,7 +96,24 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_AMPM_OVERRIDE
     L_AMPM_OVERRIDE (pm, h)
 #else
-    pm = (h < 12) ? DynamicAm : DynamicPm;
+    r = -1;
+    if (UserFuncExists("subst_ampm") == 1) {
+        snprintf(s, sizeof(s), "subst_ampm(%d)", h);
+        expr = (char const *) s;
+        r = EvalExpr(&expr, &v, NULL);
+        if (r == OK) {
+            if (!DoCoerce(STR_TYPE, &v)) {
+                snprintf(mypm, sizeof(mypm), "%s", v.v.str);
+                pm = mypm;
+            } else {
+                r = -1;
+            }
+            DestroyValue(v);
+        }
+    }
+    if (r != OK) {
+        pm = (h < 12) ? DynamicAm : DynamicPm;
+    }
 #endif
     hh = (h == 12) ? 12 : h % 12;
 
@@ -103,25 +123,56 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_AMPM_OVERRIDE
     L_AMPM_OVERRIDE (cpm, ch)
 #else
-    cpm = (ch < 12) ? DynamicAm : DynamicPm;
+    r = -1;
+    if (UserFuncExists("subst_ampm") == 1) {
+        snprintf(s, sizeof(s), "subst_ampm(%d)", h);
+        expr = (char const *) s;
+        r = EvalExpr(&expr, &v, NULL);
+        if (r == OK) {
+            if (!DoCoerce(STR_TYPE, &v)) {
+                snprintf(mycpm, sizeof(mycpm), "%s", v.v.str);
+                cpm = mycpm;
+            } else {
+                r = -1;
+            }
+        }
+    }
+    if (r != OK) {
+        cpm = (h < 12) ? DynamicAm : DynamicPm;
+    }
 #endif
     chh = (ch == 12) ? 12 : ch % 12;
 
 #ifdef L_ORDINAL_OVERRIDE
-    L_ORDINAL_OVERRIDE
+    L_ORDINAL_OVERRIDE;
 #else
-    switch(d) {
-    case 1:
-    case 21:
-    case 31: plu = "st"; break;
+    if (UserFuncExists("subst_ordinal") == 1) {
+        snprintf(s, sizeof(s), "subst_ordinal(%d)", d);
+        expr = (char const *) s;
+        r = EvalExpr(&expr, &v, NULL);
+        if (r == OK) {
+            if (!DoCoerce(STR_TYPE, &v)) {
+                snprintf(myplu, sizeof(myplu), "%s", v.v.str);
+                plu = myplu;
+            } else {
+                r = -1;
+            }
+        }
+    }
+    if (r != OK) {
+        switch(d) {
+        case 1:
+        case 21:
+        case 31: plu = "st"; break;
 
-    case 2:
-    case 22: plu = "nd"; break;
+        case 2:
+        case 22: plu = "nd"; break;
 
-    case 3:
-    case 23: plu = "rd"; break;
+        case 3:
+        case 23: plu = "rd"; break;
 
-    default: plu = "th"; break;
+        default: plu = "th"; break;
+        }
     }
 #endif
 

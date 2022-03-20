@@ -41,6 +41,8 @@ SET $Hour "Stunde"
 SET $Is "ist"
 SET $Was "war"
 SET $And "und"
+SET $Ago "vorher"
+SET $Fromnow "von heute"
 
 FSET subst_ampm(h)      iif(h<5, " nachts", h<12, " vormittags", h<=17, " nachmittags", " abends")
 FSET subst_ordinal(d)   "."

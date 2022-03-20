@@ -47,9 +47,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Hace y desde hoy */
 #define L_AGO "hace"
 #define L_FROMNOW "desde hoy"
@@ -73,6 +70,4 @@
 #define L_AND "y"
 #define L_HPLU "s"  
 #define L_MPLU "s"
-
-#endif /* L_IN_DOSUBST */
 

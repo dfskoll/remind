@@ -52,9 +52,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "geleden"
 #define L_FROMNOW "vanaf nu"
@@ -101,5 +98,4 @@ sprintf(s, "%d %s %s", hdiff, \
 		     (mdiff == 1 ? "minuut" : "minuten"), \
 		     when);
 
-#endif /* L_IN_DOSUBST */
 

@@ -52,9 +52,6 @@
 #define L_AM " ap."
 #define L_PM " ip."
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "sitten"
 #define L_FROMNOW "kuluttua"
@@ -138,7 +135,6 @@ else { \
    } \
    sprintf(s + strlen(s), when); \
 }
-#endif /* L_IN_DOSUBST */
 
 /* The next ones are used only when MK_GLOBALS is set */
 #ifdef MK_GLOBALS

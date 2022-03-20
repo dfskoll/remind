@@ -51,9 +51,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "il y a"
 #define L_FROMNOW "dans"
@@ -112,8 +109,6 @@ else if (tdiff < 0) { \
 #define L_J_OVER if (altmode == '*') { sprintf(s, "%s, %d%s %s, %d", DayName[jul%7], d, plu, MonthName[m], y); } else { sprintf(s, "%s %s, %d%s %s, %d", L_ON, DayName[jul%7], d, plu, MonthName[m], y); }
 
 #define L_K_OVER if (altmode == '*') { sprintf(s, "%s, %d%s %s", DayName[jul%7], d, plu, MonthName[m]); } else { sprintf(s, "%s %s, %d%s %s", L_ON, DayName[jul%7], d, plu, MonthName[m]); }
-
-#endif /* L_IN_DOSUBST */
 
 /* The next ones are used only when MK_GLOBALS is set */
 #ifdef MK_GLOBALS

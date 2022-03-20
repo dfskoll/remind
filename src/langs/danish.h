@@ -48,9 +48,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "siden"
 #define L_FROMNOW "fra nu"
@@ -91,5 +88,3 @@
 #define L_I_OVER                        sprintf(s, "den %02d%c%02d", m+1, DateSep, d);
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
-
-#endif /* L_IN_DOSUBST */

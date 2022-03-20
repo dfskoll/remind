@@ -50,9 +50,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "temu"
 #define L_FROMNOW "od teraz"
@@ -98,8 +95,6 @@ ampm = (hour<12) ? \
 #define	L_G_OVER			if (altmode == '*') { sprintf(s, "%s, %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s %s, %d. %s", L_ON, DayName[jul%7], d, MonthName[m]); }
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
-
-#endif /* L_IN_DOSUBST */
 
 #define L_0_OVER sprintf(s, L_HPLU);
 #define L_9_OVER sprintf(s, L_MPLU);

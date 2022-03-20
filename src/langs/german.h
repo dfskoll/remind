@@ -50,9 +50,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "vorher"
 #define L_FROMNOW "von heute"
@@ -88,5 +85,3 @@
 #define	L_G_OVER			if (altmode == '*') { sprintf(s, "%s, den %d. %s", DayName[jul%7], d, MonthName[m]); } else { sprintf(s, "%s %s, den %d. %s", L_ON, DayName[jul%7], d, MonthName[m]); }
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
-
-#endif /* L_IN_DOSUBST */

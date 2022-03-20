@@ -47,9 +47,6 @@
 #define L_AM "fh"
 #define L_PM "eh"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "síðan"
 #define L_FROMNOW "frá því nú"
@@ -79,5 +76,3 @@
 
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
-
-#endif /* L_IN_DOSUBST */

@@ -51,9 +51,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "atras"
 #define L_FROMNOW "adiante"
@@ -137,8 +134,6 @@
         	sprintf(s, "%d %s%s %s %d %s%s atras", hdiff, L_HOUR, hplu, L_AND, mdiff, L_MINUTE, mplu); \
     } \
 }
-
-#endif /* L_IN_DOSUBST */
 
 /* The next ones are used only when MK_GLOBALS is set */
 #ifdef MK_GLOBALS

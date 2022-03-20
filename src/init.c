@@ -154,7 +154,7 @@ void InitRemind(int argc, char const *argv[])
 	    if (FormWidth > 500) FormWidth = 500;
 	}
     }
-    
+
     /* Initialize global dynamic buffers */
     DBufInit(&Banner);
     DBufInit(&LineBuffer);

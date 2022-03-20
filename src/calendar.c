@@ -2246,14 +2246,14 @@ CalendarTime(int tim, int duration)
     }
 
     if (h >= 12) {
-	ampm1 = L_PM;
+	ampm1 = DynamicPm;
     } else {
-	ampm1 = L_AM;
+	ampm1 = DynamicAm;
     }
     if (h2 >= 12) {
-	ampm2 = L_PM;
+	ampm2 = DynamicPm;
     } else {
-	ampm2 = L_AM;
+	ampm2 = DynamicAm;
     }
     if (!days) {
 	if (!strcmp(ampm1, ampm2)) {
@@ -2300,7 +2300,7 @@ char const *SimpleTime(int tim)
 	    if (h == 0) hh=12;
 	    else if (h > 12) hh=h-12;
 	    else hh=h;
-	    sprintf(buf, "%d%c%02d%s ", hh, TimeSep, min, (h>=12) ? L_PM : L_AM);
+	    sprintf(buf, "%d%c%02d%s ", hh, TimeSep, min, (h>=12) ? DynamicPm : DynamicAm);
 	}
 	break;
 

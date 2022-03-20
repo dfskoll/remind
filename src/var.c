@@ -775,6 +775,7 @@ typedef struct {
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
     /*  name          mod  type              value          min/mal   max  validate*/
+    {"Ago",            1,  STR_TYPE,     &DynamicAgo,          0,      0,    NULL },
     {"Am",             1,  STR_TYPE,     &DynamicAm,           0,      0,    NULL },
     {"And",            1,  STR_TYPE,     &DynamicAnd,          0,      0,    NULL },
     {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    NULL },
@@ -800,6 +801,7 @@ static SysVar SysVarArr[] = {
     {"FoldYear",       1,  INT_TYPE,     &FoldYear,            0,      1,    NULL },
     {"FormWidth",      1,  INT_TYPE,     &FormWidth,           20,     500,  NULL },
     {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],   0,      0,    NULL },
+    {"Fromnow",        1,  STR_TYPE,     &DynamicFromnow,      0,      0,    NULL },
     {"Hour",           1,  STR_TYPE,     &DynamicHour,         0,      0,    NULL },
     {"Hplu",           1,  STR_TYPE,     &DynamicHplu,         0,      0,    NULL },
     {"HushMode",       0,  INT_TYPE,     &Hush,                0,      0,    NULL },

@@ -1,0 +1,57 @@
+# German language file for Remind
+
+# Day names
+SET $Sunday "Sonntag"
+SET $Monday "Montag"
+SET $Tuesday "Dienstag"
+SET $Wednesday "Mittwoch"
+SET $Thursday "Donnerstag"
+SET $Friday "Freitag"
+SET $Saturday "Samstag"
+
+# Month names
+SET $January "Januar"
+SET $February "Februar"
+SET $March "März"
+SET $April "April"
+SET $May "Mai"
+SET $June "Juni"
+SET $July "Juli"
+SET $August "August"
+SET $September "September"
+SET $October "Oktober"
+SET $November "November"
+SET $December "Dezember"
+
+SET $Today "heute"
+SET $Tomorrow "morgen"
+
+# Banner
+BANNER Termine für %w, den %d. %m %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+SET $On "am"
+SET $Hplu "n"
+SET $Mplu "n"
+SET $Now "jetzt"
+SET $At "um"
+SET $Minute "Minute"
+SET $Hour "Stunde"
+SET $Is "ist"
+SET $Was "war"
+SET $And "und"
+
+FSET subst_ampm(h)      iif(h<5, " nachts", h<12, " vormittags", h<=17, " nachmittags", " abends")
+FSET subst_ordinal(d)   "."
+
+FSET subst_a_alt(d)     wkday(d) + ", den " + day(d) + ". " + mon(d) + " " + year(d)
+FSET subst_a(alt, d, t) iif(alt, subst_a_alt(d), $On + " " + subst_a_alt(d))
+
+FSET subst_b(a, d, t)   iif(d==today(), $Today, d==today()+1, $Tomorrow, "in " + (d-today()) + " Tagen")
+
+FSET subst_g_alt(d)     wkday(d) + ", den " + day(d) + ". " + mon(d)
+FSET subst_g(alt, d, t) iif(alt, subst_g_alt(d), $On + " " + subst_g_alt(d))
+
+FSET subst_u(alt, d, t) subst_a(alt, d, t)
+FSET subst_v(alt, d, t) subst_g(alt, d, t)

@@ -226,6 +226,11 @@ EXTERN	int	MonthIndex[2][12]
 #endif
 ;
 
+EXTERN char *DynamicAgo
+#ifdef MK_GLOBALS
+= L_AGO
+#endif
+;
 EXTERN char *DynamicAm
 #ifdef MK_GLOBALS
 = L_AM
@@ -239,6 +244,11 @@ EXTERN char *DynamicAnd
 EXTERN char *DynamicAt
 #ifdef MK_GLOBALS
 = L_AT
+#endif
+;
+EXTERN char *DynamicFromnow
+#ifdef MK_GLOBALS
+= L_FROMNOW
 #endif
 ;
 EXTERN char *DynamicHour

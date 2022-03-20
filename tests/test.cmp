@@ -2686,6 +2686,7 @@ a125  -1
 dump $
 Variable  Value
 
+            $Ago  "ago"
              $Am  "am"
             $And  "and"
           $April  "April"
@@ -2711,6 +2712,7 @@ Variable  Value
        $FoldYear  0           [0, 1]
       $FormWidth  72          [20, 500]
          $Friday  "Friday"
+        $Fromnow  "from now"
            $Hour  "hour"
            $Hplu  "s"
        $HushMode  0

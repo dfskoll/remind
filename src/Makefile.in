@@ -23,7 +23,7 @@ SCRIPTS=	$(srcdir)/../scripts/tkremind
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
 		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/rem.1
 
-LANGS=          fr.rem
+LANGS=          fr.rem de.rem
 .SUFFIXES:
 .SUFFIXES: .c .o
 

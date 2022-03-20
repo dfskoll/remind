@@ -88,7 +88,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
     hplu = (hdiff == 1 ? "" : DynamicHplu);
 #endif /* L_HPLU_OVER */
 
-    when = (tdiff < 0 ? L_AGO : L_FROMNOW);
+    when = (tdiff < 0) ? DynamicAgo : DynamicFromnow;
 
     h = tim / 60;
     min = tim % 60;

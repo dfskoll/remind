@@ -32,6 +32,8 @@ SET $Was "était"
 SET $And "et"
 SET $Hplu "s"
 SET $Mplu "s"
+SET $Ago "il y a"
+SET $Fromnow "dans"
 
 # Banner
 BANNER Rappels pour %w, %d%s %m, %y%o:
@@ -48,6 +50,7 @@ FSET subst_1(alt, date, time) iif(time == now(), "maintenant", \
                                   time > now(), "dans " + subst_tdiff((time-now())/60, (time-now())%60), \
                                   "il y a " + subst_tdiff ((now()-time)/60, (now()-time)%60))
 
+FSET subst_b(alt, date, time) iif(date==today(), $Today, date==today()+1, $Tomorrow, "dans " + (date-today()) + " jours")
 FSET subst_j_alt(date) wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date) + " " + year(date)
 FSET subst_j(alt, date, time) iif(alt, subst_j_alt(date), $On + " " + subst_j_alt(date))
 

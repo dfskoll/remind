@@ -132,11 +132,11 @@
 
 (defconst remind-builtin-variables
   (sort
-   (list "$Am" "$And" "$April" "$August" "$CalcUTC" "$CalMode" "$Daemon" "$DateSep"
+   (list "$Ago" "$Am" "$And" "$April" "$At" "$August" "$CalcUTC" "$CalMode" "$Daemon" "$DateSep"
          "$DateTimeSep" "$December" "$DefaultColor" "$DefaultPrio"
          "$DefaultTDelta" "$DeltaOffset" "$DontFork" "$DontQueue"
          "$DontTrigAts" "$EndSent" "$EndSentIg" "$February" "$FirstIndent"
-         "$FoldYear" "$FormWidth" "$Friday" "$Hour" "$Hplu" "$HushMode" "$IgnoreOnce"
+         "$FoldYear" "$FormWidth" "$Friday" "$Fromnow" "$Hour" "$Hplu" "$HushMode" "$IgnoreOnce"
          "$InfDelta" "$IntMax" "$IntMin" "$Is" "$January" "$July" "$June" "$LatDeg"
          "$Latitude" "$LatMin" "$LatSec" "$Location" "$LongDeg" "$Longitude"
          "$LongMin" "$LongSec" "$March" "$MaxSatIter" "$MaxStringLen" "$May"

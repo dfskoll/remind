@@ -2686,7 +2686,10 @@ a125  -1
 dump $
 Variable  Value
 
+             $Am  "am"
+            $And  "and"
           $April  "April"
+             $At  "at"
          $August  "August"
         $CalcUTC  0           [0, 1]
         $CalMode  0
@@ -2708,11 +2711,14 @@ Variable  Value
        $FoldYear  0           [0, 1]
       $FormWidth  72          [20, 500]
          $Friday  "Friday"
+           $Hour  "hour"
+           $Hplu  "s"
        $HushMode  0
      $IgnoreOnce  1
        $InfDelta  0
          $IntMax  2147483647
          $IntMin  -2147483648
+             $Is  "is"
         $January  "January"
            $July  "July"
            $June  "June"
@@ -2730,12 +2736,17 @@ Variable  Value
    $MaxStringLen  65535       [-1, Inf)
             $May  "May"
     $MinsFromUTC  -300        [-780, 780]
+         $Minute  "minute"
          $Monday  "Monday"
+           $Mplu  "s"
        $NextMode  0
        $November  "November"
+            $Now  "now"
       $NumQueued  0
         $NumTrig  37
         $October  "October"
+             $On  "on"
+             $Pm  "pm"
    $PrefixLineNo  0
           $PSCal  0
          $RunOff  0
@@ -2763,6 +2774,7 @@ Variable  Value
    $UntimedFirst  0
              $Uw  6
              $Uy  1991
+            $Was  "was"
       $Wednesday  "Wednesday"
 msg [$April]%
 ../tests/test.rem(450): Trig = Saturday, 16 February, 1991

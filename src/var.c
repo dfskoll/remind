@@ -775,7 +775,10 @@ typedef struct {
 /* All of the system variables sorted alphabetically */
 static SysVar SysVarArr[] = {
     /*  name          mod  type              value          min/mal   max  validate*/
+    {"Am",             1,  STR_TYPE,     &DynamicAm,           0,      0,    NULL },
+    {"And",            1,  STR_TYPE,     &DynamicAnd,          0,      0,    NULL },
     {"April",          1,  STR_TYPE,     &DynamicMonthName[3], 0,      0,    NULL },
+    {"At",             1,  STR_TYPE,     &DynamicAt,           0,      0,    NULL },
     {"August",         1,  STR_TYPE,     &DynamicMonthName[7], 0,      0,    NULL },
     {"CalcUTC",        1,  INT_TYPE,     &CalculateUTC,        0,      1,    NULL },
     {"CalMode",        0,  INT_TYPE,     &DoCalendar,          0,      0,    NULL },
@@ -797,11 +800,14 @@ static SysVar SysVarArr[] = {
     {"FoldYear",       1,  INT_TYPE,     &FoldYear,            0,      1,    NULL },
     {"FormWidth",      1,  INT_TYPE,     &FormWidth,           20,     500,  NULL },
     {"Friday",         1,  STR_TYPE,     &DynamicDayName[4],   0,      0,    NULL },
+    {"Hour",           1,  STR_TYPE,     &DynamicHour,         0,      0,    NULL },
+    {"Hplu",           1,  STR_TYPE,     &DynamicHplu,         0,      0,    NULL },
     {"HushMode",       0,  INT_TYPE,     &Hush,                0,      0,    NULL },
     {"IgnoreOnce",     0,  INT_TYPE,     &IgnoreOnce,          0,      0,    NULL },
     {"InfDelta",       0,  INT_TYPE,     &InfiniteDelta,       0,      0,    NULL },
     {"IntMax",         0,  INT_TYPE,     &IntMax,              0,      0,    NULL },
     {"IntMin",         0,  INT_TYPE,     &IntMin,              0,      0,    NULL },
+    {"Is",             1,  STR_TYPE,     &DynamicIs,           0,      0,    NULL },
     {"January",        1,  STR_TYPE,     &DynamicMonthName[0], 0,      0,    NULL },
     {"July",           1,  STR_TYPE,     &DynamicMonthName[6], 0,      0,    NULL },
     {"June",           1,  STR_TYPE,     &DynamicMonthName[5], 0,      0,    NULL },
@@ -819,12 +825,17 @@ static SysVar SysVarArr[] = {
     {"MaxStringLen",   1,  INT_TYPE,     &MaxStringLen,        -1,     ANY,  NULL },
     {"May",            1,  STR_TYPE,     &DynamicMonthName[4], 0,      0,    NULL },
     {"MinsFromUTC",    1,  INT_TYPE,     &MinsFromUTC,         -780,   780,  NULL },
+    {"Minute",         1,  STR_TYPE,     &DynamicMinute,       0,      0,    NULL },
     {"Monday",         1,  STR_TYPE,     &DynamicDayName[0],   0,      0,    NULL },
+    {"Mplu",           1,  STR_TYPE,     &DynamicMplu,         0,      0,    NULL },
     {"NextMode",       0,  INT_TYPE,     &NextMode,            0,      0,    NULL },
     {"November",       1,  STR_TYPE,     &DynamicMonthName[10],0,      0,    NULL },
+    {"Now",            1,  STR_TYPE,     &DynamicNow,          0,      0,    NULL },
     {"NumQueued",      0,  INT_TYPE,     &NumQueued,           0,      0,    NULL },
     {"NumTrig",        0,  INT_TYPE,     &NumTriggered,        0,      0,    NULL },
     {"October",        1,  STR_TYPE,     &DynamicMonthName[9], 0,      0,    NULL },
+    {"On",             1,  STR_TYPE,     &DynamicOn,           0,      0,    NULL },
+    {"Pm",             1,  STR_TYPE,     &DynamicPm,           0,      0,    NULL },
     {"PrefixLineNo",   0,  INT_TYPE,     &DoPrefixLineNo,      0,      0,    NULL },
     {"PSCal",          0,  INT_TYPE,     &PsCal,               0,      0,    NULL },
     {"RunOff",         0,  INT_TYPE,     &RunDisabled,         0,      0,    NULL },
@@ -853,6 +864,7 @@ static SysVar SysVarArr[] = {
     {"UntimedFirst",   0,  INT_TYPE,     &UntimedBeforeTimed,  0,      0,    NULL },
     {"Uw",             0,  SPECIAL_TYPE, today_wday_func,      0,      0,    NULL },
     {"Uy",             0,  SPECIAL_TYPE, today_year_func,      0,      0,    NULL },
+    {"Was",            1,  STR_TYPE,     &DynamicWas,          0,      0,    NULL },
     {"Wednesday",      1,  STR_TYPE,     &DynamicDayName[2],   0,      0,    NULL }
 };
 

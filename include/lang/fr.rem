@@ -1,0 +1,36 @@
+# French language file for Remind
+
+SET $Sunday "dimanche"
+SET $Monday "lundi"
+SET $Tuesday "mardi"
+SET $Wednesday "mercredi"
+SET $Thursday "jeudi"
+SET $Friday "vendredi"
+SET $Saturday "samedi"
+
+SET $January "janvier"
+SET $February "février"
+SET $March "mars"
+SET $April "avril"
+SET $May "mai"
+SET $June "juin"
+SET $July "juillet"
+SET $August "août"
+SET $September "septembre"
+SET $October "octobre"
+SET $November "novembre"
+SET $December "décembre"
+
+SET $Today "aujourd'hui"
+SET $Tomorrow "demain"
+
+BANNER Rappels pour %w, %d%s %m, %y%o:
+FSET subst_fr_plu(num, str) plural(num, str)
+
+FSET subst_fr_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, "maintenant", \
+                                      hdiff==0,            mdiff + subst_fr_plu(mdiff, " minute"), \
+                                      mdiff==0,            hdiff + subst_fr_plu(hdiff, " heure"), \
+                                      hdiff + subst_fr_plu(hdiff, " heure") + " et " + mdiff + subst_fr_plu(mdiff, " minute"))
+FSET subst_1(alt, date, time) iif(time == now(), "maintenant", \
+                                  time > now(), "dans " + subst_fr_tdiff((time-now())/60, (time-now())%60), \
+                                  "il y a " + subst_fr_tdiff ((now()-time)/60, (now()-time)%60))

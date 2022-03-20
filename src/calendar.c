@@ -31,6 +31,7 @@
 #include <langinfo.h>
 #endif
 
+#include "lang.h"
 #include "types.h"
 #include "protos.h"
 #include "expr.h"

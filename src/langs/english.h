@@ -46,9 +46,6 @@
 #define L_AM "am"
 #define L_PM "pm"
 
-/*** The following are only used in dosubst.c ***/
-#ifdef L_IN_DOSUBST
-
 /* Ago and from now */
 #define L_AGO "ago"
 #define L_FROMNOW "from now"
@@ -72,11 +69,9 @@
 #define L_WAS "was"
 #define L_AND "and"
 /* What to add to make "hour" plural */
-#define L_HPLU "s"  
+#define L_HPLU "s"
 /* What to add to make "minute" plural */
 #define L_MPLU "s"
 
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
-
-#endif /* L_IN_DOSUBST */

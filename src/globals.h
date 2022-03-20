@@ -7,9 +7,10 @@
 /*  MK_GLOBALS.  Also contains useful macro definitions.       */
 /*                                                             */
 /*  This file is part of REMIND.                               */
-/*  Copyright (C) 1992-2022 by Dianne Skoll                    */
+/*  Copyright (C) 1992-2021 by Dianne Skoll                    */
 /*                                                             */
 /***************************************************************/
+
 
 #ifdef MK_GLOBALS
 #undef EXTERN
@@ -24,6 +25,9 @@
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
+
+#include "dynbuf.h"
+#include "lang.h"
 
 #define MAX_TRUSTED_USERS 20
 
@@ -141,11 +145,6 @@ EXTERN	INIT(	int	  SubsIndent, 0);
 EXTERN	INIT(	char	  *EndSent, ".?!");
 EXTERN	INIT(	char	  *EndSentIg, "\"')]}>");
 
-/* We need the language stuff here... */
-
-#include "lang.h"
-#include "dynbuf.h"
-
 EXTERN DynamicBuffer Banner;
 EXTERN DynamicBuffer LineBuffer;
 EXTERN DynamicBuffer ExprBuf;
@@ -197,18 +196,6 @@ EXTERN	char	*DayName[]
 ;
 #endif
 
-EXTERN char *DynamicToday
-#ifdef MK_GLOBALS
-= L_TODAY
-#endif
-;
-
-EXTERN char *DynamicTomorrow
-#ifdef MK_GLOBALS
-= L_TOMORROW
-#endif
-;
-
 EXTERN char *DynamicDayName []
 #ifdef MK_GLOBALS
 #if LANG == ENGLISH
@@ -227,15 +214,6 @@ EXTERN	int	MonthDays[]
 #endif
 ;
 
-#define XSTR(x) #x
-#define STRSYSDIR(x) XSTR(x)
-
-EXTERN char *SysDir
-#ifdef MK_GLOBALS
-= STRSYSDIR(SYSDIR);
-#endif
-;
-
 /* The first day of each month expressed as number of days after Jan 1.
    Second row is for leap years. */
 
@@ -248,3 +226,82 @@ EXTERN	int	MonthIndex[2][12]
 #endif
 ;
 
+EXTERN char *DynamicAm
+#ifdef MK_GLOBALS
+= L_AM
+#endif
+;
+EXTERN char *DynamicAnd
+#ifdef MK_GLOBALS
+= L_AND
+#endif
+;
+EXTERN char *DynamicAt
+#ifdef MK_GLOBALS
+= L_AT
+#endif
+;
+EXTERN char *DynamicHour
+#ifdef MK_GLOBALS
+= L_HOUR
+#endif
+;
+EXTERN char *DynamicHplu
+#ifdef MK_GLOBALS
+= L_HPLU
+#endif
+;
+EXTERN char *DynamicIs
+#ifdef MK_GLOBALS
+= L_IS
+#endif
+;
+EXTERN char *DynamicMinute
+#ifdef MK_GLOBALS
+= L_MINUTE
+#endif
+;
+EXTERN char *DynamicMplu
+#ifdef MK_GLOBALS
+= L_MPLU
+#endif
+;
+EXTERN char *DynamicNow
+#ifdef MK_GLOBALS
+= L_NOW
+#endif
+;
+EXTERN char *DynamicOn
+#ifdef MK_GLOBALS
+= L_ON
+#endif
+;
+EXTERN char *DynamicPm
+#ifdef MK_GLOBALS
+= L_PM
+#endif
+;
+EXTERN char *DynamicToday
+#ifdef MK_GLOBALS
+= L_TODAY
+#endif
+;
+EXTERN char *DynamicTomorrow
+#ifdef MK_GLOBALS
+= L_TOMORROW
+#endif
+;
+EXTERN char *DynamicWas
+#ifdef MK_GLOBALS
+= L_WAS
+#endif
+;
+
+#define XSTR(x) #x
+#define STRSYSDIR(x) XSTR(x)
+
+EXTERN char *SysDir
+#ifdef MK_GLOBALS
+= STRSYSDIR(SYSDIR);
+#endif
+;

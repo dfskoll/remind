@@ -28,6 +28,13 @@ if !$RunOff || !$DontQueue || $DontTrigAts
    exit
 endif
 
+# Include a language file, if that's given as "-ii=/path"
+
+if defined("i")
+    do [i]
+    msg INCLUDING [i]
+endif
+
 # Set up a few useful definitions
 fset show(x) "%%" + x + " yields: " + char(34) + "%" + x + char(34) + "% and %%*" + x + " yields: " + char(34) + "%*" + x + char(34) + "%"
 set a trigger(today()+2) + " ++2"
@@ -36,8 +43,6 @@ set tt now()+134
 set tu now()-134
 set d a + " at " + tt
 set e a + " at " + tu
-
-msg The above is the default banner for the [l] language.
 
 msg The following are the two-day-in-advance substitutions:%
 [a] msg [show("a")]

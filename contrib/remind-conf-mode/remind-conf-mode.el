@@ -5,7 +5,7 @@
 ;; Author: Shelagh Manton <shelagh.manton@gmail.com> with help from
 ;; Dianne Skoll
 ;; Keywords: remind configure convenience
-;; Version: 0.15
+;; Version: 0.15-dfs2
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
@@ -132,20 +132,20 @@
 
 (defconst remind-builtin-variables
   (sort
-   (list "$April" "$August" "$CalcUTC" "$CalMode" "$Daemon" "$DateSep"
+   (list "$Am" "$And" "$April" "$August" "$CalcUTC" "$CalMode" "$Daemon" "$DateSep"
          "$DateTimeSep" "$December" "$DefaultColor" "$DefaultPrio"
          "$DefaultTDelta" "$DeltaOffset" "$DontFork" "$DontQueue"
          "$DontTrigAts" "$EndSent" "$EndSentIg" "$February" "$FirstIndent"
-         "$FoldYear" "$FormWidth" "$Friday" "$HushMode" "$IgnoreOnce"
-         "$InfDelta" "$IntMax" "$IntMin" "$January" "$July" "$June" "$LatDeg"
+         "$FoldYear" "$FormWidth" "$Friday" "$Hour" "$Hplu" "$HushMode" "$IgnoreOnce"
+         "$InfDelta" "$IntMax" "$IntMin" "$Is" "$January" "$July" "$June" "$LatDeg"
          "$Latitude" "$LatMin" "$LatSec" "$Location" "$LongDeg" "$Longitude"
          "$LongMin" "$LongSec" "$March" "$MaxSatIter" "$MaxStringLen" "$May"
-         "$MinsFromUTC" "$Monday" "$NextMode" "$November" "$NumQueued"
-         "$NumTrig" "$October" "$PrefixLineNo" "$PSCal" "$RunOff" "$Saturday"
+         "$MinsFromUTC" "$Minute" "$Monday" "$Mplu" "$NextMode" "$November" "$Now" "$NumQueued"
+         "$NumTrig" "$October" "$On" "$Pm" "$PrefixLineNo" "$PSCal" "$RunOff" "$Saturday"
          "$September" "$SimpleCal" "$SortByDate" "$SortByPrio" "$SortByTime"
          "$SubsIndent" "$Sunday" "$T" "$Td" "$Thursday" "$TimeSep" "$Tm"
          "$Tuesday" "$Tw" "$Ty" "$U" "$Ud" "$Um" "$UntimedFirst" "$Uw" "$Uy"
-         "$Wednesday")
+         "$Was" "$Wednesday")
    #'(lambda (a b) (> (length a) (length b)))))
 
 

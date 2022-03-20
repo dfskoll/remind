@@ -23,11 +23,20 @@ SET $December "décembre"
 
 SET $Today "aujourd'hui"
 SET $Tomorrow "demain"
+SET $On "le"
+SET $Now "maintenant"
+SET $Minute "minute"
+SET $Hour "heure"
+SET $Is "est"
+SET $Was "était"
+SET $And "et"
+SET $Hplu "s"
+SET $Mplu "s"
 
 BANNER Rappels pour %w, %d%s %m, %y%o:
 FSET subst_fr_plu(num, str) plural(num, str)
 
-FSET subst_fr_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, "maintenant", \
+FSET subst_fr_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, $Now, \
                                       hdiff==0,            mdiff + subst_fr_plu(mdiff, " minute"), \
                                       mdiff==0,            hdiff + subst_fr_plu(hdiff, " heure"), \
                                       hdiff + subst_fr_plu(hdiff, " heure") + " et " + mdiff + subst_fr_plu(mdiff, " minute"))

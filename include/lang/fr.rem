@@ -39,13 +39,14 @@ BANNER Rappels pour %w, %d%s %m, %y%o:
 # Ordinal for a day (English would be "st", "nd", "rd", "th")
 FSET subst_ordinal(d) iif(d == 1, "er", "")
 
-FSET subst_fr_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, $Now, \
+# "%d hours", "%d minutes", or "%d hours and %d minutes"
+FSET subst_tdiff(hdiff, mdiff) iif(hdiff==0&&mdiff==0, $Now, \
                                       hdiff==0,            mdiff + plural(mdiff, " minute"), \
                                       mdiff==0,            hdiff + plural(hdiff, " heure"), \
                                       hdiff + plural(hdiff, " heure") + " et " + mdiff + plural(mdiff, " minute"))
 FSET subst_1(alt, date, time) iif(time == now(), "maintenant", \
-                                  time > now(), "dans " + subst_fr_tdiff((time-now())/60, (time-now())%60), \
-                                  "il y a " + subst_fr_tdiff ((now()-time)/60, (now()-time)%60))
+                                  time > now(), "dans " + subst_tdiff((time-now())/60, (time-now())%60), \
+                                  "il y a " + subst_tdiff ((now()-time)/60, (now()-time)%60))
 
 FSET subst_j_alt(date) wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date) + " " + year(date)
 FSET subst_j(alt, date, time) iif(alt, subst_j_alt(date), $On + " " + subst_j_alt(date))

@@ -155,10 +155,6 @@ void FindToken(char const *s, Token *tok)
     int top, bot, mid, r, max;
     int l;
 
-#if LANG != ENGLISH
-    size_t i;
-#endif
-
     tok->type = T_Illegal;
     if (! *s) {
 	tok->type = T_Empty;

@@ -30,10 +30,10 @@
 #endif
 
 #include "types.h"
+#include "globals.h"
 #include "protos.h"
 #include "expr.h"
 #include "err.h"
-#include "globals.h"
 
 /***************************************************************
  *

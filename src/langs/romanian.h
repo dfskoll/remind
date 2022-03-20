@@ -73,6 +73,7 @@
 #define L_WAS "a fost"
 /* What to add to make "minute" plural */
 #define L_MPLU "e"
+#define L_HPLU "e"
 
 /* What to add to make "hour" plural */
 #define L_HPLU_OVER hplu = (hdiff == 1 ? "ă" : "e");

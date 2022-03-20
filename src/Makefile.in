@@ -62,9 +62,9 @@ install-nostripped: all
 	for man in $(MANS) ; do  \
 		$(INSTALL_DATA) $$man $(DESTDIR)$(mandir)/man1 || exit 1; \
 	done
-	-mkdir -p $(DESTDIR)$(datarootdir)/remind || true
+	-mkdir -p $(DESTDIR)$(datarootdir)/remind/lang || true
 	for l in $(LANGS) ; do \
-	        $(INSTALL_DATA) ../include/lang/$$l $(DESTDIR)$(datarootdir)/remind || exit 1; \
+	        $(INSTALL_DATA) ../include/lang/$$l $(DESTDIR)$(datarootdir)/remind/lang || exit 1; \
 	done
 
 install: install-nostripped

@@ -25,6 +25,7 @@
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
+EXTERN  FILE *ErrFp;
 
 #include "dynbuf.h"
 #include "lang.h"
@@ -98,7 +99,6 @@ EXTERN  INIT(	char	*FileName, NULL);
 EXTERN	INIT(	int	UseStdin, 0);
 EXTERN  INIT(   int     PurgeMode, 0);
 EXTERN  INIT(   int     PurgeIncludeDepth, 0);
-EXTERN  FILE *ErrFp;
 EXTERN  INIT(   FILE    *PurgeFP,  NULL);
 EXTERN  INIT(   int     NumIfs,    0);
 EXTERN  INIT(   unsigned int IfFlags,   0);

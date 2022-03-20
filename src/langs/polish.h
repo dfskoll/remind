@@ -72,13 +72,17 @@
 #  define L_IS "będzie"
 #  define L_WAS "było"
 #define L_AND "i"
+
+#define L_HPLU ""
+#define L_MPLU ""
+
 /* What to add to make "hour" or "minute" plural */
 #define L_NPLU( N ) ((N == 1) ? "ę" : ((N==12) || (N==13) || (N==14)) ? "" : \
      ((N%10==2) || (N%10==3) || (N%10==4)) ? "y" : "" )
 /* What to add to make "hour" plural */
-#define L_HPLU L_NPLU( hdiff )
+#define L_HPLU_OVER hplu = L_NPLU( hdiff );
 /* What to add to make "minute" plural */
-#define L_MPLU L_NPLU( mdiff )
+#define L_MPLU_OVER mplu = L_NPLU( mdiff );
 
 /* Define any overrides here, such as L_ORDINAL_OVERRIDE, L_A_OVER, etc.
    See the file dosubst.c for more info. */
@@ -96,30 +100,30 @@ ampm = (hour<12) ? \
 #define L_U_OVER			L_A_OVER
 #define L_V_OVER			L_G_OVER
 
-#define L_0_OVER sprintf(s, L_HPLU);
-#define L_9_OVER sprintf(s, L_MPLU);
+#define L_0_OVER sprintf(s, L_NPLU(hdiff));
+#define L_9_OVER sprintf(s, L_NPLU(mdiff));
 #define L_1_OVER \
 if (tdiff == 0)  \
 sprintf(s, L_NOW); \
 else if (tdiff > 0) \
 { \
       if (hdiff == 0)  \
-	   sprintf(s, "za %d %s%s", mdiff, L_MINUTE, L_MPLU); \
+	   sprintf(s, "za %d %s%s", mdiff, L_MINUTE, L_NPLU(mdiff)); \
       else if (mdiff == 0) \
-           sprintf(s, "za %d %s%s", hdiff, L_HOUR, L_HPLU); \
+           sprintf(s, "za %d %s%s", hdiff, L_HOUR, L_NPLU(hdiff)); \
       else \
-	   sprintf(s, "za %d %s%s %s %d %s%s", hdiff, L_HOUR, L_HPLU, \
-		   L_AND, mdiff, L_MINUTE, L_MPLU); \
+	   sprintf(s, "za %d %s%s %s %d %s%s", hdiff, L_HOUR, L_NPLU(hdiff), \
+		   L_AND, mdiff, L_MINUTE, L_NPLU(mdiff)); \
 } \
 else \
 { \
    if (hdiff == 0)  \
-      sprintf(s, "%d %s%s temu", mdiff, L_MINUTE, L_MPLU); \
+      sprintf(s, "%d %s%s temu", mdiff, L_MINUTE, L_NPLU(mdiff)); \
    else if (mdiff == 0) \
-      sprintf(s, "%d %s%s temu", hdiff, L_HOUR, L_HPLU); \
+      sprintf(s, "%d %s%s temu", hdiff, L_HOUR, L_NPLU(hdiff)); \
    else \
-      sprintf(s, "%d %s%s %s %d %s%s temu", hdiff, L_HOUR, L_HPLU, \
-	      L_AND, mdiff, L_MINUTE, L_MPLU); \
+      sprintf(s, "%d %s%s %s %d %s%s temu", hdiff, L_HOUR, L_NPLU(hdiff), \
+	      L_AND, mdiff, L_MINUTE, L_NPLU(mdiff)); \
 } 
 
 /* The next ones are used only when MK_GLOBALS is set */

@@ -40,7 +40,7 @@ test: remind
 	@sh ../tests/test-rem
 
 .c.o:
-	@CC@ -c @CPPFLAGS@ @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -I. -I$(srcdir) $<
+	@CC@ -c @CPPFLAGS@ @CFLAGS@ @DEFS@ $(CEXTRA) $(LANGDEF) -DSYSDIR=$(datarootdir)/remind -I. -I$(srcdir) $<
 
 $(REMINDOBJS): $(REMINDHDRS)
 

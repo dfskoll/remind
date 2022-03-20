@@ -836,6 +836,7 @@ static SysVar SysVarArr[] = {
     {"SortByTime",     0,  INT_TYPE,     &SortByTime,          0,      0,    NULL },
     {"SubsIndent",     1,  INT_TYPE,     &SubsIndent,          0,      132,  NULL },
     {"Sunday",         1,  STR_TYPE,     &DynamicDayName[6],   0,      0,    NULL },
+    {"SysInclude",     0,  STR_TYPE,     &SysDir,              0,      0,    NULL },
     {"T",              0,  SPECIAL_TYPE, trig_date_func,       0,      0,    NULL },
     {"Td",             0,  SPECIAL_TYPE, trig_day_func,        0,      0,    NULL },
     {"Thursday",       1,  STR_TYPE,     &DynamicDayName[3],   0,      0,    NULL },

@@ -328,6 +328,8 @@ fi
 ../src/remind -w128 -c ../tests/utf-8.rem 1 Nov 2019 >> ../tests/test.out
 ../src/remind -c ../tests/test-addomit.rem 1 Sep 2021 >> ../tests/test.out
 
+# Remove references to SysInclude, which is build-specific
+fgrep -v '$SysInclude' < ../tests/test.out > ../tests/test.out.1 && mv -f ../tests/test.out.1 ../tests/test.out
 cmp -s ../tests/test.out ../tests/test.cmp
 if [ "$?" = "0" ]; then
    echo "Remind:  Acceptance test PASSED"

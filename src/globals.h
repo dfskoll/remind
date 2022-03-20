@@ -227,6 +227,15 @@ EXTERN	int	MonthDays[]
 #endif
 ;
 
+#define XSTR(x) #x
+#define STRSYSDIR(x) XSTR(x)
+
+EXTERN char *SysDir
+#ifdef MK_GLOBALS
+= STRSYSDIR(SYSDIR);
+#endif
+;
+
 /* The first day of each month expressed as number of days after Jan 1.
    Second row is for leap years. */
 

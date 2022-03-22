@@ -783,12 +783,11 @@ static int Add(void)
 
 /* If both are ints, just add 'em */
     if (v2.type == INT_TYPE && v1.type == INT_TYPE) {
-        int old = v1.v.val;
-	v1.v.val += v2.v.val;
         /* Check for overflow */
-        if (_private_add_overflow(v1.v.val, v2.v.val, old)) {
+        if (_private_add_overflow(v1.v.val, v2.v.val)) {
             return E_2HIGH;
         }
+	v1.v.val += v2.v.val;
 	PushValStack(v1);
 	return OK;
     }
@@ -796,9 +795,8 @@ static int Add(void)
 /* If it's a date plus an int, add 'em */
     if ((v1.type == DATE_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == DATE_TYPE)) {
-        int old = v1.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val += v2.v.val;
-        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	v1.type = DATE_TYPE;
 	PushValStack(v1);
@@ -808,9 +806,8 @@ static int Add(void)
 /* If it's a datetime plus an int or a time, add 'em */
     if ((v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) ||
 	((v1.type == INT_TYPE || v1.type == TIME_TYPE) && v2.type == DATETIME_TYPE)) {
-        int old = v1.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val += v2.v.val;
-        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	v1.type = DATETIME_TYPE;
 	PushValStack(v1);
@@ -822,9 +819,8 @@ static int Add(void)
     if ((v1.type == TIME_TYPE && v2.type == INT_TYPE) ||
 	(v1.type == INT_TYPE && v2.type == TIME_TYPE) ||
 	(v1.type == TIME_TYPE && v2.type == TIME_TYPE)) {
-        int old = v1.v.val;
+        if (_private_add_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val += v2.v.val;
-        if (_private_add_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	v1.v.val = v1.v.val % MINUTES_PER_DAY;
 	if (v1.v.val < 0) v1.v.val += MINUTES_PER_DAY;
 	v1.type = TIME_TYPE;
@@ -885,18 +881,16 @@ static int Subtract(void)
 
     /* If they're both INTs, do subtraction */
     if (v1.type == INT_TYPE && v2.type == INT_TYPE) {
-        int old = v1.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val)) return E_2HIGH;
 	v1.v.val -= v2.v.val;
-        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_2HIGH;
 	PushValStack(v1);
 	return OK;
     }
 
     /* If it's a date minus an int, do subtraction, checking for underflow */
     if (v1.type == DATE_TYPE && v2.type == INT_TYPE) {
-        int old = v1.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val -= v2.v.val;
-        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);
 	return OK;
@@ -905,9 +899,8 @@ static int Subtract(void)
     /* If it's a datetime minus an int or a time, do subtraction,
      * checking for underflow */
     if (v1.type == DATETIME_TYPE && (v2.type == INT_TYPE || v2.type == TIME_TYPE)) {
-        int old = v1.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val -= v2.v.val;
-        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	if (v1.v.val < 0) return E_DATE_OVER;
 	PushValStack(v1);
 	return OK;
@@ -925,9 +918,8 @@ static int Subtract(void)
     if ((v1.type == TIME_TYPE && v2.type == TIME_TYPE) ||
 	(v1.type == DATETIME_TYPE && v2.type == DATETIME_TYPE) ||
 	(v1.type == DATE_TYPE && v2.type == DATE_TYPE)) {
-        int old = v1.v.val;
+        if (_private_sub_overflow(v1.v.val, v2.v.val)) return E_DATE_OVER;
 	v1.v.val -= v2.v.val;
-        if (_private_sub_overflow(v1.v.val, v2.v.val, old)) return E_DATE_OVER;
 	v1.type = INT_TYPE;
 	PushValStack(v1);
 	return OK;
@@ -962,11 +954,8 @@ static int Multiply(void)
             (v1.v.val == -1 && v2.v.val == INT_MIN)) {
             return E_2HIGH;
         }
-        int old = v1.v.val;
+        if (_private_mul_overflow(v1.v.val, v2.v.val)) return E_2HIGH;
 	v1.v.val *= v2.v.val;
-        if (v2.v.val != 0) {
-            if (_private_div(v1.v.val, v2.v.val) != old) return E_2HIGH;
-        }
 	PushValStack(v1);
 	return OK;
     }
@@ -1177,9 +1166,8 @@ static int UnMinus(void)
 {
     Value *v = &ValStack[ValStackPtr-1];
     if (v->type != INT_TYPE) return E_BAD_TYPE;
-    int old = v->v.val;
+    if (v->v.val == INT_MIN) return E_2HIGH;
     v->v.val = -v->v.val;
-    if (_private_unminus_overflow(old, v->v.val)) return E_2HIGH;
     return OK;
 }
 

@@ -130,24 +130,33 @@ int DateOK(int y, int m, int d)
 
 /* Functions designed to defeat gcc optimizer */
 
-int _private_div(int a, int b) { return a/b; }
-int _private_add_overflow(int result, int b, int old)
+int _private_mul_overflow(int a, int b)
 {
-    if (b > 0 && result < old) return 1;
-    if (b < 0 && result > old) return 1;
-    return 0;
-}
-int _private_sub_overflow(int result, int b, int old)
-{
-    if (b < 0 && result < old) return 1;
-    if (b > 0 && result > old) return 1;
+    double aa = (double) a;
+    double bb = (double) b;
+
+    if (aa*bb > (double) INT_MAX || aa*bb < (double) INT_MIN) {
+        return 1;
+    }
     return 0;
 }
 
-int _private_unminus_overflow(int a, int b)
+int _private_add_overflow(int a, int b)
 {
-    if (a > 0 && b > 0) return 1;
-    if (a < 0 && b < 0) return 1;
+    double aa = (double) a;
+    double bb = (double) b;
+
+    if (aa+bb < (double) INT_MIN) return 1;
+    if (aa+bb > (double) INT_MAX) return 1;
+    return 0;
+}
+int _private_sub_overflow(int a, int b)
+{
+    double aa = (double) a;
+    double bb = (double) b;
+
+    if (aa-bb < (double) INT_MIN) return 1;
+    if (aa-bb > (double) INT_MAX) return 1;
     return 0;
 }
 

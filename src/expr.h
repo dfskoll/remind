@@ -58,7 +58,7 @@ else \
    in various arithmetic operators.  They have to be in separate
    functions with extern linkage to defeat compiler optimizations
    that would otherwise break the overflow checks. */
-extern int _private_div(int a, int b);
-extern int _private_add_overflow(int result, int b, int old);
-extern int _private_sub_overflow(int result, int b, int old);
-extern int _private_unminus_overflow(int a, int b);
+extern int _private_mul_overflow(int a, int b);
+extern int _private_add_overflow(int a, int b);
+extern int _private_sub_overflow(int a, int b);
+

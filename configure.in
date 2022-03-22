@@ -48,8 +48,13 @@ if test "$GCC" = yes; then
 	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
         # Check for link-time optimization support
         for f in -flto=auto -ffat-lto-objects; do
-            echo -n "Checking if C compiler supports $f... "
-            if $CC -E $f /dev/null > /dev/null 2>&1 ; then echo "yes"; CFLAGS="$CFLAGS $f"; else echo "no"; fi
+            AC_MSG_CHECKING([whether $CC supports $f])
+            if $CC -E $f /dev/null > /dev/null 2>&1 ; then
+                AC_MSG_RESULT([yes])
+                CFLAGS="$CFLAGS $f"
+            else
+                AC_MSG_RESULT([no])
+            fi
         done
 fi
 

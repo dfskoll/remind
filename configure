@@ -3973,7 +3973,7 @@ fi
 
 
 if test "$GCC" = yes; then
-	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
+	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes -flto=auto -ffat-lto-objects"
 fi
 
 if test "$ac_cv_perlartifacts" = "yes" ; then

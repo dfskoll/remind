@@ -28,8 +28,6 @@ AC_PROG_MAKE_SET
 AC_PATH_PROG([PERL], [perl])
 
 dnl Checks for libraries.
-dnl Replace `main' with a function in -lm:
-
 AC_CHECK_LIB(m, sqrt)
 
 dnl Integer sizes
@@ -47,7 +45,12 @@ AC_FUNC_UTIME_NULL
 AC_HEADER_TIME
 
 if test "$GCC" = yes; then
-	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes -flto=auto -ffat-lto-objects"
+	CFLAGS="$CFLAGS -Wall -Wextra -Wstrict-prototypes"
+        # Check for link-time optimization support
+        for f in -flto=auto -ffat-lto-objects; do
+            echo -n "Checking if C compiler supports $f... "
+            if $CC -E $f /dev/null > /dev/null 2>&1 ; then echo "yes"; CFLAGS="$CFLAGS $f"; else echo "no"; fi
+        done
 fi
 
 if test "$ac_cv_perlartifacts" = "yes" ; then

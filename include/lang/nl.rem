@@ -1,0 +1,55 @@
+# Support for the Dutch language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Willem Kasdorp and Erik-Jan Vens
+
+SET $Sunday "zondag"
+SET $Monday "maandag"
+SET $Tuesday "dinsdag"
+SET $Wednesday "woensdag"
+SET $Thursday "donderdag"
+SET $Friday "vrijdag"
+SET $Saturday "zaterdag"
+
+SET $January "januari"
+SET $February "februari"
+SET $March "maart"
+SET $April "april"
+SET $May "mei"
+SET $June "juni"
+SET $July "juli"
+SET $August "augustus"
+SET $September "september"
+SET $October "oktober"
+SET $November "november"
+SET $December "december"
+
+SET $Today "vandaag"
+SET $Tomorrow "morgen"
+
+BANNER Herinneringen voor %w, %d%s %m, %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+
+SET $Ago "geleden"
+SET $Fromnow "vanaf nu"
+SET $On "op"
+
+SET $Now "nu"
+SET $At "op"
+SET $Minute "minuut"
+SET $Hour "uur"
+SET $Is "is"
+SET $Was "was"
+SET $And "en"
+SET $Hplu "en"
+SET $Mplu "en"
+
+FSET subst_1(a, d, t) iif(t==now(), $Now, t<now(), subst_1a(now()-t, $Ago), subst_1a(t-now(), $Fromnow))
+FSET subst_1a(diff, when) subst_1b(diff/60, diff%60) + " " + when
+
+FSET subst_bx(a, d, t) "over " + (d-today()) + " dagen"
+FSET subst_1b(hdiff, mdiff) iif(hdiff==0, subst_minutes(mdiff), mdiff==0, subst_hours(hdiff), subst_hours(hdiff) + " " + $And + " " + subst_minutes(mdiff))
+FSET subst_minutes(m) iif(m==1, "1 minuut", m + " minuten")
+FSET subst_hours(h) iif(h==1, "1 uur", h + " uren")

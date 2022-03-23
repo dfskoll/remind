@@ -23,7 +23,6 @@ SCRIPTS=	$(srcdir)/../scripts/tkremind
 MANS=		$(srcdir)/../man/rem2ps.1 $(srcdir)/../man/remind.1 \
 		$(srcdir)/../man/tkremind.1 $(srcdir)/../man/rem.1
 
-LANGS=          fr.rem de.rem
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -62,10 +61,8 @@ install-nostripped: all
 	for man in $(MANS) ; do  \
 		$(INSTALL_DATA) $$man $(DESTDIR)$(mandir)/man1 || exit 1; \
 	done
-	-mkdir -p $(DESTDIR)$(datarootdir)/remind/lang || true
-	for l in $(LANGS) ; do \
-	        $(INSTALL_DATA) ../include/lang/$$l $(DESTDIR)$(datarootdir)/remind/lang || exit 1; \
-	done
+	-mkdir -p $(DESTDIR)$(datarootdir)/remind || true
+	cp -R ../include/* $(DESTDIR)$(datarootdir)/remind
 
 install: install-nostripped
 	strip $(DESTDIR)$(bindir)/remind || true

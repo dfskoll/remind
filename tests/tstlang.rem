@@ -32,7 +32,7 @@ endif
 
 if defined("i")
     do [i]
-    msg INCLUDING [i]
+#    msg INCLUDING [i]
 endif
 
 # Set up a few useful definitions

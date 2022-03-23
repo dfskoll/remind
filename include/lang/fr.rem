@@ -52,8 +52,8 @@ FSET subst_1(alt, date, time) iif(time == now(), "maintenant", \
                                   "il y a " + subst_tdiff ((now()-time)/60, (now()-time)%60))
 
 FSET subst_b(alt, date, time) iif(date==today(), $Today, date==today()+1, $Tomorrow, "dans " + (date-today()) + " jours")
-FSET subst_j_alt(date) wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date) + " " + year(date)
-FSET subst_j(alt, date, time) iif(alt, subst_j_alt(date), $On + " " + subst_j_alt(date))
+FSET subst_j_alt(date) iif(date==today(), $Today, date==today()+1, $Tomorrow, wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date) + ", " + year(date))
+FSET subst_j(alt, date, time) iif(date==today(), $Today, date==today()+1, $Tomorrow, alt, subst_j_alt(date), $On + " " + subst_j_alt(date))
 
-FSET subst_k_alt(date) wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date)
-FSET subst_k(alt, date, time) iif(alt, subst_k_alt(date), $On + " " + subst_k_alt(date))
+FSET subst_k_alt(date) iif(date==today(), $Today, date==today()+1, $Tomorrow, wkday(date) + ", " + day(date) + subst_ordinal(day(date)) + " " + mon(date))
+FSET subst_k(alt, date, time) iif(date==today(), $Today, date==today()+1, $Tomorrow, alt, subst_k_alt(date), $On + " " + subst_k_alt(date))

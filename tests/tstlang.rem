@@ -163,7 +163,7 @@ msg %_Time substitutions for a time in the future:%
 [d] msg [show("!")]
 [d] msg [show("@")]
 [d] msg [show("#")]
-[d] msg [show("1")]
+[f] msg [show("1")]
 [f] msg [show("2")]
 [f] msg [show("3")]
 [f] msg [show("4")]
@@ -202,6 +202,7 @@ msg %_Time substitutions for a time in the future:%
 [k] msg [show("!")]
 [k] msg [show("@")]
 [k] msg [show("#")]
+
 msg %_Time substitutions for a time in the past:%
 [e] msg [show("1")]
 [e] msg [show("2")]

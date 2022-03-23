@@ -1,0 +1,69 @@
+# Support for the Danish language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by by Mogens Lynnerup.
+
+SET $Sunday "Søndag"
+SET $Monday "Mandag"
+SET $Tuesday "Tirsdag"
+SET $Wednesday "Onsdag"
+SET $Thursday "Torsdag"
+SET $Friday "Fredag"
+SET $Saturday "Lørdag"
+
+SET $January "Januar"
+SET $February "Februar"
+SET $March "Marts"
+SET $April "April"
+SET $May "Maj"
+SET $June "Juni"
+SET $July "Juli"
+SET $August "August"
+SET $September "September"
+SET $October "Oktober"
+SET $November "November"
+SET $December "December"
+
+SET $Today "i dag"
+SET $Tomorrow "i morgen"
+
+BANNER Påmindelse for %w, %d. %m, %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+
+SET $Ago "siden"
+SET $Fromnow "fra nu"
+
+SET $On "på"
+
+SET $Now "nu"
+SET $At "kl."
+SET $Minute "minut"
+SET $Hour "time"
+SET $Is "er"
+SET $Was "var"
+SET $And "og"
+SET $Hplu "r"
+SET $Mplu "ter"
+
+FSET subst_ampm(h) iif(h<5, " om natten", h < 12, " om formiddagen", h < 18, " om eftermiddagen", " om aftenen")
+FSET subst_ordinal(d) "."
+
+FSET subst_p(alt, d, t) iif(d==today()+1, "", "e")
+FSET zeropad(s, len) iif(strlen(s + "") >= len, s + "", substr("0000", 1, len-strlen(s + "")) + s)
+FSET subst_a_alt(d) wkday(d) + ", den " + day(d) + ". " + mon(d) + " " + year(d)
+FSET subst_ax(alt, d, t) iif(alt, subst_a_alt(d), $On + " " + subst_a_alt(d))
+
+FSET subst_bx(a, d, t)   "om " + (d-today()) + " dage"
+
+FSET subst_ex(alt, d, t) "den " + zeropad(day(d), 2) + $DateSep + zeropad(monnum(d), 2) + $DateSep + zeropad(year(d), 4)
+FSET subst_fx(alt, d, t) "den " + zeropad(monnum(d), 2) + $DateSep + zeropad(day(d), 2) + $DateSep + zeropad(year(d), 4)
+
+FSET subst_g_alt(d) wkday(d) + ", den " + day(d) + ". " + mon(d)
+FSET subst_gx(alt, d, t) iif(alt, subst_g_alt(d), $On + " " + subst_g_alt(d))
+
+FSET subst_hx(alt, d, t) "den " + zeropad(day(d), 2) + $DateSep + zeropad(monnum(d), 2)
+FSET subst_ix(alt, d, t) "den " + zeropad(monnum(d), 2) + $DateSep + zeropad(day(d), 2)
+FSET subst_ux(alt, d, t) subst_ax(alt, d, t)
+FSET subst_vx(alt, d, t) subst_gx(alt, d, t)

@@ -125,7 +125,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #else
     r = -1;
     if (UserFuncExists("subst_ampm") == 1) {
-        snprintf(s, sizeof(s), "subst_ampm(%d)", h);
+        snprintf(s, sizeof(s), "subst_ampm(%d)", ch);
         expr = (char const *) s;
         r = EvalExpr(&expr, &v, NULL);
         if (r == OK) {

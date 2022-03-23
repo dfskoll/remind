@@ -58,6 +58,8 @@ set h a + " at " + wt
 set j a + " at " + wu
 set k a + " at " + xt
 set m a + " at " + xu
+set n a + " at " + vt
+set p a + " at " + vu
 
 msg The following are the two-day-in-advance substitutions:%
 [a] msg [show("a")]
@@ -176,6 +178,19 @@ msg %_Time substitutions for a time in the future:%
 [f] msg [show("!")]
 [f] msg [show("@")]
 [f] msg [show("#")]
+[n] msg [show("1")]
+[n] msg [show("2")]
+[n] msg [show("3")]
+[n] msg [show("4")]
+[n] msg [show("5")]
+[n] msg [show("6")]
+[n] msg [show("7")]
+[n] msg [show("8")]
+[n] msg [show("9")]
+[n] msg [show("0")]
+[n] msg [show("!")]
+[n] msg [show("@")]
+[n] msg [show("#")]
 [h] msg [show("1")]
 [h] msg [show("2")]
 [h] msg [show("3")]
@@ -230,6 +245,19 @@ msg %_Time substitutions for a time in the past:%
 [g] msg [show("!")]
 [g] msg [show("@")]
 [g] msg [show("#")]
+[p] msg [show("1")]
+[p] msg [show("2")]
+[p] msg [show("3")]
+[p] msg [show("4")]
+[p] msg [show("5")]
+[p] msg [show("6")]
+[p] msg [show("7")]
+[p] msg [show("8")]
+[p] msg [show("9")]
+[p] msg [show("0")]
+[p] msg [show("!")]
+[p] msg [show("@")]
+[p] msg [show("#")]
 [j] msg [show("1")]
 [j] msg [show("2")]
 [j] msg [show("3")]

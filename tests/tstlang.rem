@@ -41,8 +41,23 @@ set a trigger(today()+2) + " ++2"
 set l language()
 set tt now()+134
 set tu now()-134
+set ut now()+60
+set uu now()-60
+set vt now()+120
+set vu now()-120
+set wt now()-1
+set wu now()+1
+set xt now()-2
+set xu now()+2
+
 set d a + " at " + tt
 set e a + " at " + tu
+set f a + " at " + ut
+set g a + " at " + uu
+set h a + " at " + wt
+set j a + " at " + wu
+set k a + " at " + xt
+set m a + " at " + xu
 
 msg The following are the two-day-in-advance substitutions:%
 [a] msg [show("a")]
@@ -148,6 +163,45 @@ msg %_Time substitutions for a time in the future:%
 [d] msg [show("!")]
 [d] msg [show("@")]
 [d] msg [show("#")]
+[d] msg [show("1")]
+[f] msg [show("2")]
+[f] msg [show("3")]
+[f] msg [show("4")]
+[f] msg [show("5")]
+[f] msg [show("6")]
+[f] msg [show("7")]
+[f] msg [show("8")]
+[f] msg [show("9")]
+[f] msg [show("0")]
+[f] msg [show("!")]
+[f] msg [show("@")]
+[f] msg [show("#")]
+[h] msg [show("1")]
+[h] msg [show("2")]
+[h] msg [show("3")]
+[h] msg [show("4")]
+[h] msg [show("5")]
+[h] msg [show("6")]
+[h] msg [show("7")]
+[h] msg [show("8")]
+[h] msg [show("9")]
+[h] msg [show("0")]
+[h] msg [show("!")]
+[h] msg [show("@")]
+[h] msg [show("#")]
+[k] msg [show("1")]
+[k] msg [show("2")]
+[k] msg [show("3")]
+[k] msg [show("4")]
+[k] msg [show("5")]
+[k] msg [show("6")]
+[k] msg [show("7")]
+[k] msg [show("8")]
+[k] msg [show("9")]
+[k] msg [show("0")]
+[k] msg [show("!")]
+[k] msg [show("@")]
+[k] msg [show("#")]
 msg %_Time substitutions for a time in the past:%
 [e] msg [show("1")]
 [e] msg [show("2")]
@@ -162,6 +216,45 @@ msg %_Time substitutions for a time in the past:%
 [e] msg [show("!")]
 [e] msg [show("@")]
 [e] msg [show("#")]
+[g] msg [show("1")]
+[g] msg [show("2")]
+[g] msg [show("3")]
+[g] msg [show("4")]
+[g] msg [show("5")]
+[g] msg [show("6")]
+[g] msg [show("7")]
+[g] msg [show("8")]
+[g] msg [show("9")]
+[g] msg [show("0")]
+[g] msg [show("!")]
+[g] msg [show("@")]
+[g] msg [show("#")]
+[j] msg [show("1")]
+[j] msg [show("2")]
+[j] msg [show("3")]
+[j] msg [show("4")]
+[j] msg [show("5")]
+[j] msg [show("6")]
+[j] msg [show("7")]
+[j] msg [show("8")]
+[j] msg [show("9")]
+[j] msg [show("0")]
+[j] msg [show("!")]
+[j] msg [show("@")]
+[j] msg [show("#")]
+[m] msg [show("1")]
+[m] msg [show("2")]
+[m] msg [show("3")]
+[m] msg [show("4")]
+[m] msg [show("5")]
+[m] msg [show("6")]
+[m] msg [show("7")]
+[m] msg [show("8")]
+[m] msg [show("9")]
+[m] msg [show("0")]
+[m] msg [show("!")]
+[m] msg [show("@")]
+[m] msg [show("#")]
 
 msg %_Time substitutions for the current time:%
 set e a + " at " + now()

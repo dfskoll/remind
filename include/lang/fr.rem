@@ -1,4 +1,7 @@
-# French language file for Remind
+# Support for the French language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Laurent Duperval
 
 SET $Sunday "dimanche"
 SET $Monday "lundi"

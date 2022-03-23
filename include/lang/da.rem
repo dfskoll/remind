@@ -1,7 +1,7 @@
 # Support for the Danish language.
 # This file is part of REMIND.
 # REMIND is Copyright (C) 1992-2022 by Dianne Skoll
-# This file is derived from a translation by by Mogens Lynnerup.
+# This file is derived from a translation by Mogens Lynnerup.
 
 SET $Sunday "Søndag"
 SET $Monday "Mandag"

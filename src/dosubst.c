@@ -728,8 +728,13 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 	    break;
 
 	case '"':
-            if (DBufPutc(dbuf, QUOTE_MARKER) != OK) return E_NO_MEM;
-            has_quote = 1;
+            if (DontSuppressQuoteMarkers) {
+                if (DBufPutc(dbuf, '%') != OK) return E_NO_MEM;
+                if (DBufPutc(dbuf, c) != OK) return E_NO_MEM;
+            } else {
+                if (DBufPutc(dbuf, QUOTE_MARKER) != OK) return E_NO_MEM;
+                has_quote = 1;
+            }
 	    break;
 
 	default:

@@ -80,6 +80,7 @@ EXTERN  INIT(   long    SysTime, -1L);
 EXTERN	char	const *InitialFile;
 EXTERN	int	FileAccessDate;
 
+EXTERN  INIT(   int     DontSuppressQuoteMarkers, 0);
 EXTERN  INIT(	int 	DontFork, 0);
 EXTERN  INIT(	int 	DontQueue, 0);
 EXTERN  INIT(   int     NumQueued, 0);

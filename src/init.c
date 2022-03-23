@@ -459,6 +459,7 @@ void InitRemind(int argc, char const *argv[])
 		DoSimpleCalendar = 1;
 		PsCal = PSCAL_LEVEL1;
 		while (*arg == 'a' || *arg == 'A' ||
+                       *arg == 'q' || *arg == 'Q' ||
 		       *arg == 'p' || *arg == 'P') {
 		    if (*arg == 'a' || *arg == 'A') {
 			DoSimpleCalDelta = 1;
@@ -471,7 +472,9 @@ void InitRemind(int argc, char const *argv[])
 			} else {
 			    PsCal = PSCAL_LEVEL3;
 			}
-		    }
+		    } else if (*arg == 'q' || *arg == 'Q') {
+                        DontSuppressQuoteMarkers = 1;
+                    }
 		    arg++;
 		}
 		PARSENUM(CalMonths, arg);

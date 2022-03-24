@@ -1,0 +1,29 @@
+# Canadian holidays
+
+OMIT 1 Jan MSG New Year's Day
+
+# This varies by province
+REM Third Monday in Feb SCANFROM -7 ADDOMIT MSG Family Day
+
+# This varies by province
+OMIT [easterdate($Uy) - 2] MSG Good Friday
+
+# This varies by province
+OMIT [easterdate($Uy) + 1] MSG Easter Monday
+
+REM Mon 18 May SCANFROM -7 ADDOMIT MSG Victoria Day
+OMIT 1 July MSG Canada Day
+
+# This varies by province
+REM First Monday in Aug SCANFROM -7 ADDOMIT MSG Civic Holiday
+
+REM First Monday in Sep SCANFROM -7 ADDOMIT MSG Labour Day
+
+REM Second Monday in Oct SCANFROM -7 ADDOMIT MSG Thanksgiving Day
+
+REM 11 November MSG Remembrance Day
+
+OMIT 25 Dec MSG Christmas
+
+OMIT 26 Dec MSG Boxing Day
+

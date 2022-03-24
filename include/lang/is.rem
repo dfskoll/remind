@@ -1,45 +1,45 @@
 # Support for the Icelanding language.
 # This file is part of REMIND.
 # REMIND is Copyright (C) 1992-2022 by Dianne Skoll
-# This file is derived from a translation by Björn Davíğsson (bjossi@snerpa.is)
+# This file is derived from a translation by BjÃ¶rn DavÃ­Ã°sson (bjossi@snerpa.is)
 
 SET $Sunday "sunnudagur"
-SET $Monday "mánudagur"
-SET $Tuesday "şriğjudagur"
-SET $Wednesday "miğvikudagur"
+SET $Monday "mÃ¡nudagur"
+SET $Tuesday "Ã¾riÃ°judagur"
+SET $Wednesday "miÃ°vikudagur"
 SET $Thursday "fimmtudagur"
-SET $Friday "föstudagur"
+SET $Friday "fÃ¶studagur"
 SET $Saturday "laugardagur"
 
-SET $January "janúar"
-SET $February "febrúar"
+SET $January "janÃºar"
+SET $February "febrÃºar"
 SET $March "mars"
-SET $April "apríl"
-SET $May "maí"
-SET $June "júní"
-SET $July "júlí"
-SET $August "ágúst"
+SET $April "aprÃ­l"
+SET $May "maÃ­"
+SET $June "jÃºnÃ­"
+SET $July "jÃºlÃ­"
+SET $August "Ã¡gÃºst"
 SET $September "september"
-SET $October "október"
-SET $November "nóvember"
+SET $October "oktÃ³ber"
+SET $November "nÃ³vember"
 SET $December "desember"
 
-SET $Today "í dag"
-SET $Tomorrow "á morgun"
+SET $Today "Ã­ dag"
+SET $Tomorrow "Ã¡ morgun"
 
-BANNER Minnisatriği: %w, %d%s %m, %y%o:
+BANNER MinnisatriÃ°i: %w, %d%s %m, %y%o:
 
 SET $Am "fh"
 SET $Pm "eh"
 
-SET $Ago "síğan"
-SET $Fromnow "frá şví nú"
+SET $Ago "sÃ­Ã°an"
+SET $Fromnow "frÃ¡ Ã¾vÃ­ nÃº"
 
-SET $On "şann"
+SET $On "Ã¾ann"
 
-SET $Now "núna"
+SET $Now "nÃºna"
 SET $At "kl."
-SET $Minute "mínútu"
+SET $Minute "mÃ­nÃºtu"
 SET $Hour "klukkustund"
 SET $Is "er"
 SET $Was "var"

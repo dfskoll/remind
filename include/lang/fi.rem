@@ -47,7 +47,7 @@ SET $And "ja"
 SET $Hplu "a"
 SET $Mplu "a"
 
-FSET zeropad(s, len) iif(strlen(s + "") >= len, s + "", substr("0000", 1, len-strlen(s + "")) + s)
+FSET zeropad(s, len) pad(s, "0", len)
 
 FSET subst_ordinal(d) iif(d==1, ":senä", d==2, ":sena", (d%10)==2||(d%10)==3||(d%10)==6||(d%10)==8, ":ntena", ":ntenä")
 

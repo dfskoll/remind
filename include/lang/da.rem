@@ -51,7 +51,7 @@ FSET subst_ampm(h) iif(h<5, " om natten", h < 12, " om formiddagen", h < 18, " o
 FSET subst_ordinal(d) "."
 
 FSET subst_p(alt, d, t) iif(d==today()+1, "", "e")
-FSET zeropad(s, len) iif(strlen(s + "") >= len, s + "", substr("0000", 1, len-strlen(s + "")) + s)
+FSET zeropad(s, len) pad(s, "0", len)
 FSET subst_a_alt(d) wkday(d) + ", den " + day(d) + ". " + mon(d) + " " + year(d)
 FSET subst_ax(alt, d, t) iif(alt, subst_a_alt(d), $On + " " + subst_a_alt(d))
 

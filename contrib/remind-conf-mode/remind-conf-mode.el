@@ -143,7 +143,7 @@
          "$MinsFromUTC" "$Minute" "$Monday" "$Mplu" "$NextMode" "$November" "$Now" "$NumQueued"
          "$NumTrig" "$October" "$On" "$Pm" "$PrefixLineNo" "$PSCal" "$RunOff" "$Saturday"
          "$September" "$SimpleCal" "$SortByDate" "$SortByPrio" "$SortByTime"
-         "$SubsIndent" "$Sunday" "$T" "$Td" "$Thursday" "$TimeSep" "$Tm"
+         "$SubsIndent" "$Sunday" "$SysInclude" "$T" "$Td" "$Thursday" "$TimeSep" "$Tm"
          "$Today" "$Tomorrow" "$Tuesday" "$Tw" "$Ty" "$U" "$Ud" "$Um" "$UntimedFirst" "$Uw" "$Uy"
          "$Was" "$Wednesday")
    #'(lambda (a b) (> (length a) (length b)))))

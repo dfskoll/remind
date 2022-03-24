@@ -1,0 +1,19 @@
+SET autolang getenv("LC_ALL")
+IF autolang == ""
+    SET autolang getenv("LANGUAGE")
+ENDIF
+IF autolang == ""
+    SET autolang getenv("LANG")
+ENDIF
+
+IF autolang != ""
+    IF access($SysInclude + "/lang/" + lower(substr(autolang, 1, 5)) + ".rem", "r") == 0
+        INCLUDE [$SysInclude]/lang/[lower(substr(autolang, 1, 5))]
+    ELSE
+        IF access($SysInclude + "/lang/" + lower(substr(autolang, 1, 2)) + ".rem", "r") == 0
+            INCLUDE [$SysInclude]/lang/[lower(substr(autolang, 1, 2))].rem
+        ENDIF
+    ENDIF
+ENDIF
+
+UNSET autolang

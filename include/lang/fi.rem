@@ -1,0 +1,97 @@
+# Support for the Finnish language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Mikko Silvonen
+
+SET $Sunday "sunnuntai"
+SET $Monday "maanantai"
+SET $Tuesday "tiistai"
+SET $Wednesday "keskiviikko"
+SET $Thursday "torstai"
+SET $Friday "perjantai"
+SET $Saturday "lauantai"
+
+SET $January "tammikuu"
+SET $February "helmikuu"
+SET $March "maaliskuu"
+SET $April "huhtikuu"
+SET $May "toukokuu"
+SET $June "kesäkuu"
+SET $July "heinäkuu"
+SET $August "elokuu"
+SET $September "syyskuu"
+SET $October "lokakuu"
+SET $November "marraskuu"
+SET $December "joulukuu"
+
+SET $Today "tänään"
+SET $Tomorrow "huomenna"
+
+BANNER Viestit %wna %d. %mta %y%o:
+
+SET $Am " ap."
+SET $Pm " ip."
+
+SET $ago "sitten"
+SET $Fromnow "kuluttua"
+
+SET $On "na"
+
+SET $Now "nyt"
+SET $At "klo"
+SET $Minute "minuutti"
+SET $Hour "tunti"
+SET $Is "on"
+SET $Was "oli"
+SET $And "ja"
+SET $Hplu "a"
+SET $Mplu "a"
+
+FSET zeropad(s, len) iif(strlen(s + "") >= len, s + "", substr("0000", 1, len-strlen(s + "")) + s)
+
+FSET subst_ordinal(d) iif(d==1, ":senä", d==2, ":sena", (d%10)==2||(d%10)==3||(d%10)==6||(d%10)==8, ":ntena", ":ntenä")
+
+FSET subst_a_alt(d, o, p) wkday(d) + o + " " + day(d) + ". " + mon(d) + p + " " + year(d)
+FSET subst_ax(a, d, t) iif(a, subst_a_alt(d, "", ""), subst_a_alt(d, $On, "ta"))
+
+FSET subst_cx(a, d, t) iif(a, wkday(d), wkday(d) + $On)
+
+FSET subst_g_alt(d, o, p) wkday(d) + o + " " + day(d) + ". " + mon(d) + p
+FSET subst_gx(a, d, t) iif(a, subst_g_alt(d, "", ""), subst_g_alt(d, $On, "ta"))
+
+FSET subst_hx(a, d, t) zeropad(day(d), 2) + $DateSep + zeropad(monnum(d), 2)
+FSET subst_ix(a, d, t) zeropad(monnum(d), 2) + $DateSep + zeropad(day(d), 2)
+
+FSET subst_j_alt(d, o) wkday(d) + o + " " + mon(d) + "n " + day(d) + subst_ordinal(day(d)) + " " + year(d)
+FSET subst_jx(a, d, t) iif(a, subst_j_alt(d, ""), subst_j_alt(d, $On))
+
+FSET subst_k_alt(a, o) wkday(d) + o + " " + mon(d) + "n " + day(d) + subst_ordinal(day(d))
+FSET subst_kx(a, d, t) iif(a, subst_j_alt(d, ""), subst_j_alt(d, $On))
+
+FSET subst_lx(a, d, t) zeropad(year(d), 4) + $DateSep + zeropad(monnum(d), 2) + $DateSep + zeropad(day(d), 2)
+FSET subst_qx(a, d, t) "n"
+
+FSET subst_u_alt(d, o, p) wkday(d) + o + " " + day(d) + ". " + mon(d) + p + " " + year(d)
+FSET subst_ux(a, d, t) iif(a, subst_u_alt(d, "", ""), subst_u_alt(d, $On, "ta"))
+
+#SET $U_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s %d", DayName[jul%7], d, plu, MonthName[m], y); } else { sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT, y); }
+#SET $V_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s", DayName[jul%7], d, plu, MonthName[m]); } else { sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT); }
+#SET $1_OVER \
+#if (tdiff == 0) \
+#  sprintf(s, "%s", L_NOW); \
+#else { \
+#   s[0] = '\0'; \
+#   if (hdiff != 0) { \
+#      if (tdiff < 0) \
+#	sprintf(s, "%d %s%s ", hdiff, L_HOUR, hplu); \
+#      else \
+#        sprintf(s, "%d %s ", hdiff, L_HGEN); \
+#   } \
+#   if (mdiff != 0) { \
+#      if (tdiff < 0) \
+#         sprintf(s + strlen(s), "%d %s%s ", mdiff, L_MINUTE, mplu); \
+#      else \
+#         sprintf(s + strlen(s), "%d %s ", mdiff, L_MGEN); \
+#   } \
+#   sprintf(s + strlen(s), when); \
+#}

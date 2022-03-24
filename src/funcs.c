@@ -111,6 +111,7 @@ static int FNonomitted     (func_info *);
 static int FNow            (func_info *);
 static int FOrd            (func_info *);
 static int FOstype         (func_info *);
+static int FPad            (func_info *);
 static int FPlural         (func_info *);
 static int FPsmoon         (func_info *);
 static int FPsshade        (func_info *);
@@ -264,6 +265,7 @@ BuiltinFunc Func[] = {
     {   "now",          0,      0,      0,          FNow    },
     {   "ord",          1,      1,      1,          FOrd    },
     {   "ostype",       0,      0,      1,          FOstype },
+    {   "pad",          3,      4,      1,          FPad    },
     {   "plural",       1,      3,      1,          FPlural },
     {   "psmoon",       1,      4,      1,          FPsmoon},
     {   "psshade",      1,      3,      1,          FPsshade},
@@ -997,6 +999,69 @@ static int FOrd(func_info *info)
     sprintf(buf, "%d%s", v, s);
     return RetStrVal(buf, info);
 }
+
+/***************************************************************/
+/*                                                             */
+/*  FPad - Pad a string to min length                          */
+/*                                                             */
+/*  pad("1", "0", 4) --> "0004"                                */
+/*  pad("1", "0", 4, 1) --> "4000"                             */
+/*  pad("foo", "bar", 7) -> "barbfoo"                          */
+/*                                                             */
+/***************************************************************/
+static int FPad(func_info *info)
+{
+    int r;
+    char *s;
+    DynamicBuffer dbuf;
+    size_t len;
+    size_t wantlen;
+    size_t i;
+
+    ASSERT_TYPE(1, STR_TYPE);
+    ASSERT_TYPE(2, INT_TYPE);
+    if (Nargs == 4) {
+        ASSERT_TYPE(3, INT_TYPE);
+    }
+
+    if (ARG(0).type != STR_TYPE) {
+        r = DoCoerce(STR_TYPE, &ARG(0));
+        if (r != OK) return r;
+    }
+
+    wantlen = ARGV(2);
+    len = strlen(ARGSTR(0));
+    if (len >= wantlen) {
+        DCOPYVAL(RetVal, ARG(0));
+        return OK;
+    }
+
+    if (strlen(ARGSTR(1)) == 0) {
+        return E_BAD_TYPE;
+    }
+
+    DBufInit(&dbuf);
+    s = ARGSTR(1);
+    if (Nargs < 4 || !ARGV(3)) {
+        /* Pad on the LEFT */
+        for (i=0; i<wantlen-len; i++) {
+            DBufPutc(&dbuf, *s++);
+            if (!*s) s = ARGSTR(1);
+        }
+        DBufPuts(&dbuf, ARGSTR(0));
+    } else {
+        /* Pad on the RIGHT */
+        DBufPuts(&dbuf, ARGSTR(0));
+        for (i=0; i<wantlen-len; i++) {
+            DBufPutc(&dbuf, *s++);
+            if (!*s) s = ARGSTR(1);
+        }
+    }
+    r = RetStrVal(DBufValue(&dbuf), info);
+    DBufFree(&dbuf);
+    return r;
+}
+
 
 /***************************************************************/
 /*                                                             */

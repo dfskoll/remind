@@ -31,12 +31,12 @@ if (!exists($language_map->{$lang})) {
 
 my $flag = $language_map->{$lang};
 print STDERR "Testing for: $lang - $flag.\n";
-my_sys("make clean") && die("make clean failed");
-my_sys("make -j6 all LANGDEF=-DLANG=$flag") && die("make all failed");
+my_sys("make clean > /dev/null 2>&1") && die("make clean failed");
+my_sys("make -j6 all LANGDEF=-DLANG=$flag > /dev/null 2>&1") && die("make all failed");
 my_sys("./remind -q -r ../tests/tstlang.rem 2022-03-23 11:44 > test-$lang-compiled.out 2>&1");
 
-my_sys("make clean") && die("make clean failed");
-my_sys("make -j6 all") && die("make all failed");
+my_sys("make clean > /dev/null 2>&1") && die("make clean failed");
+my_sys("make -j6 all > /dev/null 2>&1") && die("make all failed");
 my_sys("./remind -q -r -ii=\\\"../include/lang/$lang.rem\\\" ../tests/tstlang.rem 2022-03-23 11:44 > test-$lang-runtime.out 2>&1");
 
 my $rc = my_sys("cmp test-$lang-compiled.out test-$lang-runtime.out > /dev/null 2>&1");
@@ -49,6 +49,6 @@ exit(0);
 
 sub my_sys
 {
-        print STDERR "Running: " . join(' ', @_) . "\n";
+        #print STDERR "Running: " . join(' ', @_) . "\n";
         return system(@_);
 }

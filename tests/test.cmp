@@ -3918,6 +3918,19 @@ REM Lastday April 2022 OMIT SAT SUN MSG foo
 REM Lastworkday April 2022 OMIT SAT SUN MSG foo
 ../tests/test.rem(791): Trig = Friday, 29 April, 2022
 
+SET a pad(1, "0", 2)
+pad(1, "0", 2) => "01"
+set a pad(1, "0", 2, 1)
+pad(1, "0", 2, 1) => "10"
+set a pad("foo", "quux", 14)
+pad("foo", "quux", 14) => "quuxquuxquufoo"
+set a pad("foo", "quux", 14, 1)
+pad("foo", "quux", 14, 1) => "fooquuxquuxquu"
+set a pad(11:33, " ", 12)
+pad(11:33, " ", 12) => "       11:33"
+set a pad(11:33, " ", 12, 1)
+pad(11:33, " ", 12, 1) => "11:33       "
+
 # Don't want Remind to queue reminders
 EXIT
 

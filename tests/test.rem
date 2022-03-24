@@ -790,6 +790,13 @@ REM Jan 2001 ~~1 MSG y
 REM Lastday April 2022 OMIT SAT SUN MSG foo
 REM Lastworkday April 2022 OMIT SAT SUN MSG foo
 
+SET a pad(1, "0", 2)
+set a pad(1, "0", 2, 1)
+set a pad("foo", "quux", 14)
+set a pad("foo", "quux", 14, 1)
+set a pad(11:33, " ", 12)
+set a pad(11:33, " ", 12, 1)
+
 # Don't want Remind to queue reminders
 EXIT
 

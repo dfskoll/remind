@@ -310,7 +310,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_A_OVER
 	    L_A_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %d %s, %d", get_day_name(jul%7), d,
 			get_month_name(m), y);
 	    } else {
@@ -334,7 +334,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_C_OVER
 	    L_C_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s", get_day_name(jul%7));
 	    } else {
 		snprintf(s, sizeof(s), "%s %s", DynamicOn, get_day_name(jul%7));
@@ -356,7 +356,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_E_OVER
 	    L_E_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%02d%c%02d%c%04d", d, DateSep,
 			m+1, DateSep, y);
 	    } else {
@@ -371,7 +371,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_F_OVER
 	    L_F_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%02d%c%02d%c%04d", m+1, DateSep, d, DateSep, y);
 	    } else {
 		snprintf(s, sizeof(s), "%s %02d%c%02d%c%04d", DynamicOn, m+1, DateSep, d, DateSep, y);
@@ -384,7 +384,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_G_OVER
 	    L_G_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %d %s", get_day_name(jul%7), d, get_month_name(m));
 	    } else {
 		snprintf(s, sizeof(s), "%s %s, %d %s", DynamicOn, get_day_name(jul%7), d, get_month_name(m));
@@ -397,7 +397,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_H_OVER
 	    L_H_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%02d%c%02d", d, DateSep, m+1);
 	    } else {
 		snprintf(s, sizeof(s), "%s %02d%c%02d", DynamicOn, d, DateSep, m+1);
@@ -410,7 +410,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_I_OVER
 	    L_I_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%02d%c%02d", m+1, DateSep, d);
 	    } else {
 		snprintf(s, sizeof(s), "%s %02d%c%02d", DynamicOn, m+1, DateSep, d);
@@ -423,7 +423,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_J_OVER
 	    L_J_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %s %d%s, %d", get_day_name(jul%7),
 			get_month_name(m), d, plu, y);
 	    } else {
@@ -438,7 +438,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_K_OVER
 	    L_K_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %s %d%s", get_day_name(jul%7),
 			get_month_name(m), d, plu);
 	    } else {
@@ -453,7 +453,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_L_OVER
 	    L_L_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%04d%c%02d%c%02d", y, DateSep, m+1, DateSep, d);
 	    } else {
 		snprintf(s, sizeof(s), "%s %04d%c%02d%c%02d", DynamicOn, y, DateSep, m+1, DateSep, d);
@@ -539,7 +539,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_U_OVER
 	    L_U_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %d%s %s, %d", get_day_name(jul%7), d,
 			plu, get_month_name(m), y);
 	    } else {
@@ -554,7 +554,7 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
 #ifdef L_V_OVER
 	    L_V_OVER
 #else
-	    if (altmode == '*') {
+            if (altmode == '*' || !strcmp(DynamicOn, "")) {
 		snprintf(s, sizeof(s), "%s, %d%s %s", get_day_name(jul%7), d, plu,
 			get_month_name(m));
 	    } else {

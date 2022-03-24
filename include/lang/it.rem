@@ -1,0 +1,67 @@
+# Support for the Italian language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Valerio Aimale
+
+SET $Sunday "Domenica"
+SET $Monday "Lunedí"
+SET $Tuesday "Martedí"
+SET $Wednesday "Mercoledí"
+SET $Thursday "Giovedí"
+SET $Friday "Venerdí"
+SET $Saturday "Sabato"
+
+SET $January "Gennaio"
+SET $February "Febbraio"
+SET $March "Marzo"
+SET $April "Aprile"
+SET $May "Maggio"
+SET $June "Giugno"
+SET $July "Luglio"
+SET $August "Agosto"
+SET $September "Settembre"
+SET $October "Ottobre"
+SET $November "Novembre"
+SET $December "Dicembre"
+
+SET $Today "oggi"
+SET $Tomorrow "domani"
+
+BANNER Promemoria per %w, %d %m %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+
+SET $Ago "fa"
+SET $Fromnow "da oggi"
+
+SET $On ""
+SET $Now "ora"
+SET $At "alle"
+SET $Minute "minuto"
+SET $Hour "ora"
+SET $Is "é"
+SET $Was "era"
+SET $And "e"
+SET $Hplu "a"
+SET $Mplu "i"
+
+FSET subst_bx(a, d, t) "fra " + (d-today()) + " giorni"
+FSET subst_p(a, d, t) iif(d==today()+1, "o", "i")
+FSET subst_q(a, d, t) iif(d==today()+1, "a", "e")
+
+FSET subst_ax(a, d, t) wkday(d) + ", " + day(d) + " " + mon(d) + " " + year(d)
+FSET subst_jx(a, d, t) subst_ax(a, d, t)
+FSET subst_kx(a, d, t) wkday(d) + ", " + day(d) + " " + mon(d)
+FSET subst_ux(a, d, t) subst_ax(a, d, t)
+FSET subst_vx(a, d, t) subst_kx(a, d, t)
+
+FSET subst_1(a, d, t) iif(t==now(), $Now, t<now(), subst_1a(now()-t, $Ago), subst_1a(t-now(), $Fromnow))
+FSET subst_1a(diff, when) subst_1b(diff/60, diff%60) + " " + when
+
+FSET subst_1b(hdiff, mdiff) iif(hdiff==0, subst_minutes(mdiff), mdiff==0, subst_hours(hdiff), subst_hours(hdiff) + " " + $And + " " + subst_minutes(mdiff))
+FSET subst_minutes(m) iif(m==1, "1 minuto", m + " minuti")
+FSET subst_hours(h) iif(h==1, "1 ora", h + " ore")
+
+FSET subst_0(a, d, t) iif(abs(now()-t)/60==1, "a", "e")
+FSET subst_9(a, d, t) iif(abs(now()-t)%60==1, "o", "i")

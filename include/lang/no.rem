@@ -1,0 +1,58 @@
+# Support for the Norwegian language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Trygve Randen
+
+SET $Sunday "Søndag"
+SET $Monday "Mandag"
+SET $Tuesday "Tirsdag"
+SET $Wednesday "Onsdag"
+SET $Thursday "Torsdag"
+SET $Friday "Fredag"
+SET $Saturday "Lørdag"
+
+SET $January "Januar"
+SET $February "Februar"
+SET $March "Mars"
+SET $April "April"
+SET $May "Mai"
+SET $June "Juni"
+SET $July "Juli"
+SET $August "August"
+SET $September "September"
+SET $October "Oktober"
+SET $November "November"
+SET $December "Desember"
+
+SET $Today "i dag"
+SET $Tomorrow "i morgen"
+
+BANNER Påminnelse for %w, %d. %m, %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+
+SET $Ago "siden"
+SET $Fromnow "fra nå"
+
+SET $On "den"
+SET $Now "nå"
+SET $At "kl."
+SET $Minute "minutt"
+SET $Hour "time"
+SET $Is "er"
+SET $Was "var"
+SET $And "og"
+SET $Hplu "r"
+SET $Mplu "er"
+
+FSET subst_bx(a, d, t) "om " + (d-today()) + " dager"
+FSET subst_ordinal(d) "."
+
+FSET subst_ax(a, d, t) iif(a, subst_a_alt(d), $On + " " + subst_a_alt(d))
+FSET subst_a_alt(d) wkday(d) + ", den " + day(d) + ". " + mon(d) + " " + year(d)
+FSET subst_gx(a, d, t) iif(a, subst_g_alt(d), $On + " " + subst_g_alt(d))
+FSET subst_g_alt(d) wkday(d) + ", den " + day(d) + ". " + mon(d)
+FSET subst_ux(a, d, t) subst_ax(a, d, t)
+FSET subst_vx(a, d, t) subst_gx(a, d, t)
+FSET subst_p(a, d, t) iif(d==today()+1, "", "er")

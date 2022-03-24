@@ -232,7 +232,10 @@ void InitRemind(int argc, char const *argv[])
 			Use256Colors = 1;
 		    } else if (x == 2) {
 			UseTrueColors = 1;
-		    }
+		    } else if (x != 0) {
+                        fprintf(ErrFp, "%s: -@n,m: n must be 0, 1 or 2 (assuming 0)\n",
+                                argv[0]);
+                    }
 		}
 		if (*arg == ',') {
 		    arg++;
@@ -241,7 +244,10 @@ void InitRemind(int argc, char const *argv[])
 			TerminalBackground = TERMINAL_BACKGROUND_DARK;
 		    } else if (x == 1) {
 			TerminalBackground = TERMINAL_BACKGROUND_LIGHT;
-		    }
+		    } else {
+                        fprintf(ErrFp, "%s: -@n,m: m must be 0 or 1\n",
+                                argv[0]);
+                    }
 		}
 		break;
 

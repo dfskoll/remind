@@ -6,7 +6,7 @@
 /*                                                             */
 /*  This file is part of REMIND.                               */
 /*  Copyright (C) 1992-2022 by Dianne Skoll                    */
-/*  Translated by Björn Davíðsson (bjossi@snerpa.is)           */
+/*  Translated by BjÃ¶rn DavÃ­Ã°sson (bjossi@snerpa.is)           */
 /*                                                             */
 /***************************************************************/
 
@@ -15,56 +15,56 @@
 
 /* Day names */
 #define L_SUNDAY "sunnudagur"
-#define L_MONDAY "mánudagur"
-#define L_TUESDAY "þriðjudagur"
-#define L_WEDNESDAY "miðvikudagur"
+#define L_MONDAY "mÃ¡nudagur"
+#define L_TUESDAY "Ã¾riÃ°judagur"
+#define L_WEDNESDAY "miÃ°vikudagur"
 #define L_THURSDAY "fimmtudagur"
-#define L_FRIDAY "föstudagur"
+#define L_FRIDAY "fÃ¶studagur"
 #define L_SATURDAY "laugardagur"
 
 /* Month names */
-#define L_JAN "janúar"
-#define L_FEB "febrúar"
+#define L_JAN "janÃºar"
+#define L_FEB "febrÃºar"
 #define L_MAR "mars"
-#define L_APR "apríl"
-#define L_MAY "maí"
-#define L_JUN "júní"
-#define L_JUL "júlí"
-#define L_AUG "ágúst"
+#define L_APR "aprÃ­l"
+#define L_MAY "maÃ­"
+#define L_JUN "jÃºnÃ­"
+#define L_JUL "jÃºlÃ­"
+#define L_AUG "Ã¡gÃºst"
 #define L_SEP "september"
-#define L_OCT "október"
-#define L_NOV "nóvember"
+#define L_OCT "oktÃ³ber"
+#define L_NOV "nÃ³vember"
 #define L_DEC "desember"
 
 /* Today and tomorrow */
-#define L_TODAY "í dag"
-#define L_TOMORROW "á morgun"
+#define L_TODAY "Ã­ dag"
+#define L_TOMORROW "Ã¡ morgun"
 
 /* The default banner */
-#define L_BANNER "Minnisatriði: %w, %d%s %m, %y%o:"
+#define L_BANNER "MinnisatriÃ°i: %w, %d%s %m, %y%o:"
 
 /* "am" and "pm" */
 #define L_AM "fh"
 #define L_PM "eh"
 
 /* Ago and from now */
-#define L_AGO "síðan"
-#define L_FROMNOW "frá því nú"
+#define L_AGO "sÃ­Ã°an"
+#define L_FROMNOW "frÃ¡ Ã¾vÃ­ nÃº"
 
 /* "in %d days' time" */
 #define L_INXDAYS "eftir %d daga"
 
 /* "on" as in "on date..." */
-#define L_ON "þann"
+#define L_ON "Ã¾ann"
 
 /* Pluralizing - this is a problem for many languages and may require
    a more drastic fix */
 #define L_PLURAL "a"
 
 /* Minutes, hours, at, etc */
-#define L_NOW "núna"
+#define L_NOW "nÃºna"
 #define L_AT "kl."
-#define L_MINUTE "mínútu"
+#define L_MINUTE "mÃ­nÃºtu"
 #define L_HOUR "klukkustund"
 #define L_IS "er"
 #define L_WAS "var"

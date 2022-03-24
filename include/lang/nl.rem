@@ -49,7 +49,8 @@ SET $Mplu "en"
 FSET subst_1(a, d, t) iif(t==now(), $Now, t<now(), subst_1a(now()-t, $Ago), subst_1a(t-now(), $Fromnow))
 FSET subst_1a(diff, when) subst_1b(diff/60, diff%60) + " " + when
 
-FSET subst_bx(a, d, t) "over " + (d-today()) + " dagen"
 FSET subst_1b(hdiff, mdiff) iif(hdiff==0, subst_minutes(mdiff), mdiff==0, subst_hours(hdiff), subst_hours(hdiff) + " " + $And + " " + subst_minutes(mdiff))
 FSET subst_minutes(m) iif(m==1, "1 minuut", m + " minuten")
 FSET subst_hours(h) iif(h==1, "1 uur", h + " uren")
+
+FSET subst_bx(a, d, t) "over " + (d-today()) + " dagen"

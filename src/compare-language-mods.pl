@@ -11,6 +11,7 @@ my $language_map = {
         'no' => 'NORWEGIAN',
         da => 'DANISH',
         pl => 'POLISH',
+        is => 'ICELANDIC',
         pt => 'BRAZPORT',
         it => 'ITALIAN',
         ro => 'ROMANIAN',

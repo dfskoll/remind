@@ -1,0 +1,51 @@
+# Support for the Icelanding language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Björn Davíðsson (bjossi@snerpa.is)
+
+SET $Sunday "sunnudagur"
+SET $Monday "mánudagur"
+SET $Tuesday "þriðjudagur"
+SET $Wednesday "miðvikudagur"
+SET $Thursday "fimmtudagur"
+SET $Friday "föstudagur"
+SET $Saturday "laugardagur"
+
+SET $January "janúar"
+SET $February "febrúar"
+SET $March "mars"
+SET $April "apríl"
+SET $May "maí"
+SET $June "júní"
+SET $July "júlí"
+SET $August "ágúst"
+SET $September "september"
+SET $October "október"
+SET $November "nóvember"
+SET $December "desember"
+
+SET $Today "í dag"
+SET $Tomorrow "á morgun"
+
+BANNER Minnisatriði: %w, %d%s %m, %y%o:
+
+SET $Am "fh"
+SET $Pm "eh"
+
+SET $Ago "síðan"
+SET $Fromnow "frá því nú"
+
+SET $On "þann"
+
+SET $Now "núna"
+SET $At "kl."
+SET $Minute "mínútu"
+SET $Hour "klukkustund"
+SET $Is "er"
+SET $Was "var"
+SET $And "og"
+SET $Hplu "ir"
+SET $Mplu "r"
+
+FSET subst_bx(a, d, t) "eftir " + (d - today()) + " daga"
+fset subst_p(a, d, t) iif(d == today()+1, "", "a")

@@ -82,24 +82,13 @@ FSET subst_ux(a, d, t) iif(a, subst_u_alt(d, "", ""), subst_u_alt(d, $On, "ta"))
 FSET subst_v_alt(d, o, p) wkday(d) + o + " " + day(d) + subst_ordinal(day(d)) + " " + mon(d) + p
 FSET subst_vx(a, d, t) iif(a, subst_v_alt(d, "", ""), subst_v_alt(d, $On, "ta"))
 
-#SET $U_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s %d", DayName[jul%7], d, plu, MonthName[m], y); } else { sprintf(s, "%s%s %d%s %s%s %d", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT, y); }
-#SET $V_OVER if (altmode == '*') { sprintf(s, "%s %d%s %s", DayName[jul%7], d, plu, MonthName[m]); } else { sprintf(s, "%s%s %d%s %s%s", DayName[jul%7], L_ON, d, plu, MonthName[m], L_PARTIT); }
-#SET $1_OVER \
-#if (tdiff == 0) \
-#  sprintf(s, "%s", L_NOW); \
-#else { \
-#   s[0] = '\0'; \
-#   if (hdiff != 0) { \
-#      if (tdiff < 0) \
-#	sprintf(s, "%d %s%s ", hdiff, L_HOUR, hplu); \
-#      else \
-#        sprintf(s, "%d %s ", hdiff, L_HGEN); \
-#   } \
-#   if (mdiff != 0) { \
-#      if (tdiff < 0) \
-#         sprintf(s + strlen(s), "%d %s%s ", mdiff, L_MINUTE, mplu); \
-#      else \
-#         sprintf(s + strlen(s), "%d %s ", mdiff, L_MGEN); \
-#   } \
-#   sprintf(s + strlen(s), when); \
-#}
+
+FSET subst_1(a, d, t) iif(t==now(), $Now, t<now(), subst1_past(now()-t), subst1_future(t-now()))
+
+FSET subst1_past(mins) subst_hour_past(mins/60) + subst_min_past(mins%60) + $Ago
+FSET subst1_future(mins) subst_hour_future(mins/60) + subst_min_future(mins%60) + $Fromnow
+
+FSET subst_hour_past(h) iif(h==0, "", h + " " + $Hour + iif(h==1, " ", $Hplu + " "))
+FSET subst_min_past(m) iif(m==0, "", m + " " + $Minute + iif(m==1, " ", $Mplu + " "))
+FSET subst_hour_future(h) iif(h==0, "", h + " tunnin ")
+FSET subst_min_future(m) iif(m==0, "", m + " minuutin ")

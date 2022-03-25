@@ -167,7 +167,7 @@
          "hebday" "hebmon" "hebyear" "hour" "iif" "index" "isany" "isdst"
          "isleap" "isomitted" "language" "lower" "max" "min" "minsfromutc"
          "minute" "mon" "monnum" "moondate" "moondatetime" "moonphase"
-         "moontime" "ndawn" "ndusk" "nonomitted" "now" "ord" "ostype" "plural"
+         "moontime" "ndawn" "ndusk" "nonomitted" "now" "ord" "ostype" "pad" "plural"
          "psmoon" "psshade" "realcurrent" "realnow" "realtoday" "sgn" "shell"
          "shellescape" "slide" "strlen" "substr" "sunrise" "sunset" "time"
          "timepart" "today" "trig" "trigback" "trigdate" "trigdatetime"

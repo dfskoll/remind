@@ -1,0 +1,48 @@
+# Support for the Spanish language.
+# This file is part of REMIND.
+# REMIND is Copyright (C) 1992-2022 by Dianne Skoll
+# This file is derived from a translation by Rafa Couto <rafacouto@biogate.com>
+
+SET $Sunday "Domingo"
+SET $Monday "Lunes"
+SET $Tuesday "Martes"
+SET $Wednesday "Miércoles"
+SET $Thursday "Jueves"
+SET $Friday "Viernes"
+SET $Saturday "Sábado"
+
+SET $January "Enero"
+SET $February "Febrero"
+SET $March "Marzo"
+SET $April "Abril"
+SET $May "Mayo"
+SET $June "Junio"
+SET $July "Julio"
+SET $August "Agosto"
+SET $September "Septiembre"
+SET $October "Octubre"
+SET $November "Noviembre"
+SET $December "Diciembre"
+
+SET $Today "hoy"
+SET $Tomorrow "mañana"
+
+BANNER Agenda para el %w, %d%s %m, %y%o:
+
+SET $Am "am"
+SET $Pm "pm"
+
+SET $Ago "hace"
+SET $Fromnow "desde hoy"
+SET $On "el día"
+SET $Now "ahora"
+SET $At "a las"
+SET $Minute "minuto"
+SET $Hour "hora"
+SET $Is "es"
+SET $Was "fue"
+SET $And "y"
+SET $Hplu "s"
+SET $Mplu "s"
+
+FSET subst_bx(a, d, t) "dentro de " + (d-today()) + " días"

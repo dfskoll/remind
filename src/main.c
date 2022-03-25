@@ -606,16 +606,22 @@ void Eprint(char const *fmt, ...)
     if (FreshLine && FileName) {
 	FreshLine = 0;
 	if (strcmp(FileName, "-")) {
-            print_callstack(ErrFp);
 	    (void) fprintf(ErrFp, "%s(%d): ", FileName, LineNo);
+            if (print_callstack(ErrFp)) {
+                (void) fprintf(ErrFp, ": ");
+            }
         } else {
-            print_callstack(ErrFp);
 	    (void) fprintf(ErrFp, "-stdin-(%d): ", LineNo);
+            if (print_callstack(ErrFp)) {
+                (void) fprintf(ErrFp, ": ");
+            }
         }
 	if (DebugFlag & DB_PRTLINE) OutputLine(ErrFp);
     } else if (FileName) {
-        print_callstack(ErrFp);
 	fprintf(ErrFp, "       ");
+        if (print_callstack(ErrFp)) {
+            (void) fprintf(ErrFp, ": ");
+        }
     }
 
     va_start(argptr, fmt);

@@ -231,18 +231,24 @@ have_callstack(void)
     return 0;
 }
 
+static void
+print_callstack_aux(FILE *fp, cs *entry)
+{
+    if (entry) {
+        print_callstack_aux(fp, entry->next);
+        fprintf(fp, "\n");
+        (void) fprintf(fp, "%s(%d): In function `%s'", entry->filename, entry->lineno, entry->func);
+    }
+}
+
 int
 print_callstack(FILE *fp)
 {
-    int done = 0;
-    cs *entry = callstack;
-    while(entry) {
-        (void) fprintf(fp, "%s(%d): In function `%s'\n", entry->filename, entry->lineno, entry->func);
-        done = 1;
-        entry = entry->next;
-    }
-    return done;
+    print_callstack_aux(fp, callstack);
+    if (callstack) return 1;
+    return 0;
 }
+
 void
 pop_call(void)
 {

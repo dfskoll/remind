@@ -109,6 +109,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
                 r = -1;
             }
             DestroyValue(v);
+        } else {
+            Wprint("%s", ErrMsg[r]);
         }
     }
     if (r != OK) {
@@ -135,6 +137,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
             } else {
                 r = -1;
             }
+        } else {
+            Wprint("%s", ErrMsg[r]);
         }
     }
     if (r != OK) {
@@ -157,6 +161,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
             } else {
                 r = -1;
             }
+        } else {
+            Wprint("%s", ErrMsg[r]);
         }
     }
     if (r != OK) {
@@ -231,6 +237,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
                 }
                 DestroyValue(v);
                 continue;
+            } else {
+                Wprint("%s", ErrMsg[r]);
             }
         }
 
@@ -301,6 +309,8 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
                     }
                     DestroyValue(v);
                     continue;
+                } else {
+                    Wprint("%s", ErrMsg[r]);
                 }
             }
         }

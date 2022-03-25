@@ -324,7 +324,8 @@ x => 30
 y => "Heshvan"
 z => 1991-02-16
 a => 5761
-hebdate(30, "Heshvan", 1991-02-16, 5761) => ../tests/test.rem(74): 30 Heshvan 5761: Invalid Hebrew date
+hebdate(30, "Heshvan", 1991-02-16, 5761) => ../tests/test.rem(71): In function `_i'
+../tests/test.rem(74): 30 Heshvan 5761: Invalid Hebrew date
 Invalid Hebrew date
 Leaving UserFN _i() => Invalid Hebrew date
 
@@ -357,7 +358,8 @@ x => 30
 y => "Kislev"
 z => 1991-02-16
 a => 5761
-hebdate(30, "Kislev", 1991-02-16, 5761) => ../tests/test.rem(78): 30 Kislev 5761: Invalid Hebrew date
+hebdate(30, "Kislev", 1991-02-16, 5761) => ../tests/test.rem(71): In function `_i'
+../tests/test.rem(78): 30 Kislev 5761: Invalid Hebrew date
 Invalid Hebrew date
 Leaving UserFN _i() => Invalid Hebrew date
 
@@ -379,7 +381,8 @@ x => 30
 y => "Adar A"
 z => 1991-02-16
 a => 5756
-hebdate(30, "Adar A", 1991-02-16, 5756) => ../tests/test.rem(81): No Adar A in 5756
+hebdate(30, "Adar A", 1991-02-16, 5756) => ../tests/test.rem(71): In function `_i'
+../tests/test.rem(81): No Adar A in 5756
 Invalid Hebrew date
 Leaving UserFN _i() => Invalid Hebrew date
 [_i(29, "Adar A", today(), 5755)] MSG Leap
@@ -400,7 +403,8 @@ x => 29
 y => "Adar A"
 z => 1991-02-16
 a => 5756
-hebdate(29, "Adar A", 1991-02-16, 5756) => ../tests/test.rem(83): No Adar A in 5756
+hebdate(29, "Adar A", 1991-02-16, 5756) => ../tests/test.rem(71): In function `_i'
+../tests/test.rem(83): No Adar A in 5756
 Invalid Hebrew date
 Leaving UserFN _i() => Invalid Hebrew date
 
@@ -1099,6 +1103,7 @@ y => 11:33
 x => "foo"
 y => 11:33
 "foo" * 11:33 => Type mismatch
+../tests/test.rem(334): In function `h'
 ../tests/test.rem(337): `*': Type mismatch
 Leaving UserFN h() => Type mismatch
 set a074 dosubst("%a %b %c %d %e %f %g %h", '1992/5/5')
@@ -3789,6 +3794,7 @@ trig("sun warn w") => ../tests/test.rem(740): Trig = Sunday, 17 February, 1991
 Entering UserFN w(1)
 x => 1
 1 / 0 => Division by zero
+../tests/test.rem(739): In function `w'
 ../tests/test.rem(740): `/': Division by zero
 Leaving UserFN w() => Division by zero
 1990-01-01

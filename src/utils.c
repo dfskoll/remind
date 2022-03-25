@@ -237,9 +237,18 @@ print_callstack(FILE *fp)
     int done = 0;
     cs *entry = callstack;
     while(entry) {
-        (void) fprintf(fp, "%s(%d): %s\n", entry->filename, entry->lineno, entry->func);
+        (void) fprintf(fp, "%s(%d): In function `%s'\n", entry->filename, entry->lineno, entry->func);
         done = 1;
         entry = entry->next;
     }
     return done;
+}
+void
+pop_call(void)
+{
+    cs *entry = callstack;
+    if (entry) {
+        callstack = entry->next;
+        destroy_cs(entry);
+    }
 }

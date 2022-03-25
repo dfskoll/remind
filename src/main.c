@@ -605,12 +605,16 @@ void Eprint(char const *fmt, ...)
 
     if (FreshLine && FileName) {
 	FreshLine = 0;
-	if (strcmp(FileName, "-"))
+	if (strcmp(FileName, "-")) {
+            print_callstack(ErrFp);
 	    (void) fprintf(ErrFp, "%s(%d): ", FileName, LineNo);
-	else
+        } else {
+            print_callstack(ErrFp);
 	    (void) fprintf(ErrFp, "-stdin-(%d): ", LineNo);
+        }
 	if (DebugFlag & DB_PRTLINE) OutputLine(ErrFp);
     } else if (FileName) {
+        print_callstack(ErrFp);
 	fprintf(ErrFp, "       ");
     }
 

@@ -163,6 +163,7 @@ int ReadLine(void)
 	LineNo = CLine->LineNo;
 	CLine = CLine->next;
 	FreshLine = 1;
+        clear_callstack();
 	if (DebugFlag & DB_ECHO_LINE) OutputLine(ErrFp);
 	return OK;
     }
@@ -263,6 +264,7 @@ static int ReadLineFromFile(int use_pclose)
 	}
 
 	FreshLine = 1;
+        clear_callstack();
 	if (DebugFlag & DB_ECHO_LINE) OutputLine(ErrFp);
 	return OK;
     }
@@ -818,6 +820,7 @@ static int IncludeCmd(char const *cmd)
     int old_flag;
 
     FreshLine = 1;
+    clear_callstack();
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
 
@@ -935,6 +938,7 @@ int IncludeFile(char const *fname)
     struct stat statbuf;
 
     FreshLine = 1;
+    clear_callstack();
     if (IStackPtr+1 >= INCLUDE_NEST) return E_NESTED_INCLUDE;
     i = &IStack[IStackPtr];
 

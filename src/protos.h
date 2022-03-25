@@ -175,4 +175,4 @@ int push_call(char const *filename, char const *func, int lineno);
 void clear_callstack(void);
 int have_callstack(void);
 int print_callstack(FILE *fp);
-
+void pop_call(void);

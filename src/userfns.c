@@ -32,6 +32,8 @@ typedef struct udf_struct {
     Var *locals;
     char IsActive;
     int nargs;
+    char const *filename;
+    int lineno;
 } UserFunc;
 
 /* The hash table */
@@ -93,6 +95,11 @@ int DoFset(ParsePtr p)
 	DBufFree(&buf);
 	return E_NO_MEM;
     }
+    func->filename = StrDup(FileName);
+    if (!func->filename) {
+        return E_NO_MEM;
+    }
+    func->lineno = LineNo;
     StrnCpy(func->name, DBufValue(&buf), VAR_NAME_LEN);
     DBufFree(&buf);
     if (!Hush) {
@@ -195,6 +202,9 @@ static void DestroyUserFunc(UserFunc *f)
 
     /* Free the function definition */
     if (f->text) free( (char *) f->text);
+
+    /* Free the filename */
+    if (f->filename) free( (char *) f->filename);
 
     /* Free the data structure itself */
     free(f);

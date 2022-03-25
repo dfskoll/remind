@@ -170,3 +170,9 @@ void set_components_from_lat_and_long(void);
 
 char const *get_day_name(int wkday);
 char const *get_month_name(int mon);
+
+int push_call(char const *filename, char const *func, int lineno);
+void clear_callstack(void);
+int have_callstack(void);
+int print_callstack(FILE *fp);
+

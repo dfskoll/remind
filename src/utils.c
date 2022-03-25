@@ -171,3 +171,75 @@ ShellEscape(char const *in, DynamicBuffer *out)
     }
     return OK;
 }
+
+/* Call-stack for printing errors from user-defined functions */
+typedef struct cs_s {
+    struct cs_s *next;
+    char const *filename;
+    char const *func;
+    int lineno;
+} cs;
+
+static cs *callstack = NULL;
+
+static void
+destroy_cs(cs *entry)
+{
+    if (entry->filename) free( (void *) entry->filename);
+    if (entry->func) free( (void *) entry->func);
+    free( (void *) entry);
+}
+
+
+int
+push_call(char const *filename, char const *func, int lineno)
+{
+    cs *entry = NEW(cs);
+    if (!entry) {
+        return E_NO_MEM;
+    }
+    entry->next = NULL;
+    entry->filename = StrDup(filename);
+    entry->func = StrDup(func);
+    entry->lineno = lineno;
+    if (!entry->filename || !entry->func) {
+        destroy_cs(entry);
+        return E_NO_MEM;
+    }
+    entry->next = callstack;
+    callstack = entry;
+    return OK;
+}
+
+void
+clear_callstack(void)
+{
+    cs *entry = callstack;
+    cs *next;
+    while(entry) {
+        next = entry->next;
+        destroy_cs(entry);
+        entry = next;
+    }
+    callstack = NULL;
+}
+
+int
+have_callstack(void)
+{
+    if (callstack) return 1;
+    return 0;
+}
+
+int
+print_callstack(FILE *fp)
+{
+    int done = 0;
+    cs *entry = callstack;
+    while(entry) {
+        (void) fprintf(fp, "%s(%d): %s\n", entry->filename, entry->lineno, entry->func);
+        done = 1;
+        entry = entry->next;
+    }
+    return done;
+}

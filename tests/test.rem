@@ -796,6 +796,7 @@ set a pad("foo", "quux", 14)
 set a pad("foo", "quux", 14, 1)
 set a pad(11:33, " ", 12)
 set a pad(11:33, " ", 12, 1)
+set a pad("foo", "0", $MaxStringLen+1)
 
 # Don't want Remind to queue reminders
 EXIT

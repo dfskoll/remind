@@ -3930,6 +3930,11 @@ set a pad(11:33, " ", 12)
 pad(11:33, " ", 12) => "       11:33"
 set a pad(11:33, " ", 12, 1)
 pad(11:33, " ", 12, 1) => "11:33       "
+set a pad("foo", "0", $MaxStringLen+1)
+$MaxStringLen => 65535
+65535 + 1 => 65536
+pad("foo", "0", 65536) => String too long
+../tests/test.rem(799): String too long
 
 # Don't want Remind to queue reminders
 EXIT

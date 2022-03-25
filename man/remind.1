@@ -3032,6 +3032,26 @@ Returns a string that is the ordinal number \fInum\fR.  For example,
 Returns "UNIX".  Remind used to run on OS/2 and MS-DOS, but does not
 any longer.
 .TP
+.B pad(x_arg, s_padstr, i_len [, i_right])
+Converts the first argument \fIarg\fR to a string if necessary, and
+then if it is shorter than \fIlen\fR characters, pads to to
+\fIlen\fR characters using as many copies (including partial copies)
+of \fIpadstr\fR as necessary.  By default, the string is left-padded,
+but if \fIright\fR is supplied and non-zero, the string will
+be right-padded.
+.RS
+.PP
+Here are some examples:
+.nf
+    pad(3, "0", 2)        -->  "03"
+    pad(465, "0", 2)      -->  "465"
+    pad("foo", " ", 5)    -->  "  foo"
+    pad("foo", " ", 5, 1) -->  "foo  "
+    pad("foo", "bar", 11) -->  "barbarbafoo"
+.fi
+.RE
+
+.TP
 .B plural(i_num [,s_str1 [,s_str2]])
 Can take from one to three arguments.  If one argument is supplied, returns
 "s" if \fInum\fR is not 1, and "" if \fInum\fR is 1.

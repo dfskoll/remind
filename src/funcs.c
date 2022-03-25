@@ -1040,6 +1040,10 @@ static int FPad(func_info *info)
         return E_BAD_TYPE;
     }
 
+    if (MaxStringLen > 0 && wantlen > (size_t) MaxStringLen) {
+        return E_STRING_TOO_LONG;
+    }
+
     DBufInit(&dbuf);
     s = ARGSTR(1);
     if (Nargs < 4 || !ARGV(3)) {

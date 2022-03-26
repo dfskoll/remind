@@ -84,10 +84,12 @@ Operator UnOp[] = {
 
 extern BuiltinFunc Func[];
 
-Operator OpStack[OP_STACK_SIZE];
-Value    ValStack[VAL_STACK_SIZE];
-int      OpStackPtr = 0;
-int      ValStackPtr = 0;
+static Operator OpStack[OP_STACK_SIZE];
+static int      OpStackPtr = 0;
+
+/* ValStack can't be static - needed by funcs.c */
+       Value    ValStack[VAL_STACK_SIZE];
+       int      ValStackPtr = 0;
 
 /***************************************************************/
 /*                                                             */

@@ -17,7 +17,7 @@ HTMLDIR = /var/www/remind
 # Where you stick images and CSS files, as seen by UNIX
 IMAGEDIR = /var/www/remind/resources
 
-# Where images and CSS fiels are, as seen by web browers
+# Where images and CSS files are, as seen by web browsers
 IMAGEBASE = /remind/resources
 
 # Set by configure - don't touch.

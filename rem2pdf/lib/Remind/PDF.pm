@@ -285,7 +285,7 @@ sub read_one_month_pp
 Given a hashref C<$hash> consisting of one entry parsed
 from the "remind -p" stream and a C<$specials_accepted> hash,
 return 1 if we should include this entry in the calendar or
-0 if mot.
+0 if not.
 
 =cut
 sub accept_special

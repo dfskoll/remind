@@ -4830,7 +4830,6 @@ Note how Event 2's wording was changed from the normal "in 2 days'
 time", and note also that the "tomorrow" and "today" events used the
 normal substitution---\fBsubst_bx\fR is not called for trigger days of
 today or tomorrow.
-.RS
 .PP
 As a special case, if a \fBsubst_Nx\fB or \fBsubst_N\fR function
 returns the integer zero, then the normal substitution mechanism is
@@ -4840,7 +4839,6 @@ as:
 .nf
     FSET subst_bx(a,d,t) iif(d==today()+2, "the day after tomorrow", 0)
 .fi
-.RE
 .PP
 .SH LANGUAGE PACKS
 .PP

@@ -229,14 +229,17 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
             expr = (char const *) s;
             r = EvalExpr(&expr, &v, NULL);
             if (r == OK) {
-                if (!DoCoerce(STR_TYPE, &v)) {
-                    if (DBufPuts(dbuf, v.v.str) != OK) {
-                        DestroyValue(v);
-                        return E_NO_MEM;
+                if (v.type != INT_TYPE || v.v.val != 0) {
+                    if (!DoCoerce(STR_TYPE, &v)) {
+                        if (DBufPuts(dbuf, v.v.str) != OK) {
+                            DestroyValue(v);
+                            return E_NO_MEM;
+                        }
                     }
+                    DestroyValue(v);
+                    continue;
                 }
                 DestroyValue(v);
-                continue;
             } else {
                 Eprint("%s", ErrMsg[r]);
             }
@@ -301,14 +304,17 @@ int DoSubst(ParsePtr p, DynamicBuffer *dbuf, Trigger *t, TimeTrig *tt, int jul, 
                 expr = (char const *) s;
                 r = EvalExpr(&expr, &v, NULL);
                 if (r == OK) {
-                    if (!DoCoerce(STR_TYPE, &v)) {
-                        if (DBufPuts(dbuf, v.v.str) != OK) {
-                            DestroyValue(v);
-                            return E_NO_MEM;
+                    if (v.type != INT_TYPE || v.v.val != 0) {
+                        if (!DoCoerce(STR_TYPE, &v)) {
+                            if (DBufPuts(dbuf, v.v.str) != OK) {
+                                DestroyValue(v);
+                                return E_NO_MEM;
+                            }
                         }
+                        DestroyValue(v);
+                        continue;
                     }
                     DestroyValue(v);
-                    continue;
                 } else {
                     Eprint("%s", ErrMsg[r]);
                 }

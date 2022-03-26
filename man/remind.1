@@ -563,6 +563,7 @@ The trigger date for a specific run is simply the current system date.
 present.  The reminder is triggered on the specified day of each month.
 The trigger date for a particular run is the closest such day to the
 current system date.  For example:
+.PP
 .nf
 	REM 1 MSG First of every month.
 	REM 31 MSG 31st of every month that has 31 days.
@@ -572,6 +573,7 @@ current system date.  For example:
 .I month
 present.  The reminder is triggered every day of the specified month.
 Example:
+.PP
 .nf
 	REM Feb MSG Every day in February
 .fi
@@ -581,6 +583,7 @@ Example:
 and
 .I month
 present.  Examples:
+.PP
 .nf
 	REM 6 Jan MSG Every 6th of January
 	REM Feb 29 MSG Every 29th of February
@@ -589,6 +592,7 @@ present.  Examples:
 5.  Only
 .I year
 present. Example:
+.PP
 .nf
 	REM 1991 MSG Every day in 1991
 .fi
@@ -598,6 +602,7 @@ present. Example:
 and
 .I day
 present.  Examples:
+.PP
 .nf
 	REM 1 1990 MSG 1st of every month in 1990
 	REM 1992 23 MSG 23rd of every month in 1992
@@ -608,6 +613,7 @@ present.  Examples:
 and
 .I month
 present.  Examples:
+.PP
 .nf
 	REM Feb 1991 MSG Every day in Feb 1991
 	REM 1992 September MSG Every day in Sept 1992
@@ -618,6 +624,7 @@ present.  Examples:
 and
 .I day
 present.  Examples:
+.PP
 .nf
 	REM 8 Jan 1991 MSG 8th January 1991.
 	REM 1992 March 9 MSG 9th March 1992.
@@ -626,6 +633,7 @@ present.  Examples:
 9.
 .I weekday
 only.  Examples:
+.PP
 .nf
 	REM Sat MSG Every Saturday
 	REM Mon Tue Wed Thu Fri MSG Every working day
@@ -637,6 +645,7 @@ only.  Examples:
 and
 .I day
 present.  Examples:
+.PP
 .nf
 	REM Sat 1 MSG First Saturday of every month
 	REM Mon Tue Wed Thu Fri 15 \\
@@ -648,6 +657,7 @@ present.  Examples:
 and
 .I month
 present.  Examples:
+.PP
 .nf
 	REM Mon March MSG Every Monday in March
 	REM Mon Tue Wed Thu Fri Feb MSG Every working day in February
@@ -658,6 +668,7 @@ present.  Examples:
 and
 .I day
 present.  Examples:
+.PP
 .nf
 	REM Mon 1 March MSG First Monday in March
 	REM Sat Sun 15 July MSG First Sat or Sun on or after 15 July
@@ -668,6 +679,7 @@ present.  Examples:
 and
 .I year
 present.  Example:
+.PP
 .nf
 	REM Sat Sun 1991 MSG Every Saturday and Sunday in 1991
 .fi
@@ -677,6 +689,7 @@ present.  Example:
 and
 .I year
 present.  Examples:
+.PP
 .nf
 	REM Mon 15 1990 MSG 1st Mon after 15th of every month in 1990
 	REM Mon Tue Wed Thu Fri 1 1990 \\
@@ -688,6 +701,7 @@ present.  Examples:
 and
 .I year
 present.  Example:
+.PP
 .nf
 	REM Mon Wed 1991 Feb MSG Every Mon and Wed in Feb 1991.
 .fi
@@ -697,6 +711,7 @@ present.  Example:
 and
 .I year
 present.  Example:
+.PP
 .nf
 	REM Mon Tue Wed Thu Fri 28 Oct 1990 \\
 		MSG 1st working day on or after 28 October 1990.
@@ -2323,6 +2338,7 @@ the decimal point must be a period (".").
 .PP
 For example, the coordinates of the Statue of Liberty in New York City
 are approximately set by:
+.PP
 .nf
         SET $Latitude   "40.68933"
         SET $Longitude "-74.04454"
@@ -3048,6 +3064,7 @@ be right-padded.
 .RS
 .PP
 Here are some examples:
+.PP
 .nf
     pad(3, "0", 2)        -->  "03"
     pad(465, "0", 2)      -->  "465"
@@ -3266,6 +3283,7 @@ non-zero trigger date.
 \fBIFTRIG\fR.  For example, if you have meetings every Monday in
 June and July, and you want warnings 3 days in advance, you
 could use:
+.PP
 .nf
     REM [trig("Mon Jun +3", "Mon July +3")] +3 MSG Meeting %b
 .fi
@@ -4782,13 +4800,14 @@ reminder and \fItime\fR which is the trigger time.
 .TP
 .B subst_Nx(alt, date, time)
 Again, this is a \fIfamily\fR of functions.  It is similar to the
-\fBsubst_x\fR family except it is only called if \fIdate\fR is two or
+\fBsubst_N\fR family except it is only called if \fIdate\fR is two or
 more days away from \fItoday()\fR.  This is useful if you don't want to
 override the "today" or "tomorrow" output for most substitution sequences.
 .PP
 Here's an example of how you might customize your substitution filter.
 Suppose you want to change the "%b" sequence to substitute "the day
 after tomorrow" for an event two days from now.  You could do this:
+.PP
 .nf
     FSET subst_bx(a,d,t) iif(d==today()+2, "the day after tomorrow", \
                              "in " + (d-today()) + " days' time")
@@ -4799,6 +4818,7 @@ after tomorrow" for an event two days from now.  You could do this:
 .fi
 .PP
 The output of this script is:
+.PP
 .nf
     Event 1 is in 3 days' time
     Event 2 is the day after tomorrow
@@ -4810,6 +4830,17 @@ Note how Event 2's wording was changed from the normal "in 2 days'
 time", and note also that the "tomorrow" and "today" events used the
 normal substitution---\fBsubst_bx\fR is not called for trigger days of
 today or tomorrow.
+.RS
+.PP
+As a special case, if a \fBsubst_Nx\fB or \fBsubst_N\fR function
+returns the integer zero, then the normal substitution mechanism is
+used.  Therefore, the previous example could have been written more simply
+as:
+.PP
+.nf
+    FSET subst_bx(a,d,t) iif(d==today()+2, "the day after tomorrow", 0)
+.fi
+.RE
 .PP
 .SH LANGUAGE PACKS
 .PP
@@ -4823,12 +4854,14 @@ pl.rem (Polish), pt.rem (Portuguese) and ro.rem (Romanian).
 .PP
 To use a language pack (in this example, de.rem), simply place this at
 the top of your reminders file:
+.PP
 .nf
     INCLUDE [$SysInclude]/lang/de.rem
 .fi
 .PP
 If you want \fBRemind\fR to try to find the language pack appropriate
 for your locale settings, use:
+.PP
 .nf
     INCLUDE [$SysInclude]/lang/auto.rem
 .fi
@@ -5043,10 +5076,12 @@ should attempt to support.  They are currently supported by
 .PP
 The \fBSHADE\fR special replaces the \fBpsshade()\fR function.
 Use it like this:
+.PP
 .nf
 	REM Sat Sun SPECIAL SHADE 128
 	REM Mon SPECIAL SHADE 255 0 0
 .fi
+.PP
 The \fBSHADE\fR keyword is followed by either one or three numbers,
 from 0 to 255.  If one number is supplied, it is interpreted as
 a grey-scale value from black (0) to white (255).  If three numbers
@@ -5057,14 +5092,17 @@ in calendars produced by \fBRem2PS\fR, \fBtkremind\fR and \fBrem2html\fR.)
 .PP
 The \fBMOON\fR special replaces the \fBpsmoon()\fR function.  Use it
 like this:
+.PP
 .nf
 	REM [moondate(0)] SPECIAL MOON 0
 	REM [moondate(1)] SPECIAL MOON 1
 	REM [moondate(2)] SPECIAL MOON 2
 	REM [moondate(3)] SPECIAL MOON 3
 .fi
+.PP
 These draw little moons on the various calendars.  The complete syntax
 of the \fBMOON\fR special is as follows:
+.PP
 .nf
 	... SPECIAL MOON phase moonsize fontsize msg
 .fi
@@ -5085,12 +5123,12 @@ and \fIfontsize\fR; the other backends use fixed sizes.
 .PP
 The \fBCOLOR\fR special lets you place colored reminders in the
 calendar.  Use it like this:
-
+.PP
 .nf
 	REM ... SPECIAL COLOR 255 0 0 This is a bright red reminder
 	REM ... SPECIAL COLOR 0 128 0 This is a dark green reminder
 .fi
-
+.PP
 You can spell COLOR either the American way ("COLOR") or the British
 way ("COLOUR").  This manual will use the American way.
 
@@ -5111,11 +5149,11 @@ number in the calendar.  For example, this would number each Monday
 with the ISO 8601 week number.  The week number is shown like this:
 "(W\fIn\fR)" in this example, but you can put whatever text you like
 after the WEEK keyword.
-
+.PP
 .nf
 	REM Monday SPECIAL WEEK (W[weekno()])
 .fi
-
+.PP
 .SH MISCELLANEOUS
 .PP
 .B COMMAND ABBREVIATIONS

@@ -30,6 +30,8 @@ CHANGES TO REMIND
   This causes Remind *not* to remove the %"...%" marker sequence from
   remind bodies.
 
+- BUG FIX: tkremind: Fix the "-m" flag, which was broken in 03.04.00.
+
 - BUG FIX: Fix the overflow-detection functions so they work with link-time
   optimization.  The previous versions would be optimized away.
 

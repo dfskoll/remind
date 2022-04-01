@@ -457,6 +457,7 @@ proc CreateCalFrame { w dayNames } {
     # Figure out reasonable height for text frames
     global SetFontsWorked
     global Option
+    global MondayFirst
     set h [winfo screenheight .]
     if {$h <= 480} {
 	if {$SetFontsWorked} {
@@ -470,7 +471,6 @@ proc CreateCalFrame { w dayNames } {
 	set h 5
     }
 
-    global MondayFirst
     frame $w -background $Option(LineColor)
     for {set i 0} {$i < 7} {incr i} {
 	if {$MondayFirst} {
@@ -1010,7 +1010,7 @@ proc ConfigureCalWindow { month year firstDay numDays } {
 proc FillCalWindow {} {
     set FileName ""
     set LineNo 0
-    global DayNames CurYear CurMonth MonthNames CommandLine Option TagToObj RemindErrors
+    global DayNames CurYear CurMonth MonthNames CommandLine Option TagToObj RemindErrors MondayFirst
 
     array unset TagToObj
 
@@ -1049,7 +1049,12 @@ proc FillCalWindow {} {
 
     # Update the day names in the calendar window
     for {set i 0} {$i < 7} {incr i} {
-        .cal.day$i configure -text [lindex $DayNames $i]
+	if {$MondayFirst} {
+	    set index [expr ($i+1)%7]
+	} else {
+	    set index $i
+	}
+        .cal.day$i configure -text [lindex $DayNames $index]
     }
     set offset [CalEntryOffset $firstWkday]
 

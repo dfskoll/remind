@@ -1,6 +1,7 @@
 #!@PERL@
 use strict;
 use warnings;
+use lib '@prefix@/lib/perl5';
 
 use Encode;
 use Cairo;

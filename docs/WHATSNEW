@@ -1,6 +1,6 @@
 CHANGES TO REMIND
 
-* VERSION 4.0 Patch 0 - 2022-??-??
+* VERSION 4.0 Patch 0 - 2022-04-04
 
 - MAJOR NEW FEATURE: remind: Remind output can effectively be
   translated into other languages at run-time.  A number of system
@@ -29,6 +29,9 @@ CHANGES TO REMIND
 - CHANGE: Add a "q" sub-option to the "-p", "-pp", and "-ppp" options.
   This causes Remind *not* to remove the %"...%" marker sequence from
   remind bodies.
+
+- BUG FIX: rem2pdf: Make rem2pdf respect the --prefix ./configure flag.
+  Loosely based on patch by Jonathan Kamens.
 
 - BUG FIX: tkremind: Fix the "-m" flag, which was broken in 03.04.00.
 

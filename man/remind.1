@@ -141,7 +141,7 @@ If you immediately follow the \fBs\fR with the letter
 day they actually occur \fIas well as\fR on any preceding days specified
 by the reminder's \fIdelta\fR.
 .TP
-.B \-p\fR[\fBa\fR][\fBp\fR][\fBp\fR]\fIn\fR
+.B \-p\fR[\fBa\fR][\fBp\fR][\fBp\fR][\fBq\fR]\fIn\fR
 The \fB\-p\fR option is very similar to the \fB\-s\fR option, except
 that the output contains additional information for use by the
 \fBRem2PS\fR program, which creates a PostScript calendar, and various
@@ -156,7 +156,9 @@ by the reminder's \fIdelta\fR.  If you follow the \fBp\fR with another
 format rather than the "simple calendar" format.  This format is
 also documented in the \fBrem2ps(1)\fR man page.  Finally, if you use
 three p's, as in \fB\-ppp\fR, then \fBRemind\fR uses a pure JSON
-format, again documented in \fBrem2ps(1)\fR.
+format, again documented in \fBrem2ps(1)\fR.  If you include a \fBq\fR
+letter with this option, then the normal calendar-mode substitution filter
+is disabled and the %"...%" sequences are preserved in the output.
 .RS
 .PP
 Note that the \fB\-pp\fR or \fB\-ppp\fR options also enable the \fB\-l\fR

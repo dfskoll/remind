@@ -1,0 +1,29 @@
+# language: bash
+---
+
+name: Remind unit tests
+
+on:
+  push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Remind
+        uses: actions/checkout@v2
+      - name: Add test user
+        run: |
+          sudo adduser --home /home/testuser --gecos 'Test User' --disabled-password testuser
+      - name: Fix ownership
+        run: |
+          sudo chown -R testuser .
+      - name: Build
+        run: |
+          sudo su -c './configure && make' testuser
+      - name: Run Tests
+        run: |
+          sudo su -c 'make test' testuser
+      - name: Fix up permissions so GitHub does not complain
+        run: |
+          sudo chmod -R a+rwX .

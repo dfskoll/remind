@@ -2459,6 +2459,20 @@ order, or 2 if sorting by time in descending order.
 The number of spaces by which all lines (except the first) of an
 \fBMSF\fR-type reminder should be indented.  The default is 0.
 .TP
+.B $SuppressLRM
+Normally, when Remind is run with the \fB\-c\fR option in a UTF-8 locale,
+it emits a left-to-right mark sequence after printing day names or
+reminders.  Some terminals render this incorrectly, so you can use:
+.RS
+.PP
+.nf
+    SET $SuppressLRM 1
+.fi
+.PP
+at the top of your reminder file to suppress the LRM sequences, or you
+can invoke Remind with the option \fB'\-i$SuppressLRM=1'\fR.
+.RE
+.TP
 .B $SysInclude (read-only, STRING type)
 A directory path containing standard reminder scripts.  Currently,
 Remind ships with some standard holiday files and language packs.

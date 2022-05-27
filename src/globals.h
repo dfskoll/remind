@@ -313,6 +313,12 @@ EXTERN char *DynamicWas
 
 EXTERN char *SysDir
 #ifdef MK_GLOBALS
-= STRSYSDIR(SYSDIR);
+= STRSYSDIR(SYSDIR)
+#endif
+;
+
+EXTERN int SuppressLRM
+#ifdef MK_GLOBALS
+= 0
 #endif
 ;

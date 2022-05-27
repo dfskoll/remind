@@ -1024,7 +1024,7 @@ set a057 value("a05"+"6")
 "a05" + "6" => "a056"
 value("a056") => "SDFJHSDF KSJDFH KJSDFH KSJDFH"
 set a058 version()
-version() => "04.00.00"
+version() => "04.00.01"
 set a059 wkday(today())
 today() => 1991-02-16
 wkday(1991-02-16) => "Saturday"
@@ -2594,7 +2594,7 @@ a086  4
 a109  2012-01-01
 a128  2018-02-03@16:45
 a039  "February"
-a058  "04.00.00"
+a058  "04.00.01"
 a077  "1992 92
 "
 a096  -4
@@ -2765,6 +2765,7 @@ Variable  Value
      $SortByTime  0
      $SubsIndent  0           [0, 132]
          $Sunday  "Sunday"
+    $SuppressLRM  0           [0, 1]
               $T  1990-01-01
              $Td  -1
        $Thursday  "Thursday"

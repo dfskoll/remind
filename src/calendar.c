@@ -259,6 +259,10 @@ static void WriteCalDays (void);
 static void
 send_lrm(void)
 {
+    /* Don't send LRM if SuppressLRM is set */
+    if (SuppressLRM) {
+        return;
+    }
     /* Send a lrm control sequence if UseUTF8Chars is enabled
        or char encoding is UTF-8
     */

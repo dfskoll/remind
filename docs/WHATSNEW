@@ -1,5 +1,12 @@
 CHANGES TO REMIND
 
+* VERSION 4.0 Patch 1 - 2022-06-03
+
+- IMPROVEMENT: Add $SuppressLRM system variable to suppress the UTF-8
+  Left-to-Right mark in "remind -c" output.
+
+- DOCUMENTATION FIX: Document the "q" sub-option to the "-p" option.
+
 * VERSION 4.0 Patch 0 - 2022-04-04
 
 - MAJOR NEW FEATURE: remind: Remind output can effectively be

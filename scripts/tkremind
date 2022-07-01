@@ -547,7 +547,9 @@ proc ConfigureCalFrame { w firstDay numDays } {
 	$w.t$i configure -state disabled -takefocus 0
     }
     for {set i $first} {$i <= $last} {incr i} {
+	set row [expr ($i/7)+1]
 	grid $w.f$i
+        grid rowconfigure $w $row -weight 1
         pack $w.l$i -in $w.f$i -side top -expand 0 -fill x
         pack $w.t$i -in $w.f$i -side top -expand 1 -fill both
         raise $w.l$i
@@ -581,7 +583,7 @@ proc ConfigureCalFrame { w firstDay numDays } {
             pack $w.t$i -in $w.f$i -side top -expand 1 -fill both
             raise $w.l$i
             raise $w.t$i
-	    grid rowconfigure $w [expr $row+1] -weight 1
+	    grid rowconfigure $w $row -weight 1
 	}
 	$w.l$i configure -text "" -command "" -state normal -relief flat -foreground $Option(LabelColor) -background $Option(WinBackground) -highlightcolor $Option(LineColor) -highlightbackground $Option(WinBackground)
         $w.l$i configure -state disabled

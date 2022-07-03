@@ -44,8 +44,14 @@ include the line:
 .PP
 
 \fIConfig_file\fR is the file in which \fBTkRemind\fR stores
-its options.  If it is omitted, it defaults to \fI$HOME/.tkremindrt\fR.
+its options.  If it is omitted, it defaults to \fI$HOME/.config/tkremindrc\fR.
 
+.PP
+If \fB$HOME/.reminders\fR is a \fIdirectory\fR, then \fBTkRemind\fR defaults to
+reading \fB$HOME/.reminders\fR and writing new reminders to
+\fB$HOME/.reminders/100-tkremind.rem\fR.  If you want to keep your
+reminders in a directory \fB$HOME/.reminders\fR, you should create that
+directory before starting \fBTkRemind\fR.
 .SH THE CALENDAR WINDOW
 When you start \fBTkRemind\fR, it displays a calendar for the current
 month, with today's date highlighted.  Reminders are filled into each
@@ -274,7 +280,7 @@ Similar to Change entry font, but applies to calendar heading
 .PP
 Once you've configured the options the way you like them,
 press \fBApply Options\fR to put them into effect, \fBSave Options\fR
-to put them into effect and save them in $HOME/.tkremindrc, or
+to put them into effect and save them in $HOME/.config/tkremindrc, or
 \fBCancel\fR to cancel any changes you made.
 
 .SH KEYBOARD SHORTCUTS
@@ -323,8 +329,7 @@ You can use this to activate certain reminders in different ways
 for \fBTkRemind\fR (for example).
 .PP
 \fBTkRemind\fR uses tags to keep track of reminders in the
-script file.  It also places special comments in the reminder
-file to store additional state.  You can certainly mix
+script file. You can certainly mix
 "hand-crafted" reminders with reminders created by \fBTkRemind\fR
 if you are aware of the following rules and limitations:
 .TP
@@ -334,14 +339,15 @@ where \fInnn\fR is a number.  You should not use such \fBTAG\fRs
 in hand-crafted reminders.
 .TP
 o
-Do not edit lines starting with "# TKTAGnnn", "# TKEND", or any
-lines in between.  You can move such lines, but be careful to move
-them as a single block.
-.TP
-o
 Hand-crafted reminders cannot be edited with \fBTkRemind\fR, and
 for hand-crafted timed reminders, you will not be presented with
 the "Don't remind me again" option when they pop up.
+
+.PP
+However, rather than mixing hand-edited files with \fBTkRemind\fR-generated
+ones, it is better to make \fB$HOME/.reminders\fR a directory and keep
+your hand-edited files in a separate \fB*.rem\fR file than \fBTkRemind\fR's
+\fB100-tkremind.rem\fR file.
 
 .SH SERVER MODE
 
@@ -400,13 +406,13 @@ This line is emitted in response to a \fBSTATUS\fR command.  The number
 .SH AUTHOR
 TkRemind was written by Dianne Skoll <dianne@skoll.ca>
 
-\fBTkRemind\fR is Copyright 1996-2020 by Dianne Skoll.
+\fBTkRemind\fR is Copyright 1996-2022 by Dianne Skoll.
 
 .SH FILES
 
-$HOME/.reminders -- default reminder file.
+$HOME/.reminders -- default reminder file or directory.
 
-$HOME/.tkremindrc -- \fBTkRemind\fR saved options.
+$HOME/.config/tkremindrc -- \fBTkRemind\fR saved options.
 
 .SH SEE ALSO
 \fBremind\fR, \fBrem2ps\fR, \fBrem2pdf\fR, \fBrem2html\fR

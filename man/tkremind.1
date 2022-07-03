@@ -18,13 +18,13 @@ as well as the tcllib extension.  It also requires a \fBwish\fR
 binary.  If you are using Tcl/Tk 8.5, you may also need either the Img
 or the tkpng extension to handle PNG images.
 
-.SH OPTIONS
-\fBTkRemind\fR itself has no options.  However, it passes certain options
-on to \fBRemind\fR.  The options it passes are
-\fB\-b\fR, \fB\-g\fR, \fB\-x\fR, \fB\-i\fR and \fB\-m\fR.
-See the \fBRemind\fR man page for details about the options.
-Note that \fBTkRemind\fR will respect the \fB\-m\fR and
-\fB\-b1\fR options and adjust its appearance accordingly.
+.SH COMMAND-LINE OPTIONS
+\fBTkRemind\fR itself has no command-line options.  However, it passes
+certain options on to \fBRemind\fR.  The options it passes are
+\fB\-b\fR, \fB\-g\fR, \fB\-x\fR, \fB\-i\fR and \fB\-m\fR.  See the
+\fBRemind\fR man page for details about the options.  Note that
+\fBTkRemind\fR will respect the \fB\-m\fR and \fB\-b1\fR options and
+adjust its appearance accordingly.
 
 \fIRead_file\fR is the file from which \fBTkRemind\fR reads reminders.
 It is in standard \fBRemind\fR format.  \fIWrite_file\fR is the file
@@ -298,6 +298,19 @@ Next Month
 .TP
 .B Home
 Today
+
+.SH IMMEDIATE UPDATES
+
+If you are running \fBTkRemind\fR on Linux and have the
+\fBinotifywait\fR program installed (part of the \fBinotify-tools\fR
+or similar package), then \fBTkRemind\fR redraws the calendar window
+\fIimmediately\fR if \fB$HOME/.reminders\fR changes (or, if it is a
+directory, any files in that directory change.)
+.PP
+This lets \fBTkRemind\fR react immediately to hand-edited reminders or
+to reminder files that are imported from another calendar system (for example,
+you may have a cron job that periodically imports your Google Calendar
+entries into Remind format.)
 
 .SH ODDS AND ENDS
 \fBTkRemind\fR performs some basic consistency checks when you add or

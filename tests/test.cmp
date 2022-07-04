@@ -2766,7 +2766,7 @@ Variable  Value
      $SubsIndent  0           [0, 132]
          $Sunday  "Sunday"
     $SuppressLRM  0           [0, 1]
-              $T  1990-01-01
+              $T  0
              $Td  -1
        $Thursday  "Thursday"
         $TimeSep  ":"

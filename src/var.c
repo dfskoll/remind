@@ -170,10 +170,11 @@ static int latitude_func(int do_set, Value *val)
 static int trig_date_func(int do_set, Value *val)
 {
     UNUSED(do_set);
-    val->type = DATE_TYPE;
     if (!LastTrigValid) {
+        val->type = INT_TYPE;
 	val->v.val = 0;
     } else {
+        val->type = DATE_TYPE;
 	val->v.val = LastTriggerDate;
     }
     return OK;
